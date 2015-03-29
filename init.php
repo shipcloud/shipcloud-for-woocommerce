@@ -190,6 +190,7 @@ class WooCommerceShipcloud{
 	public static function includes(){
 		// Loading functions
 		include( WCSC_FOLDER . '/functions.php' );
+		include( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
 	}
 
 	/**

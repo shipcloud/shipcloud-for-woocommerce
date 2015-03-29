@@ -70,58 +70,43 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 * Gateway settings
 		 */
 		 function init_form_fields() {
-		 	
-			if( array_key_exists( 'username', $this->settings ) && '' != $this->settings['username'] && '' != $this->settings['password'] ):
-			endif;
-				
-			$url = '';
-				
-			//  Initiate curl
-			$ch = curl_init();
-			// Disable SSL verification
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE );
-			// Will return the response, if false it print the response
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE );
-			// Set the url
-			curl_setopt($ch, CURLOPT_URL,$url);
-			// Execute
-			$result = curl_exec($ch);
-			// Closing
-			
-			curl_close($ch);
-			
-			// Will dump a beauty json :3
-			var_dump( json_decode($result, true) );
-			 
-			// p( $rates );
-			
-			$this->form_fields = array(
+		 	$this->form_fields = array(
 				    'enabled' => array(
 						'title'   => __( 'Enable', 'wcsc-locale' ),
 						'type'    => 'checkbox',
-						'label'   => __( 'Enable Shippo', 'wcsc-locale' ),
+						'label'   => __( 'Enable Shipcloud', 'wcsc-locale' ),
 						'default' => 'no'
 					),
 					'title' => array(
 						'title'       => __( 'Title', 'wcsc-locale' ),
 						'type'        => 'text',
 						'description' => __( 'This controls the title which the user sees during checkout.', 'wcsc-locale' ),
-						'default'     => __( 'Shippo', 'wcsc-locale' ),
+						'default'     => __( 'Shipcloud', 'wcsc-locale' ),
 						'desc_tip'    => true,
 					),
-					'username' => array(
-						'title'       => __( 'Username', 'wcsc-locale' ),
+					'api_key' => array(
+						'title'       => __( 'API Key', 'wcsc-locale' ),
 						'type'        => 'text',
-						'description' => __( 'Enter your goshippo.com username (email).', 'wcsc-locale' ),
+						'description' => __( 'Enter your shipcloud.com API Key.', 'wcsc-locale' ),
 						'desc_tip'    => true,
-					),
-					'password' => array(
-						'title'       => __( 'Password', 'wcsc-locale' ),
-						'type'        => 'password',
-						'description' => __( 'Enter your goshippo.com password.', 'wcsc-locale' ),
-						'desc_tip'    => true,
-					),
+					)
 			);
+			
+			
+			if( array_key_exists( 'api_key', $this->settings ) && '' != $this->settings['api_key'] ):
+				$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
+				$carriers = $sc_api->get_carriers();
+				
+				$form_fields = array();
+				foreach( $carriers AS $carrier ):
+					$this->form_fields[ '_carrier_' . $carrier[ 'name' ] ] = array(
+						'title'       	=> $carrier[ 'display_name' ],
+						'type'       	=> 'checkbox',
+						'description'   => sprintf( __( 'Activate "%s" to enable shiping method', 'wcsl-locale' ),  $carrier[ 'display_name' ]),
+						'desc_tip'    => true
+					);
+				endforeach;
+			endif;
 		} 
 
 		/**
