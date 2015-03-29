@@ -68,10 +68,6 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
 		
-		function init_carriers(){
-			
-		}
-		
 		/**
 		 * Gateway settings
 		 */
@@ -99,10 +95,8 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 			);
 			
 			if( array_key_exists( 'api_key', $this->settings ) && '' != $this->settings['api_key'] ):
-				$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
-				$carriers = $sc_api->get_carriers();
+				$carriers = $this->get_carriers();
 				
-				$form_fields = array();
 				foreach( $carriers AS $carrier ):
 					$this->form_fields[ '_carrier_' . $carrier[ 'name' ] ] = array(
 						'title'       	=> $carrier[ 'display_name' ],
@@ -110,11 +104,26 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'description'   => sprintf( __( 'Activate "%s" to enable shiping method.', 'wcsl-locale' ),  $carrier[ 'display_name' ]),
 						'desc_tip'    => true
 					);
-					$carrier_rate = $sc_api->get_rates( $carrier[ 'name' ] );
-					p( $carrier_rate );
 				endforeach;
 			endif;
 		} 
+
+		private function get_carriers(){
+			$shipment_carriers = get_option( 'woocommerce_shipcloud_carriers' );
+			
+			if( '' == $shipment_carriers )
+				$shipment_carriers = $this->update_carriers();
+			
+			return $shipment_carriers;
+		}
+		
+		private function update_carriers(){
+			$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
+			$shipment_carriers = $sc_api->get_carriers();
+			update_option( 'woocommerce_shipcloud_carriers', $shipment_carriers );
+			
+			return $shipment_carriers;
+		}
 
 		/**
 		 * calculate_shipping function.
@@ -124,28 +133,65 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 * @return void
 		 */
 		public function calculate_shipping( $package ) {
-			p( $this->settings );
-			echo 'test';
-			
 			if( !array_key_exists( 'api_key', $this->settings ) && '' == $this->settings['api_key'] )
 				return;
 			
 			$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
-			$carriers = $sc_api->get_carriers();
+			$carriers = $this->get_carriers();
+			
+			$from_address = array(
+				'street' => 'Mettmanner Straße',
+				'street_no' => '32',
+				'zip_code' => '40721',
+ 				'city' => 'Hilden',
+				'country' => 'DE'
+			);
+			
+			$to_address = array(
+				'street' => 'Krepperweg',
+				'street_no' => '4',
+				'zip_code' => '40724',
+				'city' => 'Hilden',
+				'country' => 'DE'
+			);
+			
+			$package_dimensions = array(
+				'weight' => 1.5,
+				'length' => 40,
+				'width' => 50,
+				'height' => 40
+			);
 			
 			foreach( $carriers AS $carrier ):
-				$carrier_rate = $sc_api->get_rates( $carrier[ 'name' ] );
+				if( 'no' == $this->settings[ '_carrier_' . $carrier[ 'name' ] ] )
+					continue;
+					
+				$params = array(
+					'carrier' => $carrier[ 'name' ],
+					'service' => 'standard',
+					'to' => $to_address,
+					'from' => $from_address,
+					'package' => $package_dimensions
+				);
 				
-				p( $rate );
+				$carrier_rate = $sc_api->get_rates( $params );
+				
+				if( FALSE == $carrier_rate )
+					continue;
 				
 				$rate = array(
 					'id'       => $this->id . '_' . $carrier[ 'name' ],
 					'label'    => $carrier[ 'display_name' ],
-					'cost'     => $carrier_rate,
+					'cost'     => $carrier_rate[ 'shipment_quote' ][ 'price' ],
+					'taxes'    => $carrier_rate[ 'shipment_quote' ][ 'price' ] * 0.19,
 					'calc_tax' => 'per_item'
 				);
-				$this->add_rate( $rate_ups );
+				
+				FB::warn( $rate );
+				
+				$this->add_rate( $rate );
 			endforeach;
 		}
+			
 	}
 }

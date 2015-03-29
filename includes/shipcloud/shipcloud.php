@@ -60,15 +60,12 @@ class Woocommerce_Shipcloud_API{
         );
     }
 	
-	public function get_rates( $carrier ){
+	public function get_rates( $params ){
 		$action = 'shipment_quotes';
 		
-		$params = array(
-			'carrier' => $carrier,
-			'service' => 'standard',
-		);
-		
 		$request = $this->send_request( $action, $params, 'POST' );
+		
+		FB::warn( print_r( $request, TRUE ) );
 		
 		if( 200 == $request[ 'header' ]['status'] ):
 			return $request[ 'body' ];
