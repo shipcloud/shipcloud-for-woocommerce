@@ -32,6 +32,8 @@ if ( !defined( 'ABSPATH' ) ) exit;
 if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 	
 	class WC_Shipcloud_Shippig extends WC_Shipping_Method {
+		var $carriers = array();
+		
 		/**
 		 * Constructor for your shipping class
 		 *
@@ -66,6 +68,10 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
 		
+		function init_carriers(){
+			
+		}
+		
 		/**
 		 * Gateway settings
 		 */
@@ -92,7 +98,6 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 					)
 			);
 			
-			
 			if( array_key_exists( 'api_key', $this->settings ) && '' != $this->settings['api_key'] ):
 				$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
 				$carriers = $sc_api->get_carriers();
@@ -102,9 +107,11 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 					$this->form_fields[ '_carrier_' . $carrier[ 'name' ] ] = array(
 						'title'       	=> $carrier[ 'display_name' ],
 						'type'       	=> 'checkbox',
-						'description'   => sprintf( __( 'Activate "%s" to enable shiping method', 'wcsl-locale' ),  $carrier[ 'display_name' ]),
+						'description'   => sprintf( __( 'Activate "%s" to enable shiping method.', 'wcsl-locale' ),  $carrier[ 'display_name' ]),
 						'desc_tip'    => true
 					);
+					$carrier_rate = $sc_api->get_rates( $carrier[ 'name' ] );
+					p( $carrier_rate );
 				endforeach;
 			endif;
 		} 
@@ -117,24 +124,28 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 * @return void
 		 */
 		public function calculate_shipping( $package ) {
+			p( $this->settings );
+			echo 'test';
 			
-			$rate_dhl = array(
-				'id'       => $this->id . '_dhl',
-				'label'    => "DHL",
-				'cost'     => '4.90',
-				'calc_tax' => 'per_item'
-			);
-			// Register the rate
-			$this->add_rate( $rate_dhl );
+			if( !array_key_exists( 'api_key', $this->settings ) && '' == $this->settings['api_key'] )
+				return;
 			
-			$rate_ups = array(
-				'id'       => $this->id . '_ups',
-				'label'    => "UPS",
-				'cost'     => '5.40',
-				'calc_tax' => 'per_item'
-			);
-			// Register the rate
-			$this->add_rate( $rate_ups );
+			$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
+			$carriers = $sc_api->get_carriers();
+			
+			foreach( $carriers AS $carrier ):
+				$carrier_rate = $sc_api->get_rates( $carrier[ 'name' ] );
+				
+				p( $rate );
+				
+				$rate = array(
+					'id'       => $this->id . '_' . $carrier[ 'name' ],
+					'label'    => $carrier[ 'display_name' ],
+					'cost'     => $carrier_rate,
+					'calc_tax' => 'per_item'
+				);
+				$this->add_rate( $rate_ups );
+			endforeach;
 		}
 	}
 }
