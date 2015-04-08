@@ -72,6 +72,11 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 * Gateway settings
 		 */
 		 function init_form_fields() {
+		 	global $woocommerce;
+			
+			$default_country = wc_get_base_location();
+			$default_country = $default_country[ 'country' ];
+			
 		 	$this->form_fields = array(
 				    'enabled' => array(
 						'title'   => __( 'Enable', 'wcsc-locale' ),
@@ -91,21 +96,46 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'type'        => 'text',
 						'description' => __( 'Enter your shipcloud.com API Key.', 'wcsc-locale' ),
 						'desc_tip'    => true,
-					)
+					),
+					'sender_name' => array(
+						'title'       => __( 'Name', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard sender name for shipment.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+					),
+					'sender_street' => array(
+						'title'       => __( 'Street', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard sender street for shipment.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+					),
+					'sender_street_nr' => array(
+						'title'       => __( 'Street number', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard sender street number for shipment.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+					),
+					'sender_postcode' => array(
+						'title'       => __( 'Postcode', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard sender postcode for shipment.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+					),
+					'sender_city' => array(
+						'title'       => __( 'City', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard sender city for shipment.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+					),
+					'sender_country' => array(
+						'title'       => __( 'Country', 'wcsc-locale' ),
+						'type'        => 'select',
+						'description' => __( 'Enter standard sender country for shipment.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+						'options'	  => $woocommerce->countries->countries,
+						'default'	  => $default_country
+					),
 			);
-			
-			if( array_key_exists( 'api_key', $this->settings ) && '' != $this->settings['api_key'] ):
-				$carriers = $this->get_carriers();
-				
-				foreach( $carriers AS $carrier ):
-					$this->form_fields[ '_carrier_' . $carrier[ 'name' ] ] = array(
-						'title'       	=> $carrier[ 'display_name' ],
-						'type'       	=> 'checkbox',
-						'description'   => sprintf( __( 'Activate "%s" to enable shiping method.', 'wcsl-locale' ),  $carrier[ 'display_name' ]),
-						'desc_tip'    => true
-					);
-				endforeach;
-			endif;
 		} 
 
 		private function get_carriers(){
@@ -124,74 +154,5 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 			
 			return $shipment_carriers;
 		}
-
-		/**
-		 * calculate_shipping function.
-		 *
-		 * @access public
-		 * @param mixed $package
-		 * @return void
-		 */
-		public function calculate_shipping( $package ) {
-			if( !array_key_exists( 'api_key', $this->settings ) && '' == $this->settings['api_key'] )
-				return;
-			
-			$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
-			$carriers = $this->get_carriers();
-			
-			$from_address = array(
-				'street' => 'Mettmanner Straße',
-				'street_no' => '32',
-				'zip_code' => '40721',
- 				'city' => 'Hilden',
-				'country' => 'DE'
-			);
-			
-			$to_address = array(
-				'street' => 'Krepperweg',
-				'street_no' => '4',
-				'zip_code' => '40724',
-				'city' => 'Hilden',
-				'country' => 'DE'
-			);
-			
-			$package_dimensions = array(
-				'weight' => 1.5,
-				'length' => 40,
-				'width' => 50,
-				'height' => 40
-			);
-			
-			foreach( $carriers AS $carrier ):
-				if( 'no' == $this->settings[ '_carrier_' . $carrier[ 'name' ] ] )
-					continue;
-					
-				$params = array(
-					'carrier' => $carrier[ 'name' ],
-					'service' => 'standard',
-					'to' => $to_address,
-					'from' => $from_address,
-					'package' => $package_dimensions
-				);
-				
-				$carrier_rate = $sc_api->get_rates( $params );
-				
-				if( FALSE == $carrier_rate )
-					continue;
-				
-				$rate = array(
-					'id'       => $this->id . '_' . $carrier[ 'name' ],
-					'label'    => $carrier[ 'display_name' ],
-					'cost'     => $carrier_rate[ 'shipment_quote' ][ 'price' ],
-					'taxes'    => $carrier_rate[ 'shipment_quote' ][ 'price' ] * 0.19,
-					'calc_tax' => 'per_item'
-				);
-				
-				FB::warn( $rate );
-				
-				$this->add_rate( $rate );
-			endforeach;
-		}
-			
 	}
 }
