@@ -1,11 +1,11 @@
 <?php
 /*
- * ComponentName Core Class TODO
+ * WooCommerce shipcloud.io postboxes
  *
- * This class initializes the component.
+ * Loading postboxes
  *
  * @author awesome.ug <contact@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package PluginName/Admin
+ * @package WooCommerceShipCloud/Woo
  * @version 1.0.0
  * @since 1.0.0
  * @license GPL 2
@@ -29,25 +29,31 @@
 
 if ( !defined( 'ABSPATH' ) ) exit;
 
-class WCSCAdmin extends WCSCComponent{
-	/**
-	 * Initializes the Component.
-	 * @since 1.0.0
-	 */
-	public function __construct() {
-		$this->name = __( 'Shipcloid admin', 'wcsc-locale' );
-		$this->slug = 'shipcloud_admin';
-		
-		parent::__construct();
-		
-	} // end constructor
+class WC_Shipcloud_Metaboxes{
 	
-	public function includes(){
-	    if( is_admin() ):
-			include( __DIR__ . '/metaboxes.php' );
-			WC_Shipcloud_Metaboxes::init();
-			
-		endif;
+	/**
+	 * Initialize class
+	 */
+	public static function init(){
+		add_action( 'add_meta_boxes', array( __CLASS__, 'add_metaboxes' ) );
+	}
+	
+	/**
+	 * Adding meta boxes
+	 */
+	public static function add_metaboxes(){
+		add_meta_box(
+			'shipcloudio',
+			__( 'shipcloud.io shipment', 'wcsc-locale' ),
+			array( $this, 'product_metabox' ),
+			'shop_order'
+		);
+	}
+	
+	/**
+	 * Product metabox
+	 */
+	public static function product_metabox(){
+		echo 'test';
 	}
 }
-wcsc_load_component( 'WCSCAdmin' );
