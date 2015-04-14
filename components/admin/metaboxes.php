@@ -104,11 +104,9 @@ class WC_Shipcloud_Metaboxes{
 		
 		?>
 		<div id="shipcloud">
-			<div class="shipcloud_adresses">
-				<div class="order_data_column_container">
+				<div class="order_data_column_container addresses">
 					<div class="order_data_column">
-						<h4><?php _e( 'Sender Details', 'wcsc-locale' ); ?></h4>
-						
+						<h4><?php _e( 'Sender Details', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 						<div class="address">
 							<p><?php echo $sender_address[ 'name' ]; ?><br />
 							<?php echo $sender_address[ 'company' ]; ?><br />
@@ -153,7 +151,7 @@ class WC_Shipcloud_Metaboxes{
 						</div>
 					</div>
 					<div class="order_data_column">
-						<h4><?php _e( 'Recipient Details', 'wcsc-locale' ); ?></h4>
+						<h4><?php _e( 'Recipient Details', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 						
 						<div class="address">
 							<p><?php echo $recipient_address[ 'name' ]; ?><br />
@@ -198,7 +196,9 @@ class WC_Shipcloud_Metaboxes{
 							</p>
 					</div>
 				</div>
-			</div>
+				</div>
+				<div class="order_data_column_container parcel">
+				<div></div>
 		</div>
 		<div class="clear"></div>
 		<?php
