@@ -46,7 +46,6 @@ class WCSCAdmin extends WCSCComponent{
 	    if( is_admin() ):
 			include( __DIR__ . '/metaboxes.php' );
 			WC_Shipcloud_Metaboxes::init();
-			
 		endif;
 	}
 }

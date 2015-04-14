@@ -1,1 +1,30 @@
 /* This stylesheet is used to style the admin option form of the plugin. */
+#shipcloud .order_data_column_container{
+	clear:both;
+}
+#shipcloud .order_data_column{
+    float: left;
+    padding: 0 2% 0 0;
+    width: 48%;
+}
+#shipcloud p {
+    color: #777;
+}
+#shipcloud .edit_address p{
+	float:left;
+	margin: 9px 0 0;
+    padding: 0;
+    width:46%;
+    margin-right:2%;
+}
+#shipcloud .edit_address p.fullsize{
+	width:94%;
+	clear:both;
+}
+#shipcloud .edit_address p input,
+#shipcloud .edit_address p select{
+	width: 100%;
+}
+#shipcloud .edit_address p label{
+	display:block;
+}
