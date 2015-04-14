@@ -37,6 +37,8 @@ class WC_Shipcloud_Metaboxes{
 	public static function init(){
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_metaboxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_product_metabox' ) );
+		add_action( 'wp_ajax_shipcloud_delete_parcel_template', array( __CLASS__ , 'ajax_delete_parcel_template' ) );
+		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( __CLASS__ , 'ajax_calculate_shipping' ) );
 	}
 	
 	/**
@@ -45,7 +47,7 @@ class WC_Shipcloud_Metaboxes{
 	public static function add_metaboxes(){
 		add_meta_box(
 			'shipcloudio',
-			__( 'shipcloud.io shipment', 'wcsc-locale' ),
+			__( 'Shipment Carrier', 'wcsc-locale' ),
 			array( __CLASS__, 'product_metabox' ),
 			'shop_order'
 		);
@@ -58,9 +60,11 @@ class WC_Shipcloud_Metaboxes{
 		global $post, $woocommerce;
 		
 		$options = get_option( 'woocommerce_shipcloud_settings' );
+		$parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
 		
 		$sender_address = get_post_meta( $post->ID, 'shipcloud_sender_address', TRUE );
 		$recipient_address = get_post_meta( $post->ID, 'shipcloud_recipient_address', TRUE );
+		$parcel = get_post_meta( $post->ID, 'shipcloud_parcel', TRUE );
 		
 		$order = new WC_Order( $post->ID );
 		
@@ -100,19 +104,24 @@ class WC_Shipcloud_Metaboxes{
 			);
 		endif;
 		
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+		$carriers = $shipcloud_api->get_carriers( TRUE );
+		
 		wp_nonce_field( plugin_basename( __FILE__ ), 'save_product_metabox' );
 		
 		?>
 		<div id="shipcloud">
 				<div class="order_data_column_container addresses">
 					<div class="order_data_column">
-						<h4><?php _e( 'Sender Details', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
+						<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 						<div class="address">
-							<p><?php echo $sender_address[ 'name' ]; ?><br />
+							<p>
+							<?php echo $sender_address[ 'name' ]; ?><br />
 							<?php echo $sender_address[ 'company' ]; ?><br />
 							<?php echo $sender_address[ 'street' ]; ?> <?php echo $sender_address[ 'street_nr' ]; ?><br />
 							<?php echo $sender_address[ 'postcode' ]; ?> <?php echo $sender_address[ 'city' ]; ?><br />
-							<?php echo $sender_address[ 'city' ]; ?></p>
+							<?php echo $sender_address[ 'country' ]; ?>
+							</p>
 						</div>
 						<div class="edit_address">
 							<p class="fullsize">
@@ -151,14 +160,16 @@ class WC_Shipcloud_Metaboxes{
 						</div>
 					</div>
 					<div class="order_data_column">
-						<h4><?php _e( 'Recipient Details', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
+						<h4><?php _e( 'Recipient Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 						
 						<div class="address">
-							<p><?php echo $recipient_address[ 'name' ]; ?><br />
+							<p>
+							<?php echo $recipient_address[ 'name' ]; ?><br />
 							<?php echo $recipient_address[ 'company' ]; ?><br />
 							<?php echo $recipient_address[ 'street' ]; ?> <?php echo $recipient_address[ 'street_nr' ]; ?><br />
 							<?php echo $recipient_address[ 'postcode' ]; ?> <?php echo $recipient_address[ 'city' ]; ?><br />
-							<?php echo $recipient_address[ 'city' ]; ?></p>
+							<?php echo $sender_address[ 'country' ]; ?>
+							</p>
 						</div>
 						<div class="edit_address">
 							<p class="fullsize">
@@ -198,10 +209,113 @@ class WC_Shipcloud_Metaboxes{
 				</div>
 				</div>
 				<div class="order_data_column_container parcel">
-				<div></div>
+					<div class="order_data_column">
+						<table class="widefat">
+							<thead>
+								<tr>
+									<th>
+										<label for="parcel[carrier]"><?php _e( 'Carrier', 'wcsc-locale' ); ?></label>
+									</th>
+									<th>
+										<label for="parcel[width]"><?php _e( 'Width in cm', 'wcsc-locale' ); ?></label>
+									</th>
+									<th>
+										<label for="parcel[height]"><?php _e( 'Height in cm', 'wcsc-locale' ); ?></label>
+									</th>
+									<th>
+										<label for="parcel[length]"><?php _e( 'Length in cm', 'wcsc-locale' ); ?></label>
+									</th>
+									<th>
+										<label for="parcel[weight]"><?php _e( 'Weight in kg', 'wcsc-locale' ); ?></label>
+									</th>
+									<th>
+										<label for="parcel[draft]"><?php _e( 'Save as Draft', 'wcsc-locale' ); ?></label>
+									</th>
+									<th>
+										
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="parcel_option carrier">
+										<select name="parcel[carrier]">
+											<?php foreach( $carriers AS $carrier ): ?>
+												<?php if( $parcel['carrier'] == $carrier[ 'name' ] ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
+												<option value="<?php echo $carrier[ 'name' ]; ?>"<?php echo $selected; ?>><?php echo $carrier[ 'display_name' ]; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</td>
+									<td class="parcel_option parcel_width">
+										<input type="text" name="parcel[width]" value="<?php echo $parcel[ 'width' ]; ?>" />
+									</td>
+									<td class="parcel_option parcel_height">
+										<input type="text" name="parcel[height]" value="<?php echo $parcel[ 'height' ]; ?>" />
+									</td>
+									<td class="parcel_option parcel_length">
+										<input type="text" name="parcel[length]" value="<?php echo $parcel[ 'length' ]; ?>" />
+									</td>
+									<td class="parcel_option parcel_weight">
+										<input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" />
+									</td>
+									<td class="parcel_option parcel_draft">
+										<input type="checkbox" name="parcel[draft]" value"yes" />
+									</td>
+									<td class="parcel_option parcel_button">
+										<input type="button" id="shipcloud_calculate_shipping" value="<?php _e( 'Calculate', 'wcsc-locale'  ); ?>" class="button" />
+									</td>
+								</tr>
+								
+								<?php if( '' != $parcel_templates && is_array( $parcel_templates ) ): ?>
+									<?php $i = 0; ?>
+									<?php foreach( $parcel_templates AS $parcel_template ): ?>
+										<tr<?php echo $i % 2 == 0 ? ' class="alt"': ''; ?>>
+											<td><?php echo self::get_carrier_display_name( $parcel_template[ 'carrier' ] ); ?></td>
+											<td><?php echo $parcel_template[ 'width' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
+											<td><?php echo $parcel_template[ 'height' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
+											<td><?php echo $parcel_template[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
+											<td>
+												<?php echo $parcel_template[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale' ); ?> 
+												
+											</td>
+											<td></td>
+											<td>
+												<input type="button" class="carrier_select button" value="<?php _e( 'Select', 'wcsc-locale'  ); ?>" />
+												<input type="button" class="carrier_delete button"  value="<?php _e( 'Delete', 'wcsc-locale'  ); ?>" />
+												<input type="hidden" name="carrier" value="<?php echo $parcel_template[ 'carrier' ]; ?>">
+												<input type="hidden" name="width" value="<?php echo $parcel_template[ 'width' ]; ?>">
+												<input type="hidden" name="height" value="<?php echo $parcel_template[ 'height' ]; ?>">
+												<input type="hidden" name="length" value="<?php echo $parcel_template[ 'length' ]; ?>">
+												<input type="hidden" name="weight" value="<?php echo $parcel_template[ 'weight' ]; ?>">
+											</td>
+										</tr>
+										<?php $i++; ?>
+									<?php endforeach; ?>
+								<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
 		</div>
 		<div class="clear"></div>
 		<?php
+	}
+
+	/**
+	 * Get carrier display_name from name
+	 * @param string $name
+	 * @return string $display_name
+	 */
+	private function get_carrier_display_name( $name ){
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+		$carriers = $shipcloud_api->get_carriers();
+		
+		foreach( $carriers AS $carrier ):
+			if( $carrier[ 'name' ] == $name )
+				return $carrier[ 'display_name' ];
+		endforeach;
 	}
 
 	/**
@@ -237,7 +351,70 @@ class WC_Shipcloud_Metaboxes{
         	if ( !current_user_can( 'edit_product', $post_id )  )
           		return $post_id;
 			
+		if( array_key_exists( 'draft', $_POST[ 'parcel' ] ) ):
+			$parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
+			$parcel_templates[] = $_POST[ 'parcel' ];
+			update_option( 'woocommerce_shipcloud_parcel_templates', $parcel_templates );
+		endif;
+			
 		update_post_meta( $post_id, 'shipcloud_sender_address', $_POST[ 'sender_address' ] );
 		update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST[ 'recipient_address' ] );
+		update_post_meta( $post_id, 'shipcloud_parcel', $_POST[ 'parcel' ] );
+	}
+	
+	public static function ajax_delete_parcel_template(){
+		$parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
+
+		foreach( $parcel_templates AS $key => $parcel_template ):
+			if( 
+				$parcel_template[ 'carrier' ] == $_POST[ 'carrier' ] && 
+				$parcel_template[ 'width' ] == $_POST[ 'width' ] && 
+				$parcel_template[ 'height' ] == $_POST[ 'height' ] && 
+				$parcel_template[ 'length' ] == $_POST[ 'length' ] && 
+				$parcel_template[ 'weight' ] == $_POST[ 'weight' ]
+			  ):
+				unset( $parcel_templates[ $key ] );
+			endif;
+		endforeach;
+		
+		update_option( 'woocommerce_shipcloud_parcel_templates', $parcel_templates );
+		
+		echo json_encode( array( 'deleted' => TRUE ) );
+		exit;
+	}
+	
+	public static function ajax_calculate_shipping(){
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+		
+		$shipment = array(
+			'carrier' => $_POST[ 'carrier' ],
+			'service' => 'standard',
+			'to' => array(
+				'street' 	=> $_POST[ 'to_street' ],
+				'street_no' => $_POST[ 'to_street_nr' ],
+				'zip_code' 	=> $_POST[ 'to_postcode' ],
+				'city' 		=> $_POST[ 'to_city' ],
+				'country' 	=> $_POST[ 'to_country' ]
+			),
+			'from' => array(
+				'street' 	=> $_POST[ 'from_street' ],
+				'street_no' => $_POST[ 'from_street_nr' ],
+				'zip_code' 	=> $_POST[ 'from_postcode' ],
+				'city' 		=> $_POST[ 'from_city' ],
+				'country' 	=> $_POST[ 'from_country' ]
+			),
+			'package' => array(
+				'width' 	=> $_POST[ 'width' ],
+				'height' 	=> $_POST[ 'height' ],
+				'length' 	=> $_POST[ 'length' ],
+				'weight' 	=> $_POST[ 'weight' ],
+			)
+		);
+		
+		// $shipcloud_api->send_request( 'shipment_quotes', $shipment );
+		
+		p( $shipment );
 	}
 }

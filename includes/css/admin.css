@@ -2,7 +2,9 @@
 #shipcloud p {
     color: #777;
 }
-
+#shipcloud label{
+	display:block;
+}
 #shipcloud .order_data_column_container{
 	width:100%;
 	clear:both;
@@ -37,13 +39,39 @@
 #shipcloud .edit_address p select{
 	width: 100%;
 }
-#shipcloud .edit_address p label{
-	display:block;
-}
 #shipcloud .btn_edit_address{
 	opacity: 0.4;
 	cursor:pointer;
 }
 #shipcloud .btn_edit_address:hover{
 	opacity: 1;
+}
+
+#shipcloud .parcel_option{
+	width:10%;
+}
+#shipcloud .parcel_option.carrier{
+	width:25%;
+}
+#shipcloud .parcel_option.parcel_button{
+	padding-top:17px;
+	width:25%;
+}
+#shipcloud .parcel_option.parcel_button input[type=button]{
+	width:46%;
+	float:left;
+	margin-right:2%;
+}
+#shipcloud .parcel_option input,
+#shipcloud .parcel_option select{
+	width:95%;
+}
+#shipcloud .parcel_template p{
+	line-height:25px;
+}
+#shipcloud .parcel_template_arrow{
+	font-size:25px;
+	font-weight:bold;
+	color:#0074a2;
+	line-height:25px;
 }
