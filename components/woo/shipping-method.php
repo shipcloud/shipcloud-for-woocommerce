@@ -137,22 +137,5 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 					),
 			);
 		} 
-
-		private function get_carriers(){
-			$shipment_carriers = get_option( 'woocommerce_shipcloud_carriers' );
-			
-			if( '' == $shipment_carriers )
-				$shipment_carriers = $this->update_carriers();
-			
-			return $shipment_carriers;
-		}
-		
-		private function update_carriers(){
-			$sc_api = new Woocommerce_Shipcloud_API( $this->settings['api_key'] );
-			$shipment_carriers = $sc_api->get_carriers();
-			update_option( 'woocommerce_shipcloud_carriers', $shipment_carriers );
-			
-			return $shipment_carriers;
-		}
 	}
 }

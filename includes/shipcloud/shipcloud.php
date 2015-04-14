@@ -74,7 +74,22 @@ class Woocommerce_Shipcloud_API{
 		endif;
 	}
 	
-	public function get_carriers(){
+	public function update_carriers(){
+		$shipment_carriers = $this->get_carriers();
+		update_option( 'woocommerce_shipcloud_carriers', $shipment_carriers );
+		return $shipment_carriers;
+	}
+	
+	public function get_carriers( $force_update = FALSE ){
+		$shipment_carriers = get_option( 'woocommerce_shipcloud_carriers' );
+		
+		if( '' == $shipment_carriers || $force_update )
+			$shipment_carriers = $this->update_carriers();
+		
+		return $shipment_carriers;
+	}
+	
+	public function request_carriers(){
 		$action = 'carriers';
 		$request = $this->send_request( $action );
 		
@@ -84,7 +99,7 @@ class Woocommerce_Shipcloud_API{
 			return FALSE;
 		endif;
 	}
-
+	
     /**
      * Sends a request to the API
      * @param string $action
