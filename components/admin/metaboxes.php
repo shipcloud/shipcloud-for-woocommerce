@@ -39,6 +39,7 @@ class WC_Shipcloud_Metaboxes{
 		add_action( 'save_post', array( __CLASS__, 'save_product_metabox' ) );
 		add_action( 'wp_ajax_shipcloud_delete_parcel_template', array( __CLASS__ , 'ajax_delete_parcel_template' ) );
 		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( __CLASS__ , 'ajax_calculate_shipping' ) );
+		add_action( 'wp_ajax_shipcloud_create_label', array( __CLASS__ , 'ajax_create_label' ) );
 	}
 	
 	/**
@@ -66,12 +67,16 @@ class WC_Shipcloud_Metaboxes{
 		$recipient_address = get_post_meta( $post->ID, 'shipcloud_recipient_address', TRUE );
 		$parcel = get_post_meta( $post->ID, 'shipcloud_parcel', TRUE );
 		
+		$shipment_current_data = get_post_meta( $post->ID, 'shipcloud_shipment_current_data', TRUE );
+		$shipment_data = get_post_meta( $post->ID, 'shipcloud_shipment_data', TRUE );
+		
 		$order = new WC_Order( $post->ID );
 		
 		// Use default data if nothing was saved before
 		if( '' == $sender_address || 0 == count( $sender_address ) ):
 			$sender_address = array(
-				'name' => $options[ 'sender_name' ],
+				'first_name' => $options[ 'sender_first_name' ],
+				'last_name' => $options[ 'sender_last_name' ],
 				'company' => $options[ 'sender_company' ],
 				'street' => $options[ 'sender_street' ],
 				'street_nr' => $options[ 'sender_street_nr' ],
@@ -94,7 +99,8 @@ class WC_Shipcloud_Metaboxes{
 			endif;
 			
 			$recipient_address = array(
-				'name' => $order->shipping_first_name . ' ' . $order->shipping_last_name,
+				'first_name' => $order->shipping_first_name,
+				'last_name' => $order->shipping_last_name,
 				'company' => $order->shipping_company,
 				'street' => $recipient_street,
 				'street_nr' => $recipient_street_nr,
@@ -117,7 +123,7 @@ class WC_Shipcloud_Metaboxes{
 						<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 						<div class="address">
 							<p>
-							<?php echo $sender_address[ 'name' ]; ?><br />
+							<?php echo $sender_address[ 'first_name' ]; ?> <?php echo $sender_address[ 'last_name' ]; ?><br />
 							<?php echo $sender_address[ 'company' ]; ?><br />
 							<?php echo $sender_address[ 'street' ]; ?> <?php echo $sender_address[ 'street_nr' ]; ?><br />
 							<?php echo $sender_address[ 'postcode' ]; ?> <?php echo $sender_address[ 'city' ]; ?><br />
@@ -126,8 +132,12 @@ class WC_Shipcloud_Metaboxes{
 						</div>
 						<div class="edit_address">
 							<p class="fullsize">
-								<label for="sender_address[name]"><?php _e( 'Name', 'wcsc-locale' ); ?></label>
-								<input type="text" name="sender_address[name]" value="<?php echo $sender_address[ 'name' ]; ?>">
+								<label for="sender_address[first_name]"><?php _e( 'First Name', 'wcsc-locale' ); ?></label>
+								<input type="text" name="sender_address[first_name]" value="<?php echo $sender_address[ 'first_name' ]; ?>">
+							</p>
+							<p class="fullsize">
+								<label for="sender_address[last_name]"><?php _e( 'Last Name', 'wcsc-locale' ); ?></label>
+								<input type="text" name="sender_address[last_name]" value="<?php echo $sender_address[ 'last_name' ]; ?>">
 							</p>
 							<p class="fullsize">
 								<label for="sender_address[company]"><?php _e( 'Company', 'wcsc-locale' ); ?></label>
@@ -166,7 +176,7 @@ class WC_Shipcloud_Metaboxes{
 						
 						<div class="address">
 							<p>
-							<?php echo $recipient_address[ 'name' ]; ?><br />
+							<?php echo $recipient_address[ 'first_name' ]; ?> <?php echo $recipient_address[ 'last_name' ]; ?><br />
 							<?php echo $recipient_address[ 'company' ]; ?><br />
 							<?php echo $recipient_address[ 'street' ]; ?> <?php echo $recipient_address[ 'street_nr' ]; ?><br />
 							<?php echo $recipient_address[ 'postcode' ]; ?> <?php echo $recipient_address[ 'city' ]; ?><br />
@@ -175,8 +185,12 @@ class WC_Shipcloud_Metaboxes{
 						</div>
 						<div class="edit_address">
 							<p class="fullsize">
-								<label for="recipient_address[name]"><?php _e( 'Name', 'wcsc-locale' ); ?></label>
-								<input type="text" name="recipient_address[name]" value="<?php echo $recipient_address[ 'name' ]; ?>">
+								<label for="recipient_address[first_name]"><?php _e( 'First Name', 'wcsc-locale' ); ?></label>
+								<input type="text" name="recipient_address[first_name]" value="<?php echo $recipient_address[ 'first_name' ]; ?>">
+							</p>
+							<p class="fullsize">
+								<label for="recipient_address[last_name]"><?php _e( 'Last Name', 'wcsc-locale' ); ?></label>
+								<input type="text" name="recipient_address[last_name]" value="<?php echo $recipient_address[ 'last_name' ]; ?>">
 							</p>
 							<p class="fullsize">
 								<label for="recipient_address[company]"><?php _e( 'Company', 'wcsc-locale' ); ?></label>
@@ -212,6 +226,65 @@ class WC_Shipcloud_Metaboxes{
 				</div>
 				
 				<!-- Parcel settings //-->
+				<div class="order_data_column_container shipping_data">
+					<div class="order_data_column shipment_current_data">
+						<?php if( '' != $shipment_current_data ): ?>
+							<h3><?php _e( 'Current Shipment data', 'wcsc-locale' ); ?></h3>
+							
+							<div class="data">
+								<a href="<?php echo $shipment_current_data[ 'label_url' ]; ?>" target="_blank">
+									<img src="<?php echo WCSC_URLPATH; ?>/assets/pdf.png" class="current_shipment" />
+								</a>
+								<p>
+									<span class="shipment_label"><?php _e( 'Carrier tracking number', 'wcsc-locale' ); ?></span>
+									<span class="shipment_value"><?php echo $shipment_current_data[ 'carrier_tracking_no' ]; ?></span>
+								</p>
+								<p>
+									<span class="shipment_label"><?php _e( 'Carrier tracking url', 'wcsc-locale' ); ?></span>
+									<span class="shipment_value">
+										<a href="<?php echo $shipment_current_data[ 'tracking_url' ]; ?>" target="_blank">
+										<?php echo $shipment_current_data[ 'tracking_url' ]; ?>
+										</a>
+									</span>
+								</p>
+								<p>
+									<span class="shipment_label"><?php _e( 'Label', 'wcsc-locale' ); ?></span>
+									<span class="shipment_value">
+										<a href="<?php echo $shipment_current_data[ 'label_url' ]; ?>" target="_blank">
+										<?php _e( 'Download label', 'wcsc-locale' ); ?>
+										</a>
+									</span>
+								</p>
+								<p>
+									<span class="shipment_label"><?php _e( 'Price', 'wcsc-locale' ); ?></span>
+									<span class="shipment_value"><?php echo wc_price( $shipment_current_data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?></span>
+								</p>
+							</div>
+						<?php endif; ?>
+					</div>
+					
+					<div class="order_data_column shipment_data">
+						<?php if( is_array( $shipment_data ) ): ?>
+							<h3><?php _e( 'Last created shipments for this order', 'wcsc-locale' ); ?></h3>
+							<?php foreach( $shipment_data AS $data ): ?>
+								<div class="data">
+									<span class="shipment_label"><?php _e( 'Carrier tracking number', 'wcsc-locale' ); ?></span>
+									<span class="shipment_value"><?php echo $data[ 'carrier_tracking_no' ]; ?> | </span>
+									<span class="shipment_label"><?php _e( 'Label URL', 'wcsc-locale' ); ?></span>
+									<span class="shipment_value">
+										<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank">
+										<?php _e( 'Download label', 'wcsc-locale' ); ?>
+										</a> | 
+									</span>
+									<span class="shipment_label"><?php _e( 'Price', 'wcsc-locale' ); ?></span>
+									<span class="shipment_value"><?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?></span>
+								</div>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</div>
+				</div>
+				
+				<!-- Parcel settings //-->
 				<div class="order_data_column_container parcel">
 					<div class="order_data_column info">
 					</div>
@@ -223,16 +296,16 @@ class WC_Shipcloud_Metaboxes{
 										<label for="parcel[carrier]"><?php _e( 'Carrier', 'wcsc-locale' ); ?></label>
 									</th>
 									<th>
-										<label for="parcel[width]"><?php _e( 'Width in cm', 'wcsc-locale' ); ?></label>
+										<label for="parcel[width]"><?php _e( 'Width', 'wcsc-locale' ); ?></label>
 									</th>
 									<th>
-										<label for="parcel[height]"><?php _e( 'Height in cm', 'wcsc-locale' ); ?></label>
+										<label for="parcel[height]"><?php _e( 'Height', 'wcsc-locale' ); ?></label>
 									</th>
 									<th>
-										<label for="parcel[length]"><?php _e( 'Length in cm', 'wcsc-locale' ); ?></label>
+										<label for="parcel[length]"><?php _e( 'Length', 'wcsc-locale' ); ?></label>
 									</th>
 									<th>
-										<label for="parcel[weight]"><?php _e( 'Weight in kg', 'wcsc-locale' ); ?></label>
+										<label for="parcel[weight]"><?php _e( 'Weight', 'wcsc-locale' ); ?></label>
 									</th>
 									<th>
 										<label for="parcel[draft]"><?php _e( 'Save as Draft', 'wcsc-locale' ); ?></label>
@@ -253,22 +326,23 @@ class WC_Shipcloud_Metaboxes{
 										</select>
 									</td>
 									<td class="parcel_option parcel_width">
-										<input type="text" name="parcel[width]" value="<?php echo $parcel[ 'width' ]; ?>" />
+										<input type="text" name="parcel[width]" value="<?php echo $parcel[ 'width' ]; ?>" placeholder="<?php _e( 'cm', 'wcsc-locale'  ); ?>" />
 									</td>
 									<td class="parcel_option parcel_height">
-										<input type="text" name="parcel[height]" value="<?php echo $parcel[ 'height' ]; ?>" />
+										<input type="text" name="parcel[height]" value="<?php echo $parcel[ 'height' ]; ?>" placeholder="<?php _e( 'cm', 'wcsc-locale'  ); ?>" />
 									</td>
 									<td class="parcel_option parcel_length">
-										<input type="text" name="parcel[length]" value="<?php echo $parcel[ 'length' ]; ?>" />
+										<input type="text" name="parcel[length]" value="<?php echo $parcel[ 'length' ]; ?>" placeholder="<?php _e( 'cm', 'wcsc-locale'  ); ?>" />
 									</td>
 									<td class="parcel_option parcel_weight">
-										<input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" />
+										<input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" placeholder="<?php _e( 'kg', 'wcsc-locale'  ); ?>" />
 									</td>
 									<td class="parcel_option parcel_draft">
 										<input type="checkbox" name="parcel[draft]" value"yes" />
 									</td>
 									<td class="parcel_option parcel_button">
 										<input type="button" id="shipcloud_calculate_shipping" value="<?php _e( 'Calculate', 'wcsc-locale'  ); ?>" class="button" />
+										<input type="button" id="shipcloud_create_label" value="<?php _e( 'Create label', 'wcsc-locale' ); ?>" class="button"  />
 									</td>
 								</tr>
 								
@@ -286,13 +360,13 @@ class WC_Shipcloud_Metaboxes{
 											</td>
 											<td></td>
 											<td>
-												<input type="button" class="carrier_select button" value="<?php _e( 'Select', 'wcsc-locale'  ); ?>" />
 												<input type="button" class="carrier_delete button"  value="<?php _e( 'Delete', 'wcsc-locale'  ); ?>" />
+												<input type="button" class="carrier_select button" value="<?php _e( 'Select', 'wcsc-locale'  ); ?>" />
 												<input type="hidden" name="carrier" value="<?php echo $parcel_template[ 'carrier' ]; ?>">
-												<input type="hidden" name="width" value="<?php echo $parcel_template[ 'width' ]; ?>">
-												<input type="hidden" name="height" value="<?php echo $parcel_template[ 'height' ]; ?>">
-												<input type="hidden" name="length" value="<?php echo $parcel_template[ 'length' ]; ?>">
-												<input type="hidden" name="weight" value="<?php echo $parcel_template[ 'weight' ]; ?>">
+												<input type="hidden" name="width" value="<?php echo $parcel_template[ 'width' ]; ?>" />
+												<input type="hidden" name="height" value="<?php echo $parcel_template[ 'height' ]; ?>" />
+												<input type="hidden" name="length" value="<?php echo $parcel_template[ 'length' ]; ?>" />
+												<input type="hidden" name="weight" value="<?php echo $parcel_template[ 'weight' ]; ?>" />
 											</td>
 										</tr>
 										<?php $i++; ?>
@@ -426,20 +500,122 @@ class WC_Shipcloud_Metaboxes{
 		);
 		
 		$shipment_quote = $shipcloud_api->send_request( 'shipment_quotes', $shipment, 'POST' );
+		$request_status = (int) $shipment_quote[ 'header' ][ 'status' ];
 		
 		// Getting errors if existing
-		if( array_key_exists( 'errors', $shipment_quote['body'] ) ):
-			$result = $shipment_quote['body'][ 'errors' ];
+		if( 200 != $request_status ):
+			$errors = $shipment_quote[ 'body' ][ 'errors' ];
+			$result = array();
 			
-			foreach( $result AS $key => $error )
-				$result[ $key ] = self::translate_error( $error );
-			
+			switch( $request_status ){
+				case 422:
+					$result[] = __( 'Parcel dimensions are not supported by carrier.', 'wcsc-locale');
+					break;
+				default:
+					foreach( $errors AS $key => $error ):
+						$result[ $key ] = self::translate_error( $error );
+					endforeach;
+					break;
+			}
+
 			$result = array( 'errors' => $result );
 		endif;
 		
 		// Getting price if successful
-		if( array_key_exists( 'shipment_quote', $shipment_quote['body'] ) )
-			$result = $shipment_quote['body'][ 'shipment_quote' ];
+		if( array_key_exists( 'shipment_quote', $shipment_quote['body'] ) ):
+			$result = $shipment_quote['body'][ 'shipment_quote' ] ;
+			$result[ 'price' ] = wc_price( $result[ 'price' ], array( 'currency' =>  'EUR' ) );
+		endif;
+		
+		echo json_encode( $result );
+		exit;
+	}
+
+	/**
+	 * Calulating shipping after sublitting calculation
+	 */
+	public static function ajax_create_label(){
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+		
+		$order_id = $_POST[ 'order_id' ];
+		
+		$shipment = array(
+			'carrier' => $_POST[ 'carrier' ],
+			'service' => 'standard',
+			'create_shipping_label' => true,
+			'to' => array(
+				'first_name' 	=> $_POST[ 'recipient_first_name' ],
+				'last_name' 	=> $_POST[ 'recipient_last_name' ],
+				'company' 	=> $_POST[ 'recipient_company' ],
+				'street' 	=> $_POST[ 'recipient_street' ],
+				'street_no' => $_POST[ 'recipient_street_nr' ],
+				'zip_code' 	=> $_POST[ 'recipient_postcode' ],
+				'city' 		=> $_POST[ 'recipient_city' ],
+				'country' 	=> $_POST[ 'recipient_country' ]
+			),
+			'from' => array(
+				'first_name' 	=> $_POST[ 'sender_first_name' ],
+				'last_name' 	=> $_POST[ 'sender_last_name' ],
+				'company' 	=> $_POST[ 'sender_company' ],
+				'street' 	=> $_POST[ 'sender_street' ],
+				'street_no' => $_POST[ 'sender_street_nr' ],
+				'zip_code' 	=> $_POST[ 'sender_postcode' ],
+				'city' 		=> $_POST[ 'sender_city' ],
+				'country' 	=> $_POST[ 'sender_country' ]
+			),
+			'package' => array(
+				'width' 	=> $_POST[ 'width' ],
+				'height' 	=> $_POST[ 'height' ],
+				'length' 	=> $_POST[ 'length' ],
+				'weight' 	=> $_POST[ 'weight' ],
+			)
+		);
+		
+		$shipment = $shipcloud_api->send_request( 'shipments', $shipment, 'POST' );
+		$request_status = (int) $shipment[ 'header' ][ 'status' ];
+		
+		// Getting errors if existing
+		if( 200 != $request_status ):
+			$errors = $shipment_quote[ 'body' ][ 'errors' ];
+			$result = array();
+			
+			switch( $request_status ){
+				case 422:
+					$result[] = __( 'Parcel dimensions are not supported by carrier.', 'wcsc-locale');
+					break;
+				default:
+					foreach( $errors AS $key => $error ):
+						$result[ $key ] = self::translate_error( $error );
+					endforeach;
+					break;
+			}
+
+			$result = array( 'errors' => $result );
+		endif;
+		
+		// Saving shipment data to order
+		if( 200 == $request_status ):
+			$shipment_data = get_post_meta( $order_id, 'shipcloud_shipment_data', TRUE );
+			
+			if( !is_array( $shipment_data ) )
+				$shipment_data = array();
+			
+			$data = array(
+				'id' => $shipment[ 'body' ][ 'id' ],
+				'carrier_tracking_no' => $shipment[ 'body' ][ 'carrier_tracking_no' ],
+				'tracking_url' => $shipment[ 'body' ][ 'tracking_url' ],
+				'label_url' => $shipment[ 'body' ][ 'label_url' ],
+				'price' => $shipment[ 'body' ][ 'price' ]
+			);
+			$shipment_data[] = $data;
+			
+			update_post_meta( $order_id, 'shipcloud_shipment_current_data', $data );
+			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
+			
+			$result = $shipment[ 'body' ];
+		endif;
 		
 		echo json_encode( $result );
 		exit;

@@ -97,10 +97,16 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'description' => __( 'Enter your shipcloud.com API Key.', 'wcsc-locale' ),
 						'desc_tip'    => true,
 					),
-					'sender_name' => array(
-						'title'       => __( 'Name', 'wcsc-locale' ),
+					'sender_first_name' => array(
+						'title'       => __( 'First Name', 'wcsc-locale' ),
 						'type'        => 'text',
-						'description' => __( 'Enter standard sender name for shipment.', 'wcsc-locale' ),
+						'description' => __( 'Enter standard sender first name for shipment.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+					),
+					'sender_last_name' => array(
+						'title'       => __( 'Last Name', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard sender last name for shipment.', 'wcsc-locale' ),
 						'desc_tip'    => FALSE,
 					),
 					'sender_street' => array(
