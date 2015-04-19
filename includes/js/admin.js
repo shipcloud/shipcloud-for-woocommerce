@@ -53,14 +53,44 @@ jQuery( function( $ ) {
 	});
 	
 	$( '#shipcloud #shipcloud_calculate_shipping' ).click( function(){
-		var carrier = $( "select[name='parcel[carrier]']" ).val( );
-		var width = $( "input[name='parcel[width]']" ).val();
-		var height = $( "input[name='parcel[height]']" ).val();
-		var length = $( "input[name='parcel[length]']" ).val();
-		var weight = $( "input[name='parcel[weight]']" ).val();
+		var sender_name 	= $( "input[name='sender_address[name]']" ).val( );
+		var sender_company 	= $( "input[name='sender_address[company]']" ).val( );
+		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
+		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
+		var sender_postcode = $( "input[name='sender_address[postcode]']" ).val( );
+		var sender_city 	= $( "input[name='sender_address[city]']" ).val( );
+		var sender_country 	= $( "select[name='sender_address[country]']" ).val( );
+		
+		var reciepient_name 	= $( "input[name='recipient_address[name]']" ).val( );
+		var reciepient_company 	= $( "input[name='recipient_address[company]']" ).val( );
+		var reciepient_street 	= $( "input[name='recipient_address[street]']" ).val( );
+		var reciepient_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
+		var reciepient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
+		var reciepient_city 	= $( "input[name='recipient_address[city]']" ).val( );
+		var reciepient_country 	= $( "select[name='recipient_address[country]']" ).val( );
+		
+		var carrier 	= $( "select[name='parcel[carrier]']" ).val( );
+		var width 		= $( "input[name='parcel[width]']" ).val();
+		var height 		= $( "input[name='parcel[height]']" ).val();
+		var length 		= $( "input[name='parcel[length]']" ).val();
+		var weight 		= $( "input[name='parcel[weight]']" ).val();
 		
 		var data = {
 			'action': 'shipcloud_calculate_shipping',
+			'sender_name' : sender_name,
+			'sender_company' : sender_company,
+			'sender_street' : sender_street,
+			'sender_street_nr' : sender_street_nr,
+			'sender_postcode' : sender_postcode,
+			'sender_city' : sender_city,
+			'sender_country' : sender_country,
+			'recipient_name' : reciepient_name,
+			'recipient_company' : reciepient_name,
+			'recipient_street' : reciepient_street,
+			'recipient_street_nr': reciepient_street_nr,
+			'recipient_postcode' : reciepient_postcode,
+			'recipient_city' : reciepient_city,
+			'recipient_country' : reciepient_country,
 			'carrier': carrier,
 			'width': width,
 			'height': height,
@@ -69,8 +99,24 @@ jQuery( function( $ ) {
 		};
 		
 		$.post( ajaxurl, data, function( response ) {
-			// var result = jQuery.parseJSON( response );
-			console.log( response );
+			var result = jQuery.parseJSON( response );
+			
+			if( result.errors ){
+				var html = '<ul class="errors">';
+				result.errors.forEach( function( entry ){
+					html+= '<li>' + entry + '</li>';
+				});
+				html+= '</ul>';
+				
+				$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				
+			}if( result.price ){
+				var html = '<div class="parcel_price">';
+				html+= 'The calculated price is ' +  result.price + ' &#8364;';
+				html+= '</div>';
+				
+				$( '.parcel .info' ).fadeIn().html( html );
+			}
 		});
 	});
 });

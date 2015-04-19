@@ -111,6 +111,7 @@ class WC_Shipcloud_Metaboxes{
 		
 		?>
 		<div id="shipcloud">
+				<!-- Addresses //-->
 				<div class="order_data_column_container addresses">
 					<div class="order_data_column">
 						<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
@@ -159,6 +160,7 @@ class WC_Shipcloud_Metaboxes{
 							</p>
 						</div>
 					</div>
+					
 					<div class="order_data_column">
 						<h4><?php _e( 'Recipient Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 						
@@ -208,7 +210,11 @@ class WC_Shipcloud_Metaboxes{
 					</div>
 				</div>
 				</div>
+				
+				<!-- Parcel settings //-->
 				<div class="order_data_column_container parcel">
+					<div class="order_data_column info">
+					</div>
 					<div class="order_data_column">
 						<table class="widefat">
 							<thead>
@@ -362,6 +368,9 @@ class WC_Shipcloud_Metaboxes{
 		update_post_meta( $post_id, 'shipcloud_parcel', $_POST[ 'parcel' ] );
 	}
 	
+	/**
+	 * Deleting parcel template
+	 */
 	public static function ajax_delete_parcel_template(){
 		$parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
 
@@ -383,6 +392,9 @@ class WC_Shipcloud_Metaboxes{
 		exit;
 	}
 	
+	/**
+	 * Calulating shipping after sublitting calculation
+	 */
 	public static function ajax_calculate_shipping(){
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 		
@@ -392,18 +404,18 @@ class WC_Shipcloud_Metaboxes{
 			'carrier' => $_POST[ 'carrier' ],
 			'service' => 'standard',
 			'to' => array(
-				'street' 	=> $_POST[ 'to_street' ],
-				'street_no' => $_POST[ 'to_street_nr' ],
-				'zip_code' 	=> $_POST[ 'to_postcode' ],
-				'city' 		=> $_POST[ 'to_city' ],
-				'country' 	=> $_POST[ 'to_country' ]
+				'street' 	=> $_POST[ 'recipient_street' ],
+				'street_no' => $_POST[ 'recipient_street_nr' ],
+				'zip_code' 	=> $_POST[ 'recipient_postcode' ],
+				'city' 		=> $_POST[ 'recipient_city' ],
+				'country' 	=> $_POST[ 'recipient_country' ]
 			),
 			'from' => array(
-				'street' 	=> $_POST[ 'from_street' ],
-				'street_no' => $_POST[ 'from_street_nr' ],
-				'zip_code' 	=> $_POST[ 'from_postcode' ],
-				'city' 		=> $_POST[ 'from_city' ],
-				'country' 	=> $_POST[ 'from_country' ]
+				'street' 	=> $_POST[ 'sender_street' ],
+				'street_no' => $_POST[ 'sender_street_nr' ],
+				'zip_code' 	=> $_POST[ 'sender_postcode' ],
+				'city' 		=> $_POST[ 'sender_city' ],
+				'country' 	=> $_POST[ 'sender_country' ]
 			),
 			'package' => array(
 				'width' 	=> $_POST[ 'width' ],
@@ -413,8 +425,78 @@ class WC_Shipcloud_Metaboxes{
 			)
 		);
 		
-		// $shipcloud_api->send_request( 'shipment_quotes', $shipment );
+		$shipment_quote = $shipcloud_api->send_request( 'shipment_quotes', $shipment, 'POST' );
 		
-		p( $shipment );
+		// Getting errors if existing
+		if( array_key_exists( 'errors', $shipment_quote['body'] ) ):
+			$result = $shipment_quote['body'][ 'errors' ];
+			
+			foreach( $result AS $key => $error )
+				$result[ $key ] = self::translate_error( $error );
+			
+			$result = array( 'errors' => $result );
+		endif;
+		
+		// Getting price if successful
+		if( array_key_exists( 'shipment_quote', $shipment_quote['body'] ) )
+			$result = $shipment_quote['body'][ 'shipment_quote' ];
+		
+		echo json_encode( $result );
+		exit;
+	}
+	
+	/**
+	 * Translating shipcloud.io error texts
+	 * @param string $error_text
+	 * @return string $error_text
+	 */
+	public static function translate_error( $error_text ){
+		$translations = array(
+			"Sender Street can't be blank"			
+				=> __( 'Sender Street can\'t be blank.', 'wpsc-locale' ),
+			"Sender Street number can't be blank"	
+				=> __( 'Sender Street number can\'t be blank.', 'wpsc-locale' ),
+			"Sender ZIP code can't be blank" 		
+				=> __( 'Sender ZIP code can\'t be blank.', 'wpsc-locale' ),
+			"Sender City can't be blank"			
+				=> __( 'Sender City can\'t be blank.', 'wpsc-locale' ),
+			"Sender Country can't be blank"			
+				=> __( 'Sender Country can\'t be blank.', 'wpsc-locale' ),
+			"Sender Country  is not an ALPHA-2 ISO country code." 
+				=> __( 'Sender Country  is not an ALPHA-2 ISO country code.', 'wpsc-locale' ),
+			"Receiver Street can't be blank"		
+				=> __( 'Sender Street can\'t be blank.', 'wpsc-locale' ),
+			"Receiver Street number can't be blank"	
+				=> __( 'Sender Street number can\'t be blank.', 'wpsc-locale' ),
+			"Receiver ZIP code can't be blank" 		
+				=> __( 'Sender ZIP code can\'t be blank.', 'wpsc-locale' ),
+			"Receiver City can't be blank"			
+				=> __( 'Sender City can\'t be blank.', 'wpsc-locale' ),
+			"Receiver Country can't be blank"		
+				=> __( 'Sender Country can\'t be blank.', 'wpsc-locale' ),
+			"Receiver Country  is not an ALPHA-2 ISO country code." 
+				=> __( 'Receiver Country  is not an ALPHA-2 ISO country code.', 'wpsc-locale' ),
+			"Package Height (in cm) can't be blank" 
+				=> __( 'Package Height (in cm) can\'t be blank.', 'wpsc-locale' ),
+			"Package Height (in cm) is not a number"
+				=> __( 'Package Height (in cm) is not a number.', 'wpsc_locale' ),
+			"Package Length (in cm) can't be blank"
+				=> __( 'Package Length (in cm) can\'t be blank.', 'wpsc_locale' ),
+			"Package Length (in cm) is not a number"
+				=> __( 'Package Length (in cm) is not a number.', 'wpsc-locale'),
+			"Package Width (in cm) can't be blank"
+				=> __( 'Package Width (in cm) can\'t be blank.', 'wpsc-locale' ),
+			"Package Width (in cm) is not a number"
+				=> __( 'Package Width (in cm) is not a number.', 'wpsc-locale'),
+			"Package Weight (in kg) can't be blank"
+				=> __( 'Package Weight (in kg) can\'t be blank.', 'wpsc-locale' ),
+			"Package Weight (in kg) is not a number"
+				=> __( 'Package Weight (in kg) is not a number.', 'wpsc-locale')
+		);
+		
+		if( array_key_exists( $error_text, $translations ) )
+			$error_text = $translations[ $error_text ];
+		
+		return $error_text;
 	}
 }
