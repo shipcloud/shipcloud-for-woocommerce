@@ -235,10 +235,13 @@ class WC_Shipcloud_Metaboxes{
 								<a href="<?php echo $shipment_current_data[ 'label_url' ]; ?>" target="_blank">
 									<img src="<?php echo WCSC_URLPATH; ?>/assets/pdf.png" class="current_shipment" />
 								</a>
+								<?php if( '' !=  $shipment_current_data[ 'carrier_tracking_no' ]): ?>
 								<p>
 									<span class="shipment_label"><?php _e( 'Carrier tracking number', 'wcsc-locale' ); ?></span>
 									<span class="shipment_value"><?php echo $shipment_current_data[ 'carrier_tracking_no' ]; ?></span>
 								</p>
+								<?php endif; ?>
+								<?php if( '' !=  $shipment_current_data[ 'tracking_url' ]): ?>
 								<p>
 									<span class="shipment_label"><?php _e( 'Carrier tracking url', 'wcsc-locale' ); ?></span>
 									<span class="shipment_value">
@@ -247,6 +250,7 @@ class WC_Shipcloud_Metaboxes{
 										</a>
 									</span>
 								</p>
+								<?php endif; ?>
 								<p>
 									<span class="shipment_label"><?php _e( 'Label', 'wcsc-locale' ); ?></span>
 									<span class="shipment_value">
@@ -268,8 +272,10 @@ class WC_Shipcloud_Metaboxes{
 							<h3><?php _e( 'Last created shipments for this order', 'wcsc-locale' ); ?></h3>
 							<?php foreach( $shipment_data AS $data ): ?>
 								<div class="data">
+									<?php if( '' !=  $shipment_current_data[ 'carrier_tracking_no' ]): ?>
 									<span class="shipment_label"><?php _e( 'Carrier tracking number', 'wcsc-locale' ); ?></span>
 									<span class="shipment_value"><?php echo $data[ 'carrier_tracking_no' ]; ?> | </span>
+									<?php endif; ?>
 									<span class="shipment_label"><?php _e( 'Label URL', 'wcsc-locale' ); ?></span>
 									<span class="shipment_value">
 										<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank">

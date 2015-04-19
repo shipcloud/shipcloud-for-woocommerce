@@ -2,6 +2,10 @@
 #shipcloud p {
     color: #777;
 }
+#shipcloud h3 {
+    padding:0;
+    margin-bottom:20px;
+}
 #shipcloud label{
 	display:block;
 }
