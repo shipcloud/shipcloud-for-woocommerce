@@ -176,26 +176,23 @@ jQuery( function( $ ) {
 		};
 		
 		$.post( ajaxurl, data, function( response ) {
-			var result = jQuery.parseJSON( response );
-			
-			console.log( response );
-			console.log( result );
-			
-			if( result.errors != null ){
-				var html = '<ul class="errors">';
-				result.errors.forEach( function( entry ){
-					html+= '<li>' + entry + '</li>';
-				});
-				html+= '</ul>';
-				
-				$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+			try
+			{
+			   var result = JSON.parse( response );
+			   
+			   if( result.errors != null ){
+					var html = '<ul class="errors">';
+					result.errors.forEach( function( entry ){
+						html+= '<li>' + entry + '</li>';
+					});
+					html+= '</ul>';
+					
+					$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				}
 			}
-			
-			if( result.id != null ){
-				var html = '<ul class="errors">';
-				html+= '</ul>';
-				
-				$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+			catch( e )
+			{
+				$( '.shipment_labels' ).prepend( response );
 			}
 		});
 	});

@@ -57,49 +57,31 @@
 /**
  * 	Shipments
  */
-#shipcloud .shipment_current_data{
+#shipcloud .shipment_labels{
+	width:100%;
+}
+#shipcloud .shipment_labels .data{
 	width:96%;
 	padding:2%;
 	background-color: #f8f8f8;
 	border: 1px solid #dfdfdf;
 	margin-bottom: 20px;
 }
-#shipcloud .shipment_current_data img.current_shipment{
+#shipcloud .shipment_labels .data img.current_shipment{
 	float:left;
 }
-#shipcloud .shipment_current_data p{
+#shipcloud .shipment_labels .data p{
 	margin-left: 58px;
 }
-#shipcloud .shipment_current_data .shipment_label{
+#shipcloud .shipment_labels .data .shipment_label{
     display: block;
     float: left;
     width: 30%;
 }
-#shipcloud .shipment_current_data .shipment_value{
+#shipcloud .shipment_labels .data .shipment_value{
     display: block;
     float: right;
     width: 70%;
-}
-#shipcloud .shipment_data{
-	width:96%;
-	padding:2%;
-	background-color: #FFF;
-	border: 1px solid #dfdfdf;
-	margin-bottom: 20px;
-}
-#shipcloud .shipment_data .data{
-	width:100%;
-	clear:both;
-}
-#shipcloud .shipment_data .shipment_label{
-    display: inline;
-    float: left;
-    margin-right: 5px;
-}
-#shipcloud .shipment_data .shipment_value{
-    display: inline;
-    float: left;
-    margin-right: 5px;
 }
 /**
  * Parcel
