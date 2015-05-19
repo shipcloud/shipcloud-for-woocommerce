@@ -11,35 +11,70 @@ jQuery( function( $ ) {
 		div_edit_address.show();
 	});
 	
-	$( '.carrier_select' ).click( function (){
-		
-		var template = $( this ).parent();
-		
-		var carrier = template.find( "input[name='carrier']" ).val();
-		var width = template.find( "input[name='width']" ).val();
-		var height = template.find( "input[name='height']" ).val();
-		var length = template.find( "input[name='length']" ).val();
-		var weight = template.find( "input[name='weight']" ).val();
-		
-		$( "select[name='parcel[carrier]']" ).val( carrier );
-		$( "input[name='parcel[width]']" ).val( width );
-		$( "input[name='parcel[height]']" ).val( height );
-		$( "input[name='parcel[length]']" ).val( length );
-		$( "input[name='parcel[weight]']" ).val( weight );
-	});
+	var carrier_select = function(){
+		$( '.carrier_select' ).click( function (){
+			
+			var template = $( this ).parent();
+			
+			var carrier = template.find( "input[name='carrier']" ).val();
+			var width = template.find( "input[name='width']" ).val();
+			var height = template.find( "input[name='height']" ).val();
+			var length = template.find( "input[name='length']" ).val();
+			var weight = template.find( "input[name='weight']" ).val();
+			
+			$( "select[name='parcel[carrier]']" ).val( carrier );
+			$( "input[name='parcel[width]']" ).val( width );
+			$( "input[name='parcel[height]']" ).val( height );
+			$( "input[name='parcel[length]']" ).val( length );
+			$( "input[name='parcel[weight]']" ).val( weight );
+		});
+	}
+	carrier_select();
 	
-	$( '#shipcloud .carrier_delete' ).click( function (){
+	var carrier_delete = function(){
+		$( '#shipcloud .carrier_delete' ).click( function (){
+			
+			var template = $( this ).parent();
+			
+			var carrier = template.find( "input[name='carrier']" ).val();
+			var width = template.find( "input[name='width']" ).val();
+			var height = template.find( "input[name='height']" ).val();
+			var length = template.find( "input[name='length']" ).val();
+			var weight = template.find( "input[name='weight']" ).val();
+			
+			var data = {
+				'action': 'shipcloud_delete_parcel_template',
+				'carrier': carrier,
+				'width': width,
+				'height': height,
+				'length': length,
+				'weight': weight
+			};
+			
+			$.post( ajaxurl, data, function( response ) {
+				var result = jQuery.parseJSON( response );
+				if( result.deleted == true ){
+					template.parent().remove();
+				}
+			});
+		});
+	}
+	carrier_delete();
+	
+	$( '#shipcloud #shipcloud_add_parcel_template' ).click( function (){
+		var template = $( '#parcel_options' );
 		
-		var template = $( this ).parent();
+		var carrier_name = template.find( "select[name='parcel[carrier]'] option:selected" ).text();
+		var carrier = template.find( "select[name='parcel[carrier]']" ).val();
+		var width = template.find( "input[name='parcel[width]']" ).val();
+		var height = template.find( "input[name='parcel[height]']" ).val();
+		var length = template.find( "input[name='parcel[length]']" ).val();
+		var weight = template.find( "input[name='parcel[weight]']" ).val();
 		
-		var carrier = template.find( "input[name='carrier']" ).val();
-		var width = template.find( "input[name='width']" ).val();
-		var height = template.find( "input[name='height']" ).val();
-		var length = template.find( "input[name='length']" ).val();
-		var weight = template.find( "input[name='weight']" ).val();
+		console.log( carrier_name );
 		
 		var data = {
-			'action': 'shipcloud_delete_parcel_template',
+			'action': 'shipcloud_add_parcel_template',
 			'carrier': carrier,
 			'width': width,
 			'height': height,
@@ -49,11 +84,48 @@ jQuery( function( $ ) {
 		
 		$.post( ajaxurl, data, function( response ) {
 			var result = jQuery.parseJSON( response );
-			if( result.deleted == true ){
-				template.parent().remove();
+			
+			if( result.added == true ){
+				
+				var html = '<div class="parcel_template_added">';
+				html+= wcsc_translate.parcel_added;
+				html+= '</div>';
+				
+				$( '.parcel .info' ).fadeIn().html( html );
+				
+				var html = '<tr><td>' + carrier_name + '</td>';
+				html+= '<td>' + width + ' ' + wcsc_translate.cm + '</td>';
+				html+= '<td>' + height + ' ' + wcsc_translate.cm + '</td>';
+				html+= '<td>' + length + ' ' + wcsc_translate.cm + '</td>';
+				html+= '<td>' + weight + ' ' + wcsc_translate.kg + '</td>';
+				html+= '<td>';
+					html+= '<input type="button" class="carrier_delete button"  value="Delete" />';
+					html+= '<input type="button" class="carrier_select button" value="Select" />';
+					html+= '<input type="hidden" value="' + carrier  + '" name="carrier" />';
+					html+= '<input type="hidden" value="' + width  + '" name="width" />';
+					html+= '<input type="hidden" value="' + height + '" name="height" />';
+					html+= '<input type="hidden" value="' + length + '" name="length" />';
+					html+= '<input type="hidden" value="' + weight + '" name="weight" />';
+				html+= '</td></tr>';
+				
+				$( '#parcel_table tbody' ).append( html );
+				
+				carrier_select();
+				carrier_delete();
+			}else{
+				
+				var html = '<div class="parcel_template_not_added">';
+				html+= wcsc_translate.parcel_not_added;
+				html+= '</div>';
+				
+				$( '.parcel .info' ).fadeIn().html( html );
 			}
+			
+			console.log( result );
 		});
 	});
+	
+	
 	
 	$( '#shipcloud #shipcloud_calculate_shipping' ).click( function(){
 		
@@ -107,16 +179,17 @@ jQuery( function( $ ) {
 				
 				$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
 				
-			}if( result.price ){
-				var price_text = 'The calculated price is';
-				var button_text = 'Create label';
+				$( '#shipcloud_create_label').fadeOut();
+				$( '#shipcloud_add_parcel_template').fadeOut();
 				
+			}if( result.price ){
 				var html = '<div class="parcel_price">';
-				html+= price_text + ' ' +  result.price;
+				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
 				
 				$( '.parcel .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeIn();
+				$( '#shipcloud_add_parcel_template').fadeIn();
 			}
 		});
 	});
@@ -201,6 +274,7 @@ jQuery( function( $ ) {
 		
 		$( '.parcel .info' ).fadeOut();
 		$( '#shipcloud_create_label').fadeOut();
+		$( '#shipcloud_add_parcel_template').fadeOut();
 	});
 	
 	$( "select[name='parcel[carrier]']" ).change(function(){

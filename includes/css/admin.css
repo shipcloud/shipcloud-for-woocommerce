@@ -89,9 +89,18 @@
 #shipcloud .parcel .info{
 	display:none;
 }
-#shipcloud .parcel .parcel_price{
+#shipcloud .parcel .parcel_price,
+#shipcloud .parcel .parcel_template_added{
     border-left: 4px solid #7ad03a;
-    -webkit-box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
+	 -webkit-box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
+	box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
+    line-height: 28px;
+    padding: 12px;
+    margin-bottom:20px;
+}
+#shipcloud .parcel .parcel_template_not_added{
+    border-left: 4px solid #dd3d36;
+	 -webkit-box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
 	box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
     line-height: 28px;
     padding: 12px;
@@ -120,7 +129,6 @@
 	width:25%;
 }
 #shipcloud .parcel_option.parcel_button{
-	padding-top:17px;
 	width:25%;
 }
 #shipcloud .parcel_option input,
@@ -128,7 +136,8 @@
 	width:95%;
 	margin-bottom: 10px;
 }
-#shipcloud #shipcloud_create_label{
+#shipcloud #shipcloud_create_label,
+#shipcloud #shipcloud_add_parcel_template{
 	display:none;
 }
 #shipcloud .parcel_template p{

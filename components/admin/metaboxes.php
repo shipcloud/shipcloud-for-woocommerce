@@ -37,9 +37,11 @@ class WC_Shipcloud_Metaboxes{
 	public static function init(){
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_metaboxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_product_metabox' ) );
+		add_action( 'wp_ajax_shipcloud_add_parcel_template', array( __CLASS__ , 'ajax_add_parcel_template' ) );
 		add_action( 'wp_ajax_shipcloud_delete_parcel_template', array( __CLASS__ , 'ajax_delete_parcel_template' ) );
 		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( __CLASS__ , 'ajax_calculate_shipping' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( __CLASS__ , 'ajax_create_label' ) );
+		
 	}
 	
 	/**
@@ -244,7 +246,7 @@ class WC_Shipcloud_Metaboxes{
 					<div class="order_data_column info">
 					</div>
 					<div class="order_data_column">
-						<table class="widefat">
+						<table class="widefat" id="parcel_table">
 							<thead>
 								<tr>
 									<th>
@@ -263,15 +265,12 @@ class WC_Shipcloud_Metaboxes{
 										<label for="parcel[weight]"><?php _e( 'Weight', 'wcsc-locale' ); ?></label>
 									</th>
 									<th>
-										<label for="parcel[draft]"><?php _e( 'Save as Draft', 'wcsc-locale' ); ?></label>
-									</th>
-									<th>
 										
 									</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr id="parcel_options">
 									<td class="parcel_option carrier">
 										<select name="parcel[carrier]">
 											<?php foreach( $carriers AS $carrier ): ?>
@@ -292,21 +291,13 @@ class WC_Shipcloud_Metaboxes{
 									<td class="parcel_option parcel_weight">
 										<input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" placeholder="<?php _e( 'kg', 'wcsc-locale'  ); ?>" />
 									</td>
-									<td class="parcel_option parcel_draft">
-										<input type="checkbox" name="parcel[draft]" value"yes" />
-									</td>
 									<td class="parcel_option parcel_button">
 										<input type="button" id="shipcloud_calculate_shipping" value="<?php _e( 'Calculate', 'wcsc-locale'  ); ?>" class="button" />
+										<input type="button" id="shipcloud_add_parcel_template" value="<?php _e( 'Save as draft', 'wcsc-locale'  ); ?>" class="button" />
 										<input type="button" id="shipcloud_create_label" value="<?php _e( 'Create label', 'wcsc-locale' ); ?>" class="button"  />
 									</td>
 								</tr>
-							</tbody>
-						</table>
 						
-						<h3><?php _e( 'Parcel templates', 'wcsc-locale' ); ?></h3>
-						
-						<table class="widefat">
-							<tbody>		
 								<?php if( '' != $parcel_templates && is_array( $parcel_templates ) ): ?>
 									<?php $i = 0; ?>
 									<?php foreach( $parcel_templates AS $parcel_template ): ?>
@@ -319,7 +310,6 @@ class WC_Shipcloud_Metaboxes{
 												<?php echo $parcel_template[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale' ); ?> 
 												
 											</td>
-											<td></td>
 											<td>
 												<input type="button" class="carrier_delete button"  value="<?php _e( 'Delete', 'wcsc-locale'  ); ?>" />
 												<input type="button" class="carrier_select button" value="<?php _e( 'Select', 'wcsc-locale'  ); ?>" />
@@ -468,6 +458,45 @@ class WC_Shipcloud_Metaboxes{
 		update_post_meta( $post_id, 'shipcloud_sender_address', $_POST[ 'sender_address' ] );
 		update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST[ 'recipient_address' ] );
 		update_post_meta( $post_id, 'shipcloud_parcel', $_POST[ 'parcel' ] );
+	}
+	
+	/**
+	 * Save parcel template
+	 */
+	public static function ajax_add_parcel_template(){
+		$parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
+		
+		// Checking if parcel template exists
+		$found = FALSE;
+		foreach( $parcel_templates AS $key => $parcel_template ):
+			if( 
+				$parcel_template[ 'carrier' ] == $_POST[ 'carrier' ] && 
+				$parcel_template[ 'width' ] == $_POST[ 'width' ] && 
+				$parcel_template[ 'height' ] == $_POST[ 'height' ] && 
+				$parcel_template[ 'length' ] == $_POST[ 'length' ] && 
+				$parcel_template[ 'weight' ] == $_POST[ 'weight' ]
+			  ):
+				$found = TRUE;
+			endif;
+		endforeach;
+		
+		// Adding parcel template
+		if( !$found ):
+			$new_parcel_template = array(
+				'carrier' => $_POST[ 'carrier' ],
+				'width' => $_POST[ 'width' ],
+				'height' => $_POST[ 'height' ],
+				'length' => $_POST[ 'length' ],
+				'weight' => $_POST[ 'weight' ]
+			);
+			$parcel_templates[] = $new_parcel_template;
+			update_option( 'woocommerce_shipcloud_parcel_templates', $parcel_templates );
+			echo json_encode( array( 'added' => TRUE ) );
+			exit;
+		endif;
+		
+		echo json_encode( array( 'added' => FALSE ) );		
+		exit;
 	}
 	
 	/**

@@ -153,7 +153,18 @@ class WooCommerceShipcloud{
 	 * @since 1.0.0
 	 */	
 	public static function register_admin_scripts() {
-		wp_enqueue_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );
+		$translation_array = array(
+			'parcel_added' =>  __( 'Parcel template added!', 'wcsc-locale' ),
+			'parcel_not_added' =>  __( 'Parcel template not added!', 'wcsc-locale' ),
+			'price_text' => __( 'The calculated price is', 'wcsc-locale' ),
+			'kg' => __( 'kg', 'wcsc-locale' ),
+			'kg' => __( 'kg', 'wcsc-locale' ),
+			'cm' => __( 'cm', 'wcsc-locale' )
+		);	
+		
+		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );
+		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
+		wp_enqueue_script( 'wcsc-admin-script' );
 	} // end register_admin_scripts
 	
 	/**
