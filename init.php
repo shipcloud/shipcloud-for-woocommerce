@@ -137,7 +137,6 @@ class WooCommerceShipcloud{
 	 */
 	public static function load_textdomain() {
 		load_plugin_textdomain( 'wcsc-locale', false, WCSC_RELATIVE_FOLDER . '/languages' );
-		
 	} // end plugin_textdomain
 
 	/**
