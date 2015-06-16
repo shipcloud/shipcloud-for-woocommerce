@@ -1,4 +1,41 @@
 /* This stylesheet is used to style the admin option form of the plugin. */
+
+/**
+ * 	Tabs
+ */
+#shipcloud .ui-state-hover{
+	background:none;
+	border:none;
+}
+#shipcloud .ui-state-hover, 
+#shipcloud .ui-widget-content .ui-state-hover, 
+#shipcloud .ui-widget-header .ui-state-hover,
+#shipcloud .ui-state-focus, 
+#shipcloud .ui-widget-content .ui-state-focus, 
+#shipcloud .ui-widget-header .ui-state-focus,
+#shipcloud .ui-state-active, 
+#shipcloud .ui-widget-content .ui-state-active, 
+#shipcloud .ui-widget-header .ui-state-active{
+	background:none;
+	border:none;
+}
+#shipcloud .wcsc-nav-tab-wrapper{
+	padding:0;
+	border-bottom: 1px solid #ccc;
+}
+#shipcloud .wcsc-nav-tab-wrapper li{
+	float:left;
+	margin-bottom:0px;
+}
+#shipcloud .wcsc-nav-tab-wrapper .ui-tabs-active .nav-tab{
+	background-color:#FFF;
+}
+#shipcloud .wcsc-tab-label{
+	padding:20px;
+}
+/**
+ * 	General
+ */
 #shipcloud p {
     color: #777;
 }
@@ -9,16 +46,27 @@
 #shipcloud label{
 	display:block;
 }
+
 #shipcloud .order_data_column_container{
 	width:100%;
 	clear:both;
+	margin-bottom: 20px;
 }
 #shipcloud .order_data_column{
     float: left;
 }
 #shipcloud .addresses .order_data_column{
-	padding: 0 2% 0 0;
-    width: 48%;
+    width: 40%;
+    padding:4%;
+}
+#shipcloud .addresses .order_data_column h4,
+#shipcloud .addresses .order_data_column p{
+	margin:0;
+}
+#shipcloud .addresses .order_data_column.sender{
+	margin-right:4%;
+}
+#shipcloud .addresses .order_data_column.recipient{
 }
 #shipcloud .parcel .order_data_column{
 	padding: 0;
@@ -54,6 +102,57 @@
 #shipcloud .errors{
 	border-color: #dd3d36;
 }
+
+#shipcloud .shadow{
+    -webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+}
+
+/**
+ * 	Action Buttons
+ */
+.order_data_column_container.actions .action:first-child{
+	border-top:1px solid #ccc;
+	-webkit-border-top-left-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius-topright: 3px;
+	border-top-right-radius: 3px;
+}
+.order_data_column_container.actions .action:last-child{
+	-webkit-border-bottom-left-radius: 3px;
+	-moz-border-radius-bottomleft: 3px;
+	border-bottom-left-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	-moz-border-radius-bottomright: 3px;
+	border-bottom-right-radius: 3px;
+	
+}
+.order_data_column_container.actions .action{
+	border-left: 1px solid #CCC;
+	border-right: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	margin: 0;
+}
+#shipcloud #create_label,
+#shipcloud #pickup_parcel{
+    padding: 0.5%;
+    text-align: right;
+    width: 99%;
+}
+
+#shipcloud #create_label{
+}
+
+#shipcloud #pickup_parcel{
+}
+
+.button-wcsc-action{
+	min-width:200px;
+}
+
 /**
  * 	Shipments
  */

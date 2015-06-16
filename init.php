@@ -68,7 +68,7 @@ class WooCommerceShipcloud{
             // Register admin styles and scripts
             add_action( 'plugins_loaded', array( __CLASS__, 'check_requirements' ), 1 );
             add_action( 'admin_print_styles', array( __CLASS__, 'register_admin_styles' ) );
-            add_action( 'admin_enqueue_scripts', array( __CLASS__, 'register_admin_scripts' ) );
+            add_action( 'admin_enqueue_scripts', array( __CLASS__, 'register_admin_scripts' ), 0 );
             add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
         else:
             // Register plugin styles and scripts
@@ -164,6 +164,7 @@ class WooCommerceShipcloud{
 		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
 		wp_enqueue_script( 'wcsc-admin-script' );
+		
 	} // end register_admin_scripts
 	
 	/**

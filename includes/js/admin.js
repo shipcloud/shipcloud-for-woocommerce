@@ -282,4 +282,26 @@ jQuery( function( $ ) {
 		$( '.parcel .info' ).fadeOut();
 		$( '#shipcloud_create_label').fadeOut();
 	});
+	
+	$( '.shipcloud-tabs' ).tabs( function(){
+		
+	});
+	
+	// $( '.shipcloud-tabs' ).removeClass( 'ui-tabs' ).removeClass( 'ui-widget' ).removeClass( 'ui-widget-content' ).removeClass( 'ui-corner-all' );
+	// ui-tabs-panel ui-corner-bottom
+	
+	$( '#shipcloud' ).find( '.ui-tabs' ).removeClass( 'ui-tabs' );
+	$( '#shipcloud' ).find( '.ui-widget' ).removeClass( 'ui-widget' );
+	$( '#shipcloud' ).find( '.ui-widget-content' ).removeClass( 'ui-widget-content' );
+	$( '#shipcloud' ).find( '.ui-corner-all' ).removeClass( 'ui-corner-all' );
+	$( '#shipcloud' ).find( '.ui-tabs-nav' ).removeClass( 'ui-tabs-nav' );
+	$( '#shipcloud' ).find( '.ui-helper-reset' ).removeClass( 'ui-helper-reset' );
+	$( '#shipcloud' ).find( '.ui-helper-clearfix' ).removeClass( 'ui-helper-clearfix' );
+	$( '#shipcloud' ).find( '.ui-widget-header' ).removeClass( 'ui-widget-header' );
+	$( '#shipcloud' ).find( '.ui-state-default' ).removeClass( 'ui-state-default' );
+	$( '#shipcloud' ).find( '.ui-corner-top' ).removeClass( 'ui-corner-top' );
+	$( '#shipcloud' ).find( '.ui-state-active' ).removeClass( 'ui-state-active' );
+	$( '#shipcloud' ).find( '.ui-tabs-panel' ).removeClass( 'ui-tabs-panel' );
+	$( '#shipcloud' ).find( '.ui-corner-bottom' ).removeClass( 'ui-corner-bottom' );
+	 
 });
