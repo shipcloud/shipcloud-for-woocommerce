@@ -7,8 +7,40 @@ jQuery( function( $ ) {
 		
 		console.log( div_edit_address );
 		
-		div_address.hide();
-		div_edit_address.show();
+		if( 'block' == div_address.css( 'display' ) ){
+			div_address.hide();
+			div_edit_address.show();
+		}else{
+			var address = '';
+			
+			if( div_address.parent().hasClass( 'sender' ) ){
+				address += $( "input[name='sender_address[first_name]']" ).val()  + ' ';
+				address += $( "input[name='sender_address[last_name]']" ).val() + '<br />';
+				address += $( "input[name='sender_address[company]']" ).val() + '<br />';
+				address += $( "input[name='sender_address[street]']" ).val()  + ' ';
+				address += $( "input[name='sender_address[street_nr]']" ).val() + '<br />';
+				address += $( "input[name='sender_address[postcode]']" ).val() + ' ';
+				address += $( "input[name='sender_address[city]']" ).val() + '<br />';
+				address += $( "select[name='sender_address[country]']" ).val();
+			}else{
+		
+				address += $( "input[name='recipient_address[first_name]']" ).val() + ' ';
+				address += $( "input[name='recipient_address[last_name]']" ).val() + '<br />';
+				address += $( "input[name='recipient_address[company]']" ).val() + '<br />';
+				address += $( "input[name='recipient_address[street]']" ).val() + ' ';
+				address += $( "input[name='recipient_address[street_nr]']" ).val() + '<br />';
+				address += $( "input[name='recipient_address[postcode]']" ).val() +  ' ';
+				address += $( "input[name='recipient_address[city]']" ).val() + '<br />';
+				address += $( "select[name='recipient_address[country]']" ).val();
+			}
+			
+			div_address.html( address );
+						
+			div_edit_address.hide();
+			div_address.show();
+		}
+	
+		
 	});
 	
 	var carrier_select = function(){
@@ -124,7 +156,6 @@ jQuery( function( $ ) {
 			console.log( result );
 		});
 	});
-	
 	
 	
 	$( '#shipcloud #shipcloud_calculate_shipping' ).click( function(){

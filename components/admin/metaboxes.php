@@ -51,14 +51,14 @@ class WC_Shipcloud_Metaboxes{
 	public static function add_metaboxes(){
 		add_meta_box(
 			'shipcloudio',
-			__( 'Shipment Carrier', 'wcsc-locale' ),
+			__( 'Shipment', 'wcsc-locale' ),
 			array( __CLASS__, 'product_metabox' ),
 			'shop_order'
 		);
 	}
 	
 	
-	public function enqueue_scripts(){
+	public static function enqueue_scripts(){
 		global $wp_scripts;
 
 		wp_enqueue_script( 'jquery' );
@@ -87,7 +87,7 @@ class WC_Shipcloud_Metaboxes{
 		<div id="shipcloud">
 			<div class="shipcloud-tabs">
 				<ul class="nav-tab-wrapper wcsc-nav-tab-wrapper">
-					<li><a class="nav-tab" href="#wcsc-tab-label"><?php _e( 'Shipment overview', 'wcsc-locale' ); ?></a></li>
+					<li><a class="nav-tab" href="#wcsc-tab-label"><?php _e( 'Overview', 'wcsc-locale' ); ?></a></li>
 					<li><a class="nav-tab" href="#wcsc-tab-templates"><?php _e( 'Parcel Templates', 'wcsc-locale' ); ?></a></li>
 					<div style="clear:both;"></div>
 				</ul>
