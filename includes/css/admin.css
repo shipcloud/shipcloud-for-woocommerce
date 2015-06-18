@@ -60,9 +60,6 @@
 #shipcloud .addresses .order_data_column{
     width: 40%;
     padding:4%;
-    -webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
 }
 #shipcloud .addresses .order_data_column h4,
 #shipcloud .addresses .order_data_column p{
@@ -121,7 +118,6 @@
 #shipcloud #create_label,
 #shipcloud #pickup_parcel{
     padding: 0.5%;
-    text-align: right;
     width: 99%;
 }
 
@@ -145,28 +141,38 @@
 #shipcloud .shipment_labels{
 	width:100%;
 }
-#shipcloud .shipment_labels .data{
+#shipcloud .shipment_labels .label{
+	width:47%;
+	padding:1%;
+	margin-bottom: 1%;
+	margin-right: 1%;
+	float:left;
+	
+	-webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+	
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+#shipcloud .label_shipment_sender{
+	width:46%;
+	float:left;
+	padding:2%;
+	font-size:0.75em;
+}
+#shipcloud .label_shipment_parcel{
+	width:46%;
+	float:right;
+	padding:2%;
+	font-size:0.75em;
+}
+#shipcloud .label_shipment_recipient{
 	width:96%;
 	padding:2%;
-	background-color: #f8f8f8;
-	border: 1px solid #dfdfdf;
-	margin-bottom: 20px;
-}
-#shipcloud .shipment_labels .data img.current_shipment{
-	float:left;
-}
-#shipcloud .shipment_labels .data p{
-	margin-left: 58px;
-}
-#shipcloud .shipment_labels .data .shipment_label{
-    display: block;
-    float: left;
-    width: 30%;
-}
-#shipcloud .shipment_labels .data .shipment_value{
-    display: block;
-    float: right;
-    width: 70%;
+	font-size:1.25em;
+	font-weight:bold;
 }
 /**
  * Parcel

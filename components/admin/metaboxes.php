@@ -170,7 +170,7 @@ class WC_Shipcloud_Metaboxes{
 		?>
 		<!-- Addresses //-->
 			<div class="order_data_column_container addresses">
-				<div class="order_data_column sender shadow">
+				<div class="order_data_column sender">
 					<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 					<div class="address">
 						<p>
@@ -222,7 +222,7 @@ class WC_Shipcloud_Metaboxes{
 					</div>
 				</div>
 				
-				<div class="order_data_column recipient shadow">
+				<div class="order_data_column recipient">
 					<h4><?php _e( 'Recipient Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 					
 					<div class="address">
@@ -440,60 +440,41 @@ class WC_Shipcloud_Metaboxes{
 	 */
 	private static function get_label_html( $data, $time = FALSE ){
 		ob_start();
+		
+		// p( $data );
 		?>
-		<div class="data">
-			<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank">
-				<img src="<?php echo WCSC_URLPATH; ?>/assets/pdf.png" class="current_shipment" />
-			</a>
-			<?php if( '' !=  $data[ 'carrier_tracking_no' ]): ?>
-			<p>
-				<span class="shipment_label"><?php _e( 'Carrier tracking number', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value"><?php echo $data[ 'carrier_tracking_no' ]; ?></span>
-			</p>
-			<?php endif; ?>
-			<?php if( '' !=  $data[ 'tracking_url' ]): ?>
-			<p>
-				<span class="shipment_label"><?php _e( 'Carrier tracking url', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value">
-					<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank">
-					<?php echo $data[ 'tracking_url' ]; ?>
-					</a>
-				</span>
-			</p>
-			<?php endif; ?>
-			<p>
-				<span class="shipment_label"><?php _e( 'Label', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value">
-					<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank">
-					<?php _e( 'Download label', 'wcsc-locale' ); ?>
-					</a>
-				</span>
-			</p>
-			<p>
-				<span class="shipment_label"><?php _e( 'Price', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value"><?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?></span>
-			</p>
-			<p>
-				<span class="shipment_label"><?php _e( 'Carrier', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value"><?php echo $data[ 'carrier' ]; ?></span>
-			</p>
-			<p>
-				<span class="shipment_label"><?php _e( 'Dimensions', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value"><?php echo $data[ 'width' ]; ?> x <?php echo $data[ 'height' ]; ?> x <?php echo $data[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></span>
-			</p>
-			<p>
-				<span class="shipment_label"><?php _e( 'Weight', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value"><?php echo $data[ 'weight' ]; ?>  <?php _e( 'kg', 'wcsc-locale' ); ?></span>
-			</p>
-			<?php if( FALSE != $time ): ?>
-			<p>
-				<span class="shipment_label"><?php _e( 'Date created', 'wcsc-locale' ); ?></span>
-				<span class="shipment_value"><?php echo date_i18n( get_option( 'date_format' ), $time ); ?> - <?php echo date_i18n( get_option( 'time_format' ), $time ); ?></span>
-			</p>
-			<?php endif; ?>
+		<div class="label">
+			<div class="data">
+				<div class="label_shipment_parcel">
+					<div class="parcel_carrier"><?php echo $data[ 'carrier' ]; ?></div>
+					<div class="parcel_dimensions"><?php echo $data[ 'width' ]; ?> x <?php echo $data[ 'height' ]; ?> <?php echo $data[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale'); ?></div>
+					<div class="parcel_weight"><?php echo $data[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale'); ?></div>
+				</div>
+				
+				<div class="label_shipment_sender">
+					<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
+					<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
+					<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]; ?></div>
+					<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
+					<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
+				</div>
+				
+				<div style="clear: both;"></div>
+				
+				<div class="label_shipment_recipient">
+					<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
+					<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
+					<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]; ?></div>
+					<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
+					<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
+				</div>
+			</div>
 			
-			<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button button-wcsc-action" />
-			<div class="clear"></div>
+			<div class="label_shipment_actions">
+				<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
+				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button button-wcsc-action" />
+			</div>
+			
 		</div><?php
 		
 		$html = ob_get_clean();
