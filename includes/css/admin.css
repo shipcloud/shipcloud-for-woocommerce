@@ -47,7 +47,6 @@
     margin-bottom:20px;
 }
 #shipcloud label{
-	display:block;
 }
 
 #shipcloud .order_data_column_container{
@@ -78,7 +77,8 @@
 	padding: 0;
     width: 100%;
 }
-
+#shipcloud #ask_create_label,
+#shipcloud #ask_order_pickup,
 #shipcloud .edit_address{
 	display:none;
 }
@@ -118,30 +118,6 @@
 /**
  * 	Action Buttons
  */
-.order_data_column_container.actions .action:first-child{
-	border-top:1px solid #ccc;
-	-webkit-border-top-left-radius: 3px;
-	-moz-border-radius-topleft: 3px;
-	border-top-left-radius: 3px;
-	-webkit-border-top-right-radius: 3px;
-	-moz-border-radius-topright: 3px;
-	border-top-right-radius: 3px;
-}
-.order_data_column_container.actions .action:last-child{
-	-webkit-border-bottom-left-radius: 3px;
-	-moz-border-radius-bottomleft: 3px;
-	border-bottom-left-radius: 3px;
-	-webkit-border-bottom-right-radius: 3px;
-	-moz-border-radius-bottomright: 3px;
-	border-bottom-right-radius: 3px;
-	
-}
-.order_data_column_container.actions .action{
-	border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
-	border-bottom: 1px solid #CCC;
-	margin: 0;
-}
 #shipcloud #create_label,
 #shipcloud #pickup_parcel{
     padding: 0.5%;
@@ -245,7 +221,6 @@
 	width:95%;
 	margin-bottom: 10px;
 }
-#shipcloud #shipcloud_create_label,
 #shipcloud #shipcloud_add_parcel_template{
 	display:none;
 }
@@ -258,3 +233,8 @@
 	color:#0074a2;
 	line-height:25px;
 }
+
+/**
+ * 	Dialog (becaus WooCommerce adds jQuery UI CSS from google)
+ */
+

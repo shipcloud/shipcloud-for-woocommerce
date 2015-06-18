@@ -43,6 +43,8 @@ class WC_Shipcloud_Metaboxes{
 		add_action( 'wp_ajax_shipcloud_create_label', array( __CLASS__ , 'ajax_create_label' ) );
 		
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ), 1 );
+		
+		
 	}
 	
 	/**
@@ -59,13 +61,15 @@ class WC_Shipcloud_Metaboxes{
 	
 	
 	public static function enqueue_scripts(){
-		global $wp_scripts;
-
+		// JS
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-core' );
+		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
-		
-		// p( $wp_scripts );
+		// wp_enqueue_script( 'jquery-blockui' );
+
+		// CSS
+		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 	}
 	
 	/**
@@ -76,8 +80,6 @@ class WC_Shipcloud_Metaboxes{
 		
 		$parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
 		$parcel = get_post_meta( $post->ID, 'shipcloud_parcel', TRUE );
-		
-		$shipment_data = get_post_meta( $post->ID, 'shipcloud_shipment_data', TRUE );
 		
 		$order = new WC_Order( $post->ID );
 		
@@ -118,6 +120,11 @@ class WC_Shipcloud_Metaboxes{
 		$sender_address = get_post_meta( $post->ID, 'shipcloud_sender_address', TRUE );
 		$recipient_address = get_post_meta( $post->ID, 'shipcloud_recipient_address', TRUE );
 		
+		/**
+		 * Shipment_labels
+		 */
+		$shipment_data = get_post_meta( $post->ID, 'shipcloud_shipment_data', TRUE );
+		
 		// Use default data if nothing was saved before
 		if( '' == $sender_address || 0 == count( $sender_address ) ):
 			$sender_address = array(
@@ -132,8 +139,12 @@ class WC_Shipcloud_Metaboxes{
 			);
 		endif;
 		
+		p( $recipient_address );
+		
 		// Use default data if nothing was saved before
 		if( '' == $recipient_address || 0 == count( $recipient_address ) ):
+			$order = new WC_Order( $post->ID );
+			
 			$recipient_street = '';
 			$recipient_street_nr = '';
 			
@@ -272,6 +283,7 @@ class WC_Shipcloud_Metaboxes{
 		<div class="order_data_column_container actions">	
 			<div id="create_label" class="action">
 			<?php if( '' != $parcel_templates && is_array( $parcel_templates ) ): ?>
+				<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
 				<select name="parcel_template">
 				<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
 					<?php 
@@ -280,34 +292,42 @@ class WC_Shipcloud_Metaboxes{
 						$show.= $parcel_template[ 'height' ] . ' x ';
 						$show.= $parcel_template[ 'length' ] . __( 'cm', 'wcsc-locale' ) . ' ';
 						$show.= $parcel_template[ 'weight' ] . __( 'kg', 'wcsc-locale' ) . ' ';
+						
+						$value = $parcel_template[ 'carrier' ] . ';';
+						$value.= $parcel_template[ 'width' ] . ';';
+						$value.= $parcel_template[ 'height' ] . ';';
+						$value.= $parcel_template[ 'length' ] . ';';
+						$value.= $parcel_template[ 'weight' ];
 					 ?>
-					<option value="<?php echo $key; ?>"><?php echo $show; ?></option>
+					<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
 				<?php endforeach; ?>
-				</select>
-				<input type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button-primary button-wcsc-action" />	
+				</select></label>
+				<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button button-wcsc-action" />	
 			<?php endif; ?>
-			</div>
-			
-			<div id="pickup_parcel" class="action">
-				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button-primary button-wcsc-action" />
 			</div>
 			
 		</div>
 		<div style="clear:both;"></div>
 		
-		<?php if( '' != $shipment_data && is_array( $shipment_data ) ): ?>
+		
 		<!-- Label list //-->
 		<div class="order_data_column_container shipping_data">
 			<h3><?php _e( 'Created labels', 'wcsc-locale' ); ?></h3>
 			<div class="order_data_column shipment_labels">
+				<?php if( '' != $shipment_data && is_array( $shipment_data ) ): ?>
 					<?php krsort( $shipment_data ); ?>
 					<?php foreach( $shipment_data AS $time => $data ): ?>
 						<?php echo self::get_label_html( $data, $time ); ?>
 					<?php endforeach; ?>
+				<?php else: ?>
+					<p id="no_label_created"><?php _e( 'No Label created yet.', 'wcsc-locale' ); ?></p>
+				<?php endif; ?>
 			</div>
 			<div style="clear: both"></div>
 		</div>
-		<?php endif; ?>
+		
+		<div id="ask_create_label"><?php echo esc_attr__( 'Do you really want to create a label?', 'questions-locale' ); ?></div>
+		<div id="ask_order_pickup"><?php echo esc_attr__( 'Do you really want to order a pickup?', 'questions-locale' ); ?></div>
 		
 		<?
 	}
@@ -378,7 +398,6 @@ class WC_Shipcloud_Metaboxes{
 							<td class="parcel_option parcel_button">
 								<input type="button" id="shipcloud_calculate_shipping" value="<?php _e( 'Calculate', 'wcsc-locale'  ); ?>" class="button" />
 								<input type="button" id="shipcloud_add_parcel_template" value="<?php _e( 'Save as draft', 'wcsc-locale'  ); ?>" class="button" />
-								<input type="button" id="shipcloud_create_label" value="<?php _e( 'Create label', 'wcsc-locale' ); ?>" class="button"  />
 							</td>
 						</tr>
 				
@@ -472,6 +491,8 @@ class WC_Shipcloud_Metaboxes{
 				<span class="shipment_value"><?php echo date_i18n( get_option( 'date_format' ), $time ); ?> - <?php echo date_i18n( get_option( 'time_format' ), $time ); ?></span>
 			</p>
 			<?php endif; ?>
+			
+			<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button button-wcsc-action" />
 			<div class="clear"></div>
 		</div><?php
 		
