@@ -447,7 +447,7 @@ class WC_Shipcloud_Metaboxes{
 			<div class="data">
 				<div class="label_shipment_parcel">
 					<div class="parcel_carrier"><?php echo $data[ 'carrier' ]; ?></div>
-					<div class="parcel_dimensions"><?php echo $data[ 'width' ]; ?> x <?php echo $data[ 'height' ]; ?> <?php echo $data[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale'); ?></div>
+					<div class="parcel_dimensions"><?php echo $data[ 'width' ]; ?> x <?php echo $data[ 'height' ]; ?> x <?php echo $data[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale'); ?></div>
 					<div class="parcel_weight"><?php echo $data[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale'); ?></div>
 				</div>
 				
@@ -472,7 +472,8 @@ class WC_Shipcloud_Metaboxes{
 			
 			<div class="label_shipment_actions">
 				<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
-				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button button-wcsc-action" />
+				<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking', 'wcsc-locale'); ?></a>
+				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button" />
 			</div>
 			
 		</div><?php
