@@ -300,9 +300,11 @@ class WC_Shipcloud_Metaboxes{
 					<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
 				<?php endforeach; ?>
 				</select></label>
-				<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button button-wcsc-action" />	
+				<input id="shipcloud_create_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="button" />	
+				<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button" />
+				<a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php _e( 'Edit parcel templates', 'wcsc-locale'); ?></a>
 			<?php else: ?>
-				<p><?php echo __( 'You have not create a parcel template yet. <a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates">Create a parcel template</a>.', 'wcsc-locale' ); ?></p>
+				<p><?php echo __( 'You have not create a parcel template yet. <a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button">Create parcel template</a>.', 'wcsc-locale' ); ?></p>
 			<?php endif; ?>
 			</div>
 			
