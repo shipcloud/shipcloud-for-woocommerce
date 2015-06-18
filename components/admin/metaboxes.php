@@ -282,7 +282,7 @@ class WC_Shipcloud_Metaboxes{
 		<!-- Actions //-->
 		<div class="order_data_column_container actions">	
 			<div id="create_label" class="action">
-			<?php if( '' != $parcel_templates && is_array( $parcel_templates ) ): ?>
+			<?php if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ): ?>
 				<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
 				<select name="parcel_template">
 				<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
@@ -303,6 +303,8 @@ class WC_Shipcloud_Metaboxes{
 				<?php endforeach; ?>
 				</select></label>
 				<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button button-wcsc-action" />	
+			<?php else: ?>
+				<p><?php echo __( 'You have not create a parcel template yet. <a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates">Create a parcel template</a>.', 'wcsc-locale' ); ?></p>
 			<?php endif; ?>
 			</div>
 			
@@ -326,8 +328,8 @@ class WC_Shipcloud_Metaboxes{
 			<div style="clear: both"></div>
 		</div>
 		
-		<div id="ask_create_label"><?php echo esc_attr__( 'Do you really want to create a label?', 'questions-locale' ); ?></div>
-		<div id="ask_order_pickup"><?php echo esc_attr__( 'Do you really want to order a pickup?', 'questions-locale' ); ?></div>
+		<div id="ask_create_label"><?php echo esc_attr__( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'questions-locale' ); ?></div>
+		<div id="ask_order_pickup"><?php echo esc_attr__( 'This will order a pickup for this parcel. Do you really want to order?', 'questions-locale' ); ?></div>
 		
 		<?
 	}

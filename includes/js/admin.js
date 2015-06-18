@@ -339,9 +339,11 @@ jQuery( function( $ ) {
 		$( '.parcel .info' ).fadeOut();
 	});
 	
-	$( '.shipcloud-tabs' ).tabs( function(){
-		
-	});
+	$( '.shipcloud-tabs' ).tabs();
+	
+    $('.shipcloud-switchto-parcel-tamplates').click( function () {
+        $( '.shipcloud-tabs' ).tabs( "option", "active", 1 );
+    });
 	
 	// $( '.shipcloud-tabs' ).removeClass( 'ui-tabs' ).removeClass( 'ui-widget' ).removeClass( 'ui-widget-content' ).removeClass( 'ui-corner-all' );
 	// ui-tabs-panel ui-corner-bottom
