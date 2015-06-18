@@ -128,7 +128,6 @@ jQuery( function( $ ) {
 				html+= '<td>' + weight + ' ' + wcsc_translate.kg + '</td>';
 				html+= '<td>';
 					html+= '<input type="button" class="carrier_delete button"  value="Delete" />';
-					html+= '<input type="button" class="carrier_select button" value="Select" />';
 					html+= '<input type="hidden" value="' + carrier  + '" name="carrier" />';
 					html+= '<input type="hidden" value="' + width  + '" name="width" />';
 					html+= '<input type="hidden" value="' + height + '" name="height" />';
@@ -137,6 +136,13 @@ jQuery( function( $ ) {
 				html+= '</td></tr>';
 				
 				$( '#parcel_table tbody' ).append( html );
+				
+				var show = carrier_name + ' ' + width + ' x ' + height + ' x ' + length + ' ' + wcsc_translate.cm + ' x ' + weight + ' '+ wcsc_translate.kg;
+				var value = carrier + ';' + width + ';' + height + ';' + length + ';' + weight;
+				
+				html = '<option value="' + value + '">' + show + '</option>';
+				
+				$( '#create_label #parcel_template' ).append( html );
 				
 				carrier_select();
 				carrier_delete();
@@ -309,14 +315,14 @@ jQuery( function( $ ) {
             'closeOnEscape' : true,
             'minHeight'     : 80,
             'buttons'       : [{
-                    text: 'Yes',
+                    text: wcsc_translate.yes,
                     click: function() {
                             shipcloud_create_label();
                             $( this ).dialog( "close" );
                         }
                     },
                     {
-                    text: 'No',
+                    text: wcsc_translate.no,
                     click: function() {
                         	$( this ).dialog( "close" );
                         }

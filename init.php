@@ -157,8 +157,9 @@ class WooCommerceShipcloud{
 			'parcel_not_added' =>  __( 'Parcel template not added!', 'wcsc-locale' ),
 			'price_text' => __( 'The calculated price is', 'wcsc-locale' ),
 			'kg' => __( 'kg', 'wcsc-locale' ),
-			'kg' => __( 'kg', 'wcsc-locale' ),
-			'cm' => __( 'cm', 'wcsc-locale' )
+			'cm' => __( 'cm', 'wcsc-locale' ),
+			'yes' => __( 'yes', 'wcsc-locale' ),
+			'no' => __( 'no', 'wcsc-locale' )
 		);	
 		
 		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );

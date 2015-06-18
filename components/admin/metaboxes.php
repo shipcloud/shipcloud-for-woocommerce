@@ -139,8 +139,6 @@ class WC_Shipcloud_Metaboxes{
 			);
 		endif;
 		
-		p( $recipient_address );
-		
 		// Use default data if nothing was saved before
 		if( '' == $recipient_address || 0 == count( $recipient_address ) ):
 			$order = new WC_Order( $post->ID );
@@ -284,7 +282,7 @@ class WC_Shipcloud_Metaboxes{
 			<div id="create_label" class="action">
 			<?php if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ): ?>
 				<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
-				<select name="parcel_template">
+				<select name="parcel_template" id="parcel_template">
 				<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
 					<?php 
 						$show = self::get_carrier_display_name( $parcel_template[ 'carrier' ] ) . ' ';
