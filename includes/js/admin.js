@@ -102,7 +102,7 @@ jQuery( function( $ ) {
 	}
 	carrier_delete();
 	
-	$( '#shipcloud #shipcloud_add_parcel_template' ).click( function (){
+	$( '#shipcloud_add_parcel_template' ).click( function (){
 		var template = $( '#parcel_options' );
 		
 		var carrier_name = template.find( "select[name='parcel[carrier]'] option:selected" ).text();
@@ -172,7 +172,7 @@ jQuery( function( $ ) {
 		});
 	});
 
-	$( '#shipcloud #shipcloud_check_parcel_dimensions' ).click( function(){
+	$( '#shipcloud_verify_parcel_settings' ).click( function(){
 
 		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
 		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
@@ -211,6 +211,9 @@ jQuery( function( $ ) {
 			'weight': weight
 		};
 
+		var button = $( this );
+		button.addClass( 'button-loading' );
+
 		$.post( ajaxurl, data, function( response ) {
 
 			var result = jQuery.parseJSON( response );
@@ -234,11 +237,13 @@ jQuery( function( $ ) {
 				$( '#wcsc-tab-templates .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
 				$( '#shipcloud_add_parcel_template').fadeIn();
 			}
+
+			button.removeClass( 'button-loading' );
 		});
 	});
 	
 	
-	$( '#shipcloud #shipcloud_calculate_price' ).click( function(){
+	$( '#shipcloud_calculate_price' ).click( function(){
 		
 		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
 		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
@@ -279,6 +284,9 @@ jQuery( function( $ ) {
 			'length': length,
 			'weight': weight
 		};
+
+		var button = $( this );
+		button.addClass( 'button-loading' );
 		
 		$.post( ajaxurl, data, function( response ) {
 			
@@ -302,12 +310,15 @@ jQuery( function( $ ) {
 				$( '#wcsc-tab-label .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
 				$( '#shipcloud_create_label').fadeIn();
 			}
+			button.removeClass( 'button-loading' );
 		});
+
+
 	});
-	
+
 	var shipcloud_create_label = function(){
 		var order_id = $( "#post_ID" ).val();
-		
+
 		var sender_first_name 	= $( "input[name='sender_address[first_name]']" ).val( );
 		var sender_last_name 	= $( "input[name='sender_address[last_name]']" ).val( );
 		var sender_company 	= $( "input[name='sender_address[company]']" ).val( );
@@ -316,7 +327,7 @@ jQuery( function( $ ) {
 		var sender_postcode = $( "input[name='sender_address[postcode]']" ).val( );
 		var sender_city 	= $( "input[name='sender_address[city]']" ).val( );
 		var sender_country 	= $( "select[name='sender_address[country]']" ).val( );
-		
+
 		var recipient_first_name 	= $( "input[name='recipient_address[first_name]']" ).val( );
 		var recipient_last_name 	= $( "input[name='recipient_address[last_name]']" ).val( );
 		var recipient_company 	= $( "input[name='recipient_address[company]']" ).val( );
@@ -325,16 +336,16 @@ jQuery( function( $ ) {
 		var recipient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
 		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
 		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
-		
+
 		var parcel_template 	= $( "select[name='parcel_template']" ).val( );
 		parcel_template = parcel_template.split( ";" );
-		
+
 		var carrier 	= parcel_template[ 0 ];
 		var width 		= parcel_template[ 1 ];
 		var height 		= parcel_template[ 2 ];
 		var length 		= parcel_template[ 3 ];
 		var weight 		= parcel_template[ 4 ];
-		
+
 		var data = {
 			'action': 'shipcloud_create_label',
 			'order_id' : order_id,
@@ -360,21 +371,25 @@ jQuery( function( $ ) {
 			'length': length,
 			'weight': weight
 		};
-		
+
+		var button = $( '#shipcloud_create_label' );
+		button.addClass( 'button-loading-blue' );
+
 		$.post( ajaxurl, data, function( response ) {
 			try
 			{
-			   var result = JSON.parse( response );
-			   
-			   if( result.errors != null ){
+				var result = JSON.parse( response );
+
+				if( result.errors != null ){
 					var html = '<ul class="errors">';
 					result.errors.forEach( function( entry ){
 						html+= '<li>' + entry + '</li>';
 					});
 					html+= '</ul>';
-					
+
 					$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
 				}else{
+
 				}
 			}
 			catch( e )
@@ -382,12 +397,100 @@ jQuery( function( $ ) {
 				$( '.shipment_labels' ).prepend( response );
 				$( '#no_label_created' ).fadeOut();
 			}
+
+			button.removeClass( 'button-loading-blue' );
+		});
+	}
+
+	var shipcloud_order_pickup = function(){
+		var order_id = $( "#post_ID" ).val();
+
+		var sender_first_name 	= $( "input[name='sender_address[first_name]']" ).val( );
+		var sender_last_name 	= $( "input[name='sender_address[last_name]']" ).val( );
+		var sender_company 	= $( "input[name='sender_address[company]']" ).val( );
+		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
+		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
+		var sender_postcode = $( "input[name='sender_address[postcode]']" ).val( );
+		var sender_city 	= $( "input[name='sender_address[city]']" ).val( );
+		var sender_country 	= $( "select[name='sender_address[country]']" ).val( );
+
+		var recipient_first_name 	= $( "input[name='recipient_address[first_name]']" ).val( );
+		var recipient_last_name 	= $( "input[name='recipient_address[last_name]']" ).val( );
+		var recipient_company 	= $( "input[name='recipient_address[company]']" ).val( );
+		var recipient_street 	= $( "input[name='recipient_address[street]']" ).val( );
+		var recipient_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
+		var recipient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
+		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
+		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
+
+		var parcel_template 	= $( "select[name='parcel_template']" ).val( );
+		parcel_template = parcel_template.split( ";" );
+
+		var carrier 	= parcel_template[ 0 ];
+		var width 		= parcel_template[ 1 ];
+		var height 		= parcel_template[ 2 ];
+		var length 		= parcel_template[ 3 ];
+		var weight 		= parcel_template[ 4 ];
+
+		var data = {
+			'action': 'shipcloud_create_label',
+			'order_id' : order_id,
+			'sender_first_name' : sender_first_name,
+			'sender_last_name' : sender_last_name,
+			'sender_company' : sender_company,
+			'sender_street' : sender_street,
+			'sender_street_nr' : sender_street_nr,
+			'sender_postcode' : sender_postcode,
+			'sender_city' : sender_city,
+			'sender_country' : sender_country,
+			'recipient_first_name' : recipient_first_name,
+			'recipient_last_name' : recipient_last_name,
+			'recipient_company' : recipient_company,
+			'recipient_street' : recipient_street,
+			'recipient_street_nr': recipient_street_nr,
+			'recipient_postcode' : recipient_postcode,
+			'recipient_city' : recipient_city,
+			'recipient_country' : recipient_country,
+			'carrier': carrier,
+			'width': width,
+			'height': height,
+			'length': length,
+			'weight': weight
+		};
+
+		var button = $( '#shipcloud_create_label' );
+		button.addClass( 'button-loading-blue' );
+
+		$.post( ajaxurl, data, function( response ) {
+			try
+			{
+				var result = JSON.parse( response );
+
+				if( result.errors != null ){
+					var html = '<ul class="errors">';
+					result.errors.forEach( function( entry ){
+						html+= '<li>' + entry + '</li>';
+					});
+					html+= '</ul>';
+
+					$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				}else{
+
+				}
+			}
+			catch( e )
+			{
+				$( '.shipment_labels' ).prepend( response );
+				$( '#no_label_created' ).fadeOut();
+			}
+
+			button.removeClass( 'button-loading-blue' );
 		});
 	}
 	
-	$( '#shipcloud #shipcloud_create_label' ).click( function(){
+	$( '#shipcloud_create_label' ).click( function(){
 		var ask_create_label = $( '#ask_create_label' );
-		
+
 		ask_create_label.dialog({                   
             'dialogClass'   : 'wp-dialog',           
             'modal'         : true,

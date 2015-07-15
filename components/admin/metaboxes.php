@@ -421,7 +421,7 @@ class WC_Shipcloud_Metaboxes{
 								<input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" placeholder="<?php _e( 'kg', 'wcsc-locale'  ); ?>" />
 							</td>
 							<td class="parcel_option parcel_button">
-								<input type="button" id="shipcloud_check_parcel_dimensions" value="<?php _e( 'Verify Parcel Settings', 'wcsc-locale'  ); ?>" class="button" />
+								<input type="button" id="shipcloud_verify_parcel_settings" value="<?php _e( 'Verify Parcel Settings', 'wcsc-locale'  ); ?>" class="button" />
 								<input type="button" id="shipcloud_add_parcel_template" value="<?php _e( 'Save as draft', 'wcsc-locale'  ); ?>" class="button" />
 							</td>
 						</tr>
@@ -498,7 +498,7 @@ class WC_Shipcloud_Metaboxes{
 			<div class="label_shipment_actions">
 				<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
 				<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking', 'wcsc-locale'); ?></a>
-				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button-primary" />
+				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="order-pickup button-primary" />
 			</div>
 			
 		</div><?php

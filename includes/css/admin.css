@@ -129,6 +129,18 @@
 /**
  * 	Action Buttons
  */
+#shipcloud .button-loading{
+	background-image: url( '../../assets/images/loading.gif' );
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+	padding-left:28px;
+}
+#shipcloud .button-loading-blue{
+	background-image: url( '../../assets/images/loading-blue.gif' );
+	background-repeat: no-repeat;
+	background-position: 5px 5px;
+	padding-left:28px;
+}
 #shipcloud #create_label,
 #shipcloud #pickup_parcel{
     padding: 0.5%;
