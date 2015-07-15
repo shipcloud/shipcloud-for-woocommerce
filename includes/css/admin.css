@@ -57,6 +57,14 @@
 #shipcloud .order_data_column{
     float: left;
 }
+#shipcloud #create_label,
+#shipcloud #button_actions{
+	text-align:center;
+	padding: 10px;
+}
+#shipcloud #select_label{
+	margin-bottom:20px;
+}
 #shipcloud .addresses .order_data_column{
     width: 40%;
     padding:4%;
@@ -107,9 +115,15 @@
 }
 
 #shipcloud .shadow{
-    -webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+	-webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
 	-moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
 	box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
+	
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	
+	margin-bottom: 20px;
 }
 
 /**
@@ -147,14 +161,6 @@
 	margin-bottom: 1%;
 	margin-right: 1%;
 	float:left;
-	
-	-webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
-	box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
-	
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
 }
 #shipcloud .label_shipment_sender{
 	width:46%;

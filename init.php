@@ -26,7 +26,7 @@ License:
   
 */
 
-/*
+/**
  * WooCommerce Shipcloud initializing class
  *
  * This class initializes the Plugin.
@@ -39,7 +39,7 @@ License:
  */
 
 if ( !defined( 'ABSPATH' ) ) exit;
- 
+
 class WooCommerceShipcloud{
 	 
 	/**

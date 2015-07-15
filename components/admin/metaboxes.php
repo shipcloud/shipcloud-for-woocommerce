@@ -169,6 +169,8 @@ class WC_Shipcloud_Metaboxes{
 		
 		?>
 		<!-- Addresses //-->
+		<h3><?php _e( 'Created a new label', 'wcsc-locale' ); ?></h3>
+		<div id="create_label" class="shadow">
 			<div class="order_data_column_container addresses">
 				<div class="order_data_column sender">
 					<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
@@ -279,38 +281,44 @@ class WC_Shipcloud_Metaboxes{
 		
 		<!-- Actions //-->
 		<div class="order_data_column_container actions">	
-			<div id="create_label" class="action">
-			<?php if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ): ?>
-				<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
-				<select name="parcel_template" id="parcel_template">
-				<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
-					<?php 
-						$show = self::get_carrier_display_name( $parcel_template[ 'carrier' ] ) . ' ';
-						$show.= $parcel_template[ 'width' ] . ' x ';
-						$show.= $parcel_template[ 'height' ] . ' x ';
-						$show.= $parcel_template[ 'length' ] . __( 'cm', 'wcsc-locale' ) . ' ';
-						$show.= $parcel_template[ 'weight' ] . __( 'kg', 'wcsc-locale' ) . ' ';
-						
-						$value = $parcel_template[ 'carrier' ] . ';';
-						$value.= $parcel_template[ 'width' ] . ';';
-						$value.= $parcel_template[ 'height' ] . ';';
-						$value.= $parcel_template[ 'length' ] . ';';
-						$value.= $parcel_template[ 'weight' ];
-					 ?>
-					<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
-				<?php endforeach; ?>
-				</select></label>
-				<input id="shipcloud_create_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="button" />	
-				<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button" />
-				<a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php _e( 'Edit parcel templates', 'wcsc-locale'); ?></a>
+			<div id="create_label_form" class="action">
+				<?php if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ): ?>
+				<div id="select_label">
+					<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
+					<select name="parcel_template" id="parcel_template">
+					<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
+						<?php 
+							$show = self::get_carrier_display_name( $parcel_template[ 'carrier' ] ) . ' ';
+							$show.= $parcel_template[ 'width' ] . ' x ';
+							$show.= $parcel_template[ 'height' ] . ' x ';
+							$show.= $parcel_template[ 'length' ] . __( 'cm', 'wcsc-locale' ) . ' ';
+							$show.= $parcel_template[ 'weight' ] . __( 'kg', 'wcsc-locale' ) . ' ';
+							
+							$value = $parcel_template[ 'carrier' ] . ';';
+							$value.= $parcel_template[ 'width' ] . ';';
+							$value.= $parcel_template[ 'height' ] . ';';
+							$value.= $parcel_template[ 'length' ] . ';';
+							$value.= $parcel_template[ 'weight' ];
+						 ?>
+						<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
+					<?php endforeach; ?>
+					</select></label>
+				</div>
+				<div id="button_actions">
+					<input id="shipcloud_create_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="button" />	
+					<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button" />
+					<a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php _e( 'Edit parcel templates', 'wcsc-locale'); ?></a>
+				</div>
 			<?php else: ?>
-				<p><?php echo __( 'You have not create a parcel template yet. <a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button">Create parcel template</a>.', 'wcsc-locale' ); ?></p>
+				<p><?php echo __( 'You need to create at minimum one parcel templates.', 'wcsc-locale' ); ?></p>
+				<p><a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php echo __( 'Edit parcel templates', 'wcsc-locale' ); ?></a></p>
 			<?php endif; ?>
 			</div>
 			
 		</div>
 		<div style="clear:both;"></div>
 		
+		</div>
 		
 		<!-- Label list //-->
 		<div class="order_data_column_container shipping_data">
@@ -445,7 +453,7 @@ class WC_Shipcloud_Metaboxes{
 		
 		// p( $data );
 		?>
-		<div class="label">
+		<div class="label shadow">
 			<div class="data">
 				<div class="label_shipment_parcel">
 					<div class="parcel_carrier"><?php echo $data[ 'carrier' ]; ?></div>
