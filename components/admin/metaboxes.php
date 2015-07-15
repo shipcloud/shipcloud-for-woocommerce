@@ -89,7 +89,7 @@ class WC_Shipcloud_Metaboxes{
 			<div class="shipcloud-tabs">
 				<ul class="nav-tab-wrapper wcsc-nav-tab-wrapper">
 					<li><a class="nav-tab" href="#wcsc-tab-label"><?php _e( 'Overview', 'wcsc-locale' ); ?></a></li>
-					<li><a class="nav-tab" href="#wcsc-tab-templates"><?php _e( 'Parcel Templates', 'wcsc-locale' ); ?></a></li>
+					<li><a class="nav-tab" href="#wcsc-tab-templates"><?php _e( 'Parcel-Templates', 'wcsc-locale' ); ?></a></li>
 					<div style="clear:both;"></div>
 				</ul>
 				<div id="wcsc-tab-label" class="wcsc-tab wcsc-tab-label">
@@ -329,7 +329,7 @@ class WC_Shipcloud_Metaboxes{
 				</div>
 
 				<div id="parcel_templates_missing" style="<?php echo $style_parcel_templates_missing; ?>">
-					<p><?php echo __( 'You need to create at minimum one parcel templates.', 'wcsc-locale' ); ?></p>
+					<p><?php echo __( 'You need to create at minimum one parcel template.', 'wcsc-locale' ); ?></p>
 					<p><a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php echo __( 'Edit parcel templates', 'wcsc-locale' ); ?></a></p>
 				</div>
 			</div>
