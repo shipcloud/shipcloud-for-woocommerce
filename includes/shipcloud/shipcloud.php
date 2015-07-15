@@ -65,8 +65,6 @@ class Woocommerce_Shipcloud_API{
 		
 		$request = $this->send_request( $action, $params, 'POST' );
 		
-		FB::warn( print_r( $request, TRUE ) );
-		
 		if( 200 == $request[ 'header' ]['status'] ):
 			return $request[ 'body' ];
 		else:
@@ -88,17 +86,28 @@ class Woocommerce_Shipcloud_API{
 		
 		return $shipment_carriers;
 	}
-	
-	public function request_carriers(){
-		$action = 'carriers';
-		$request = $this->send_request( $action );
-		
-		if( 200 == $request[ 'header' ]['status'] ):
-			return $request[ 'body' ];
-		else:
-			return FALSE;
-		endif;
-	}
+
+    public function request_carriers(){
+        $action = 'carriers';
+        $request = $this->send_request( $action );
+
+        if( 200 == $request[ 'header' ]['status'] ):
+            return $request[ 'body' ];
+        else:
+            return FALSE;
+        endif;
+    }
+
+    public function request_pickup( $params ){
+        $action = 'pickup_requests';
+        $request = $this->send_request( $action, $params, 'POST' );
+
+        if( 200 == $request[ 'header' ]['status'] ):
+            return $request[ 'body' ];
+        else:
+            return FALSE;
+        endif;
+    }
 	
     /**
      * Sends a request to the API

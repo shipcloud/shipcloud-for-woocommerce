@@ -87,19 +87,30 @@
 #shipcloud .edit_address{
 	display:none;
 }
+#shipcloud .edit_address{
+	position: absolute;
+	width:30%;
+	background-color: #FFF;
+	border:1px solid #CCC;
+	padding:2%;
+	z-index: 1000;
+	text-align: left;
+}
 #shipcloud .edit_address p{
 	float:left;
-	margin: 9px 0 0;
-    padding: 0;
-    width:46%;
-    margin-right:2%;
+	margin: 0;
+    padding: 5px 0;
+    width:50%;
 }
 #shipcloud .edit_address p.fullsize{
-	width:94%;
+	width:100%;
 	clear:both;
 }
 #shipcloud .edit_address p input,
 #shipcloud .edit_address p select{
+	width: 100%;
+}
+#shipcloud .save_address{
 	width: 100%;
 }
 #shipcloud .btn_edit_address{

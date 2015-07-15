@@ -41,10 +41,9 @@ class WC_Shipcloud_Metaboxes{
 		add_action( 'wp_ajax_shipcloud_delete_parcel_template', array( __CLASS__ , 'ajax_delete_parcel_template' ) );
 		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( __CLASS__ , 'ajax_calculate_shipping' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( __CLASS__ , 'ajax_create_label' ) );
-		
+		add_action( 'wp_ajax_shipcloud_request_pickup', array( __CLASS__ , 'ajax_request_pickup' ) );
+
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ), 1 );
-		
-		
 	}
 	
 	/**
@@ -225,6 +224,8 @@ class WC_Shipcloud_Metaboxes{
 							<?php endforeach; ?>
 							</select>
 						</p>
+						<div style="clear:both;"></div>
+						<p class="fullsize"><input type="button" class="button save_address" value="<?php _e( 'Save Address', 'wcsc-locale' ); ?>" /></p>
 					</div>
 				</div>
 				
@@ -278,7 +279,8 @@ class WC_Shipcloud_Metaboxes{
 							<?php endforeach; ?>
 							</select>
 						</p>
-				</div>
+						<p class="fullsize"><input type="button" class="button save_address" value="<?php _e( 'Save Address', 'wcsc-locale' ); ?>" /></p>
+					</div>
 			</div>
 			<div style="clear: both"></div>
 		</div>
@@ -465,7 +467,8 @@ class WC_Shipcloud_Metaboxes{
 	 */
 	private static function get_label_html( $data, $time = FALSE ){
 		ob_start();
-		
+
+
 		// p( $data );
 		?>
 		<div class="label shadow">
@@ -498,7 +501,9 @@ class WC_Shipcloud_Metaboxes{
 			<div class="label_shipment_actions">
 				<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
 				<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking', 'wcsc-locale'); ?></a>
-				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="order-pickup button-primary" />
+				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="shipcloud-order-pickup button-primary" />
+				<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>" />
+				<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>" />
 			</div>
 			
 		</div><?php
@@ -811,6 +816,46 @@ class WC_Shipcloud_Metaboxes{
 			echo self::get_label_html( $data );
 		endif;
 		
+		exit;
+	}
+
+	/**
+	 * Requesting pickup
+	 */
+	public static function ajax_request_pickup(){
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+
+		$pickup_date = date( 'Y/m/d', time() );
+
+		$pickup_date = '2015/07/22';
+
+		$shipment = array(
+			'carrier' => $_POST[ 'carrier' ],
+			'pickup_date' => $pickup_date,
+			'shipments' => array(
+				'id' => $_POST[ 'shipment_id' ],
+			)
+		);
+
+		p( $shipment );
+
+		$pickup_request = $shipcloud_api->send_request( 'pickup_requests', $shipment, 'POST' );
+		$request_status = (int) $shipment[ 'header' ][ 'status' ];
+
+		p( $pickup_request );
+
+		if( 200 != $request_status ):
+			$errors = $pickup_request[ 'body' ][ 'errors' ];
+			$result = array( 'errors' => $errors );
+		endif;
+
+		// Getting price if successful
+		if( array_key_exists( 'pickup_date', $pickup_request['body'] ) ):
+			$result[ 'pickup_date' ] = $pickup_request['body'][ 'pickup_date' ] ;
+		endif;
+
+		echo json_encode( $result );
 		exit;
 	}
 	
