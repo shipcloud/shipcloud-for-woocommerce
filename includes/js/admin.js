@@ -117,6 +117,7 @@ jQuery( function( $ ) {
 		var height = template.find( "input[name='parcel[height]']" ).val();
 		var length = template.find( "input[name='parcel[length]']" ).val();
 		var weight = template.find( "input[name='parcel[weight]']" ).val();
+		weight = weight.replace( ',', '.' );
 		
 		var data = {
 			'action': 'shipcloud_add_parcel_template',
@@ -413,8 +414,6 @@ jQuery( function( $ ) {
 
 			var carrier = $( this ).parent().find( "input[name='carrier']" ).val();
 			var shipment_id = $( this ).parent().find( "input[name='shipment_id']" ).val();
-
-			console.log( shipment_id );
 
 			var data = {
 				'action': 'shipcloud_request_pickup',
