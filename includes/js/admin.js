@@ -51,12 +51,13 @@ jQuery( function( $ ) {
 			var height = template.find( "input[name='height']" ).val();
 			var length = template.find( "input[name='length']" ).val();
 			var weight = template.find( "input[name='weight']" ).val();
-			
-			$( "select[name='parcel[carrier]']" ).val( carrier );
-			$( "input[name='parcel[width]']" ).val( width );
-			$( "input[name='parcel[height]']" ).val( height );
-			$( "input[name='parcel[length]']" ).val( length );
-			$( "input[name='parcel[weight]']" ).val( weight );
+
+			$( '.shipcloud-tabs' ).tabs( "option", "active", 0 );
+
+			var template_value = carrier + ';' + width + ';' + height + ';' + length + ';' + weight;
+
+			$( "select[name='parcel_template']" ).val( template_value );
+
 		});
 	}
 	carrier_select();
@@ -71,7 +72,17 @@ jQuery( function( $ ) {
 			var height = template.find( "input[name='height']" ).val();
 			var length = template.find( "input[name='length']" ).val();
 			var weight = template.find( "input[name='weight']" ).val();
-			
+
+			var template_value = carrier + ';' + width + ';' + height + ';' + length + ';' + weight;
+
+			$( "select[name='parcel_template'] option[value='" + template_value + "']" ).remove();
+
+			var parcel_template_count = $( "select[name='parcel_template'] option").size();
+			if( parcel_template_count < 1 ){
+				$( '#parcel_templates').hide();
+				$( '#parcel_templates_missing').show();
+			}
+
 			var data = {
 				'action': 'shipcloud_delete_parcel_template',
 				'carrier': carrier,
@@ -127,7 +138,8 @@ jQuery( function( $ ) {
 				html+= '<td>' + length + ' ' + wcsc_translate.cm + '</td>';
 				html+= '<td>' + weight + ' ' + wcsc_translate.kg + '</td>';
 				html+= '<td>';
-					html+= '<input type="button" class="carrier_delete button"  value="Delete" />';
+					html+= '<input type="button" class="carrier_delete button"  value="' + wcsc_translate.delete + '" />';
+					html+= '<input type="button" class="carrier_select button"  value="' + wcsc_translate.select + '" />';
 					html+= '<input type="hidden" value="' + carrier  + '" name="carrier" />';
 					html+= '<input type="hidden" value="' + width  + '" name="width" />';
 					html+= '<input type="hidden" value="' + height + '" name="height" />';
@@ -143,7 +155,10 @@ jQuery( function( $ ) {
 				html = '<option value="' + value + '">' + show + '</option>';
 				
 				$( '#create_label #parcel_template' ).append( html );
-				
+
+				$( '#parcel_templates').show();
+				$( '#parcel_templates_missing').hide();
+
 				carrier_select();
 				carrier_delete();
 			}else{
@@ -156,9 +171,74 @@ jQuery( function( $ ) {
 			}
 		});
 	});
+
+	$( '#shipcloud #shipcloud_check_parcel_dimensions' ).click( function(){
+
+		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
+		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
+		var sender_postcode = $( "input[name='sender_address[postcode]']" ).val( );
+		var sender_city 	= $( "input[name='sender_address[city]']" ).val( );
+		var sender_country 	= $( "select[name='sender_address[country]']" ).val( );
+
+		var recipient_street 	= $( "input[name='recipient_address[street]']" ).val( );
+		var recipient_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
+		var recipient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
+		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
+		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
+
+		var carrier 	= $( "select[name='parcel[carrier]']" ).val( );
+		var width 		= $( "input[name='parcel[width]']" ).val();
+		var height 		= $( "input[name='parcel[height]']" ).val();
+		var length 		= $( "input[name='parcel[length]']" ).val();
+		var weight 		= $( "input[name='parcel[weight]']" ).val();
+
+		var data = {
+			'action': 'shipcloud_calculate_shipping',
+			'sender_street' : sender_street,
+			'sender_street_nr' : sender_street_nr,
+			'sender_postcode' : sender_postcode,
+			'sender_city' : sender_city,
+			'sender_country' : sender_country,
+			'recipient_street' : recipient_street,
+			'recipient_street_nr': recipient_street_nr,
+			'recipient_postcode' : recipient_postcode,
+			'recipient_city' : recipient_city,
+			'recipient_country' : recipient_country,
+			'carrier': carrier,
+			'width': width,
+			'height': height,
+			'length': length,
+			'weight': weight
+		};
+
+		$.post( ajaxurl, data, function( response ) {
+
+			var result = jQuery.parseJSON( response );
+
+			if( result.errors ){
+
+				var html = '<ul class="errors">';
+				result.errors.forEach( function( entry ){
+					html+= '<li>' + entry + '</li>';
+				});
+				html+= '</ul>';
+
+				$( '#wcsc-tab-templates .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				$( '#shipcloud_add_parcel_template').fadeOut();
+
+			}if( result.price ){
+				var html = '<div class="notice">';
+				html+= wcsc_translate.parcel_dimensions_check_yes;
+				html+= '</div>';
+
+				$( '#wcsc-tab-templates .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				$( '#shipcloud_add_parcel_template').fadeIn();
+			}
+		});
+	});
 	
 	
-	$( '#shipcloud #shipcloud_calculate_shipping' ).click( function(){
+	$( '#shipcloud #shipcloud_calculate_price' ).click( function(){
 		
 		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
 		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
@@ -171,12 +251,15 @@ jQuery( function( $ ) {
 		var recipient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
 		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
 		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
-		
-		var carrier 	= $( "select[name='parcel[carrier]']" ).val( );
-		var width 		= $( "input[name='parcel[width]']" ).val();
-		var height 		= $( "input[name='parcel[height]']" ).val();
-		var length 		= $( "input[name='parcel[length]']" ).val();
-		var weight 		= $( "input[name='parcel[weight]']" ).val();
+
+		var parcel_template 	= $( "select[name='parcel_template" ).val( );
+		var parcel_dimendions 	= parcel_template.split( ';' );
+
+		var carrier 	= parcel_dimendions[0];
+		var width 		= parcel_dimendions[1];
+		var height 		= parcel_dimendions[2];
+		var length 		= parcel_dimendions[3];
+		var weight 		= parcel_dimendions[4];
 		
 		var data = {
 			'action': 'shipcloud_calculate_shipping',
@@ -208,19 +291,16 @@ jQuery( function( $ ) {
 				});
 				html+= '</ul>';
 				
-				$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
-				
+				$( '#wcsc-tab-label .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
 				$( '#shipcloud_create_label').fadeOut();
-				$( '#shipcloud_add_parcel_template').fadeOut();
-				
+
 			}if( result.price ){
-				var html = '<div class="parcel_price">';
+				var html = '<div class="notice">';
 				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
 				
-				$( '.parcel .info' ).fadeIn().html( html );
+				$( '#wcsc-tab-label .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
 				$( '#shipcloud_create_label').fadeIn();
-				$( '#shipcloud_add_parcel_template').fadeIn();
 			}
 		});
 	});
@@ -333,27 +413,35 @@ jQuery( function( $ ) {
         
         ask_create_label.dialog( "open" );
 	});
-		
+
+	/**
+	 * Hiding parcel template adding button if value in form has changed
+	 */
 	$( "input[name='parcel[width]'],  input[name='parcel[height]'],  input[name='parcel[length]'],  input[name='parcel[weight]']" ).focusin(function(){
-		
 		$( '.parcel .info' ).fadeOut();
 		$( '#shipcloud_add_parcel_template').fadeOut();
 	});
 	
 	$( "select[name='parcel[carrier]']" ).change(function(){
-		
 		$( '.parcel .info' ).fadeOut();
+		$( '#shipcloud_add_parcel_template').fadeOut();
 	});
-	
+
+	/**
+	 * Initializing tabs
+	 */
 	$( '.shipcloud-tabs' ).tabs();
-	
+
+	/**
+	 * Function to switch to parcel templates
+	 */
     $('.shipcloud-switchto-parcel-tamplates').click( function () {
         $( '.shipcloud-tabs' ).tabs( "option", "active", 1 );
     });
-	
-	// $( '.shipcloud-tabs' ).removeClass( 'ui-tabs' ).removeClass( 'ui-widget' ).removeClass( 'ui-widget-content' ).removeClass( 'ui-corner-all' );
-	// ui-tabs-panel ui-corner-bottom
-	
+
+	/**
+	 * CSS Corrections
+	 */
 	$( '#shipcloud' ).find( '.ui-tabs' ).removeClass( 'ui-tabs' );
 	$( '#shipcloud' ).find( '.ui-widget' ).removeClass( 'ui-widget' );
 	$( '#shipcloud' ).find( '.ui-widget-content' ).removeClass( 'ui-widget-content' );

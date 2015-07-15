@@ -144,7 +144,10 @@
 #shipcloud #create_label select{
 	margin-top: -1px;
 }
-
+#shipcloud .label_shipment_actions{
+	text-align: left;
+	padding: 2%;
+}
 .button-wcsc-action{
 	min-width:200px;
 }
@@ -156,7 +159,7 @@
 	width:100%;
 }
 #shipcloud .shipment_labels .label{
-	width:47%;
+	width:98%;
 	padding:1%;
 	margin-bottom: 1%;
 	margin-right: 1%;
@@ -183,11 +186,10 @@
 /**
  * Parcel
  */
-#shipcloud .parcel .info{
+#shipcloud .info{
 	display:none;
 }
-#shipcloud .parcel .parcel_price,
-#shipcloud .parcel .parcel_template_added{
+#shipcloud .notice{
     border-left: 4px solid #7ad03a;
 	 -webkit-box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
 	box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
@@ -195,29 +197,21 @@
     padding: 12px;
     margin-bottom:20px;
 }
-#shipcloud .parcel .parcel_template_not_added{
-    border-left: 4px solid #dd3d36;
-	 -webkit-box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
-	box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
-    line-height: 28px;
-    padding: 12px;
-    margin-bottom:20px;
-}
-#shipcloud .parcel input[type=button]{
-	float:right;
-	margin-left:10px;
-}
-#shipcloud .parcel .info .errors{
+#shipcloud .errors{
 	background: #fff;
 	border-left: 4px solid #fff;
 	-webkit-box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
 	box-shadow: 1px 0 1px 0 rgba( 0, 0, 0, 0.1 );
 	margin: 5px 0px 10px;
-	padding: 1px 12px;
+	padding: 12px;
 	border-color: #dd3d36;
 }
 #shipcloud .parcel .info .errors li{
 	margin: 3px 0;
+}
+#shipcloud .parcel input[type=button]{
+	float:right;
+	margin-left:10px;
 }
 #shipcloud .parcel_option{
 	width:10%;

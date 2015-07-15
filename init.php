@@ -154,8 +154,11 @@ class WooCommerceShipcloud{
 	public static function register_admin_scripts() {
 		$translation_array = array(
 			'parcel_added' =>  __( 'Parcel template added!', 'wcsc-locale' ),
+			'parcel_dimensions_check_yes' => __( 'Parcel dimensions verified!', 'wcsc-locale' ),
 			'parcel_not_added' =>  __( 'Parcel template not added!', 'wcsc-locale' ),
 			'price_text' => __( 'The calculated price is', 'wcsc-locale' ),
+			'select' => __( 'Select', 'wcsc-locale' ),
+			'delete' => __( 'Delete', 'wcsc-locale' ),
 			'kg' => __( 'kg', 'wcsc-locale' ),
 			'cm' => __( 'cm', 'wcsc-locale' ),
 			'yes' => __( 'yes', 'wcsc-locale' ),

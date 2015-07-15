@@ -94,9 +94,13 @@ class WC_Shipcloud_Metaboxes{
 					<div style="clear:both;"></div>
 				</ul>
 				<div id="wcsc-tab-label" class="wcsc-tab wcsc-tab-label">
+					<div class="info">
+					</div>
 				<?php self::tab_create_label(); ?>
 				</div>
 				<div id="wcsc-tab-templates" class="wcsc-tab wcsc-tab-templates">
+					<div class="info">
+					</div>
 				<?php self::tab_create_templates(); ?>
 				</div>
 			</div>
@@ -280,39 +284,52 @@ class WC_Shipcloud_Metaboxes{
 		</div>
 		
 		<!-- Actions //-->
-		<div class="order_data_column_container actions">	
+		<?php
+
+		if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ){
+			$style_parcel_templates = 'display:block;';
+			$style_parcel_templates_missing = 'display:none;';
+		}else{
+			$style_parcel_templates = 'display:none;';
+			$style_parcel_templates_missing = 'display:block;';
+		}
+
+		?>
+		<div class="order_data_column_container actions">
 			<div id="create_label_form" class="action">
-				<?php if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ): ?>
-				<div id="select_label">
-					<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
-					<select name="parcel_template" id="parcel_template">
-					<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
-						<?php 
-							$show = self::get_carrier_display_name( $parcel_template[ 'carrier' ] ) . ' ';
-							$show.= $parcel_template[ 'width' ] . ' x ';
-							$show.= $parcel_template[ 'height' ] . ' x ';
-							$show.= $parcel_template[ 'length' ] . __( 'cm', 'wcsc-locale' ) . ' ';
-							$show.= $parcel_template[ 'weight' ] . __( 'kg', 'wcsc-locale' ) . ' ';
-							
-							$value = $parcel_template[ 'carrier' ] . ';';
-							$value.= $parcel_template[ 'width' ] . ';';
-							$value.= $parcel_template[ 'height' ] . ';';
-							$value.= $parcel_template[ 'length' ] . ';';
-							$value.= $parcel_template[ 'weight' ];
-						 ?>
-						<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
-					<?php endforeach; ?>
-					</select></label>
+
+				<div id="parcel_templates" style="<?php echo $style_parcel_templates; ?>">
+					<div id="select_label">
+						<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
+						<select name="parcel_template" id="parcel_template">
+						<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
+							<?php
+								$show = self::get_carrier_display_name( $parcel_template[ 'carrier' ] ) . ' ';
+								$show.= $parcel_template[ 'width' ] . ' x ';
+								$show.= $parcel_template[ 'height' ] . ' x ';
+								$show.= $parcel_template[ 'length' ] . __( 'cm', 'wcsc-locale' ) . ' ';
+								$show.= $parcel_template[ 'weight' ] . __( 'kg', 'wcsc-locale' ) . ' ';
+
+								$value = $parcel_template[ 'carrier' ] . ';';
+								$value.= $parcel_template[ 'width' ] . ';';
+								$value.= $parcel_template[ 'height' ] . ';';
+								$value.= $parcel_template[ 'length' ] . ';';
+								$value.= $parcel_template[ 'weight' ];
+							 ?>
+							<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
+						<?php endforeach; ?>
+						</select></label>
+					</div>
+					<div id="button_actions">
+						<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="button" />
+						<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button-primary" />
+					</div>
 				</div>
-				<div id="button_actions">
-					<input id="shipcloud_create_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="button" />	
-					<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="button" />
-					<a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php _e( 'Edit parcel templates', 'wcsc-locale'); ?></a>
+
+				<div id="parcel_templates_missing" style="<?php echo $style_parcel_templates_missing; ?>">
+					<p><?php echo __( 'You need to create at minimum one parcel templates.', 'wcsc-locale' ); ?></p>
+					<p><a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php echo __( 'Edit parcel templates', 'wcsc-locale' ); ?></a></p>
 				</div>
-			<?php else: ?>
-				<p><?php echo __( 'You need to create at minimum one parcel templates.', 'wcsc-locale' ); ?></p>
-				<p><a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php echo __( 'Edit parcel templates', 'wcsc-locale' ); ?></a></p>
-			<?php endif; ?>
 			</div>
 			
 		</div>
@@ -356,9 +373,7 @@ class WC_Shipcloud_Metaboxes{
 		$parcel = get_post_meta( $post->ID, 'shipcloud_parcel', TRUE );
 		
 		?><!-- Parcel settings //-->
-		<div class="order_data_column_container parcel">
-			<div class="order_data_column info">
-			</div>
+		<div id="create_template" class="order_data_column_container parcel">
 			<div class="order_data_column">
 				<table class="widefat" id="parcel_table">
 					<thead>
@@ -406,7 +421,7 @@ class WC_Shipcloud_Metaboxes{
 								<input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" placeholder="<?php _e( 'kg', 'wcsc-locale'  ); ?>" />
 							</td>
 							<td class="parcel_option parcel_button">
-								<input type="button" id="shipcloud_calculate_shipping" value="<?php _e( 'Calculate', 'wcsc-locale'  ); ?>" class="button" />
+								<input type="button" id="shipcloud_check_parcel_dimensions" value="<?php _e( 'Verify Parcel Settings', 'wcsc-locale'  ); ?>" class="button" />
 								<input type="button" id="shipcloud_add_parcel_template" value="<?php _e( 'Save as draft', 'wcsc-locale'  ); ?>" class="button" />
 							</td>
 						</tr>
@@ -483,7 +498,7 @@ class WC_Shipcloud_Metaboxes{
 			<div class="label_shipment_actions">
 				<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
 				<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking', 'wcsc-locale'); ?></a>
-				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button" />
+				<input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="button-primary" />
 			</div>
 			
 		</div><?php
