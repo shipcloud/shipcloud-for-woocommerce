@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-15 17:06+0100\n"
-"PO-Revision-Date: 2015-07-16 15:18+0100\n"
+"POT-Creation-Date: 2015-07-16 23:21+0100\n"
+"PO-Revision-Date: 2015-07-16 23:24+0100\n"
 "Last-Translator: Sven Wagener <sven.wagener@rheinschmiede.de>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -25,238 +25,219 @@ msgstr "Shipcloud admin"
 msgid "shipcloud.io Shipment-Center"
 msgstr "shipcloud.io Versandzentrum"
 
-#: ../components/admin/metaboxes.php:91
-msgid "Overview"
-msgstr "Übersicht"
+#: ../components/admin/metaboxes.php:92 ../components/admin/metaboxes.php:303
+msgid "Create Label"
+msgstr "Versandmarke erstellen"
 
-#: ../components/admin/metaboxes.php:92
-msgid "Parcel-Templates"
-msgstr "Paket-Vorlagen"
+#: ../components/admin/metaboxes.php:93
+msgid "Parcel Templates"
+msgstr "Paketvorlagen"
 
-#: ../components/admin/metaboxes.php:175
-msgid "Created a shipment"
-msgstr "Sendung erstellen"
-
-#: ../components/admin/metaboxes.php:179
+#: ../components/admin/metaboxes.php:176
 msgid "Sender Address"
 msgstr "Absenderadresse"
 
-#: ../components/admin/metaboxes.php:191
-#: ../components/admin/metaboxes.php:246
+#: ../components/admin/metaboxes.php:179
+#: ../components/admin/metaboxes.php:223
+msgid "Company"
+msgstr "Firma"
+
+#: ../components/admin/metaboxes.php:183
+#: ../components/admin/metaboxes.php:227
 #: ../components/woo/shipping-method.php:101
 msgid "First Name"
 msgstr "Vorname"
 
-#: ../components/admin/metaboxes.php:195
-#: ../components/admin/metaboxes.php:250
+#: ../components/admin/metaboxes.php:187
+#: ../components/admin/metaboxes.php:231
 #: ../components/woo/shipping-method.php:107
 msgid "Last Name"
 msgstr "Nachname"
 
-#: ../components/admin/metaboxes.php:199
-#: ../components/admin/metaboxes.php:254
-msgid "Company"
-msgstr "Firma"
-
-#: ../components/admin/metaboxes.php:203
-#: ../components/admin/metaboxes.php:258
+#: ../components/admin/metaboxes.php:191
+#: ../components/admin/metaboxes.php:235
 #: ../components/woo/shipping-method.php:113
 msgid "Street"
 msgstr "Straße"
 
-#: ../components/admin/metaboxes.php:207
-#: ../components/admin/metaboxes.php:262
-msgid "Street Number"
-msgstr "Hausnummer"
+#: ../components/admin/metaboxes.php:195
+#: ../components/admin/metaboxes.php:239
+msgid "Number"
+msgstr "Nummer"
 
-#: ../components/admin/metaboxes.php:211
-#: ../components/admin/metaboxes.php:266
+#: ../components/admin/metaboxes.php:199
+#: ../components/admin/metaboxes.php:243
 #: ../components/woo/shipping-method.php:125
 msgid "Postcode"
 msgstr "PLZ"
 
-#: ../components/admin/metaboxes.php:215
-#: ../components/admin/metaboxes.php:270
+#: ../components/admin/metaboxes.php:203
+#: ../components/admin/metaboxes.php:247
 #: ../components/woo/shipping-method.php:131
 msgid "City"
 msgstr "Ort"
 
-#: ../components/admin/metaboxes.php:219
-#: ../components/admin/metaboxes.php:274
+#: ../components/admin/metaboxes.php:207
+#: ../components/admin/metaboxes.php:251
 #: ../components/woo/shipping-method.php:137
 msgid "Country"
 msgstr "Land"
 
-#: ../components/admin/metaboxes.php:228
-#: ../components/admin/metaboxes.php:282
-msgid "Save Address"
-msgstr "Adresse speichern"
-
-#: ../components/admin/metaboxes.php:233
+#: ../components/admin/metaboxes.php:219
 msgid "Recipient Address"
 msgstr "Empfängeradresse"
 
-#: ../components/admin/metaboxes.php:305
-msgid "Select parcel template:"
-msgstr "Wählen Sie die Paket-Vorlage:"
+#: ../components/admin/metaboxes.php:276
+msgid "Actions"
+msgstr "Aktionen"
 
-#: ../components/admin/metaboxes.php:312
+#: ../components/admin/metaboxes.php:286
+#: ../components/admin/metaboxes.php:391
+#: ../components/admin/metaboxes.php:394
+#: ../components/admin/metaboxes.php:397
+#: ../components/admin/metaboxes.php:413
 #: ../components/admin/metaboxes.php:414
-#: ../components/admin/metaboxes.php:417
-#: ../components/admin/metaboxes.php:420
-#: ../components/admin/metaboxes.php:436
-#: ../components/admin/metaboxes.php:437
-#: ../components/admin/metaboxes.php:438
-#: ../components/admin/metaboxes.php:485 ../init.php:163
+#: ../components/admin/metaboxes.php:415 ../init.php:163
 msgid "cm"
 msgstr "cm"
 
-#: ../components/admin/metaboxes.php:313
-#: ../components/admin/metaboxes.php:423
-#: ../components/admin/metaboxes.php:440
-#: ../components/admin/metaboxes.php:486 ../init.php:162
+#: ../components/admin/metaboxes.php:287
+#: ../components/admin/metaboxes.php:400
+#: ../components/admin/metaboxes.php:417 ../init.php:162
 msgid "kg"
 msgstr "kg"
 
-#: ../components/admin/metaboxes.php:326
+#: ../components/admin/metaboxes.php:297
+msgid "Parcel Template"
+msgstr "Paketvorlage"
+
+#: ../components/admin/metaboxes.php:302
 msgid "Calculate Price"
 msgstr "Preis berechnen"
 
-#: ../components/admin/metaboxes.php:327
-msgid "Create shipment & label"
-msgstr "Versand & Etikett erstellen"
-
-#: ../components/admin/metaboxes.php:332
+#: ../components/admin/metaboxes.php:312
 msgid "You need to create at minimum one parcel template."
-msgstr "Sie müssen mindestens eine Paket-Vorlage erstellen."
+msgstr "Sie müssen mindestens eine Paketvorlage erstellen."
 
-#: ../components/admin/metaboxes.php:333
+#: ../components/admin/metaboxes.php:313
 msgid "Edit parcel templates"
-msgstr "Paket-Vorlagen bearbeiten"
+msgstr "Paketvorlagen bearbeiten"
 
-#: ../components/admin/metaboxes.php:344
-msgid "Existing shipments"
-msgstr "Vorhandenen Sendungen"
-
-#: ../components/admin/metaboxes.php:352
-msgid "No Label created yet."
-msgstr "Es wurde kein Etikett erstellt."
-
-#: ../components/admin/metaboxes.php:384
+#: ../components/admin/metaboxes.php:361
 msgid "Carrier"
 msgstr "Versandunternehmen"
 
-#: ../components/admin/metaboxes.php:387
+#: ../components/admin/metaboxes.php:364
 msgid "Width"
 msgstr "Breite"
 
-#: ../components/admin/metaboxes.php:390
+#: ../components/admin/metaboxes.php:367
 msgid "Height"
 msgstr "Höhe"
 
-#: ../components/admin/metaboxes.php:393
+#: ../components/admin/metaboxes.php:370
 msgid "Length"
 msgstr "Länge"
 
-#: ../components/admin/metaboxes.php:396
+#: ../components/admin/metaboxes.php:373
 msgid "Weight"
 msgstr "Gewicht"
 
-#: ../components/admin/metaboxes.php:426
+#: ../components/admin/metaboxes.php:403
 msgid "Verify Parcel Settings"
 msgstr "Paket-Einstellungen überprüfen"
 
-#: ../components/admin/metaboxes.php:427
+#: ../components/admin/metaboxes.php:404
 msgid "Save as draft"
 msgstr "Als Vorlage speichern"
 
-#: ../components/admin/metaboxes.php:444 ../init.php:161
+#: ../components/admin/metaboxes.php:421 ../init.php:161
 msgid "Delete"
 msgstr "Löschen"
 
-#: ../components/admin/metaboxes.php:445 ../init.php:160
+#: ../components/admin/metaboxes.php:422 ../init.php:160
 msgid "Select"
 msgstr "Auswählen"
 
-#: ../components/admin/metaboxes.php:476
-msgid "Download label"
-msgstr "Etikett herunterladen"
+#: ../components/admin/metaboxes.php:488
+msgid "Download Label"
+msgstr "Versandmarke herunterladen"
 
-#: ../components/admin/metaboxes.php:477
-msgid "Tracking"
-msgstr "Tracking"
+#: ../components/admin/metaboxes.php:489
+msgid "Tracking Link"
+msgstr "Tracking Link"
 
-#: ../components/admin/metaboxes.php:478
+#: ../components/admin/metaboxes.php:490
 msgid "Order Pickup"
 msgstr "Abholung beauftragen"
 
-#: ../components/admin/metaboxes.php:683
-#: ../components/admin/metaboxes.php:757
+#: ../components/admin/metaboxes.php:680
+#: ../components/admin/metaboxes.php:754
 msgid "Parcel dimensions are not supported by carrier."
 msgstr "Paketabmessungen werden vom Versandunternehmen nicht unterstützt."
 
-#: ../components/admin/metaboxes.php:867
-#: ../components/admin/metaboxes.php:879
+#: ../components/admin/metaboxes.php:865
+#: ../components/admin/metaboxes.php:877
 msgid "Sender Street can't be blank."
 msgstr "Absender-Straße darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:869
-#: ../components/admin/metaboxes.php:881
+#: ../components/admin/metaboxes.php:867
+#: ../components/admin/metaboxes.php:879
 msgid "Sender Street number can't be blank."
 msgstr "Absender-Hausnummer darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:871
-#: ../components/admin/metaboxes.php:883
+#: ../components/admin/metaboxes.php:869
+#: ../components/admin/metaboxes.php:881
 msgid "Sender ZIP code can't be blank."
 msgstr "Absender-Postleitzahl darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:873
-#: ../components/admin/metaboxes.php:885
+#: ../components/admin/metaboxes.php:871
+#: ../components/admin/metaboxes.php:883
 msgid "Sender City can't be blank."
 msgstr "Absender-Stadt darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:875
-#: ../components/admin/metaboxes.php:887
+#: ../components/admin/metaboxes.php:873
+#: ../components/admin/metaboxes.php:885
 msgid "Sender Country can't be blank."
 msgstr "Absender-Land darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:877
+#: ../components/admin/metaboxes.php:875
 msgid "Sender Country  is not an ALPHA-2 ISO country code."
 msgstr "Absender-Land ist kein ALPHA-2-ISO-Ländercode."
 
-#: ../components/admin/metaboxes.php:889
+#: ../components/admin/metaboxes.php:887
 msgid "Receiver Country  is not an ALPHA-2 ISO country code."
 msgstr "Empfänger-Land ist kein ALPHA-2-ISO-Ländercode."
 
-#: ../components/admin/metaboxes.php:891
+#: ../components/admin/metaboxes.php:889
 msgid "Package Height (in cm) can't be blank."
 msgstr "Pakethöhe (in cm) darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:893
+#: ../components/admin/metaboxes.php:891
 msgid "Package Height (in cm) is not a number."
 msgstr "Pakethöhe (in cm) ist keine Zahl."
 
-#: ../components/admin/metaboxes.php:895
+#: ../components/admin/metaboxes.php:893
 msgid "Package Length (in cm) can't be blank."
 msgstr "Paketlänge (in cm) darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:897
+#: ../components/admin/metaboxes.php:895
 msgid "Package Length (in cm) is not a number."
 msgstr "Paketlänge (in cm) ist keine Zahl."
 
-#: ../components/admin/metaboxes.php:899
+#: ../components/admin/metaboxes.php:897
 msgid "Package Width (in cm) can't be blank."
 msgstr "Paket Breite (in cm) darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:901
+#: ../components/admin/metaboxes.php:899
 msgid "Package Width (in cm) is not a number."
 msgstr "Paket Breite (in cm) ist keine Zahl."
 
-#: ../components/admin/metaboxes.php:903
+#: ../components/admin/metaboxes.php:901
 msgid "Package Weight (in kg) can't be blank."
 msgstr "Paketgewicht (in kg) darf nicht leer sein."
 
-#: ../components/admin/metaboxes.php:905
+#: ../components/admin/metaboxes.php:903
 msgid "Package Weight (in kg) is not a number."
 msgstr "Paketgewicht (in kg) ist keine Zahl."
 
@@ -364,12 +345,33 @@ msgid "The calculated price is"
 msgstr "Der berechnete Preis ist"
 
 #: ../init.php:164
-msgid "yes"
-msgstr "ja"
+msgid "Yes"
+msgstr "Ja"
 
 #: ../init.php:165
-msgid "no"
-msgstr "nein"
+msgid "No"
+msgstr "Nein"
+
+#~ msgid "Overview"
+#~ msgstr "Übersicht"
+
+#~ msgid "Created a shipment"
+#~ msgstr "Sendung erstellen"
+
+#~ msgid "Save Address"
+#~ msgstr "Adresse speichern"
+
+#~ msgid "Select parcel template:"
+#~ msgstr "Wählen Sie die Paket-Vorlage:"
+
+#~ msgid "Existing shipments"
+#~ msgstr "Vorhandenen Sendungen"
+
+#~ msgid "No Label created yet."
+#~ msgstr "Es wurde kein Etikett erstellt."
+
+#~ msgid "no"
+#~ msgstr "nein"
 
 #~ msgid "Shipment Carrier"
 #~ msgstr "Versandunternehmen"
