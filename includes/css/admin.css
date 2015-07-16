@@ -56,14 +56,14 @@
 #shipcloud .order_data_column{
     float: left;
 }
-#shipcloud #create_label,
-#shipcloud #button_actions{
+#shipcloud #create_label_form{
+	padding-right: 0;
 }
 #shipcloud #select_label{
 }
 #shipcloud .addresses .order_data_column{
 	padding: 0 3% 0 0;
-	width: 30%;
+	width: 31.3%;
 }
 #shipcloud .addresses .disabled label{
 	display:none;
