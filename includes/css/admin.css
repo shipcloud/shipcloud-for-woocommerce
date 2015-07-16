@@ -62,11 +62,8 @@
 #shipcloud #select_label{
 }
 #shipcloud .addresses .order_data_column{
-	padding-bottom: 4%;
-	padding-left: 3%;
-	padding-top: 4%;
-	padding-right:0;
-	width: 29%;
+	padding: 0 3% 0 0;
+	width: 30%;
 }
 #shipcloud .addresses .disabled label{
 	display:none;
@@ -150,6 +147,7 @@
 	border-right: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
 	margin-bottom: 20px;
+	padding: 20px;
 }
 
 /**
@@ -232,6 +230,9 @@
 #shipcloud .info{
 	display:none;
 }
+#shipcloud #create_template .info{
+	margin-bottom: 10px;
+}
 #shipcloud .notice{
     border: 1px solid #CCC;
 	box-shadow: none;
@@ -241,11 +242,10 @@
 	text-align: center;
 }
 #shipcloud #parcel_table{
-	padding:3.5%;
 	border:none;
 }
 #shipcloud #parcel_table th{
-	padding: 8px 0 8px 0;
+	padding: 0;
 	border:none;
 }
 #shipcloud #parcel_table th label{
@@ -257,12 +257,6 @@
 	padding: 8px 0;
 }
 #shipcloud .errors{
-	border: 1px solid #CCC;
-	box-shadow: none;
-	line-height: 28px;
-	padding: 12px;
-	margin:0;
-	text-align: center;
 }
 #shipcloud .parcel .info .errors li{
 	margin: 3px 0;

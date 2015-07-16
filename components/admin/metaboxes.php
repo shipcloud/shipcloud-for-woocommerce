@@ -97,8 +97,6 @@ class WC_Shipcloud_Metaboxes{
 				<?php self::tab_create_label(); ?>
 				</div>
 				<div id="wcsc-tab-templates" class="wcsc-tab wcsc-tab-templates">
-					<div class="info">
-					</div>
 				<?php self::tab_create_templates(); ?>
 				</div>
 			</div>
@@ -353,6 +351,8 @@ class WC_Shipcloud_Metaboxes{
 		
 		?><!-- Parcel settings //-->
 		<div id="create_template" class="container-bottom parcel">
+			<div class="info">
+			</div>
 			<div class="order_data_column">
 				<table class="widefat" id="parcel_table">
 					<thead>

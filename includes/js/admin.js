@@ -215,7 +215,7 @@ jQuery( function( $ ) {
 
 			if( result.errors ){
 
-				var html = '<ul class="errors">';
+				var html = '<ul class="notice errors">';
 				result.errors.forEach( function( entry ){
 					html+= '<li>' + entry + '</li>';
 				});
