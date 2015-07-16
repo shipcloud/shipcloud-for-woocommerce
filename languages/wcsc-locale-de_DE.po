@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-07-15 17:06+0100\n"
-"PO-Revision-Date: 2015-07-15 17:09+0100\n"
+"PO-Revision-Date: 2015-07-16 15:18+0100\n"
 "Last-Translator: Sven Wagener <sven.wagener@rheinschmiede.de>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -23,7 +23,7 @@ msgstr "Shipcloud admin"
 
 #: ../components/admin/metaboxes.php:55
 msgid "shipcloud.io Shipment-Center"
-msgstr "shipcloud.io Versantzentrum"
+msgstr "shipcloud.io Versandzentrum"
 
 #: ../components/admin/metaboxes.php:91
 msgid "Overview"

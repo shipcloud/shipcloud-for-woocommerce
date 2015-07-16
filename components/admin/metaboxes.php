@@ -65,6 +65,7 @@ class WC_Shipcloud_Metaboxes{
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
+		wp_enqueue_script( 'admin-widgets' );
 		// wp_enqueue_script( 'jquery-blockui' );
 
 		// CSS
@@ -88,13 +89,11 @@ class WC_Shipcloud_Metaboxes{
 		<div id="shipcloud">
 			<div class="shipcloud-tabs">
 				<ul class="nav-tab-wrapper wcsc-nav-tab-wrapper">
-					<li><a class="nav-tab" href="#wcsc-tab-label"><?php _e( 'Overview', 'wcsc-locale' ); ?></a></li>
-					<li><a class="nav-tab" href="#wcsc-tab-templates"><?php _e( 'Parcel-Templates', 'wcsc-locale' ); ?></a></li>
+					<li><a class="nav-tab" href="#wcsc-tab-label"><?php _e( 'Create Label', 'wcsc-locale' ); ?></a></li>
+					<li><a class="nav-tab" href="#wcsc-tab-templates"><?php _e( 'Parcel Templates', 'wcsc-locale' ); ?></a></li>
 					<div style="clear:both;"></div>
 				</ul>
 				<div id="wcsc-tab-label" class="wcsc-tab wcsc-tab-label">
-					<div class="info">
-					</div>
 				<?php self::tab_create_label(); ?>
 				</div>
 				<div id="wcsc-tab-templates" class="wcsc-tab wcsc-tab-templates">
@@ -171,141 +170,118 @@ class WC_Shipcloud_Metaboxes{
 		$parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
 		
 		?>
-		<!-- Addresses //-->
-		<h3><?php _e( 'Created a shipment', 'wcsc-locale' ); ?></h3>
-		<div id="create_label" class="shadow">
+
+		<!-- Create Label //-->
+		<div id="create_label" class="container-bottom">
 			<div class="order_data_column_container addresses">
 				<div class="order_data_column sender">
-					<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
-					<div class="address">
-						<p>
-						<?php echo $sender_address[ 'first_name' ]; ?> <?php echo $sender_address[ 'last_name' ]; ?><br />
-						<?php echo $sender_address[ 'company' ]; ?><br />
-						<?php echo $sender_address[ 'street' ]; ?> <?php echo $sender_address[ 'street_nr' ]; ?><br />
-						<?php echo $sender_address[ 'postcode' ]; ?> <?php echo $sender_address[ 'city' ]; ?><br />
-						<?php echo $sender_address[ 'country' ]; ?>
-						</p>
-					</div>
-					<div class="edit_address">
-						<p class="fullsize">
-							<label for="sender_address[first_name]"><?php _e( 'First Name', 'wcsc-locale' ); ?></label>
-							<input type="text" name="sender_address[first_name]" value="<?php echo $sender_address[ 'first_name' ]; ?>">
-						</p>
-						<p class="fullsize">
-							<label for="sender_address[last_name]"><?php _e( 'Last Name', 'wcsc-locale' ); ?></label>
-							<input type="text" name="sender_address[last_name]" value="<?php echo $sender_address[ 'last_name' ]; ?>">
-						</p>
+					<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?>  <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
+					<div class="edit_address disabled">
 						<p class="fullsize">
 							<label for="sender_address[company]"><?php _e( 'Company', 'wcsc-locale' ); ?></label>
-							<input type="text" name="sender_address[company]" value="<?php echo $sender_address[ 'company' ]; ?>">
+							<input type="text" name="sender_address[company]" value="<?php echo $sender_address[ 'company' ]; ?>" disabled>
 						</p>
 						<p>
+							<label for="sender_address[first_name]"><?php _e( 'First Name', 'wcsc-locale' ); ?></label>
+							<input type="text" name="sender_address[first_name]" value="<?php echo $sender_address[ 'first_name' ]; ?>" disabled>
+						</p>
+						<p>
+							<label for="sender_address[last_name]"><?php _e( 'Last Name', 'wcsc-locale' ); ?></label>
+							<input type="text" name="sender_address[last_name]" value="<?php echo $sender_address[ 'last_name' ]; ?>" disabled>
+						</p>
+						<p class="seventyfive">
 							<label for="sender_address[street]"><?php _e( 'Street', 'wcsc-locale' ); ?></label>
-							<input type="text" name="sender_address[street]" value="<?php echo $sender_address[ 'street' ]; ?>">
+							<input type="text" name="sender_address[street]" value="<?php echo $sender_address[ 'street' ]; ?>" disabled>
 						</p>
-						<p>
-							<label for="sender_address[street_nr]"><?php _e( 'Street Number', 'wcsc-locale' ); ?></label>
-							<input type="text" name="sender_address[street_nr]" value="<?php echo $sender_address[ 'street_nr' ]; ?>">
+						<p class="twentyfive">
+							<label for="sender_address[street_nr]"><?php _e( 'Number', 'wcsc-locale' ); ?></label>
+							<input type="text" name="sender_address[street_nr]" value="<?php echo $sender_address[ 'street_nr' ]; ?>" disabled>
 						</p>
 						<p>
 							<label for="sender_address[postcode]"><?php _e( 'Postcode', 'wcsc-locale' ); ?></label>
-							<input type="text" name="sender_address[postcode]" value="<?php echo $sender_address[ 'postcode' ]; ?>">
+							<input type="text" name="sender_address[postcode]" value="<?php echo $sender_address[ 'postcode' ]; ?>" disabled>
 						</p>
 						<p>
 							<label for="sender_address[city]"><?php _e( 'City', 'wcsc-locale' ); ?></label>
-							<input type="text" name="sender_address[city]" value="<?php echo $sender_address[ 'city' ]; ?>">
+							<input type="text" name="sender_address[city]" value="<?php echo $sender_address[ 'city' ]; ?>" disabled>
 						</p>
-						<p>
+						<p class="fullsize">
 							<label for="sender_address[country]"><?php _e( 'Country', 'wcsc-locale' ); ?></label>
-							<select name="sender_address[country]">
+							<select name="sender_address[country]" disabled>
 							<?php foreach( $woocommerce->countries->countries AS $key => $country ): ?>
 								<?php if( $key == $sender_address[ 'country' ] ): $selected = ' selected'; else: $selected = ''; endif; ?>
 								<option value="<?php echo $key; ?>"<?php echo $selected; ?>><?php echo $country; ?></option>
 							<?php endforeach; ?>
 							</select>
 						</p>
-						<div style="clear:both;"></div>
-						<p class="fullsize"><input type="button" class="button save_address" value="<?php _e( 'Save Address', 'wcsc-locale' ); ?>" /></p>
 					</div>
 				</div>
 				
 				<div class="order_data_column recipient">
-					<h4><?php _e( 'Recipient Address', 'wcsc-locale' ); ?> <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
-					
-					<div class="address">
-						<p>
-						<?php echo $recipient_address[ 'first_name' ]; ?> <?php echo $recipient_address[ 'last_name' ]; ?><br />
-						<?php echo $recipient_address[ 'company' ]; ?><br />
-						<?php echo $recipient_address[ 'street' ]; ?> <?php echo $recipient_address[ 'street_nr' ]; ?><br />
-						<?php echo $recipient_address[ 'postcode' ]; ?> <?php echo $recipient_address[ 'city' ]; ?><br />
-						<?php echo $sender_address[ 'country' ]; ?>
-						</p>
-					</div>
-					<div class="edit_address">
-						<p class="fullsize">
-							<label for="recipient_address[first_name]"><?php _e( 'First Name', 'wcsc-locale' ); ?></label>
-							<input type="text" name="recipient_address[first_name]" value="<?php echo $recipient_address[ 'first_name' ]; ?>">
-						</p>
-						<p class="fullsize">
-							<label for="recipient_address[last_name]"><?php _e( 'Last Name', 'wcsc-locale' ); ?></label>
-							<input type="text" name="recipient_address[last_name]" value="<?php echo $recipient_address[ 'last_name' ]; ?>">
-						</p>
+					<h4><?php _e( 'Recipient Address', 'wcsc-locale' ); ?>  <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
+
+					<div class="edit_address disabled">
 						<p class="fullsize">
 							<label for="recipient_address[company]"><?php _e( 'Company', 'wcsc-locale' ); ?></label>
-							<input type="text" name="recipient_address[company]" value="<?php echo $recipient_address[ 'company' ]; ?>">
+							<input type="text" name="recipient_address[company]" value="<?php echo $recipient_address[ 'company' ]; ?>" disabled>
 						</p>
 						<p>
+							<label for="recipient_address[first_name]"><?php _e( 'First Name', 'wcsc-locale' ); ?></label>
+							<input type="text" name="recipient_address[first_name]" value="<?php echo $recipient_address[ 'first_name' ]; ?>" disabled>
+						</p>
+						<p>
+							<label for="recipient_address[last_name]"><?php _e( 'Last Name', 'wcsc-locale' ); ?></label>
+							<input type="text" name="recipient_address[last_name]" value="<?php echo $recipient_address[ 'last_name' ]; ?>" disabled>
+						</p>
+						<p class="seventyfive">
 							<label for="recipient_address[street]"><?php _e( 'Street', 'wcsc-locale' ); ?></label>
-							<input type="text" name="recipient_address[street]" value="<?php echo $recipient_address[ 'street' ]; ?>">
+							<input type="text" name="recipient_address[street]" value="<?php echo $recipient_address[ 'street' ]; ?>" disabled>
 						</p>
-						<p>
-							<label for="recipient_address[street_nr]"><?php _e( 'Street Number', 'wcsc-locale' ); ?></label>
-							<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient_address[ 'street_nr' ]; ?>">
+						<p class="twentyfive">
+							<label for="recipient_address[street_nr]"><?php _e( 'Number', 'wcsc-locale' ); ?></label>
+							<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient_address[ 'street_nr' ]; ?>" disabled>
 						</p>
 						<p>
 							<label for="recipient_address[postcode]"><?php _e( 'Postcode', 'wcsc-locale' ); ?></label>
-							<input type="text" name="recipient_address[postcode]" value="<?php echo $recipient_address[ 'postcode' ]; ?>">
+							<input type="text" name="recipient_address[postcode]" value="<?php echo $recipient_address[ 'postcode' ]; ?>" disabled>
 						</p>
 						<p>
 							<label for="recipient_address[city]"><?php _e( 'City', 'wcsc-locale' ); ?></label>
-							<input type="text" name="recipient_address[city]" value="<?php echo $recipient_address[ 'city' ]; ?>">
+							<input type="text" name="recipient_address[city]" value="<?php echo $recipient_address[ 'city' ]; ?>" disabled>
 						</p>
-						<p>
+						<p class="fullsize">
 							<label for="recipient_address[country]"><?php _e( 'Country', 'wcsc-locale' ); ?></label>
-							<select name="recipient_address[country]">
+							<select name="recipient_address[country]" disabled>
 							<?php foreach( $woocommerce->countries->countries AS $key => $country ): ?>
 								<?php if( $key == $sender_address[ 'country' ] ): $selected = ' selected'; else: $selected = ''; endif; ?>
 								<option value="<?php echo $key; ?>"<?php echo $selected; ?>><?php echo $country; ?></option>
 							<?php endforeach; ?>
 							</select>
 						</p>
-						<p class="fullsize"><input type="button" class="button save_address" value="<?php _e( 'Save Address', 'wcsc-locale' ); ?>" /></p>
 					</div>
+
 			</div>
-			<div style="clear: both"></div>
-		</div>
-		
-		<!-- Actions //-->
-		<?php
 
-		if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ){
-			$style_parcel_templates = 'display:block;';
-			$style_parcel_templates_missing = 'display:none;';
-		}else{
-			$style_parcel_templates = 'display:none;';
-			$style_parcel_templates_missing = 'display:block;';
-		}
+			<!-- Actions //-->
+			<?php
 
-		?>
-		<div class="order_data_column_container actions">
-			<div id="create_label_form" class="action">
+			if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ){
+				$style_parcel_templates = 'display:block;';
+				$style_parcel_templates_missing = 'display:none;';
+			}else{
+				$style_parcel_templates = 'display:none;';
+				$style_parcel_templates_missing = 'display:block;';
+			}
 
+			?>
+			<div id="create_label_form" class="order_data_column actions">
+				<h4><?php _e( 'Actions', 'wcsc-locale' ); ?></h4>
 				<div id="parcel_templates" style="<?php echo $style_parcel_templates; ?>">
 					<div id="select_label">
-						<label for"parcel_template"><?php _e( 'Select parcel template:', 'wcsc-locale' ); ?>
+						<p class="fullsize">
 						<select name="parcel_template" id="parcel_template">
-						<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
-							<?php
+							<?php foreach( $parcel_templates AS $key => $parcel_template ): ?>
+								<?php
 								$show = self::get_carrier_display_name( $parcel_template[ 'carrier' ] ) . ' ';
 								$show.= $parcel_template[ 'width' ] . ' x ';
 								$show.= $parcel_template[ 'height' ] . ' x ';
@@ -317,14 +293,20 @@ class WC_Shipcloud_Metaboxes{
 								$value.= $parcel_template[ 'height' ] . ';';
 								$value.= $parcel_template[ 'length' ] . ';';
 								$value.= $parcel_template[ 'weight' ];
-							 ?>
-							<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
-						<?php endforeach; ?>
-						</select></label>
+								?>
+								<option value="<?php echo $value; ?>"><?php echo $show; ?></option>
+							<?php endforeach; ?>
+						</select><label for"parcel_template"><?php _e( 'Parcel Template', 'wcsc-locale' ); ?></label>
+						</p>
+						<div style="clear: both"></div>
 					</div>
 					<div id="button_actions">
-						<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="button" />
-						<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create shipment & label', 'wcsc-locale'); ?>" class="button-primary" />
+						<p class="fullsize"><input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="fullsize button" /></p>
+						<p class="fullsize"><input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="fullsize button-primary" /></p>
+						<div style="clear: both"></div>
+					</div>
+					<div style="clear: both"></div>
+					<div class="info">
 					</div>
 				</div>
 
@@ -333,30 +315,25 @@ class WC_Shipcloud_Metaboxes{
 					<p><a href="#wcsc-tab-templates" class="shipcloud-switchto-parcel-tamplates button"><?php echo __( 'Edit parcel templates', 'wcsc-locale' ); ?></a></p>
 				</div>
 			</div>
-			
-		</div>
-		<div style="clear:both;"></div>
-		
-		</div>
-		
-		<!-- Label list //-->
-		<div class="order_data_column_container shipping_data">
-			<h3><?php _e( 'Existing shipments', 'wcsc-locale' ); ?></h3>
-			<div class="order_data_column shipment_labels">
-				<?php if( '' != $shipment_data && is_array( $shipment_data ) ): ?>
-					<?php krsort( $shipment_data ); ?>
-					<?php foreach( $shipment_data AS $time => $data ): ?>
-						<?php echo self::get_label_html( $data, $time ); ?>
-					<?php endforeach; ?>
-				<?php else: ?>
-					<p id="no_label_created"><?php _e( 'No Label created yet.', 'wcsc-locale' ); ?></p>
-				<?php endif; ?>
-			</div>
 			<div style="clear: both"></div>
+			<!-- Label list //-->
+			<div class="order_data_column_container shipping_data">
+				<div class="shipment_labels">
+					<?php if( '' != $shipment_data && is_array( $shipment_data ) ): ?>
+						<?php krsort( $shipment_data ); ?>
+						<?php foreach( $shipment_data AS $time => $data ): ?>
+							<?php echo self::get_label_html( $data, $time ); ?>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+				<div style="clear: both"></div>
+			</div>
 		</div>
-		
-		<div id="ask_create_label"><?php echo esc_attr__( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'questions-locale' ); ?></div>
-		<div id="ask_order_pickup"><?php echo esc_attr__( 'This will order a pickup for this parcel. Do you really want to order?', 'questions-locale' ); ?></div>
+		</div>
+
+		<!-- Hidden Dialog messages //-->
+		<div id="ask_create_label"><?php echo esc_attr__( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'wcsc-locale' ); ?></div>
+		<div id="ask_order_pickup"><?php echo esc_attr__( 'This will order a pickup for this parcel. Do you really want to order?', 'wcsc-locale' ); ?></div>
 		
 		<?
 	}
@@ -375,7 +352,7 @@ class WC_Shipcloud_Metaboxes{
 		$parcel = get_post_meta( $post->ID, 'shipcloud_parcel', TRUE );
 		
 		?><!-- Parcel settings //-->
-		<div id="create_template" class="order_data_column_container parcel">
+		<div id="create_template" class="container-bottom parcel">
 			<div class="order_data_column">
 				<table class="widefat" id="parcel_table">
 					<thead>
@@ -456,6 +433,7 @@ class WC_Shipcloud_Metaboxes{
 					</tbody>
 				</table>
 			</div>
+			<div style="clear: both;"></div>
 		</div>
 		<?php
 	}
@@ -469,43 +447,54 @@ class WC_Shipcloud_Metaboxes{
 		ob_start();
 
 		?>
-		<div class="label shadow">
-			<div class="data">
-
-				<div class="label_shipment_actions">
-					<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
-					<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking', 'wcsc-locale'); ?></a>
-					<!-- <input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="shipcloud-order-pickup button-primary" /> //-->
-					<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>" />
-					<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>" />
+		<div class="label widget">
+			<div class="widget-top">
+				<div class="widget-title-action">
+					<a class="widget-action hide-if-no-js"></a>
 				</div>
-
-				<div class="label_shipment_parcel">
-					<div class="parcel_carrier"><?php echo $data[ 'carrier' ]; ?></div>
-					<div class="parcel_dimensions"><?php echo $data[ 'width' ]; ?> x <?php echo $data[ 'height' ]; ?> x <?php echo $data[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale'); ?></div>
-					<div class="parcel_weight"><?php echo $data[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale'); ?></div>
-					<div class="parcel_price"><?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?></div>
-				</div>
-				
-				<div class="label_shipment_sender">
-					<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
-					<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
-					<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]; ?></div>
-					<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
-					<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
-				</div>
-				
-				<div style="clear: both;"></div>
-				
-				<div class="label_shipment_recipient">
-					<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
-					<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
-					<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]; ?></div>
-					<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
-					<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
+				<div class="widget-title">
+					<h4><?php echo $data[ 'sender_company' ]; ?> &gt; <?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></h4>
 				</div>
 			</div>
+			<div class="widget-inside">
+				<div class="widget-content">
+					<div class="data">
 
+						<div class="label_shipment_actions">
+							<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
+							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking', 'wcsc-locale'); ?></a>
+							<!-- <input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="shipcloud-order-pickup button-primary" /> //-->
+							<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>" />
+							<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>" />
+						</div>
+
+						<div class="label_shipment_parcel">
+							<div class="parcel_carrier"><?php echo $data[ 'carrier' ]; ?></div>
+							<div class="parcel_dimensions"><?php echo $data[ 'width' ]; ?> x <?php echo $data[ 'height' ]; ?> x <?php echo $data[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale'); ?></div>
+							<div class="parcel_weight"><?php echo $data[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale'); ?></div>
+							<div class="parcel_price"><?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?></div>
+						</div>
+
+						<div class="label_shipment_sender">
+							<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
+							<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
+							<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]; ?></div>
+							<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
+							<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
+						</div>
+
+						<div style="clear: both;"></div>
+
+						<div class="label_shipment_recipient">
+							<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
+							<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
+							<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]; ?></div>
+							<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
+							<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div><?php
 		
 		$html = ob_get_clean();
@@ -638,7 +627,7 @@ class WC_Shipcloud_Metaboxes{
 	}
 	
 	/**
-	 * Calulating shipping after sublitting calculation
+	 * Calulating shipping after submitting calculation
 	 */
 	public static function ajax_calculate_shipping(){
 		$options = get_option( 'woocommerce_shipcloud_settings' );

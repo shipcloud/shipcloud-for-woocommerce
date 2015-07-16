@@ -1,51 +1,39 @@
 jQuery( function( $ ) {
-	
-	$( '.btn_edit_address' ).click( function ( e ){
-
-		var position = $( this ).position();
-		var div_address = $( this ).parent().parent().find( ".address" );
-		var div_edit_address = $( this ).parent().parent().find( ".edit_address" );
-
-		// Centering container under edit button
-		var container_left_position = position.left  - ( div_edit_address.width() / 2 );
-		div_edit_address.css( 'top', ( position.top + 25 ) + 'px' );
-		div_edit_address.css( 'left', ( container_left_position ) + 'px');
-
-		if( 'none' == div_edit_address.css( 'display' ) ){
-			div_edit_address.show();
-		}else{
-			var address = '';
-			
-			if( div_address.parent().hasClass( 'sender' ) ){
-				address += $( "input[name='sender_address[first_name]']" ).val()  + ' ';
-				address += $( "input[name='sender_address[last_name]']" ).val() + '<br />';
-				address += $( "input[name='sender_address[company]']" ).val() + '<br />';
-				address += $( "input[name='sender_address[street]']" ).val()  + ' ';
-				address += $( "input[name='sender_address[street_nr]']" ).val() + '<br />';
-				address += $( "input[name='sender_address[postcode]']" ).val() + ' ';
-				address += $( "input[name='sender_address[city]']" ).val() + '<br />';
-				address += $( "select[name='sender_address[country]']" ).val();
-			}else{
-		
-				address += $( "input[name='recipient_address[first_name]']" ).val() + ' ';
-				address += $( "input[name='recipient_address[last_name]']" ).val() + '<br />';
-				address += $( "input[name='recipient_address[company]']" ).val() + '<br />';
-				address += $( "input[name='recipient_address[street]']" ).val() + ' ';
-				address += $( "input[name='recipient_address[street_nr]']" ).val() + '<br />';
-				address += $( "input[name='recipient_address[postcode]']" ).val() +  ' ';
-				address += $( "input[name='recipient_address[city]']" ).val() + '<br />';
-				address += $( "select[name='recipient_address[country]']" ).val();
-			}
-			
-			div_address.html( address );
-						
-			div_edit_address.hide();
-		}
-	});
 
 	var edit_address = function(){
+		$( '.btn_edit_address' ).click( function ( e ){
+			var div_address = $( this ).parent().parent().find( ".address" );
+			var div_edit_address = $( this ).parent().parent().find( ".edit_address" );
+			var div_edit_address_inputs = div_edit_address.find( 'input' );
+			var div_edit_address_selects = div_edit_address.find( 'select' );
 
+			if( div_edit_address.hasClass( 'disabled' ) ){
+				console.log( div_edit_address_inputs );
+
+				div_edit_address_inputs.each(function() {
+					$( this ).removeAttr( 'disabled' );
+				});
+
+				div_edit_address_selects.each(function() {
+					$( this ).removeAttr( 'disabled' );
+				});
+
+				div_edit_address.removeClass( 'disabled' )
+
+			}else{
+				div_edit_address_inputs.each(function() {
+					$( this).attr( 'disabled', 'disabled' );
+				});
+
+				div_edit_address_selects.each(function() {
+					$( this ).attr( 'disabled', 'disabled' );
+				});
+
+				div_edit_address.addClass( 'disabled' )
+			}
+		});
 	}
+	edit_address();
 	
 	var carrier_select = function(){
 		$( '.carrier_select' ).click( function (){
@@ -306,7 +294,7 @@ jQuery( function( $ ) {
 				});
 				html+= '</ul>';
 				
-				$( '#wcsc-tab-label .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				$( '#wcsc-tab-label .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeOut();
 
 			}if( result.price ){
@@ -314,7 +302,7 @@ jQuery( function( $ ) {
 				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
 				
-				$( '#wcsc-tab-label .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				$( '#wcsc-tab-label .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeIn();
 			}
 			button.removeClass( 'button-loading' );
@@ -402,7 +390,6 @@ jQuery( function( $ ) {
 			catch( e )
 			{
 				$( '.shipment_labels' ).prepend( response );
-				$( '#no_label_created' ).fadeOut();
 			}
 
 			button.removeClass( 'button-loading-blue' );
@@ -451,8 +438,6 @@ jQuery( function( $ ) {
 	}
 	shipcloud_order_pickup();
 
-
-	
 	$( '#shipcloud_create_label' ).click( function(){
 		var ask_create_label = $( '#ask_create_label' );
 

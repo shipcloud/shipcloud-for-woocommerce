@@ -20,7 +20,7 @@
 	border:none;
 }
 #shipcloud .wcsc-nav-tab-wrapper{
-	padding:0;
+	margin: 20px 0 0 0;
 	border-bottom: 1px solid #ccc;
 }
 #shipcloud .wcsc-nav-tab-wrapper li{
@@ -31,7 +31,6 @@
 	background-color:#FFF;
 }
 #shipcloud .wcsc-tab-label{
-	padding:20px;
 }
 #shipcloud .wcsc-tab{
 	min-height:300px;
@@ -47,6 +46,7 @@
     margin-bottom:20px;
 }
 #shipcloud label{
+	padding-left:2px;
 }
 
 #shipcloud .order_data_column_container{
@@ -59,22 +59,31 @@
 }
 #shipcloud #create_label,
 #shipcloud #button_actions{
-	text-align:center;
-	padding: 10px;
 }
 #shipcloud #select_label{
-	margin-bottom:20px;
 }
 #shipcloud .addresses .order_data_column{
-    width: 40%;
-    padding:4%;
+	padding-bottom: 4%;
+	padding-left: 3%;
+	padding-top: 4%;
+	width: 29%;
+}
+#shipcloud .addresses .disabled label{
+	display:none;
+}
+#shipcloud .addresses .disabled input,
+#shipcloud .addresses .disabled select{
+}
+#shipcloud .addresses .disabled .twentyfive,
+#shipcloud .addresses .disabled .secentyfive,
+#shipcloud .addresses .disabled .fullsize{
+	display:inline;
 }
 #shipcloud .addresses .order_data_column h4,
 #shipcloud .addresses .order_data_column p{
-	margin:0;
+	margin: 0 0 5px;
 }
 #shipcloud .addresses .order_data_column.sender{
-	margin-right:4%;
 }
 #shipcloud .addresses .order_data_column.recipient{
 }
@@ -83,29 +92,26 @@
     width: 100%;
 }
 #shipcloud #ask_create_label,
-#shipcloud #ask_order_pickup,
-#shipcloud .edit_address{
+#shipcloud #ask_order_pickup{
 	display:none;
 }
 #shipcloud .edit_address{
-	position: absolute;
-	width:30%;
-	background-color: #FFF;
-	border:1px solid #CCC;
-	padding:2%;
-	z-index: 1000;
-	text-align: left;
 }
-#shipcloud .edit_address p{
+#shipcloud .order_data_column p{
 	float:left;
 	margin: 0;
-    padding: 5px 0;
     width:50%;
 }
-#shipcloud .edit_address p.fullsize{
-	width:100%;
-	clear:both;
+#shipcloud .order_data_column .twentyfive{
+	width:25%;
 }
+#shipcloud .order_data_column .seventyfive{
+	width:75%;
+}
+#shipcloud .order_data_column .fullsize{
+	width:100%;
+}
+
 #shipcloud .edit_address p input,
 #shipcloud .edit_address p select{
 	width: 100%;
@@ -120,7 +126,13 @@
 #shipcloud .btn_edit_address:hover{
 	opacity: 1;
 }
-
+#shipcloud #parcel_templates #select_label{
+	padding-bottom: 20px;
+}
+#shipcloud #parcel_templates #select_label label{
+	text-align: center;
+	display: block;
+}
 #shipcloud .errors{
 	border-color: #dd3d36;
 }
@@ -130,10 +142,13 @@
 	-moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
 	box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
 	
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	
+	margin-bottom: 20px;
+}
+
+#shipcloud .container-bottom{
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
 	margin-bottom: 20px;
 }
 
@@ -154,8 +169,6 @@
 }
 #shipcloud #create_label,
 #shipcloud #pickup_parcel{
-    padding: 0.5%;
-    width: 99%;
 }
 
 #shipcloud #create_label{
@@ -182,11 +195,10 @@
 	width:100%;
 }
 #shipcloud .shipment_labels .label{
-	width:98%;
-	padding:1%;
 	margin-bottom: 1%;
 	margin-right: 1%;
-	float:left;
+	padding: 0 3%;
+	width: 100%;
 }
 #shipcloud .label_shipment_sender{
 	width:46%;
@@ -219,6 +231,22 @@
     line-height: 28px;
     padding: 12px;
     margin-bottom:20px;
+}
+#shipcloud #parcel_table{
+	padding:3.5%;
+	border:none;
+}
+#shipcloud #parcel_table th{
+	padding: 8px 0 8px 0;
+	border:none;
+}
+#shipcloud #parcel_table th label{
+	padding:0;
+	font-weight: 600;
+	font-size: 12px;
+}
+#shipcloud #parcel_table td{
+	padding: 8px 0;
 }
 #shipcloud .errors{
 	background: #fff;
