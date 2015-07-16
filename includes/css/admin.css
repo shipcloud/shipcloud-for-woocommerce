@@ -178,9 +178,9 @@
 #shipcloud #create_label select{
 	margin-top: -1px;
 }
-#shipcloud .label_shipment_actions{
+#shipcloud .widget-content .label_shipment_actions{
 	text-align: left;
-	padding: 2%;
+	padding-right: 0;
 }
 .button-wcsc-action{
 	min-width:200px;
