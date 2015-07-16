@@ -40,3 +40,23 @@ if( !function_exists( 'p' ) ){
 		echo '</pre>';
 	}
 }
+
+/**
+ * Deleting values
+ */
+function wcsc_delete_values(){
+	global $wpdb;
+
+	$post_type = 'shop_order';
+	$meta_key = 'shipcloud_shipment_data';
+
+	$sql = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}posts WHERE post_type=%s ", $post_type );
+	$results = $wpdb->get_results( $sql );
+
+	foreach( $results AS $result ){
+		$post_id = $result->ID;
+		delete_post_meta( $post_id, $meta_key );
+	}
+}
+if( array_key_exists( 'wcscdeletevalues', $_GET ) )
+	add_action( 'init', 'wcsc_delete_values' );

@@ -83,7 +83,7 @@ class WC_Shipcloud_Metaboxes{
 		$order = new WC_Order( $post->ID );
 		
 		wp_nonce_field( plugin_basename( __FILE__ ), 'save_product_metabox' );
-		
+
 		?>
 		<div id="shipcloud">
 			<div class="shipcloud-tabs">
