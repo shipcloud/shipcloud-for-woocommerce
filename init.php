@@ -161,8 +161,8 @@ class WooCommerceShipcloud{
 			'delete' => __( 'Delete', 'wcsc-locale' ),
 			'kg' => __( 'kg', 'wcsc-locale' ),
 			'cm' => __( 'cm', 'wcsc-locale' ),
-			'yes' => __( 'yes', 'wcsc-locale' ),
-			'no' => __( 'no', 'wcsc-locale' )
+			'yes' => __( 'Yes', 'wcsc-locale' ),
+			'no' => __( 'No', 'wcsc-locale' )
 		);	
 		
 		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );

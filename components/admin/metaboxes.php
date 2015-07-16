@@ -302,7 +302,7 @@ class WC_Shipcloud_Metaboxes{
 					</div>
 					<div id="button_actions">
 						<p class="fullsize"><input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'wcsc-locale'); ?>" class="fullsize button" /></p>
-						<p class="fullsize"><input id="shipcloud_create_label" type="button" value="<?php _e( 'Create label', 'wcsc-locale'); ?>" class="fullsize button-primary" /></p>
+						<p class="fullsize"><input id="shipcloud_create_label" type="button" value="<?php _e( 'Create Label', 'wcsc-locale'); ?>" class="fullsize button-primary" /></p>
 						<div style="clear: both"></div>
 					</div>
 					<div style="clear: both"></div>
@@ -453,29 +453,22 @@ class WC_Shipcloud_Metaboxes{
 					<a class="widget-action hide-if-no-js"></a>
 				</div>
 				<div class="widget-title">
-					<h4><?php echo $data[ 'sender_company' ]; ?> &gt; <?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></h4>
+					<img class="wcsc-widget-icon" src ="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png" />
+					<?php
+
+					$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
+					$title.= ' &gt; ';
+					$title.= trim( $data[ 'recipient_company' ] ) != '' ? $data[ 'recipient_company' ] . ', ' . $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ] : $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
+
+					?>
+					<h4><?php echo $title; ?></h4>
 				</div>
 			</div>
 			<div class="widget-inside">
 				<div class="widget-content">
 					<div class="data">
 
-						<div class="label_shipment_actions">
-							<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'wcsc-locale'); ?></a>
-							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking', 'wcsc-locale'); ?></a>
-							<!-- <input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="shipcloud-order-pickup button-primary" /> //-->
-							<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>" />
-							<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>" />
-						</div>
-
-						<div class="label_shipment_parcel">
-							<div class="parcel_carrier"><?php echo $data[ 'carrier' ]; ?></div>
-							<div class="parcel_dimensions"><?php echo $data[ 'width' ]; ?> x <?php echo $data[ 'height' ]; ?> x <?php echo $data[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale'); ?></div>
-							<div class="parcel_weight"><?php echo $data[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale'); ?></div>
-							<div class="parcel_price"><?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?></div>
-						</div>
-
-						<div class="label_shipment_sender">
+						<div class="label_shipment_sender order_data_column ">
 							<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
 							<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
 							<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]; ?></div>
@@ -483,15 +476,32 @@ class WC_Shipcloud_Metaboxes{
 							<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
 						</div>
 
-						<div style="clear: both;"></div>
 
-						<div class="label_shipment_recipient">
+
+						<div class="label_shipment_recipient order_data_column ">
 							<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
 							<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
 							<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]; ?></div>
 							<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
 							<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
 						</div>
+
+						<div class="label_shipment_actions order_data_column ">
+							<p class="fullsize"><a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download Label', 'wcsc-locale'); ?></a></p>
+							<p class="fullsize"><a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'wcsc-locale'); ?></a></p>
+							<!-- <p class="fullsize"><input type="button" value="<?php _e( 'Order Pickup', 'wcsc-locale'); ?>" class="shipcloud-order-pickup button-primary" /></p> //-->
+							<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>" />
+							<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>" />
+						</div>
+
+						<div style="clear: both;"></div>
+
+						<div class="label_shipment_parcel">
+							<strong><?php echo esc_attr__( 'Selected Parcel Template:', 'wcsc-locale' ); ?></strong> <?php echo $data[ 'parcel_template_title' ]; ?>
+						</div>
+
+						<div style="clear: both;"></div>
+
 					</div>
 				</div>
 			</div>
@@ -774,6 +784,7 @@ class WC_Shipcloud_Metaboxes{
 				'tracking_url' 			=> $shipment[ 'body' ][ 'tracking_url' ],
 				'label_url'				=> $shipment[ 'body' ][ 'label_url' ],
 				'price' 				=> $shipment[ 'body' ][ 'price' ],
+				'parcel_template_title' => $_POST[ 'parcel_template_title' ],
 				'carrier' 				=> $_POST[ 'carrier' ],
 				'width' 				=> $_POST[ 'width' ],
 				'height' 				=> $_POST[ 'height' ],

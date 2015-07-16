@@ -333,6 +333,7 @@ jQuery( function( $ ) {
 		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
 
 		var parcel_template 	= $( "select[name='parcel_template']" ).val( );
+		var parcel_template_title 	= $( "select[name='parcel_template'] option:selected" ).text();
 		parcel_template = parcel_template.split( ";" );
 
 		var carrier 	= parcel_template[ 0 ];
@@ -360,6 +361,7 @@ jQuery( function( $ ) {
 			'recipient_postcode' : recipient_postcode,
 			'recipient_city' : recipient_city,
 			'recipient_country' : recipient_country,
+			'parcel_template_title': parcel_template_title,
 			'carrier': carrier,
 			'width': width,
 			'height': height,
@@ -442,7 +444,7 @@ jQuery( function( $ ) {
 		var ask_create_label = $( '#ask_create_label' );
 
 		ask_create_label.dialog({                   
-            'dialogClass'   : 'wp-dialog',           
+            'dialogClass'   : 'wcsc-dialog wp-dialog',
             'modal'         : true,
             'autoOpen'      : false, 
             'closeOnEscape' : true,
