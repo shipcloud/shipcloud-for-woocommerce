@@ -476,8 +476,6 @@ class WC_Shipcloud_Metaboxes{
 							<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
 						</div>
 
-
-
 						<div class="label_shipment_recipient order_data_column ">
 							<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
 							<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
@@ -497,7 +495,7 @@ class WC_Shipcloud_Metaboxes{
 						<div style="clear: both;"></div>
 
 						<div class="label_shipment_parcel">
-							<strong><?php echo esc_attr__( 'Selected Parcel Template:', 'wcsc-locale' ); ?></strong> <?php echo $data[ 'parcel_template_title' ]; ?>
+							<strong><?php echo esc_attr__( 'Selected Parcel Template:', 'wcsc-locale' ); ?></strong> <?php echo $data[ 'parcel_template_title' ]; ?> -  <?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?>
 						</div>
 
 						<div style="clear: both;"></div>

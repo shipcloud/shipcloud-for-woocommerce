@@ -197,10 +197,12 @@
 	width:100%;
 }
 #shipcloud .shipment_labels .label{
-	margin-bottom: 1%;
-	margin-right: 1%;
-	padding: 0 3%;
+	margin-top: 20px;
+	padding: 0;
 	width: 100%;
+}
+#shipcloud .shipment_labels .widget-inside{
+	padding:20px;
 }
 #shipcloud .label_shipment_sender{
 	width:46%;
@@ -216,13 +218,10 @@
 	text-align: center;
 }
 #shipcloud .label_shipment_parcel{
-	margin-bottom: 20px;
 	color:#000;
-	padding:0 3%;
-}
-#shipcloud .label_shipment_parcel div{
-	display: inline;
 	margin-right:2px;
+	padding-top:20px;
+
 }
 /**
  * Parcel
@@ -240,6 +239,10 @@
     padding: 12px;
     margin:0;
 	text-align: center;
+}
+#shipcloud #parcel_templates .notice{
+	padding:0;
+
 }
 #shipcloud #parcel_table{
 	border:none;

@@ -476,10 +476,14 @@ jQuery( function( $ ) {
 		$( '.parcel .info' ).fadeOut();
 		$( '#shipcloud_add_parcel_template').fadeOut();
 	});
-	
+
 	$( "select[name='parcel[carrier]']" ).change(function(){
 		$( '.parcel .info' ).fadeOut();
 		$( '#shipcloud_add_parcel_template').fadeOut();
+	});
+
+	$( "select[name='parcel_template']" ).change(function(){
+		$( '#parcel_templates .info' ).fadeOut();
 	});
 
 	/**
