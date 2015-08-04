@@ -63,11 +63,11 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 */
 		function init() {
 			$this->init_settings();
-			$this->init_form_fields(); 
+			$this->init_form_fields();
 
 			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
-		
+
 		/**
 		 * Gateway settings
 		 */
@@ -141,7 +141,27 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'options'	  => $woocommerce->countries->countries,
 						'default'	  => $default_country
 					),
+					'standard_price' => array(
+						'type'        => 'shipcloud_details',
+					),
 			);
-		} 
+		}
+
+		/**
+		 * Adding own gateway settings
+		 */
+		function generate_shipcloud_details_html(){
+			ob_start();
+			?>
+			<tr valign="top">
+				<th scope="row" class="titledesc">
+					<?php _e( 'Parcel templates', 'woocommerce' ); ?>
+				</th>
+				<td><?php echo WCSCParcel_templates::show(); ?></td>
+			</tr>
+			<?php
+
+			return ob_get_clean();
+		}
 	}
 }

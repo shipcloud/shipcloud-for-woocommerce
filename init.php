@@ -215,6 +215,7 @@ class WooCommerceShipcloud{
 	public static function load_components(){
 		// Loading Components
 		include( WCSC_FOLDER . '/components/component.php' );
+		include( WCSC_FOLDER . '/components/core/core.php' );
 		include( WCSC_FOLDER . '/components/admin/admin.php' );
 		include( WCSC_FOLDER . '/components/woo/woo.php' );
 	}

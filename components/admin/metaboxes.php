@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * WooCommerce shipcloud.io postboxes
  *
  * Loading postboxes
@@ -66,7 +66,6 @@ class WC_Shipcloud_Metaboxes{
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'jquery-ui-tabs' );
 		wp_enqueue_script( 'admin-widgets' );
-		// wp_enqueue_script( 'jquery-blockui' );
 
 		// CSS
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
@@ -354,84 +353,7 @@ class WC_Shipcloud_Metaboxes{
 			<div class="info">
 			</div>
 			<div class="order_data_column">
-				<table class="widefat" id="parcel_table">
-					<thead>
-						<tr>
-							<th>
-								<label for="parcel[carrier]"><?php _e( 'Carrier', 'wcsc-locale' ); ?></label>
-							</th>
-							<th>
-								<label for="parcel[width]"><?php _e( 'Width', 'wcsc-locale' ); ?></label>
-							</th>
-							<th>
-								<label for="parcel[height]"><?php _e( 'Height', 'wcsc-locale' ); ?></label>
-							</th>
-							<th>
-								<label for="parcel[length]"><?php _e( 'Length', 'wcsc-locale' ); ?></label>
-							</th>
-							<th>
-								<label for="parcel[weight]"><?php _e( 'Weight', 'wcsc-locale' ); ?></label>
-							</th>
-							<th>
-								
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr id="parcel_options">
-							<td class="parcel_option carrier">
-								<select name="parcel[carrier]">
-									<?php foreach( $carriers AS $carrier ): ?>
-										<?php if( $parcel['carrier'] == $carrier[ 'name' ] ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
-										<option value="<?php echo $carrier[ 'name' ]; ?>"<?php echo $selected; ?>><?php echo $carrier[ 'display_name' ]; ?></option>
-									<?php endforeach; ?>
-								</select>
-							</td>
-							<td class="parcel_option parcel_width">
-								<input type="text" name="parcel[width]" value="<?php echo $parcel[ 'width' ]; ?>" placeholder="<?php _e( 'cm', 'wcsc-locale'  ); ?>" />
-							</td>
-							<td class="parcel_option parcel_height">
-								<input type="text" name="parcel[height]" value="<?php echo $parcel[ 'height' ]; ?>" placeholder="<?php _e( 'cm', 'wcsc-locale'  ); ?>" />
-							</td>
-							<td class="parcel_option parcel_length">
-								<input type="text" name="parcel[length]" value="<?php echo $parcel[ 'length' ]; ?>" placeholder="<?php _e( 'cm', 'wcsc-locale'  ); ?>" />
-							</td>
-							<td class="parcel_option parcel_weight">
-								<input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" placeholder="<?php _e( 'kg', 'wcsc-locale'  ); ?>" />
-							</td>
-							<td class="parcel_option parcel_button">
-								<input type="button" id="shipcloud_verify_parcel_settings" value="<?php _e( 'Verify Parcel Settings', 'wcsc-locale'  ); ?>" class="button" />
-								<input type="button" id="shipcloud_add_parcel_template" value="<?php _e( 'Save as draft', 'wcsc-locale'  ); ?>" class="button" />
-							</td>
-						</tr>
-				
-						<?php if( '' != $parcel_templates && is_array( $parcel_templates ) ): ?>
-							<?php $i = 0; ?>
-							<?php foreach( $parcel_templates AS $parcel_template ): ?>
-								<tr<?php echo $i % 2 == 0 ? ' class="alt"': ''; ?>>
-									<td><?php echo self::get_carrier_display_name( $parcel_template[ 'carrier' ] ); ?></td>
-									<td><?php echo $parcel_template[ 'width' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
-									<td><?php echo $parcel_template[ 'height' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
-									<td><?php echo $parcel_template[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
-									<td>
-										<?php echo $parcel_template[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale' ); ?> 
-										
-									</td>
-									<td>
-										<input type="button" class="carrier_delete button"  value="<?php _e( 'Delete', 'wcsc-locale'  ); ?>" />
-										<input type="button" class="carrier_select button" value="<?php _e( 'Select', 'wcsc-locale'  ); ?>" />
-										<input type="hidden" name="carrier" value="<?php echo $parcel_template[ 'carrier' ]; ?>">
-										<input type="hidden" name="width" value="<?php echo $parcel_template[ 'width' ]; ?>" />
-										<input type="hidden" name="height" value="<?php echo $parcel_template[ 'height' ]; ?>" />
-										<input type="hidden" name="length" value="<?php echo $parcel_template[ 'length' ]; ?>" />
-										<input type="hidden" name="weight" value="<?php echo $parcel_template[ 'weight' ]; ?>" />
-									</td>
-								</tr>
-								<?php $i++; ?>
-							<?php endforeach; ?>
-						<?php endif; ?>
-					</tbody>
-				</table>
+				<?php echo WCSCParcel_templates::show(); ?>
 			</div>
 			<div style="clear: both;"></div>
 		</div>

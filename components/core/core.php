@@ -29,30 +29,20 @@
 
 if ( !defined( 'ABSPATH' ) ) exit;
 
-class WCSCWoo extends WCSCComponent{
+class WCSCCore extends WCSCComponent{
 	/**
 	 * Initializes the Component.
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->name = __( 'WooCommerce functions', 'wcsc-locale' );
-		$this->slug = 'woo';
+		$this->name = __( 'shipcloud.io Core', 'wcsc-locale' );
+		$this->slug = 'sccore';
 		
 		parent::__construct();
-		
 	} // end constructor
 	
 	public function includes(){
-		include( __DIR__ . '/shipping-method.php' );
-		add_filter( 'woocommerce_shipping_methods', array( __CLASS__, 'add_shippo' ) );
-	}
-	
-	/**
-	 * Adding shipping method to WooCommerce
-	 */
-	public static function add_shippo( $methods ){
-		$methods[] = 'WC_Shipcloud_Shippig'; 
-		return $methods;
+		include( __DIR__ . '/parcels.php' );
 	}
 }
-wcsc_load_component( 'WCSCWoo' );
+wcsc_load_component( 'WCSCCore' );
