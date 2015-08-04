@@ -29,34 +29,178 @@
 
 if ( !defined( 'ABSPATH' ) ) exit;
 
-class WCSCParcel_templates
-{
-
+class WCSCParcel_PostType{
     /**
      * Initializing Post type
      */
     public static function init(){
         add_action( 'init', array( __CLASS__, 'register_post_types' ) );
+        add_action( 'admin_menu',  array( __CLASS__, 'add_menu' ) );
+        add_action( 'add_meta_boxes', array( __CLASS__, 'meta_boxes' ), 10 );
+        add_action( 'edit_form_after_title', array( __CLASS__, 'box_settings' ) );
+        add_action( 'save_post', array( __CLASS__, 'save' ) );
     }
 
     /**
      * Registering Post type
      */
     public static function register_post_types(){
+        $labels = array(
+            'name'               => _x( 'Parcels', 'post type general name', 'wcsc-locale' ),
+            'singular_name'      => _x( 'Parcel', 'post type singular name', 'wcsc-locale' ),
+            'menu_name'          => _x( 'Parcels', 'admin menu', 'wcsc-locale' ),
+            'name_admin_bar'     => _x( 'Parcel', 'add new on admin bar', 'wcsc-locale' ),
+            'add_new'            => _x( 'Add New', 'parcel', 'wcsc-locale' ),
+            'add_new_item'       => __( 'Add New Parcel', 'wcsc-locale' ),
+            'new_item'           => __( 'New Parcel', 'wcsc-locale' ),
+            'edit_item'          => __( 'Edit Parcel', 'wcsc-locale' ),
+            'view_item'          => __( 'View Parcel', 'wcsc-locale' ),
+            'all_items'          => __( 'All Parcels', 'wcsc-locale' ),
+            'search_items'       => __( 'Search Parcels', 'wcsc-locale' ),
+            'parent_item_colon'  => __( 'Parent Parcels:', 'wcsc-locale' ),
+            'not_found'          => __( 'No Parcel found.', 'wcsc-locale' ),
+            'not_found_in_trash' => __( 'No Parcels found in Trash.', 'wcsc-locale' )
+        );
+
         $args = array(
+            'labels'             => $labels,
+            'description'        => __( 'Description.', 'wcsc-locale' ),
             'public'             => false,
-            'publicly_queryable' => false,
+            'publicly_queryable' => true,
             'show_ui'            => false,
-            'show_in_menu'       => false,
+            'show_in_menu'       => 'edit.php?post_type=shop_order',
             'query_var'          => true,
             'capability_type'    => 'post',
             'has_archive'        => false,
             'hierarchical'       => false,
-            'menu_position'      => null
+            'menu_position'      => null,
+            'supports'           => false
         );
 
         register_post_type( 'sc_parcel_template', $args );
     }
+
+    /**
+     * Registering Post type
+     */
+    public static function add_menu(){
+        add_submenu_page( 'edit.php?post_type=product', 'Parcels', 'Parcels', 'manage_options', 'edit.php?post_type=sc_parcel_template' );
+    }
+
+    /**
+     * Adding metaboxes
+     */
+    public static function meta_boxes(){
+        add_meta_box(
+            'box-tools',
+            __( 'Tools', 'wcsc-locale' ),
+            array( __CLASS__, 'box_tools' ),
+            'sc_parcel_template',
+            'side'
+        );
+    }
+
+    public static function box_settings(){
+        global $post;
+
+        $options = get_option( 'woocommerce_shipcloud_settings' );
+        $shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+
+        $carriers = $shipcloud_api->get_carriers( TRUE );
+
+        $carrier = get_post_meta( $post->ID, 'carrier', TRUE );
+        $width   = get_post_meta( $post->ID, 'width', TRUE );
+        $height  = get_post_meta( $post->ID, 'height', TRUE );
+        $length  = get_post_meta( $post->ID, 'length', TRUE );
+        $weight  = get_post_meta( $post->ID, 'weight', TRUE );
+        $retail_price  = get_post_meta( $post->ID, 'retail_price', TRUE );
+
+        ?>
+        <div id="wcsc-parcel-settings">
+            <table class="form-table">
+                <tbody>
+                    <tr>
+                        <th><label for="carrier"><?php _e( 'Shipping Company', 'wcsc-locale' ); ?></label></th>
+                        <td>
+                            <select name="carrier">
+                                <?php foreach( $carriers AS $carrier ): ?>
+                                    <?php if( $parcel['carrier'] == $carrier[ 'name' ] ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
+                                    <option value="<?php echo $carrier[ 'name' ]; ?>"<?php echo $selected; ?>><?php echo $carrier[ 'display_name' ]; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="test"><?php _e( 'Width', 'wcsc-locale' ); ?></label></th>
+                        <td><input type="text" name="width" value="<?php echo $width; ?>" /> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="test"><?php _e( 'Height', 'wcsc-locale' ); ?></label></th>
+                        <td><input type="text" name="height" value="<?php echo $height; ?>" /> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="test"><?php _e( 'Length', 'wcsc-locale' ); ?></label></th>
+                        <td><input type="text" name="length" value="<?php echo $length; ?>" /> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="test"><?php _e( 'Weight', 'wcsc-locale' ); ?></label></th>
+                        <td><input type="text" name="weight" value="<?php echo $weight; ?>" /> <?php _e( 'kg', 'wcsc-locale' ); ?></td>
+                    </tr>
+                    <tr>
+                        <th><label for="test"><?php _e( 'Retail price', 'wcsc-locale' ); ?></label></th>
+                        <td><input type="text" name="retail_price" value="<?php echo $retail_price; ?>" /> &euro;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <?php
+    }
+
+    public static function box_tools(){
+        ?>
+        <input type="button" name="check_parcel_settings" class="button" value="<?php _e( 'Check Parcel Settings', 'wcsc-locale' ); ?>" />
+        <?php
+    }
+
+    /**
+     * Saving data
+     *
+     * @param int $post_id
+     * @since 1.0.0
+     */
+    public static function save( $post_id ){
+        global $wpdb;
+
+        if ( wp_is_post_revision( $post_id ) ) {
+            return;
+        }
+        if ( !array_key_exists( 'post_type', $_POST ) ) {
+            return;
+        }
+        if ( 'sc_parcel_template' != $_POST['post_type'] ) {
+            return;
+        }
+
+        $carrier = $_POST[ 'carrier' ];
+        $width = $_POST[ 'width' ];
+        $height = $_POST[ 'height' ];
+        $length = $_POST[ 'length' ];
+        $weight = $_POST[ 'weight' ];
+        $retail_price = $_POST[ 'retail_price' ];
+
+        update_post_meta( $post_id, 'carrier', $carrier );
+        update_post_meta( $post_id, 'width', $width );
+        update_post_meta( $post_id, 'height', $height );
+        update_post_meta( $post_id, 'length', $length );
+        update_post_meta( $post_id, 'weight', $weight );
+        update_post_meta( $post_id, 'retail_price', $retail_price );
+
+    }
+}
+WCSCParcel_PostType::init();
+
+class WCSCParcel_templates
+{
 
     /**
      * Getting all templates
@@ -86,7 +230,7 @@ class WCSCParcel_templates
             $parcel_templates[ $key ][ 'values'][ 'height' ] = get_post_meta( $post->ID, 'height', TRUE );
             $parcel_templates[ $key ][ 'values'][ 'length' ] = get_post_meta( $post->ID, 'length', TRUE );
             $parcel_templates[ $key ][ 'values'][ 'weight' ] = get_post_meta( $post->ID, 'weight', TRUE );
-            $parcel_templates[ $key ][ 'values'][ 'customer_price' ] = get_post_meta( $post->ID, 'customer_price', TRUE );
+            $parcel_templates[ $key ][ 'values'][ 'retailer_price' ] = get_post_meta( $post->ID, 'retailer_price', TRUE );
         }
 
         return $parcel_templates;
@@ -102,7 +246,7 @@ class WCSCParcel_templates
      * @param null $customer_price
      * @return int|WP_Error
      */
-    public static function add( $carrier, $width, $height, $length, $weight, $customer_price = null ){
+    public static function add( $carrier, $width, $height, $length, $weight, $retail_price = null ){
         $post = array(
             'post_title'    => $carrier . ' - ' . $width . 'x' . $height . 'x' . $length . __( 'cm', 'wcsc-locale' ) . ' ' . $weight . __( 'kg', 'wcsc-locale' ),
             'post_status'   => 'publish',
@@ -116,7 +260,7 @@ class WCSCParcel_templates
         add_post_meta( $post_id, 'height', $height );
         add_post_meta( $post_id, 'length', $length );
         add_post_meta( $post_id, 'weight', $weight );
-        add_post_meta( $post_id, 'customer_price', $customer_price );
+        add_post_meta( $post_id, 'retail_price', $retail_price );
 
         add_action( 'wcsc_add_parcel_template', $post_id );
 
@@ -240,10 +384,8 @@ class WCSCParcel_templates
 
     }
 }
-WCSCParcel_templates::init();
 
 // Testing
-
 // WCSCParcel_templates::add( 'ups', 50, 50, 50, 10, 5.4 );
 // WCSCParcel_templates::delete( 73 );
 // p( WCSCParcel_templates::get() );

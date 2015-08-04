@@ -92,17 +92,17 @@ class WooCommerceShipcloud{
 		endif;
 		
 		if ( !function_exists( 'curl_init' ) ):
-		    $wcsc_errors[] = __( 'Shipcloud needs the CURL PHP extension.', 'wcsc-locale' );
+		    $wcsc_errors[] = __( 'shipcloud.io needs the CURL PHP extension.', 'wcsc-locale' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
 		
 		if ( !function_exists( 'json_decode' ) ):
-		    $wcsc_errors[] = __( 'Shipcloud needs the JSON PHP extension.', 'wcsc-locale' );
+		    $wcsc_errors[] = __( 'shipcloud.io needs the JSON PHP extension.', 'wcsc-locale' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
 
 		if ( !function_exists( 'mb_detect_encoding' ) ):
-		    $wcsc_errors[] = __( 'Shipcloud needs the Multibyte String PHP extension.', 'wcsc-locale' );
+		    $wcsc_errors[] = __( 'shipcloud.io needs the Multibyte String PHP extension.', 'wcsc-locale' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
 		

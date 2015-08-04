@@ -35,7 +35,7 @@ class WCSCAdmin extends WCSCComponent{
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->name = __( 'Shipcloud admin', 'wcsc-locale' );
+		$this->name = __( 'shipcloud.io admin', 'wcsc-locale' );
 		$this->slug = 'shipcloud_admin';
 		
 		parent::__construct();

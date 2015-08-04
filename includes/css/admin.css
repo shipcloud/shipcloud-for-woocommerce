@@ -226,6 +226,17 @@
 /**
  * Parcel
  */
+#wcsc-parcel-settings {
+	border: 1px solid #e5e5e5;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	height: auto;
+	padding: 10px;
+	background: #fff none repeat scroll 0 0;
+}
+#wcsc-parcel-settings .form-table{
+	margin:0;
+}
+
 #shipcloud .info{
 	display:none;
 }

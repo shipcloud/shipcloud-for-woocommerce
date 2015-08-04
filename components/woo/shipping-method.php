@@ -42,7 +42,7 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 */
 		public function __construct() {
 			$this->id                 = 'shipcloud';
-			$this->title       = __( 'Shipcloud', 'wcsc-locale' );
+			$this->title       = __( 'shipcloud.io', 'wcsc-locale' );
 			$this->method_description = __( 'Add shipcloud to your shipping methods', 'wcsc-locale' );
 			
 			$this->init();
@@ -81,14 +81,14 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 				    'enabled' => array(
 						'title'   => __( 'Enable', 'wcsc-locale' ),
 						'type'    => 'checkbox',
-						'label'   => __( 'Enable Shipcloud', 'wcsc-locale' ),
+						'label'   => __( 'Enable shipcloud.io', 'wcsc-locale' ),
 						'default' => 'no'
 					),
 					'title' => array(
 						'title'       => __( 'Title', 'wcsc-locale' ),
 						'type'        => 'text',
 						'description' => __( 'This controls the title which the user sees during checkout.', 'wcsc-locale' ),
-						'default'     => __( 'Shipcloud', 'wcsc-locale' ),
+						'default'     => __( 'shipcloud.io', 'wcsc-locale' ),
 						'desc_tip'    => true,
 					),
 					'api_key' => array(
@@ -142,26 +142,12 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'default'	  => $default_country
 					),
 					'standard_price' => array(
-						'type'        => 'shipcloud_details',
+						'title'       => __( 'Standard Price', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard price for a parcel if no other parcel is selected for product.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
 					),
 			);
-		}
-
-		/**
-		 * Adding own gateway settings
-		 */
-		function generate_shipcloud_details_html(){
-			ob_start();
-			?>
-			<tr valign="top">
-				<th scope="row" class="titledesc">
-					<?php _e( 'Parcel templates', 'woocommerce' ); ?>
-				</th>
-				<td><?php echo WCSCParcel_templates::show(); ?></td>
-			</tr>
-			<?php
-
-			return ob_get_clean();
 		}
 	}
 }
