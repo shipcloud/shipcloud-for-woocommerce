@@ -37,18 +37,21 @@ class WC_Shipcloud_Product{
     }
 
     public static function shipping_option(){
+        $parcel_templates = WCSCParcel_templates::get();
+
+        $options = array();
+
+        foreach( $parcel_templates AS $parcel_template ){
+            $options[ $parcel_template[ 'ID' ] ] = $parcel_template[ 'post_title' ];
+        }
+
         // Stock status
         woocommerce_wp_select(
             array(
                 'id' => '_wcsc_parcel',
                 'wrapper_class' => 'hide_if_variable',
                 'label' => __( 'Parcel', 'wcsc-locale' ),
-                'options' => array(
-                    '0' => __( 'No Parcel - Use standard Price', 'wcsc-locale' ),
-                    '1' => __( 'Parcel 1', 'wcsc-locale' ),
-                    '2' => __( 'Parcel 2', 'wcsc-locale' ),
-                    '3' => __( 'Parcel 3', 'wcsc-locale' )
-                ),
+                'options' => $options,
                 'desc_tip' => true,
                 'description' => __( 'Select Parcel which will be used to send product', 'wcsc-locale' )
             )
