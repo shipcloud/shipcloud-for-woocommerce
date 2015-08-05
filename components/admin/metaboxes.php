@@ -64,7 +64,6 @@ class WC_Shipcloud_Metaboxes{
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
-		wp_enqueue_script( 'jquery-ui-tabs' );
 		wp_enqueue_script( 'admin-widgets' );
 
 		// CSS
@@ -86,25 +85,13 @@ class WC_Shipcloud_Metaboxes{
 
 		?>
 		<div id="shipcloud">
-			<div class="shipcloud-tabs">
-				<ul class="nav-tab-wrapper wcsc-nav-tab-wrapper">
-					<li><a class="nav-tab" href="#wcsc-tab-label"><?php _e( 'Create Label', 'wcsc-locale' ); ?></a></li>
-					<li><a class="nav-tab" href="#wcsc-tab-templates"><?php _e( 'Parcel Templates', 'wcsc-locale' ); ?></a></li>
-					<div style="clear:both;"></div>
-				</ul>
-				<div id="wcsc-tab-label" class="wcsc-tab wcsc-tab-label">
-				<?php self::tab_create_label(); ?>
-				</div>
-				<div id="wcsc-tab-templates" class="wcsc-tab wcsc-tab-templates">
-				<?php self::tab_create_templates(); ?>
-				</div>
-			</div>
+				<?php self::create_label_html(); ?>
 		</div>
 		<div class="clear"></div>
 		<?php
 	}
 
-	private static function tab_create_label(){
+	private static function create_label_html(){
 		global $post, $woocommerce;
 		
 		/**
@@ -169,7 +156,7 @@ class WC_Shipcloud_Metaboxes{
 		?>
 
 		<!-- Create Label //-->
-		<div id="create_label" class="container-bottom">
+		<div id="create_label">
 			<div class="order_data_column_container addresses">
 				<div class="order_data_column sender">
 					<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?>  <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>

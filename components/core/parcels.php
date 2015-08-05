@@ -39,6 +39,8 @@ class WCSCParcel_PostType{
         add_action( 'add_meta_boxes', array( __CLASS__, 'meta_boxes' ), 10 );
         add_action( 'edit_form_after_title', array( __CLASS__, 'box_settings' ) );
         add_action( 'save_post', array( __CLASS__, 'save' ) );
+
+        add_filter( 'post_updated_messages', array( __CLASS__, 'remove_all_messages' ) );
     }
 
     /**
@@ -66,8 +68,8 @@ class WCSCParcel_PostType{
             'labels'             => $labels,
             'description'        => __( 'Description.', 'wcsc-locale' ),
             'public'             => false,
-            'publicly_queryable' => true,
-            'show_ui'            => false,
+            'publicly_queryable' => false,
+            'show_ui'            => true,
             'show_in_menu'       => 'edit.php?post_type=shop_order',
             'query_var'          => true,
             'capability_type'    => 'post',
@@ -81,14 +83,14 @@ class WCSCParcel_PostType{
     }
 
     /**
-     * Registering Post type
+     * Adding Parcels to Woo Menu
      */
     public static function add_menu(){
         add_submenu_page( 'edit.php?post_type=product', 'Parcels', 'Parcels', 'manage_options', 'edit.php?post_type=sc_parcel_template' );
     }
 
     /**
-     * Adding metaboxes
+     * Adding Metaboxes
      */
     public static function meta_boxes(){
         add_meta_box(
@@ -102,6 +104,10 @@ class WCSCParcel_PostType{
 
     public static function box_settings(){
         global $post;
+
+        if ( 'sc_parcel_template' != $post->post_type ) {
+            return;
+        }
 
         $options = get_option( 'woocommerce_shipcloud_settings' );
         $shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
@@ -188,13 +194,22 @@ class WCSCParcel_PostType{
         $weight = $_POST[ 'weight' ];
         $retail_price = $_POST[ 'retail_price' ];
 
+        $post_title = $carrier . ' - ' . $width . ' x ' . $height . ' x ' . $length . ' ' . __( 'cm', 'wcsc-locale' ) . ' ' . $weight . __( 'kg', 'wcsc-locale' );
+
+        $where = array( 'ID' => $post_id );
+        $wpdb->update( $wpdb->posts, array( 'post_title' => $post_title ), $where );
+
         update_post_meta( $post_id, 'carrier', $carrier );
         update_post_meta( $post_id, 'width', $width );
         update_post_meta( $post_id, 'height', $height );
         update_post_meta( $post_id, 'length', $length );
         update_post_meta( $post_id, 'weight', $weight );
         update_post_meta( $post_id, 'retail_price', $retail_price );
+    }
 
+    public static function remove_all_messages( $messages )
+    {
+        return array();
     }
 }
 WCSCParcel_PostType::init();

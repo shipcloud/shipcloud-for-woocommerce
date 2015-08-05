@@ -55,117 +55,7 @@ jQuery( function( $ ) {
 		});
 	}
 	carrier_select();
-	
-	var carrier_delete = function(){
-		$( '#shipcloud .carrier_delete' ).click( function (){
-			
-			var template = $( this ).parent();
-			
-			var carrier = template.find( "input[name='carrier']" ).val();
-			var width = template.find( "input[name='width']" ).val();
-			var height = template.find( "input[name='height']" ).val();
-			var length = template.find( "input[name='length']" ).val();
-			var weight = template.find( "input[name='weight']" ).val();
 
-			var template_value = carrier + ';' + width + ';' + height + ';' + length + ';' + weight;
-
-			$( "select[name='parcel_template'] option[value='" + template_value + "']" ).remove();
-
-			var parcel_template_count = $( "select[name='parcel_template'] option").size();
-			if( parcel_template_count < 1 ){
-				$( '#parcel_templates').hide();
-				$( '#parcel_templates_missing').show();
-			}
-
-			var data = {
-				'action': 'shipcloud_delete_parcel_template',
-				'carrier': carrier,
-				'width': width,
-				'height': height,
-				'length': length,
-				'weight': weight
-			};
-			
-			$.post( ajaxurl, data, function( response ) {
-				var result = jQuery.parseJSON( response );
-				if( result.deleted == true ){
-					template.parent().remove();
-				}
-			});
-		});
-	}
-	carrier_delete();
-	
-	$( '#shipcloud_add_parcel_template' ).click( function (){
-		var template = $( '#parcel_options' );
-		
-		var carrier_name = template.find( "select[name='parcel[carrier]'] option:selected" ).text();
-		var carrier = template.find( "select[name='parcel[carrier]']" ).val();
-		var width = template.find( "input[name='parcel[width]']" ).val();
-		var height = template.find( "input[name='parcel[height]']" ).val();
-		var length = template.find( "input[name='parcel[length]']" ).val();
-		var weight = template.find( "input[name='parcel[weight]']" ).val();
-		weight = weight.replace( ',', '.' );
-		
-		var data = {
-			'action': 'shipcloud_add_parcel_template',
-			'carrier': carrier,
-			'width': width,
-			'height': height,
-			'length': length,
-			'weight': weight
-		};
-		
-		$.post( ajaxurl, data, function( response ) {
-			var result = jQuery.parseJSON( response );
-			
-			if( result.added == true ){
-				
-				var html = '<div class="parcel_template_added">';
-				html+= wcsc_translate.parcel_added;
-				html+= '</div>';
-				
-				$( '.parcel .info' ).fadeIn().html( html );
-				
-				var html = '<tr><td>' + carrier_name + '</td>';
-				html+= '<td>' + width + ' ' + wcsc_translate.cm + '</td>';
-				html+= '<td>' + height + ' ' + wcsc_translate.cm + '</td>';
-				html+= '<td>' + length + ' ' + wcsc_translate.cm + '</td>';
-				html+= '<td>' + weight + ' ' + wcsc_translate.kg + '</td>';
-				html+= '<td>';
-					html+= '<input type="button" class="carrier_delete button"  value="' + wcsc_translate.delete + '" />';
-					html+= '<input type="button" class="carrier_select button"  value="' + wcsc_translate.select + '" />';
-					html+= '<input type="hidden" value="' + carrier  + '" name="carrier" />';
-					html+= '<input type="hidden" value="' + width  + '" name="width" />';
-					html+= '<input type="hidden" value="' + height + '" name="height" />';
-					html+= '<input type="hidden" value="' + length + '" name="length" />';
-					html+= '<input type="hidden" value="' + weight + '" name="weight" />';
-				html+= '</td></tr>';
-				
-				$( '#parcel_table tbody' ).append( html );
-				
-				var show = carrier_name + ' ' + width + ' x ' + height + ' x ' + length + ' ' + wcsc_translate.cm + ' x ' + weight + ' '+ wcsc_translate.kg;
-				var value = carrier + ';' + width + ';' + height + ';' + length + ';' + weight;
-				
-				html = '<option value="' + value + '">' + show + '</option>';
-				
-				$( '#create_label #parcel_template' ).append( html );
-
-				$( '#parcel_templates').show();
-				$( '#parcel_templates_missing').hide();
-
-				carrier_select();
-				carrier_delete();
-			}else{
-				
-				var html = '<div class="parcel_template_not_added">';
-				html+= wcsc_translate.parcel_not_added;
-				html+= '</div>';
-				
-				$( '.parcel .info' ).fadeIn().html( html );
-			}
-		});
-	});
 
 	$( '#shipcloud_verify_parcel_settings' ).click( function(){
 
@@ -236,7 +126,6 @@ jQuery( function( $ ) {
 			button.removeClass( 'button-loading' );
 		});
 	});
-	
 	
 	$( '#shipcloud_calculate_price' ).click( function(){
 		
@@ -487,11 +376,6 @@ jQuery( function( $ ) {
 	});
 
 	/**
-	 * Initializing tabs
-	 */
-	$( '.shipcloud-tabs' ).tabs();
-
-	/**
 	 * Function to switch to parcel templates
 	 */
     $('.shipcloud-switchto-parcel-tamplates').click( function () {
@@ -501,6 +385,7 @@ jQuery( function( $ ) {
 	/**
 	 * CSS Corrections
 	 */
+
 	$( '#shipcloud' ).find( '.ui-tabs' ).removeClass( 'ui-tabs' );
 	$( '#shipcloud' ).find( '.ui-widget' ).removeClass( 'ui-widget' );
 	$( '#shipcloud' ).find( '.ui-widget-content' ).removeClass( 'ui-widget-content' );

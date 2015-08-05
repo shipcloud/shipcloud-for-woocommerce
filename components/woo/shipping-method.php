@@ -97,6 +97,12 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'description' => __( 'Enter your shipcloud.com API Key.', 'wcsc-locale' ),
 						'desc_tip'    => true,
 					),
+					'standard_price' => array(
+						'title'       => __( 'Standard Price', 'wcsc-locale' ),
+						'type'        => 'text',
+						'description' => __( 'Enter standard price for a parcel if no other parcel is selected for product.', 'wcsc-locale' ),
+						'desc_tip'    => FALSE,
+					),
 					'sender_first_name' => array(
 						'title'       => __( 'First Name', 'wcsc-locale' ),
 						'type'        => 'text',
@@ -141,12 +147,7 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'options'	  => $woocommerce->countries->countries,
 						'default'	  => $default_country
 					),
-					'standard_price' => array(
-						'title'       => __( 'Standard Price', 'wcsc-locale' ),
-						'type'        => 'text',
-						'description' => __( 'Enter standard price for a parcel if no other parcel is selected for product.', 'wcsc-locale' ),
-						'desc_tip'    => FALSE,
-					),
+
 			);
 		}
 	}

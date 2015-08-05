@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * WooCommerce Core Component
  *
  * Loading extensions for Woo
@@ -44,6 +44,7 @@ class WCSCWoo extends WCSCComponent{
 	
 	public function includes(){
 		include( __DIR__ . '/shipping-method.php' );
+		include( __DIR__ . '/product.php' );
 		add_filter( 'woocommerce_shipping_methods', array( __CLASS__, 'add_shippo' ) );
 	}
 	

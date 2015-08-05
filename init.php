@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WooCommerce Shipcloud
+Plugin Name: WooCommerce shipcloud.io
 Plugin URI: http://www.awesome.ug
 Description: Integrates shipcloud.io shipment services to your WooCommerce shop.
 Version: 1.0.0
