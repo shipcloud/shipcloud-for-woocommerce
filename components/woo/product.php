@@ -37,7 +37,7 @@ class WC_Shipcloud_Product{
     }
 
     public static function shipping_option(){
-        $parcel_templates = WCSCParcel_templates::get();
+        $parcel_templates = WCSC_Parcel_Templates::get();
 
         $options = array();
 

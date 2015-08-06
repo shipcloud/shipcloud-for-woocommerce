@@ -37,23 +37,28 @@ class WCSCWoo extends WCSCComponent{
 	public function __construct() {
 		$this->name = __( 'WooCommerce functions', 'wcsc-locale' );
 		$this->slug = 'woo';
-		
+
 		parent::__construct();
+
+        add_action( 'woocommerce_shipping_init', array( $this, 'load_shipping_method' ) );
+        add_filter( 'woocommerce_shipping_methods',  array( $this, 'add_shipping_method' ) );
 		
 	} // end constructor
 	
 	public function includes(){
-		include( __DIR__ . '/shipping-method.php' );
 		include( __DIR__ . '/product.php' );
-		add_filter( 'woocommerce_shipping_methods', array( __CLASS__, 'add_shippo' ) );
+        include( __DIR__ . '/order.php');
 	}
-	
-	/**
-	 * Adding shipping method to WooCommerce
-	 */
-	public static function add_shippo( $methods ){
-		$methods[] = 'WC_Shipcloud_Shippig'; 
-		return $methods;
-	}
+
+    public function load_shipping_method(){
+        include( __DIR__ . '/shipping-method.php' );
+    }
+
+    public function add_shipping_method( $methods ){
+        $methods[] = 'WC_Shipcloud_Shippig';
+        return $methods;
+    }
 }
 wcsc_load_component( 'WCSCWoo' );
+
+

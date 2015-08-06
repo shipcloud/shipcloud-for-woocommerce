@@ -54,28 +54,59 @@ class WooCommerceShipcloud{
 		$wcsc_passed_requirements = FALSE;
         
         self::constants();
+		self::load_textdomain();
         self::includes();
-        self::load_components();
-        self::load_textdomain();
-        
+
         // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
         register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
         register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
         register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
 
+		// Check Requirements and loading core
+		add_action( 'plugins_loaded', array( __CLASS__, 'check_requirements' ), 1 );
+		add_action( 'plugins_loaded', array( __CLASS__, 'load_components' ), 1 );
+
         // Functions on Frontend
         if( is_admin() ):
             // Register admin styles and scripts
-            add_action( 'plugins_loaded', array( __CLASS__, 'check_requirements' ), 1 );
             add_action( 'admin_print_styles', array( __CLASS__, 'register_admin_styles' ) );
             add_action( 'admin_enqueue_scripts', array( __CLASS__, 'register_admin_scripts' ), 0 );
-            add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
+            add_action( 'admin_notices', array( __CLASS__, 'notices' ) );
         else:
             // Register plugin styles and scripts
             add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_plugin_styles' ) );
             add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_plugin_scripts' ) );
         endif;
 	} // end constructor
+
+	/**
+	 * Defining Constants for Use in Plugin
+	 * @since 1.0.0
+	 */
+	public static function constants(){
+		define( 'WCSC_FOLDER', self::get_folder() );
+		define( 'WCSC_RELATIVE_FOLDER', substr( WCSC_FOLDER, strlen( WP_PLUGIN_DIR ), strlen( WCSC_FOLDER ) ) );
+		define( 'WCSC_URLPATH', self::get_url_path() );
+		define( 'WCSC_COMPONENTFOLDER', WCSC_FOLDER . '/components' );
+	}
+
+	/**
+	 * Loads the plugin text domain for translation.
+	 * @since 1.0.0
+	 */
+	public static function load_textdomain() {
+		load_plugin_textdomain( 'wcsc-locale', false, WCSC_RELATIVE_FOLDER . '/languages' );
+	}
+
+	/**
+	 * Getting include files
+	 * @since 1.0.0
+	 */
+	public static function includes(){
+		// Loading functions
+		include( WCSC_FOLDER . '/functions.php' );
+		include( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
+	}
 	
 	/**
 	 * Checking Requirements and adding Error Messages.
@@ -105,7 +136,21 @@ class WooCommerceShipcloud{
 		    $wcsc_errors[] = __( 'shipcloud.io needs the Multibyte String PHP extension.', 'wcsc-locale' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
-		
+	}
+
+	/**
+	 * Loading components
+	 * @since 1.0.0
+	 */
+	public static function load_components(){
+		global $wcsc_passed_requirements;
+
+		if( !$wcsc_passed_requirements )
+			return;
+
+		include( WCSC_FOLDER . '/components/component.php' );
+		include( WCSC_FOLDER . '/components/core/core.php' );
+		include( WCSC_FOLDER . '/components/woo/woo.php' );
 	}
 	
 	/**
@@ -130,14 +175,6 @@ class WooCommerceShipcloud{
 	 */
 	public static function uninstall( $network_wide ) {
 	} // end uninstall
-
-	/**
-	 * Loads the plugin text domain for translation.
-	 * @since 1.0.0
-	 */
-	public static function load_textdomain() {
-		load_plugin_textdomain( 'wcsc-locale', false, WCSC_RELATIVE_FOLDER . '/languages' );
-	} // end plugin_textdomain
 
 	/**
 	 * Registers and enqueues admin-specific styles.
@@ -186,40 +223,7 @@ class WooCommerceShipcloud{
 	public static function register_plugin_scripts() {
 		wp_enqueue_script( 'wcsc-plugin-script',  WCSC_URLPATH . '/includes/js/display.js' );
 	} // end register_plugin_scripts
-	
-	/**
-	 * Defining Constants for Use in Plugin
-	 * @since 1.0.0
-	 */
-	public static function constants(){
-		define( 'WCSC_FOLDER', self::get_folder() );
-		define( 'WCSC_RELATIVE_FOLDER', substr( WCSC_FOLDER, strlen( WP_PLUGIN_DIR ), strlen( WCSC_FOLDER ) ) );  
-		define( 'WCSC_URLPATH', self::get_url_path() );
-		define( 'WCSC_COMPONENTFOLDER', WCSC_FOLDER . '/components' );
-	}
-	
-	/**
-	 * Getting include files
-	 * @since 1.0.0
-	 */
-	public static function includes(){
-		// Loading functions
-		include( WCSC_FOLDER . '/functions.php' );
-		include( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
-	}
 
-	/**
-	 * Loading components dynamical
-	 * @since 1.0.0
-	 */
-	public static function load_components(){
-		// Loading Components
-		include( WCSC_FOLDER . '/components/component.php' );
-		include( WCSC_FOLDER . '/components/core/core.php' );
-		include( WCSC_FOLDER . '/components/admin/admin.php' );
-		include( WCSC_FOLDER . '/components/woo/woo.php' );
-	}
-	
 	/**
 	* Getting URL
 	* @since 1.0.0
@@ -242,7 +246,7 @@ class WooCommerceShipcloud{
 	* Showing Errors
 	* @since 1.0.0
 	*/
-	public static function admin_notices(){
+	public static function notices(){
 		global $wcsc_errors, $wcsc_notices; 
 		
 		if( count( $wcsc_errors ) > 0 ):

@@ -29,7 +29,7 @@ jQuery( function( $ ) {
 					$( this ).attr( 'disabled', 'disabled' );
 				});
 
-				div_edit_address.addClass( 'disabled' )
+				div_edit_address.addClass( 'disabled' );
 			}
 		});
 	}
@@ -57,25 +57,29 @@ jQuery( function( $ ) {
 	carrier_select();
 
 
-	$( '#shipcloud_verify_parcel_settings' ).click( function(){
+	$( '#check_parcel_settings' ).click( function(){
 
-		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
-		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
-		var sender_postcode = $( "input[name='sender_address[postcode]']" ).val( );
-		var sender_city 	= $( "input[name='sender_address[city]']" ).val( );
-		var sender_country 	= $( "select[name='sender_address[country]']" ).val( );
+		// We need to give any address to test parcel settings
 
-		var recipient_street 	= $( "input[name='recipient_address[street]']" ).val( );
-		var recipient_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
-		var recipient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
-		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
-		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
+		// From Cologne Cathedral
+		var sender_street 	= 'Domkloster';
+		var sender_street_nr= '4';
+		var sender_postcode = '50667';
+		var sender_city 	= 'Köln';
+		var sender_country 	= 'DE';
 
-		var carrier 	= $( "select[name='parcel[carrier]']" ).val( );
-		var width 		= $( "input[name='parcel[width]']" ).val();
-		var height 		= $( "input[name='parcel[height]']" ).val();
-		var length 		= $( "input[name='parcel[length]']" ).val();
-		var weight 		= $( "input[name='parcel[weight]']" ).val();
+		// From Cologne Main Station
+		var recipient_street 	= 'Trankgasse';
+		var recipient_street_nr	= '11';
+		var recipient_postcode 	= '50667';
+		var recipient_city 		= 'Köln';
+		var recipient_country 	= 'DE';
+
+		var carrier 	= $( "select[name='carrier']" ).val( );
+		var width 		= $( "input[name='width']" ).val();
+		var height 		= $( "input[name='height']" ).val();
+		var length 		= $( "input[name='length']" ).val();
+		var weight 		= $( "input[name='weight']" ).val();
 
 		var data = {
 			'action': 'shipcloud_calculate_shipping',
@@ -105,22 +109,22 @@ jQuery( function( $ ) {
 
 			if( result.errors ){
 
-				var html = '<ul class="notice errors">';
+				var html = '';
 				result.errors.forEach( function( entry ){
-					html+= '<li>' + entry + '</li>';
+					html+= entry + '<br />';
 				});
-				html+= '</ul>';
 
-				$( '#wcsc-tab-templates .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
-				$( '#shipcloud_add_parcel_template').fadeOut();
+				$( '.shipcloud-message').removeClass( 'updated' ).addClass( 'error' ).fadeIn();;
+				$( '.shipcloud-message .info' ).html( html );
+				$( '.shipcloud-message').delay( 3000 ).fadeOut();
 
 			}if( result.price ){
-				var html = '<div class="notice">';
-				html+= wcsc_translate.parcel_dimensions_check_yes;
-				html+= '</div>';
 
-				$( '#wcsc-tab-templates .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
-				$( '#shipcloud_add_parcel_template').fadeIn();
+				var html = wcsc_translate.parcel_dimensions_check_yes;
+
+				$( '.shipcloud-message').removeClass( 'error' ).addClass( 'updated' ).fadeIn();
+				$( '.shipcloud-message .info' ).html( html );
+				$( '.shipcloud-message').delay( 3000 ).fadeOut();
 			}
 
 			button.removeClass( 'button-loading' );
@@ -136,19 +140,18 @@ jQuery( function( $ ) {
 		var sender_country 	= $( "select[name='sender_address[country]']" ).val( );
 		
 		var recipient_street 	= $( "input[name='recipient_address[street]']" ).val( );
-		var recipient_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
-		var recipient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
-		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
+		var recipient_street_nr	= $( "input[name='recipient_address[street_nr]']" ).val( );
+		var recipient_postcode 	= $( "input[name='recipient_address[postcode]']" ).val( );
+		var recipient_city 		= $( "input[name='recipient_address[city]']" ).val( );
 		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
 
-		var parcel_template 	= $( "select[name='parcel_template" ).val( );
-		var parcel_dimendions 	= parcel_template.split( ';' );
+		var parcel_id 	= $( "select[name=parcel_id" ).val( );
 
-		var carrier 	= parcel_dimendions[0];
-		var width 		= parcel_dimendions[1];
-		var height 		= parcel_dimendions[2];
-		var length 		= parcel_dimendions[3];
-		var weight 		= parcel_dimendions[4];
+		var carrier 	= $( "input[name='parcel[" + parcel_id + "][carrier]']" ).val( );
+		var width 		= $( "input[name='parcel[" + parcel_id + "][width]']" ).val( );
+		var height 		= $( "input[name='parcel[" + parcel_id + "][height]']" ).val( );
+		var length 		= $( "input[name='parcel[" + parcel_id + "][length]']" ).val( );
+		var weight 		= $( "input[name='parcel[" + parcel_id + "][weight]']" ).val( );
 		
 		var data = {
 			'action': 'shipcloud_calculate_shipping',
@@ -183,7 +186,7 @@ jQuery( function( $ ) {
 				});
 				html+= '</ul>';
 				
-				$( '#wcsc-tab-label .info' ).fadeIn().html( html );
+				$( '#parcel_templates .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeOut();
 
 			}if( result.price ){
@@ -191,7 +194,7 @@ jQuery( function( $ ) {
 				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
 				
-				$( '#wcsc-tab-label .info' ).fadeIn().html( html );
+				$( '#parcel_templates .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeIn();
 			}
 			button.removeClass( 'button-loading' );

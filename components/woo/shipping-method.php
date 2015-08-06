@@ -29,10 +29,15 @@
  
 if ( !defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
+if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 	
 	class WC_Shipcloud_Shippig extends WC_Shipping_Method {
+
 		var $carriers = array();
+
+		var $logger;
+
+		var $debug = FALSE;
 		
 		/**
 		 * Constructor for your shipping class
@@ -41,18 +46,23 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 * @return void
 		 */
 		public function __construct() {
-			$this->id                 = 'shipcloud';
+			$this->id          = 'shipcloud';
 			$this->title       = __( 'shipcloud.io', 'wcsc-locale' );
 			$this->method_description = __( 'Add shipcloud to your shipping methods', 'wcsc-locale' );
-			
-			$this->init();
 			
 			// Is gateway enabled
 			if( is_array( $this->settings ) && array_key_exists( 'enabled', $this->settings ) && 'yes' == $this->settings[ 'enabled' ] )
 				$this->enabled = 'yes';
 			else
 				$this->enabled = 'no';
-			
+
+			$this->init();
+
+			if( 'yes' == $this->settings['debug'] )
+				$this->debug = TRUE;
+
+			if( $this->debug && class_exists( 'WC_Logger' ))
+				$this->log = new WC_Logger();
 		}
 
 		/**
@@ -61,7 +71,7 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		 * @access public
 		 * @return void
 		 */
-		function init() {
+		public function init() {
 			$this->init_settings();
 			$this->init_form_fields();
 
@@ -71,7 +81,7 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 		/**
 		 * Gateway settings
 		 */
-		 function init_form_fields() {
+		 public function init_form_fields() {
 		 	global $woocommerce;
 			
 			$default_country = wc_get_base_location();
@@ -96,6 +106,12 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 						'type'        => 'text',
 						'description' => __( 'Enter your shipcloud.com API Key.', 'wcsc-locale' ),
 						'desc_tip'    => true,
+					),
+					'debug' => array(
+						'title'       => __( 'Debug', 'wcsc-locale' ),
+						'type'        => 'checkbox',
+						'label'       => __( 'Enable logging if you experience problems.', 'wcsc-locale' ),
+						'default'     => 'no'
 					),
 					'standard_price' => array(
 						'title'       => __( 'Standard Price', 'wcsc-locale' ),
@@ -149,6 +165,28 @@ if ( ! class_exists( 'WC_Your_Shipping_Method' ) ) {
 					),
 
 			);
+		}
+
+		/**
+		 * calculate_shipping function
+		 *
+		 * @access public
+		 * @param mixed $package
+		 * @return void
+		 */
+		public function calculate_shipping( $package ) {
+
+			// $this->log->add( 'shipcloud', print_r( $package, TRUE ) );
+
+			$rate = array(
+				'id' => $this->id,
+				'label' => $this->settings['title'],
+				'cost' => '10.99',
+				'calc_tax' => 'per_item'
+			);
+
+			// Register the rate
+			$this->add_rate( $rate );
 		}
 	}
 }

@@ -53,7 +53,7 @@ abstract class WCSCComponent{
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-	 	add_action( 'plugins_loaded', array( $this, 'start' ), 10 );
+        $this->start();
 	}
 	
 	/**
@@ -63,8 +63,8 @@ abstract class WCSCComponent{
 	public function start(){
 		if( !$this->is_active() )
 			return FALSE;
-		
-		add_action( 'plugins_loaded', array( $this, 'includes' ), 20 );
+
+        $this->includes();
 	}
 	
 	/**
