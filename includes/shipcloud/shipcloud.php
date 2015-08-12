@@ -73,7 +73,7 @@ class Woocommerce_Shipcloud_API{
 	}
 	
 	public function update_carriers(){
-		$shipment_carriers = $this->get_carriers();
+		$shipment_carriers = $this->request_carriers();
 		update_option( 'woocommerce_shipcloud_carriers', $shipment_carriers );
 		return $shipment_carriers;
 	}
