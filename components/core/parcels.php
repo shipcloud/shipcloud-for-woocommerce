@@ -68,7 +68,7 @@ class WCSC_Parcel_PostType{
 
         $args = array(
             'labels'             => $labels,
-            'description'        => __( 'Description.', 'wcsc-locale' ),
+            'description'        => __( 'Description', 'wcsc-locale' ),
             'public'             => false,
             'publicly_queryable' => false,
             'show_ui'            => true,
@@ -381,7 +381,7 @@ class WCSC_Parcels
                     <input type="text" name="parcel[weight]" value="<?php echo $parcel[ 'weight' ]; ?>" placeholder="<?php _e( 'kg', 'wcsc-locale'  ); ?>" />
                 </td>
                 <td class="parcel_option parcel_weight">
-                    <input type="text" name="parcel[customer_price]" value="<?php echo $parcel[ 'customer_price' ]; ?>" placeholder="<?php _e( 'EUR?', 'wcsc-locale'  ); ?>" />
+                    <input type="text" name="parcel[customer_price]" value="<?php echo $parcel[ 'customer_price' ]; ?>" placeholder="" />
                 </td>
                 <td class="parcel_option parcel_button">
                     <input type="button" id="shipcloud_verify_parcel_settings" value="<?php _e( 'Verify Parcel Settings', 'wcsc-locale'  ); ?>" class="button" />
@@ -398,7 +398,7 @@ class WCSC_Parcels
                         <td><?php echo $parcel_template[ 'height' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
                         <td><?php echo $parcel_template[ 'length' ]; ?> <?php _e( 'cm', 'wcsc-locale' ); ?></td>
                         <td><?php echo $parcel_template[ 'weight' ]; ?> <?php _e( 'kg', 'wcsc-locale' ); ?></td>
-                        <td><?php echo $parcel_template[ 'customer_price' ]; ?> <?php _e( 'EUR?', 'wcsc-locale' ); ?></td>
+                        <td><?php echo $parcel_template[ 'customer_price' ]; ?></td>
                         <td>
                             <input type="button" class="carrier_delete button"  value="<?php _e( 'Delete', 'wcsc-locale'  ); ?>" />
                             <input type="button" class="carrier_select button" value="<?php _e( 'Select', 'wcsc-locale'  ); ?>" />

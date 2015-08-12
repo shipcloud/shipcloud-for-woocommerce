@@ -104,7 +104,7 @@ class WC_Shipcloud_Shippig_Classes{
             $html.='<option value="' . $parcel[ 'ID' ] . '">' . $parcel[ 'post_title' ] . '</option>';
         }
         $html.= '</select>';
-        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class', 'wcsc-locale' ) . '</p>';
+        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class.', 'wcsc-locale' ) . '</p>';
         $html.= '</div>';
 
         echo $html;
