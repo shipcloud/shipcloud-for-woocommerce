@@ -103,7 +103,7 @@ class WC_Shipcloud_Order{
 				$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
 
 				if( is_array( $recipient_street ) ) {
-					$recipient_street = $recipient_street['address'];
+					$recipient_street_name = $recipient_street['address'];
 					$recipient_street_nr = $recipient_street['number'];
 				}
 
@@ -111,7 +111,7 @@ class WC_Shipcloud_Order{
 					'first_name' => $order->shipping_first_name,
 					'last_name' => $order->shipping_last_name,
 					'company' => $order->shipping_company,
-					'street' => $recipient_street,
+					'street' => $recipient_street_name,
 					'street_nr' => $recipient_street_nr,
 					'postcode' => $order->shipping_postcode,
 					'city' => $order->shipping_city,
