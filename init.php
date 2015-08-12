@@ -6,10 +6,10 @@ Description: Integrates shipcloud.io shipment services to your WooCommerce shop.
 Version: 1.0.0 beta 1
 Author: awesome.ug
 Author URI: http://www.awesome.ug
-Author Email: support@awesome.ug
+Author Email: very@awesome.ug
 License:
 
-  Copyright 2015 (support@awesome.ug)
+  Copyright 2015 (very@awesome.ug)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as 
@@ -32,7 +32,7 @@ License:
  * This class initializes the Plugin.
  *
  * @author rheinschmiede.de, Author <contact@awesome.ug>
- * @package PluginName
+ * @package WooCommerceShipCloud
  * @version 1.0.0
  * @since 1.0.0
  * @license GPL 2

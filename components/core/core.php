@@ -1,11 +1,11 @@
 <?php
-/*
+/**
  * WooCommerce Core Component
  *
  * Loading extensions for Woo
  *
  * @author awesome.ug <contact@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package WooCommerceShipCloud/Woo
+ * @package WooCommerceShipCloud/Core
  * @version 1.0.0
  * @since 1.0.0
  * @license GPL 2

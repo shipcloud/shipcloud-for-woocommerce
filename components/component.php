@@ -1,11 +1,11 @@
 <?php
-/*
+/**
  * Component Class
  *
  * Mother of all Components
  *
  * @author awesome.ug <contact@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package PluginName/Admin
+ * @package WooCommerceShipCloud
  * @version 1.0.0
  * @since 1.0.0
  * @license GPL 2
