@@ -10,7 +10,7 @@
  * @since 1.0.0
  * @license GPL 2
 
-  Copyright 2015 (contact@awesome.ug)
+  Copyright 2015 (very@awesome.ug)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as 
@@ -199,35 +199,46 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				'cost' => 0,
 			);
 
-			$package_qty = $this->get_package_item_qty($package);
 			$found_shipping_classes = $this->find_shipping_classes($package);
 
-            $this->log( print_r( $package, TRUE ) );
-            $this->log( print_r( $found_shipping_classes, TRUE ) );
+            // $this->log( print_r( $package, TRUE ) );
+            // $this->log( print_r( $found_shipping_classes, TRUE ) );
 
 			// Running Shipment Classes
 			$highest_class_cost = 0;
 
 			foreach ($found_shipping_classes as $shipping_class => $products) {
 
+                // $this->log( print_r( $products, TRUE ) );
+
                 if( '' == $shipping_class ){
                     // Product has no shipment classes
                     foreach( $products AS $product ){
-                        $rate[ 'cost' ] += $this->get_product_costs( $product[ 'product_id' ] );
+                        $cost = $this->get_product_costs( $product[ 'product_id' ] );
+                        $cost_total = $cost * $product[ 'quantity' ];
+                        $this->log( sprintf( __( 'Adding product #%s without shipping class %s times with cost of %s. Total costs %s', 'wcsc-locale' ), $product[ 'product_id' ], $product[ 'quantity' ], $cost, $cost_total ) );
+                        $rate[ 'cost' ] += $cost_total;
                     }
                 }else{
                     // Product has shipment classes
-                    $class_cost = $this->get_shipping_class_costs($shipping_class);
+                    $cost = $this->get_shipping_class_costs($shipping_class);
 
                     if ($this->settings['calculation_type'] === 'class') {
-                        $rate['cost'] += $class_cost;
+                        $this->log( sprintf( __( 'Adding products of shipping class #%s with cost of %s', 'wcsc-locale' ), $shipping_class,  $cost ) );
+                        $rate['cost'] += $cost;
                     } else {
-                        $highest_class_cost = $class_cost > $highest_class_cost ? $class_cost : $highest_class_cost;
+                        $highest_class_cost = $cost > $highest_class_cost ? $cost : $highest_class_cost;
+                        $this->log( sprintf( __( 'Checking products of shipping class #%s with cost of %s', 'wcsc-locale' ), $shipping_class, $cost ) );
                     }
                 }
 			}
 
-			$rate['cost'] += $highest_class_cost;
+            if( $highest_class_cost > 0 ) {
+                $rate['cost'] += $highest_class_cost;
+                $this->log(sprintf(__('Adding highest costs shipping classes of %s', 'wcsc-locale'), $highest_class_cost));
+            }
+
+            $this->log(sprintf(__('Sum of all costs: %s', 'wcsc-locale'), $rate['cost']));
 
 			// Register the rate
 			$this->add_rate($rate);
@@ -243,7 +254,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$term = get_term_by('slug', $shipping_class, 'product_shipping_class');
 
 			if ( !is_object($term) ) {
-				$this->log( sprintf( __('No term found for shipping class #%s', 'wcsc-locale'), $shipping_class ) );
+				$this->log( sprintf( __( 'No term found for shipping class #%s', 'wcsc-locale' ), $shipping_class ) );
 				return FALSE;
 			}
 
@@ -251,7 +262,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			if (0 == $parcel_id) {
 				$this->log( sprintf( __('No parcel found for product id #%s', 'wcsc-locale'), $product_id ) );
-				return FALSE;
 			}
 
 			$retail_price = $this->get_parcel_retail_price( $parcel_id );
@@ -266,12 +276,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		public function get_product_costs($product_id)
 		{
 			$parcel_id = get_post_meta($product_id, '_wcsc_parcel_id', TRUE);
-
-			if ( 0 == $parcel_id ) {
-				$this->log(sprintf(__( 'No parcel found for product id #%s', 'wcsc-locale' ), $product_id) );
-				return FALSE;
-			}
-
 			$retail_price = $this->get_parcel_retail_price( $parcel_id );
 
 			return $retail_price;
@@ -281,15 +285,19 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * Get retail price for parcel.
 		 * @param $parcel_id
 		 */
-		public function get_parcel_retail_price($parcel_id)
+		public function get_parcel_retail_price($parcel_id = 0)
 		{
-			// Getting price of parcel, selected in the shipping class
-			$parcels = WCSC_Parcels::get( array('include' => $parcel_id) );
-			$retail_price = $parcels[0]['values']['retail_price'];
+            if( 0 != $parcel_id && '' != $parcel_id ) {
+                // Getting price of parcel, selected in the shipping class
+                $parcels = WCSC_Parcels::get(array('include' => $parcel_id));
+                $retail_price = $parcels[0]['values']['retail_price'];
+            }
 
             // Price fallback
-            if( '' == $retail_price )
-                $retail_price = $this->settings[ 'standard_price' ];
+            if( '' == $retail_price ) {
+                $retail_price = $this->settings['standard_price'];
+                $this->log(sprintf(__('No price found for parcel. Using fallback price %s', 'wcsc-locale'), $retail_price));
+            }
 
 			return $retail_price;
 		}
@@ -316,22 +324,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			return $found_shipping_classes;
-		}
-
-		/**
-		 * Get items in package
-		 * @param  array $package
-		 * @return int
-		 */
-		public function get_package_item_qty($package)
-		{
-			$total_quantity = 0;
-			foreach ($package['contents'] as $item_id => $values) {
-				if ($values['quantity'] > 0 && $values['data']->needs_shipping()) {
-					$total_quantity += $values['quantity'];
-				}
-			}
-
 		}
 
 		/**

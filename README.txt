@@ -1,10 +1,9 @@
-=== Plugin Name ===
-Contributors: username1, username2 (this should be a list of wordpress.org userid's)
-Donate link: http://example.com/
-Tags: comments, spam
-Requires at least: 3.3.1
-Tested up to: 3.3.1
-Stable tag: 4.3
+=== shipcloud.io for WooCommerce ===
+Contributors: mahype, awesome-ug
+Tags: woocommerce, shipcloud
+Requires at least: 3.0.0
+Tested up to: 4.3.0
+Stable tag: 1.0.0
 
 Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
 

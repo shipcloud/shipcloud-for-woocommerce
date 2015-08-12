@@ -266,6 +266,17 @@ class WCSC_Parcels
     }
 
     /**
+     * Getting parcel data
+     * @param $parcel_id
+     */
+    public static function get_parcel( $parcel_id ){
+        $parcels = self::get( array( 'include'=> $parcel_id ) );
+        $parcel = $parcels[ 0 ];
+
+        return $parcel;
+    }
+
+    /**
      * Adding a parcel template
      * @param $carrier
      * @param $width

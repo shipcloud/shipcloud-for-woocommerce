@@ -224,15 +224,15 @@ jQuery( function( $ ) {
 		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
 		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
 
-		var parcel_template 	= $( "select[name='parcel_template']" ).val( );
-		var parcel_template_title 	= $( "select[name='parcel_template'] option:selected" ).text();
-		parcel_template = parcel_template.split( ";" );
+		var parcel_id 	= $( "select[name=parcel_id" ).val( );
 
-		var carrier 	= parcel_template[ 0 ];
-		var width 		= parcel_template[ 1 ];
-		var height 		= parcel_template[ 2 ];
-		var length 		= parcel_template[ 3 ];
-		var weight 		= parcel_template[ 4 ];
+		var carrier 	= $( "input[name='parcel[" + parcel_id + "][carrier]']" ).val( );
+		var width 		= $( "input[name='parcel[" + parcel_id + "][width]']" ).val( );
+		var height 		= $( "input[name='parcel[" + parcel_id + "][height]']" ).val( );
+		var length 		= $( "input[name='parcel[" + parcel_id + "][length]']" ).val( );
+		var weight 		= $( "input[name='parcel[" + parcel_id + "][weight]']" ).val( );
+
+		var parcel_title = '';
 
 		var data = {
 			'action': 'shipcloud_create_label',
@@ -253,7 +253,7 @@ jQuery( function( $ ) {
 			'recipient_postcode' : recipient_postcode,
 			'recipient_city' : recipient_city,
 			'recipient_country' : recipient_country,
-			'parcel_template_title': parcel_template_title,
+			'parcel_id' : parcel_id,
 			'carrier': carrier,
 			'width': width,
 			'height': height,

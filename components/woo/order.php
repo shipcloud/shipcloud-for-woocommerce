@@ -10,7 +10,7 @@
  * @since 1.0.0
  * @license GPL 2
 
-  Copyright 2015 (contact@awesome.ug)
+  Copyright 2015 (very@awesome.ug)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as 
@@ -382,7 +382,7 @@ class WC_Shipcloud_Order{
 					<div style="clear: both;"></div>
 
 					<div class="label_shipment_parcel">
-						<strong><?php echo esc_attr__( 'Selected Parcel Template:', 'wcsc-locale' ); ?></strong> <?php echo $data[ 'parcel_template_title' ]; ?> -  <?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?>
+						<strong><?php echo esc_attr__( 'Selected Parcel:', 'wcsc-locale' ); ?></strong> <?php echo $data[ 'parcel_title' ]; ?> -  <?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?>
 					</div>
 
 					<div style="clear: both;"></div>
@@ -538,6 +538,8 @@ class WC_Shipcloud_Order{
 			
 			if( !is_array( $shipment_data ) )
 				$shipment_data = array();
+
+			$parcel = WCSC_Parcels::get_parcel( $parcel_id );
 			
 			$data = array(
 				'id' 					=> $shipment[ 'body' ][ 'id' ],
@@ -545,7 +547,8 @@ class WC_Shipcloud_Order{
 				'tracking_url' 			=> $shipment[ 'body' ][ 'tracking_url' ],
 				'label_url'				=> $shipment[ 'body' ][ 'label_url' ],
 				'price' 				=> $shipment[ 'body' ][ 'price' ],
-				'parcel_template_title' => $_POST[ 'parcel_template_title' ],
+				'parcel_id' 			=> $_POST[ 'parcel_id' ],
+				'parcel_title' 			=> $parcel[ 'post_title' ],
 				'carrier' 				=> $_POST[ 'carrier' ],
 				'width' 				=> $_POST[ 'width' ],
 				'height' 				=> $_POST[ 'height' ],
