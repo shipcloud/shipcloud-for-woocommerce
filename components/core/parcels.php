@@ -228,7 +228,7 @@ class WCSC_Parcel_PostType{
 }
 WCSC_Parcel_PostType::init();
 
-class WCSC_Parcel_Templates
+class WCSC_Parcels
 {
 
     /**

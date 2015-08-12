@@ -37,20 +37,21 @@ class WC_Shipcloud_Product{
     }
 
     public static function shipping_option(){
-        $parcel_templates = WCSC_Parcel_Templates::get();
+        $parcels = WCSC_Parcels::get();
 
         $options = array();
+        $options[ 0 ] = __( 'None', 'wcsc-locale' );
 
-        foreach( $parcel_templates AS $parcel_template ){
-            $options[ $parcel_template[ 'ID' ] ] = $parcel_template[ 'post_title' ];
+        foreach( $parcels AS $parcel ){
+            $options[ $parcel[ 'ID' ] ] = $parcel[ 'post_title' ];
         }
 
         // Stock status
         woocommerce_wp_select(
             array(
-                'id' => '_wcsc_parcel',
+                'id' => '_wcsc_parcel_id',
                 'wrapper_class' => 'hide_if_variable',
-                'label' => __( 'Parcel', 'wcsc-locale' ),
+                'label' => __( 'or shipcloud Parcel', 'wcsc-locale' ),
                 'options' => $options,
                 'desc_tip' => true,
                 'description' => __( 'Select Parcel which will be used to send product', 'wcsc-locale' )
@@ -61,7 +62,7 @@ class WC_Shipcloud_Product{
     public static function save_shipping_option( $post_id, $post ){
 
         if ( isset( $_POST['_wcsc_parcel'] ) ) {
-            update_post_meta( $post_id, '_wcsc_parcel', wc_clean( $_POST['_wcsc_parcel'] ) );
+            update_post_meta( $post_id, '_wcsc_parcel_id', wc_clean( $_POST['_wcsc_parcel_id'] ) );
         }
     }
 }

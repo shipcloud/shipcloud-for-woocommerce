@@ -215,7 +215,7 @@ class WC_Shipcloud_Order{
 				<!-- Actions //-->
 				<?php
 
-				$parcel_templates = WCSC_Parcel_Templates::get();
+				$parcel_templates = WCSC_Parcels::get();
 
 				if( is_array( $parcel_templates ) && count( $parcel_templates ) > 0 ){
 					$style_parcel_templates = 'display:block;';

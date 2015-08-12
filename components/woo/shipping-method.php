@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * WooCommerce Shipping method
  *
  * Class which extends the WC_Shipping_Method API
