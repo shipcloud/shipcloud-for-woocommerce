@@ -413,8 +413,3 @@ class WCSC_Parcels
 
     }
 }
-
-// Testing
-// WCSCParcel_templates::add( 'ups', 50, 50, 50, 10, 5.4 );
-// WCSCParcel_templates::delete( 73 );
-// p( WCSCParcel_templates::get() );
