@@ -133,9 +133,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'default' => 'no'
 				),
 				'standard_sender_data' => array(
-					'title' => __('Standard sender data', 'woocommerce'),
+					'title' => __('Standard sender data', 'wcsc-locale'),
 					'type' => 'title',
-					'description' => sprintf(__('Setup your standard sender data for sending parcels.', 'woocommerce'))
+					'description' => sprintf(__('Setup your standard sender data for sending parcels.', 'wcsc-locale'))
 				),
                 'sender_company' => array(
                     'title' => __('Company', 'wcsc-locale'),

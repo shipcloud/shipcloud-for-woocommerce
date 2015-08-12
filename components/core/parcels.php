@@ -88,7 +88,7 @@ class WCSC_Parcel_PostType{
      * Adding Parcels to Woo Menu
      */
     public static function add_menu(){
-        add_submenu_page( 'edit.php?post_type=product', 'shipcloud Parcels', 'shipcloud Parcels', 'manage_options', 'edit.php?post_type=sc_parcel_template' );
+        add_submenu_page( 'edit.php?post_type=product', __( 'shipcloud Parcels', 'wcsc-locale' ), __( 'shipcloud Parcels', 'wcsc-locale' ), 'manage_options', 'edit.php?post_type=sc_parcel_template' );
     }
 
     /**

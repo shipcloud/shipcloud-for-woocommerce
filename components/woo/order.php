@@ -287,8 +287,8 @@ class WC_Shipcloud_Order{
 			</div>
 
 			<!-- Hidden Dialog messages //-->
-			<div id="ask_create_label"><?php echo esc_attr__( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'wcsc-locale' ); ?></div>
-			<div id="ask_order_pickup"><?php echo esc_attr__( 'This will order a pickup for this parcel. Do you really want to order?', 'wcsc-locale' ); ?></div>
+			<div id="ask_create_label"><?php _e( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'wcsc-locale' ); ?></div>
+			<div id="ask_order_pickup"><?php _e( 'This will order a pickup for this parcel. Do you really want to order?', 'wcsc-locale' ); ?></div>
 
 		</div>
 		<div class="clear"></div>
@@ -382,7 +382,7 @@ class WC_Shipcloud_Order{
 					<div style="clear: both;"></div>
 
 					<div class="label_shipment_parcel">
-						<strong><?php echo esc_attr__( 'Selected Parcel:', 'wcsc-locale' ); ?></strong> <?php echo $data[ 'parcel_title' ]; ?> -  <?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?>
+						<strong><?php _e( 'Selected Parcel:', 'wcsc-locale' ); ?></strong> <?php echo $data[ 'parcel_title' ]; ?> -  <?php echo wc_price( $data[ 'price' ], array( 'currency' =>  'EUR' ) ); ?>
 					</div>
 
 					<div style="clear: both;"></div>
