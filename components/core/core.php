@@ -42,7 +42,9 @@ class WCSCCore extends WCSCComponent{
 	} // end constructor
 	
 	public function includes(){
-		include( __DIR__ . '/parcels.php' );
+        if( wcsc_is_enabled() ) {
+            include(__DIR__ . '/parcels.php');
+        }
 	}
 }
 wcsc_load_component( 'WCSCCore' );

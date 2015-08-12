@@ -128,6 +128,35 @@ function wcsc_translate_shipcloud_text( $error_text ){
 }
 
 /**
+ * Checking if payment gateway is enabled
+ * @return bool
+ */
+function wcsc_is_enabled(){
+	$settings = get_option( 'woocommerce_shipcloud_settings' );
+
+	// Needed if options are saved in this moment
+	if( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) )
+		return TRUE;
+
+	// Needed if options are saved in this moment
+	if( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && !array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) )
+		return FALSE;
+
+	if( '' == $settings )
+		return FALSE;
+
+	if( !array_key_exists( 'enabled', $settings ) )
+		return FALSE;
+
+	if ('yes' != $settings['enabled'])
+		return FALSE;
+
+	return TRUE;
+}
+
+wcsc_is_enabled();
+
+/**
  * Deleting values
  */
 function wcsc_delete_values(){

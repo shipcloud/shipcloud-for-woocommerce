@@ -46,9 +46,11 @@ class WCSCWoo extends WCSCComponent{
 	} // end constructor
 	
 	public function includes(){
-		include( __DIR__ . '/product.php' );
-        include( __DIR__ . '/order.php');
-        include( __DIR__ . '/shipping-classes.php' );
+        if( wcsc_is_enabled() ) {
+            include(__DIR__ . '/product.php');
+            include(__DIR__ . '/order.php');
+            include(__DIR__ . '/shipping-classes.php');
+        }
 	}
 
     public function load_shipping_method(){
