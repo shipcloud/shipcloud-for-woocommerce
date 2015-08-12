@@ -54,7 +54,7 @@ class WC_Shipcloud_Shippig_Classes{
         $parcels[ 0 ][ 'post_title' ] = __( 'None', 'wcsc-locale' );
         $parcels = array_merge( $parcels, WCSC_Parcels::get() );
 
-        $parcel_id = get_option( 'wcsc_shipping_class_' . $term_id . 'parcel_id', 0 );
+        $parcel_id = get_option( 'wcsc_shipping_class_' . $term_id . '_parcel_id', 0 );
 
         $html = '<tr class="form-field">';
         $html.= '<th scope="row">';
@@ -86,7 +86,7 @@ class WC_Shipcloud_Shippig_Classes{
      */
     public static function shipping_class_edit_form_fields_save( $term_id, $tt_id ){
         $parcel_id = $_POST[ '_wcsc_parcel_id' ];
-        update_option( 'wcsc_shipping_class_' . $term_id . 'parcel_id', $parcel_id );
+        update_option( 'wcsc_shipping_class_' . $term_id . '_parcel_id', $parcel_id );
     }
 
     /**
@@ -117,7 +117,7 @@ class WC_Shipcloud_Shippig_Classes{
      */
     public static function shipping_class_add_form_fields_save( $term_id, $tt_id ){
         $parcel_id = $_POST[ '_wcsc_parcel_id' ];
-        update_option( 'wcsc_shipping_class_' . $term_id . 'parcel_id', $parcel_id );
+        update_option( 'wcsc_shipping_class_' . $term_id . '_parcel_id', $parcel_id );
     }
 }
 WC_Shipcloud_Shippig_Classes::init();
