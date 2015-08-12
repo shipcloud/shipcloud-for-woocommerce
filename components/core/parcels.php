@@ -156,7 +156,7 @@ class WCSC_Parcel_PostType{
                     </tr>
                     <tr>
                         <th><label for="test"><?php _e( 'Retail price', 'wcsc-locale' ); ?></label></th>
-                        <td><input type="text" name="retail_price" value="<?php echo $retail_price; ?>" /> &euro;</td>
+                        <td><input type="text" name="retail_price" value="<?php echo $retail_price; ?>" /></td>
                     </tr>
                 </tbody>
             </table>
@@ -196,7 +196,7 @@ class WCSC_Parcel_PostType{
         $height = $_POST[ 'height' ];
         $length = $_POST[ 'length' ];
         $weight = $_POST[ 'weight' ];
-        $retail_price = $_POST[ 'retail_price' ];
+        $retail_price = str_replace( ',', '.', $_POST[ 'retail_price' ] );
 
         $post_title = wcsc_get_carrier_display_name( $carrier ) . ' - ' . $width . ' x ' . $height . ' x ' . $length . ' ' . __( 'cm', 'wcsc-locale' ) . ' ' . $weight . __( 'kg', 'wcsc-locale' );
 
