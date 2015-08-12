@@ -191,6 +191,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 * @return void
 		 */
 		public function calculate_shipping( $package ) {
+			$calculation_type = $this->settings[ 'calculation_type' ];
+
+			// $packages = $package[ '' ];
+
+
 
 			// $this->log->add( 'shipcloud', print_r( $package, TRUE ) );
 

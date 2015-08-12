@@ -60,8 +60,7 @@ class WC_Shipcloud_Product{
     }
 
     public static function save_shipping_option( $post_id, $post ){
-
-        if ( isset( $_POST['_wcsc_parcel'] ) ) {
+        if ( isset( $_POST['_wcsc_parcel_id'] ) ) {
             update_post_meta( $post_id, '_wcsc_parcel_id', wc_clean( $_POST['_wcsc_parcel_id'] ) );
         }
     }
