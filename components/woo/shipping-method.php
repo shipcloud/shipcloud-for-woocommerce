@@ -137,12 +137,18 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'type' => 'title',
 					'description' => sprintf(__('Setup your standard sender data for sending parcels.', 'woocommerce'))
 				),
-				'sender_first_name' => array(
-					'title' => __('First Name', 'wcsc-locale'),
-					'type' => 'text',
-					'description' => __('Enter standard sender first name for shipment.', 'wcsc-locale'),
-					'desc_tip' => true,
-				),
+                'sender_company' => array(
+                    'title' => __('Company', 'wcsc-locale'),
+                    'type' => 'text',
+                    'description' => __('Enter standard sender company for shipment.', 'wcsc-locale'),
+                    'desc_tip' => true,
+                ),
+                'sender_first_name' => array(
+                    'title' => __('First Name', 'wcsc-locale'),
+                    'type' => 'text',
+                    'description' => __('Enter standard sender first name for shipment.', 'wcsc-locale'),
+                    'desc_tip' => true,
+                ),
 				'sender_last_name' => array(
 					'title' => __('Last Name', 'wcsc-locale'),
 					'type' => 'text',
