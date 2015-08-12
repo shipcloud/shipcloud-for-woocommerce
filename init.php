@@ -31,7 +31,7 @@ License:
  *
  * This class initializes the Plugin.
  *
- * @author rheinschmiede.de, Author <contact@awesome.ug>
+ * @author rheinschmiede.de, Author <very@awesome.ug>
  * @package WooCommerceShipCloud
  * @version 1.0.0
  * @since 1.0.0

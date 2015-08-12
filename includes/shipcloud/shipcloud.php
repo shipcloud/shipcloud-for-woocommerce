@@ -4,13 +4,13 @@
  *
  * API Base class for Shipclod.io
  *
- * @author awesome.ug <contact@awesome.ug>, Sven Wagener <sven@awesome.ug>
+ * @author awesome.ug <very@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/API
  * @version 1.0.0
  * @since 1.0.0
  * @license GPL 2
 
-  Copyright 2015 (contact@awesome.ug)
+  Copyright 2015 (very@awesome.ug)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License, version 2, as 
