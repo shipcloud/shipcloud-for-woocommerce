@@ -579,7 +579,7 @@ class WC_Shipcloud_Order{
 			$result = $shipment[ 'body' ];
 
 			$order = wc_get_order( $order_id );
-			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce' ) );
+			$order->add_order_note( __( 'shipcloud.io label was created.', 'wcsc-locale' ) );
 			
 			echo self::get_label_html( $data );
 		endif;
