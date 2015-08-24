@@ -178,6 +178,7 @@
 
 #shipcloud #create_label select{
 	margin-top: -1px;
+	width: 100%;
 }
 #shipcloud .widget-content .label_shipment_actions{
 	text-align: left;
