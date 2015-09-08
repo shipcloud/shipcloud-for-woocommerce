@@ -88,105 +88,188 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$default_country = wc_get_base_location();
 			$default_country = $default_country['country'];
 
+			$shipcloud = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
+
+			$carriers_options = array();
+
+			if( $carriers = $shipcloud->request_carriers() )
+			{
+				$carriers_options[] = array(
+					'title' => __( 'Carriers', 'woocommerce-shipcloud' ),
+					'type' 	=> 'title',
+					'id' 	=> 'carriers_allowed'
+				);
+
+				for( $i = 0; $i < count( $carriers ); $i++ )
+				{
+					$carriers_options[ $carriers[ $i ][ 'name' ] ] = array(
+						'desc' => $carriers[ $i ][ 'display_name' ],
+						'type'    => 'checkbox',
+				        'default' => 'yes',
+					    'checkboxgroup' => $i == 0 ? 'start' : ( ( $i + 1 ) == count( $carriers ) ? 'end' : '') ,
+						'show_if_checked' => $i == 0 ? 'option': 'yes',
+					);
+
+					if( $i == 0 )
+					{
+						$carriers_options[ $carriers[ $i ][ 'name' ] ][ 'title' ] = __( 'Carriers', 'woocommerce-shipcloud' );
+					}
+
+				}
+
+				$carriers_options[] = array(
+					'type' 	=> 'sectionend',
+					'id' 	=> 'carriers_allowed'
+				);
+
+				$carriers_text = __( 'Select the Carriers you want to provide.', 'woocommerce-shipcloud' );
+			}
+			else
+			{
+				$carriers_text =  __( 'Please input a valid API Key to get Carriers from shipcloud.io.', 'woocommerce-shipcloud' );
+			}
+
+			// p( $carriers_options );
+
 			$this->form_fields = array(
-				'enabled' => array(
-					'title' => __('Enable', 'woocommerce-shipcloud'),
-					'type' => 'checkbox',
-					'label' => __('Enable shipcloud.io', 'woocommerce-shipcloud'),
+				'enabled'              => array(
+					'title'   => __( 'Enable', 'woocommerce-shipcloud' ),
+					'type'    => 'checkbox',
+					'label'   => __( 'Enable shipcloud.io', 'woocommerce-shipcloud' ),
 					'default' => 'no'
 				),
-				'title' => array(
-					'title' => __('Title', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-shipcloud'),
-					'default' => __('shipcloud.io', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+				'api_key'              => array(
+					'title'       => __( 'API Key', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => sprintf( __( 'Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/users/api_key' ),
 				),
-				'api_key' => array(
-					'title' => __('API Key', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => sprintf( __('Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud'), 'https://app.shipcloud.io/de/users/api_key' ),
+				'carriers_allowed'  => array(
+					'title'         => __( 'Carriers', 'woocommerce-shipcloud' ),
+					'type'          => 'title',
+					'description'   =>  $carriers_text
 				),
-				'standard_price' => array(
-					'title' => __('Fallback Price', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => __('This price will be used if no other price was set up.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+				'calculation' => array(
+					'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
+					'type'        => 'title',
+					'description' => sprintf( __( 'Setup the automatic price calculation.', 'woocommerce-shipcloud' ) )
 				),
-				'calculation_type' => array(
-					'title' => __('Calculate Shipment Classes', 'woocommerce-shipcloud'),
-					'type' => 'select',
-					'description' => __('How should the price for shipment classes be calculated.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
-					'class' => 'wc-enhanced-select',
-					'default' => 'class',
-					'options' => array(
-						'class' => __('Per Class: Charge shipping for each shipping class individually', 'woocommerce'),
-						'order' => __('Per Order: Charge shipping for the most expensive shipping class', 'woocommerce'),
+				'calculate_products_type'     => array(
+					'title'       => __( 'Calculate Products', 'woocommerce-shipcloud' ),
+					'type'        => 'select',
+					'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
+					'class'       => 'wc-enhanced-select',
+					'default'     => 'class',
+					'options'     => array(
+						'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce' ),
+						'order' => __( 'Per Order: Charge shipping for the most expensive Product', 'woocommerce' ),
 					)
 				),
-				'debug' => array(
-					'title' => __('Debug', 'woocommerce-shipcloud'),
-					'type' => 'checkbox',
-					'label' => __('Enable logging if you experience problems.', 'woocommerce-shipcloud'),
-					'default' => 'no'
+				'standard_price_products'       => array(
+					'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+					'type'        => 'price',
+					'description' => __( 'Will be used if no sizes or weight is given to a Product.', 'woocommerce-shipcloud' ),
+				),
+				'calculation_type_shipment_classes'     => array(
+					'title'       => __( 'Calculate Shipment Classes', 'woocommerce-shipcloud' ),
+					'type'        => 'select',
+					'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
+					'class'       => 'wc-enhanced-select',
+					'default'     => 'class',
+					'options'     => array(
+						'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce' ),
+						'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce' ),
+					)
+				),
+				'standard_price_shipment_classes'       => array(
+					'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+					'type'        => 'price',
+					'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class.', 'woocommerce-shipcloud' ),
+				),
+				'carrier_selection'     => array(
+					'title'       => __( 'Carrier Selection', 'woocommerce-shipcloud' ),
+					'type'        => 'select',
+					'description' => __( 'Who can select the carrier?', 'woocommerce-shipcloud' ),
+					'class'       => 'wc-enhanced-select',
+					'desc_tip'    => TRUE,
+					'default'     => 'shopowner',
+					'options'     => array(
+						'shopowner' => __( 'Shop Owner can select Carrier', 'woocommerce-shipcloud' ),
+						'customer' => __( 'Customer can select Carrier', 'woocommerce-shipcloud' ),
+					)
 				),
 				'standard_sender_data' => array(
-					'title' => __('Standard sender data', 'woocommerce-shipcloud'),
-					'type' => 'title',
-					'description' => sprintf(__('Setup your standard sender data for sending parcels.', 'woocommerce-shipcloud'))
+					'title'       => __( 'Standard sender data', 'woocommerce-shipcloud' ),
+					'type'        => 'title',
+					'description' => sprintf( __( 'Setup your standard sender data for sending parcels.', 'woocommerce-shipcloud' ) )
 				),
-                'sender_company' => array(
-                    'title' => __('Company', 'woocommerce-shipcloud'),
-                    'type' => 'text',
-                    'description' => __('Enter standard sender company for shipment.', 'woocommerce-shipcloud'),
-                    'desc_tip' => true,
-                ),
-                'sender_first_name' => array(
-                    'title' => __('First Name', 'woocommerce-shipcloud'),
-                    'type' => 'text',
-                    'description' => __('Enter standard sender first name for shipment.', 'woocommerce-shipcloud'),
-                    'desc_tip' => true,
-                ),
-				'sender_last_name' => array(
-					'title' => __('Last Name', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => __('Enter standard sender last name for shipment.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+				'sender_company'       => array(
+					'title'       => __( 'Company', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Enter standard sender company for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
 				),
-				'sender_street' => array(
-					'title' => __('Street', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => __('Enter standard sender street for shipment.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+				'sender_first_name'    => array(
+					'title'       => __( 'First Name', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Enter standard sender first name for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
 				),
-				'sender_street_nr' => array(
-					'title' => __('Street number', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => __('Enter standard sender street number for shipment.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+				'sender_last_name'     => array(
+					'title'       => __( 'Last Name', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Enter standard sender last name for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
 				),
-				'sender_postcode' => array(
-					'title' => __('Postcode', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => __('Enter standard sender postcode for shipment.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+				'sender_street'        => array(
+					'title'       => __( 'Street', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Enter standard sender street for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
 				),
-				'sender_city' => array(
-					'title' => __('City', 'woocommerce-shipcloud'),
-					'type' => 'text',
-					'description' => __('Enter standard sender city for shipment.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+				'sender_street_nr'     => array(
+					'title'       => __( 'Street number', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Enter standard sender street number for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
 				),
-				'sender_country' => array(
-					'title' => __('Country', 'woocommerce-shipcloud'),
-					'type' => 'select',
-					'description' => __('Enter standard sender country for shipment.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
-					'options' => $woocommerce->countries->countries,
-					'default' => $default_country
-				)
+				'sender_postcode'      => array(
+					'title'       => __( 'Postcode', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Enter standard sender postcode for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
+				),
+				'sender_city'          => array(
+					'title'       => __( 'City', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Enter standard sender city for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
+				),
+				'sender_country'       => array(
+					'title'       => __( 'Country', 'woocommerce-shipcloud' ),
+					'type'        => 'select',
+					'description' => __( 'Enter standard sender country for shipment.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
+					'options'     => $woocommerce->countries->countries,
+					'default'     => $default_country
+				),
+				'further_settings' => array(
+					'title'       => __( 'Further Settings', 'woocommerce-shipcloud' ),
+					'type'        => 'title',
+					'description' => sprintf( __( 'Setup further settings.', 'woocommerce-shipcloud' ) )
+				),
+				'debug'                => array(
+					'title'   => __( 'Debug', 'woocommerce-shipcloud' ),
+					'type'    => 'checkbox',
+					'label'   => __( 'Enable logging if you experience problems.', 'woocommerce-shipcloud' ),
+					'default' => 'no'
+				),
 			);
+
+			if( count( $carriers_options ) > 0 ){
+				$this->form_fields = array_slice( $this->form_fields, 0, 3, true) + $carriers_options + array_slice( $this->form_fields, 3, count( $this->form_fields )-3, true);
+			}
 		}
 
 		/**
