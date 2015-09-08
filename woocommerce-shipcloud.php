@@ -166,7 +166,6 @@ class WooCommerceShipcloud
 		}
 
 		include( WCSC_FOLDER . '/components/component.php' );
-		include( WCSC_FOLDER . '/components/core/core.php' );
 		include( WCSC_FOLDER . '/components/woo/woo.php' );
 	}
 
