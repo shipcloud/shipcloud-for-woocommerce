@@ -116,7 +116,7 @@ class WCSC_Parcel_PostType{
 
         $carriers = $shipcloud_api->get_carriers( TRUE );
 
-        $carrier = get_post_meta( $post->ID, 'carrier', TRUE );
+        $selected_carrier = get_post_meta( $post->ID, 'carrier', TRUE );
         $width   = get_post_meta( $post->ID, 'width', TRUE );
         $height  = get_post_meta( $post->ID, 'height', TRUE );
         $length  = get_post_meta( $post->ID, 'length', TRUE );
@@ -132,7 +132,7 @@ class WCSC_Parcel_PostType{
                         <td>
                             <select name="carrier">
                                 <?php foreach( $carriers AS $carrier ): ?>
-                                    <?php if( $parcel['carrier'] == $carrier[ 'name' ] ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
+                                    <?php if( $selected_carrier == $carrier[ 'name' ] ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
                                     <option value="<?php echo $carrier[ 'name' ]; ?>"<?php echo $selected; ?>><?php echo $carrier[ 'display_name' ]; ?></option>
                                 <?php endforeach; ?>
                             </select>
