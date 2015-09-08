@@ -35,7 +35,7 @@ class WCSCCore extends WCSCComponent{
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->name = __( 'shipcloud.io Core', 'wcsc-locale' );
+		$this->name = __( 'shipcloud.io Core', 'woocommerce-shipcloud' );
 		$this->slug = 'sccore';
 		
 		parent::__construct();

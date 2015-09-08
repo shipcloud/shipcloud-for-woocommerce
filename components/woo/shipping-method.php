@@ -49,8 +49,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		public function __construct()
 		{
 			$this->id = 'shipcloud';
-			$this->title = __('shipcloud.io', 'wcsc-locale');
-			$this->method_description = __('Add shipcloud to your shipping methods', 'wcsc-locale');
+			$this->title = __('shipcloud.io', 'woocommerce-shipcloud');
+			$this->method_description = __('Add shipcloud to your shipping methods', 'woocommerce-shipcloud');
 
 			// Is gateway enabled
 			if (is_array($this->settings) && array_key_exists('enabled', $this->settings) && 'yes' == $this->settings['enabled'])
@@ -90,34 +90,33 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$this->form_fields = array(
 				'enabled' => array(
-					'title' => __('Enable', 'wcsc-locale'),
+					'title' => __('Enable', 'woocommerce-shipcloud'),
 					'type' => 'checkbox',
-					'label' => __('Enable shipcloud.io', 'wcsc-locale'),
+					'label' => __('Enable shipcloud.io', 'woocommerce-shipcloud'),
 					'default' => 'no'
 				),
 				'title' => array(
-					'title' => __('Title', 'wcsc-locale'),
+					'title' => __('Title', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('This controls the title which the user sees during checkout.', 'wcsc-locale'),
-					'default' => __('shipcloud.io', 'wcsc-locale'),
+					'description' => __('This controls the title which the user sees during checkout.', 'woocommerce-shipcloud'),
+					'default' => __('shipcloud.io', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 				),
 				'api_key' => array(
-					'title' => __('API Key', 'wcsc-locale'),
+					'title' => __('API Key', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('Enter your shipcloud.io API Key.', 'wcsc-locale'),
-					'desc_tip' => true,
+					'description' => sprintf( __('Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud'), 'https://app.shipcloud.io/de/users/api_key' ),
 				),
 				'standard_price' => array(
-					'title' => __('Fallback Price', 'wcsc-locale'),
+					'title' => __('Fallback Price', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('This price will be used if no other price was set up.', 'wcsc-locale'),
+					'description' => __('This price will be used if no other price was set up.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 				),
 				'calculation_type' => array(
-					'title' => __('Calculate Shipment Classes', 'wcsc-locale'),
+					'title' => __('Calculate Shipment Classes', 'woocommerce-shipcloud'),
 					'type' => 'select',
-					'description' => __('How should the price for shipment classes be calculated.', 'wcsc-locale'),
+					'description' => __('How should the price for shipment classes be calculated.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 					'class' => 'wc-enhanced-select',
 					'default' => 'class',
@@ -127,62 +126,62 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					)
 				),
 				'debug' => array(
-					'title' => __('Debug', 'wcsc-locale'),
+					'title' => __('Debug', 'woocommerce-shipcloud'),
 					'type' => 'checkbox',
-					'label' => __('Enable logging if you experience problems.', 'wcsc-locale'),
+					'label' => __('Enable logging if you experience problems.', 'woocommerce-shipcloud'),
 					'default' => 'no'
 				),
 				'standard_sender_data' => array(
-					'title' => __('Standard sender data', 'wcsc-locale'),
+					'title' => __('Standard sender data', 'woocommerce-shipcloud'),
 					'type' => 'title',
-					'description' => sprintf(__('Setup your standard sender data for sending parcels.', 'wcsc-locale'))
+					'description' => sprintf(__('Setup your standard sender data for sending parcels.', 'woocommerce-shipcloud'))
 				),
                 'sender_company' => array(
-                    'title' => __('Company', 'wcsc-locale'),
+                    'title' => __('Company', 'woocommerce-shipcloud'),
                     'type' => 'text',
-                    'description' => __('Enter standard sender company for shipment.', 'wcsc-locale'),
+                    'description' => __('Enter standard sender company for shipment.', 'woocommerce-shipcloud'),
                     'desc_tip' => true,
                 ),
                 'sender_first_name' => array(
-                    'title' => __('First Name', 'wcsc-locale'),
+                    'title' => __('First Name', 'woocommerce-shipcloud'),
                     'type' => 'text',
-                    'description' => __('Enter standard sender first name for shipment.', 'wcsc-locale'),
+                    'description' => __('Enter standard sender first name for shipment.', 'woocommerce-shipcloud'),
                     'desc_tip' => true,
                 ),
 				'sender_last_name' => array(
-					'title' => __('Last Name', 'wcsc-locale'),
+					'title' => __('Last Name', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('Enter standard sender last name for shipment.', 'wcsc-locale'),
+					'description' => __('Enter standard sender last name for shipment.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 				),
 				'sender_street' => array(
-					'title' => __('Street', 'wcsc-locale'),
+					'title' => __('Street', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('Enter standard sender street for shipment.', 'wcsc-locale'),
+					'description' => __('Enter standard sender street for shipment.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 				),
 				'sender_street_nr' => array(
-					'title' => __('Street number', 'wcsc-locale'),
+					'title' => __('Street number', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('Enter standard sender street number for shipment.', 'wcsc-locale'),
+					'description' => __('Enter standard sender street number for shipment.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 				),
 				'sender_postcode' => array(
-					'title' => __('Postcode', 'wcsc-locale'),
+					'title' => __('Postcode', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('Enter standard sender postcode for shipment.', 'wcsc-locale'),
+					'description' => __('Enter standard sender postcode for shipment.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 				),
 				'sender_city' => array(
-					'title' => __('City', 'wcsc-locale'),
+					'title' => __('City', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('Enter standard sender city for shipment.', 'wcsc-locale'),
+					'description' => __('Enter standard sender city for shipment.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 				),
 				'sender_country' => array(
-					'title' => __('Country', 'wcsc-locale'),
+					'title' => __('Country', 'woocommerce-shipcloud'),
 					'type' => 'select',
-					'description' => __('Enter standard sender country for shipment.', 'wcsc-locale'),
+					'description' => __('Enter standard sender country for shipment.', 'woocommerce-shipcloud'),
 					'desc_tip' => true,
 					'options' => $woocommerce->countries->countries,
 					'default' => $default_country
@@ -222,7 +221,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
                     foreach( $products AS $product ){
                         $cost = $this->get_product_costs( $product[ 'product_id' ] );
                         $cost_total = $cost * $product[ 'quantity' ];
-                        $this->log( sprintf( __( 'Adding product #%s without shipping class %s times with cost of %s. Total costs %s', 'wcsc-locale' ), $product[ 'product_id' ], $product[ 'quantity' ], $cost, $cost_total ) );
+                        $this->log( sprintf( __( 'Adding product #%s without shipping class %s times with cost of %s. Total costs %s', 'woocommerce-shipcloud' ), $product[ 'product_id' ], $product[ 'quantity' ], $cost, $cost_total ) );
                         $rate[ 'cost' ] += $cost_total;
                     }
                 }else{
@@ -230,21 +229,21 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
                     $cost = $this->get_shipping_class_costs($shipping_class);
 
                     if ($this->settings['calculation_type'] === 'class') {
-                        $this->log( sprintf( __( 'Adding products of shipping class #%s with cost of %s', 'wcsc-locale' ), $shipping_class,  $cost ) );
+                        $this->log( sprintf( __( 'Adding products of shipping class #%s with cost of %s', 'woocommerce-shipcloud' ), $shipping_class,  $cost ) );
                         $rate['cost'] += $cost;
                     } else {
                         $highest_class_cost = $cost > $highest_class_cost ? $cost : $highest_class_cost;
-                        $this->log( sprintf( __( 'Checking products of shipping class #%s with cost of %s', 'wcsc-locale' ), $shipping_class, $cost ) );
+                        $this->log( sprintf( __( 'Checking products of shipping class #%s with cost of %s', 'woocommerce-shipcloud' ), $shipping_class, $cost ) );
                     }
                 }
 			}
 
             if( $highest_class_cost > 0 ) {
                 $rate['cost'] += $highest_class_cost;
-                $this->log(sprintf(__('Adding highest costs shipping classes of %s', 'wcsc-locale'), $highest_class_cost));
+                $this->log(sprintf(__('Adding highest costs shipping classes of %s', 'woocommerce-shipcloud'), $highest_class_cost));
             }
 
-            $this->log(sprintf(__('Sum of all costs: %s', 'wcsc-locale'), $rate['cost']));
+            $this->log(sprintf(__('Sum of all costs: %s', 'woocommerce-shipcloud'), $rate['cost']));
 
 			// Register the rate
 			$this->add_rate($rate);
@@ -260,14 +259,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$term = get_term_by('slug', $shipping_class, 'product_shipping_class');
 
 			if ( !is_object($term) ) {
-				$this->log( sprintf( __( 'No term found for shipping class #%s', 'wcsc-locale' ), $shipping_class ) );
+				$this->log( sprintf( __( 'No term found for shipping class #%s', 'woocommerce-shipcloud' ), $shipping_class ) );
 				return FALSE;
 			}
 
 			$parcel_id = get_option( 'wcsc_shipping_class_' . $term->term_id . '_parcel_id', 0);
 
 			if (0 == $parcel_id) {
-				$this->log( sprintf( __('No parcel found for product id #%s', 'wcsc-locale'), $product_id ) );
+				$this->log( sprintf( __('No parcel found for product id #%s', 'woocommerce-shipcloud'), $product_id ) );
 			}
 
 			$retail_price = $this->get_parcel_retail_price( $parcel_id );
@@ -302,7 +301,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
             // Price fallback
             if( '' == $retail_price ) {
                 $retail_price = $this->settings['standard_price'];
-                $this->log(sprintf(__('No price found for parcel. Using fallback price %s', 'wcsc-locale'), $retail_price));
+                $this->log(sprintf(__('No price found for parcel. Using fallback price %s', 'woocommerce-shipcloud'), $retail_price));
             }
 
 			return $retail_price;
