@@ -90,47 +90,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$shipcloud = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
 
-			$carriers_options = array();
-
-			if( $carriers = $shipcloud->request_carriers() )
-			{
-				$carriers_options[] = array(
-					'title' => __( 'Carriers', 'woocommerce-shipcloud' ),
-					'type' 	=> 'title',
-					'id' 	=> 'carriers_allowed'
-				);
-
-				for( $i = 0; $i < count( $carriers ); $i++ )
-				{
-					$carriers_options[ $carriers[ $i ][ 'name' ] ] = array(
-						'desc' => $carriers[ $i ][ 'display_name' ],
-						'type'    => 'checkbox',
-				        'default' => 'yes',
-					    'checkboxgroup' => $i == 0 ? 'start' : ( ( $i + 1 ) == count( $carriers ) ? 'end' : '') ,
-						'show_if_checked' => $i == 0 ? 'option': 'yes',
-					);
-
-					if( $i == 0 )
-					{
-						$carriers_options[ $carriers[ $i ][ 'name' ] ][ 'title' ] = __( 'Carriers', 'woocommerce-shipcloud' );
-					}
-
-				}
-
-				$carriers_options[] = array(
-					'type' 	=> 'sectionend',
-					'id' 	=> 'carriers_allowed'
-				);
-
-				$carriers_text = __( 'Select the Carriers you want to provide.', 'woocommerce-shipcloud' );
-			}
-			else
-			{
-				$carriers_text =  __( 'Please input a valid API Key to get Carriers from shipcloud.io.', 'woocommerce-shipcloud' );
-			}
-
-			// p( $carriers_options );
-
 			$this->form_fields = array(
 				'enabled'              => array(
 					'title'   => __( 'Enable', 'woocommerce-shipcloud' ),
@@ -143,15 +102,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'type'        => 'text',
 					'description' => sprintf( __( 'Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/users/api_key' ),
 				),
-				'carriers_allowed'  => array(
-					'title'         => __( 'Carriers', 'woocommerce-shipcloud' ),
-					'type'          => 'title',
-					'description'   =>  $carriers_text
-				),
 				'calculation' => array(
 					'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
 					'type'        => 'title',
-					'description' => sprintf( __( 'Setup the automatic price calculation.', 'woocommerce-shipcloud' ) )
+					'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'woocommerce-shipcloud' ) )
 				),
 				'calculate_products_type'     => array(
 					'title'       => __( 'Calculate Products', 'woocommerce-shipcloud' ),
