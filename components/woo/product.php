@@ -40,7 +40,7 @@ class WC_Shipcloud_Product{
         $parcels = WCSC_Parcels::get();
 
         $options = array();
-        $options[ 0 ] = __( 'None', 'wcsc-locale' );
+        $options[ 0 ] = __( 'None', 'woocommerce-shipcloud' );
 
         foreach( $parcels AS $parcel ){
             $options[ $parcel[ 'ID' ] ] = $parcel[ 'post_title' ];
@@ -51,10 +51,10 @@ class WC_Shipcloud_Product{
             array(
                 'id' => '_wcsc_parcel_id',
                 'wrapper_class' => 'hide_if_variable',
-                'label' => __( 'or shipcloud Parcel', 'wcsc-locale' ),
+                'label' => __( 'or shipcloud Parcel', 'woocommerce-shipcloud' ),
                 'options' => $options,
                 'desc_tip' => true,
-                'description' => __( 'Select Parcel which will be used to send product', 'wcsc-locale' )
+                'description' => __( 'Select Parcel which will be used to send product', 'woocommerce-shipcloud' )
             )
         );
     }

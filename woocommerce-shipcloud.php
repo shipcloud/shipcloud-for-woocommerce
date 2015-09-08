@@ -104,7 +104,7 @@ class WooCommerceShipcloud
 	 */
 	public static function load_textdomain()
 	{
-		load_plugin_textdomain( 'wcsc-locale', FALSE, WCSC_RELATIVE_FOLDER . '/languages' );
+		load_plugin_textdomain( 'woocommerce-shipcloud', FALSE, WCSC_RELATIVE_FOLDER . '/languages' );
 	}
 
 	/**
@@ -131,22 +131,22 @@ class WooCommerceShipcloud
 		$wcsc_passed_requirements = TRUE;
 
 		if( !class_exists( 'WooCommerce' ) ):
-			$wcsc_errors[] = __( 'WooCommerce is not installed. Please install before using Plugin.', 'wcsc-locale' );
+			$wcsc_errors[] = __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
 
 		if( !function_exists( 'curl_init' ) ):
-			$wcsc_errors[] = __( 'shipcloud.io needs the CURL PHP extension.', 'wcsc-locale' );
+			$wcsc_errors[] = __( 'shipcloud.io needs the CURL PHP extension.', 'woocommerce-shipcloud' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
 
 		if( !function_exists( 'json_decode' ) ):
-			$wcsc_errors[] = __( 'shipcloud.io needs the JSON PHP extension.', 'wcsc-locale' );
+			$wcsc_errors[] = __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
 
 		if( !function_exists( 'mb_detect_encoding' ) ):
-			$wcsc_errors[] = __( 'shipcloud.io needs the Multibyte String PHP extension.', 'wcsc-locale' );
+			$wcsc_errors[] = __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' );
 			$wcsc_passed_requirements = FALSE;
 		endif;
 	}
@@ -222,16 +222,16 @@ class WooCommerceShipcloud
 	public static function register_admin_scripts()
 	{
 		$translation_array = array(
-			'parcel_added'                => __( 'Parcel template added!', 'wcsc-locale' ),
-			'parcel_dimensions_check_yes' => __( 'Parcel dimensions verified!', 'wcsc-locale' ),
-			'parcel_not_added'            => __( 'Parcel template not added!', 'wcsc-locale' ),
-			'price_text'                  => __( 'The calculated price is', 'wcsc-locale' ),
-			'select'                      => __( 'Select', 'wcsc-locale' ),
-			'delete'                      => __( 'Delete', 'wcsc-locale' ),
-			'kg'                          => __( 'kg', 'wcsc-locale' ),
-			'cm'                          => __( 'cm', 'wcsc-locale' ),
-			'yes'                         => __( 'Yes', 'wcsc-locale' ),
-			'no'                          => __( 'No', 'wcsc-locale' )
+			'parcel_added'                => __( 'Parcel template added!', 'woocommerce-shipcloud' ),
+			'parcel_dimensions_check_yes' => __( 'Parcel dimensions verified!', 'woocommerce-shipcloud' ),
+			'parcel_not_added'            => __( 'Parcel template not added!', 'woocommerce-shipcloud' ),
+			'price_text'                  => __( 'The calculated price is', 'woocommerce-shipcloud' ),
+			'select'                      => __( 'Select', 'woocommerce-shipcloud' ),
+			'delete'                      => __( 'Delete', 'woocommerce-shipcloud' ),
+			'kg'                          => __( 'kg', 'woocommerce-shipcloud' ),
+			'cm'                          => __( 'cm', 'woocommerce-shipcloud' ),
+			'yes'                         => __( 'Yes', 'woocommerce-shipcloud' ),
+			'no'                          => __( 'No', 'woocommerce-shipcloud' )
 		);
 
 		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );

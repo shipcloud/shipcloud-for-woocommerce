@@ -35,7 +35,7 @@ class WCSCWoo extends WCSCComponent{
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		$this->name = __( 'WooCommerce functions', 'wcsc-locale' );
+		$this->name = __( 'WooCommerce functions', 'woocommerce-shipcloud' );
 		$this->slug = 'woo';
 
 		parent::__construct();

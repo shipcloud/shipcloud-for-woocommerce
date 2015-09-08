@@ -51,14 +51,14 @@ class WC_Shipcloud_Shippig_Classes{
         $term_id = $_GET[ 'tag_ID' ]; // $tag doesn't work really, so use $_GET[ 'tag_ID' ]
 
         $parcels[ 0 ][ 'ID' ] = 0;
-        $parcels[ 0 ][ 'post_title' ] = __( 'None', 'wcsc-locale' );
+        $parcels[ 0 ][ 'post_title' ] = __( 'None', 'woocommerce-shipcloud' );
         $parcels = array_merge( $parcels, WCSC_Parcels::get() );
 
         $parcel_id = get_option( 'wcsc_shipping_class_' . $term_id . '_parcel_id', 0 );
 
         $html = '<tr class="form-field">';
         $html.= '<th scope="row">';
-        $html.= '<label for="_wcsc_parcel_id">' . __( 'shipcloud Parcel', 'wcsc-locale' ) . '</label>';
+        $html.= '<label for="_wcsc_parcel_id">' . __( 'shipcloud Parcel', 'woocommerce-shipcloud' ) . '</label>';
         $html.= '</th>';
         $html.= '<td>';
 
@@ -72,7 +72,7 @@ class WC_Shipcloud_Shippig_Classes{
             $html.='<option value="' . $parcel[ 'ID' ] . '"' . $selected . '>' . $parcel[ 'post_title' ] . '</option>';
         }
         $html.= '</select>';
-        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class.', 'wcsc-locale' ) . '</p>';
+        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class.', 'woocommerce-shipcloud' ) . '</p>';
         $html.= '</td>';
         $html.= '</tr>';
 
@@ -94,17 +94,17 @@ class WC_Shipcloud_Shippig_Classes{
      */
     public static function shipping_class_add_form_fields(){
         $parcels[ 0 ][ 'ID' ] = 0;
-        $parcels[ 0 ][ 'post_title' ] = __( 'None', 'wcsc-locale' );
+        $parcels[ 0 ][ 'post_title' ] = __( 'None', 'woocommerce-shipcloud' );
         $parcels = array_merge( $parcels, WCSC_Parcels::get() );
 
         $html = '<div class="form-field">';
-        $html.= '<label for="cat_Image_url">' . __( 'shipcloud Parcel', 'wcsc-locale' ) . '</label>';
+        $html.= '<label for="cat_Image_url">' . __( 'shipcloud Parcel', 'woocommerce-shipcloud' ) . '</label>';
         $html.= '<select name="_wcsc_parcel_id">';
         foreach( $parcels AS $parcel ){
             $html.='<option value="' . $parcel[ 'ID' ] . '">' . $parcel[ 'post_title' ] . '</option>';
         }
         $html.= '</select>';
-        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class.', 'wcsc-locale' ) . '</p>';
+        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class.', 'woocommerce-shipcloud' ) . '</p>';
         $html.= '</div>';
 
         echo $html;
