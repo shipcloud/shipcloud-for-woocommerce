@@ -105,8 +105,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				'api_key' => array(
 					'title' => __('API Key', 'woocommerce-shipcloud'),
 					'type' => 'text',
-					'description' => __('Enter your shipcloud.io API Key.', 'woocommerce-shipcloud'),
-					'desc_tip' => true,
+					'description' => sprintf( __('Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud'), 'https://app.shipcloud.io/de/users/api_key' ),
 				),
 				'standard_price' => array(
 					'title' => __('Fallback Price', 'woocommerce-shipcloud'),
