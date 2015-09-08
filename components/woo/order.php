@@ -125,7 +125,7 @@ class WC_Shipcloud_Order{
 			<div id="create_label">
 				<div class="order_data_column_container addresses">
 					<div class="order_data_column sender">
-						<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?>  <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
+						<h4><?php _e( 'Sender Address', 'wcsc-locale' ); ?>  <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 						<div class="edit_address disabled">
 							<p class="fullsize">
 								<label for="sender_address[company]"><?php _e( 'Company', 'wcsc-locale' ); ?></label>
@@ -168,7 +168,7 @@ class WC_Shipcloud_Order{
 					</div>
 
 					<div class="order_data_column recipient">
-						<h4><?php _e( 'Recipient Address', 'wcsc-locale' ); ?>  <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo WooCommerce::plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
+						<h4><?php _e( 'Recipient Address', 'wcsc-locale' ); ?>  <a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/icons/edit.png"></a></h4>
 
 						<div class="edit_address disabled">
 							<p class="fullsize">
@@ -429,7 +429,7 @@ class WC_Shipcloud_Order{
 				'weight' 	=> str_replace( ',', '.', $_POST[ 'weight' ] ),
 			)
 		);
-		
+
 		$shipment_quote = $shipcloud_api->send_request( 'shipment_quotes', $shipment, 'POST' );
 		$request_status = (int) $shipment_quote[ 'header' ][ 'status' ];
 		
