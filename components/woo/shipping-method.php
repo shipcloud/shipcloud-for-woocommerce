@@ -62,6 +62,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			if (class_exists('WC_Logger'))
 				$this->log = new WC_Logger();
+
 		}
 
 		/**
@@ -75,7 +76,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$this->init_settings();
 			$this->init_form_fields();
 
-			add_action('woocommerce_update_options_shipping_' . $this->id, array($this, 'process_admin_options'));
+			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
 
 		/**
@@ -90,6 +91,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 			$shipcloud = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
 
+			$carriers_options = array();
+			if( $carriers = $shipcloud->get_carriers( TRUE ) )
+			{
+				foreach( $carriers as $carrier )
+				{
+					$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
+				}
+			}
+
 			$this->form_fields = array(
 				'enabled'              => array(
 					'title'   => __( 'Enable', 'woocommerce-shipcloud' ),
@@ -101,6 +111,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'title'       => __( 'API Key', 'woocommerce-shipcloud' ),
 					'type'        => 'text',
 					'description' => sprintf( __( 'Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/users/api_key' ),
+				),
+				'allowed_carriers'     => array(
+					'title'       => __( 'Carriers', 'woocommerce-shipcloud' ),
+					'type'        => 'multi_checkbox',
+					'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
+					'options'     => $carriers_options
 				),
 				'calculation' => array(
 					'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
@@ -205,6 +222,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'type'        => 'select',
 					'description' => __( 'Enter standard sender country for shipment.', 'woocommerce-shipcloud' ),
 					'desc_tip'    => TRUE,
+					'class'       => 'wc-enhanced-select',
 					'options'     => $woocommerce->countries->countries,
 					'default'     => $default_country
 				),
@@ -220,10 +238,78 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'default' => 'no'
 				),
 			);
+		}
 
-			if( count( $carriers_options ) > 0 ){
-				$this->form_fields = array_slice( $this->form_fields, 0, 3, true) + $carriers_options + array_slice( $this->form_fields, 3, count( $this->form_fields )-3, true);
+		/**
+		 * Multi Checkbox HTML
+		 *
+		 * @param $key
+		 * @param $data
+		 *
+		 * @return string
+		 */
+		public function generate_multi_checkbox_html( $key, $data ){
+
+			$field    = $this->get_field_key( $key );
+			$defaults = array(
+				'title'             => '',
+				'disabled'          => false,
+				'class'             => '',
+				'css'               => '',
+				'placeholder'       => '',
+				'type'              => 'text',
+				'desc_tip'          => false,
+				'description'       => '',
+				'custom_attributes' => array(),
+				'options'           => array()
+			);
+
+			$data  = wp_parse_args( $data, $defaults );
+			$value = (array) $this->get_option( $key, array() );
+
+			ob_start();
+			?>
+			<tr valign="top">
+				<th scope="row" class="titledesc">
+					<label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+					<?php echo $this->get_tooltip_html( $data ); ?>
+				</th>
+				<td class="forminp">
+					<fieldset>
+						<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
+						<div class="multi-checkbox <?php echo esc_attr( $data['class'] ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
+							<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
+								<div>
+								<input type="checkbox" name="<?php echo esc_attr( $field ); ?>[]" value="<?php echo esc_attr( $option_key ); ?>" <?php checked( in_array( $option_key, $value ), true ); ?>> <?php echo esc_attr( $option_value ); ?>
+								</div>
+							<?php endforeach; ?>
+						</div>
+						<?php echo $this->get_description_html( $data ); ?>
+					</fieldset>
+				</td>
+			</tr>
+			<?php
+
+			return ob_get_clean();
+		}
+
+		/**
+		 * Validating multi_checkbox field and sanitizing it
+		 *
+		 * @param $key
+		 * @return array
+		 */
+		public function validate_multi_checkbox_field( $key )
+		{
+			$field = $this->get_field_key( $key );
+
+			if ( isset( $_POST[ $field ] ) ) {
+				$value = array_map( 'wc_clean', array_map( 'stripslashes', (array) $_POST[ $field ] ) );
+			} else {
+				$value = '';
 			}
+
+			return $value;
 		}
 
 		/**
