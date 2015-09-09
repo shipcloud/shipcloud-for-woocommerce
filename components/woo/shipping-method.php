@@ -119,6 +119,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'desc_tip'    => TRUE,
 					'options'     => $carriers_options
 				),
+				'debug'                => array(
+					'title'   => __( 'Debug', 'woocommerce-shipcloud' ),
+					'type'    => 'checkbox',
+					'label'   => __( 'Enable logging if you experience problems.', 'woocommerce-shipcloud' ),
+					'default' => 'no'
+				),
 				'calculation' => array(
 					'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
 					'type'        => 'title',
@@ -225,17 +231,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					'class'       => 'wc-enhanced-select',
 					'options'     => $woocommerce->countries->countries,
 					'default'     => $default_country
-				),
-				'further_settings' => array(
-					'title'       => __( 'Further Settings', 'woocommerce-shipcloud' ),
-					'type'        => 'title',
-					'description' => sprintf( __( 'Setup further settings.', 'woocommerce-shipcloud' ) )
-				),
-				'debug'                => array(
-					'title'   => __( 'Debug', 'woocommerce-shipcloud' ),
-					'type'    => 'checkbox',
-					'label'   => __( 'Enable logging if you experience problems.', 'woocommerce-shipcloud' ),
-					'default' => 'no'
 				),
 			);
 		}
