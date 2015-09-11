@@ -3,7 +3,7 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-/*
+/**
 * Getting Plugin Template
 * @since 1.0.0
 */
@@ -47,6 +47,33 @@ if( !function_exists( 'p' ) )
 		print_r( $var );
 		echo '</pre>';
 	}
+}
+
+
+/**
+ * Get allowed Carriers
+ *
+ * @return array $carriers
+ */
+function wcsc_get_carriers()
+{
+	$settings = get_option( 'woocommerce_shipcloud_settings', null );
+	$allowed_carriers = $settings[ 'allowed_carriers' ];
+
+	$shipcloud = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
+	$shipcloud_carriers = $shipcloud->get_carriers();
+
+	$carriers = array();
+
+	foreach( $shipcloud_carriers AS $shipcloud_carrier )
+	{
+		if( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
+		{
+			$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
+		}
+	}
+
+	return $carriers;
 }
 
 /**
