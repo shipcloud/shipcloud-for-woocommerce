@@ -278,7 +278,6 @@ class WC_Shipcloud_Order
 		?>
 		<div class="order_data_column_container parcels">
 
-			<h3><?php _e( 'Create Parcel Labels', 'woocommerce-shipcloud' ); ?></h3>
 			<div class="info"></div>
 
 			<?php echo self::parcel_form(); ?>

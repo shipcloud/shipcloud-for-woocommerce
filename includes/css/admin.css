@@ -3,6 +3,9 @@
 /**
  * 	General
  */
+#shipcloud{
+    padding:2%;
+}
 #shipcloud p {
     color: #777;
 }
@@ -20,9 +23,9 @@
  * 	Container
  */
 #shipcloud .order_data_column_container {
-    width: 96%;
+    width: 100%;
     clear: both;
-    padding: 2%;
+    margin-bottom: 30px;
 }
 
 #shipcloud .order_data_column {
