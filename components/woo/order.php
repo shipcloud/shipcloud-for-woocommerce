@@ -278,8 +278,6 @@ class WC_Shipcloud_Order
 		?>
 		<div class="order_data_column_container parcels">
 
-			<div class="info"></div>
-
 			<?php echo self::parcel_form(); ?>
 			<?php echo self::parcel_templates(); ?>
 
@@ -397,6 +395,8 @@ class WC_Shipcloud_Order
 				</select>
 				<input type="button" value="<?php echo esc_attr( 'Insert in Form', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 			</div>
+
+			<div class="info"></div>
 
 		</div>
 		<?php
