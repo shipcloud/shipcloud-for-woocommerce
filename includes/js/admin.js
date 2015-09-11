@@ -35,102 +35,23 @@ jQuery( function( $ ) {
 	}
 	edit_address();
 	
-	var carrier_select = function(){
-		$( '.carrier_select' ).click( function (){
-			
-			var template = $( this ).parent();
-			
-			var carrier = template.find( "input[name='carrier']" ).val();
-			var width = template.find( "input[name='width']" ).val();
-			var height = template.find( "input[name='height']" ).val();
-			var length = template.find( "input[name='length']" ).val();
-			var weight = template.find( "input[name='weight']" ).val();
 
-			$( '.shipcloud-tabs' ).tabs( "option", "active", 0 );
+	$( '.insert-to-form' ).click( function (){
+		var parcel = $( this ).parent().find( "select[name='parcel_list']").val();
 
-			var template_value = carrier + ';' + width + ';' + height + ';' + length + ';' + weight;
+		if( 'none' != parcel ) {
+			var form_table = $('.parcel-form-table');
 
-			$( "select[name='parcel_template']" ).val( template_value );
+			parcel = parcel.split( ';' );
 
-		});
-	}
-	carrier_select();
-
-
-	$( '#check_parcel_settings' ).click( function(){
-
-		// We need to give any address to test parcel settings
-
-		// From Cologne Cathedral
-		var sender_street 	= 'Domkloster';
-		var sender_street_nr= '4';
-		var sender_postcode = '50667';
-		var sender_city 	= 'Köln';
-		var sender_country 	= 'DE';
-
-		// From Cologne Main Station
-		var recipient_street 	= 'Trankgasse';
-		var recipient_street_nr	= '11';
-		var recipient_postcode 	= '50667';
-		var recipient_city 		= 'Köln';
-		var recipient_country 	= 'DE';
-
-		var carrier 	= $( "select[name='carrier']" ).val( );
-		var width 		= $( "input[name='width']" ).val();
-		var height 		= $( "input[name='height']" ).val();
-		var length 		= $( "input[name='length']" ).val();
-		var weight 		= $( "input[name='weight']" ).val();
-
-		var data = {
-			'action': 'shipcloud_calculate_shipping',
-			'sender_street' : sender_street,
-			'sender_street_nr' : sender_street_nr,
-			'sender_postcode' : sender_postcode,
-			'sender_city' : sender_city,
-			'sender_country' : sender_country,
-			'recipient_street' : recipient_street,
-			'recipient_street_nr': recipient_street_nr,
-			'recipient_postcode' : recipient_postcode,
-			'recipient_city' : recipient_city,
-			'recipient_country' : recipient_country,
-			'carrier': carrier,
-			'width': width,
-			'height': height,
-			'length': length,
-			'weight': weight
-		};
-
-		var button = $( this );
-		button.addClass( 'button-loading' );
-
-		$.post( ajaxurl, data, function( response ) {
-
-			var result = jQuery.parseJSON( response );
-
-			if( result.errors ){
-
-				var html = '';
-				result.errors.forEach( function( entry ){
-					html+= entry + '<br />';
-				});
-
-				$( '.shipcloud-message').removeClass( 'updated' ).addClass( 'error' ).fadeIn();;
-				$( '.shipcloud-message .info' ).html( html );
-				$( '.shipcloud-message').delay( 3000 ).fadeOut();
-
-			}if( result.price ){
-
-				var html = wcsc_translate.parcel_dimensions_check_yes;
-
-				$( '.shipcloud-message').removeClass( 'error' ).addClass( 'updated' ).fadeIn();
-				$( '.shipcloud-message .info' ).html( html );
-				$( '.shipcloud-message').delay( 3000 ).fadeOut();
-			}
-
-			button.removeClass( 'button-loading' );
-		});
+			form_table.find( "input[name='parcel_width']" ).val( parcel[ 0 ] );
+			form_table.find( "input[name='parcel_height']" ).val( parcel[ 1 ] );
+			form_table.find( "input[name='parcel_length']" ).val( parcel[ 2 ] );
+			form_table.find( "input[name='parcel_weight']" ).val( parcel[ 3 ] );
+			form_table.find( "select[name='parcel_carrier']" ).val( parcel[ 4 ] );
+		}
 	});
-	
+
 	$( '#shipcloud_calculate_price' ).click( function(){
 		
 		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
@@ -384,23 +305,4 @@ jQuery( function( $ ) {
     $('.shipcloud-switchto-parcel-tamplates').click( function () {
         $( '.shipcloud-tabs' ).tabs( "option", "active", 1 );
     });
-
-	/**
-	 * CSS Corrections
-	 */
-
-	$( '#shipcloud' ).find( '.ui-tabs' ).removeClass( 'ui-tabs' );
-	$( '#shipcloud' ).find( '.ui-widget' ).removeClass( 'ui-widget' );
-	$( '#shipcloud' ).find( '.ui-widget-content' ).removeClass( 'ui-widget-content' );
-	$( '#shipcloud' ).find( '.ui-corner-all' ).removeClass( 'ui-corner-all' );
-	$( '#shipcloud' ).find( '.ui-tabs-nav' ).removeClass( 'ui-tabs-nav' );
-	$( '#shipcloud' ).find( '.ui-helper-reset' ).removeClass( 'ui-helper-reset' );
-	$( '#shipcloud' ).find( '.ui-helper-clearfix' ).removeClass( 'ui-helper-clearfix' );
-	$( '#shipcloud' ).find( '.ui-widget-header' ).removeClass( 'ui-widget-header' );
-	$( '#shipcloud' ).find( '.ui-state-default' ).removeClass( 'ui-state-default' );
-	$( '#shipcloud' ).find( '.ui-corner-top' ).removeClass( 'ui-corner-top' );
-	$( '#shipcloud' ).find( '.ui-state-active' ).removeClass( 'ui-state-active' );
-	$( '#shipcloud' ).find( '.ui-tabs-panel' ).removeClass( 'ui-tabs-panel' );
-	$( '#shipcloud' ).find( '.ui-corner-bottom' ).removeClass( 'ui-corner-bottom' );
-	 
 });
