@@ -43,8 +43,6 @@ class WCSCCore extends WCSCComponent{
 	
 	public function includes(){
         if( wcsc_is_enabled() ) {
-            include(__DIR__ . '/class-carriers.php');
-            include(__DIR__ . '/class-parcel-templates.php');
             include(__DIR__ . '/parcel-templates.php');
         }
 	}
