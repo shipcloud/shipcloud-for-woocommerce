@@ -74,11 +74,14 @@
 
 #shipcloud .parcel-form-table th {
     width: 25%;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 #shipcloud .parcel-form-table td {
     width: 75%;
+}
+#shipcloud .parcel-form-table input[type="text"]{
+    width: 50px;
 }
 
 #shipcloud .parcel-template-field{
@@ -88,7 +91,6 @@
     display:block;
     margin-bottom: 5px;
 }
-
 #shipcloud #button-actions {
     margin-top: 8%;
 }
