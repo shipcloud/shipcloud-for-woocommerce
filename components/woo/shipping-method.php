@@ -42,9 +42,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 		/**
 		 * Constructor for your shipping class
-		 *
-		 * @access public
-		 * @return void
 		 */
 		public function __construct()
 		{
