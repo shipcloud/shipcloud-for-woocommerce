@@ -156,7 +156,7 @@ class Woocommerce_Shipcloud_API
 				break;
 		}
 
-		// @todo Logging
+		// @todo: Better Error Handling
 		if( is_wp_error( $response ) )
 		{
 			$error_message = $response->get_error_message();
