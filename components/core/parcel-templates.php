@@ -114,12 +114,7 @@ class WCSC_Parcel_PostType{
         $options = get_option( 'woocommerce_shipcloud_settings' );
         $shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
-        $carriers = array( 0 => array(
-                'name' => 'none',
-                'display_name' => esc_attr( 'No Carrier', 'woocommerce-shipcloud' )
-            )
-        );
-        $carriers = array_merge( $carriers, $shipcloud_api->get_carriers() );
+        $carriers = wcsc_get_carriers();
 
         $selected_carrier = get_post_meta( $post->ID, 'carrier', TRUE );
         $width   = get_post_meta( $post->ID, 'width', TRUE );
@@ -151,9 +146,9 @@ class WCSC_Parcel_PostType{
                         <th><label for="carrier"><?php _e( 'Shipping Company', 'woocommerce-shipcloud' ); ?></label></th>
                         <td>
                             <select name="carrier">
-                                <?php foreach( $carriers AS $carrier ): ?>
-                                    <?php if( $selected_carrier == $carrier[ 'name' ] ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
-                                    <option value="<?php echo $carrier[ 'name' ]; ?>"<?php echo $selected; ?>><?php echo $carrier[ 'display_name' ]; ?></option>
+                                <?php foreach( $carriers AS $name => $display_name ): ?>
+                                    <?php if( $selected_carrier == $name ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
+                                    <option value="<?php echo $name; ?>"<?php echo $selected; ?>><?php echo $display_name; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </td>
@@ -257,7 +252,6 @@ class WCSC_Parcels
             $parcel_templates[ $key ][ 'values'][ 'height' ] = get_post_meta( $post->ID, 'height', TRUE );
             $parcel_templates[ $key ][ 'values'][ 'length' ] = get_post_meta( $post->ID, 'length', TRUE );
             $parcel_templates[ $key ][ 'values'][ 'weight' ] = get_post_meta( $post->ID, 'weight', TRUE );
-            $parcel_templates[ $key ][ 'values'][ 'retail_price' ] = get_post_meta( $post->ID, 'retail_price', TRUE );
         }
 
         return $parcel_templates;
@@ -298,7 +292,6 @@ class WCSC_Parcels
         add_post_meta( $post_id, 'height', $height );
         add_post_meta( $post_id, 'length', $length );
         add_post_meta( $post_id, 'weight', $weight );
-        add_post_meta( $post_id, 'retail_price', $retail_price );
 
         add_action( 'wcsc_add_parcel_template', $post_id );
 
@@ -319,14 +312,11 @@ class WCSC_Parcels
      * List Parcel templates
      */
     public function show(){
-        $options = get_option( 'woocommerce_shipcloud_settings' );
         $parcel_templates = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
 
-        $shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
-        $carriers = $shipcloud_api->get_carriers( TRUE );
+        $carriers = wcsc_get_carriers();
 
         ob_start();
-
         ?>
         <table class="widefat" id="parcel_table">
 
@@ -360,9 +350,9 @@ class WCSC_Parcels
             <tr id="parcel_options">
                 <td class="parcel_option carrier">
                     <select name="parcel[carrier]">
-                        <?php foreach( $carriers AS $carrier ): ?>
-                            <?php if( $parcel['carrier'] == $carrier[ 'name' ] ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
-                            <option value="<?php echo $carrier[ 'name' ]; ?>"<?php echo $selected; ?>><?php echo $carrier[ 'display_name' ]; ?></option>
+                        <?php foreach( $carriers AS $name => $display_name ): ?>
+                            <?php if( $parcel['carrier'] == $name ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
+                            <option value="<?php echo $name; ?>"<?php echo $selected; ?>><?php echo $display_name; ?></option>
                         <?php endforeach; ?>
                     </select>
                 </td>
@@ -405,7 +395,6 @@ class WCSC_Parcels
                             <input type="hidden" name="height" value="<?php echo $parcel_template[ 'height' ]; ?>" />
                             <input type="hidden" name="length" value="<?php echo $parcel_template[ 'length' ]; ?>" />
                             <input type="hidden" name="weight" value="<?php echo $parcel_template[ 'weight' ]; ?>" />
-                            <input type="hidden" name="customer_price" value="<?php echo $parcel_template[ 'customer_price' ]; ?>" />
                         </td>
                     </tr>
                     <?php $i++; ?>
