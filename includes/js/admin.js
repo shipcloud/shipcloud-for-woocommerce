@@ -68,11 +68,11 @@ jQuery( function( $ ) {
 
 		var parcel_id 	= $( "select[name=parcel_id" ).val( );
 
-		var carrier 	= $( "input[name='parcel[" + parcel_id + "][carrier]']" ).val( );
-		var width 		= $( "input[name='parcel[" + parcel_id + "][width]']" ).val( );
-		var height 		= $( "input[name='parcel[" + parcel_id + "][height]']" ).val( );
-		var length 		= $( "input[name='parcel[" + parcel_id + "][length]']" ).val( );
-		var weight 		= $( "input[name='parcel[" + parcel_id + "][weight]']" ).val( );
+		var carrier 	= $( "select[name='parcel_carrier']" ).val( );
+		var width 		= $( "input[name='parcel_width']" ).val( );
+		var height 		= $( "input[name='parcel_height']" ).val( );
+		var length 		= $( "input[name='parcel_length']" ).val( );
+		var weight 		= $( "input[name='parcel_weight']" ).val( );
 		
 		var data = {
 			'action': 'shipcloud_calculate_shipping',
@@ -107,7 +107,7 @@ jQuery( function( $ ) {
 				});
 				html+= '</ul>';
 				
-				$( '#parcel_templates .info' ).fadeIn().html( html );
+				$( '.parcels .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeOut();
 
 			}if( result.price ){
@@ -115,7 +115,7 @@ jQuery( function( $ ) {
 				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
 				
-				$( '#parcel_templates .info' ).fadeIn().html( html );
+				$( '.parcels .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeIn();
 			}
 			button.removeClass( 'button-loading' );
@@ -147,11 +147,11 @@ jQuery( function( $ ) {
 
 		var parcel_id 	= $( "select[name=parcel_id" ).val( );
 
-		var carrier 	= $( "input[name='parcel[" + parcel_id + "][carrier]']" ).val( );
-		var width 		= $( "input[name='parcel[" + parcel_id + "][width]']" ).val( );
-		var height 		= $( "input[name='parcel[" + parcel_id + "][height]']" ).val( );
-		var length 		= $( "input[name='parcel[" + parcel_id + "][length]']" ).val( );
-		var weight 		= $( "input[name='parcel[" + parcel_id + "][weight]']" ).val( );
+		var carrier 	= $( "select[name='parcel_carrier']" ).val( );
+		var width 		= $( "input[name='parcel_width']" ).val( );
+		var height 		= $( "input[name='parcel_height']" ).val( );
+		var length 		= $( "input[name='parcel_length']" ).val( );
+		var weight 		= $( "input[name='parcel_weight']" ).val( );
 
 		var parcel_title = '';
 
