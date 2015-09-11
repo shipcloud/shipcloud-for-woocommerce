@@ -126,7 +126,6 @@ class WCSC_Parcel_PostType{
         $height  = get_post_meta( $post->ID, 'height', TRUE );
         $length  = get_post_meta( $post->ID, 'length', TRUE );
         $weight  = get_post_meta( $post->ID, 'weight', TRUE );
-        $retail_price  = get_post_meta( $post->ID, 'retail_price', TRUE );
 
         ?>
         <div id="wcsc-parcel-settings">
