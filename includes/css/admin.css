@@ -61,6 +61,9 @@
 /**
  * Parcels
  */
+#shipcloud .parcels {
+}
+
 #shipcloud .parcel-form-table {
     width: 100%;
     text-align: left;
@@ -75,18 +78,8 @@
     width: 75%;
 }
 
-#shipcloud .parcels {
-    border: 1px solid #CCC;
-    background: #efefef;
-    margin: 0 2%;
-    padding: 2%;
-    width: 92%;
-}
 #shipcloud .parcel-template-field{
-    border: 1px solid #CCC;
-    padding: 10px 10px 10px 40px;
     margin-bottom: 20px;
-    background: #FFFFFF;
 }
 #shipcloud .parcel-template-field label{
     display:block;
