@@ -37,7 +37,6 @@ class WCSC_Parcel_PostType{
         add_action( 'init', array( __CLASS__, 'register_post_types' ) );
         add_action( 'admin_menu',  array( __CLASS__, 'add_menu' ) );
         add_action( 'add_meta_boxes', array( __CLASS__, 'meta_boxes' ), 10 );
-        add_action( 'edit_form_after_title', array( __CLASS__, 'box_settings' ) );
         add_action( 'save_post', array( __CLASS__, 'save' ) );
 
         add_action( 'admin_notices', array( __CLASS__, 'notice_area' ) );
@@ -98,9 +97,9 @@ class WCSC_Parcel_PostType{
         add_meta_box(
             'box-tools',
             __( 'Tools', 'woocommerce-shipcloud' ),
-            array( __CLASS__, 'box_tools' ),
+            array( __CLASS__, 'box_settings' ),
             'sc_parcel_template',
-            'side'
+            'normal'
         );
     }
 
@@ -123,7 +122,7 @@ class WCSC_Parcel_PostType{
         $weight  = get_post_meta( $post->ID, 'weight', TRUE );
 
         ?>
-        <div id="wcsc-parcel-settings">
+        <div id="shipcloud-parcel-settings">
             <table class="form-table">
                 <tbody>
                     <tr>
@@ -156,12 +155,6 @@ class WCSC_Parcel_PostType{
                 </tbody>
             </table>
         </div>
-        <?php
-    }
-
-    public static function box_tools(){
-        ?>
-        <input type="button" id="check_parcel_settings" class="button" value="<?php _e( 'Check Parcel Settings', 'woocommerce-shipcloud' ); ?>" />
         <?php
     }
 

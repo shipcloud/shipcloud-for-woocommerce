@@ -160,6 +160,19 @@
     margin-bottom: 5px;
     font-weight: bold;
 }
+/**
+ * Post type Page
+ */
+.post-type-sc_parcel_template #post-body-content{
+    margin: 0;
+}
+.post-type-sc_parcel_template #minor-publishing-actions,
+.post-type-sc_parcel_template #misc-publishing-actions{
+    display: none;
+}
+#shipcloud-parcel-settings .form-table th{
+    font-weight: normal;
+}
 
 /**
  * Dialogs
