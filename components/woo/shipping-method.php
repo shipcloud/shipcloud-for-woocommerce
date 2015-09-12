@@ -141,8 +141,9 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'class'       => 'wc-enhanced-select',
 					'default'     => 'class',
 					'options'     => array(
-						'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce' ),
-						'order'   => __( 'Per Order: Charge shipping for the most expensive Product', 'woocommerce' ),
+						'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
+						'order'   => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
+						// todo Wording is bad!
 					)
 				),
 				'standard_price_products'           => array(
