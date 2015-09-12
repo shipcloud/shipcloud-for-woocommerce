@@ -57,7 +57,6 @@ class WCSCWoo extends WCSCComponent
 	{
 		if( wcsc_is_enabled() )
 		{
-			include( __DIR__ . '/product.php' );
 			include( __DIR__ . '/order.php' );
 			include( __DIR__ . '/shipping-classes.php' );
 		}
