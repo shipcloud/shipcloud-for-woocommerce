@@ -103,6 +103,23 @@ class Woocommerce_Shipcloud_API
 		p( $shipment_data );
 	}
 
+	public function create_label( $shipment_id )
+	{
+		$params = array(
+			'create_shipping_label' => TRUE
+		);
+
+		$action = 'shipments/:' . $shipment_id;
+
+		$request_data = $this->send_request( $action, $params, 'PUT' );
+
+		p( $this->get_endpoint( $action ) );
+
+		p( $request_data );
+
+		return $request_data;
+	}
+
 	public function request_pickup( $params )
 	{
 		$action = 'pickup_requests';

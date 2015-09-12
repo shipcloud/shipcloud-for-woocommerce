@@ -58,6 +58,7 @@ class WC_Shipcloud_Order
 		add_action( 'save_post', array( __CLASS__, 'save_settings' ) );
 
 		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( __CLASS__, 'ajax_calculate_shipping' ) );
+		add_action( 'wp_ajax_shipcloud_create_shipment', array( __CLASS__, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( __CLASS__, 'ajax_create_label' ) );
 
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ), 1 );
@@ -280,7 +281,7 @@ class WC_Shipcloud_Order
 		ob_start();
 		?>
 		<div class="section parcels">
-			<h3><?php echo esc_attr( 'Create Parcel Label', 'woocommerce-shipcloud' ); ?></h3>
+			<h3><?php echo esc_attr( 'Create Shipment', 'woocommerce-shipcloud' ); ?></h3>
 
 			<?php echo self::parcel_form(); ?>
 			<?php echo self::parcel_templates(); ?>
@@ -340,7 +341,7 @@ class WC_Shipcloud_Order
 
 			<div id="button-actions">
 				<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'woocommerce-shipcloud' ); ?>" class="button"/>
-				<input id="shipcloud_create_label" type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="button-primary"/>
+				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Create Shipment', 'woocommerce-shipcloud' ); ?>" class="button"/>
 			</div>
 
 			<div class="clear"></div>
@@ -451,6 +452,7 @@ class WC_Shipcloud_Order
 	private static function get_label_html( $data, $time = FALSE )
 	{
 		ob_start();
+
 		?>
 		<div class="label widget">
 		<div class="widget-top">
@@ -489,14 +491,21 @@ class WC_Shipcloud_Order
 						<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
 					</div>
 
-					<div class="label_shipment_actions order_data_column ">
+					<div class="label_shipment_actions ">
+						<?php if( '' == $data[ 'label_url' ] ): ?>
+						<p>
+							<input type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="shipcloud_create_label button-primary"/>
+						</p>
+						<?php else: ?>
 						<p class="fullsize">
 							<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download Label', 'woocommerce-shipcloud' ); ?></a>
 						</p>
+						<?php endif; ?>
 
 						<p class="fullsize">
 							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
 						</p>
+
 						<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
 						<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
 					</div>
@@ -607,6 +616,7 @@ class WC_Shipcloud_Order
 
 		// Getting errors if existing
 		if( 200 != $request_status ):
+
 			$errors = $shipment_quote[ 'body' ][ 'errors' ];
 			$result = array();
 
@@ -636,9 +646,9 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * Calulating shipping after sublitting calculation
+	 * Creating shipment
 	 */
-	public static function ajax_create_label()
+	public static function ajax_create_shipment()
 	{
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 
@@ -649,7 +659,7 @@ class WC_Shipcloud_Order
 		$shipment = array(
 			'carrier'               => $_POST[ 'carrier' ],
 			'service'               => 'standard',
-			'create_shipping_label' => TRUE,
+			'create_shipping_label' => FALSE,
 			'to'                    => array(
 				'first_name' => $_POST[ 'recipient_first_name' ],
 				'last_name'  => $_POST[ 'recipient_last_name' ],
@@ -683,7 +693,7 @@ class WC_Shipcloud_Order
 
 		// Getting errors if existing
 		if( 200 != $request_status ):
-			$errors = $shipment_quote[ 'body' ][ 'errors' ];
+			$errors = $shipment[ 'body' ][ 'errors' ];
 			$result = array();
 
 			switch ( $request_status )
@@ -752,6 +762,65 @@ class WC_Shipcloud_Order
 			$shipment_data[ time() ] = $data;
 
 			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
+
+			$result = $shipment[ 'body' ];
+
+			$order = wc_get_order( $order_id );
+			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+
+			echo self::get_label_html( $data );
+		endif;
+
+		exit;
+	}
+
+	/**
+	 * Calulating shipping after sublitting calculation
+	 */
+	public static function ajax_create_label()
+	{
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+
+		$shipment_id = $_POST[ 'shipment_id' ];
+
+		$args = array(
+			'create_shipping_label' => TRUE,
+		);
+
+		$shipment = $shipcloud_api->create_label( $shipment_id );
+
+		$request_status = (int) $shipment[ 'header' ][ 'status' ];
+
+		// Getting errors if existing
+		if( 200 != $request_status ):
+			$errors = $shipment[ 'body' ][ 'errors' ];
+			$result = array();
+
+			switch ( $request_status )
+			{
+				case 422:
+					$result[] = __( 'Parcel dimensions are not supported by carrier.', 'woocommerce-shipcloud' );
+					break;
+				default:
+					foreach( $errors AS $key => $error ):
+						$result[ $key ] = wcsc_translate_shipcloud_text( $error );
+					endforeach;
+					break;
+			}
+
+			$result = array( 'errors' => $result );
+
+			echo json_encode( $result );
+			exit;
+		endif;
+
+		delete_post_meta( $order_id, 'shipcloud_shipment_current_data' );
+		// delete_post_meta( $order_id, 'shipcloud_shipment_data' );
+
+		// Saving shipment data to order
+		if( 200 == $request_status ):
+
 
 			$result = $shipment[ 'body' ];
 
