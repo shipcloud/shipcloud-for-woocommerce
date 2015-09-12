@@ -83,6 +83,10 @@
     text-align: left;
 }
 
+#shipcloud-io .parcel-form-table select{
+    font-size:13px;
+}
+
 #shipcloud-io .btn-edit-address {
     opacity: 0.4;
     cursor: pointer;
