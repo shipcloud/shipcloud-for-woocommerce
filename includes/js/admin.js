@@ -1,40 +1,41 @@
 jQuery( function( $ ) {
 
-	var edit_address = function(){
-		$( '.btn_edit_address' ).click( function ( e ){
-			var div_address = $( this ).parent().parent().find( ".address" );
-			var div_edit_address = $( this ).parent().parent().find( ".edit_address" );
-			var div_edit_address_inputs = div_edit_address.find( 'input' );
-			var div_edit_address_selects = div_edit_address.find( 'select' );
+	$( '.btn-edit-address' ).click( function ( e ){
+		var div_address_form = $( this ).parent().parent();
+		var div_address_form_inputs = div_address_form.find( 'input' );
+		var div_address_form_selects = div_address_form.find( 'select' );
 
-			if( div_edit_address.hasClass( 'disabled' ) ){
-				console.log( div_edit_address_inputs );
+		console.log( div_address_form );
 
-				div_edit_address_inputs.each(function() {
-					$( this ).removeAttr( 'disabled' );
-				});
+		if( div_address_form.hasClass( 'disabled' ) ){
 
-				div_edit_address_selects.each(function() {
-					$( this ).removeAttr( 'disabled' );
-				});
+			console.log( 'Jau' );
 
-				div_edit_address.removeClass( 'disabled' )
+			div_address_form_inputs.each(function() {
+				$( this ).removeAttr( 'disabled' );
+			});
 
-			}else{
-				div_edit_address_inputs.each(function() {
-					$( this).attr( 'disabled', 'disabled' );
-				});
+			div_address_form_selects.each(function() {
+				$( this ).removeAttr( 'disabled' );
+			});
 
-				div_edit_address_selects.each(function() {
-					$( this ).attr( 'disabled', 'disabled' );
-				});
+			div_address_form.removeClass( 'disabled' )
 
-				div_edit_address.addClass( 'disabled' );
-			}
-		});
-	}
-	edit_address();
-	
+		}else{
+
+			console.log( 'Nej' );
+
+			div_address_form_inputs.each(function() {
+				$( this).attr( 'disabled', 'disabled' );
+			});
+
+			div_address_form_selects.each(function() {
+				$( this ).attr( 'disabled', 'disabled' );
+			});
+
+			div_address_form.addClass( 'disabled' );
+		}
+	});
 
 	$( '.insert-to-form' ).click( function (){
 		var parcel = $( this ).parent().find( "select[name='parcel_list']").val();
@@ -204,7 +205,7 @@ jQuery( function( $ ) {
 			}
 			catch( e )
 			{
-				$( '.shipment_labels' ).prepend( response );
+				$( '.shipment-labels' ).prepend( response );
 			}
 
 			button.removeClass( 'button-loading-blue' );
@@ -243,7 +244,7 @@ jQuery( function( $ ) {
 					}
 				}
 				catch (e) {
-					$('.shipment_labels').prepend(response);
+					$('.shipment-labels').prepend(response);
 					$('#no_label_created').fadeOut();
 				}
 
@@ -254,7 +255,7 @@ jQuery( function( $ ) {
 	shipcloud_order_pickup();
 
 	$( '#shipcloud_create_label' ).click( function(){
-		var ask_create_label = $( '#ask_create_label' );
+		var ask_create_label = $( '#ask-create-label' );
 
 		ask_create_label.dialog({                   
             'dialogClass'   : 'wcsc-dialog wp-dialog',

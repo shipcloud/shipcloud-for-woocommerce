@@ -81,7 +81,7 @@ class WC_Shipcloud_Order
 	 */
 	public static function add_metaboxes()
 	{
-		add_meta_box( 'shipcloudio', __( 'shipcloud.io Shipment-Center', 'woocommerce-shipcloud' ), array( __CLASS__, 'shipment_center' ), 'shop_order' );
+		add_meta_box( 'shipcloud-io', __( 'shipcloud.io Shipment-Center', 'woocommerce-shipcloud' ), array( __CLASS__, 'shipment_center' ), 'shop_order' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ class WC_Shipcloud_Order
 
 		wp_nonce_field( plugin_basename( __FILE__ ), 'save_settings' );
 
-		$html = '<div id="shipcloud">';
+		$html = '<div id="shipment-center">';
 		$html .= self::addresses();
 		$html .= self::parcel();
 		$html .= self::labels();
@@ -157,50 +157,51 @@ class WC_Shipcloud_Order
 
 		ob_start();
 		?>
-		<div class="order_data_column_container addresses">
-			<div class="order_data_column sender">
-				<h4><?php _e( 'Sender Address', 'woocommerce-shipcloud' ); ?>
-					<a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/icons/edit.png"></a>
-				</h4>
+		<div class="section addresses">
 
-				<div class="edit_address disabled">
+			<div class="address fifty">
+				<div class="address-form sender disabled">
+
+					<h3><?php _e( 'Sender Address', 'woocommerce-shipcloud' ); ?>
+						<a class="btn-edit-address"><img width="14" alt="Edit" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/icons/edit.png"></a>
+					</h3>
+
 					<p class="fullsize">
-						<label for="sender_address[company]"><?php _e( 'Company', 'woocommerce-shipcloud' ); ?></label>
 						<input type="text" name="sender_address[company]" value="<?php echo $sender[ 'company' ]; ?>" disabled>
+						<label for="sender_address[company]"><?php _e( 'Company', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
-					<p>
-						<label for="sender_address[first_name]"><?php _e( 'First Name', 'woocommerce-shipcloud' ); ?></label>
+					<p class="fullsize">
 						<input type="text" name="sender_address[first_name]" value="<?php echo $sender[ 'first_name' ]; ?>" disabled>
+						<label for="sender_address[first_name]"><?php _e( 'First Name', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
-					<p>
-						<label for="sender_address[last_name]"><?php _e( 'Last Name', 'woocommerce-shipcloud' ); ?></label>
+					<p class="fullsize">
 						<input type="text" name="sender_address[last_name]" value="<?php echo $sender[ 'last_name' ]; ?>" disabled>
+						<label for="sender_address[last_name]"><?php _e( 'Last Name', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="seventyfive">
-						<label for="sender_address[street]"><?php _e( 'Street', 'woocommerce-shipcloud' ); ?></label>
 						<input type="text" name="sender_address[street]" value="<?php echo $sender[ 'street' ]; ?>" disabled>
+						<label for="sender_address[street]"><?php _e( 'Street', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="twentyfive">
-						<label for="sender_address[street_nr]"><?php _e( 'Number', 'woocommerce-shipcloud' ); ?></label>
 						<input type="text" name="sender_address[street_nr]" value="<?php echo $sender[ 'street_nr' ]; ?>" disabled>
-					</p>
-
-					<p>
-						<label for="sender_address[postcode]"><?php _e( 'Postcode', 'woocommerce-shipcloud' ); ?></label>
-						<input type="text" name="sender_address[postcode]" value="<?php echo $sender[ 'postcode' ]; ?>" disabled>
-					</p>
-
-					<p>
-						<label for="sender_address[city]"><?php _e( 'City', 'woocommerce-shipcloud' ); ?></label>
-						<input type="text" name="sender_address[city]" value="<?php echo $sender[ 'city' ]; ?>" disabled>
+						<label for="sender_address[street_nr]"><?php _e( 'Number', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="fullsize">
-						<label for="sender_address[country]"><?php _e( 'Country', 'woocommerce-shipcloud' ); ?></label>
+						<input type="text" name="sender_address[postcode]" value="<?php echo $sender[ 'postcode' ]; ?>" disabled>
+						<label for="sender_address[postcode]"><?php _e( 'Postcode', 'woocommerce-shipcloud' ); ?></label>
+					</p>
+
+					<p class="fullsize">
+						<input type="text" name="sender_address[city]" value="<?php echo $sender[ 'city' ]; ?>" disabled>
+						<label for="sender_address[city]"><?php _e( 'City', 'woocommerce-shipcloud' ); ?></label>
+					</p>
+
+					<p class="fullsize">
 						<select name="sender_address[country]" disabled>
 							<?php foreach( $woocommerce->countries->countries AS $key => $country ): ?>
 								<?php if( $key == $sender[ 'country' ] ): $selected = ' selected';
@@ -208,53 +209,54 @@ class WC_Shipcloud_Order
 								<option value="<?php echo $key; ?>"<?php echo $selected; ?>><?php echo $country; ?></option>
 							<?php endforeach; ?>
 						</select>
+						<label for="sender_address[country]"><?php _e( 'Country', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 				</div>
 			</div>
 
-			<div class="order_data_column recipient">
-				<h4><?php _e( 'Recipient Address', 'woocommerce-shipcloud' ); ?>
-					<a class="btn_edit_address"><img width="14" alt="Edit" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/icons/edit.png"></a>
-				</h4>
+			<div class="address fifty">
+				<div class="address-form recipient disabled">
 
-				<div class="edit_address disabled">
+					<h3><?php _e( 'Recipient Address', 'woocommerce-shipcloud' ); ?>
+						<a class="btn-edit-address"><img width="14" alt="Edit" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/icons/edit.png"></a>
+					</h3>
+
 					<p class="fullsize">
-						<label for="recipient_address[company]"><?php _e( 'Company', 'woocommerce-shipcloud' ); ?></label>
 						<input type="text" name="recipient_address[company]" value="<?php echo $recipient[ 'company' ]; ?>" disabled>
+						<label for="recipient_address[company]"><?php _e( 'Company', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
-					<p>
-						<label for="recipient_address[first_name]"><?php _e( 'First Name', 'woocommerce-shipcloud' ); ?></label>
+					<p class="fullsize">
 						<input type="text" name="recipient_address[first_name]" value="<?php echo $recipient[ 'first_name' ]; ?>" disabled>
+						<label for="recipient_address[first_name]"><?php _e( 'First Name', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
-					<p>
-						<label for="recipient_address[last_name]"><?php _e( 'Last Name', 'woocommerce-shipcloud' ); ?></label>
+					<p class="fullsize">
 						<input type="text" name="recipient_address[last_name]" value="<?php echo $recipient[ 'last_name' ]; ?>" disabled>
+						<label for="recipient_address[last_name]"><?php _e( 'Last Name', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="seventyfive">
-						<label for="recipient_address[street]"><?php _e( 'Street', 'woocommerce-shipcloud' ); ?></label>
 						<input type="text" name="recipient_address[street]" value="<?php echo $recipient[ 'street' ]; ?>" disabled>
+						<label for="recipient_address[street]"><?php _e( 'Street', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="twentyfive">
-						<label for="recipient_address[street_nr]"><?php _e( 'Number', 'woocommerce-shipcloud' ); ?></label>
 						<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient[ 'street_nr' ]; ?>" disabled>
-					</p>
-
-					<p>
-						<label for="recipient_address[postcode]"><?php _e( 'Postcode', 'woocommerce-shipcloud' ); ?></label>
-						<input type="text" name="recipient_address[postcode]" value="<?php echo $recipient[ 'postcode' ]; ?>" disabled>
-					</p>
-
-					<p>
-						<label for="recipient_address[city]"><?php _e( 'City', 'woocommerce-shipcloud' ); ?></label>
-						<input type="text" name="recipient_address[city]" value="<?php echo $recipient[ 'city' ]; ?>" disabled>
+						<label for="recipient_address[street_nr]"><?php _e( 'Number', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="fullsize">
-						<label for="recipient_address[country]"><?php _e( 'Country', 'woocommerce-shipcloud' ); ?></label>
+						<input type="text" name="recipient_address[postcode]" value="<?php echo $recipient[ 'postcode' ]; ?>" disabled>
+						<label for="recipient_address[postcode]"><?php _e( 'Postcode', 'woocommerce-shipcloud' ); ?></label>
+					</p>
+
+					<p class="fullsize">
+						<input type="text" name="recipient_address[city]" value="<?php echo $recipient[ 'city' ]; ?>" disabled>
+						<label for="recipient_address[city]"><?php _e( 'City', 'woocommerce-shipcloud' ); ?></label>
+					</p>
+
+					<p class="fullsize">
 						<select name="recipient_address[country]" disabled>
 							<?php foreach( $woocommerce->countries->countries AS $key => $country ): ?>
 								<?php if( $key == $sender[ 'country' ] ): $selected = ' selected';
@@ -262,6 +264,7 @@ class WC_Shipcloud_Order
 								<option value="<?php echo $key; ?>"<?php echo $selected; ?>><?php echo $country; ?></option>
 							<?php endforeach; ?>
 						</select>
+						<label for="recipient_address[country]"><?php _e( 'Country', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 				</div>
 			</div>
@@ -276,7 +279,8 @@ class WC_Shipcloud_Order
 	{
 		ob_start();
 		?>
-		<div class="order_data_column_container parcels">
+		<div class="section parcels">
+			<h3><?php echo esc_attr( 'Create Parcel Label', 'woocommerce-shipcloud' ); ?></h3>
 
 			<?php echo self::parcel_form(); ?>
 			<?php echo self::parcel_templates(); ?>
@@ -292,7 +296,8 @@ class WC_Shipcloud_Order
 
 		ob_start();
 		?>
-		<div class="order_data_column create-label">
+		<div class="create-label fifty">
+
 			<table class="parcel-form-table">
 				<tbody>
 				<tr>
@@ -372,7 +377,7 @@ class WC_Shipcloud_Order
 
 		ob_start();
 		?>
-		<div class="order_data_column parcel-templates">
+		<div class="parcel-templates fifty">
 
 			<div class="parcel-template-field parcels-recommended">
 				<label for="parcels_recommended"><?php echo esc_attr( 'Parcels which have been calulated for Order', 'woocommerce-shipcloud' ); ?></label>
@@ -412,8 +417,8 @@ class WC_Shipcloud_Order
 		?>
 		<div id="create_label">
 
-			<div class="order_data_column_container shipping_data">
-				<div class="shipment_labels">
+			<div class="section shipping-data">
+				<div class="shipment-labels">
 					<?php
 
 					if( '' != $shipment_data && is_array( $shipment_data ) )
@@ -431,7 +436,7 @@ class WC_Shipcloud_Order
 				<div style="clear: both"></div>
 			</div>
 		</div>
-		<div id="ask_create_label"><?php _e( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'woocommerce-shipcloud' ); ?></div>
+		<div id="ask-create-label"><?php _e( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'woocommerce-shipcloud' ); ?></div>
 		<?php
 
 		return ob_get_clean();
@@ -454,7 +459,7 @@ class WC_Shipcloud_Order
 				<a class="widget-action hide-if-no-js"></a>
 			</div>
 			<div class="widget-title">
-				<img class="wcsc-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
+				<img class="shipcloud-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
 				<?php
 
 				$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
@@ -469,7 +474,7 @@ class WC_Shipcloud_Order
 			<div class="widget-content">
 				<div class="data">
 
-					<div class="label_shipment_sender order_data_column ">
+					<div class="label-shipment-sender address">
 						<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
 						<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?><?php echo $data[ 'sender_last_name' ]; ?></div>
 						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?><?php echo $data[ 'sender_street_no' ]; ?></div>
@@ -477,7 +482,7 @@ class WC_Shipcloud_Order
 						<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
 					</div>
 
-					<div class="label_shipment_recipient order_data_column ">
+					<div class="label-shipment-recipient address">
 						<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
 						<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?><?php echo $data[ 'recipient_last_name' ]; ?></div>
 						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?><?php echo $data[ 'recipient_street_no' ]; ?></div>
@@ -493,16 +498,14 @@ class WC_Shipcloud_Order
 						<p class="fullsize">
 							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
 						</p>
-						<!-- <p class="fullsize"><input type="button" value="<?php _e( 'Order Pickup', 'woocommerce-shipcloud' ); ?>" class="shipcloud-order-pickup button-primary" /></p> //-->
 						<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
 						<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
 					</div>
 
 					<div style="clear: both;"></div>
 
-					<div class="label_shipment_parcel">
-						<strong><?php _e( 'Selected Parcel:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'parcel_title' ]; ?>
-						- <?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?>
+					<div class="label-shipment-parcel">
+						<strong><?php _e( 'Selected Parcel:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'parcel_title' ]; ?> - <?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?>
 					</div>
 
 					<div style="clear: both;"></div>
