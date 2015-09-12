@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-12 23:42+0200\n"
-"PO-Revision-Date: 2015-09-12 23:44+0200\n"
+"POT-Creation-Date: 2015-09-12 23:59+0200\n"
+"PO-Revision-Date: 2015-09-13 00:03+0200\n"
 "Last-Translator: Sven Wagener <sven.wagener@rheinschmiede.de>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: __;_e;_x:1,2c\n"
+"X-Poedit-KeywordsList: __;_e;_x:1,2c;esc_attr\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.8.4\n"
@@ -95,7 +95,7 @@ msgid "Tools"
 msgstr "Tools"
 
 #: ../components/core/parcel-templates.php:129
-#: ../components/core/parcel-templates.php:323
+#: ../components/core/parcel-templates.php:323 ../components/woo/order.php:305
 #: ../components/woo/shipping-classes.php:75
 #: ../components/woo/shipping-classes.php:116
 msgid "Width"
@@ -111,8 +111,9 @@ msgstr "Breite"
 #: ../components/core/parcel-templates.php:360
 #: ../components/core/parcel-templates.php:379
 #: ../components/core/parcel-templates.php:380
-#: ../components/core/parcel-templates.php:381
-#: ../components/woo/shipping-classes.php:69
+#: ../components/core/parcel-templates.php:381 ../components/woo/order.php:307
+#: ../components/woo/order.php:313 ../components/woo/order.php:319
+#: ../components/woo/order.php:373 ../components/woo/shipping-classes.php:69
 #: ../components/woo/shipping-classes.php:78
 #: ../components/woo/shipping-classes.php:87
 #: ../components/woo/shipping-classes.php:113
@@ -122,21 +123,21 @@ msgid "cm"
 msgstr "cm"
 
 #: ../components/core/parcel-templates.php:133
-#: ../components/core/parcel-templates.php:326
+#: ../components/core/parcel-templates.php:326 ../components/woo/order.php:311
 #: ../components/woo/shipping-classes.php:84
 #: ../components/woo/shipping-classes.php:120
 msgid "Height"
 msgstr "Höhe"
 
 #: ../components/core/parcel-templates.php:137
-#: ../components/core/parcel-templates.php:329
+#: ../components/core/parcel-templates.php:329 ../components/woo/order.php:317
 #: ../components/woo/shipping-classes.php:66
 #: ../components/woo/shipping-classes.php:112
 msgid "Length"
 msgstr "Länge"
 
 #: ../components/core/parcel-templates.php:141
-#: ../components/core/parcel-templates.php:332
+#: ../components/core/parcel-templates.php:332 ../components/woo/order.php:323
 #: ../components/woo/shipping-classes.php:93
 #: ../components/woo/shipping-classes.php:124
 msgid "Weight"
@@ -146,8 +147,8 @@ msgstr "Gewicht"
 #: ../components/core/parcel-templates.php:189
 #: ../components/core/parcel-templates.php:277
 #: ../components/core/parcel-templates.php:363
-#: ../components/core/parcel-templates.php:382
-#: ../components/woo/shipping-classes.php:96
+#: ../components/core/parcel-templates.php:382 ../components/woo/order.php:325
+#: ../components/woo/order.php:374 ../components/woo/shipping-classes.php:96
 #: ../components/woo/shipping-classes.php:125 ../woocommerce-shipcloud.php:231
 msgid "kg"
 msgstr "kg"
@@ -156,7 +157,11 @@ msgstr "kg"
 msgid "Shipping Company"
 msgstr "Versandunternehmen"
 
-#: ../components/core/parcel-templates.php:320
+#: ../components/core/parcel-templates.php:148 ../components/woo/order.php:332
+msgid "[ Select a Carrier ]"
+msgstr "Versandunternehmen wählen"
+
+#: ../components/core/parcel-templates.php:320 ../components/woo/order.php:329
 msgid "Carrier"
 msgstr "Versandunternehmen"
 
@@ -189,22 +194,22 @@ msgid "Sender Address"
 msgstr "Absenderadresse"
 
 #: ../components/woo/order.php:172 ../components/woo/order.php:227
-#: ../components/woo/shipping-method.php:195
+#: ../components/woo/shipping-method.php:196
 msgid "Company"
 msgstr "Firma"
 
 #: ../components/woo/order.php:177 ../components/woo/order.php:232
-#: ../components/woo/shipping-method.php:201
+#: ../components/woo/shipping-method.php:202
 msgid "First Name"
 msgstr "Vorname"
 
 #: ../components/woo/order.php:182 ../components/woo/order.php:237
-#: ../components/woo/shipping-method.php:207
+#: ../components/woo/shipping-method.php:208
 msgid "Last Name"
 msgstr "Nachname"
 
 #: ../components/woo/order.php:187 ../components/woo/order.php:242
-#: ../components/woo/shipping-method.php:213
+#: ../components/woo/shipping-method.php:214
 msgid "Street"
 msgstr "Straße"
 
@@ -213,17 +218,17 @@ msgid "Number"
 msgstr "Nummer"
 
 #: ../components/woo/order.php:197 ../components/woo/order.php:252
-#: ../components/woo/shipping-method.php:225
+#: ../components/woo/shipping-method.php:226
 msgid "Postcode"
 msgstr "PLZ"
 
 #: ../components/woo/order.php:202 ../components/woo/order.php:257
-#: ../components/woo/shipping-method.php:231
+#: ../components/woo/shipping-method.php:232
 msgid "City"
 msgstr "Ort"
 
 #: ../components/woo/order.php:213 ../components/woo/order.php:268
-#: ../components/woo/shipping-method.php:237
+#: ../components/woo/shipping-method.php:238
 msgid "Country"
 msgstr "Land"
 
@@ -231,13 +236,33 @@ msgstr "Land"
 msgid "Recipient Address"
 msgstr "Empfängeradresse"
 
+#: ../components/woo/order.php:284 ../components/woo/order.php:344
+msgid "Create Shipment"
+msgstr "Versand anlegen"
+
 #: ../components/woo/order.php:343
 msgid "Calculate Price"
 msgstr "Preis berechnen"
 
-#: ../components/woo/order.php:344
-msgid "Create Shipment"
-msgstr "Versand anlegen"
+#: ../components/woo/order.php:371 ../components/woo/order.php:372
+msgid "x"
+msgstr "x"
+
+#: ../components/woo/order.php:384
+msgid "Automatic determined Parcels"
+msgstr "Automatisch ermittelte Pakete"
+
+#: ../components/woo/order.php:385 ../components/woo/order.php:396
+msgid "&#8592; Insert"
+msgstr "&larr; Einfügen"
+
+#: ../components/woo/order.php:387 ../components/woo/order.php:398
+msgid "[ Select a Parcel ]"
+msgstr "[ Paket Wählen ]"
+
+#: ../components/woo/order.php:395
+msgid "Your Parcel Templates"
+msgstr "Ihre Paketvorlagen"
 
 #: ../components/woo/order.php:440
 msgid ""
@@ -352,60 +377,60 @@ msgstr ""
 "Pro Bestellung: Versandkosten entsprechend die teuersten Versandkosten eines "
 "Produktes ermitteln"
 
-#: ../components/woo/shipping-method.php:149
-#: ../components/woo/shipping-method.php:166
+#: ../components/woo/shipping-method.php:150
+#: ../components/woo/shipping-method.php:167
 msgid "Standard Price"
 msgstr "Standardpreis"
 
-#: ../components/woo/shipping-method.php:151
+#: ../components/woo/shipping-method.php:152
 msgid "Will be used if no sizes or weight is given to a Product."
 msgstr ""
 "Wird verwendet wenn für ein Produkt keine Größen oder Gewicht eingegeben "
 "wurde."
 
-#: ../components/woo/shipping-method.php:154
+#: ../components/woo/shipping-method.php:155
 msgid "Calculate Shipment Classes"
 msgstr "Versandklasse berechnen"
 
-#: ../components/woo/shipping-method.php:156
+#: ../components/woo/shipping-method.php:157
 msgid "How should the price for shipment classes be calculated."
 msgstr "Wie soll der Preis für Versandklassen berechnet werden."
 
-#: ../components/woo/shipping-method.php:161
+#: ../components/woo/shipping-method.php:162
 msgid "Per Class: Charge shipping for each shipping class individually"
 msgstr "Pro Klasse: Versandkosten für jede Versandklasse einzeln ermitteln"
 
-#: ../components/woo/shipping-method.php:162
+#: ../components/woo/shipping-method.php:163
 msgid "Per Order: Charge shipping for the most expensive shipping class"
 msgstr "Pro Bestellung Versandkosten für die teuerste Versandklasse ermitteln"
 
-#: ../components/woo/shipping-method.php:168
+#: ../components/woo/shipping-method.php:169
 msgid "Will be used if no sizes or weight is given to a Shipment Class."
 msgstr ""
 "Wird verwendet werden, wenn keine Größe oder Gewicht zu einer Versandklasse "
 "angegeben wurde."
 
-#: ../components/woo/shipping-method.php:171
+#: ../components/woo/shipping-method.php:172
 msgid "Carrier Selection"
 msgstr "Versandunternehmen"
 
-#: ../components/woo/shipping-method.php:173
+#: ../components/woo/shipping-method.php:174
 msgid "Who can select the carrier?"
 msgstr "Wer kann das Versandunternehmen auswählen?"
 
-#: ../components/woo/shipping-method.php:178
+#: ../components/woo/shipping-method.php:179
 msgid "Shop Owner can select Carrier"
 msgstr "Shopbesitzer wählt Versandunternehmen"
 
-#: ../components/woo/shipping-method.php:179
+#: ../components/woo/shipping-method.php:180
 msgid "Customer can select Carrier"
 msgstr "Kunde wählt Versandunternehmen"
 
-#: ../components/woo/shipping-method.php:183
+#: ../components/woo/shipping-method.php:184
 msgid "Standard Carrier"
 msgstr "Standard Versandunternehmen"
 
-#: ../components/woo/shipping-method.php:185
+#: ../components/woo/shipping-method.php:186
 msgid ""
 "This Carrier will be preselected if the Shop Owner selects the Carrier or "
 "will be preselected as Carrier if Customer can select the Carrier."
@@ -414,51 +439,51 @@ msgstr ""
 "Versandunternehmen auswählt oder als vorausgewählt, wenn der Kunde das "
 "Versandunternehmen wählt."
 
-#: ../components/woo/shipping-method.php:190
+#: ../components/woo/shipping-method.php:191
 msgid "Standard sender data"
 msgstr "Standard-Absender Daten"
 
-#: ../components/woo/shipping-method.php:192
+#: ../components/woo/shipping-method.php:193
 msgid "Setup your standard sender data for sending parcels."
 msgstr "Geben Sie einen Standardabsender für den Versand an."
 
-#: ../components/woo/shipping-method.php:197
+#: ../components/woo/shipping-method.php:198
 msgid "Enter standard sender company for shipment."
 msgstr "Geben Sie ein Standardabsender-Firma für den Versand an."
 
-#: ../components/woo/shipping-method.php:203
+#: ../components/woo/shipping-method.php:204
 msgid "Enter standard sender first name for shipment."
 msgstr "Geben Sie einen Standardabsender-Vornamen für den Versand an."
 
-#: ../components/woo/shipping-method.php:209
+#: ../components/woo/shipping-method.php:210
 msgid "Enter standard sender last name for shipment."
 msgstr "Geben Sie einen Standardabsender-Nachnamen für den Versand an."
 
-#: ../components/woo/shipping-method.php:215
+#: ../components/woo/shipping-method.php:216
 msgid "Enter standard sender street for shipment."
 msgstr "Geben Sie eine Standardabsender-Straße für den Versand an."
 
-#: ../components/woo/shipping-method.php:219
+#: ../components/woo/shipping-method.php:220
 msgid "Street number"
 msgstr "Hausnummer"
 
-#: ../components/woo/shipping-method.php:221
+#: ../components/woo/shipping-method.php:222
 msgid "Enter standard sender street number for shipment."
 msgstr "Geben Sie die Standardabsender-Hausnummer für Versand an."
 
-#: ../components/woo/shipping-method.php:227
+#: ../components/woo/shipping-method.php:228
 msgid "Enter standard sender postcode for shipment."
 msgstr "Geben Sie Standardabsender-Postleitzahl für den Versand an."
 
-#: ../components/woo/shipping-method.php:233
+#: ../components/woo/shipping-method.php:234
 msgid "Enter standard sender city for shipment."
 msgstr "Geben Sie eine Standardsender-Stadt für den Versand an."
 
-#: ../components/woo/shipping-method.php:239
+#: ../components/woo/shipping-method.php:240
 msgid "Enter standard sender country for shipment."
 msgstr "Geben Sie ein Standardabsender-Land für den Versand an."
 
-#: ../components/woo/shipping-method.php:367
+#: ../components/woo/shipping-method.php:368
 #, php-format
 msgid ""
 "Adding product #%s without shipping class %s times with cost of %s. Total "
@@ -467,37 +492,37 @@ msgstr ""
 "Hinzufügen von Produkt #%s ohne Versandklasse %s mit Kosten von %s. "
 "Gesamtkosten %s"
 
-#: ../components/woo/shipping-method.php:381
+#: ../components/woo/shipping-method.php:382
 #, php-format
 msgid "Adding products of shipping class #%s with cost of %s"
 msgstr "Hinzufügen von Produkten für die Versandklasse #%s mit Kosten von %s"
 
-#: ../components/woo/shipping-method.php:387
+#: ../components/woo/shipping-method.php:388
 #, php-format
 msgid "Checking products of shipping class #%s with cost of %s"
 msgstr "Prüfen Produkte Versandkosten Klasse #%s mit Kosten von %s"
 
-#: ../components/woo/shipping-method.php:395
+#: ../components/woo/shipping-method.php:396
 #, php-format
 msgid "Adding highest costs shipping classes of %s"
 msgstr "Hinzufügen der höchsten Versandklasse mit Kosten von %s"
 
-#: ../components/woo/shipping-method.php:398
+#: ../components/woo/shipping-method.php:399
 #, php-format
 msgid "Sum of all costs: %s"
 msgstr "Summe aller Kosten: %s"
 
-#: ../components/woo/shipping-method.php:417
+#: ../components/woo/shipping-method.php:418
 #, php-format
 msgid "No term found for shipping class #%s"
 msgstr "Kein Term für die Versandklasse #%s gefunden"
 
-#: ../components/woo/shipping-method.php:426
+#: ../components/woo/shipping-method.php:427
 #, php-format
 msgid "No parcel found for product id #%s"
 msgstr "Kein Paket für Produkt ID #%s gefunden"
 
-#: ../components/woo/shipping-method.php:465
+#: ../components/woo/shipping-method.php:466
 #, php-format
 msgid "No price found for parcel. Using fallback price %s"
 msgstr "Kein Preis für Paket gefunden. Nutze Fallback-Preis %s"
@@ -612,6 +637,9 @@ msgstr "Ja"
 #: ../woocommerce-shipcloud.php:234
 msgid "No"
 msgstr "Nein"
+
+#~ msgid "&larr; Insert"
+#~ msgstr "&larr; Einfügen"
 
 #~ msgid "Per Order: Charge shipping for the most expensive Product"
 #~ msgstr ""

@@ -278,17 +278,17 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			?>
 			<tr valign="top">
 				<th scope="row" class="titledesc">
-					<label for="<?php echo esc_attr( $field ); ?>"><?php echo wp_kses_post( $data[ 'title' ] ); ?></label>
+					<label for="<?php _e( $field ); ?>"><?php echo wp_kses_post( $data[ 'title' ] ); ?></label>
 					<?php echo $this->get_tooltip_html( $data ); ?>
 				</th>
 				<td class="forminp">
 					<fieldset>
 						<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data[ 'title' ] ); ?></span>
 						</legend>
-						<div class="multi-checkbox <?php echo esc_attr( $data[ 'class' ] ); ?>" id="<?php echo esc_attr( $field ); ?>" style="<?php echo esc_attr( $data[ 'css' ] ); ?>" <?php disabled( $data[ 'disabled' ], TRUE ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
+						<div class="multi-checkbox <?php _e( $data[ 'class' ] ); ?>" id="<?php _e( $field ); ?>" style="<?php _e( $data[ 'css' ] ); ?>" <?php disabled( $data[ 'disabled' ], TRUE ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
 							<?php foreach( (array) $data[ 'options' ] as $option_key => $option_value ) : ?>
 								<div>
-									<input type="checkbox" name="<?php echo esc_attr( $field ); ?>[]" value="<?php echo esc_attr( $option_key ); ?>" <?php checked( in_array( $option_key, $value ), TRUE ); ?>> <?php echo esc_attr( $option_value ); ?>
+									<input type="checkbox" name="<?php _e( $field ); ?>[]" value="<?php _e( $option_key ); ?>" <?php checked( in_array( $option_key, $value ), TRUE ); ?>> <?php _e( $option_value ); ?>
 								</div>
 							<?php endforeach; ?>
 						</div>

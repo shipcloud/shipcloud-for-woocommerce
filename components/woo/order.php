@@ -281,7 +281,7 @@ class WC_Shipcloud_Order
 		ob_start();
 		?>
 		<div class="section parcels">
-			<h3><?php echo esc_attr( 'Create Shipment', 'woocommerce-shipcloud' ); ?></h3>
+			<h3><?php _e( 'Create Shipment', 'woocommerce-shipcloud' ); ?></h3>
 
 			<?php echo self::parcel_form(); ?>
 			<?php echo self::parcel_templates(); ?>
@@ -302,34 +302,34 @@ class WC_Shipcloud_Order
 			<table class="parcel-form-table">
 				<tbody>
 				<tr>
-					<th><?php echo esc_attr( 'Width', 'woocommerce-shipcloud' ); ?></th>
+					<th><?php _e( 'Width', 'woocommerce-shipcloud' ); ?></th>
 					<td>
-						<input type="text" name="parcel_width"/> <?php echo esc_attr( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_width"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><?php echo esc_attr( 'Height', 'woocommerce-shipcloud' ); ?></th>
+					<th><?php _e( 'Height', 'woocommerce-shipcloud' ); ?></th>
 					<td>
-						<input type="text" name="parcel_height"/> <?php echo esc_attr( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_height"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><?php echo esc_attr( 'Length', 'woocommerce-shipcloud' ); ?> </th>
+					<th><?php _e( 'Length', 'woocommerce-shipcloud' ); ?> </th>
 					<td>
-						<input type="text" name="parcel_length"/> <?php echo esc_attr( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_length"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><?php echo esc_attr( 'Weight', 'woocommerce-shipcloud' ); ?></th>
+					<th><?php _e( 'Weight', 'woocommerce-shipcloud' ); ?></th>
 					<td>
-						<input type="text" name="parcel_weight"/> <?php echo esc_attr( 'kg', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_weight"/> <?php _e( 'kg', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><?php echo esc_attr( 'Carrier', 'woocommerce-shipcloud' ); ?></th>
+					<th><?php _e( 'Carrier', 'woocommerce-shipcloud' ); ?></th>
 					<td>
 						<select name="parcel_carrier">
-							<option value="none"><?php echo esc_attr( '[ Select a Carrier ]', 'woocommerce-shipcloud' ); ?></option>
+							<option value="none"><?php _e( '[ Select a Carrier ]', 'woocommerce-shipcloud' ); ?></option>
 							<?php foreach( $carriers AS $name => $display_name ): ?>
 							<option value="<?php echo $name; ?>"><?php echo $display_name; ?></option>
 							<?php endforeach; ?>
@@ -381,10 +381,10 @@ class WC_Shipcloud_Order
 		<div class="parcel-templates fifty">
 
 			<div class="parcel-template-field parcels-recommended">
-				<label for="parcels_recommended"><?php echo esc_attr( 'Automatic determined Parcels', 'woocommerce-shipcloud' ); ?></label>
-				<input type="button" value="<?php echo esc_attr( '&larr; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
+				<label for="parcels_recommended"><?php _e( 'Automatic determined Parcels', 'woocommerce-shipcloud' ); ?></label>
+				<input type="button" value="<?php _e( '&#8592; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 				<select name="parcel_list">
-					<option value="none"><?php echo esc_attr( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
+					<option value="none"><?php _e( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
 					<?php foreach( $parcel_templates AS $parcel_template ): ?>
 						<option value="<?php echo $parcel_template[ 'value' ];?>"><?php echo $parcel_template[ 'option' ];?></option>
 					<?php endforeach; ?>
@@ -392,10 +392,10 @@ class WC_Shipcloud_Order
 			</div>
 
 			<div class="parcel-template-field parcels-templates">
-				<label for="parcel_templates"><?php echo esc_attr( 'Your Parcel Templates', 'woocommerce-shipcloud' ); ?></label>
-				<input type="button" value="<?php echo esc_attr( '&#8592; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
+				<label for="parcel_templates"><?php _e( 'Your Parcel Templates', 'woocommerce-shipcloud' ); ?></label>
+				<input type="button" value="<?php _e( '&#8592; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 				<select name="parcel_list">
-					<option value="none"><?php echo esc_attr( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
+					<option value="none"><?php _e( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
 					<?php foreach( $parcel_templates AS $parcel_template ): ?>
 					<option value="<?php echo $parcel_template[ 'value' ];?>"><?php echo $parcel_template[ 'option' ];?></option>
 					<?php endforeach; ?>
