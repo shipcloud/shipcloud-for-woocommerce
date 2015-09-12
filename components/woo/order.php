@@ -466,6 +466,7 @@ class WC_Shipcloud_Order
 				$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
 				$title .= ' &gt; ';
 				$title .= trim( $data[ 'recipient_company' ] ) != '' ? $data[ 'recipient_company' ] . ', ' . $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ] : $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
+				$title .= ' | <small>' . $data[ 'parcel_title' ] . '</small>';
 
 				?>
 				<h4><?php echo $title; ?></h4>
@@ -511,10 +512,6 @@ class WC_Shipcloud_Order
 					</div>
 
 					<div style="clear: both;"></div>
-
-					<div class="label-shipment-parcel">
-						<strong><?php _e( 'Selected Parcel:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'parcel_title' ]; ?> - <?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?>
-					</div>
 
 					<?php echo self::get_tracking_status_html( $data[ 'id' ] ); ?>
 
