@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-12 23:59+0200\n"
-"PO-Revision-Date: 2015-09-13 00:05+0200\n"
+"POT-Creation-Date: 2015-09-13 00:23+0200\n"
+"PO-Revision-Date: 2015-09-13 00:23+0200\n"
 "Last-Translator: Sven Wagener <sven.wagener@rheinschmiede.de>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -272,28 +272,24 @@ msgstr ""
 "Abhängig von dem Versandunternehmen wird eine Gebühr fällig um die "
 "Versandmarke zu erstellen. Wollen Sie wirklich eine Versandmarke erstellen?"
 
-#: ../components/woo/order.php:497
+#: ../components/woo/order.php:498
 msgid "Create Label"
 msgstr "Versandmarke erstellen"
 
-#: ../components/woo/order.php:501
+#: ../components/woo/order.php:502
 msgid "Download Label"
 msgstr "Versandmarke herunterladen"
 
-#: ../components/woo/order.php:506
+#: ../components/woo/order.php:507
 msgid "Tracking Link"
 msgstr "Tracking Link"
 
-#: ../components/woo/order.php:516
-msgid "Selected Parcel:"
-msgstr "Gewähltes Paket:"
-
-#: ../components/woo/order.php:626 ../components/woo/order.php:702
-#: ../components/woo/order.php:803
+#: ../components/woo/order.php:623 ../components/woo/order.php:699
+#: ../components/woo/order.php:800
 msgid "Parcel dimensions are not supported by carrier."
 msgstr "Paketabmessungen werden vom Versandunternehmen nicht unterstützt."
 
-#: ../components/woo/order.php:769 ../components/woo/order.php:828
+#: ../components/woo/order.php:766 ../components/woo/order.php:825
 msgid "shipcloud.io label was created."
 msgstr "shipcloud.io Versandmarke wurde erstellt."
 
@@ -565,36 +561,44 @@ msgid "Receiver Country  is not an ALPHA-2 ISO country code."
 msgstr "Empfänger-Land ist kein ALPHA-2-ISO-Ländercode."
 
 #: ../woocommerce-shipcloud-functions.php:142
-msgid "Package Height (in cm) can't be blank."
-msgstr "Pakethöhe (in cm) darf nicht leer sein."
+#: ../woocommerce-shipcloud-functions.php:150
+msgid "Height (in cm) can't be blank."
+msgstr "Höhe (in cm) darf nicht leer sein."
 
 #: ../woocommerce-shipcloud-functions.php:143
-msgid "Package Height (in cm) is not a number."
-msgstr "Pakethöhe (in cm) ist keine Zahl."
+#: ../woocommerce-shipcloud-functions.php:151
+msgid "Height (in cm) is not a number."
+msgstr "Höhe (in cm) ist keine Zahl."
 
 #: ../woocommerce-shipcloud-functions.php:144
-msgid "Package Length (in cm) can't be blank."
-msgstr "Paketlänge (in cm) darf nicht leer sein."
+#: ../woocommerce-shipcloud-functions.php:152
+msgid "Length (in cm) can't be blank."
+msgstr "Länge (in cm) darf nicht leer sein."
 
 #: ../woocommerce-shipcloud-functions.php:145
-msgid "Package Length (in cm) is not a number."
-msgstr "Paketlänge (in cm) ist keine Zahl."
+#: ../woocommerce-shipcloud-functions.php:153
+msgid "Length (in cm) is not a number."
+msgstr "Llänge (in cm) ist keine Zahl."
 
 #: ../woocommerce-shipcloud-functions.php:146
-msgid "Package Width (in cm) can't be blank."
-msgstr "Paket Breite (in cm) darf nicht leer sein."
+#: ../woocommerce-shipcloud-functions.php:154
+msgid "Width (in cm) can't be blank."
+msgstr "Breite (in cm) darf nicht leer sein."
 
 #: ../woocommerce-shipcloud-functions.php:147
-msgid "Package Width (in cm) is not a number."
-msgstr "Paket Breite (in cm) ist keine Zahl."
+#: ../woocommerce-shipcloud-functions.php:155
+msgid "Width (in cm) is not a number."
+msgstr "Breite (in cm) ist keine Zahl."
 
 #: ../woocommerce-shipcloud-functions.php:148
-msgid "Package Weight (in kg) can't be blank."
-msgstr "Paketgewicht (in kg) darf nicht leer sein."
+#: ../woocommerce-shipcloud-functions.php:156
+msgid "Weight (in kg) can't be blank."
+msgstr "Gewicht (in kg) darf nicht leer sein."
 
 #: ../woocommerce-shipcloud-functions.php:149
-msgid "Package Weight (in kg) is not a number."
-msgstr "Paketgewicht (in kg) ist keine Zahl."
+#: ../woocommerce-shipcloud-functions.php:157
+msgid "Weight (in kg) is not a number."
+msgstr "Gewicht (in kg) ist keine Zahl."
 
 #: ../woocommerce-shipcloud.php:134
 msgid "WooCommerce is not installed. Please install before using Plugin."
@@ -637,6 +641,9 @@ msgstr "Ja"
 #: ../woocommerce-shipcloud.php:234
 msgid "No"
 msgstr "Nein"
+
+#~ msgid "Selected Parcel:"
+#~ msgstr "Gewähltes Paket:"
 
 #~ msgid "&larr; Insert"
 #~ msgstr "&larr; Einfügen"
