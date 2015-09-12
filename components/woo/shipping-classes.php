@@ -38,7 +38,7 @@ class WC_Shipcloud_Shippig_Classes{
         add_action( 'product_shipping_class_edit_form_fields', array( __CLASS__, 'shipping_class_edit_form_fields' ), 10, 1 );
         add_action( 'edited_product_shipping_class', array( __CLASS__, 'shipping_class_edit_form_fields_save' ), 10, 1 );
 
-        add_action( 'product_shipping_class_add_form_fields', array( __CLASS__, 'shipping_class_edit_form_fields' ), 10, 1 );
+        add_action( 'product_shipping_class_add_form_fields', array( __CLASS__, 'shipping_class_add_form_fields' ), 10, 1 );
         add_action( 'create_product_shipping_class', array( __CLASS__, 'shipping_class_edit_form_fields_save' ), 10, 1 );
     }
 
@@ -97,6 +97,33 @@ class WC_Shipcloud_Shippig_Classes{
             $html.= '</td>';
         $html.= '</tr>';
 
+        echo $html;
+    }
+
+
+    /**
+     * Selecting Parcel for shipping class on adding Shipment Class
+     */
+    public static function shipping_class_add_form_fields(){
+
+        $parcels = array_merge( $parcels, WCSC_Parcels::get() );
+        $html = '<h4>' . __( 'Shipment Settings', 'woocommerce-shipcloud' ) . '</h4>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_length">' . __( 'Length', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_length" /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+        $html.= '</div>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_width">' . __( 'Width', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_width" /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+        $html.= '</div>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_height">' . __( 'Height', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_height"  /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+        $html.= '</div>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_height">' . __( 'Weight', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_weight" /> ' .  __( 'kg', 'woocommerce-shipcloud' );
+        $html.= '</div>';
         echo $html;
     }
 

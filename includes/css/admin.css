@@ -183,6 +183,15 @@
 .shipcloud-parcel-form-field input[type="text"]{
     width:50px;
 }
+.form-field.shipment-settings label{
+    float: left;
+    line-height: 26px;
+    margin-right: 10px;
+    width: 15%;
+}
+.form-field.shipment-settings input[type="text"]{
+    width:50px;
+}
 
 /**
  * Dialogs
