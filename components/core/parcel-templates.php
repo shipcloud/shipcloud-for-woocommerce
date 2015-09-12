@@ -145,6 +145,7 @@ class WCSC_Parcel_PostType{
                         <th><label for="carrier"><?php _e( 'Shipping Company', 'woocommerce-shipcloud' ); ?></label></th>
                         <td>
                             <select name="carrier">
+                                <option value="none"><?php echo esc_attr( '[ Select a Carrier ]', 'woocommerce-shipcloud' ); ?></option>
                                 <?php foreach( $carriers AS $name => $display_name ): ?>
                                     <?php if( $selected_carrier == $name ): $selected = ' selected="selected"'; else: $selected = ''; endif; ?>
                                     <option value="<?php echo $name; ?>"<?php echo $selected; ?>><?php echo $display_name; ?></option>

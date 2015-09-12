@@ -173,6 +173,9 @@
 #shipcloud-parcel-settings .form-table th{
     font-weight: normal;
 }
+#shipcloud-parcel-settings .form-table input[type="text"]{
+    width:50px;
+}
 
 /**
  * Dialogs
