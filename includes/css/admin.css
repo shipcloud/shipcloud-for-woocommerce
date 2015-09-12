@@ -178,6 +178,13 @@
 }
 
 /**
+ * Shipment Classes
+ */
+.shipcloud-parcel-form-field input[type="text"]{
+    width:50px;
+}
+
+/**
  * Dialogs
  */
 #ask-create-label{
