@@ -380,7 +380,7 @@ class WC_Shipcloud_Order
 		<div class="parcel-templates fifty">
 
 			<div class="parcel-template-field parcels-recommended">
-				<label for="parcels_recommended"><?php echo esc_attr( 'Ordered Parcels', 'woocommerce-shipcloud' ); ?></label>
+				<label for="parcels_recommended"><?php echo esc_attr( 'Automatic determined Parcels', 'woocommerce-shipcloud' ); ?></label>
 				<input type="button" value="<?php echo esc_attr( '&larr; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 				<select name="parcel_list">
 					<option value="none"><?php echo esc_attr( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
@@ -427,7 +427,7 @@ class WC_Shipcloud_Order
 
 						foreach( $shipment_data AS $time => $data )
 						{
-							self::get_label_html( $data, $time );
+							echo self::get_label_html( $data, $time );
 						}
 					}
 
