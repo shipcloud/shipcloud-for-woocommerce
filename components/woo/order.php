@@ -451,7 +451,6 @@ class WC_Shipcloud_Order
 	private static function get_label_html( $data, $time = FALSE )
 	{
 		ob_start();
-
 		?>
 		<div class="label widget">
 		<div class="widget-top">
@@ -508,6 +507,8 @@ class WC_Shipcloud_Order
 						<strong><?php _e( 'Selected Parcel:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'parcel_title' ]; ?> - <?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?>
 					</div>
 
+					<?php echo self::get_tracking_status_html( $data[ 'id' ] ); ?>
+
 					<div style="clear: both;"></div>
 
 				</div>
@@ -518,6 +519,14 @@ class WC_Shipcloud_Order
 		$html = ob_get_clean();
 
 		return $html;
+	}
+
+	private static function get_tracking_status_html( $shipment_id )
+	{
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+
+		$shipcloud_api->get_tracking_status( $shipment_id );
 	}
 
 	/**

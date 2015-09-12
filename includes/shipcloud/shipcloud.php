@@ -96,6 +96,13 @@ class Woocommerce_Shipcloud_API
 		endif;
 	}
 
+	public function get_tracking_status( $shipment_id )
+	{
+		$shipment_data = $this->send_request( 'shipments/:' . $shipment_id );
+
+		p( $shipment_data );
+	}
+
 	public function request_pickup( $params )
 	{
 		$action = 'pickup_requests';
