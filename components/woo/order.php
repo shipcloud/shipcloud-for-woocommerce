@@ -380,25 +380,25 @@ class WC_Shipcloud_Order
 		<div class="parcel-templates fifty">
 
 			<div class="parcel-template-field parcels-recommended">
-				<label for="parcels_recommended"><?php echo esc_attr( 'Parcels which have been calulated for Order', 'woocommerce-shipcloud' ); ?></label>
+				<label for="parcels_recommended"><?php echo esc_attr( 'Ordered Parcels', 'woocommerce-shipcloud' ); ?></label>
+				<input type="button" value="<?php echo esc_attr( '&larr; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 				<select name="parcel_list">
 					<option value="none"><?php echo esc_attr( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
 					<?php foreach( $parcel_templates AS $parcel_template ): ?>
 						<option value="<?php echo $parcel_template[ 'value' ];?>"><?php echo $parcel_template[ 'option' ];?></option>
 					<?php endforeach; ?>
 				</select>
-				<input type="button" value="<?php echo esc_attr( 'Insert in Form', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 			</div>
 
 			<div class="parcel-template-field parcels-templates">
-				<label for="parcel_templates"><?php echo esc_attr( 'Parcel Templates', 'woocommerce-shipcloud' ); ?></label>
+				<label for="parcel_templates"><?php echo esc_attr( 'Your Parcel Templates', 'woocommerce-shipcloud' ); ?></label>
+				<input type="button" value="<?php echo esc_attr( '&#8592; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 				<select name="parcel_list">
-					<option value="none"><?php echo esc_attr( '[ Select a Parcel Template ]', 'woocommerce-shipcloud' ); ?></option>
+					<option value="none"><?php echo esc_attr( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
 					<?php foreach( $parcel_templates AS $parcel_template ): ?>
 					<option value="<?php echo $parcel_template[ 'value' ];?>"><?php echo $parcel_template[ 'option' ];?></option>
 					<?php endforeach; ?>
 				</select>
-				<input type="button" value="<?php echo esc_attr( 'Insert in Form', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 			</div>
 
 			<div class="info"></div>
