@@ -176,6 +176,7 @@ jQuery( function( $ ) {
 			catch( e )
 			{
 				$( '.shipment-labels' ).prepend( response );
+				shipcloud_create_label_buttons();
 			}
 			button.removeClass( 'button-loading' );
 		});
@@ -215,37 +216,40 @@ jQuery( function( $ ) {
 		});
 	}
 
-	$( '.shipcloud_create_label' ).click( function(){
-		var ask_create_label = $( '#ask-create-label' );
+	var shipcloud_create_label_buttons = function () {
+		$('.shipcloud_create_label').click(function () {
+			var ask_create_label = $('#ask-create-label');
 
-		ask_create_label.dialog({                   
-            'dialogClass'   : 'wcsc-dialog wp-dialog',
-            'modal'         : true,
-            'autoOpen'      : false, 
-            'closeOnEscape' : true,
-            'minHeight'     : 80,
-            'buttons'       : [{
-                    text: wcsc_translate.yes,
-                    click: function() {
-                            // shipcloud_create_label();
-							var shipment_id = $( this).parent().parent().find( "input[name='shipment_id']").val();
-							shipcloud_create_label( shipment_id );
+			ask_create_label.dialog({
+				'dialogClass': 'wcsc-dialog wp-dialog',
+				'modal': true,
+				'autoOpen': false,
+				'closeOnEscape': true,
+				'minHeight': 80,
+				'buttons': [{
+					text: wcsc_translate.yes,
+					click: function () {
+						// shipcloud_create_label();
+						var shipment_id = $(this).parent().parent().find("input[name='shipment_id']").val();
+						shipcloud_create_label(shipment_id);
 
-                            $( this ).dialog( "close" );
-                        }
-                    },
-                    {
-                    text: wcsc_translate.no,
-                    click: function() {
-                        	$( this ).dialog( "close" );
-                        }
-                    },
-                ],
-                
-        });
-        
-        ask_create_label.dialog( "open" );
-	});
+						$(this).dialog("close");
+					}
+				},
+					{
+						text: wcsc_translate.no,
+						click: function () {
+							$(this).dialog("close");
+						}
+					},
+				],
+
+			});
+
+			ask_create_label.dialog("open");
+		});
+	}
+	shipcloud_create_label_buttons();
 
 	/**
 	 * Hiding parcel template adding button if value in form has changed
