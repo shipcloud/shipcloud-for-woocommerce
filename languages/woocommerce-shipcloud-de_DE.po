@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-12 23:59+0200\n"
-"PO-Revision-Date: 2015-09-13 00:03+0200\n"
+"PO-Revision-Date: 2015-09-13 00:05+0200\n"
 "Last-Translator: Sven Wagener <sven.wagener@rheinschmiede.de>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -159,7 +159,7 @@ msgstr "Versandunternehmen"
 
 #: ../components/core/parcel-templates.php:148 ../components/woo/order.php:332
 msgid "[ Select a Carrier ]"
-msgstr "Versandunternehmen wählen"
+msgstr "[ Versandunternehmen wählen ]"
 
 #: ../components/core/parcel-templates.php:320 ../components/woo/order.php:329
 msgid "Carrier"
