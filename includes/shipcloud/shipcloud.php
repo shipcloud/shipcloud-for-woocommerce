@@ -51,14 +51,14 @@ class Woocommerce_Shipcloud_API
 		return $url;
 	}
 
-	public function get_rates( $params )
+	public function get_price( $params )
 	{
 		$action = 'shipment_quotes';
 
 		$request = $this->send_request( $action, $params, 'POST' );
 
 		if( FALSE != $request && 200 == $request[ 'header' ][ 'status' ] ):
-			return $request[ 'body' ];
+			return $request[ 'body' ][ 'shipment_quote' ][ 'price' ];
 		else:
 			return FALSE;
 		endif;
@@ -143,6 +143,9 @@ class Woocommerce_Shipcloud_API
 	 */
 	public function send_request( $action = '', $params = array(), $method = 'GET' )
 	{
+		$count_requests = get_option( 'woocommerce_shipcloud_count_requests', 0 ) + 1;
+		update_option( 'woocommerce_shipcloud_count_requests', $count_requests );
+
 		$url = $this->get_endpoint( $action );
 		$headers = array( 'Authorization' => 'Basic ' . base64_encode( $this->api_key ) );
 
