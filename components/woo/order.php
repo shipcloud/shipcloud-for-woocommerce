@@ -57,6 +57,8 @@ class WC_Shipcloud_Order
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_metaboxes' ) );
 		add_action( 'save_post', array( __CLASS__, 'save_settings' ) );
 
+		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'save_determined_parcels' ), 10 , 2 );
+
 		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( __CLASS__, 'ajax_calculate_shipping' ) );
 		add_action( 'wp_ajax_shipcloud_create_shipment', array( __CLASS__, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( __CLASS__, 'ajax_create_label' ) );
@@ -372,11 +374,31 @@ class WC_Shipcloud_Order
 								. get_post_meta( $post->ID, 'height', TRUE ) . esc_attr( 'x', 'woocommerce-shipcloud' )
 								. get_post_meta( $post->ID, 'length', TRUE ) . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
 								. get_post_meta( $post->ID, 'weight', TRUE ) . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
-								. wcsc_get_carrier_display_name( get_post_meta( $post->ID, 'carrier', TRUE ) ),
+								. strtoupper( get_post_meta( $post->ID, 'carrier', TRUE ) ),
+			);
+		}
+
+		$shipcloud_parcels = get_post_meta( self::$order_id, 'shipcloud_parcels', TRUE );
+		$determined_parcels = array();
+
+		foreach( $shipcloud_parcels AS $parcel )
+		{
+			$determined_parcels[] = array(
+				'value'     => 	$parcel[ 'width' ] . ';'
+					. $parcel[ 'height' ] . ';'
+					. $parcel[ 'length' ] . ';'
+					. $parcel[ 'weight' ] . ';'
+					. $parcel[ 'carrier' ] . ';',
+				'option'    => $parcel[ 'width' ]. esc_attr( 'x', 'woocommerce-shipcloud' )
+					. $parcel[ 'height' ] . esc_attr( 'x', 'woocommerce-shipcloud' )
+					. $parcel[ 'length' ] . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
+					. $parcel[ 'weight' ] . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
+					. strtoupper( $parcel[ 'carrier' ] ),
 			);
 		}
 
 		ob_start();
+
 		?>
 		<div class="parcel-templates fifty">
 
@@ -385,8 +407,8 @@ class WC_Shipcloud_Order
 				<input type="button" value="<?php _e( '&#8592; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button" />
 				<select name="parcel_list">
 					<option value="none"><?php _e( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
-					<?php foreach( $parcel_templates AS $parcel_template ): ?>
-						<option value="<?php echo $parcel_template[ 'value' ];?>"><?php echo $parcel_template[ 'option' ];?></option>
+					<?php foreach( $determined_parcels AS $determined_parcel ): ?>
+						<option value="<?php echo $determined_parcel[ 'value' ];?>"><?php echo $determined_parcel[ 'option' ];?></option>
 					<?php endforeach; ?>
 				</select>
 			</div>
@@ -574,6 +596,18 @@ class WC_Shipcloud_Order
 		update_post_meta( $post_id, 'shipcloud_parcel', $_POST[ 'parcel' ] );
 	}
 
+
+	/**
+	 * Saving Data Calculated Parcels
+	 * @param $order_id
+	 */
+	public static function save_determined_parcels( $order_id, $posted ){
+		$shipcloud_parcels = WC()->session->get( 'shipcloud_parcels' );
+		$shipcloud_parcels = $shipcloud_parcels[ $posted[ 'shipping_method' ][ 0 ] ];
+
+		update_post_meta( $order_id, 'shipcloud_parcels', $shipcloud_parcels );
+	}
+
 	/**
 	 * Calulating shipping after submitting calculation
 	 */
@@ -614,7 +648,7 @@ class WC_Shipcloud_Order
 		// Getting errors if existing
 		if( 200 != $request_status ):
 
-			$errors = $shipment_quote[ 'body' ][ 'errors' ];
+			$errors = $request[ 'body' ][ 'errors' ];
 			$result = array();
 
 			switch ( $request_status )
@@ -633,8 +667,8 @@ class WC_Shipcloud_Order
 		endif;
 
 		// Getting price if successful
-		if( array_key_exists( 'shipment_quote', $shipment_quote[ 'body' ] ) ):
-			$result = $shipment_quote[ 'body' ][ 'shipment_quote' ];
+		if( array_key_exists( 'shipment_quote', $request[ 'body' ] ) ):
+			$result = $request[ 'body' ][ 'shipment_quote' ];
 			$result[ 'price' ] = wc_price( $result[ 'price' ], array( 'currency' => 'EUR' ) );
 		endif;
 

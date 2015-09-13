@@ -70,8 +70,6 @@ function wcsc_get_order_parcels( $ordered_package )
 	$settings = get_option( 'woocommerce_shipcloud_settings' );
 	$parcels = array();
 
-	p();
-
 	foreach( $ordered_package AS $shipping_class => $products )
 	{
 		if( '' == $shipping_class )

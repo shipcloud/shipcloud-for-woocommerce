@@ -506,12 +506,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 				$this->add_rate( $rate );
 			}
-
-			// $this->log( print_r( $package, TRUE ) );
-			// $this->log( print_r( $found_shipping_classes, TRUE ) );
-
-			// Register the rate
-			// $this->add_rate( $rate );
+			WC()->session->set( 'shipcloud_parcels', $calculated_parcels );
 		}
 
 		/**
