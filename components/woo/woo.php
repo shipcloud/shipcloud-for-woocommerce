@@ -43,20 +43,15 @@ class WCSCWoo extends WCSCComponent
 
 		parent::__construct();
 
-		add_action( 'woocommerce_shipping_init', array(
-			$this,
-			'load_shipping_method'
-		) );
-		add_filter( 'woocommerce_shipping_methods', array(
-			$this,
-			'add_shipping_method'
-		) );
+		add_action( 'woocommerce_shipping_init', array( $this, 'load_shipping_method' ) );
+		add_filter( 'woocommerce_shipping_methods', array( $this, 'add_shipping_method' ) );
 	}
 
 	public function includes()
 	{
 		if( wcsc_is_enabled() )
 		{
+			include( __DIR__ . '/woo-functions.php' );
 			include( __DIR__ . '/order.php' );
 			include( __DIR__ . '/shipping-classes.php' );
 		}
