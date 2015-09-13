@@ -608,8 +608,8 @@ class WC_Shipcloud_Order
 			)
 		);
 
-		$shipment_quote = $shipcloud_api->send_request( 'shipment_quotes', $shipment, 'POST' );
-		$request_status = (int) $shipment_quote[ 'header' ][ 'status' ];
+		$request = $shipcloud_api->send_request( 'shipment_quotes', $shipment, 'POST' );
+		$request_status = (int) $request[ 'header' ][ 'status' ];
 
 		// Getting errors if existing
 		if( 200 != $request_status ):
@@ -656,7 +656,6 @@ class WC_Shipcloud_Order
 		$shipment = array(
 			'carrier'               => $_POST[ 'carrier' ],
 			'service'               => 'standard',
-			'create_shipping_label' => FALSE,
 			'to'                    => array(
 				'first_name' => $_POST[ 'recipient_first_name' ],
 				'last_name'  => $_POST[ 'recipient_last_name' ],
@@ -723,7 +722,7 @@ class WC_Shipcloud_Order
 				$shipment_data = array();
 			}
 
-			$parcel = WCSC_Parcels::get_parcel( $parcel_id );
+			$parcel = wcsc_get_parceltemplate( $parcel_id );
 
 			$data = array(
 				'id'                   => $shipment[ 'body' ][ 'id' ],
@@ -759,8 +758,6 @@ class WC_Shipcloud_Order
 			$shipment_data[ time() ] = $data;
 
 			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
-
-			$result = $shipment[ 'body' ];
 
 			$order = wc_get_order( $order_id );
 			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );

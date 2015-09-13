@@ -106,7 +106,7 @@ class WC_Shipcloud_Shippig_Classes{
      */
     public static function shipping_class_add_form_fields(){
 
-        $parcels = array_merge( $parcels, WCSC_Parcels::get() );
+        $parcels = array_merge( $parcels, wcsc_get_parceltemplates() );
         $html = '<h4>' . __( 'Shipment Settings', 'woocommerce-shipcloud' ) . '</h4>';
         $html.= '<div class="form-field shipment-settings">';
             $html.= '<label for="shipcloud_parcel_length">' . __( 'Length', 'woocommerce-shipcloud' ) . '</label>';

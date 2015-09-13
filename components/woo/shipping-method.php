@@ -455,7 +455,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			if( 0 != $parcel_id && '' != $parcel_id )
 			{
 				// Getting price of parcel, selected in the shipping class
-				$parcels = WCSC_Parcels::get( array( 'include' => $parcel_id ) );
+				$parcels = wcsc_get_parceltemplates( array( 'include' => $parcel_id ) );
 				$retail_price = $parcels[ 0 ][ 'values' ][ 'retail_price' ];
 			}
 
