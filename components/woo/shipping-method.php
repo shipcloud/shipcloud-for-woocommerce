@@ -27,7 +27,9 @@
  */
 
 if( !defined( 'ABSPATH' ) )
+{
 	exit;
+}
 
 if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
 {
@@ -181,10 +183,10 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					)
 				),
 				'standard_carrier'                  => array(
-					'title'         => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
-					'type'          => 'select',
-					'description'   => __( 'This Carrier will be preselected if the Shop Owner selects the Carrier or will be preselected as Carrier if Customer can select the Carrier.', 'woocommerce-shipcloud' ),
-				    'options'       => wcsc_get_carriers(),
+					'title'       => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
+					'type'        => 'select',
+					'description' => __( 'This Carrier will be preselected if the Shop Owner selects the Carrier or will be preselected as Carrier if Customer can select the Carrier.', 'woocommerce-shipcloud' ),
+					'options'     => wcsc_get_carriers(),
 					'desc_tip'    => TRUE
 				),
 				'standard_sender_data'              => array(
@@ -335,71 +337,181 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 */
 		public function calculate_shipping( $package )
 		{
-			$rate = array(
-				'id'    => $this->id,
-				'label' => $this->settings[ 'title' ],
-				'cost'  => 0,
+			if( '' == $package[ 'destination' ][ 'city' ] || '' == $package[ 'destination' ][ 'country' ] || '' == $package[ 'destination' ][ 'postcode' ] || '' == $package[ 'destination' ][ 'address' ] )
+			{
+				return; // Can't calculate without Address - Stop here!
+			}
+
+			$settings = get_option( 'woocommerce_shipcloud_settings' );
+			$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
+
+			/**
+			 * Getting Adresses
+			 */
+			$sender = array(
+				'street'     => $settings[ 'sender_street' ],
+				'street_no'  => $settings[ 'sender_street_nr' ],
+				'zip_code'   => $settings[ 'sender_postcode' ],
+				'city'       => $settings[ 'sender_city' ],
+				'country'    => $settings[ 'sender_country' ],
 			);
 
-			$found_shipping_classes = $this->find_shipping_classes( $package );
+			$recipient_street = wcsc_explode_street( $package[ 'destination' ][ 'address' ] );
+
+			if( is_array( $recipient_street ) )
+			{
+				$recipient_street_name = $recipient_street[ 'address' ];
+				$recipient_street_nr = $recipient_street[ 'number' ];
+			}
+
+			$recipient = array(
+				'street'    => $recipient_street_name,
+				'street_no' => $recipient_street_nr,
+				'zip_code'  => $package[ 'destination' ][ 'postcode' ],
+				'city'      => $package[ 'destination' ][ 'city' ],
+				'country'   => $package[ 'destination' ][ 'country' ]
+			);
+
+			/**
+			 * Ordering Parcels
+			 */
+			$ordered_package = wcsc_order_package_by_shipping_class( $package );
+			$parcels = wcsc_get_order_parcels( $ordered_package );
+
+			/**
+			 * Setup Carrier
+			 */
+			if( 'shopowner' == $settings[ 'carrier_selection' ] )
+			{
+				$carriers = array( $settings[ 'standard_carrier' ] => wcsc_get_carrier_display_name( $settings[ 'standard_carrier' ] ) );
+			}
+			else
+			{
+				$carriers = wcsc_get_carriers();
+			}
+
+			/**
+			 * Calculating
+			 */
+			$prices = array();
+			$calculated_parcels = array();
+
+			foreach( $carriers AS $carrier_name => $carrier_display_name )
+			{
+				$sum = 0;
+
+				// Shipping Classes
+				if( isset( $parcels[ 'shipping_classes' ] ) )
+				{
+
+					// Running each Shipping Class
+					foreach( $parcels[ 'shipping_classes' ] AS $key => $parcel )
+					{
+
+						if( is_array( $parcel ) )
+						{
+							$shipment = array(
+								'carrier' => $carrier_name,
+								'service' => 'standard',
+								'to'      => $recipient,
+								'from'    => $sender,
+								'package' => array(
+									'width'  => $parcel[ 'width' ],
+									'height' => $parcel[ 'height' ],
+									'length' => $parcel[ 'length' ],
+									'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
+								)
+							);
+
+							$calculated_parcels[ $carrier_name ][] = array(
+								'carrier'=> $carrier_name,
+								'width'  => $parcel[ 'width' ],
+								'height' => $parcel[ 'height' ],
+								'length' => $parcel[ 'length' ],
+								'weight' => str_replace( ',', '.', $parcel[ 'weight' ] )
+							);
+
+							$price = $shipcloud_api->get_price( $shipment );
+						}
+						else
+						{
+							$price = $parcel;
+						}
+
+						if( 'class' == $settings[ 'calculation_type_shipment_classes' ] )
+						{
+							$sum += $price;
+						}
+						else
+						{
+							$sum = $price > $sum ? $price : $sum;
+						}
+					}
+				}
+
+				// Products
+				if( isset( $parcels[ 'products' ] ) )
+				{
+					// Running each Product
+					foreach( $parcels[ 'products' ] AS $key => $parcel )
+					{
+						if( is_array( $parcel ) )
+						{
+							$shipment = array(
+								'carrier' => $carrier_name,
+								'service' => 'standard',
+								'to'      => $recipient,
+								'from'    => $sender,
+								'package' => array(
+									'width'  => $parcel[ 'width' ],
+									'height' => $parcel[ 'height' ],
+									'length' => $parcel[ 'length' ],
+									'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
+								)
+							);
+
+							$calculated_parcels[ $carrier_name ][] = array(
+								'carrier'=> $carrier_name,
+								'width'  => $parcel[ 'width' ],
+								'height' => $parcel[ 'height' ],
+								'length' => $parcel[ 'length' ],
+								'weight' => str_replace( ',', '.', $parcel[ 'weight' ] )
+							);
+
+							$price = $shipcloud_api->get_price( $shipment );
+						}
+						else
+						{
+							$price = $parcel;
+						}
+
+						if( 'product' == $settings[ 'calculate_products_type' ] )
+						{
+							$sum += $price;
+						}
+						else
+						{
+							$sum = $price > $sum ? $price : $sum;
+						}
+					}
+				}
+
+				$prices[ $carrier_name ] = $sum;
+
+				$rate = array(
+					'id'    => $carrier_name,
+					'label' => strtoupper( $carrier_name ),
+					'cost'  => $sum,
+				);
+
+				$this->add_rate( $rate );
+			}
 
 			// $this->log( print_r( $package, TRUE ) );
 			// $this->log( print_r( $found_shipping_classes, TRUE ) );
 
-			$carriers = wcsc_get_carriers();
-
-			// Running Shipment Classes
-			$highest_class_cost = 0;
-
-			foreach( $found_shipping_classes as $shipping_class => $products )
-			{
-
-				// $this->log( print_r( $products, TRUE ) );
-
-				if( '' == $shipping_class )
-				{
-					/**
-					 * Calculate Product
-					 */
-					foreach( $products AS $product )
-					{
-						$cost = $this->get_product_costs( $product[ 'product_id' ] );
-						$cost_total = $cost * $product[ 'quantity' ];
-						$this->log( sprintf( __( 'Adding product #%s without shipping class %s times with cost of %s. Total costs %s', 'woocommerce-shipcloud' ), $product[ 'product_id' ], $product[ 'quantity' ], $cost, $cost_total ) );
-						$rate[ 'cost' ] += $cost_total;
-					}
-				}
-				else
-				{
-					/**
-					 * Calculate Shipment Class
-					 */
-					// Product has shipment classes
-					$cost = $this->get_shipping_class_costs( $shipping_class );
-
-					if( $this->settings[ 'calculation_type' ] === 'class' )
-					{
-						$this->log( sprintf( __( 'Adding products of shipping class #%s with cost of %s', 'woocommerce-shipcloud' ), $shipping_class, $cost ) );
-						$rate[ 'cost' ] += $cost;
-					}
-					else
-					{
-						$highest_class_cost = $cost > $highest_class_cost ? $cost : $highest_class_cost;
-						$this->log( sprintf( __( 'Checking products of shipping class #%s with cost of %s', 'woocommerce-shipcloud' ), $shipping_class, $cost ) );
-					}
-				}
-			}
-
-			if( $highest_class_cost > 0 )
-			{
-				$rate[ 'cost' ] += $highest_class_cost;
-				$this->log( sprintf( __( 'Adding highest costs shipping classes of %s', 'woocommerce-shipcloud' ), $highest_class_cost ) );
-			}
-
-			$this->log( sprintf( __( 'Sum of all costs: %s', 'woocommerce-shipcloud' ), $rate[ 'cost' ] ) );
-
 			// Register the rate
-			$this->add_rate( $rate );
+			// $this->add_rate( $rate );
 		}
 
 		/**
@@ -467,35 +579,6 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			}
 
 			return $retail_price;
-		}
-
-		/**
-		 * Finds and returns shipping classes and the products with said class.
-		 *
-		 * @param mixed $package
-		 *
-		 * @return array
-		 */
-		public function find_shipping_classes( $package )
-		{
-			$found_shipping_classes = array();
-
-			foreach( $package[ 'contents' ] as $item_id => $values )
-			{
-				if( $values[ 'data' ]->needs_shipping() )
-				{
-					$found_class = $values[ 'data' ]->get_shipping_class();
-
-					if( !isset( $found_shipping_classes[ $found_class ] ) )
-					{
-						$found_shipping_classes[ $found_class ] = array();
-					}
-
-					$found_shipping_classes[ $found_class ][ $item_id ] = $values;
-				}
-			}
-
-			return $found_shipping_classes;
 		}
 
 		/**
