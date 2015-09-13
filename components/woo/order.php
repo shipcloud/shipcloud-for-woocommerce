@@ -529,8 +529,8 @@ class WC_Shipcloud_Order
 
 	private static function get_tracking_status_html( $shipment_id )
 	{
-		$options = get_option( 'woocommerce_shipcloud_settings' );
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+		$settings = get_option( 'woocommerce_shipcloud_settings' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 
 		$shipcloud_api->get_tracking_status( $shipment_id );
 	}
