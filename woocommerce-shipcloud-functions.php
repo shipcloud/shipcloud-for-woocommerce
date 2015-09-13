@@ -57,7 +57,7 @@ if( !function_exists( 'p' ) )
  */
 function wcsc_get_carriers()
 {
-	$settings = get_option( 'woocommerce_shipcloud_settings', null );
+	$settings = get_option( 'woocommerce_shipcloud_settings' );
 	$allowed_carriers = $settings[ 'allowed_carriers' ];
 
 	$shipcloud = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
@@ -85,9 +85,9 @@ function wcsc_get_carriers()
  */
 function wcsc_get_carrier_display_name( $name )
 {
-	$options = get_option( 'woocommerce_shipcloud_settings' );
+	$settings = get_option( 'woocommerce_shipcloud_settings' );
 
-	$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+	$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 	$carriers = $shipcloud_api->get_carriers();
 
 	foreach( $carriers AS $carrier ):
