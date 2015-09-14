@@ -184,8 +184,11 @@ jQuery( function( $ ) {
 
 	var shipcloud_create_label = function( shipment_id ){
 
+		var order_id = $( "#post_ID" ).val();
+
 		var data = {
 			'action': 'shipcloud_create_label',
+			'order_id': order_id,
 			'shipment_id': shipment_id
 		};
 
