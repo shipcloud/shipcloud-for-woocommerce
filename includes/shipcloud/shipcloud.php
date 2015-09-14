@@ -142,7 +142,12 @@ class Woocommerce_Shipcloud_API
 		update_option( 'woocommerce_shipcloud_count_requests', $count_requests );
 
 		$url = $this->get_endpoint( $action );
-		$headers = array( 'Authorization' => 'Basic ' . base64_encode( $this->api_key ) );
+		$headers = array(
+			'Authorization' => 'Basic ' . base64_encode( $this->api_key ),
+			'Content-Type'  => 'application/json'
+		);
+
+		$params = json_encode( $params );
 
 		switch ( $method )
 		{
