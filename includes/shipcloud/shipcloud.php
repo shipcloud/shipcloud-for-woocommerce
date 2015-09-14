@@ -98,9 +98,9 @@ class Woocommerce_Shipcloud_API
 
 	public function get_tracking_status( $shipment_id )
 	{
-		$shipment_data = $this->send_request( 'shipments/:' . $shipment_id );
+		$request_data = $this->send_request( 'shipments/' . $shipment_id );
 
-		p( $shipment_data );
+		return $request_data;
 	}
 
 	public function create_label( $shipment_id )
@@ -109,13 +109,8 @@ class Woocommerce_Shipcloud_API
 			'create_shipping_label' => TRUE
 		);
 
-		$action = 'shipments/:' . $shipment_id;
-
+		$action = 'shipments/' . $shipment_id;
 		$request_data = $this->send_request( $action, $params, 'PUT' );
-
-		p( $this->get_endpoint( $action ) );
-
-		p( $request_data );
 
 		return $request_data;
 	}
