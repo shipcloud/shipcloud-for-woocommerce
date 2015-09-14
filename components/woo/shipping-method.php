@@ -94,10 +94,10 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			$default_country = wc_get_base_location();
 			$default_country = $default_country[ 'country' ];
 
-			$shipcloud = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
+			$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
 
 			$carriers_options = array();
-			if( $carriers = $shipcloud->get_carriers( TRUE ) )
+			if( $carriers = $shipcloud_api->get_carriers() )
 			{
 				foreach( $carriers as $carrier )
 				{
