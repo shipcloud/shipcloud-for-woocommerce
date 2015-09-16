@@ -97,14 +97,17 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			$default_country = wc_get_base_location();
 			$default_country = $default_country[ 'country' ];
 
-			$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
-
 			$carriers_options = array();
-			if( $carriers = $shipcloud_api->get_carriers() )
+			if( array_key_exists( 'api_key', $this->settings ) )
 			{
-				foreach( $carriers as $carrier )
+				$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
+
+				if( $carriers = $shipcloud_api->get_carriers() )
 				{
-					$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
+					foreach( $carriers as $carrier )
+					{
+						$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
+					}
 				}
 			}
 

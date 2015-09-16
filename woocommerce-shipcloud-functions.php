@@ -58,11 +58,17 @@ if( !function_exists( 'p' ) )
 function wcsc_get_carriers()
 {
 	$settings = get_option( 'woocommerce_shipcloud_settings' );
+
+	if( '' == $settings || !array_key_exists( 'api_key', $settings ) || '' == $settings[ 'api_key' ] )
+	{
+		return array();
+	}
+
 	$allowed_carriers = $settings[ 'allowed_carriers' ];
 
 	$shipcloud = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 
-	if( '' == $settings ){
+	if( '' == $allowed_carriers ){
 		$shipcloud_carriers = $shipcloud->get_carriers( TRUE );
 	}else{
 		$shipcloud_carriers = $shipcloud->get_carriers();
@@ -70,11 +76,14 @@ function wcsc_get_carriers()
 
 	$carriers = array();
 
-	foreach( $shipcloud_carriers AS $shipcloud_carrier )
+	if( is_array( $allowed_carriers ) )
 	{
-		if( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
+		foreach( $shipcloud_carriers AS $shipcloud_carrier )
 		{
-			$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
+			if( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
+			{
+				$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
+			}
 		}
 	}
 
