@@ -378,27 +378,27 @@ class WC_Shipcloud_Order
 		$posts = get_posts( $args );
 
 		$parcel_templates = array();
-		foreach( $posts AS $post )
-		{
-			$parcel_templates[] = array(
-				'value'     => 	get_post_meta( $post->ID, 'width', TRUE ) . ';'
-								. get_post_meta( $post->ID, 'height', TRUE ) . ';'
-								. get_post_meta( $post->ID, 'length', TRUE ) . ';'
-								. get_post_meta( $post->ID, 'weight', TRUE ) . ';'
-								. get_post_meta( $post->ID, 'carrier', TRUE ) . ';',
-				'option'    => get_post_meta( $post->ID, 'width', TRUE ) . esc_attr( 'x', 'woocommerce-shipcloud' )
-								. get_post_meta( $post->ID, 'height', TRUE ) . esc_attr( 'x', 'woocommerce-shipcloud' )
-								. get_post_meta( $post->ID, 'length', TRUE ) . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
-								. get_post_meta( $post->ID, 'weight', TRUE ) . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
-								. strtoupper( get_post_meta( $post->ID, 'carrier', TRUE ) ),
-			);
+
+		if( is_array( $posts ) && count( $posts ) > 0 ){
+			foreach( $posts AS $post )
+			{
+				$parcel_templates[] = array(
+					'value'     => 	get_post_meta( $post->ID, 'width', TRUE ) . ';'
+									. get_post_meta( $post->ID, 'height', TRUE ) . ';'
+									. get_post_meta( $post->ID, 'length', TRUE ) . ';'
+									. get_post_meta( $post->ID, 'weight', TRUE ) . ';'
+									. get_post_meta( $post->ID, 'carrier', TRUE ) . ';',
+					'option'    => get_post_meta( $post->ID, 'width', TRUE ) . esc_attr( 'x', 'woocommerce-shipcloud' )
+									. get_post_meta( $post->ID, 'height', TRUE ) . esc_attr( 'x', 'woocommerce-shipcloud' )
+									. get_post_meta( $post->ID, 'length', TRUE ) . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
+									. get_post_meta( $post->ID, 'weight', TRUE ) . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
+									. strtoupper( get_post_meta( $post->ID, 'carrier', TRUE ) ),
+				);
+			}
 		}
 
 		$shipcloud_parcels = get_post_meta( $this->order_id, 'shipcloud_parcels', TRUE );
 		$determined_parcels = array();
-
-		echo 'SCP: ';
-		p( $shipcloud_parcels );
 
 		if( is_array( $shipcloud_parcels ) && count( $shipcloud_parcels ) > 0 ){
 			foreach( $shipcloud_parcels AS $parcel )
@@ -419,8 +419,6 @@ class WC_Shipcloud_Order
 		}
 
 		ob_start();
-
-		echo 'Count Requests: ' . get_option( 'woocommerce_shipcloud_count_requests', 0 );
 
 		?>
 		<div class="parcel-templates fifty">
