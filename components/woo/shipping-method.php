@@ -34,7 +34,7 @@ if( !defined( 'ABSPATH' ) )
 if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) )
 {
 
-	class WC_Shipcloud_Shippig extends WC_Shipping_Method
+	class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
 
 		var $carriers = array();
@@ -42,6 +42,8 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		var $logger;
 
 		var $debug = FALSE;
+
+		var $callback_url;
 
 		/**
 		 * Constructor for your shipping class
@@ -51,6 +53,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			$this->id = 'shipcloud';
 			$this->title = __( 'shipcloud.io', 'woocommerce-shipcloud' );
 			$this->method_description = __( 'Add shipcloud to your shipping methods', 'woocommerce-shipcloud' );
+			$this->callback_url = WC()->api_request_url( 'shipcloud' );
 
 			// Is gateway enabled
 			if( is_array( $this->settings ) && array_key_exists( 'enabled', $this->settings ) && 'yes' == $this->settings[ 'enabled' ] )
@@ -123,6 +126,14 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
 					'desc_tip'    => TRUE,
 					'options'     => $carriers_options
+				),
+				'callback_url'                  => array(
+					'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
+					'type'        => 'text',
+					'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
+					'desc_tip'    => TRUE,
+					'default'     => $this->callback_url,
+					'disabled'    => FALSE
 				),
 				'debug'                             => array(
 					'title'   => __( 'Debug', 'woocommerce-shipcloud' ),
@@ -574,6 +585,13 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			}
 
 			return $retail_price;
+		}
+
+		/**
+		 * Listening to Shipcloud Webhooks
+		 */
+		public static function shipment_listener(){
+			// $this->log(  'Geht doch!' );
 		}
 
 		/**

@@ -43,10 +43,12 @@ class WCSCWoo extends WCSCComponent
 
 		parent::__construct();
 
-		add_action( 'woocommerce_shipping_init', array( $this, 'load_shipping_method' ) );
 		add_filter( 'woocommerce_shipping_methods', array( $this, 'add_shipping_method' ) );
 	}
 
+	/**
+	 * Including Files
+	 */
 	public function includes()
 	{
 		if( wcsc_is_enabled() )
@@ -54,17 +56,22 @@ class WCSCWoo extends WCSCComponent
 			include( __DIR__ . '/woo-functions.php' );
 			include( __DIR__ . '/order.php' );
 			include( __DIR__ . '/shipping-classes.php' );
+			include( __DIR__ . '/shipping-method.php' );
+
+			add_action( 'woocommerce_api_shipcloud', array( 'WC_Shipcloud_Shipping', 'shipment_listener' ) );
 		}
 	}
 
-	public function load_shipping_method()
-	{
-		include( __DIR__ . '/shipping-method.php' );
-	}
-
+	/**
+	 * Adding Shipping Method
+	 *
+	 * @param $methods
+	 *
+	 * @return array
+	 */
 	public function add_shipping_method( $methods )
 	{
-		$methods[] = 'WC_Shipcloud_Shippig';
+		$methods[] = 'WC_Shipcloud_Shipping';
 
 		return $methods;
 	}
