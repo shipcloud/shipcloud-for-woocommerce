@@ -61,7 +61,12 @@ function wcsc_get_carriers()
 	$allowed_carriers = $settings[ 'allowed_carriers' ];
 
 	$shipcloud = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
-	$shipcloud_carriers = $shipcloud->get_carriers();
+
+	if( '' == $settings ){
+		$shipcloud_carriers = $shipcloud->get_carriers( TRUE );
+	}else{
+		$shipcloud_carriers = $shipcloud->get_carriers();
+	}
 
 	$carriers = array();
 
