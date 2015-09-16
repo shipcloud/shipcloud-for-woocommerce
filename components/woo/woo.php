@@ -51,12 +51,13 @@ class WCSCWoo extends WCSCComponent
 	 */
 	public function includes()
 	{
+		include( __DIR__ . '/shipping-method.php' );
+
 		if( wcsc_is_enabled() )
 		{
 			include( __DIR__ . '/woo-functions.php' );
 			include( __DIR__ . '/order.php' );
 			include( __DIR__ . '/shipping-classes.php' );
-			include( __DIR__ . '/shipping-method.php' );
 
 			add_action( 'woocommerce_api_shipcloud', array( 'WC_Shipcloud_Shipping', 'shipment_listener' ) );
 		}
