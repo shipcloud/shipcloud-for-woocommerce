@@ -2,8 +2,6 @@
 /**
  * WooCommerce shipcloud.io Core Functions
  *
- * Loading parcel functions
- *
  * @author  awesome.ug <very@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/Core
  * @version 1.0.0
@@ -31,7 +29,18 @@ if( !defined( 'ABSPATH' ) )
 	exit;
 }
 
-function wcsc_add_parceltemplate(  $carrier, $width, $height, $length, $weight )
+/**
+ * Adds a Parcel Template
+ *
+ * @param string $carrier The Carrier Name
+ * @param int $width The width in cm
+ * @param $height The height in cm
+ * @param $length The length in cm
+ * @param $weight The weight in kg
+ *
+ * @return int|WP_Error Returns the new Parcel Template ID or on failure WP_Error
+ */
+function wcsc_add_parceltemplate( $carrier, $width, $height, $length, $weight )
 {
 	$post = array(
 		'post_title'  => $carrier . ' - ' . $width . 'x' . $height . 'x' . $length . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $weight . __( 'kg', 'woocommerce-shipcloud' ),
@@ -52,21 +61,42 @@ function wcsc_add_parceltemplate(  $carrier, $width, $height, $length, $weight )
 	return $post_id;
 }
 
-function wcsc_delete_parceltemplate( $post_id )
+/**
+ * Deletes a Parcel Template
+ *
+ * @param $template_id
+ *
+ * @return array|false|WP_Post
+ */
+function wcsc_delete_parceltemplate( $template_id )
 {
-	add_action( 'wcsc_delete_parcel_template', $post_id );
+	add_action( 'wcsc_delete_parcel_template', $template_id );
 
-	return wp_delete_post( $post_id );
+	return wp_delete_post( $template_id );
 }
 
-function wcsc_get_parceltemplate( $parcel_id )
+/**
+ * Gets a Parcel Template
+ *
+ * @param $template_id
+ *
+ * @return mixed
+ */
+function wcsc_get_parceltemplate( $template_id )
 {
-	$parcels = wcsc_get_parceltemplates( array( 'include' => $parcel_id ) );
+	$parcels = wcsc_get_parceltemplates( array( 'include' => $template_id ) );
 	$parcel = $parcels[ 0 ];
 
 	return $parcel;
 }
 
+/**
+ * Gets Parcel Templates
+ *
+ * @param array $args
+ *
+ * @return array $parcel_templates Parcel Templates in an Array
+ */
 function wcsc_get_parceltemplates( $args = array() )
 {
 	global $wpdb;
