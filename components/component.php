@@ -69,30 +69,7 @@ abstract class WCSCComponent
 	 */
 	public function start()
 	{
-		if( !$this->is_active() )
-		{
-			return FALSE;
-		}
-
 		$this->includes();
-	}
-
-	/**
-	 * Checking if module is active
-	 *
-	 * @return boolean $is_active
-	 */
-	public function is_active()
-	{
-		global $wcsc_passed_requirements;
-
-		// Only start if there requirements passed
-		if( !$wcsc_passed_requirements )
-		{
-			return FALSE;
-		}
-
-		return TRUE;
 	}
 }
 

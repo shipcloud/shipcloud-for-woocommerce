@@ -50,6 +50,16 @@ class WooCommerceShipcloud
 	protected static $_instance = NULL;
 
 	/**
+	 * @var Notices for screening in Admin
+	 */
+	private $passed_requirements = FALSE;
+
+	/**
+	 * @var Notices for screening in Admin
+	 */
+	private static $notices = array();
+
+	/**
 	 * Construct
 	 */
 	private function __construct()
@@ -77,12 +87,6 @@ class WooCommerceShipcloud
 	 */
 	public function load_plugin()
 	{
-		global $wcsc_errors, $wcsc_notices, $wcsc_passed_requirements;
-
-		$wcsc_errors = array();
-		$wcsc_notices = array();
-		$wcsc_passed_requirements = FALSE;
-
 		$this->constants();
 		$this->load_textdomain();
 		$this->includes();
@@ -151,29 +155,29 @@ class WooCommerceShipcloud
 	 */
 	public function check_requirements()
 	{
-		global $wcsc_errors, $wcsc_passed_requirements;
+		$passed = TRUE;
 
-		$wcsc_passed_requirements = TRUE;
+		if( !class_exists( 'WooCommerce' ) )
+		{
+			self::add_notice( 'error', __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' ) );
+			$passed = FALSE;
+		}
 
-		if( !class_exists( 'WooCommerce' ) ):
-			$wcsc_errors[] = __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' );
-			$wcsc_passed_requirements = FALSE;
-		endif;
+		if( !function_exists( 'json_decode' ) )
+		{
+			self::add_notice( 'error', __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' ) );
+			$passed = FALSE;
+		}
 
-		if( !function_exists( 'curl_init' ) ):
-			$wcsc_errors[] = __( 'shipcloud.io needs the CURL PHP extension.', 'woocommerce-shipcloud' );
-			$wcsc_passed_requirements = FALSE;
-		endif;
+		if( !function_exists( 'mb_detect_encoding' ) ){
+			self::add_notice( 'error', __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' ) );
+			$passed = FALSE;
+		}
 
-		if( !function_exists( 'json_decode' ) ):
-			$wcsc_errors[] = __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' );
-			$wcsc_passed_requirements = FALSE;
-		endif;
-
-		if( !function_exists( 'mb_detect_encoding' ) ):
-			$wcsc_errors[] = __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' );
-			$wcsc_passed_requirements = FALSE;
-		endif;
+		if( $passed )
+		{
+			$this->passed_requirements = TRUE;
+		}
 	}
 
 	/**
@@ -183,9 +187,7 @@ class WooCommerceShipcloud
 	 */
 	public function load_components()
 	{
-		global $wcsc_passed_requirements;
-
-		if( !$wcsc_passed_requirements )
+		if( !$this->passed_requirements )
 		{
 			return;
 		}
@@ -308,25 +310,30 @@ class WooCommerceShipcloud
 	}
 
 	/**
+	 * Adding notices to admin
+	 * @param $type
+	 * @param $message
+	 */
+	public static function add_notice( $type, $message )
+	{
+		self::$notices[] = array(
+			'type'      => $type,
+			'message'   => $message
+		);
+	}
+
+	/**
 	 * Showing Errors
 	 *
 	 * @since 1.0.0
 	 */
 	public function notices()
 	{
-		global $wcsc_errors, $wcsc_notices;
-
-		if( count( $wcsc_errors ) > 0 ):
-			foreach( $wcsc_errors AS $error )
-				echo '<div class="error"><p>' . $error . '</p></div>';
-		endif;
-
-		if( count( $wcsc_notices ) > 0 ):
-			foreach( $wcsc_notices AS $notice )
-				echo '<div class="updated"><p>' . $notice . '</p></div>';
+		if( count( self::$notices ) > 0 ):
+			foreach( self::$notices AS $notice )
+				echo '<div class="' . $notice[ 'type' ] . '"><p>' . $notice[ 'message' ] . '</p></div>';
 		endif;
 	}
 
 }
-
 WooCommerceShipcloud::instance();
