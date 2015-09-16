@@ -71,6 +71,18 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			{
 				$this->log = new WC_Logger();
 			}
+
+			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'check_settings' ), 20 );
+			// $this->check_settings();
+		}
+
+		/**
+		 * Checking Settings and setup Errors
+		 */
+		public function check_settings(){
+			if( !array_key_exists( 'api_key' ) && '' == $this->settings[ 'api_key' ] ||  array_key_exists( 'woocommerce_shipcloud_api_key', $_POST  ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ]){
+				WooCommerceShipcloud::add_notice( 'error', __( 'You have to provide a shipcloud.io API Key', 'woocommerce-shipcloud' ) );
+			}
 		}
 
 		/**
