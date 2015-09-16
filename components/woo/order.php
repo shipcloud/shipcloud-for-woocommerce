@@ -34,7 +34,7 @@ class WC_Shipcloud_Order
 	/**
 	 * @var int Order ID
 	 */
-	static $order_id;
+	protected $order_id;
 
 	/**
 	 * @var The Single instance of the class
@@ -46,24 +46,24 @@ class WC_Shipcloud_Order
 	 */
 	private function __construct()
 	{
-		self::init_hooks();
+		$this->init_hooks();
 	}
 
 	/**
 	 * Initialize Hooks
 	 */
-	private static function init_hooks()
+	private function init_hooks()
 	{
-		add_action( 'add_meta_boxes', array( __CLASS__, 'add_metaboxes' ) );
-		add_action( 'save_post', array( __CLASS__, 'save_settings' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_metaboxes' ) );
+		add_action( 'save_post', array( $this, 'save_settings' ) );
 
-		add_action( 'woocommerce_checkout_order_processed', array( __CLASS__, 'save_determined_parcels' ), 10 , 2 );
+		add_action( 'woocommerce_checkout_order_processed', array( $this, 'save_determined_parcels' ), 10 , 2 );
 
-		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( __CLASS__, 'ajax_calculate_shipping' ) );
-		add_action( 'wp_ajax_shipcloud_create_shipment', array( __CLASS__, 'ajax_create_shipment' ) );
-		add_action( 'wp_ajax_shipcloud_create_label', array( __CLASS__, 'ajax_create_label' ) );
+		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( $this, 'ajax_calculate_shipping' ) );
+		add_action( 'wp_ajax_shipcloud_create_shipment', array( $this, 'ajax_create_shipment' ) );
+		add_action( 'wp_ajax_shipcloud_create_label', array( $this, 'ajax_create_label' ) );
 
-		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_scripts' ), 1 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
 	}
 
 	/**
@@ -82,40 +82,44 @@ class WC_Shipcloud_Order
 	/**
 	 * Adding meta boxes
 	 */
-	public static function add_metaboxes()
+	public function add_metaboxes()
 	{
-		add_meta_box( 'shipcloud-io', __( 'shipcloud.io Shipment-Center', 'woocommerce-shipcloud' ), array( __CLASS__, 'shipment_center' ), 'shop_order' );
+		add_meta_box( 'shipcloud-io', __( 'shipcloud.io Shipment-Center', 'woocommerce-shipcloud' ), array( $this, 'shipment_center' ), 'shop_order' );
 	}
 
 	/**
 	 * Product metabox
 	 */
-	public static function shipment_center()
+	public function shipment_center()
 	{
 		global $post;
 
-		self::$order_id = $post->ID;
+		$this->order_id = $post->ID;
 
 		wp_nonce_field( plugin_basename( __FILE__ ), 'save_settings' );
 
 		$html = '<div id="shipment-center">';
-		$html .= self::addresses();
-		$html .= self::parcel();
-		$html .= self::labels();
+		$html .= $this->addresses();
+		$html .= $this->parcel();
+		$html .= $this->labels();
 		$html .= '</div>';
 		$html .= '<div class="clear"></div>';
 
 		echo $html;
 	}
 
-	private static function addresses()
+	/**
+	 * Shows Addresses Content
+	 * @return string
+	 */
+	private function addresses()
 	{
 		global $woocommerce;
 
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 
-		$sender = get_post_meta( self::$order_id, 'shipcloud_sender_address', TRUE );
-		$recipient = get_post_meta( self::$order_id, 'shipcloud_recipient_address', TRUE );
+		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', TRUE );
+		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', TRUE );
 
 		// Use default data if nothing was saved before
 		if( '' == $sender || 0 == count( $sender ) )
@@ -135,7 +139,7 @@ class WC_Shipcloud_Order
 		// Use default data if nothing was saved before
 		if( '' == $recipient || 0 == count( $recipient ) )
 		{
-			$order = new WC_Order( self::$order_id );
+			$order = new WC_Order( $this->order_id );
 
 			$recipient_street_nr = '';
 			$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
@@ -278,15 +282,19 @@ class WC_Shipcloud_Order
 		return ob_get_clean();
 	}
 
-	private static function parcel()
+	/**
+	 * Returns Parcel Content
+	 * @return string
+	 */
+	private function parcel()
 	{
 		ob_start();
 		?>
 		<div class="section parcels">
 			<h3><?php _e( 'Create Shipment', 'woocommerce-shipcloud' ); ?></h3>
 
-			<?php echo self::parcel_form(); ?>
-			<?php echo self::parcel_templates(); ?>
+			<?php echo $this->parcel_form(); ?>
+			<?php echo $this->parcel_templates(); ?>
 
 			<div class="clear"></div>
 		</div>
@@ -294,7 +302,11 @@ class WC_Shipcloud_Order
 		return ob_get_clean();
 	}
 
-	private static function parcel_form(){
+	/**
+	 * Returns Parcel Form Content
+	 * @return string
+	 */
+	private function parcel_form(){
 		$carriers = wcsc_get_carriers();
 
 		ob_start();
@@ -352,7 +364,11 @@ class WC_Shipcloud_Order
 		return ob_get_clean();
 	}
 
-	private static function parcel_templates()
+	/**
+	 * Returns Parcel Template Form
+	 * @return string
+	 */
+	private function parcel_templates()
 	{
 		$args = array(
 			'post_type'   => 'sc_parcel_template',
@@ -378,26 +394,33 @@ class WC_Shipcloud_Order
 			);
 		}
 
-		$shipcloud_parcels = get_post_meta( self::$order_id, 'shipcloud_parcels', TRUE );
+		$shipcloud_parcels = get_post_meta( $this->order_id, 'shipcloud_parcels', TRUE );
 		$determined_parcels = array();
 
-		foreach( $shipcloud_parcels AS $parcel )
-		{
-			$determined_parcels[] = array(
-				'value'     => 	$parcel[ 'width' ] . ';'
-					. $parcel[ 'height' ] . ';'
-					. $parcel[ 'length' ] . ';'
-					. $parcel[ 'weight' ] . ';'
-					. $parcel[ 'carrier' ] . ';',
-				'option'    => $parcel[ 'width' ]. esc_attr( 'x', 'woocommerce-shipcloud' )
-					. $parcel[ 'height' ] . esc_attr( 'x', 'woocommerce-shipcloud' )
-					. $parcel[ 'length' ] . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
-					. $parcel[ 'weight' ] . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
-					. strtoupper( $parcel[ 'carrier' ] ),
-			);
+		echo 'SCP: ';
+		p( $shipcloud_parcels );
+
+		if( is_array( $shipcloud_parcels ) && count( $shipcloud_parcels ) > 0 ){
+			foreach( $shipcloud_parcels AS $parcel )
+			{
+				$determined_parcels[] = array(
+					'value'     => 	$parcel[ 'width' ] . ';'
+						. $parcel[ 'height' ] . ';'
+						. $parcel[ 'length' ] . ';'
+						. $parcel[ 'weight' ] . ';'
+						. $parcel[ 'carrier' ] . ';',
+					'option'    => $parcel[ 'width' ]. esc_attr( 'x', 'woocommerce-shipcloud' )
+						. $parcel[ 'height' ] . esc_attr( 'x', 'woocommerce-shipcloud' )
+						. $parcel[ 'length' ] . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
+						. $parcel[ 'weight' ] . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
+						. strtoupper( $parcel[ 'carrier' ] ),
+				);
+			}
 		}
 
 		ob_start();
+
+		echo 'Count Requests: ' . get_option( 'woocommerce_shipcloud_count_requests', 0 );
 
 		?>
 		<div class="parcel-templates fifty">
@@ -432,9 +455,13 @@ class WC_Shipcloud_Order
 		return ob_get_clean();
 	}
 
-	private static function labels()
+	/**
+	 * Returns Labels
+	 * @return string
+	 */
+	private function labels()
 	{
-		$shipment_data = get_post_meta( self::$order_id, 'shipcloud_shipment_data', TRUE );
+		$shipment_data = get_post_meta( $this->order_id, 'shipcloud_shipment_data', TRUE );
 
 		ob_start();
 		?>
@@ -450,7 +477,7 @@ class WC_Shipcloud_Order
 
 						foreach( $shipment_data AS $time => $data )
 						{
-							echo self::get_label_html( $data, $time );
+							echo $this->get_label_html( $data, $time );
 						}
 					}
 
@@ -471,7 +498,7 @@ class WC_Shipcloud_Order
 	 * @param array $data
 	 * @param int   $time
 	 */
-	private static function get_label_html( $data, $time = FALSE )
+	private function get_label_html( $data, $time = FALSE )
 	{
 		ob_start();
 
@@ -535,7 +562,7 @@ class WC_Shipcloud_Order
 
 					<div style="clear: both;"></div>
 
-					<?php echo self::get_tracking_status_html( $data[ 'id' ] ); ?>
+					<?php echo $this->get_tracking_status_html( $data[ 'id' ] ); ?>
 
 					<div style="clear: both;"></div>
 
@@ -549,12 +576,18 @@ class WC_Shipcloud_Order
 		return $html;
 	}
 
-	private static function get_tracking_status_html( $shipment_id )
+	/**
+	 * Returns Tracking status HTML
+	 * @param $shipment_id
+	 */
+	private function get_tracking_status_html( $shipment_id )
 	{
 		$settings = get_option( 'woocommerce_shipcloud_settings' );
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 
-		$shipcloud_api->get_tracking_status( $shipment_id );
+		$response = $shipcloud_api->get_tracking_status( $shipment_id );
+
+		p( $response );
 	}
 
 	/**
@@ -562,7 +595,7 @@ class WC_Shipcloud_Order
 	 *
 	 * @param int $post_id
 	 */
-	public static function save_settings( $post_id )
+	public function save_settings( $post_id )
 	{
 		// Savety first!
 		if( !wp_verify_nonce( $_POST[ 'save_settings' ], plugin_basename( __FILE__ ) ) )
@@ -601,7 +634,7 @@ class WC_Shipcloud_Order
 	 * Saving Data Calculated Parcels
 	 * @param $order_id
 	 */
-	public static function save_determined_parcels( $order_id, $posted ){
+	public function save_determined_parcels( $order_id, $posted ){
 		$shipcloud_parcels = WC()->session->get( 'shipcloud_parcels' );
 		$shipcloud_parcels = $shipcloud_parcels[ $posted[ 'shipping_method' ][ 0 ] ];
 
@@ -611,7 +644,7 @@ class WC_Shipcloud_Order
 	/**
 	 * Calulating shipping after submitting calculation
 	 */
-	public static function ajax_calculate_shipping()
+	public function ajax_calculate_shipping()
 	{
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 
@@ -679,7 +712,7 @@ class WC_Shipcloud_Order
 	/**
 	 * Creating shipment
 	 */
-	public static function ajax_create_shipment()
+	public function ajax_create_shipment()
 	{
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 
@@ -796,7 +829,7 @@ class WC_Shipcloud_Order
 			$order = wc_get_order( $order_id );
 			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
-			echo self::get_label_html( $data );
+			echo $this->get_label_html( $data );
 		endif;
 
 		exit;
@@ -805,24 +838,21 @@ class WC_Shipcloud_Order
 	/**
 	 * Calulating shipping after sublitting calculation
 	 */
-	public static function ajax_create_label()
+	public function ajax_create_label()
 	{
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
+		$order_id = $_POST[ 'order_id' ];
 		$shipment_id = $_POST[ 'shipment_id' ];
 
-		$args = array(
-			'create_shipping_label' => TRUE,
-		);
+		$request = $shipcloud_api->create_label( $shipment_id );
 
-		$shipment = $shipcloud_api->create_label( $shipment_id );
-
-		$request_status = (int) $shipment[ 'header' ][ 'status' ];
+		$request_status = (int) $request[ 'header' ][ 'status' ];
 
 		// Getting errors if existing
 		if( 200 != $request_status ):
-			$errors = $shipment[ 'body' ][ 'errors' ];
+			$errors = $request[ 'body' ][ 'errors' ];
 			$result = array();
 
 			switch ( $request_status )
@@ -844,24 +874,23 @@ class WC_Shipcloud_Order
 		endif;
 
 		delete_post_meta( $order_id, 'shipcloud_shipment_current_data' );
-		// delete_post_meta( $order_id, 'shipcloud_shipment_data' );
 
 		// Saving shipment data to order
 		if( 200 == $request_status ):
 
-
-			$result = $shipment[ 'body' ];
-
 			$order = wc_get_order( $order_id );
 			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
-			echo self::get_label_html( $data );
+			echo $this->get_label_html( $data );
 		endif;
 
 		exit;
 	}
 
-	public static function enqueue_scripts()
+	/**
+	 * Enqueuing needed Scripts & Styles
+	 */
+	public function enqueue_scripts()
 	{
 		// JS
 		wp_enqueue_script( 'jquery' );
@@ -873,5 +902,4 @@ class WC_Shipcloud_Order
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
 	}
 }
-
 WC_Shipcloud_Order::instance();

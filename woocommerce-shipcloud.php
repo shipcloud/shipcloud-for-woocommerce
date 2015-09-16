@@ -44,13 +44,38 @@ if( !defined( 'ABSPATH' ) )
 
 class WooCommerceShipcloud
 {
+	/**
+	 * @var The Single instance of the class
+	 */
+	protected static $_instance = NULL;
+
+	/**
+	 * Construct
+	 */
+	private function __construct()
+	{
+		$this->load_plugin();
+	}
+
+	/**
+	 * Main Instance
+	 */
+	public static function instance()
+	{
+		if( is_null( self::$_instance ) )
+		{
+			self::$_instance = new self();
+		}
+
+		return self::$_instance;
+	}
 
 	/**
 	 * Initializes the plugin.
 	 *
 	 * @since 1.0.0
 	 */
-	public static function init()
+	public function load_plugin()
 	{
 		global $wcsc_errors, $wcsc_notices, $wcsc_passed_requirements;
 
@@ -58,29 +83,29 @@ class WooCommerceShipcloud
 		$wcsc_notices = array();
 		$wcsc_passed_requirements = FALSE;
 
-		self::constants();
-		self::load_textdomain();
-		self::includes();
+		$this->constants();
+		$this->load_textdomain();
+		$this->includes();
 
 		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
-		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
-		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
 
 		// Check Requirements and loading core
-		add_action( 'plugins_loaded', array( __CLASS__, 'check_requirements' ), 1 );
-		add_action( 'plugins_loaded', array( __CLASS__, 'load_components' ), 1 );
+		add_action( 'plugins_loaded', array( $this, 'check_requirements' ), 1 );
+		add_action( 'plugins_loaded', array( $this, 'load_components' ), 1 );
 
 		// Functions on Frontend
 		if( is_admin() ):
 			// Register admin styles and scripts
-			add_action( 'admin_print_styles', array( __CLASS__, 'register_admin_styles' ) );
-			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'register_admin_scripts' ), 0 );
-			add_action( 'admin_notices', array( __CLASS__, 'notices' ) );
+			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
+			add_action( 'admin_notices', array( $this, 'notices' ) );
 		else:
 			// Register plugin styles and scripts
-			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_plugin_styles' ) );
-			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'register_plugin_scripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
 		endif;
 	} // end constructor
 
@@ -89,11 +114,11 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function constants()
+	private function constants()
 	{
-		define( 'WCSC_FOLDER', self::get_folder() );
+		define( 'WCSC_FOLDER', $this->get_folder() );
 		define( 'WCSC_RELATIVE_FOLDER', substr( WCSC_FOLDER, strlen( WP_PLUGIN_DIR ), strlen( WCSC_FOLDER ) ) );
-		define( 'WCSC_URLPATH', self::get_url_path() );
+		define( 'WCSC_URLPATH', $this->get_url_path() );
 		define( 'WCSC_COMPONENTFOLDER', WCSC_FOLDER . '/components' );
 	}
 
@@ -102,7 +127,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function load_textdomain()
+	private function load_textdomain()
 	{
 		load_plugin_textdomain( 'woocommerce-shipcloud', FALSE, WCSC_RELATIVE_FOLDER . '/languages' );
 	}
@@ -112,7 +137,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function includes()
+	private function includes()
 	{
 		// Loading functions
 		include( WCSC_FOLDER . '/woocommerce-shipcloud-functions.php' );
@@ -124,7 +149,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function check_requirements()
+	public function check_requirements()
 	{
 		global $wcsc_errors, $wcsc_passed_requirements;
 
@@ -156,7 +181,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function load_components()
+	public function load_components()
 	{
 		global $wcsc_passed_requirements;
 
@@ -178,7 +203,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function activate( $network_wide )
+	public function activate( $network_wide )
 	{
 	}
 
@@ -188,7 +213,7 @@ class WooCommerceShipcloud
 	 * @param    boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is
 	 *                                 disabled or plugin is activated on an individual blog
 	 */
-	public static function deactivate( $network_wide )
+	public function deactivate( $network_wide )
 	{
 	}
 
@@ -209,7 +234,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function register_admin_styles()
+	public function register_admin_styles()
 	{
 		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . '/includes/css/admin.css' );
 	}
@@ -219,7 +244,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function register_admin_scripts()
+	public function register_admin_scripts()
 	{
 		$translation_array = array(
 			'parcel_added'                => __( 'Parcel template added!', 'woocommerce-shipcloud' ),
@@ -237,14 +262,14 @@ class WooCommerceShipcloud
 		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
 		wp_enqueue_script( 'wcsc-admin-script' );
-	} // end register_admin_scripts
+	}
 
 	/**
 	 * Registers and enqueues plugin-specific styles.
 	 *
 	 * @since 1.0.0
 	 */
-	public static function register_plugin_styles()
+	public function register_plugin_styles()
 	{
 		wp_enqueue_style( 'wcsc-plugin-styles', WCSC_URLPATH . '/includes/css/display.css' );
 	}
@@ -254,7 +279,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function register_plugin_scripts()
+	public function register_plugin_scripts()
 	{
 		wp_enqueue_script( 'wcsc-plugin-script', WCSC_URLPATH . '/includes/js/display.js' );
 	}
@@ -264,7 +289,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	private static function get_url_path()
+	private function get_url_path()
 	{
 		$sub_path = substr( WCSC_FOLDER, strlen( ABSPATH ), ( strlen( WCSC_FOLDER ) - 11 ) );
 		$script_url = get_bloginfo( 'wpurl' ) . '/' . $sub_path;
@@ -277,7 +302,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	private static function get_folder()
+	private function get_folder()
 	{
 		return plugin_dir_path( __FILE__ );
 	}
@@ -287,7 +312,7 @@ class WooCommerceShipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function notices()
+	public function notices()
 	{
 		global $wcsc_errors, $wcsc_notices;
 
@@ -304,4 +329,4 @@ class WooCommerceShipcloud
 
 }
 
-WooCommerceShipcloud::init();
+WooCommerceShipcloud::instance();
