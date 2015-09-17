@@ -145,8 +145,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				'callback_url'                  => array(
 					'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
 					'type'        => 'text',
-					'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
-					'desc_tip'    => TRUE,
+					'description' => sprintf( __( 'You want to get noticed about the Shipment Status? Copy this Webhook URL and enter it <a href="%s" target="_blank">in your shipcloud.io Webhooks Section</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/webhooks' ),
 					'default'     => $this->callback_url,
 					'disabled'    => FALSE
 				),
