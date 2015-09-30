@@ -15,7 +15,7 @@ class Config extends PHPUnit_Extensions_Selenium2TestCase
 		$this->setBrowserUrl( "http://" . $host );
 	}
 
-	public function testMyTestCase()
+	public function testSetupPlugin()
 	{
 		$this->url("/wp-admin/");
 
@@ -27,9 +27,16 @@ class Config extends PHPUnit_Extensions_Selenium2TestCase
 
 		$this->byId( 'woocommerce_shipcloud_enabled' )->click();
 		$this->byId( 'woocommerce_shipcloud_api_key' )->value( '9f784473673a3f195157061ece467532' );
+
 		$this->byName( 'save' )->click();
 
-		print_r( $this->byId( 'woocommerce_shipcloud_enabled' )->value() );
+		$this->byId( 'woocommerce_shipcloud_allowed_carriers_dhl' )->click();
+		$this->byId( 'woocommerce_shipcloud_allowed_carriers_ups' )->click();
+		$this->byId( 'woocommerce_shipcloud_allowed_carriers_hermes' )->click();
+
+		$this->byId( 'woocommerce_shipcloud_debug' )->click();
+
+		$this->byName( 'save' )->click();
 
 		$this->timeout()->implicitWait( 20000 );
 	}
