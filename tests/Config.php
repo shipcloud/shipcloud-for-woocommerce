@@ -24,6 +24,12 @@ class Config extends PHPUnit_Extensions_Selenium2TestCase
 			$this->byId( 'woocommerce_shipcloud_allowed_carriers_ups' )->click();
 			$this->byId( 'woocommerce_shipcloud_allowed_carriers_hermes' )->click();
 
+			$this->select( $this->byId( 'woocommerce_shipcloud_calculate_products_type' ) )->selectOptionByValue( 'order' );
+			$this->byId( 'woocommerce_shipcloud_standard_price_products' )->value( '4,9' );
+
+			$this->select( $this->byId( 'woocommerce_shipcloud_calculation_type_shipment_classes' ) )->selectOptionByValue( 'order' );
+			$this->byId( 'woocommerce_shipcloud_standard_price_shipment_classes' )->value( '6,9' );
+
 			$default_company = 'Musterfirma';
 			$default_first_name = 'Maria';
 			$default_last_name = 'Mustermann';
@@ -42,7 +48,15 @@ class Config extends PHPUnit_Extensions_Selenium2TestCase
 
 			$this->byId( 'woocommerce_shipcloud_debug' )->click();
 
+
+
 			$this->byName( 'save' )->click();
+
+			$this->assertSame( 'order', $this->byId( 'woocommerce_shipcloud_calculate_products_type' )->attribute( 'value' ) );
+			$this->assertSame( '4,9', $this->byId( 'woocommerce_shipcloud_standard_price_products' )->attribute( 'value' ) ) ;
+
+			$this->assertSame( 'order', $this->byId( 'woocommerce_shipcloud_calculation_type_shipment_classes' )->attribute( 'value' ) );
+			$this->assertSame( '6,9', $this->byId( 'woocommerce_shipcloud_standard_price_shipment_classes' )->attribute( 'value' ) );
 
 			$this->assertTrue( $this->byId( 'woocommerce_shipcloud_allowed_carriers_dhl' )->selected() );
 			$this->assertTrue( $this->byId( 'woocommerce_shipcloud_allowed_carriers_ups' )->selected() );
@@ -84,6 +98,9 @@ class Config extends PHPUnit_Extensions_Selenium2TestCase
 		{
 			$this->byId( 'woocommerce_shipcloud_debug' )->click();
 		}
+
+		$this->byId( 'woocommerce_shipcloud_standard_price_products' )->clear();
+		$this->byId( 'woocommerce_shipcloud_standard_price_shipment_classes' )->clear();
 
 		$this->byId( 'woocommerce_shipcloud_sender_company' )->clear();
 		$this->byId( 'woocommerce_shipcloud_sender_first_name' )->clear();
