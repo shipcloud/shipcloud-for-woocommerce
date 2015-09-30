@@ -312,11 +312,15 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 						<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data[ 'title' ] ); ?></span>
 						</legend>
 						<div class="multi-checkbox <?php _e( $data[ 'class' ] ); ?>" id="<?php _e( $field ); ?>" style="<?php _e( $data[ 'css' ] ); ?>" <?php disabled( $data[ 'disabled' ], TRUE ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
+							<?php if( count( $data[ 'options' ] ) > 0  && '' != trim( $this->settings[ 'api_key' ] ) ): ?>
 							<?php foreach( (array) $data[ 'options' ] as $option_key => $option_value ) : ?>
 								<div>
 									<input id="<?php _e( $field ); ?>_<?php _e( $option_key ); ?>" type="checkbox" name="<?php _e( $field ); ?>[]" value="<?php _e( $option_key ); ?>" <?php checked( in_array( $option_key, $value ), TRUE ); ?>> <?php _e( $option_value ); ?>
 								</div>
 							<?php endforeach; ?>
+							<?php else: ?>
+								<p><?php _e( 'Please enter an API key to get available shipment Carriers.', 'woocommerce-shipcloud' ); ?></p>
+							<?php endif; ?>
 						</div>
 						<?php echo $this->get_description_html( $data ); ?>
 					</fieldset>
