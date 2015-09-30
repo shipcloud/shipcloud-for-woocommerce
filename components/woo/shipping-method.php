@@ -164,7 +164,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'type'        => 'select',
 					'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
 					'desc_tip'    => TRUE,
-					'class'       => 'wc-enhanced-select',
+					'class'       => 'select',
 					'default'     => 'class',
 					'options'     => array(
 						'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
@@ -182,7 +182,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'type'        => 'select',
 					'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
 					'desc_tip'    => TRUE,
-					'class'       => 'wc-enhanced-select',
+					'class'       => 'select',
 					'default'     => 'class',
 					'options'     => array(
 						'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce' ),
@@ -198,7 +198,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'title'       => __( 'Carrier Selection', 'woocommerce-shipcloud' ),
 					'type'        => 'select',
 					'description' => __( 'Who can select the carrier?', 'woocommerce-shipcloud' ),
-					'class'       => 'wc-enhanced-select',
+					'class'       => 'select',
 					'desc_tip'    => TRUE,
 					'default'     => 'shopowner',
 					'options'     => array(
