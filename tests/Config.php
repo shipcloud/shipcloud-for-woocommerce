@@ -2,6 +2,9 @@
 
 class Config extends PHPUnit_Extensions_Selenium2TestCase
 {
+
+	var $order_id;
+
 	public function testSetupPlugin()
 	{
 		$this->login();
@@ -47,8 +50,6 @@ class Config extends PHPUnit_Extensions_Selenium2TestCase
 			$this->byId( 'woocommerce_shipcloud_sender_city' )->value( $default_city );
 
 			$this->byId( 'woocommerce_shipcloud_debug' )->click();
-
-
 
 			$this->byName( 'save' )->click();
 
