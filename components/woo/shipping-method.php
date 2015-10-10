@@ -71,18 +71,51 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			{
 				$this->log = new WC_Logger();
 			}
-
 			$this->check_settings();
 		}
 
 		/**
 		 * Checking Settings and setup Errors
 		 */
-		public function check_settings(){
-			if( ( !array_key_exists( 'api_key', $this->settings ) && '' == $this->settings[ 'api_key' ] ) || ( array_key_exists( 'api_key', $this->settings ) && '' == $this->settings[ 'api_key' ] ) ||  ( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST  ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
+		public function check_settings()
+		{
+			// If Gateway is disabled after submit
+			if( ( !isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) && isset( $_POST[ 'save' ] ) ) )
+			{
+				return TRUE;
+			}
+
+			// If Gateway is disabled
+			if( 'no' == $this->settings[ 'enabled' ] && !isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) )
+			{
+				return TRUE;
+			}
+
+			if( ( '' == $this->settings[ 'api_key' ] && !isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] )  )
 			{
 				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please <a href="%s">enter a ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				return FALSE;
 			}
+
+			if( '' == $this->settings[ 'allowed_carriers' ] && !isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && !isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
+			{
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please select at least one <a href="%s">Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				return FALSE;
+			}
+
+			if( ( '' == $this->settings[ 'standard_price_products' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] )  )
+			{
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please <a href="%s">enter a Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				return FALSE;
+			}
+
+			if( ( '' == $this->settings[ 'standard_price_shipment_classes' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] )  )
+			{
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please <a href="%s">enter a Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				return FALSE;
+			}
+
+			return TRUE;
 		}
 
 		/**
@@ -123,6 +156,28 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				}
 			}
 
+
+			$available_carriers = wcsc_get_carriers();
+
+			if( count( $available_carriers ) > 0 )
+			{
+				$standard_carrier_settings = array(
+					'title'       => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
+					'type'        => 'select',
+					'description' => __( 'This Carrier will be preselected if the Shop Owner selects the Carrier or will be preselected as Carrier if Customer can select the Carrier.', 'woocommerce-shipcloud' ),
+					'options'     => $available_carriers,
+					'desc_tip'    => TRUE
+				);
+			}
+			else
+			{
+				$standard_carrier_settings = array(
+					'title'       => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
+					'type'        => 'text_only',
+					'description' => __( 'You have to select at least one Carrier above to select a Standard Sarrier.', 'woocommerce-shipcloud' ),
+				);
+			}
+
 			$this->form_fields = array(
 				'enabled'                           => array(
 					'title'   => __( 'Enable', 'woocommerce-shipcloud' ),
@@ -144,9 +199,8 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				),
 				'callback_url'                  => array(
 					'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
-					'type'        => 'text',
-					'description' => sprintf( __( 'You want to get noticed about the Shipment Status? Copy this Webhook URL and enter it <a href="%s" target="_blank">in your shipcloud.io Webhooks Section</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/webhooks' ),
-					'default'     => $this->callback_url,
+					'type'        => 'text_only',
+					'description' => sprintf( __( '%s<br /><br />You want to get noticed about the Shipment Status? Copy this Webhook URL and enter it <a href="%s" target="_blank">in your shipcloud.io Webhooks Section.</a>', 'woocommerce-shipcloud' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
 					'disabled'    => FALSE
 				),
 				'debug'                             => array(
@@ -176,7 +230,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				'standard_price_products'           => array(
 					'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
 					'type'        => 'price',
-					'description' => __( 'Will be used if no sizes or weight is given to a Product.', 'woocommerce-shipcloud' ),
+					'description' => __( 'Will be used if no sizes or weight is given to a Product (have to be entered in €).', 'woocommerce-shipcloud' ),
 				),
 				'calculation_type_shipment_classes' => array(
 					'title'       => __( 'Calculate Shipment Classes', 'woocommerce-shipcloud' ),
@@ -193,7 +247,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				'standard_price_shipment_classes'   => array(
 					'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
 					'type'        => 'price',
-					'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class.', 'woocommerce-shipcloud' ),
+					'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class (have to be entered in €).', 'woocommerce-shipcloud' ),
 				),
 				'carrier_selection'                 => array(
 					'title'       => __( 'Carrier Selection', 'woocommerce-shipcloud' ),
@@ -207,13 +261,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 						'customer'  => __( 'Customer can select Carrier', 'woocommerce-shipcloud' ),
 					)
 				),
-				'standard_carrier'                  => array(
-					'title'       => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
-					'type'        => 'select',
-					'description' => __( 'This Carrier will be preselected if the Shop Owner selects the Carrier or will be preselected as Carrier if Customer can select the Carrier.', 'woocommerce-shipcloud' ),
-					'options'     => wcsc_get_carriers(),
-					'desc_tip'    => TRUE
-				),
+				'standard_carrier'                  => $standard_carrier_settings,
 				'standard_sender_data'              => array(
 					'title'       => __( 'Standard sender data', 'woocommerce-shipcloud' ),
 					'type'        => 'title',
@@ -325,6 +373,36 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 						</div>
 						<?php echo $this->get_description_html( $data ); ?>
 					</fieldset>
+				</td>
+			</tr>
+			<?php
+
+			return ob_get_clean();
+		}
+
+		/**
+		 * Generate Text only HTML.
+		 *
+		 * @param  mixed $key
+		 * @param  mixed $data
+		 * @return string
+		 */
+		public function generate_text_only_html( $key, $data ) {
+
+			$field    = $this->get_field_key( $key );
+			$defaults = array(
+			);
+
+			$data = wp_parse_args( $data, $defaults );
+
+			ob_start();
+			?>
+			<tr valign="top">
+				<th scope="row" class="titledesc">
+					<?php echo wp_kses_post( $data[ 'title' ] ); ?>
+				</th>
+				<td class="forminp">
+					<p><?php echo wp_kses_post( $data['description'] ); ?></p>
 				</td>
 			</tr>
 			<?php
