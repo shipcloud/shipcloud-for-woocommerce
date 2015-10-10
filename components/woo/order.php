@@ -297,6 +297,13 @@ class WC_Shipcloud_Order
 			<?php echo $this->parcel_templates(); ?>
 
 			<div class="clear"></div>
+
+			<div id="button-actions">
+				<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'woocommerce-shipcloud' ); ?>" class="button"/>
+				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Only Create Shipment', 'woocommerce-shipcloud' ); ?>" class="button"/>
+				<input id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create Shipment & Label', 'woocommerce-shipcloud' ); ?>" class="button"/>
+			</div>
+			
 		</div>
 		<?php
 		return ob_get_clean();
@@ -362,11 +369,6 @@ class WC_Shipcloud_Order
 				</tr>
 				</tbody>
 			</table>
-
-			<div id="button-actions">
-				<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'woocommerce-shipcloud' ); ?>" class="button"/>
-				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Create Shipment', 'woocommerce-shipcloud' ); ?>" class="button"/>
-			</div>
 
 			<div class="clear"></div>
 		</div>
