@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-10 20:04+0200\n"
-"PO-Revision-Date: 2015-10-10 20:05+0200\n"
+"POT-Creation-Date: 2015-10-10 22:36+0200\n"
+"PO-Revision-Date: 2015-10-10 22:36+0200\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -21,9 +21,9 @@ msgstr ""
 #: ../components/core/parcel-template.php:161
 #: ../components/core/parcel-template.php:167
 #: ../components/core/parcel-template.php:173
-#: ../components/core/parcel-template.php:238 ../components/woo/order.php:331
-#: ../components/woo/order.php:337 ../components/woo/order.php:343
-#: ../components/woo/order.php:405 ../components/woo/order.php:426
+#: ../components/core/parcel-template.php:238 ../components/woo/order.php:332
+#: ../components/woo/order.php:338 ../components/woo/order.php:344
+#: ../components/woo/order.php:406 ../components/woo/order.php:427
 #: ../components/woo/shipping-classes.php:95
 #: ../components/woo/shipping-classes.php:104
 #: ../components/woo/shipping-classes.php:113
@@ -35,8 +35,8 @@ msgstr "cm"
 
 #: ../components/core/core-functions.php:46
 #: ../components/core/parcel-template.php:179
-#: ../components/core/parcel-template.php:238 ../components/woo/order.php:349
-#: ../components/woo/order.php:406 ../components/woo/order.php:427
+#: ../components/core/parcel-template.php:238 ../components/woo/order.php:350
+#: ../components/woo/order.php:407 ../components/woo/order.php:428
 #: ../components/woo/shipping-classes.php:122
 #: ../components/woo/shipping-classes.php:151 ../woocommerce-shipcloud.php:258
 msgid "kg"
@@ -119,25 +119,25 @@ msgstr "Paketvorlagen"
 msgid "Tools"
 msgstr "Tools"
 
-#: ../components/core/parcel-template.php:159 ../components/woo/order.php:329
+#: ../components/core/parcel-template.php:159 ../components/woo/order.php:330
 #: ../components/woo/shipping-classes.php:101
 #: ../components/woo/shipping-classes.php:142
 msgid "Width"
 msgstr "Breite"
 
-#: ../components/core/parcel-template.php:165 ../components/woo/order.php:335
+#: ../components/core/parcel-template.php:165 ../components/woo/order.php:336
 #: ../components/woo/shipping-classes.php:110
 #: ../components/woo/shipping-classes.php:146
 msgid "Height"
 msgstr "Höhe"
 
-#: ../components/core/parcel-template.php:171 ../components/woo/order.php:341
+#: ../components/core/parcel-template.php:171 ../components/woo/order.php:342
 #: ../components/woo/shipping-classes.php:92
 #: ../components/woo/shipping-classes.php:138
 msgid "Length"
 msgstr "Länge"
 
-#: ../components/core/parcel-template.php:177 ../components/woo/order.php:347
+#: ../components/core/parcel-template.php:177 ../components/woo/order.php:348
 #: ../components/woo/shipping-classes.php:119
 #: ../components/woo/shipping-classes.php:150
 msgid "Weight"
@@ -151,96 +151,96 @@ msgstr "Versandunternehmen"
 msgid "[ Select a Carrier ]"
 msgstr "[ Versandunternehmen wählen ]"
 
-#: ../components/woo/order.php:87
+#: ../components/woo/order.php:88
 msgid "shipcloud.io Shipment-Center"
 msgstr "shipcloud.io Versandzentrum"
 
-#: ../components/woo/order.php:172
+#: ../components/woo/order.php:173
 msgid "Sender Address"
 msgstr "Absenderadresse"
 
-#: ../components/woo/order.php:178 ../components/woo/order.php:233
+#: ../components/woo/order.php:179 ../components/woo/order.php:234
 #: ../components/woo/shipping-method.php:271
 msgid "Company"
 msgstr "Firma"
 
-#: ../components/woo/order.php:183 ../components/woo/order.php:238
+#: ../components/woo/order.php:184 ../components/woo/order.php:239
 #: ../components/woo/shipping-method.php:277
 msgid "First Name"
 msgstr "Vorname"
 
-#: ../components/woo/order.php:188 ../components/woo/order.php:243
+#: ../components/woo/order.php:189 ../components/woo/order.php:244
 #: ../components/woo/shipping-method.php:283
 msgid "Last Name"
 msgstr "Nachname"
 
-#: ../components/woo/order.php:193 ../components/woo/order.php:248
+#: ../components/woo/order.php:194 ../components/woo/order.php:249
 #: ../components/woo/shipping-method.php:289
 msgid "Street"
 msgstr "Straße"
 
-#: ../components/woo/order.php:198 ../components/woo/order.php:253
+#: ../components/woo/order.php:199 ../components/woo/order.php:254
 msgid "Number"
 msgstr "Nummer"
 
-#: ../components/woo/order.php:203 ../components/woo/order.php:258
+#: ../components/woo/order.php:204 ../components/woo/order.php:259
 #: ../components/woo/shipping-method.php:301
 msgid "Postcode"
 msgstr "PLZ"
 
-#: ../components/woo/order.php:208 ../components/woo/order.php:263
+#: ../components/woo/order.php:209 ../components/woo/order.php:264
 #: ../components/woo/shipping-method.php:307
 msgid "City"
 msgstr "Ort"
 
-#: ../components/woo/order.php:219 ../components/woo/order.php:274
+#: ../components/woo/order.php:220 ../components/woo/order.php:275
 #: ../components/woo/shipping-method.php:313
 msgid "Country"
 msgstr "Land"
 
-#: ../components/woo/order.php:227
+#: ../components/woo/order.php:228
 msgid "Recipient Address"
 msgstr "Empfängeradresse"
 
-#: ../components/woo/order.php:294 ../components/woo/order.php:303
+#: ../components/woo/order.php:295 ../components/woo/order.php:304
 msgid "Create Shipment"
 msgstr "Versand anlegen"
 
-#: ../components/woo/order.php:302
+#: ../components/woo/order.php:303
 msgid "Calculate Price"
 msgstr "Preis berechnen"
 
-#: ../components/woo/order.php:304
+#: ../components/woo/order.php:305
 msgid "Create Shipment & Label"
 msgstr "Versand & Versandmarke anlegen"
 
-#: ../components/woo/order.php:353
+#: ../components/woo/order.php:354
 msgid "Carrier"
 msgstr "Versandunternehmen"
 
-#: ../components/woo/order.php:366
+#: ../components/woo/order.php:367
 #, php-format
 msgid "<a href=\"%s\">Please select a Carrier</a>."
 msgstr "<a href=\"%s\">Bitte wählen Sie ein Versandunternehmen</a>."
 
-#: ../components/woo/order.php:403 ../components/woo/order.php:404
-#: ../components/woo/order.php:424 ../components/woo/order.php:425
+#: ../components/woo/order.php:404 ../components/woo/order.php:405
+#: ../components/woo/order.php:425 ../components/woo/order.php:426
 msgid "x"
 msgstr "x"
 
-#: ../components/woo/order.php:439
+#: ../components/woo/order.php:440
 msgid "Automatic determined Parcels"
 msgstr "Automatisch ermittelte Pakete"
 
-#: ../components/woo/order.php:441 ../components/woo/order.php:457
+#: ../components/woo/order.php:442 ../components/woo/order.php:458
 msgid "&#8592; Insert"
 msgstr "&larr; Einfügen"
 
-#: ../components/woo/order.php:443 ../components/woo/order.php:459
+#: ../components/woo/order.php:444 ../components/woo/order.php:460
 msgid "[ Select a Parcel ]"
 msgstr "[ Paket Wählen ]"
 
-#: ../components/woo/order.php:450
+#: ../components/woo/order.php:451
 msgid ""
 "Please add weight and parcel dimensions in your Products to use automatic "
 "calculations."
@@ -248,18 +248,18 @@ msgstr ""
 "Bitte fügen Sie Gewicht und Größenangaben in Ihre Produkte ein um die "
 "automatische Berechnungen zu verwenden."
 
-#: ../components/woo/order.php:455
+#: ../components/woo/order.php:456
 msgid "Your Parcel Templates"
 msgstr "Ihre Paketvorlagen"
 
-#: ../components/woo/order.php:466
+#: ../components/woo/order.php:467
 #, php-format
 msgid "Please <a href=\"%s\">add parcel templates</a> if you want to use."
 msgstr ""
 "Bitte  fügen Sie <a href=\"%s\">Paketvorlagen</a> hinzu, wenn Sie diese "
 "verwenden möchten."
 
-#: ../components/woo/order.php:509
+#: ../components/woo/order.php:512
 msgid ""
 "Depending on the carrier, there will be a fee fo for creating the label. Do "
 "you really want to create a label?"
@@ -267,24 +267,24 @@ msgstr ""
 "Abhängig von dem Versandunternehmen wird eine Gebühr fällig um die "
 "Versandmarke zu erstellen. Wollen Sie wirklich eine Versandmarke erstellen?"
 
-#: ../components/woo/order.php:567
+#: ../components/woo/order.php:581
 msgid "Create Label"
 msgstr "Versandmarke erstellen"
 
-#: ../components/woo/order.php:571
+#: ../components/woo/order.php:584
 msgid "Download Label"
 msgstr "Versandmarke herunterladen"
 
-#: ../components/woo/order.php:576
+#: ../components/woo/order.php:588
 msgid "Tracking Link"
 msgstr "Tracking Link"
 
-#: ../components/woo/order.php:708 ../components/woo/order.php:783
-#: ../components/woo/order.php:879
+#: ../components/woo/order.php:720 ../components/woo/order.php:800
+#: ../components/woo/order.php:896
 msgid "Parcel dimensions are not supported by carrier."
 msgstr "Paketabmessungen werden vom Versandunternehmen nicht unterstützt."
 
-#: ../components/woo/order.php:848 ../components/woo/order.php:900
+#: ../components/woo/order.php:865 ../components/woo/order.php:915
 msgid "shipcloud.io label was created."
 msgstr "shipcloud.io Versandmarke wurde erstellt."
 
