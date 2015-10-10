@@ -93,7 +93,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 			if( ( '' == $this->settings[ 'api_key' ] && !isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] )  )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please <a href="%s">enter a ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
 				return FALSE;
 			}
 
@@ -105,13 +105,13 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 			if( ( '' == $this->settings[ 'standard_price_products' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] )  )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please <a href="%s">enter a Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
 				return FALSE;
 			}
 
 			if( ( '' == $this->settings[ 'standard_price_shipment_classes' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] )  )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please <a href="%s">enter a Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
 				return FALSE;
 			}
 
@@ -174,7 +174,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				$standard_carrier_settings = array(
 					'title'       => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
 					'type'        => 'text_only',
-					'description' => __( 'You have to select at least one Carrier above to select a Standard Sarrier.', 'woocommerce-shipcloud' ),
+					'description' => __( 'You have to select at least one Carrier above to select a Standard Carrier.', 'woocommerce-shipcloud' ),
 				);
 			}
 
@@ -200,7 +200,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				'callback_url'                  => array(
 					'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
 					'type'        => 'text_only',
-					'description' => sprintf( __( '%s<br /><br />You want to get noticed about the Shipment Status? Copy this Webhook URL and enter it <a href="%s" target="_blank">in your shipcloud.io Webhooks Section.</a>', 'woocommerce-shipcloud' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
+					'description' => sprintf( __( '%s<br /><br />You want to get noticed about the Shipment Status? Copy the Webhook URL and enter it in your <a href="%s" target="_blank">shipcloud.io Webhooks Section.</a>', 'woocommerce-shipcloud' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
 					'disabled'    => FALSE
 				),
 				'debug'                             => array(

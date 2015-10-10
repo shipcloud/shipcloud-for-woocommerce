@@ -141,6 +141,7 @@ function wcsc_explode_street( $street )
 function wcsc_translate_shipcloud_text( $error_text )
 {
 	$translations = array(
+		"Carrier can't be blank"                                => __( 'Carrier can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Sender Street can't be blank"                          => __( 'Sender Street can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Sender Street number can't be blank"                   => __( 'Sender Street number can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Sender ZIP code can't be blank"                        => __( 'Sender ZIP code can\'t be blank.', 'woocommerce-shipcloud' ),
