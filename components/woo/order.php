@@ -309,6 +309,9 @@ class WC_Shipcloud_Order
 	private function parcel_form(){
 		$carriers = wcsc_get_carriers();
 
+		$settings = get_option( 'woocommerce_shipcloud_settings' );
+		$standard_carrier = $settings[ 'standard_carrier' ];
+
 		ob_start();
 		?>
 		<div class="create-label fifty">
@@ -344,9 +347,12 @@ class WC_Shipcloud_Order
 					<td>
 						<?php if( count( $carriers ) > 0 ): ?>
 						<select name="parcel_carrier">
-							<option value="none"><?php _e( '[ Select a Carrier ]', 'woocommerce-shipcloud' ); ?></option>
 							<?php foreach( $carriers AS $name => $display_name ): ?>
-							<option value="<?php echo $name; ?>"><?php echo $display_name; ?></option>
+								<?php if( $name == $standard_carrier ): ?>
+									<option value="<?php echo $name; ?>" selected><?php echo $display_name; ?></option>
+								<?php else: ?>
+									<option value="<?php echo $name; ?>"><?php echo $display_name; ?></option>
+								<?php endif; ?>
 							<?php endforeach; ?>
 						</select>
 						<?php else: ?>
@@ -598,8 +604,6 @@ class WC_Shipcloud_Order
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 
 		$response = $shipcloud_api->get_tracking_status( $shipment_id );
-
-		p( $response );
 	}
 
 	/**
