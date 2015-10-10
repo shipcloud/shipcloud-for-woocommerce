@@ -244,7 +244,7 @@ jQuery( function( $ ) {
 		});
 	}
 
-	var shipcloud_create_label = function( shipment_id ){
+	var shipcloud_create_label = function( shipment_id, button ){
 
 		var order_id = $( "#post_ID" ).val();
 
@@ -254,36 +254,55 @@ jQuery( function( $ ) {
 			'shipment_id': shipment_id
 		};
 
-		var button = $( '.shipcloud_create_label' );
-		button.addClass( 'button-loading-blue' );
+        button.addClass( 'button-loading-blue' );
 
 		$.post( ajaxurl, data, function( response ) {
 			try
 			{
 				var result = JSON.parse( response );
 
-				if( result.errors != null ){
+				if( result.errors != null )
+                {
 					var html = '<ul class="errors">';
 					result.errors.forEach( function( entry ){
 						html+= '<li>' + entry + '</li>';
 					});
 					html+= '</ul>';
 
-					$( '.parcel .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+					$( '.parcel .info' ).fadeIn().html( html );
 				}
+                else
+                {
+                    console.log( result.label_url );
+
+                    var div_create_label = button.parent();
+                    var div_download_label = button.parent().parent().find( '.button-download-label' );
+
+                    div_download_label.find( 'a' ).attr( 'href', result.label_url );
+                    div_download_label.find( 'a' ).attr( 'target', '_blank' );
+
+                    div_create_label.removeClass( 'show' );
+                    div_create_label.addClass( 'hide' );
+
+                    div_download_label.removeClass( 'hide' );
+                    div_download_label.addClass( 'show' );
+                }
+
 			}
 			catch( e )
 			{
+                console.log( e );
 				$( '.shipment-labels' ).prepend( response );
 			}
-
-			button.removeClass( 'button-loading-blue' );
+            button.removeClass( 'button-loading-blue' );
 		});
 	}
 
 	var shipcloud_create_label_buttons = function () {
-		$('.shipcloud_create_label').click(function () {
+		$('.shipcloud_create_label').click( function ( e ) {
+
 			var ask_create_label = $('#ask-create-label');
+            var button = $( this );
 
 			ask_create_label.dialog({
 				'dialogClass': 'wcsc-dialog wp-dialog',
@@ -293,10 +312,11 @@ jQuery( function( $ ) {
 				'minHeight': 80,
 				'buttons': [{
 					text: wcsc_translate.yes,
-					click: function () {
-						// shipcloud_create_label();
+					click: function ()
+                    {
 						var shipment_id = $(this).parent().parent().find("input[name='shipment_id']").val();
-						shipcloud_create_label(shipment_id);
+
+						shipcloud_create_label( shipment_id, button );
 
 						$(this).dialog("close");
 					}
@@ -308,7 +328,6 @@ jQuery( function( $ ) {
 						}
 					},
 				],
-
 			});
 
 			ask_create_label.dialog("open");

@@ -525,6 +525,17 @@ class WC_Shipcloud_Order
 	{
 		ob_start();
 
+		if( '' == $data[ 'label_url' ] )
+		{
+			$classes_button_create_label = ' show';
+			$classes_button_download_label = ' hide';
+		}
+		else
+		{
+			$classes_button_create_label = ' hide';
+			$classes_button_download_label = ' show';
+		}
+
 		?>
 		<div class="label widget">
 		<div class="widget-top">
@@ -565,15 +576,13 @@ class WC_Shipcloud_Order
 					</div>
 
 					<div class="label_shipment_actions ">
-						<?php if( '' == $data[ 'label_url' ] ): ?>
-						<p>
+
+						<p class="button-create-label<?php echo $classes_button_create_label; ?>">
 							<input type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="shipcloud_create_label button-primary"/>
 						</p>
-						<?php else: ?>
-						<p class="fullsize">
+						<p class="button-download-label<?php echo $classes_button_download_label; ?>">
 							<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download Label', 'woocommerce-shipcloud' ); ?></a>
 						</p>
-						<?php endif; ?>
 
 						<p class="fullsize">
 							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
@@ -895,11 +904,9 @@ class WC_Shipcloud_Order
 
 			$result = array( 'errors' => $result );
 
-			echo json_encode( $result );
-			exit;
 		endif;
 
-		delete_post_meta( $order_id, 'shipcloud_shipment_current_data' );
+		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data', TRUE );
 
 		// Saving shipment data to order
 		if( 200 == $request_status ):
@@ -907,8 +914,29 @@ class WC_Shipcloud_Order
 			$order = wc_get_order( $order_id );
 			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
-			echo $this->get_label_html( $data );
+			foreach( $shipments AS $key => $shipment )
+			{
+				if( $shipment[ 'id' ] == $request[ 'body' ][ 'id' ] )
+				{
+					$shipments[ $key ][ 'tracking_url' ] = $request[ 'body' ][ 'tracking_url' ];
+					$shipments[ $key ][ 'label_url' ] = $request[ 'body' ][ 'label_url' ];
+					$shipments[ $key ][ 'price' ] = $request[ 'body' ][ 'price' ];
+					break;
+				}
+			}
+
+			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments );
+
+			$result = array(
+				'id' => $request[ 'body' ][ 'id' ],
+				'tracking_url' => $request[ 'body' ][ 'tracking_url' ],
+				'label_url' => $request[ 'body' ][ 'label_url' ],
+				'price' => $request[ 'body' ][ 'price' ]
+			);
+
 		endif;
+
+		echo json_encode( $result );
 
 		exit;
 	}

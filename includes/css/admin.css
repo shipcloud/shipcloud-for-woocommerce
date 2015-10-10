@@ -41,6 +41,12 @@
 #shipcloud-io .fullsize {
     width: 100%;
 }
+#shipment-center .hide{
+    display: none;
+}
+#shipment-center .show{
+    display: block;
+}
 
 /**
  * 	Container
