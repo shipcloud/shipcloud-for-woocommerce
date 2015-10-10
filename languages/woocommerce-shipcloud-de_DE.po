@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-10-10 19:28+0200\n"
-"PO-Revision-Date: 2015-10-10 19:30+0200\n"
+"PO-Revision-Date: 2015-10-10 19:32+0200\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -628,7 +628,7 @@ msgstr "Länge (in cm) darf nicht leer sein."
 #: ../woocommerce-shipcloud-functions.php:168
 #: ../woocommerce-shipcloud-functions.php:176
 msgid "Length (in cm) is not a number."
-msgstr "Llänge (in cm) ist keine Zahl."
+msgstr "Länge (in cm) ist keine Zahl."
 
 #: ../woocommerce-shipcloud-functions.php:169
 #: ../woocommerce-shipcloud-functions.php:177
