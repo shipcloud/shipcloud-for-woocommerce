@@ -342,12 +342,16 @@ class WC_Shipcloud_Order
 				<tr>
 					<th><?php _e( 'Carrier', 'woocommerce-shipcloud' ); ?></th>
 					<td>
+						<?php if( count( $carriers ) > 0 ): ?>
 						<select name="parcel_carrier">
 							<option value="none"><?php _e( '[ Select a Carrier ]', 'woocommerce-shipcloud' ); ?></option>
 							<?php foreach( $carriers AS $name => $display_name ): ?>
 							<option value="<?php echo $name; ?>"><?php echo $display_name; ?></option>
 							<?php endforeach; ?>
 						</select>
+						<?php else: ?>
+							<?php echo sprintf( __( '<a href="%s">Please select a Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ); ?>
+						<?php endif; ?>
 					</td>
 				</tr>
 				</tbody>
