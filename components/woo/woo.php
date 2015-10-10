@@ -36,12 +36,10 @@ class WCSCWoo extends WCSCComponent
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct()
+	protected function __construct()
 	{
 		$this->name = __( 'WooCommerce functions', 'woocommerce-shipcloud' );
 		$this->slug = 'woo';
-
-		parent::__construct();
 
 		add_filter( 'woocommerce_shipping_methods', array( $this, 'add_shipping_method' ) );
 	}
@@ -49,7 +47,7 @@ class WCSCWoo extends WCSCComponent
 	/**
 	 * Including Files
 	 */
-	public function includes()
+	protected function includes()
 	{
 		include( __DIR__ . '/shipping-method.php' );
 

@@ -57,7 +57,7 @@ class WooCommerceShipcloud
 	/**
 	 * @var Notices for screening in Admin
 	 */
-	private static $notices = array();
+	static $notices = array();
 
 	/**
 	 * Construct
@@ -105,7 +105,7 @@ class WooCommerceShipcloud
 			// Register admin styles and scripts
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
-			add_action( 'admin_notices', array( $this, 'notices' ) );
+			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
 		else:
 			// Register plugin styles and scripts
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
@@ -159,18 +159,18 @@ class WooCommerceShipcloud
 
 		if( !class_exists( 'WooCommerce' ) )
 		{
-			self::add_notice( 'error', __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' ) );
+			self::admin_notice( __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' ), 'error' );
 			$passed = FALSE;
 		}
 
 		if( !function_exists( 'json_decode' ) )
 		{
-			self::add_notice( 'error', __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' ) );
+			self::admin_notice( __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' ), 'error' );
 			$passed = FALSE;
 		}
 
 		if( !function_exists( 'mb_detect_encoding' ) ){
-			self::add_notice( 'error', __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' ) );
+			self::admin_notice( __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' ), 'error' );
 			$passed = FALSE;
 		}
 
@@ -310,29 +310,34 @@ class WooCommerceShipcloud
 	}
 
 	/**
-	 * Adding notices to admin
-	 * @param $type
-	 * @param $message
+	 * Adds a notice to
+	 *
+	 * @param        $message
+	 * @param string $type
 	 */
-	public static function add_notice( $type, $message )
+	public static function admin_notice( $message, $type = 'updated' )
 	{
 		self::$notices[] = array(
-			'type'      => $type,
-			'message'   => $message
+			'message' => '<b>ShipCloud for WooCommerce</b>: ' . $message,
+			'type'    => $type
 		);
 	}
 
 	/**
-	 * Showing Errors
-	 *
-	 * @since 1.0.0
+	 * Show Notices in Admin
 	 */
-	public function notices()
+	public function show_admin_notices()
 	{
-		if( count( self::$notices ) > 0 ):
+		if( is_array( self::$notices ) && count( self::$notices ) > 0 )
+		{
+			$html = '';
 			foreach( self::$notices AS $notice )
-				echo '<div class="' . $notice[ 'type' ] . '"><p>' . $notice[ 'message' ] . '</p></div>';
-		endif;
+			{
+				$message = $notice[ 'message' ];
+				$html .= '<div class="' . $notice[ 'type' ] . '"><p>' .$message . '</p></div>';
+			}
+			echo $html;
+		}
 	}
 
 }

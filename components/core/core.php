@@ -36,18 +36,16 @@ class WCSCCore extends WCSCComponent
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct()
+	protected function __construct()
 	{
 		$this->name = __( 'shipcloud.io Core', 'woocommerce-shipcloud' );
 		$this->slug = 'sccore';
-
-		parent::__construct();
 	}
 
 	/**
 	 * Includes
 	 */
-	public function includes()
+	protected function includes()
 	{
 		if( wcsc_is_enabled() )
 		{

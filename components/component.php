@@ -32,6 +32,11 @@ if( !defined( 'ABSPATH' ) )
 abstract class WCSCComponent
 {
 	/**
+	 * @var The Single instance of the class
+	 */
+	protected static $_instances = NULL;
+
+	/**
 	 * Name of Component
 	 *
 	 * @var $name
@@ -53,13 +58,43 @@ abstract class WCSCComponent
 	var $active = TRUE;
 
 	/**
-	 * Initializes the Component.
-	 *
-	 * @since 1.0.0
+	 * Main Instance
 	 */
-	public function __construct()
+	public static function instance()
 	{
-		$this->start();
+		$class = get_called_class();
+
+		if( !isset( self::$_instances[ $class ] ) )
+		{
+			self::$_instances[ $class ] = new $class();
+			self::$_instances[ $class ]->init_base_hooks();
+
+			add_action( 'plugins_loaded' , array( self::$_instances[ $class ], 'check_and_start' ) );
+		}
+
+		return self::$_instances[ $class ];
+	}
+
+	/**
+	 * Checking and starting
+	 */
+	public function check_and_start(){
+		$class = get_called_class();
+
+		if( TRUE == self::$_instances[ $class ]->check() )
+		{
+			self::$_instances[ $class ]->base_init();
+		}
+	}
+
+
+	/**
+	 * Function fot Checks
+	 * @return mixed
+	 */
+	protected function check()
+	{
+		return TRUE;
 	}
 
 	/**
@@ -67,9 +102,51 @@ abstract class WCSCComponent
 	 *
 	 * @since 1.0.0
 	 */
-	public function start()
+	private function base_init()
 	{
-		$this->includes();
+		if( method_exists( $this, 'init_hooks' ) )
+		{
+			$this->init_hooks();
+		}
+
+		if( method_exists( $this, 'includes' ) )
+		{
+			$this->includes();
+		}
+
+		if( method_exists( $this, 'scripts' ) )
+		{
+			$this->scripts();
+		}
+
+		if( method_exists( $this, 'init' ) )
+		{
+			$this->init();
+		}
+	}
+
+	/**
+	 * Initializing Base Hooks for all Components
+	 */
+	private function init_base_hooks()
+	{
+	}
+
+
+	/**
+	 * Adds a notice to
+	 *
+	 * @param        $message
+	 * @param string $type
+	 */
+	protected function admin_notice( $message, $type = 'updated' )
+	{
+		if( WP_DEBUG )
+		{
+			$message = $message . ' (in Module "' .  $this->name . '")';
+		}
+
+		WooCommerceShipcloud::admin_notice( $message , $type );
 	}
 }
 
@@ -77,7 +154,7 @@ function wcsc_load_component( $component_name )
 {
 	if( class_exists( $component_name ) ):
 		global $wcsc;
-		$component = new $component_name();
+		$component = $component_name::instance();
 		$wcsc[ 'components' ][ $component->slug ] = $component;
 	endif;
 }
