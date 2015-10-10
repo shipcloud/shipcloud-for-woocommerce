@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-10 19:19+0200\n"
-"PO-Revision-Date: 2015-10-10 19:19+0200\n"
+"POT-Creation-Date: 2015-10-10 19:28+0200\n"
+"PO-Revision-Date: 2015-10-10 19:30+0200\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -252,7 +252,7 @@ msgstr "Ihre Paketvorlagen"
 #, php-format
 msgid "Please <a href=\"%s\">add parcel templates</a> if you want to use."
 msgstr ""
-"Bitte  fügen Sie<a href=\"%s\">Paketvorlagen</a> hinzu, wenn Sie diese "
+"Bitte  fügen Sie <a href=\"%s\">Paketvorlagen</a> hinzu, wenn Sie diese "
 "verwenden möchten."
 
 #: ../components/woo/order.php:501
@@ -522,6 +522,8 @@ msgstr "Geben Sie ein Standardabsender-Land für den Versand an."
 #: ../components/woo/shipping-method.php:371
 msgid "Please enter an API key to get available shipment Carriers."
 msgstr ""
+"Bitte geben Sie einen API Key ein um verfügbare Versandunternehmen "
+"anzuzeigen."
 
 #: ../components/woo/shipping-method.php:632
 #, php-format
@@ -547,90 +549,104 @@ msgid "Carrier can't be blank."
 msgstr "Versandunternehmen darf nicht leer sein."
 
 #: ../woocommerce-shipcloud-functions.php:145
+msgid "Sender Last Name can't be blank."
+msgstr "Absender-Nachname darf nicht leer sein."
+
+#: ../woocommerce-shipcloud-functions.php:146
+#: ../woocommerce-shipcloud-functions.php:147
 msgid "Sender Street can't be blank."
 msgstr "Absender-Straße darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:146
+#: ../woocommerce-shipcloud-functions.php:148
+#: ../woocommerce-shipcloud-functions.php:149
 msgid "Sender Street number can't be blank."
 msgstr "Absender-Hausnummer darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:147
+#: ../woocommerce-shipcloud-functions.php:150
+#: ../woocommerce-shipcloud-functions.php:151
 msgid "Sender ZIP code can't be blank."
 msgstr "Absender-Postleitzahl darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:148
+#: ../woocommerce-shipcloud-functions.php:152
+#: ../woocommerce-shipcloud-functions.php:153
 msgid "Sender City can't be blank."
 msgstr "Absender-Stadt darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:149
+#: ../woocommerce-shipcloud-functions.php:154
 msgid "Sender Country can't be blank."
 msgstr "Absender-Land darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:150
+#: ../woocommerce-shipcloud-functions.php:155
 msgid "Sender Country  is not an ALPHA-2 ISO country code."
 msgstr "Absender-Land ist kein ALPHA-2-ISO-Ländercode."
 
-#: ../woocommerce-shipcloud-functions.php:151
+#: ../woocommerce-shipcloud-functions.php:156
+msgid "Receiver Last Name can't be blank."
+msgstr "Empfänger-Nachname darf nicht leer sein."
+
+#: ../woocommerce-shipcloud-functions.php:157
 msgid "Receiver Street can't be blank."
 msgstr "Empfänger-Straße darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:152
+#: ../woocommerce-shipcloud-functions.php:158
 msgid "Receiver Street number can't be blank."
 msgstr "Empfänger-Hausnummer darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:153
+#: ../woocommerce-shipcloud-functions.php:159
+#: ../woocommerce-shipcloud-functions.php:160
 msgid "Receiver ZIP code can't be blank."
 msgstr "Empfänger-Postleitzahl darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:154
+#: ../woocommerce-shipcloud-functions.php:161
+#: ../woocommerce-shipcloud-functions.php:162
 msgid "Receiver City can't be blank."
 msgstr "Empfänger Stadt darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:155
+#: ../woocommerce-shipcloud-functions.php:163
 msgid "Receiver Country can't be blank."
 msgstr "Empfänger Land darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:156
+#: ../woocommerce-shipcloud-functions.php:164
 msgid "Receiver Country  is not an ALPHA-2 ISO country code."
 msgstr "Empfänger-Land ist kein ALPHA-2-ISO-Ländercode."
 
-#: ../woocommerce-shipcloud-functions.php:157
 #: ../woocommerce-shipcloud-functions.php:165
+#: ../woocommerce-shipcloud-functions.php:173
 msgid "Height (in cm) can't be blank."
 msgstr "Höhe (in cm) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:158
 #: ../woocommerce-shipcloud-functions.php:166
+#: ../woocommerce-shipcloud-functions.php:174
 msgid "Height (in cm) is not a number."
 msgstr "Höhe (in cm) ist keine Zahl."
 
-#: ../woocommerce-shipcloud-functions.php:159
 #: ../woocommerce-shipcloud-functions.php:167
+#: ../woocommerce-shipcloud-functions.php:175
 msgid "Length (in cm) can't be blank."
 msgstr "Länge (in cm) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:160
 #: ../woocommerce-shipcloud-functions.php:168
+#: ../woocommerce-shipcloud-functions.php:176
 msgid "Length (in cm) is not a number."
 msgstr "Llänge (in cm) ist keine Zahl."
 
-#: ../woocommerce-shipcloud-functions.php:161
 #: ../woocommerce-shipcloud-functions.php:169
+#: ../woocommerce-shipcloud-functions.php:177
 msgid "Width (in cm) can't be blank."
 msgstr "Breite (in cm) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:162
 #: ../woocommerce-shipcloud-functions.php:170
+#: ../woocommerce-shipcloud-functions.php:178
 msgid "Width (in cm) is not a number."
 msgstr "Breite (in cm) ist keine Zahl."
 
-#: ../woocommerce-shipcloud-functions.php:163
 #: ../woocommerce-shipcloud-functions.php:171
+#: ../woocommerce-shipcloud-functions.php:179
 msgid "Weight (in kg) can't be blank."
 msgstr "Gewicht (in kg) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:164
 #: ../woocommerce-shipcloud-functions.php:172
+#: ../woocommerce-shipcloud-functions.php:180
 msgid "Weight (in kg) is not a number."
 msgstr "Gewicht (in kg) ist keine Zahl."
 
