@@ -116,23 +116,23 @@ jQuery( function( $ ) {
 	}
 
 	$( '#shipcloud_calculate_price' ).click( function(){
-		
+
 		var data = get_shipment_form_data( 'shipcloud_calculate_shipping' );
 
 		var button = $( this );
 		button.addClass( 'button-loading' );
-		
+
 		$.post( ajaxurl, data, function( response ) {
-			
+
 			var result = jQuery.parseJSON( response );
-			
+
 			if( result.errors ){
 				var html = '<ul class="errors">';
 				result.errors.forEach( function( entry ){
 					html+= '<li>' + entry + '</li>';
 				});
 				html+= '</ul>';
-				
+
 				$( '.parcels .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeOut();
 
@@ -140,7 +140,7 @@ jQuery( function( $ ) {
 				var html = '<div class="notice">';
 				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
-				
+
 				$( '.parcels .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeIn();
 			}
@@ -181,6 +181,68 @@ jQuery( function( $ ) {
 			button.removeClass( 'button-loading' );
 		});
 	});
+
+	$( '#shipcloud_create_shipment_label' ).click( function(){
+		var data = get_shipment_form_data( 'shipcloud_create_shipment_label' );
+
+		var ask_create_label = $('#ask-create-label');
+
+		ask_create_label.dialog({
+			'dialogClass': 'wcsc-dialog wp-dialog',
+			'modal': true,
+			'autoOpen': false,
+			'closeOnEscape': true,
+			'minHeight': 80,
+			'buttons': [{
+				text: wcsc_translate.yes,
+				click: function () {
+
+					shipcloud_create_shipment_label(data);
+
+					$(this).dialog("close");
+				}
+			},
+				{
+					text: wcsc_translate.no,
+					click: function () {
+						$(this).dialog("close");
+					}
+				},
+			],
+
+		});
+
+		ask_create_label.dialog("open");
+	});
+
+	var shipcloud_create_shipment_label = function( data ){
+
+		var button = $( '#shipcloud_create_shipment_label' );
+		button.addClass( 'button-loading-blue' );
+
+		$.post( ajaxurl, data, function( response ) {
+			try
+			{
+				var result = JSON.parse( response );
+
+				if( result.errors != null ){
+					var html = '<ul class="errors">';
+					result.errors.forEach( function( entry ){
+						html+= '<li>' + entry + '</li>';
+					});
+					html+= '</ul>';
+
+					$( '.parcels .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+				}
+			}
+			catch( e )
+			{
+				$( '.shipment-labels' ).prepend( response );
+				shipcloud_create_label_buttons();
+			}
+			button.removeClass( 'button-loading-blue' );
+		});
+	}
 
 	var shipcloud_create_label = function( shipment_id ){
 

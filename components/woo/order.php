@@ -61,6 +61,7 @@ class WC_Shipcloud_Order
 
 		add_action( 'wp_ajax_shipcloud_calculate_shipping', array( $this, 'ajax_calculate_shipping' ) );
 		add_action( 'wp_ajax_shipcloud_create_shipment', array( $this, 'ajax_create_shipment' ) );
+		add_action( 'wp_ajax_shipcloud_create_shipment_label', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( $this, 'ajax_create_label' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
@@ -300,10 +301,10 @@ class WC_Shipcloud_Order
 
 			<div id="button-actions">
 				<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'woocommerce-shipcloud' ); ?>" class="button"/>
-				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Only Create Shipment', 'woocommerce-shipcloud' ); ?>" class="button"/>
-				<input id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create Shipment & Label', 'woocommerce-shipcloud' ); ?>" class="button"/>
+				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Create Shipment', 'woocommerce-shipcloud' ); ?>" class="button"/>
+				<input id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create Shipment & Label', 'woocommerce-shipcloud' ); ?>" class="button-primary"/>
 			</div>
-			
+
 		</div>
 		<?php
 		return ob_get_clean();
@@ -481,6 +482,8 @@ class WC_Shipcloud_Order
 	 */
 	private function labels()
 	{
+		// delete_post_meta( $this->order_id, 'shipcloud_shipment_data' );
+
 		$shipment_data = get_post_meta( $this->order_id, 'shipcloud_shipment_data', TRUE );
 
 		ob_start();
@@ -768,6 +771,11 @@ class WC_Shipcloud_Order
 				'weight' => $_POST[ 'weight' ],
 			)
 		);
+
+		if( 'shipcloud_create_shipment_label' == $_POST[ 'action' ] )
+		{
+			$shipment[ 'create_shipping_label' ] = TRUE;
+		}
 
 		$shipment = $shipcloud_api->send_request( 'shipments', $shipment, 'POST' );
 		$request_status = (int) $shipment[ 'header' ][ 'status' ];
