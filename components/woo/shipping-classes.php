@@ -61,7 +61,7 @@ class WC_Shipcloud_Shippig_Classes{
      * Initializing functions
      */
     public function init_hooks(){
-        add_action( 'product_shipping_class_edit_form_fields', array( $this, 'shipping_class_edit_form_fields' ), 10, 1 );
+        add_action( 'product_shipping_class_edit_form_fields', array( $this, 'shipping_class_edit_form_fields' ), 10, 2 );
         add_action( 'edited_product_shipping_class', array( $this, 'shipping_class_edit_form_fields_save' ), 10, 1 );
 
         add_action( 'product_shipping_class_add_form_fields', array( $this, 'shipping_class_add_form_fields' ), 10, 1 );
@@ -132,7 +132,6 @@ class WC_Shipcloud_Shippig_Classes{
      */
     public function shipping_class_add_form_fields(){
 
-        $parcels = array_merge( $parcels, wcsc_get_parceltemplates() );
         $html = '<h4>' . __( 'Shipment Settings', 'woocommerce-shipcloud' ) . '</h4>';
         $html.= '<div class="form-field shipment-settings">';
             $html.= '<label for="shipcloud_parcel_length">' . __( 'Length', 'woocommerce-shipcloud' ) . '</label>';
