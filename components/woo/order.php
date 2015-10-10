@@ -525,6 +525,8 @@ class WC_Shipcloud_Order
 	{
 		ob_start();
 
+		// p( $data );
+
 		if( '' == $data[ 'label_url' ] )
 		{
 			$classes_button_create_label = ' show';
@@ -824,16 +826,18 @@ class WC_Shipcloud_Order
 				$shipment_data = array();
 			}
 
-			$parcel = wcsc_get_parceltemplate( $parcel_id );
+			// $parcel = wcsc_get_parceltemplate( $parcel_id );
 
-			$data = array(
+			$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
+
+				$data = array(
 				'id'                   => $shipment[ 'body' ][ 'id' ],
 				'carrier_tracking_no'  => $shipment[ 'body' ][ 'carrier_tracking_no' ],
 				'tracking_url'         => $shipment[ 'body' ][ 'tracking_url' ],
 				'label_url'            => $shipment[ 'body' ][ 'label_url' ],
 				'price'                => $shipment[ 'body' ][ 'price' ],
 				'parcel_id'            => $_POST[ 'parcel_id' ],
-				'parcel_title'         => $parcel[ 'post_title' ],
+				'parcel_title'         => $parcel_title,
 				'carrier'              => $_POST[ 'carrier' ],
 				'width'                => $_POST[ 'width' ],
 				'height'               => $_POST[ 'height' ],
