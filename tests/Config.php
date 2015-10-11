@@ -1,16 +1,13 @@
 <?php
 
-class Config extends PHPUnit_Extensions_Selenium2TestCase
+require_once( '_woocommerce_shipcloud.php' );
+
+class Config extends WoocommerceShipcloud_Tests
 {
-
-	var $order_id;
-
 	public function testSetupPlugin()
 	{
 		$this->login();
-		$this->cleanup();
-
-		$this->url( "/wp-admin/admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping" );
+		$this->cleanup_config();
 
 		$this->byId( 'woocommerce_shipcloud_enabled' )->click();
 
@@ -73,60 +70,5 @@ class Config extends PHPUnit_Extensions_Selenium2TestCase
 			$this->assertSame( $default_postcode, $this->byId( 'woocommerce_shipcloud_sender_postcode' )->attribute( 'value' ) );
 			$this->assertSame( $default_city, $this->byId( 'woocommerce_shipcloud_sender_city' )->attribute( 'value' ) );
 		}
-	}
-
-	private function login()
-	{
-		$this->url( "/wp-admin/" );
-
-		$this->byId( 'user_login' )->value( 'wagesve' );
-		$this->byId( 'user_pass' )->value( 'tv7r66' );
-		$this->byId( 'wp-submit' )->submit();
-	}
-
-	private function cleanup()
-	{
-		$this->url( "/wp-admin/admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping" );
-
-		if( $this->byId( 'woocommerce_shipcloud_enabled' )->selected() )
-		{
-			$this->byId( 'woocommerce_shipcloud_enabled' )->click();
-		}
-
-		$this->byId( 'woocommerce_shipcloud_api_key' )->clear();
-
-		if( $this->byId( 'woocommerce_shipcloud_debug' )->selected() )
-		{
-			$this->byId( 'woocommerce_shipcloud_debug' )->click();
-		}
-
-		$this->byId( 'woocommerce_shipcloud_standard_price_products' )->clear();
-		$this->byId( 'woocommerce_shipcloud_standard_price_shipment_classes' )->clear();
-
-		$this->byId( 'woocommerce_shipcloud_sender_company' )->clear();
-		$this->byId( 'woocommerce_shipcloud_sender_first_name' )->clear();
-		$this->byId( 'woocommerce_shipcloud_sender_last_name' )->clear();
-		$this->byId( 'woocommerce_shipcloud_sender_street' )->clear();
-		$this->byId( 'woocommerce_shipcloud_sender_street_nr' )->clear();
-		$this->byId( 'woocommerce_shipcloud_sender_postcode' )->clear();
-		$this->byId( 'woocommerce_shipcloud_sender_city' )->clear();
-
-		$this->byName( 'save' )->click();
-	}
-
-	protected function setUp()
-	{
-		global $argv, $argc;
-
-		$host = 'clean.wp';
-
-		if( $argc == 3 )
-		{
-			$host = $argv[ 2 ];
-		}
-
-		$this->setBrowser( "firefox" );
-		$this->setBrowserUrl( "http://" . $host );
-		// $this->cleanup();
 	}
 }
