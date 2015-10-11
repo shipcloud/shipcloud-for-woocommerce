@@ -627,7 +627,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		{
 			$woocommerce_shipping_calculator_enable_city = TRUE;
 			?>
-			<p class="form-row form-row-wide" id="calc_shipping_city_field">
+			<p class="form-row form-row-wide" id="calc_shipping_address_field">
 				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_address() ); ?>" placeholder="<?php esc_attr_e( 'Address', 'woocommerce' ); ?>" name="calc_shipping_address" id="calc_shipping_address" />
 			</p>
 			<?php

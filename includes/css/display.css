@@ -1,1 +1,16 @@
-/* This stylesheet is used to style the public view of the plugin. */
+
+/**
+ * Workarround for missing fields in Shipment Calculator
+ *
+ * Take a look at 'woocommerce_shipping_calculator_enable_city' actionhooks
+ *
+ * @todo Deleting after getting a good Actionhook or Filter for Address field
+ */
+.woocommerce #calc_shipping_address_field
+{
+    display:none;
+}
+.woocommerce-shipping-calculator #calc_shipping_address_field
+{
+    display:block;
+}
