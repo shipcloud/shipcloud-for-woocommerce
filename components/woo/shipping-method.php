@@ -197,6 +197,19 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'desc_tip'    => TRUE,
 					'options'     => $carriers_options
 				),
+				'carrier_selection'                 => array(
+					'title'       => __( 'Carrier Selection', 'woocommerce-shipcloud' ),
+					'type'        => 'select',
+					'description' => __( 'Who can select the carrier?', 'woocommerce-shipcloud' ),
+					'class'       => 'select',
+					'desc_tip'    => TRUE,
+					'default'     => 'shopowner',
+					'options'     => array(
+						'shopowner' => __( 'Shop Owner can select Carrier', 'woocommerce-shipcloud' ),
+						'customer'  => __( 'Customer can select Carrier', 'woocommerce-shipcloud' ),
+					)
+				),
+				'standard_carrier'                  => $standard_carrier_settings,
 				'callback_url'                  => array(
 					'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
 					'type'        => 'text_only',
@@ -249,19 +262,6 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'type'        => 'price',
 					'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class (have to be entered in €).', 'woocommerce-shipcloud' ),
 				),
-				'carrier_selection'                 => array(
-					'title'       => __( 'Carrier Selection', 'woocommerce-shipcloud' ),
-					'type'        => 'select',
-					'description' => __( 'Who can select the carrier?', 'woocommerce-shipcloud' ),
-					'class'       => 'select',
-					'desc_tip'    => TRUE,
-					'default'     => 'shopowner',
-					'options'     => array(
-						'shopowner' => __( 'Shop Owner can select Carrier', 'woocommerce-shipcloud' ),
-						'customer'  => __( 'Customer can select Carrier', 'woocommerce-shipcloud' ),
-					)
-				),
-				'standard_carrier'                  => $standard_carrier_settings,
 				'standard_sender_data'              => array(
 					'title'       => __( 'Standard sender data', 'woocommerce-shipcloud' ),
 					'type'        => 'title',
