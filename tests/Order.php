@@ -37,6 +37,6 @@ class Order extends WoocommerceShipcloud_Tests
 
 		$order_id = $this->byCssSelector( '.order_details .order strong' )->text();
 
-		$this->add_shipping_to_order( $order_id );
+		$this->add_wcsc_shipping_to_order( $order_id );
 	}
 }
