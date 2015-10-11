@@ -58,6 +58,10 @@ class WCSCWoo extends WCSCComponent
 			include( __DIR__ . '/shipping-classes.php' );
 
 			add_action( 'woocommerce_api_shipcloud', array( 'WC_Shipcloud_Shipping', 'shipment_listener' ) );
+
+			// Additional Shipment calculation Field
+			add_action( 'woocommerce_shipping_calculator_enable_city', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_form_fields' ) );
+			add_action( 'woocommerce_calculated_shipping', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_fields' ) );
 		}
 	}
 

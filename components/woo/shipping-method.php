@@ -617,6 +617,32 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		}
 
 		/**
+		 * Adding form field for Address Field and enabling City field
+		 *
+		 * @param $woocommerce_shipping_calculator_enable_city
+		 *
+		 * @return bool
+		 */
+		public static function add_calculate_shipping_form_fields( $woocommerce_shipping_calculator_enable_city )
+		{
+			$woocommerce_shipping_calculator_enable_city = TRUE;
+			?>
+			<p class="form-row form-row-wide" id="calc_shipping_city_field">
+				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_address() ); ?>" placeholder="<?php esc_attr_e( 'Address', 'woocommerce' ); ?>" name="calc_shipping_address" id="calc_shipping_address" />
+			</p>
+			<?php
+			return $woocommerce_shipping_calculator_enable_city;
+		}
+
+		/**
+		 * Setting Address field after submiting
+		 */
+		public static function add_calculate_shipping_fields()
+		{
+			WC()->customer->set_shipping_address( $_POST['calc_shipping_address'] );
+		}
+
+		/**
 		 * Get price for parcel which have been selected in Shipping Class.
 		 *
 		 * @param string $shipping_class
