@@ -12,7 +12,32 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 		$this->byName( "parcel_width" )->value( '10' );
 		$this->byName( "parcel_height" )->value( '15' );
 		$this->byName( "parcel_length" )->value( '20' );
-		$this->byName( "parcel_weight" )->value( '5,5' );
+		$this->byName( "parcel_weight" )->value( '5' );
+		$this->select( $this->byName( 'parcel_carrier' ) )->selectOptionByValue( 'ups' );
+
+		$this->byId( "shipcloud_create_shipment" )->click();
+		sleep( 4 );
+
+		$this->cleanup_wcsc_order_shipping_data_fields();
+
+		$this->byName( "parcel_width" )->value( '7' );
+		$this->byName( "parcel_height" )->value( '13' );
+		$this->byName( "parcel_length" )->value( '23' );
+		$this->byName( "parcel_weight" )->value( '3' );
+		$this->select( $this->byName( 'parcel_carrier' ) )->selectOptionByValue( 'dhl' );
+
+		$this->byId( "shipcloud_create_shipment" )->click();
+		sleep( 4 );
+
+		$this->save_order();
+	}
+
+	public function cleanup_wcsc_order_shipping_data_fields()
+	{
+		$this->byName( "parcel_width" )->clear();
+		$this->byName( "parcel_height" )->clear();
+		$this->byName( "parcel_length" )->clear();
+		$this->byName( "parcel_weight" )->clear();
 	}
 
 	public function cleanup_wcsc_config()

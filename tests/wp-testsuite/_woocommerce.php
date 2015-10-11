@@ -43,6 +43,10 @@ class WooCommerce_Tests extends WP_Tests
 		}
 	}
 
+	public function save_order(){
+		$this->byCssSelector( "#woocommerce-order-actions .save_order" );
+	}
+
 	public function go_order( $order_id )
 	{
 		$this->url( "/wp-admin/post.php?post={$order_id}&action=edit" );
