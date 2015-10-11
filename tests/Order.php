@@ -10,33 +10,24 @@ class Order extends WoocommerceShipcloud_Tests
 	 */
 	public function testBuyProduct()
 	{
-		$this->url("/shop/");
+		$this->add_to_cart( array( 70, 37, 53 ) );
 
-		$products[] = $this->byCssSelector( ".post-53 .add_to_cart_button" );
+		$this->go_cart();
 
-		foreach( $products AS $product )
-		{
-			$product->click();
-			sleep( 4 );
-		}
+		$customer_data = array(
+			'first_name' => 'Max',
+			'last_name' => 'Mustermann',
+			'company' => 'Musterfirma',
+			'email' => 'support@awesome.ug',
+			'phone' => '110',
+			'address_1' => 'Musterweg 1',
+			'address_2' => '',
+			'postcode' => '66666',
+			'city' => 'Musterstadt',
+		);
 
-		$this->url( "/cart/" );
+		$order_id = $this->checkout( $customer_data );
 
-		sleep( 2 );
-
-		$this->byCssSelector( ".checkout-button" )->click();
-
-		$this->checkout();
-
-		sleep( 4 );
-
-		$this->byId( "payment_method_cheque" )->click();
-		$this->byId( "place_order" )->click();
-
-		sleep( 4 );
-
-		$order_id = $this->byCssSelector( '.order_details .order strong' )->text();
-
-		$this->add_wcsc_shipping_to_order( $order_id );
+		$this->enter_wcsc_order_shipping_data( $order_id );
 	}
 }

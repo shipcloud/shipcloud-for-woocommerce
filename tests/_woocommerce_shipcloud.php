@@ -4,15 +4,10 @@ require_once( dirname( __FILE__ ) . '/wp-testsuite/_woocommerce.php' );
 
 class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 {
-	public function add_wcsc_shipping_to_order( $order_id )
+	public function enter_wcsc_order_shipping_data( $order_id )
 	{
 		$this->login();
-
-		$url = "/wp-admin/post.php?post={$order_id}&action=edit";
-
-		$this->url( $url );
-
-		sleep( 5 );
+		$this->go_order( $order_id );
 
 		$this->byName( "parcel_width" )->value( '10' );
 		$this->byName( "parcel_height" )->value( '15' );
