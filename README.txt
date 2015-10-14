@@ -23,6 +23,9 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 == Changelog ==
 
+= 1.0.0 beta 3 =
+*
+
 = 1.0.0 beta 2 =
 * Added selection of allowed Carriers
 * Added automatic price calculation
