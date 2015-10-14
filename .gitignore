@@ -2,3 +2,4 @@
 .project
 .DS_Store
 apigen-report.xml
+phpunit-selenium/

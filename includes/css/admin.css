@@ -1,330 +1,236 @@
 /* This stylesheet is used to style the admin option form of the plugin. */
 
 /**
- * 	Tabs
- */
-#shipcloud .ui-state-hover{
-	background:none;
-	border:none;
-}
-#shipcloud .ui-state-hover, 
-#shipcloud .ui-widget-content .ui-state-hover, 
-#shipcloud .ui-widget-header .ui-state-hover,
-#shipcloud .ui-state-focus, 
-#shipcloud .ui-widget-content .ui-state-focus, 
-#shipcloud .ui-widget-header .ui-state-focus,
-#shipcloud .ui-state-active, 
-#shipcloud .ui-widget-content .ui-state-active, 
-#shipcloud .ui-widget-header .ui-state-active{
-	background:none;
-	border:none;
-}
-#shipcloud .wcsc-nav-tab-wrapper{
-	margin: 20px 0 0 0;
-	border-bottom: 1px solid #ccc;
-}
-#shipcloud .wcsc-nav-tab-wrapper li{
-	float:left;
-	margin-bottom:0px;
-}
-#shipcloud .wcsc-nav-tab-wrapper .ui-tabs-active .nav-tab{
-	background-color:#FFF;
-}
-#shipcloud .wcsc-tab-label{
-}
-#shipcloud .wcsc-tab{
-	min-height:300px;
-}
-/**
  * 	General
  */
-#shipcloud p {
+#shipcloud-io .inside {
+    padding: 0;
+}
+
+#shipcloud-io p {
     color: #777;
 }
-#shipcloud h3 {
-    padding:0;
-    margin-bottom:20px;
-}
-#shipcloud label{
-	padding-left:2px;
+
+#shipcloud-io .inside h3,
+#shipcloud-io .inside h4,
+#shipcloud-io .inside p,
+#shipcloud-io .inside table{
+    padding: 0;
+    margin: 0 0 10px;
 }
 
-#shipcloud .order_data_column_container{
-	width:100%;
-	clear:both;
+#shipcloud-io label {
+    padding-left: 2px;
 }
-#shipcloud .order_data_column{
-    float: left;
+
+#shipcloud-io .twentyfive {
+    width: 25%;
+    float:left;
 }
-#shipcloud #create_label_form{
-	padding-right: 0;
+
+#shipcloud-io .fifty {
+    width: 50%;
+    float:left;
 }
-#shipcloud #select_label{
+
+#shipcloud-io .seventyfive {
+    width: 75%;
+    float:left;
 }
-#shipcloud .addresses .order_data_column{
-	padding: 0 3% 0 0;
-	width: 31.3%;
-}
-#shipcloud .addresses .disabled label{
-	display:none;
-}
-#shipcloud .addresses .disabled input,
-#shipcloud .addresses .disabled select{
-}
-#shipcloud .addresses .disabled .twentyfive,
-#shipcloud .addresses .disabled .secentyfive,
-#shipcloud .addresses .disabled .fullsize{
-	display:inline;
-}
-#shipcloud .addresses .order_data_column h4,
-#shipcloud .addresses .order_data_column p{
-	margin: 0 0 5px;
-}
-#shipcloud .addresses .order_data_column.sender{
-}
-#shipcloud .addresses .order_data_column.recipient{
-}
-#shipcloud .parcel .order_data_column{
-	padding: 0;
+
+#shipcloud-io .fullsize {
     width: 100%;
 }
-#shipcloud #ask_create_label,
-#shipcloud #ask_order_pickup{
-	display:none;
+#shipment-center .hide{
+    display: none;
 }
-#shipcloud .edit_address{
-}
-#shipcloud .order_data_column p{
-	float:left;
-	margin: 0;
-    width:50%;
-}
-#shipcloud .order_data_column .twentyfive{
-	width:25%;
-}
-#shipcloud .order_data_column .seventyfive{
-	width:75%;
-}
-#shipcloud .order_data_column .fullsize{
-	width:100%;
+#shipment-center .show{
+    display: block;
 }
 
-#shipcloud .edit_address p input,
-#shipcloud .edit_address p select{
-	width: 100%;
-}
-#shipcloud .save_address{
-	width: 100%;
-}
-#shipcloud .btn_edit_address{
-	opacity: 0.4;
-	cursor:pointer;
-}
-#shipcloud .btn_edit_address:hover{
-	opacity: 1;
-}
-#shipcloud #parcel_templates #select_label{
-	padding-bottom: 20px;
-}
-#shipcloud #parcel_templates #select_label label{
-	text-align: center;
-	display: block;
-}
-#shipcloud .errors{
-	border-color: #dd3d36;
+/**
+ * 	Container
+ */
+#shipcloud-io .section {
+    width: 96%;
+    padding: 1% 2% 2%;
+    border-bottom: 1px solid #dfdfdf;
 }
 
-#shipcloud .shadow{
-	-webkit-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
-	-moz-box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
-	box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.75);
-	
-	margin-bottom: 20px;
+/**
+ * Address
+ */
+#shipcloud-io .address-form.sender {
+    padding-right:2%;
+    width:98%;
+}
+#shipcloud-io .address-form.recipient {
+    padding-left:2%;
+    width:98%;
+}
+#shipcloud-io .addresses label{
+    font-size: 10px;
+}
+#shipcloud-io .addresses input,
+#shipcloud-io .addresses select {
+    width: 100%;
 }
 
-#shipcloud .container-bottom{
-	border-left: 1px solid #ccc;
-	border-right: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-	margin-bottom: 20px;
-	padding: 20px;
+/**
+ * Parcels
+ */
+#shipcloud-io .parcels {
+    background: #f8f8f8 none repeat scroll 0 0;
+
+}
+
+#shipcloud-io .parcel-form-table {
+    width: 100%;
+    text-align: left;
+}
+
+#shipcloud-io .parcel-form-table select{
+    font-size:13px;
+}
+
+#shipcloud-io .btn-edit-address {
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+#shipcloud-io .btn-edit-address:hover {
+    opacity: 1;
+}
+#shipcloud-io .parcel-form-table th{
+    font-weight: normal;
+}
+#shipcloud-io .parcel-form-table input[type="text"]{
+    width:50px;
+}
+#shipcloud-io .parcel-template-field{
+    margin-bottom:10px;
+}
+#shipcloud-io .parcel-template-field label{
+    display: block;
+}
+#shipcloud-io .parcel-template-field select{
+    font-size: 13px;
 }
 
 /**
  * 	Action Buttons
  */
-#shipcloud .button-loading,
-#check_parcel_settings.button-loading{
-	background-image: url( '../../assets/images/loading.gif' );
-	background-repeat: no-repeat;
-	background-position: 5px 5px;
-	padding-left:28px;
-}
-#shipcloud .button-loading-blue{
-	background-image: url( '../../assets/images/loading-blue.gif' );
-	background-repeat: no-repeat;
-	background-position: 5px 5px;
-	padding-left:28px;
-}
-#shipcloud #create_label,
-#shipcloud #pickup_parcel{
+#shipcloud-io .button-loading{
+    background-image: url('../../assets/images/loading.gif');
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    padding-left: 28px;
 }
 
-#shipcloud #create_label{
-}
-
-#shipcloud #pickup_parcel{
-}
-
-#shipcloud #create_label select{
-	margin-top: -1px;
-	width: 100%;
-}
-#shipcloud .widget-content .label_shipment_actions{
-	text-align: left;
-	padding-right: 0;
-}
-.button-wcsc-action{
-	min-width:200px;
+#shipcloud-io .button-loading-blue {
+    background-image: url('../../assets/images/loading-blue.gif');
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    padding-left: 28px;
 }
 
 /**
  * 	Shipments
  */
-.wcsc-widget-icon{
-	float:left;
-	margin: 6px 0px 6px 6px;
-}
-#shipcloud .shipment_labels{
-	width:100%;
-}
-#shipcloud .shipment_labels .label{
-	margin-top: 20px;
-	padding: 0;
-	width: 100%;
-}
-#shipcloud .shipment_labels .widget-inside{
-	padding:20px;
-}
-#shipcloud .label_shipment_sender{
-	width:46%;
-	float:left;
-	padding:2%;
-}
-#shipcloud .label_shipment_recipient{
-	width:96%;
-	padding:2%;
-}
-#shipcloud .label_shipment_actions .button{
-	width:100%;
-	text-align: center;
-}
-#shipcloud .label_shipment_parcel{
-	color:#000;
-	margin-right:2px;
-	padding-top:20px;
 
+.shipcloud-widget-icon{
+    float: left;
+    margin: -8px 15px 0 -5px;
+}
+
+#shipcloud-io .shipment-labels .widget-title{
+    padding:15px;
+}
+
+#shipcloud-io .shipment-labels .widget-title h4{
+    margin: 0;
+    line-height: 16px;
+}
+#shipcloud-io .shipment-labels .widget-inside{
+    padding:20px;
+}
+
+#shipcloud-io .shipment-labels .label {
+    margin-top: 20px;
+    padding: 0;
+}
+
+#shipcloud-io .shipment-labels .address{
+    float:left;
+    width: 33%;
+    margin-bottom: 20px;
+}
+
+#shipcloud-io .parcel-templates  label{
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 /**
- * Parcel
+ * Post type Page
  */
-#wcsc-parcel-settings {
-	border: 1px solid #e5e5e5;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-	height: auto;
-	padding: 10px;
-	background: #fff none repeat scroll 0 0;
+.post-type-sc_parcel_template #post-body-content{
+    margin: 0;
 }
-#wcsc-parcel-settings .form-table{
-	margin:0;
+.post-type-sc_parcel_template #minor-publishing-actions,
+.post-type-sc_parcel_template #misc-publishing-actions{
+    display: none;
+}
+#shipcloud-parcel-settings .form-table th{
+    font-weight: normal;
+}
+#shipcloud-parcel-settings .form-table input[type="text"]{
+    width:50px;
 }
 
-#shipcloud .info{
-	display:none;
+/**
+ * Shipment Classes
+ */
+.shipcloud-parcel-form-field input[type="text"]{
+    width:50px;
 }
-#shipcloud #create_template .info{
-	margin-bottom: 10px;
+.form-field.shipment-settings label{
+    float: left;
+    line-height: 26px;
+    margin-right: 10px;
+    width: 15%;
 }
-#shipcloud .notice{
-    border: 1px solid #CCC;
-	box-shadow: none;
-    line-height: 28px;
-    padding: 12px;
-    margin:0;
-	text-align: center;
+.form-field.shipment-settings input[type="text"]{
+    width:50px;
 }
-#shipcloud #parcel_templates .notice{
-	padding:0;
 
-}
-#shipcloud #parcel_table{
-	border:none;
-}
-#shipcloud #parcel_table th{
-	padding: 0;
-	border:none;
-}
-#shipcloud #parcel_table th label{
-	padding:0;
-	font-weight: 600;
-	font-size: 12px;
-}
-#shipcloud #parcel_table td{
-	padding: 8px 0;
-}
-#shipcloud .errors{
-}
-#shipcloud .parcel .info .errors li{
-	margin: 3px 0;
-}
-#shipcloud .parcel input[type=button]{
-	float:right;
-	margin-left:10px;
-}
-#shipcloud .parcel_option{
-	width:10%;
-}
-#shipcloud .parcel_option.carrier{
-	width:25%;
-}
-#shipcloud .parcel_option.parcel_button{
-	width:25%;
-}
-#shipcloud .parcel_option input,
-#shipcloud .parcel_option select{
-	width:95%;
-	margin-bottom: 10px;
-}
-#shipcloud #shipcloud_add_parcel_template{
-	display:none;
-}
-#shipcloud .parcel_template p{
-	line-height:25px;
-}
-#shipcloud .parcel_template_arrow{
-	font-size:25px;
-	font-weight:bold;
-	color:#0074a2;
-	line-height:25px;
+/**
+ * Dialogs
+ */
+#ask-create-label{
+    display: none;
 }
 
 /**
  * 	Dialog (becaus WooCommerce adds jQuery UI CSS from google)
  */
-.wp-admin .wcsc-dialog{
-	border-radius: 0;
+.wp-admin .wcsc-dialog {
+    border-radius: 0;
 }
-.wp-admin .wcsc-dialog .ui-corner-all{
-	border-radius: 0;
+
+.wp-admin .wcsc-dialog .ui-corner-all {
+    border-radius: 0;
 }
+
 .wp-admin .wcsc-dialog .ui-widget-header {
-	background: none;
-	border: none;
-	border-bottom: 1px solid #CCC;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #CCC;
 }
-.wp-admin .wcsc-dialog .ui-button{
-	background: none;
+
+.wp-admin .wcsc-dialog .ui-button {
+    background: none;
 }
-.wp-admin .wcsc-dialog .ui-dialog-titlebar-close::before{
-	content: '';
+
+.wp-admin .wcsc-dialog .ui-dialog-titlebar-close::before {
+    content: '';
 }

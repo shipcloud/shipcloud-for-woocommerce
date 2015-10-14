@@ -32,14 +32,40 @@ if ( !defined( 'ABSPATH' ) ) exit;
 class WC_Shipcloud_Shippig_Classes{
 
     /**
+     * @var The Single instance of the class
+     */
+    protected static $_instance = NULL;
+
+    /**
+     * Construct
+     */
+    private function __construct()
+    {
+        $this->init_hooks();
+    }
+
+    /**
+     * Main Instance
+     */
+    public static function instance()
+    {
+        if( is_null( self::$_instance ) )
+        {
+            self::$_instance = new self();
+        }
+
+        return self::$_instance;
+    }
+
+    /**
      * Initializing functions
      */
-    public static function init(){
-        add_action( 'product_shipping_class_edit_form_fields', array( __CLASS__, 'shipping_class_edit_form_fields' ), 10, 2 );
-        add_action( 'edited_product_shipping_class', array( __CLASS__, 'shipping_class_edit_form_fields_save' ), 10, 2 );
+    public function init_hooks(){
+        add_action( 'product_shipping_class_edit_form_fields', array( $this, 'shipping_class_edit_form_fields' ), 10, 2 );
+        add_action( 'edited_product_shipping_class', array( $this, 'shipping_class_edit_form_fields_save' ), 10, 1 );
 
-        add_action( 'product_shipping_class_add_form_fields', array( __CLASS__, 'shipping_class_add_form_fields' ), 10, 2 );
-        add_action( 'create_product_shipping_class', array( __CLASS__, 'shipping_class_add_form_fields_save' ), 10, 2 );
+        add_action( 'product_shipping_class_add_form_fields', array( $this, 'shipping_class_add_form_fields' ), 10, 1 );
+        add_action( 'create_product_shipping_class', array( $this, 'shipping_class_edit_form_fields_save' ), 10, 1 );
     }
 
     /**
@@ -47,35 +73,82 @@ class WC_Shipcloud_Shippig_Classes{
      * @param $tag
      * @param $taxonomy
      */
-    public static function shipping_class_edit_form_fields( $tag, $taxonomy ){
+    public function shipping_class_edit_form_fields( $tag, $taxonomy ){
         $term_id = $_GET[ 'tag_ID' ]; // $tag doesn't work really, so use $_GET[ 'tag_ID' ]
 
-        $parcels[ 0 ][ 'ID' ] = 0;
-        $parcels[ 0 ][ 'post_title' ] = __( 'None', 'woocommerce-shipcloud' );
-        $parcels = array_merge( $parcels, WCSC_Parcels::get() );
+        $width = get_option( 'shipping_class_' . $term_id . '_shipcloud_width' );
+        $height = get_option( 'shipping_class_' . $term_id . '_shipcloud_height' );
+        $length = get_option( 'shipping_class_' . $term_id . '_shipcloud_length' );
+        $weight = get_option( 'shipping_class_' . $term_id . '_shipcloud_weight' );
 
-        $parcel_id = get_option( 'wcsc_shipping_class_' . $term_id . '_parcel_id', 0 );
-
-        $html = '<tr class="form-field">';
-        $html.= '<th scope="row">';
-        $html.= '<label for="_wcsc_parcel_id">' . __( 'shipcloud Parcel', 'woocommerce-shipcloud' ) . '</label>';
-        $html.= '</th>';
-        $html.= '<td>';
-
-        $html.= '<select name="_wcsc_parcel_id">';
-        foreach( $parcels AS $parcel ){
-
-            $selected = '';
-            if( $parcel_id == $parcel[ 'ID' ] )
-                $selected = ' selected="selected"';
-
-            $html.='<option value="' . $parcel[ 'ID' ] . '"' . $selected . '>' . $parcel[ 'post_title' ] . '</option>';
-        }
-        $html.= '</select>';
-        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class.', 'woocommerce-shipcloud' ) . '</p>';
-        $html.= '</td>';
+        $html = '<tr class="form-field shipcloud-parcel-form-field">';
+            $html.= '<th scope="row" colspan="2">';
+                $html.= '<h3>' . __( 'Shipment Settings', 'woocommerce-shipcloud' ) . '</h3>';
+            $html.= '</th>';
         $html.= '</tr>';
 
+        $html.= '<tr class="form-field shipcloud-parcel-form-field">';
+            $html.= '<th scope="row">';
+                $html.= '<label for="shipcloud_parcel_length">' . __( 'Length', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '</th>';
+            $html.= '<td>';
+                $html.= '<input type="text" name="shipcloud_parcel_length" value="' . $length .'" /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+            $html.= '</td>';
+        $html.= '</tr>';
+
+        $html.= '<tr class="form-field shipcloud-parcel-form-field">';
+            $html.= '<th scope="row">';
+                $html.= '<label for="shipcloud_parcel_width">' . __( 'Width', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '</th>';
+            $html.= '<td>';
+                $html.= '<input type="text" name="shipcloud_parcel_width" value="' . $width .'" /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+            $html.= '</td>';
+        $html.= '</tr>';
+
+        $html.= '<tr class="form-field shipcloud-parcel-form-field">';
+            $html.= '<th scope="row">';
+                $html.= '<label for="shipcloud_parcel_height">' . __( 'Height', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '</th>';
+            $html.= '<td>';
+                $html.= '<input type="text" name="shipcloud_parcel_height" value="' . $height .'" /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+            $html.= '</td>';
+        $html.= '</tr>';
+
+        $html.= '<tr class="form-field shipcloud-parcel-form-field">';
+            $html.= '<th scope="row">';
+                $html.= '<label for="shipcloud_parcel_weight">' . __( 'Weight', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '</th>';
+            $html.= '<td>';
+                $html.= '<input type="text" name="shipcloud_parcel_weight" value="' . $weight .'" /> ' .  __( 'kg', 'woocommerce-shipcloud' );
+            $html.= '</td>';
+        $html.= '</tr>';
+
+        echo $html;
+    }
+
+
+    /**
+     * Selecting Parcel for shipping class on adding Shipment Class
+     */
+    public function shipping_class_add_form_fields(){
+
+        $html = '<h4>' . __( 'Shipment Settings', 'woocommerce-shipcloud' ) . '</h4>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_length">' . __( 'Length', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_length" /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+        $html.= '</div>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_width">' . __( 'Width', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_width" /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+        $html.= '</div>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_height">' . __( 'Height', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_height"  /> ' .  __( 'cm', 'woocommerce-shipcloud' );
+        $html.= '</div>';
+        $html.= '<div class="form-field shipment-settings">';
+            $html.= '<label for="shipcloud_parcel_height">' . __( 'Weight', 'woocommerce-shipcloud' ) . '</label>';
+            $html.= '<input type="text" name="shipcloud_parcel_weight" /> ' .  __( 'kg', 'woocommerce-shipcloud' );
+        $html.= '</div>';
         echo $html;
     }
 
@@ -84,40 +157,17 @@ class WC_Shipcloud_Shippig_Classes{
      * @param int $term_id Term ID
      * @param int $tt_id Term taxonomy ID
      */
-    public static function shipping_class_edit_form_fields_save( $term_id, $tt_id ){
-        $parcel_id = $_POST[ '_wcsc_parcel_id' ];
-        update_option( 'wcsc_shipping_class_' . $term_id . '_parcel_id', $parcel_id );
-    }
+    public function shipping_class_edit_form_fields_save( $term_id )
+    {
+        $parcel_length = $_POST[ 'shipcloud_parcel_length' ];
+        $parcel_width = $_POST[ 'shipcloud_parcel_width' ];
+        $parcel_height = $_POST[ 'shipcloud_parcel_height' ];
+        $parcel_weight = $_POST[ 'shipcloud_parcel_weight' ];
 
-    /**
-     * Selecting Parcel for shipping class on adding Shipment Class
-     */
-    public static function shipping_class_add_form_fields(){
-        $parcels[ 0 ][ 'ID' ] = 0;
-        $parcels[ 0 ][ 'post_title' ] = __( 'None', 'woocommerce-shipcloud' );
-        $parcels = array_merge( $parcels, WCSC_Parcels::get() );
-
-        $html = '<div class="form-field">';
-        $html.= '<label for="cat_Image_url">' . __( 'shipcloud Parcel', 'woocommerce-shipcloud' ) . '</label>';
-        $html.= '<select name="_wcsc_parcel_id">';
-        foreach( $parcels AS $parcel ){
-            $html.='<option value="' . $parcel[ 'ID' ] . '">' . $parcel[ 'post_title' ] . '</option>';
-        }
-        $html.= '</select>';
-        $html.= '<p class="description">' . __( 'Select the shipcloud parcel you want to use for this shipping class.', 'woocommerce-shipcloud' ) . '</p>';
-        $html.= '</div>';
-
-        echo $html;
-    }
-
-    /**
-     * Saving Shipping Class data on adding Shipment Class
-     * @param int $term_id Term ID
-     * @param int $tt_id Term taxonomy ID
-     */
-    public static function shipping_class_add_form_fields_save( $term_id, $tt_id ){
-        $parcel_id = $_POST[ '_wcsc_parcel_id' ];
-        update_option( 'wcsc_shipping_class_' . $term_id . '_parcel_id', $parcel_id );
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_length', $parcel_length );
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_width', $parcel_width );
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_height', $parcel_height );
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_weight', $parcel_weight );
     }
 }
-WC_Shipcloud_Shippig_Classes::init();
+WC_Shipcloud_Shippig_Classes::instance();
