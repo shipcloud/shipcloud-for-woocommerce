@@ -1,6 +1,6 @@
 <?php
 
-require_once( '_woocommerce_shipcloud.php' );
+require_once( 'woocommerce_shipcloud.php' );
 
 class Order extends WoocommerceShipcloud_Tests
 {
@@ -26,7 +26,11 @@ class Order extends WoocommerceShipcloud_Tests
 			'city' => 'Musterstadt',
 		);
 
-		$order_id = $this->checkout( $customer_data );
+		$this->checkout( $customer_data );
+
+		sleep( 10 );
+
+		$order_id = $this->get_order_id_after_checkout();
 
 		$this->enter_wcsc_order_shipping_data( $order_id );
 	}

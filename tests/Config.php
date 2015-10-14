@@ -1,6 +1,6 @@
 <?php
 
-require_once( '_woocommerce_shipcloud.php' );
+require_once( 'woocommerce_shipcloud.php' );
 
 class Config extends WoocommerceShipcloud_Tests
 {

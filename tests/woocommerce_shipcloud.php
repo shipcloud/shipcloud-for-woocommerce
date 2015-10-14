@@ -1,13 +1,23 @@
 <?php
 
-require_once( dirname( __FILE__ ) . '/wp-testsuite/_woocommerce.php' );
+require_once( dirname( __FILE__ ) . '/wp-testsuite/testsuite.php' );
 
 class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 {
+	/**
+	 * Construct
+	 */
+	public function init()
+	{
+		$this->shop_url = '/shop/';
+		$this->cart_url = '/cart/';
+		$this->checkout_url = '/checkout/';
+	}
+
 	public function enter_wcsc_order_shipping_data( $order_id )
 	{
 		$this->login();
-		$this->go_order( $order_id );
+		$this->admin_go_order( $order_id );
 
 		$this->byName( "parcel_width" )->value( '10' );
 		$this->byName( "parcel_height" )->value( '15' );
@@ -16,7 +26,7 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 		$this->select( $this->byName( 'parcel_carrier' ) )->selectOptionByValue( 'ups' );
 
 		$this->byId( "shipcloud_create_shipment" )->click();
-		sleep( 4 );
+		sleep( 2 );
 
 		$this->cleanup_wcsc_order_shipping_data_fields();
 
@@ -27,9 +37,9 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 		$this->select( $this->byName( 'parcel_carrier' ) )->selectOptionByValue( 'dhl' );
 
 		$this->byId( "shipcloud_create_shipment" )->click();
-		sleep( 4 );
+		sleep( 2 );
 
-		$this->save_order();
+		$this->admin_save_order();
 	}
 
 	public function cleanup_wcsc_order_shipping_data_fields()

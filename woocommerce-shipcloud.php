@@ -32,7 +32,7 @@
  *
  * @author  rheinschmiede.de, Author <very@awesome.ug>
  * @package WooCommerceShipCloud
- * @version 1.0.0
+ * @version 1.0.0 beta3
  * @since   1.0.0
  * @license GPL 2
  */
