@@ -113,6 +113,63 @@ function wcsc_get_carrier_display_name( $name )
 }
 
 /**
+ * Getting shipment status by string (Needed for translations)
+ *
+ * @param string $status
+ * @return string $message
+ */
+function wcsc_get_shipment_status_string( $status )
+{
+	/**
+	 * Hooks in for further functions after status changes
+	 */
+	switch( $status )
+	{
+		case 'shipment.tracking.picked_up':
+			$message = __( 'Picked up', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.transit':
+			$message = __( 'In transit', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.out_for_delivery':
+			$message = __( 'Out for delivery', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.delivered':
+			$message = __( 'Delivered', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.awaits_pickup_by_receiver':
+			$message = __( 'Awaits pickup by Receiver', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.delayed':
+			$message = __( 'Delayed', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.not_delivered':
+			$message = __( 'Not delivered', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.notification':
+			$message = __( 'Carrier internal notification. Tracking events within the shipment will carry more elaborate information.', 'woocommerce-shipcloud' );
+			break;
+
+		case 'shipment.tracking.unknown':
+			$message = __( 'Status unknown', 'woocommerce-shipcloud' );
+			break;
+
+		default:
+			$message = __( 'Shipment Created', 'woocommerce-shipcloud' );
+			break;
+	}
+
+	return $message;
+}
+
+/**
  * Splitting Address for getting number of street and street separate
  *
  * @param string $street

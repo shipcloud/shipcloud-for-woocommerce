@@ -755,8 +755,81 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 */
 		public static function shipment_listener()
 		{
-			self::log( 'Payment Listener:' );
-			self::log( print_r( $_REQUEST, TRUE ) );
+			global $wpdb;
+
+			$shipment = json_decode( file_get_contents('php://input') );
+			$shipment_id = $shipment->data->id;
+
+			$sql = $wpdb->prepare( "SELECT p.ID FROM {$wpdb->posts} AS p, {$wpdb->postmeta} AS pm WHERE p.ID = pm.post_ID AND pm.meta_key=%s AND pm.meta_value=%s", 'shipcloud_shipment_ids', $shipment_id );
+
+			$order_id = $wpdb->get_var( $sql );
+
+			if( NULL == $order_id )
+			{
+				if( self::$debug )
+				{
+					self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID %s not found', $shipment_id ) );
+				}
+				return;
+			}
+			else
+			{
+				if( self::$debug )
+				{
+					self::log( sprintf( 'Shipment Listener: Changed status to "%s" for Shipment ID %s (Order ID %s) ', $shipment->type, $shipment_id, $order_id ) );
+				}
+			}
+
+			$order = wc_get_order( $order_id );
+			$order->add_order_note( sprintf( __( 'Shipment status changed to: %s', 'woocommerce-shipcloud' ), wcsc_get_shipment_status_string( $shipment->type ) ) );
+
+			update_post_meta( $order_id, 'shipment_' . $shipment_id . '_status', $shipment->type );
+
+			/**
+			 * Hooks in for further functions after status changes
+			 */
+			switch( $shipment->type )
+			{
+				case 'shipment.tracking.picked_up':
+					do_action( 'shipcloud_shipment_tracking_picked_up', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.transit':
+					do_action( 'shipcloud_shipment_tracking_transit', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.out_for_delivery':
+					do_action( 'shipcloud_shipment_tracking_out_for_delivery', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.delivered':
+					do_action( 'shipcloud_shipment_tracking_delivered', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.awaits_pickup_by_receiver':
+					do_action( 'shipcloud_shipment_tracking_awaits_pickup_by_receiver', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.delayed':
+					do_action( 'shipcloud_shipment_tracking_delayed', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.not_delivered':
+					do_action( 'shipcloud_shipment_tracking_not_delivered', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.notification':
+					do_action( 'shipcloud_shipment_tracking_notification', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.unknown':
+					do_action( 'shipcloud_shipment_tracking_unknown', $order_id, $shipment_id );
+					break;
+
+				default:
+					do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
+					break;
+			}
 		}
 
 		/**
