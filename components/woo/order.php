@@ -142,6 +142,7 @@ class WC_Shipcloud_Order
 		{
 			$order = new WC_Order( $this->order_id );
 
+			$recipient_street_name = '';
 			$recipient_street_nr = '';
 			$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
 
@@ -484,7 +485,7 @@ class WC_Shipcloud_Order
 	{
 		// delete_post_meta( $this->order_id, 'shipcloud_shipment_data' );
 
-		$shipment_data = get_post_meta( $this->order_id, 'shipcloud_shipment_data', TRUE );
+		$shipment_data = get_post_meta( $this->order_id, 'shipcloud_shipment_data' );
 
 		ob_start();
 		?>
@@ -496,11 +497,9 @@ class WC_Shipcloud_Order
 
 					if( '' != $shipment_data && is_array( $shipment_data ) )
 					{
-						krsort( $shipment_data );
-
-						foreach( $shipment_data AS $time => $data )
+						foreach( $shipment_data AS $data )
 						{
-							echo $this->get_label_html( $data, $time );
+							echo $this->get_label_html( $data );
 						}
 					}
 
@@ -519,13 +518,11 @@ class WC_Shipcloud_Order
 	 * Creates label HTML
 	 *
 	 * @param array $data
-	 * @param int   $time
+	 * @return string $html
 	 */
-	private function get_label_html( $data, $time = FALSE )
+	private function get_label_html( $data )
 	{
 		ob_start();
-
-		// p( $data );
 
 		if( '' == $data[ 'label_url' ] )
 		{
@@ -538,71 +535,77 @@ class WC_Shipcloud_Order
 			$classes_button_download_label = ' show';
 		}
 
+		$status = get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', TRUE );
+		$shipment_status = wcsc_get_shipment_status_string( $status );
+
 		?>
 		<div class="label widget">
-		<div class="widget-top">
-			<div class="widget-title-action">
-				<a class="widget-action hide-if-no-js"></a>
-			</div>
-			<div class="widget-title">
-				<img class="shipcloud-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
-				<?php
+			<div class="widget-top">
+				<div class="widget-title-action">
+					<a class="widget-action hide-if-no-js"></a>
+				</div>
+				<div class="widget-title">
+					<img class="shipcloud-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
+					<?php
 
-				$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
-				$title .= ' &gt; ';
-				$title .= trim( $data[ 'recipient_company' ] ) != '' ? $data[ 'recipient_company' ] . ', ' . $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ] : $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
-				$title .= ' | <small>' . $data[ 'parcel_title' ] . '</small>';
+					$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
+					$title .= ' &gt; ';
+					$title .= trim( $data[ 'recipient_company' ] ) != '' ? $data[ 'recipient_company' ] . ', ' . $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ] : $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
+					$title .= ' | <small>' . $data[ 'parcel_title' ] . '</small>';
 
-				?>
-				<h4><?php echo $title; ?></h4>
-			</div>
-		</div>
-		<div class="widget-inside">
-			<div class="widget-content">
-				<div class="data">
-
-					<div class="label-shipment-sender address">
-						<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
-						<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
-						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]; ?></div>
-						<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
-						<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
-					</div>
-
-					<div class="label-shipment-recipient address">
-						<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
-						<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
-						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]; ?></div>
-						<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
-						<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
-					</div>
-
-					<div class="label_shipment_actions ">
-
-						<p class="button-create-label<?php echo $classes_button_create_label; ?>">
-							<input type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="shipcloud_create_label button-primary"/>
-						</p>
-						<p class="button-download-label<?php echo $classes_button_download_label; ?>">
-							<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download Label', 'woocommerce-shipcloud' ); ?></a>
-						</p>
-
-						<p class="fullsize">
-							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
-						</p>
-
-						<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
-						<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
-					</div>
-
-					<div style="clear: both;"></div>
-
-					<?php echo $this->get_tracking_status_html( $data[ 'id' ] ); ?>
-
-					<div style="clear: both;"></div>
-
+					?>
+					<h4><?php echo $title; ?></h4>
 				</div>
 			</div>
-		</div>
+			<div class="widget-inside">
+				<div class="widget-content">
+					<div class="data">
+
+						<div class="label-shipment-sender address">
+							<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
+							<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
+							<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]; ?></div>
+							<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
+							<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
+						</div>
+
+						<div class="label-shipment-recipient address">
+							<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
+							<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
+							<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]; ?></div>
+							<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
+							<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
+						</div>
+
+						<div class="label_shipment_actions">
+
+							<p class="button-create-label<?php echo $classes_button_create_label; ?>">
+								<input type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="shipcloud_create_label button-primary"/>
+							</p>
+							<p class="button-download-label<?php echo $classes_button_download_label; ?>">
+								<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download Label', 'woocommerce-shipcloud' ); ?></a>
+							</p>
+
+							<p class="fullsize">
+								<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
+							</p>
+
+							<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
+							<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
+						</div>
+
+						<div style="clear: both;"></div>
+
+						<div class="label_shipment_status">
+							<div class="shipment_id"><strong><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'id' ]; ?></div>
+							<div class="shipment status"><strong><?php _e( 'Shipment Status:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $shipment_status; ?></div>
+						</div>
+
+						<div style="clear: both;"></div>
+
+					</div>
+				</div>
+			</div>
 		</div><?php
 
 		$html = ob_get_clean();
@@ -626,6 +629,7 @@ class WC_Shipcloud_Order
 	 * Saving product metabox
 	 *
 	 * @param int $post_id
+	 * @return void
 	 */
 	public function save_settings( $post_id )
 	{
@@ -814,7 +818,7 @@ class WC_Shipcloud_Order
 			exit;
 		endif;
 
-		delete_post_meta( $order_id, 'shipcloud_shipment_current_data' );
+		// For testing purposes
 		// delete_post_meta( $order_id, 'shipcloud_shipment_data' );
 
 		// Saving shipment data to order
@@ -830,7 +834,7 @@ class WC_Shipcloud_Order
 
 			$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
 
-				$data = array(
+			$data = array(
 				'id'                   => $shipment[ 'body' ][ 'id' ],
 				'carrier_tracking_no'  => $shipment[ 'body' ][ 'carrier_tracking_no' ],
 				'tracking_url'         => $shipment[ 'body' ][ 'tracking_url' ],
@@ -861,9 +865,9 @@ class WC_Shipcloud_Order
 				'recipient_country'    => $_POST[ 'recipient_country' ],
 				'date_created'         => time()
 			);
-			$shipment_data[ time() ] = $data;
 
-			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
+			add_post_meta( $order_id, 'shipcloud_shipment_ids', $data[ 'id' ] );
+			add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
 
 			$order = wc_get_order( $order_id );
 			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
@@ -890,7 +894,8 @@ class WC_Shipcloud_Order
 		$request_status = (int) $request[ 'header' ][ 'status' ];
 
 		// Getting errors if existing
-		if( 200 != $request_status ):
+		if( 200 != $request_status )
+		{
 			$errors = $request[ 'body' ][ 'errors' ];
 			$result = array();
 
@@ -907,16 +912,17 @@ class WC_Shipcloud_Order
 			}
 
 			$result = array( 'errors' => $result );
+		}
 
-		endif;
-
-		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data', TRUE );
+		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
 		// Saving shipment data to order
 		if( 200 == $request_status ):
 
 			$order = wc_get_order( $order_id );
 			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+
+			$shipments_old = $shipments;
 
 			foreach( $shipments AS $key => $shipment )
 			{
@@ -929,7 +935,7 @@ class WC_Shipcloud_Order
 				}
 			}
 
-			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments );
+			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments[ $key ], $shipments_old[ $key ] );
 
 			$result = array(
 				'id' => $request[ 'body' ][ 'id' ],

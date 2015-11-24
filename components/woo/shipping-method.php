@@ -36,17 +36,34 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 	class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
+		/**
+		 * Logger
+		 *
+		 * @var $logger
+		 * @since 1.0.0
+		 */
+		private static $logger;
 
-		var $carriers = array();
+		/**
+		 * Debug mode
+		 *
+		 * @var bool $debug
+		 * @since 1.0.0
+		 */
+		private static $debug = TRUE;
 
-		var $logger;
-
-		var $debug = FALSE;
-
-		var $callback_url;
+		/**
+		 * Callback URL
+		 *
+		 * @var string $callback_url
+		 * @since 1.0.0
+		 */
+		private $callback_url;
 
 		/**
 		 * Constructor for your shipping class
+		 *
+		 * @since 1.0.0
 		 */
 		public function __construct()
 		{
@@ -65,17 +82,19 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				$this->enabled = 'no';
 			}
 
-			$this->init();
-
-			if( class_exists( 'WC_Logger' ) )
+			if( 'no' == $this->settings[ 'debug' ] )
 			{
-				$this->log = new WC_Logger();
+				$this->debug = FALSE;
 			}
+
+			$this->init();
 			$this->check_settings();
 		}
 
 		/**
 		 * Checking Settings and setup Errors
+		 *
+		 * @since 1.0.0
 		 */
 		public function check_settings()
 		{
@@ -91,27 +110,31 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				return TRUE;
 			}
 
-			if( ( '' == $this->settings[ 'api_key' ] && !isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] )  )
+			if( ( '' == $this->settings[ 'api_key' ] && !isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
 				return FALSE;
 			}
 
 			if( '' == $this->settings[ 'allowed_carriers' ] && !isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && !isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please select at least one <a href="%s">Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please select at least one <a href="%s">Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
 				return FALSE;
 			}
 
-			if( ( '' == $this->settings[ 'standard_price_products' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] )  )
+			if( ( '' == $this->settings[ 'standard_price_products' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
 				return FALSE;
 			}
 
-			if( ( '' == $this->settings[ 'standard_price_shipment_classes' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] )  )
+			if( ( '' == $this->settings[ 'standard_price_shipment_classes' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping') ), 'error' );
+				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
 				return FALSE;
 			}
 
@@ -123,6 +146,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 *
 		 * @access public
 		 * @return void
+		 * @since 1.0.0
 		 */
 		public function init()
 		{
@@ -134,6 +158,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 		/**
 		 * Gateway settings
+		 * @since 1.0.0
 		 */
 		public function init_form_fields()
 		{
@@ -155,7 +180,6 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					}
 				}
 			}
-
 
 			$available_carriers = wcsc_get_carriers();
 
@@ -210,7 +234,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					)
 				),
 				'standard_carrier'                  => $standard_carrier_settings,
-				'callback_url'                  => array(
+				'callback_url'                      => array(
 					'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
 					'type'        => 'text_only',
 					'description' => sprintf( __( '%s<br /><br />You want to get noticed about the Shipment Status? Copy the Webhook URL and enter it in your <a href="%s" target="_blank">shipcloud.io Webhooks Section.</a>', 'woocommerce-shipcloud' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
@@ -220,7 +244,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'title'   => __( 'Debug', 'woocommerce-shipcloud' ),
 					'type'    => 'checkbox',
 					'label'   => __( 'Enable logging if you experience problems.', 'woocommerce-shipcloud' ),
-					'default' => 'no'
+					'default' => 'yes'
 				),
 				'calculation'                       => array(
 					'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
@@ -328,6 +352,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 * @param $data
 		 *
 		 * @return string
+		 * @since 1.0.0
 		 */
 		public function generate_multi_checkbox_html( $key, $data )
 		{
@@ -361,12 +386,12 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 						<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data[ 'title' ] ); ?></span>
 						</legend>
 						<div class="multi-checkbox <?php _e( $data[ 'class' ] ); ?>" id="<?php _e( $field ); ?>" style="<?php _e( $data[ 'css' ] ); ?>" <?php disabled( $data[ 'disabled' ], TRUE ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
-							<?php if( count( $data[ 'options' ] ) > 0  && '' != trim( $this->settings[ 'api_key' ] ) ): ?>
-							<?php foreach( (array) $data[ 'options' ] as $option_key => $option_value ) : ?>
-								<div>
-									<input id="<?php _e( $field ); ?>_<?php _e( $option_key ); ?>" type="checkbox" name="<?php _e( $field ); ?>[]" value="<?php _e( $option_key ); ?>" <?php checked( in_array( $option_key, $value ), TRUE ); ?>> <?php _e( $option_value ); ?>
-								</div>
-							<?php endforeach; ?>
+							<?php if( count( $data[ 'options' ] ) > 0 && '' != trim( $this->settings[ 'api_key' ] ) ): ?>
+								<?php foreach( (array) $data[ 'options' ] as $option_key => $option_value ) : ?>
+									<div>
+										<input id="<?php _e( $field ); ?>_<?php _e( $option_key ); ?>" type="checkbox" name="<?php _e( $field ); ?>[]" value="<?php _e( $option_key ); ?>" <?php checked( in_array( $option_key, $value ), TRUE ); ?>> <?php _e( $option_value ); ?>
+									</div>
+								<?php endforeach; ?>
 							<?php else: ?>
 								<p><?php _e( 'Please enter an API key to get available shipment Carriers.', 'woocommerce-shipcloud' ); ?></p>
 							<?php endif; ?>
@@ -385,13 +410,15 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 *
 		 * @param  mixed $key
 		 * @param  mixed $data
+		 *
 		 * @return string
+		 * @since 1.0.0
 		 */
-		public function generate_text_only_html( $key, $data ) {
+		public function generate_text_only_html( $key, $data )
+		{
 
-			$field    = $this->get_field_key( $key );
-			$defaults = array(
-			);
+			$field = $this->get_field_key( $key );
+			$defaults = array();
 
 			$data = wp_parse_args( $data, $defaults );
 
@@ -402,7 +429,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					<?php echo wp_kses_post( $data[ 'title' ] ); ?>
 				</th>
 				<td class="forminp">
-					<p><?php echo wp_kses_post( $data['description'] ); ?></p>
+					<p><?php echo wp_kses_post( $data[ 'description' ] ); ?></p>
 				</td>
 			</tr>
 			<?php
@@ -416,6 +443,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 * @param $key
 		 *
 		 * @return array
+		 * @since 1.0.0
 		 */
 		public function validate_multi_checkbox_field( $key )
 		{
@@ -434,13 +462,11 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		}
 
 		/**
-		 * calculate_shipping function
-		 *
-		 * @access public
+		 * Calculate_shipping function
 		 *
 		 * @param mixed $packages
-		 *
 		 * @return void
+		 * @since 1.0.0
 		 */
 		public function calculate_shipping( $package )
 		{
@@ -456,11 +482,11 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			 * Getting Adresses
 			 */
 			$sender = array(
-				'street'     => $settings[ 'sender_street' ],
-				'street_no'  => $settings[ 'sender_street_nr' ],
-				'zip_code'   => $settings[ 'sender_postcode' ],
-				'city'       => $settings[ 'sender_city' ],
-				'country'    => $settings[ 'sender_country' ],
+				'street'    => $settings[ 'sender_street' ],
+				'street_no' => $settings[ 'sender_street_nr' ],
+				'zip_code'  => $settings[ 'sender_postcode' ],
+				'city'      => $settings[ 'sender_city' ],
+				'country'   => $settings[ 'sender_country' ],
 			);
 
 			$recipient_street = wcsc_explode_street( $package[ 'destination' ][ 'address' ] );
@@ -531,11 +557,11 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 							);
 
 							$calculated_parcels[ $carrier_name ][] = array(
-								'carrier'=> $carrier_name,
-								'width'  => $parcel[ 'width' ],
-								'height' => $parcel[ 'height' ],
-								'length' => $parcel[ 'length' ],
-								'weight' => str_replace( ',', '.', $parcel[ 'weight' ] )
+								'carrier' => $carrier_name,
+								'width'   => $parcel[ 'width' ],
+								'height'  => $parcel[ 'height' ],
+								'length'  => $parcel[ 'length' ],
+								'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
 							);
 
 							$price = $shipcloud_api->get_price( $shipment );
@@ -578,11 +604,11 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 							);
 
 							$calculated_parcels[ $carrier_name ][] = array(
-								'carrier'=> $carrier_name,
-								'width'  => $parcel[ 'width' ],
-								'height' => $parcel[ 'height' ],
-								'length' => $parcel[ 'length' ],
-								'weight' => str_replace( ',', '.', $parcel[ 'weight' ] )
+								'carrier' => $carrier_name,
+								'width'   => $parcel[ 'width' ],
+								'height'  => $parcel[ 'height' ],
+								'length'  => $parcel[ 'length' ],
+								'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
 							);
 
 							$price = $shipcloud_api->get_price( $shipment );
@@ -620,15 +646,15 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 * Adding form field for Address Field and enabling City field
 		 *
 		 * @param $woocommerce_shipping_calculator_enable_city
-		 *
 		 * @return bool
+		 * @since 1.0.0
 		 */
 		public static function add_calculate_shipping_form_fields( $woocommerce_shipping_calculator_enable_city )
 		{
 			$woocommerce_shipping_calculator_enable_city = TRUE;
 			?>
 			<p class="form-row form-row-wide" id="calc_shipping_address_field">
-				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_address() ); ?>" placeholder="<?php esc_attr_e( 'Address', 'woocommerce' ); ?>" name="calc_shipping_address" id="calc_shipping_address" />
+				<input type="text" class="input-text" value="<?php echo esc_attr( WC()->customer->get_shipping_address() ); ?>" placeholder="<?php esc_attr_e( 'Address', 'woocommerce' ); ?>" name="calc_shipping_address" id="calc_shipping_address"/>
 			</p>
 			<?php
 			return $woocommerce_shipping_calculator_enable_city;
@@ -636,18 +662,20 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 		/**
 		 * Setting Address field after submiting
+		 *
+		 * @since 1.0.0
 		 */
 		public static function add_calculate_shipping_fields()
 		{
-			WC()->customer->set_shipping_address( $_POST['calc_shipping_address'] );
+			WC()->customer->set_shipping_address( $_POST[ 'calc_shipping_address' ] );
 		}
 
 		/**
 		 * Get price for parcel which have been selected in Shipping Class.
 		 *
 		 * @param string $shipping_class
-		 *
 		 * @return float $costs
+		 * @since 1.0.0
 		 */
 		public function get_shipping_class_costs( $shipping_class )
 		{
@@ -655,7 +683,10 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 			if( !is_object( $term ) )
 			{
-				$this->log( sprintf( __( 'No term found for shipping class #%s', 'woocommerce-shipcloud' ), $shipping_class ) );
+				if( $this->debug )
+				{
+					self::log( sprintf( __( 'No term found for shipping class #%s', 'woocommerce-shipcloud' ), $shipping_class ) );
+				}
 
 				return FALSE;
 			}
@@ -664,7 +695,10 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 			if( 0 == $parcel_id )
 			{
-				$this->log( sprintf( __( 'No parcel found for product id #%s', 'woocommerce-shipcloud' ), $product_id ) );
+				if( $this->debug )
+				{
+					self::log( sprintf( __( 'No parcel found for product id #%s', 'woocommerce-shipcloud' ), $product_id ) );
+				}
 			}
 
 			$retail_price = $this->get_parcel_retail_price( $parcel_id );
@@ -676,6 +710,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 * Get price for parcel which have been selected in product.
 		 *
 		 * @param $product_id
+		 * @since 1.0.0
 		 */
 		public function get_product_costs( $product_id )
 		{
@@ -689,6 +724,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 * Get retail price for parcel.
 		 *
 		 * @param $parcel_id
+		 * @since 1.0.0
 		 */
 		public function get_parcel_retail_price( $parcel_id = 0 )
 		{
@@ -703,7 +739,10 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			if( '' == $retail_price )
 			{
 				$retail_price = $this->settings[ 'standard_price' ];
-				$this->log( sprintf( __( 'No price found for parcel. Using fallback price %s', 'woocommerce-shipcloud' ), $retail_price ) );
+				if( $this->debug )
+				{
+					self::log( sprintf( __( 'No price found for parcel. Using fallback price %s', 'woocommerce-shipcloud' ), $retail_price ) );
+				}
 			}
 
 			return $retail_price;
@@ -711,22 +750,102 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 		/**
 		 * Listening to Shipcloud Webhooks
+		 *
+		 * @since 1.0.0
 		 */
-		public static function shipment_listener(){
-			// $this->log(  'Geht doch!' );
+		public static function shipment_listener()
+		{
+			global $wpdb;
+
+			$shipment = json_decode( file_get_contents('php://input') );
+			$shipment_id = $shipment->data->id;
+
+			$sql = $wpdb->prepare( "SELECT p.ID FROM {$wpdb->posts} AS p, {$wpdb->postmeta} AS pm WHERE p.ID = pm.post_ID AND pm.meta_key=%s AND pm.meta_value=%s", 'shipcloud_shipment_ids', $shipment_id );
+
+			$order_id = $wpdb->get_var( $sql );
+
+			if( NULL == $order_id )
+			{
+				if( self::$debug )
+				{
+					self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID %s not found', $shipment_id ) );
+				}
+				return;
+			}
+			else
+			{
+				if( self::$debug )
+				{
+					self::log( sprintf( 'Shipment Listener: Changed status to "%s" for Shipment ID %s (Order ID %s) ', $shipment->type, $shipment_id, $order_id ) );
+				}
+			}
+
+			$order = wc_get_order( $order_id );
+			$order->add_order_note( sprintf( __( 'Shipment status changed to: %s', 'woocommerce-shipcloud' ), wcsc_get_shipment_status_string( $shipment->type ) ) );
+
+			update_post_meta( $order_id, 'shipment_' . $shipment_id . '_status', $shipment->type );
+
+			/**
+			 * Hooks in for further functions after status changes
+			 */
+			switch( $shipment->type )
+			{
+				case 'shipment.tracking.picked_up':
+					do_action( 'shipcloud_shipment_tracking_picked_up', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.transit':
+					do_action( 'shipcloud_shipment_tracking_transit', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.out_for_delivery':
+					do_action( 'shipcloud_shipment_tracking_out_for_delivery', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.delivered':
+					do_action( 'shipcloud_shipment_tracking_delivered', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.awaits_pickup_by_receiver':
+					do_action( 'shipcloud_shipment_tracking_awaits_pickup_by_receiver', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.delayed':
+					do_action( 'shipcloud_shipment_tracking_delayed', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.not_delivered':
+					do_action( 'shipcloud_shipment_tracking_not_delivered', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.notification':
+					do_action( 'shipcloud_shipment_tracking_notification', $order_id, $shipment_id );
+					break;
+
+				case 'shipment.tracking.unknown':
+					do_action( 'shipcloud_shipment_tracking_unknown', $order_id, $shipment_id );
+					break;
+
+				default:
+					do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
+					break;
+			}
 		}
 
 		/**
 		 * Adding logentry on debug mode
 		 *
 		 * @param $message
+		 * @since 1.0.0
 		 */
-		public function log( $message )
+		public static function log( $message )
 		{
-			if( 'yes' == $this->settings[ 'debug' ] )
+			if( !is_object( self::$logger ) )
 			{
-				$this->log->add( 'shipcloud', $message );
+				self::$logger = new WC_Logger();
 			}
+
+			self::$logger->add( 'shipcloud', $message );
 		}
 	}
 }
