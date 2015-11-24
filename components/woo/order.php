@@ -894,7 +894,8 @@ class WC_Shipcloud_Order
 		$request_status = (int) $request[ 'header' ][ 'status' ];
 
 		// Getting errors if existing
-		if( 200 != $request_status ):
+		if( 200 != $request_status )
+		{
 			$errors = $request[ 'body' ][ 'errors' ];
 			$result = array();
 
@@ -911,16 +912,17 @@ class WC_Shipcloud_Order
 			}
 
 			$result = array( 'errors' => $result );
+		}
 
-		endif;
-
-		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data', TRUE );
+		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
 		// Saving shipment data to order
 		if( 200 == $request_status ):
 
 			$order = wc_get_order( $order_id );
 			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+
+			$shipments_old = $shipments;
 
 			foreach( $shipments AS $key => $shipment )
 			{
@@ -933,7 +935,7 @@ class WC_Shipcloud_Order
 				}
 			}
 
-			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments );
+			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments[ $key ], $shipments_old[ $key ] );
 
 			$result = array(
 				'id' => $request[ 'body' ][ 'id' ],
