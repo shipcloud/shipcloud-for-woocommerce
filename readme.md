@@ -9,8 +9,8 @@ This plugin integrates shipcloud.io into WooCommerce.
 Integrate your shipcloid.io account to your WooCommerce shop. Create shipment labels, view tracking info and calculate your shipment prices.
 
 ## Requirements
-- WordPress 3.3+
-- WooCommerce 1.3+
+- WordPress 4.0.0+
+- WooCommerce 2.0.0+
 
 ## Installation
 1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
