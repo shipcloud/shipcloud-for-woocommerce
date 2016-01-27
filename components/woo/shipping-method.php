@@ -757,8 +757,34 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		{
 			global $wpdb;
 
-			$shipment = json_decode( file_get_contents('php://input') );
+			$post = file_get_contents('php://input');
+			$shipment = json_decode( $post );
+
+			if( ( json_last_error() !== JSON_ERROR_NONE ) ){
+				if( self::$debug )
+				{
+					self::log( sprintf( 'Shipment Listener: JSON error (%s).', json_last_error_msg() ) );
+				}
+				exit;
+			}
+
+			if( !property_exists( $shipment, 'data' ) || !property_exists( $shipment->data, 'id' ) ){
+				if( self::$debug )
+				{
+					self::log( 'Shipment Listener: Wrong data format.' );
+				}
+				exit;
+			}
+
 			$shipment_id = $shipment->data->id;
+
+			if( empty( $shipment_id ) ){
+				if( self::$debug )
+				{
+					self::log( 'Shipment Listener: Shipment ID not given.' );
+				}
+				exit;
+			}
 
 			$sql = $wpdb->prepare( "SELECT p.ID FROM {$wpdb->posts} AS p, {$wpdb->postmeta} AS pm WHERE p.ID = pm.post_ID AND pm.meta_key=%s AND pm.meta_value=%s", 'shipcloud_shipment_ids', $shipment_id );
 
@@ -768,9 +794,9 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			{
 				if( self::$debug )
 				{
-					self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID %s not found', $shipment_id ) );
+					self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID #%s not found', $shipment_id ) );
 				}
-				return;
+				exit;
 			}
 			else
 			{
@@ -830,6 +856,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
 					break;
 			}
+			exit;
 		}
 
 		/**
