@@ -23,6 +23,9 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 == Changelog ==
 
+= 1.0.0 alpha 4 =
+* Finished Shipment Listener
+
 = 1.0.0 alpha 3 =
 * Added Shipment Listener
 
