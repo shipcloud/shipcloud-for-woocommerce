@@ -144,7 +144,8 @@ class Woocommerce_Shipcloud_API
 		$url = $this->get_endpoint( $action );
 		$headers = array(
 			'Authorization' => 'Basic ' . base64_encode( $this->api_key ),
-			'Content-Type'  => 'application/json'
+			'Content-Type'  => 'application/json',
+			'Affiliate-ID'  => 'plugin.woocommerce.z4NVoYhp'
 		);
 
 		$params = json_encode( $params );
