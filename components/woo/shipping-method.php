@@ -758,6 +758,15 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			global $wpdb;
 
 			$shipment = json_decode( file_get_contents('php://input') );
+
+			if( ( json_last_error() == JSON_ERROR_NONE ) ){
+				if( self::$debug )
+				{
+					self::log( sprintf( 'Shipment Listener: Wrong data format, expecting JSON.', $shipment_id ) );
+				}
+				exit;
+			}
+
 			$shipment_id = $shipment->data->id;
 
 			$sql = $wpdb->prepare( "SELECT p.ID FROM {$wpdb->posts} AS p, {$wpdb->postmeta} AS pm WHERE p.ID = pm.post_ID AND pm.meta_key=%s AND pm.meta_value=%s", 'shipcloud_shipment_ids', $shipment_id );
@@ -770,7 +779,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				{
 					self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID %s not found', $shipment_id ) );
 				}
-				return;
+				exit;
 			}
 			else
 			{
@@ -830,6 +839,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
 					break;
 			}
+			exit;
 		}
 
 		/**
