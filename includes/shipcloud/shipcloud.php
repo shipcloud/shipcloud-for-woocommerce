@@ -115,6 +115,16 @@ class Woocommerce_Shipcloud_API
 		return $request_data;
 	}
 
+	public function delete_shipment( $shipment_id )
+	{
+		$params = array();
+
+		$action = 'shipments/' . $shipment_id;
+		$request_data = $this->send_request( $action, $params, 'DELETE' );
+
+		return $request_data;
+	}
+
 	public function request_pickup( $params )
 	{
 		$action = 'pickup_requests';
@@ -182,6 +192,18 @@ class Woocommerce_Shipcloud_API
 					'method'  => 'PUT',
 					'body'    => $params
 				);
+				$response = wp_remote_request( $url, $args );
+
+				break;
+
+			case "DELETE":
+
+				$args = array(
+					'timeout' => 10,
+					'headers' => $headers,
+					'method'  => 'DELETE'
+				);
+
 				$response = wp_remote_request( $url, $args );
 
 				break;

@@ -171,6 +171,14 @@
     width: 33%;
     margin-bottom: 20px;
 }
+#shipcloud-io .label-shipment-actions{
+    text-align: right;
+}
+#shipcloud-io .label-shipment-actions a,
+#shipcloud-io .label-shipment-actions input{
+    min-width: 240px;
+    text-align: center;
+}
 
 #shipcloud-io .info{
     padding: 0 20px;
@@ -235,7 +243,8 @@
 /**
  * Dialogs
  */
-#ask-create-label{
+#ask-create-label,
+#ask-delete-shipment{
     display: none;
 }
 
