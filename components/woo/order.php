@@ -540,6 +540,7 @@ class WC_Shipcloud_Order
 			$classes_button_download_label = ' show';
 		}
 
+		$display_id = strtoupper( substr( $data[ 'id' ], 0,5 ) ) . '-' . strtoupper( substr( $data[ 'id' ], 5,5 ) );
 		$status = get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', TRUE );
 		$shipment_status = wcsc_get_shipment_status_string( $status );
 
@@ -612,7 +613,7 @@ class WC_Shipcloud_Order
 								<tbody>
 									<tr>
 										<th><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></th>
-										<td><?php echo $data[ 'id' ]; ?></td>
+										<td><?php echo $display_id; ?></td>
 									</tr>
 									<tr>
 										<th><?php _e( 'Tracking Status:', 'woocommerce-shipcloud' ); ?></th>
