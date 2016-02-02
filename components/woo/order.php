@@ -908,7 +908,7 @@ class WC_Shipcloud_Order
 		add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
 
 		$order = wc_get_order( $order_id );
-		$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+		$order->add_order_note( __( 'shipcloud.io label was prepared.', 'woocommerce-shipcloud' ) );
 
 		echo $this->get_label_html( $data );
 
