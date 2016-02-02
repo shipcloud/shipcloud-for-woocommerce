@@ -156,8 +156,14 @@
 }
 
 #shipcloud-io .shipment-labels .label {
-    margin-top: 20px;
+    margin: 10px 20px;
     padding: 0;
+}
+#shipcloud-io .shipment-labels .label:first-child {
+    margin: 20px 20px 10px 20px;
+}
+#shipcloud-io .shipment-labels .label:last-child {
+    margin: 10px 20px 20px 20px;
 }
 
 #shipcloud-io .shipment-labels .address{
