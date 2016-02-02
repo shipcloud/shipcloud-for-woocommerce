@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-02 22:24+0100\n"
-"PO-Revision-Date: 2016-02-02 22:25+0100\n"
+"POT-Creation-Date: 2016-02-02 23:08+0100\n"
+"PO-Revision-Date: 2016-02-02 23:08+0100\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: ../components/core/parcel-template.php:238 ../components/woo/order.php:334
 #: ../components/woo/order.php:340 ../components/woo/order.php:346
 #: ../components/woo/order.php:408 ../components/woo/order.php:429
-#: ../components/woo/order.php:854 ../components/woo/shipping-classes.php:95
+#: ../components/woo/order.php:873 ../components/woo/shipping-classes.php:95
 #: ../components/woo/shipping-classes.php:104
 #: ../components/woo/shipping-classes.php:113
 #: ../components/woo/shipping-classes.php:138
@@ -37,7 +37,7 @@ msgstr "cm"
 #: ../components/core/parcel-template.php:179
 #: ../components/core/parcel-template.php:238 ../components/woo/order.php:352
 #: ../components/woo/order.php:409 ../components/woo/order.php:430
-#: ../components/woo/order.php:854 ../components/woo/shipping-classes.php:122
+#: ../components/woo/order.php:873 ../components/woo/shipping-classes.php:122
 #: ../components/woo/shipping-classes.php:150 ../woocommerce-shipcloud.php:257
 msgid "kg"
 msgstr "kg"
@@ -214,7 +214,7 @@ msgstr "Preis berechnen"
 msgid "Prepare Label"
 msgstr "Versandmarke vorbereiten"
 
-#: ../components/woo/order.php:307 ../components/woo/order.php:588
+#: ../components/woo/order.php:307 ../components/woo/order.php:589
 msgid "Create Label"
 msgstr "Versandmarke erstellen"
 
@@ -229,7 +229,7 @@ msgstr "<a href=\"%s\">Bitte wählen Sie ein Versandunternehmen</a>."
 
 #: ../components/woo/order.php:406 ../components/woo/order.php:407
 #: ../components/woo/order.php:427 ../components/woo/order.php:428
-#: ../components/woo/order.php:854
+#: ../components/woo/order.php:873
 msgid "x"
 msgstr "x"
 
@@ -276,44 +276,48 @@ msgstr ""
 msgid "Do you really want to delete this shipment?"
 msgstr "Möchten Sie diese Sendung wirklich löschen?"
 
-#: ../components/woo/order.php:591
+#: ../components/woo/order.php:592
 msgid "Download Label"
 msgstr "Versandmarke herunterladen"
 
-#: ../components/woo/order.php:595
+#: ../components/woo/order.php:596
 msgid "Tracking Link"
 msgstr "Tracking Link"
 
-#: ../components/woo/order.php:600
+#: ../components/woo/order.php:601
 msgid "Delete Shipment"
 msgstr "Sendung löschen"
 
-#: ../components/woo/order.php:611
+#: ../components/woo/order.php:615
 msgid "Shipment ID:"
 msgstr "Versand-ID:"
 
-#: ../components/woo/order.php:612
+#: ../components/woo/order.php:619
 msgid "Tracking Status:"
 msgstr "Trackingstatus:"
 
-#: ../components/woo/order.php:614
+#: ../components/woo/order.php:624
 msgid "Price:"
 msgstr "Preis:"
 
-#: ../components/woo/order.php:748 ../components/woo/order.php:835
-#: ../components/woo/order.php:930
+#: ../components/woo/order.php:767 ../components/woo/order.php:854
+#: ../components/woo/order.php:949
 msgid "Parcel dimensions are not supported by carrier."
 msgstr "Paketabmessungen werden vom Versandunternehmen nicht unterstützt."
 
-#: ../components/woo/order.php:892 ../components/woo/order.php:948
+#: ../components/woo/order.php:911
+msgid "shipcloud.io label was prepared."
+msgstr "shipcloud.io Versandmarke wurde vorbereitet."
+
+#: ../components/woo/order.php:967
 msgid "shipcloud.io label was created."
 msgstr "shipcloud.io Versandmarke wurde erstellt."
 
-#: ../components/woo/order.php:1025
+#: ../components/woo/order.php:1044
 msgid "shipcloud.io shipment was deleted."
 msgstr "shipcloud.io Sendung wurde gelöscht."
 
-#: ../components/woo/order.php:1048
+#: ../components/woo/order.php:1067
 msgid "Shipment was not found."
 msgstr "Sendung wurde nicht gefunden."
 
