@@ -661,6 +661,11 @@ class WC_Shipcloud_Order
 	 */
 	public function save_settings( $post_id )
 	{
+
+		if( ! isset( $_POST[ 'save_settings' ] ) ){
+			return $post_id;
+		}
+		
 		// Savety first!
 		if( !wp_verify_nonce( $_POST[ 'save_settings' ], plugin_basename( __FILE__ ) ) )
 		{
