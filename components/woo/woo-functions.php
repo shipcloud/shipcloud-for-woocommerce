@@ -174,7 +174,7 @@ function wcsc_get_shipment_request_data( $sender = FALSE, $recipient, $parcel, $
 	// Use default data if nothing was saved before
 	if( '' == $recipient || 0 == count( $recipient ) )
 	{
-		$order = new WC_Order( self::$order_id );
+		$order = new WC_Order( $order_id );
 
 		$recipient_street_nr = '';
 		$recipient_street = wcsc_explode_street( $order->shipping_address_1 );

@@ -469,8 +469,6 @@ class WC_Shipcloud_Order
 				<?php endif; ?>
 			</div>
 
-			<div class="info"></div>
-
 		</div>
 		<?php
 
@@ -489,14 +487,19 @@ class WC_Shipcloud_Order
 
 		ob_start();
 		?>
+
+		<div class="info"></div>
+
 		<div id="create_label">
 
-			<div class="section shipping-data">
+			<div class="shipping-data">
 				<div class="shipment-labels">
 					<?php
 
 					if( '' != $shipment_data && is_array( $shipment_data ) )
 					{
+						rsort( $shipment_data );
+
 						foreach( $shipment_data AS $data )
 						{
 							echo $this->get_label_html( $data );
@@ -599,6 +602,9 @@ class WC_Shipcloud_Order
 						<div class="label_shipment_status">
 							<div class="shipment_id"><strong><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'id' ]; ?></div>
 							<div class="shipment status"><strong><?php _e( 'Shipment Status:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $shipment_status; ?></div>
+							<?php if( ! empty( $data[ 'price' ] ) ): ?>
+							<div class="shipment price"><strong><?php _e( 'Price:', 'woocommerce-shipcloud' ); ?></strong> <?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?></div>
+							<?php endif; ?>
 						</div>
 
 						<div style="clear: both;"></div>
@@ -712,6 +718,14 @@ class WC_Shipcloud_Order
 		);
 
 		$request = $shipcloud_api->send_request( 'shipment_quotes', $shipment, 'POST' );
+
+		if( is_wp_error( $request ) ){
+			$errors[] = $request->get_error_message();
+			$result = array( 'errors' => $errors );
+			echo json_encode( $result );
+			exit;
+		}
+
 		$request_status = (int) $request[ 'header' ][ 'status' ];
 
 		// Getting errors if existing
@@ -792,23 +806,30 @@ class WC_Shipcloud_Order
 			$shipment[ 'create_shipping_label' ] = TRUE;
 		}
 
-		$shipment = $shipcloud_api->send_request( 'shipments', $shipment, 'POST' );
-		$request_status = (int) $shipment[ 'header' ][ 'status' ];
+		$request = $shipcloud_api->send_request( 'shipments', $shipment, 'POST' );
+
+		if( is_wp_error( $request ) ){
+			$errors[] = $request->get_error_message();
+			$result = array( 'errors' => $errors );
+			echo json_encode( $result );
+			exit;
+		}
+
+		$request_status = (int) $request[ 'header' ][ 'status' ];
 
 		// Getting errors if existing
-		if( 200 != $request_status ):
-			$errors = $shipment[ 'body' ][ 'errors' ];
+		if( 200 != $request_status ) {
+			$errors = $request[ 'body' ][ 'errors' ];
 			$result = array();
 
-			switch ( $request_status )
-			{
+			switch ( $request_status ) {
 				case 422:
 					$result[] = __( 'Parcel dimensions are not supported by carrier.', 'woocommerce-shipcloud' );
 					break;
 				default:
-					foreach( $errors AS $key => $error ):
+					foreach ( $errors AS $key => $error ) {
 						$result[ $key ] = wcsc_translate_shipcloud_text( $error );
-					endforeach;
+					}
 					break;
 			}
 
@@ -816,7 +837,7 @@ class WC_Shipcloud_Order
 
 			echo json_encode( $result );
 			exit;
-		endif;
+		}
 
 		// For testing purposes
 		// delete_post_meta( $order_id, 'shipcloud_shipment_data' );
@@ -834,12 +855,12 @@ class WC_Shipcloud_Order
 		$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
 
 		$data = array(
-			'id'                   => $shipment[ 'body' ][ 'id' ],
-			'carrier_tracking_no'  => $shipment[ 'body' ][ 'carrier_tracking_no' ],
-			'tracking_url'         => $shipment[ 'body' ][ 'tracking_url' ],
-			'label_url'            => $shipment[ 'body' ][ 'label_url' ],
-			'price'                => $shipment[ 'body' ][ 'price' ],
-			'parcel_id'            => $_POST[ 'parcel_id' ],
+			'id'                   => $request[ 'body' ][ 'id' ],
+			'carrier_tracking_no'  => '',
+			'tracking_url'         => $request[ 'body' ][ 'tracking_url' ],
+			'label_url'            => '',
+			'price'                => '',
+			'parcel_id'            => '',
 			'parcel_title'         => $parcel_title,
 			'carrier'              => $_POST[ 'carrier' ],
 			'width'                => $_POST[ 'width' ],
@@ -888,6 +909,13 @@ class WC_Shipcloud_Order
 		$shipment_id = $_POST[ 'shipment_id' ];
 
 		$request = $shipcloud_api->create_label( $shipment_id );
+
+		if( is_wp_error( $request ) ){
+			$errors[] = $request->get_error_message();
+			$result = array( 'errors' => $errors );
+			echo json_encode( $result );
+			exit;
+		}
 
 		$request_status = (int) $request[ 'header' ][ 'status' ];
 

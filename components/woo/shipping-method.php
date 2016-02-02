@@ -50,7 +50,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 * @var bool $debug
 		 * @since 1.0.0
 		 */
-		private static $debug = TRUE;
+		private $debug = TRUE;
 
 		/**
 		 * Callback URL
@@ -82,7 +82,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				$this->enabled = 'no';
 			}
 
-			if( 'no' == $this->settings[ 'debug' ] )
+			if( isset( $this->settings[ 'debug' ] ) && 'no' == $this->settings[ 'debug' ] )
 			{
 				$this->debug = FALSE;
 			}

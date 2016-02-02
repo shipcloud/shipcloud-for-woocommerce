@@ -5,11 +5,7 @@ jQuery( function( $ ) {
 		var div_address_form_inputs = div_address_form.find( 'input' );
 		var div_address_form_selects = div_address_form.find( 'select' );
 
-		console.log( div_address_form );
-
 		if( div_address_form.hasClass( 'disabled' ) ){
-
-			console.log( 'Jau' );
 
 			div_address_form_inputs.each(function() {
 				$( this ).removeAttr( 'disabled' );
@@ -22,8 +18,6 @@ jQuery( function( $ ) {
 			div_address_form.removeClass( 'disabled' )
 
 		}else{
-
-			console.log( 'Nej' );
 
 			div_address_form_inputs.each(function() {
 				$( this).attr( 'disabled', 'disabled' );
@@ -127,13 +121,13 @@ jQuery( function( $ ) {
 			var result = jQuery.parseJSON( response );
 
 			if( result.errors ){
-				var html = '<ul class="errors">';
+				var html = '<div class="error"><ul class="errors">';
 				result.errors.forEach( function( entry ){
 					html+= '<li>' + entry + '</li>';
 				});
-				html+= '</ul>';
+				html+= '</ul></div>';
 
-				$( '.parcels .info' ).fadeIn().html( html );
+				$( '#shipment-center .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeOut();
 
 			}if( result.price ){
@@ -141,7 +135,7 @@ jQuery( function( $ ) {
 				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
 
-				$( '.parcels .info' ).fadeIn().html( html );
+				$( '#shipment-center .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeIn();
 			}
 			button.removeClass( 'button-loading' );
@@ -167,8 +161,6 @@ jQuery( function( $ ) {
 						html+= '<li>' + entry + '</li>';
 					});
 					html+= '</ul>';
-
-					console.log( html );
 
 					$( '.parcels .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
 				}
@@ -273,8 +265,6 @@ jQuery( function( $ ) {
 				}
                 else
                 {
-                    console.log( result.label_url );
-
                     var div_create_label = button.parent();
                     var div_download_label = button.parent().parent().find( '.button-download-label' );
 
@@ -291,7 +281,6 @@ jQuery( function( $ ) {
 			}
 			catch( e )
 			{
-                console.log( e );
 				$( '.shipment-labels' ).prepend( response );
 			}
             button.removeClass( 'button-loading-blue' );
