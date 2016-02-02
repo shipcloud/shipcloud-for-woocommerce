@@ -142,44 +142,6 @@
     float: left;
     margin: -8px 15px 0 -5px;
 }
-
-#shipcloud-io .shipment-labels .widget-title{
-    padding:15px;
-}
-
-#shipcloud-io .shipment-labels .widget-title h4{
-    margin: 0;
-    line-height: 16px;
-}
-#shipcloud-io .shipment-labels .widget-inside{
-    padding:20px;
-}
-
-#shipcloud-io .shipment-labels .label {
-    margin: 10px 20px;
-    padding: 0;
-}
-#shipcloud-io .shipment-labels .label:first-child {
-    margin: 20px 20px 10px 20px;
-}
-#shipcloud-io .shipment-labels .label:last-child {
-    margin: 10px 20px 20px 20px;
-}
-
-#shipcloud-io .shipment-labels .address{
-    float:left;
-    width: 33%;
-    margin-bottom: 20px;
-}
-#shipcloud-io .label-shipment-actions{
-    text-align: right;
-}
-#shipcloud-io .label-shipment-actions a,
-#shipcloud-io .label-shipment-actions input{
-    min-width: 240px;
-    text-align: center;
-}
-
 #shipcloud-io .info{
     padding: 0 20px;
 }
@@ -201,6 +163,54 @@
     color: #264409;
     margin: 20px 0;
     padding: 12px;
+}
+#shipcloud-io .shipment-labels .widget-title{
+    padding:15px;
+}
+
+#shipcloud-io .shipment-labels .widget-title h4{
+    margin: 0;
+    line-height: 16px;
+}
+#shipcloud-io .shipment-labels .widget-inside{
+    padding:20px;
+}
+
+#shipcloud-io .shipment-labels .label {
+    margin: 10px 20px;
+    padding: 0;
+}
+
+#shipcloud-io .shipment-labels .label:first-child {
+    margin: 20px 20px 10px 20px;
+}
+
+#shipcloud-io .shipment-labels .label:last-child {
+    margin: 10px 20px 20px 20px;
+}
+
+#shipcloud-io .shipment-labels .address{
+    float:left;
+    width: 33%;
+    margin-bottom: 20px;
+}
+
+#shipcloud-io .label-shipment-actions{
+    text-align: right;
+}
+
+#shipcloud-io .label-shipment-actions a,
+#shipcloud-io .label-shipment-actions input{
+    min-width: 240px;
+    text-align: center;
+}
+
+#shipcloud-io .label-shipment-status table th {
+    text-align: left;
+}
+
+#shipcloud-io .label-shipment-status table td{
+    padding-left:20px;
 }
 
 #shipcloud-io .parcel-templates  label{

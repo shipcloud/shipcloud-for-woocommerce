@@ -607,12 +607,25 @@ class WC_Shipcloud_Order
 
 						<div style="clear: both;"></div>
 
-						<div class="label_shipment_status">
-							<div class="shipment_id"><strong><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'id' ]; ?></div>
-							<div class="shipment status"><strong><?php _e( 'Tracking Status:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $shipment_status; ?></div>
-							<?php if( ! empty( $data[ 'price' ] ) ): ?>
-							<div class="shipment price"><strong><?php _e( 'Price:', 'woocommerce-shipcloud' ); ?></strong> <?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?></div>
-							<?php endif; ?>
+						<div class="label-shipment-status">
+							<table>
+								<tbody>
+									<tr>
+										<th><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></th>
+										<td><?php echo $data[ 'id' ]; ?></td>
+									</tr>
+									<tr>
+										<th><?php _e( 'Tracking Status:', 'woocommerce-shipcloud' ); ?></th>
+										<td><?php echo $shipment_status; ?></td>
+									</tr>
+									<?php if( ! empty( $data[ 'price' ] ) ): ?>
+										<tr>
+											<th><?php _e( 'Price:', 'woocommerce-shipcloud' ); ?></strong></th>
+											<td><?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?></td>
+										</tr>
+									<?php endif; ?>
+								</tbody>
+							</table>
 						</div>
 
 						<div style="clear: both;"></div>
