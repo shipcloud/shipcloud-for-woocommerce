@@ -499,7 +499,7 @@ class WC_Shipcloud_Order
 
 					if( '' != $shipment_data && is_array( $shipment_data ) )
 					{
-						rsort( $shipment_data );
+						$shipment_data = array_reverse( $shipment_data );
 
 						foreach( $shipment_data AS $data )
 						{
