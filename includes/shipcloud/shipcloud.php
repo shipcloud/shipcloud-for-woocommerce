@@ -155,6 +155,7 @@ class Woocommerce_Shipcloud_API
 			case "GET":
 
 				$args = array(
+					'timeout' => 10,
 					'headers' => $headers
 				);
 				$response = wp_remote_get( $url, $args );
@@ -164,6 +165,7 @@ class Woocommerce_Shipcloud_API
 			case "POST":
 
 				$args = array(
+					'timeout' => 10,
 					'headers' => $headers,
 					'body'    => $params
 				);
@@ -175,6 +177,7 @@ class Woocommerce_Shipcloud_API
 			case "PUT":
 
 				$args = array(
+					'timeout' => 10,
 					'headers' => $headers,
 					'method'  => 'PUT',
 					'body'    => $params
@@ -184,13 +187,9 @@ class Woocommerce_Shipcloud_API
 				break;
 		}
 
-		// @todo: Better Error Handling
 		if( is_wp_error( $response ) )
 		{
-			$error_message = $response->get_error_message();
-			echo "Something went wrong: $error_message";
-
-			return FALSE;
+			return $response;
 		}
 
 		$body = wp_remote_retrieve_body( $response );

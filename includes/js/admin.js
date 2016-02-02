@@ -121,13 +121,13 @@ jQuery( function( $ ) {
 			var result = jQuery.parseJSON( response );
 
 			if( result.errors ){
-				var html = '<ul class="errors">';
+				var html = '<div class="error"><ul class="errors">';
 				result.errors.forEach( function( entry ){
 					html+= '<li>' + entry + '</li>';
 				});
-				html+= '</ul>';
+				html+= '</ul></div>';
 
-				$( '.parcels .info' ).fadeIn().html( html );
+				$( '#shipment-center .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeOut();
 
 			}if( result.price ){
@@ -135,7 +135,7 @@ jQuery( function( $ ) {
 				html+= wcsc_translate.price_text + ' ' +  result.price;
 				html+= '</div>';
 
-				$( '.parcels .info' ).fadeIn().html( html );
+				$( '#shipment-center .info' ).fadeIn().html( html );
 				$( '#shipcloud_create_label').fadeIn();
 			}
 			button.removeClass( 'button-loading' );

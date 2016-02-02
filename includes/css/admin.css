@@ -166,6 +166,24 @@
     margin-bottom: 20px;
 }
 
+#shipcloud-io .info{
+    padding:20px;
+}
+
+#shipcloud-io .info .error{
+    border-left: 5px #FBC2C4 solid;
+    background: #FBE3E4;
+    color: #8a1f11;
+    margin:0;
+}
+#shipcloud-io .info .notice{
+    border-left: 5px solid #C6D880;
+    background: #E6EFC2;
+    color: #264409;
+    margin:0;
+    padding: 12px 12px;
+}
+
 #shipcloud-io .parcel-templates  label{
     margin-bottom: 5px;
     font-weight: bold;
