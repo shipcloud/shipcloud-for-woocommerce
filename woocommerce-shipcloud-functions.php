@@ -162,7 +162,7 @@ function wcsc_get_shipment_status_string( $status )
 			break;
 
 		default:
-			$message = __( 'Shipment Created', 'woocommerce-shipcloud' );
+			$message = __( 'Not available yet', 'woocommerce-shipcloud' );
 			break;
 	}
 
@@ -234,7 +234,8 @@ function wcsc_translate_shipcloud_text( $error_text )
 		"Width (in cm) can't be blank"                  => __( 'Width (in cm) can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Width (in cm) is not a number"                 => __( 'Width (in cm) is not a number.', 'woocommerce-shipcloud' ),
 		"Weight (in kg) can't be blank"                 => __( 'Weight (in kg) can\'t be blank.', 'woocommerce-shipcloud' ),
-		"Weight (in kg) is not a number"                => __( 'Weight (in kg) is not a number.', 'woocommerce-shipcloud' )
+		"Weight (in kg) is not a number"                => __( 'Weight (in kg) is not a number.', 'woocommerce-shipcloud' ),
+		"Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted" => __( 'Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted', 'woocommerce-shipcloud' )
 	);
 
 	if( array_key_exists( $error_text, $translations ) )

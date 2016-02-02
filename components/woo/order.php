@@ -63,6 +63,7 @@ class WC_Shipcloud_Order
 		add_action( 'wp_ajax_shipcloud_create_shipment', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_shipment_label', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( $this, 'ajax_create_label' ) );
+		add_action( 'wp_ajax_shipcloud_delete_shipment', array( $this, 'ajax_delete_shipment' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
 	}
@@ -302,8 +303,8 @@ class WC_Shipcloud_Order
 
 			<div id="button-actions">
 				<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'woocommerce-shipcloud' ); ?>" class="button"/>
-				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Create Shipment', 'woocommerce-shipcloud' ); ?>" class="button"/>
-				<input id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create Shipment & Label', 'woocommerce-shipcloud' ); ?>" class="button-primary"/>
+				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Prepare Label', 'woocommerce-shipcloud' ); ?>" class="button"/>
+				<input id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="button-primary"/>
 			</div>
 
 		</div>
@@ -512,6 +513,7 @@ class WC_Shipcloud_Order
 			</div>
 		</div>
 		<div id="ask-create-label"><?php _e( 'Depending on the carrier, there will be a fee fo for creating the label. Do you really want to create a label?', 'woocommerce-shipcloud' ); ?></div>
+		<div id="ask-delete-shipment"><?php _e( 'Do you really want to delete this shipment?', 'woocommerce-shipcloud' ); ?></div>
 		<?php
 
 		return ob_get_clean();
@@ -527,7 +529,7 @@ class WC_Shipcloud_Order
 	{
 		ob_start();
 
-		if( '' == $data[ 'label_url' ] )
+		if( empty( $data[ 'label_url' ] ) )
 		{
 			$classes_button_create_label = ' show';
 			$classes_button_download_label = ' hide';
@@ -538,11 +540,12 @@ class WC_Shipcloud_Order
 			$classes_button_download_label = ' show';
 		}
 
+		$display_id = strtoupper( substr( $data[ 'id' ], 0,5 ) ) . '-' . strtoupper( substr( $data[ 'id' ], 5,5 ) );
 		$status = get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', TRUE );
 		$shipment_status = wcsc_get_shipment_status_string( $status );
 
 		?>
-		<div class="label widget">
+		<div id="shipment-<?php echo $data[ 'id' ]; ?>" class="label widget">
 			<div class="widget-top">
 				<div class="widget-title-action">
 					<a class="widget-action hide-if-no-js"></a>
@@ -580,7 +583,7 @@ class WC_Shipcloud_Order
 							<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
 						</div>
 
-						<div class="label_shipment_actions">
+						<div class="label-shipment-actions">
 
 							<p class="button-create-label<?php echo $classes_button_create_label; ?>">
 								<input type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="shipcloud_create_label button-primary"/>
@@ -593,18 +596,37 @@ class WC_Shipcloud_Order
 								<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
 							</p>
 
+							<?php if( empty( $data[ 'label_url' ] ) ): ?>
+							<p class="button-delete-shipment">
+								<input type="button" value="<?php _e( 'Delete Shipment', 'woocommerce-shipcloud' ); ?>" class="shipcloud_delete_shipment button"/>
+							</p>
+							<?php endif; ?>
+
 							<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
 							<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
 						</div>
 
 						<div style="clear: both;"></div>
 
-						<div class="label_shipment_status">
-							<div class="shipment_id"><strong><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $data[ 'id' ]; ?></div>
-							<div class="shipment status"><strong><?php _e( 'Shipment Status:', 'woocommerce-shipcloud' ); ?></strong> <?php echo $shipment_status; ?></div>
-							<?php if( ! empty( $data[ 'price' ] ) ): ?>
-							<div class="shipment price"><strong><?php _e( 'Price:', 'woocommerce-shipcloud' ); ?></strong> <?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?></div>
-							<?php endif; ?>
+						<div class="label-shipment-status">
+							<table>
+								<tbody>
+									<tr>
+										<th><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></th>
+										<td><?php echo $display_id; ?></td>
+									</tr>
+									<tr>
+										<th><?php _e( 'Tracking Status:', 'woocommerce-shipcloud' ); ?></th>
+										<td><?php echo $shipment_status; ?></td>
+									</tr>
+									<?php if( ! empty( $data[ 'price' ] ) ): ?>
+										<tr>
+											<th><?php _e( 'Price:', 'woocommerce-shipcloud' ); ?></strong></th>
+											<td><?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?></td>
+										</tr>
+									<?php endif; ?>
+								</tbody>
+							</table>
 						</div>
 
 						<div style="clear: both;"></div>
@@ -639,6 +661,11 @@ class WC_Shipcloud_Order
 	 */
 	public function save_settings( $post_id )
 	{
+
+		if( ! isset( $_POST[ 'save_settings' ] ) ){
+			return $post_id;
+		}
+		
 		// Savety first!
 		if( !wp_verify_nonce( $_POST[ 'save_settings' ], plugin_basename( __FILE__ ) ) )
 		{
@@ -841,15 +868,6 @@ class WC_Shipcloud_Order
 
 		// For testing purposes
 		// delete_post_meta( $order_id, 'shipcloud_shipment_data' );
-
-		// Saving shipment data to order
-		$shipment_data = get_post_meta( $order_id, 'shipcloud_shipment_data', TRUE );
-
-		if( !is_array( $shipment_data ) )
-		{
-			$shipment_data = array();
-		}
-
 		// $parcel = wcsc_get_parceltemplate( $parcel_id );
 
 		$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
@@ -969,6 +987,86 @@ class WC_Shipcloud_Order
 				'label_url' => $request[ 'body' ][ 'label_url' ],
 				'price' => $request[ 'body' ][ 'price' ]
 			);
+
+		endif;
+
+		echo json_encode( $result );
+
+		exit;
+	}
+
+	/**
+	 * Deleting a shipment
+	 */
+	public function ajax_delete_shipment(){
+		$order_id = $_POST[ 'order_id' ];
+		$shipment_id = $_POST[ 'shipment_id' ];
+
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+		$request = $shipcloud_api->delete_shipment( $shipment_id );
+
+		if( is_wp_error( $request ) ){
+			$errors[] = $request->get_error_message();
+			$result = array( 'errors' => $errors );
+			echo json_encode( $result );
+			exit;
+		}
+
+		$request_status = (int) $request[ 'header' ][ 'status' ];
+
+		// Getting errors
+		if( 200 != $request_status && 404 != $request_status && 204 != $request_status )
+		{
+			$errors = $request[ 'body' ][ 'errors' ];
+			$result = array();
+
+			switch ( $request_status )
+			{
+				default:
+					foreach( $errors AS $key => $error ) {
+						$result[ $key ] = wcsc_translate_shipcloud_text( $error );
+					}
+					break;
+			}
+
+			$result = array( 'errors' => $result );
+			echo json_encode( $result );
+			exit;
+		}
+
+		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+
+		// Deleting shipment form post meta
+		if( 200 == $request_status || 404 == $request_status || 204 == $request_status ):
+
+			$order = wc_get_order( $order_id );
+			$order->add_order_note( __( 'shipcloud.io shipment was deleted.', 'woocommerce-shipcloud' ) );
+
+			$shipments_old = $shipments;
+
+			$delete_shipment_key = '';
+
+			foreach( $shipments AS $key => $shipment )
+			{
+				if( $shipment[ 'id' ] == $shipment_id )
+				{
+					$delete_shipment_key = $shipments[ $key ];
+					break;
+				}
+			}
+
+			if( ! empty( $delete_shipment_key ) ) {
+
+				delete_post_meta( $order_id, 'shipcloud_shipment_data', $delete_shipment_key, $shipments_old[ $key ] );
+
+				$result = array(
+					'id' => $shipment_id,
+				);
+			}else{
+				$errors[] = __( 'Shipment was not found.', 'woocommerce-shipcloud' );
+				$result = array( 'errors' => $errors );
+			}
 
 		endif;
 
