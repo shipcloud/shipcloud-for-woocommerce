@@ -67,6 +67,11 @@ class Woocommerce_Shipcloud_API
 	public function update_carriers()
 	{
 		$shipment_carriers = $this->request_carriers();
+
+		if( FALSE === $shipment_carriers ){
+			return FALSE;
+		}
+
 		update_option( 'woocommerce_shipcloud_carriers', $shipment_carriers );
 
 		return $shipment_carriers;
@@ -74,9 +79,9 @@ class Woocommerce_Shipcloud_API
 
 	public function get_carriers( $force_update = FALSE )
 	{
-		$shipment_carriers = get_option( 'woocommerce_shipcloud_carriers' );
+		$shipment_carriers = get_option( 'woocommerce_shipcloud_carriers', FALSE );
 
-		if( '' == $shipment_carriers || $force_update )
+		if( empty( $shipment_carriers ) || TRUE === $force_update )
 		{
 			$shipment_carriers = $this->update_carriers();
 		}
@@ -89,11 +94,29 @@ class Woocommerce_Shipcloud_API
 		$action = 'carriers';
 		$request = $this->send_request( $action );
 
-		if( FALSE != $request && 200 == (int) $request[ 'header' ][ 'status' ] ):
+		if( FALSE != $request && 200 == (int) $request[ 'header' ][ 'status' ] ) {
 			return $request[ 'body' ];
-		else:
+		}else {
+			return false;
+		}
+	}
+
+	public function translate_service_name( $service_name )
+	{
+		$services = array(
+			'standard' => __( 'Standard', 'woocommerce-shipcloud' ),
+			'returns' => __( 'Returns', 'woocommerce-shipcloud' ),
+			'one_day' => __( 'One Day', 'woocommerce-shipcloud' ),
+			'one_day_early' => __( 'One Day Early', 'woocommerce-shipcloud' ),
+			'same_day' => __( 'Same Day', 'woocommerce-shipcloud' ),
+		);
+
+		if( ! array_key_exists( $service_name, $services ) )
+		{
 			return FALSE;
-		endif;
+		}
+
+		return $services[ $service_name ];
 	}
 
 	public function get_tracking_status( $shipment_id )

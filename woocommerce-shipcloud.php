@@ -41,7 +41,7 @@ if( !defined( 'ABSPATH' ) )
 	exit;
 }
 
-class WooCommerceShipcloud
+class WooCommerce_Shipcloud
 {
 	/**
 	 * @var The Single instance of the class
@@ -216,6 +216,8 @@ class WooCommerceShipcloud
 	 */
 	public function deactivate( $network_wide )
 	{
+		delete_option( 'woocommerce_shipcloud_carriers' );
+		WooCommerce_Shipcloud::admin_notice( 'Deleted Carriers' );
 	}
 
 	/**
@@ -340,4 +342,4 @@ class WooCommerceShipcloud
 	}
 
 }
-WooCommerceShipcloud::instance();
+WooCommerce_Shipcloud::instance();

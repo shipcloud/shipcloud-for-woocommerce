@@ -146,15 +146,16 @@ abstract class WCSCComponent
 			$message = $message . ' (in Module "' .  $this->name . '")';
 		}
 
-		WooCommerceShipcloud::admin_notice( $message , $type );
+		WooCommerce_Shipcloud::admin_notice( $message , $type );
 	}
 }
 
 function wcsc_load_component( $component_name )
 {
-	if( class_exists( $component_name ) ):
+	if( class_exists( $component_name ) )
+	{
 		global $wcsc;
 		$component = $component_name::instance();
 		$wcsc[ 'components' ][ $component->slug ] = $component;
-	endif;
+	}
 }

@@ -7,7 +7,7 @@ if( !defined( 'ABSPATH' ) )
 * Getting Plugin Template
 * @since 1.0.0
 */
-if( defined( 'WCSC_FOLDER' ) ): // TODO: Replace PluginName
+if( defined( 'WCSC_FOLDER' ) ):
 	function wcsc_locate_template( $template_names, $load = FALSE, $require_once = TRUE )
 	{
 		$located = '';
@@ -68,7 +68,7 @@ function wcsc_get_carriers()
 
 	$shipcloud = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 
-	if( '' == $allowed_carriers ){
+	if( empty( $allowed_carriers ) ){
 		$shipcloud_carriers = $shipcloud->get_carriers( TRUE );
 	}else{
 		$shipcloud_carriers = $shipcloud->get_carriers();
