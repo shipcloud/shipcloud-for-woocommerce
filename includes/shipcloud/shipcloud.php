@@ -31,6 +31,12 @@ class Woocommerce_Shipcloud_API
 	private $api_key;
 	private $api_url;
 
+	/**
+	 * Woocommerce_Shipcloud_API constructor.
+	 *
+	 * @param string $apiKey
+	 * @since 1.0.0
+	 */
 	public function __construct( $apiKey )
 	{
 		$this->api_key = $apiKey;
@@ -38,37 +44,23 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
-	 * set the cURL url: combining url-endpoint + action
+	 * Getting API endpoint
 	 *
-	 * @param $action
-	 *
-	 * @return string
+	 * @param string $action
+	 * @return string $api_url
+	 * @since 1.0.0
 	 */
 	private function get_endpoint( $action )
 	{
-		$url = $this->api_url . '/' . $action;
-
-		return $url;
+		return $this->api_url . '/' . $action;
 	}
 
-	public function get_price( $params )
-	{
-		$action = 'shipment_quotes';
-
-		$request = $this->send_request( $action, $params, 'POST' );
-
-		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
-		{
-			return $request[ 'body' ][ 'shipment_quote' ][ 'price' ];
-		}
-		else
-		{
-			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
-		}
-	}
-
-	public function update_carriers()
+	/**
+	 * Updating carriers and saving in WP options
+	 *
+	 * @return array|WP_Error
+	 */
+	private function update_carriers()
 	{
 		$shipment_carriers = $this->request_carriers();
 
@@ -82,6 +74,15 @@ class Woocommerce_Shipcloud_API
 		return $shipment_carriers;
 	}
 
+	/**
+	 * Getting carriers
+	 *
+	 * @param bool $force_update
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
 	public function get_carriers( $force_update = FALSE )
 	{
 		$shipment_carriers = get_option( 'woocommerce_shipcloud_carriers', FALSE );
@@ -92,27 +93,132 @@ class Woocommerce_Shipcloud_API
 			WooCommerce_Shipcloud::admin_notice( __( 'Updated Carriers!', 'woocommerce-shipcloud' ) );
 		}
 
-		return $shipment_carriers;
+		$carriers = array();
+		foreach( $shipment_carriers AS $shipment_carrier )
+		{
+			if( isset( $shipment_carrier[ 'services' ] ) ){
+				foreach( $shipment_carrier[ 'services' ] AS $service )
+				{
+					$carriers[] = array(
+						'name' => $shipment_carrier[ 'name' ] . '_' . $service,
+						'display_name' => $shipment_carrier[ 'display_name' ] . ' - ' . $this->translate_service_name( $service )
+					);
+				}
+			}else{
+				$carriers[] = array(
+					'name'	=> $shipment_carrier[ 'name' ],
+					'display_name'	=> $shipment_carrier[ 'display_name' ]
+				);
+			}
+		}
+
+		return $carriers;
 	}
 
-	public function request_carriers()
+	/**
+	 * Requesting carriers
+	 *
+	 * @return array|WP_Error
+	 *
+	 * @since 1.0.0
+	 */
+	private function request_carriers()
 	{
 		$action = 'carriers';
 		$request = $this->send_request( $action );
 
-		if( is_wp_error( $request ) ){
+		if( is_wp_error( $request ) )
+		{
 			return $request;
 		}
 
-		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] ) {
+		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
+		{
 			return $request[ 'body' ];
-		}else {
-			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+		}
+		else
+		{
+			$error = $this->get_error( $request );
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
 		}
 	}
 
-	public function translate_service_name( $service_name )
+	/**
+	 * Splitting carrier name into API usable carrier name and service name
+	 *
+	 * @param $carrier_name
+	 *
+	 * @return array
+	 */
+	private function disassemble_carrier_name( $carrier_name )
+	{
+		$carrier_arr = explode( '_', $carrier_name );
+
+		$carrier = $carrier_arr[ 0 ];
+		$service = '';
+
+		for( $i = 1; $i < count( $carrier_arr ); $i++ ){
+			$service .= $i == 1 ? '' : '_';
+			$service .= $carrier_arr[ $i ];
+		}
+
+		return array(
+			'carrier' => $carrier,
+			'service' => $service
+		);
+	}
+
+	/**
+	 * Getting display name for a carrier including service
+	 *
+	 * @param $carrier_name
+	 *
+	 * @return bool
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_carrier_display_name( $carrier_name )
+	{
+		$carriers = $this->get_carriers();
+
+		foreach( $carriers AS $carrier )
+		{
+			if( $carrier[ 'name' ] == $carrier_name )
+			{
+				return $carrier[ 'display_name' ];
+			}
+		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Getting display name for a carrier (short name) including service
+	 *
+	 * @param $carrier_name
+	 *
+	 * @return string
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_carrier_display_name_short( $carrier_name )
+	{
+		$carrier_name_arr = $this->disassemble_carrier_name( $carrier_name );
+		$display_name = strtoupper( $carrier_name_arr[ 'carrier' ] ) . ' - ' . $this->translate_service_name( $carrier_name_arr[ 'service' ] );
+
+		return $display_name;
+	}
+
+	/**
+	 * Translating service to a readable name
+	 *
+	 * @param $service_name
+	 *
+	 * @return bool
+	 *
+	 * @since 1.0.0
+	 */
+	private function translate_service_name( $service_name )
 	{
 		$services = array(
 			'standard' => __( 'Standard', 'woocommerce-shipcloud' ),
@@ -130,7 +236,37 @@ class Woocommerce_Shipcloud_API
 		return $services[ $service_name ];
 	}
 
-	public function translate_error_code( $error_code )
+	/**
+	 * Getting error string of a request
+	 *
+	 * @param $request
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
+	private function get_error( $request )
+	{
+		$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+
+		if( isset( $request[ 'body' ] ) )
+		{
+			$error[ 'description' ] .= ' - ' . $this->get_body_errors( $request[ 'body' ] );
+		}
+
+		return $error;
+	}
+
+	/**
+	 * Translating error codes to a readable string
+	 *
+	 * @param $error_code
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
+	private function translate_error_code( $error_code )
 	{
 		$error_codes = array(
 			'204'   => array(
@@ -183,13 +319,116 @@ class Woocommerce_Shipcloud_API
 		return $error_codes[ $error_code ];
 	}
 
-	public function get_tracking_status( $shipment_id )
-	{
-		$request_data = $this->send_request( 'shipments/' . $shipment_id );
+	/**
+	 * Getting errors of a shipcloud body response and creating a string
+	 *
+	 * @param $body
+	 *
+	 * @return bool|string
+	 *
+	 * @since 1.0.0
+	 */
+	private function get_body_errors( $body ){
+		if( isset( $body[ 'errors' ] ) )
+		{
+			$error_str = '';
 
-		return $request_data;
+			foreach( $body[ 'errors' ] as $error )
+			{
+				$error_str .= $error;
+			}
+			return $error_str;
+		}
+		return FALSE;
 	}
 
+	/**
+	 * Getting the price for a shipment
+	 *
+	 * @param string $carrier
+	 * @param array $from
+	 * @param array $to
+	 * @param array $package
+	 *
+	 * @return float|WP_Error
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_price( $carrier, $from, $to, $package )
+	{
+		$action = 'shipment_quotes';
+
+		$carrier = $this->disassemble_carrier_name( $carrier );
+
+		$params = array(
+			'carrier' => $carrier[ 'carrier' ],
+			'service' => $carrier[ 'service' ],
+			'to'      => $to,
+			'from'    => $from,
+			'package' => $package
+		);
+
+		$request = $this->send_request( $action, $params, 'POST' );
+
+		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
+		{
+			return $request[ 'body' ][ 'shipment_quote' ][ 'price' ];
+		}
+		else
+		{
+			$error = $this->get_error( $request );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+		}
+	}
+
+	/**
+	 * Creating a shipment
+	 *
+	 * @param string $carrier
+	 * @param array $from
+	 * @param array $to
+	 * @param array $package
+	 * @param bool $create_label
+	 *
+	 * @return float|WP_Error
+	 *
+	 * @since 1.0.0
+	 */
+	public function create_shipment( $carrier, $from, $to, $package, $create_label = FALSE )
+	{
+		$carrier = $this->disassemble_carrier_name( $carrier );
+
+		$params = array(
+			'carrier' => $carrier[ 'carrier' ],
+			'service' => $carrier[ 'service' ],
+			'to'      => $to,
+			'from'    => $from,
+			'package' => $package,
+			'create_shipping_label' => $create_label
+		);
+
+		$request = $this->send_request( 'shipments', $params, 'POST' );
+
+		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
+		{
+			return $request[ 'body' ][ 'shipment_quote' ][ 'price' ];
+		}
+		else
+		{
+			$error = $this->get_error( $request );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+		}
+	}
+
+	/**
+	 * Creating a shipping label
+	 *
+	 * @param string $shipment_id
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
 	public function create_label( $shipment_id )
 	{
 		$params = array(
@@ -202,6 +441,15 @@ class Woocommerce_Shipcloud_API
 		return $request_data;
 	}
 
+	/**
+	 * Deleting a shipment
+	 *
+	 * @param string $shipment_id
+	 *
+	 * @return array $request_data
+	 *
+	 * @since 1.0.0
+	 */
 	public function delete_shipment( $shipment_id )
 	{
 		$params = array();
@@ -212,8 +460,32 @@ class Woocommerce_Shipcloud_API
 		return $request_data;
 	}
 
+	/**
+	 * Getting the tracking status of a shipment
+	 *
+	 * @param $shipment_id
+	 *
+	 * @return array $request_data
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_tracking_status( $shipment_id )
+	{
+		$request_data = $this->send_request( 'shipments/' . $shipment_id );
+
+		return $request_data;
+	}
+
+	/**
+	 * Requesting a pickup
+	 *
+	 * @param $params
+	 *
+	 * @return WP_Error
+	 */
 	public function request_pickup( $params )
 	{
+		// Todo: Finish it!
 		$action = 'pickup_requests';
 		$request = $this->send_request( $action, $params, 'POST' );
 
@@ -223,7 +495,7 @@ class Woocommerce_Shipcloud_API
 		}
 		else
 		{
-			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+			$error = $this->get_error( $request );
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
 		}
 	}
@@ -237,7 +509,7 @@ class Woocommerce_Shipcloud_API
 	 *
 	 * @return array $response_arr
 	 */
-	public function send_request( $action = '', $params = array(), $method = 'GET' )
+	private function send_request( $action = '', $params = array(), $method = 'GET' )
 	{
 		$count_requests = get_option( 'woocommerce_shipcloud_count_requests', 0 ) + 1;
 		update_option( 'woocommerce_shipcloud_count_requests', $count_requests );
@@ -323,6 +595,13 @@ class Woocommerce_Shipcloud_API
 		return $response_arr;
 	}
 
+	/**
+	 * Connection testing
+	 *
+	 * @return bool|WP_Error
+	 *
+	 * @since 1.0.0
+	 */
 	public function test(){
 		$action = 'carriers';
 		$request = $this->send_request( $action );
@@ -333,7 +612,7 @@ class Woocommerce_Shipcloud_API
 
 		if( 200 !== (int) $request[ 'header' ][ 'status' ] )
 		{
-			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+			$error = $this->get_error( $request );
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
 		}
 
