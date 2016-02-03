@@ -84,6 +84,7 @@ class Woocommerce_Shipcloud_API
 		if( empty( $shipment_carriers ) || TRUE === $force_update )
 		{
 			$shipment_carriers = $this->update_carriers();
+			WooCommerce_Shipcloud::admin_notice( __( 'Updated Carriers!', 'woocommerce-shipcloud' ) );
 		}
 
 		return $shipment_carriers;

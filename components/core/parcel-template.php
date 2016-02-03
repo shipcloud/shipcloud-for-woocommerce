@@ -29,7 +29,7 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-class WCSC_Parceltemplate_PostType
+class WCSC_Parceltemplate_Posttype
 {
 	/**
 	 * @var The Single instance of the class
@@ -268,4 +268,4 @@ class WCSC_Parceltemplate_PostType
 	}
 }
 
-WCSC_Parceltemplate_PostType::instance();
+WCSC_Parceltemplate_Posttype::instance();

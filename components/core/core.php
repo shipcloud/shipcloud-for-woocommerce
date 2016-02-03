@@ -29,7 +29,7 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-class WCSCCore extends WCSCComponent
+class WCSC_Core extends WCSC_Component
 {
 	/**
 	 * Initializes the Component.
@@ -54,4 +54,4 @@ class WCSCCore extends WCSCComponent
 		}
 	}
 }
-wcsc_load_component( 'WCSCCore' );
+wcsc_load_component( 'WCSC_Core' );

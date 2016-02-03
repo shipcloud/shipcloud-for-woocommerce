@@ -90,27 +90,22 @@ class WooCommerce_Shipcloud
 		$this->load_textdomain();
 		$this->includes();
 
-		// Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
-		register_uninstall_hook( __FILE__, array( __CLASS__, 'uninstall' ) );
-
 		// Check Requirements and loading core
-		add_action( 'plugins_loaded', array( $this, 'check_requirements' ), 1 );
-		add_action( 'plugins_loaded', array( $this, 'load_components' ), 1 );
+		add_action( 'plugins_loaded', array( $this, 'check_requirements' ), 20 );
+		add_action( 'plugins_loaded', array( $this, 'load_components' ), 25 );
 
-		// Functions on Frontend
-		if( is_admin() ):
-			// Register admin styles and scripts
+		if( is_admin() )
+		{
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
 			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
-		else:
-			// Register plugin styles and scripts
+		}
+		else
+		{
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
-		endif;
-	} // end constructor
+		}
+	}
 
 	/**
 	 * Defining Constants for Use in Plugin
@@ -186,7 +181,7 @@ class WooCommerce_Shipcloud
 	 */
 	public function load_components()
 	{
-		if( !$this->passed_requirements )
+		if( ! $this->passed_requirements )
 		{
 			return;
 		}
@@ -204,7 +199,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public function activate( $network_wide )
+	public static function activate( $network_wide )
 	{
 	}
 
@@ -214,10 +209,9 @@ class WooCommerce_Shipcloud
 	 * @param    boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is
 	 *                                 disabled or plugin is activated on an individual blog
 	 */
-	public function deactivate( $network_wide )
+	public static function deactivate( $network_wide )
 	{
 		delete_option( 'woocommerce_shipcloud_carriers' );
-		WooCommerce_Shipcloud::admin_notice( 'Deleted Carriers' );
 	}
 
 	/**
@@ -342,4 +336,13 @@ class WooCommerce_Shipcloud
 	}
 
 }
-WooCommerce_Shipcloud::instance();
+
+register_activation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'deactivate' ) );
+register_uninstall_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'uninstall' ) );
+
+function woocommerce_shipcloud_init(){
+	WooCommerce_Shipcloud::instance();
+}
+
+add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );

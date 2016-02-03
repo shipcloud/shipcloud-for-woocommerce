@@ -29,7 +29,7 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-class WCSCWoo extends WCSCComponent
+class WCSC_Woo extends WCSC_Component
 {
 	/**
 	 * Initializes the Component.
@@ -81,4 +81,4 @@ class WCSCWoo extends WCSCComponent
 	}
 }
 
-wcsc_load_component( 'WCSCWoo' );
+wcsc_load_component( 'WCSC_Woo' );

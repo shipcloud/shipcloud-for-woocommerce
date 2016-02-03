@@ -29,7 +29,7 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-abstract class WCSCComponent
+abstract class WCSC_Component
 {
 	/**
 	 * @var The Single instance of the class
@@ -69,7 +69,7 @@ abstract class WCSCComponent
 			self::$_instances[ $class ] = new $class();
 			self::$_instances[ $class ]->init_base_hooks();
 
-			add_action( 'plugins_loaded' , array( self::$_instances[ $class ], 'check_and_start' ) );
+			add_action( 'plugins_loaded' , array( self::$_instances[ $class ], 'check_and_start' ), 30 );
 		}
 
 		return self::$_instances[ $class ];
