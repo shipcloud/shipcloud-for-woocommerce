@@ -4,13 +4,13 @@
  *
  * Class which extends the WC_Shipping_Method API
  *
- * @author  awesome.ug <very@awesome.ug>, Sven Wagener <sven@awesome.ug>
+ * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/Woo
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
  *
- * Copyright 2015 (very@awesome.ug)
+ * Copyright 2016 (support@awesome.ug)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -98,6 +98,24 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 */
 		public function check_settings()
 		{
+
+			// Testing Connection after setting up API Key
+			if ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
+			{
+				$api_key = $_POST[ 'woocommerce_shipcloud_api_key' ];
+
+				$shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
+				$test_result = $shipcloud_api->test();
+
+				if ( is_wp_error( $test_result ) )
+				{
+					WooCommerce_Shipcloud::admin_notice( $test_result->get_error_message(), 'error' );
+					return FALSE;
+				}
+
+				return TRUE;
+			}
+
 			// If Gateway is disabled after submit
 			if( ( !isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) && isset( $_POST[ 'save' ] ) ) )
 			{
@@ -112,28 +130,28 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 			if( ( '' == $this->settings[ 'api_key' ] && !isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
 				return FALSE;
 			}
 
 			if( '' == $this->settings[ 'allowed_carriers' ] && !isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && !isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please select at least one <a href="%s">Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one <a href="%s">Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
 				return FALSE;
 			}
 
 			if( ( '' == $this->settings[ 'standard_price_products' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
 				return FALSE;
 			}
 
 			if( ( '' == $this->settings[ 'standard_price_shipment_classes' ] && !isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
 			{
-				WooCommerceShipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
 				return FALSE;
 			}
@@ -157,7 +175,16 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		}
 
 		/**
+		 * Own processes on saving settings
+		 */
+		public function process_admin_options()
+		{
+			parent::process_admin_options();
+		}
+
+		/**
 		 * Gateway settings
+		 *
 		 * @since 1.0.0
 		 */
 		public function init_form_fields()
@@ -171,8 +198,13 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			if( array_key_exists( 'api_key', $this->settings ) )
 			{
 				$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
+				$carriers = $shipcloud_api->get_carriers();
 
-				if( $carriers = $shipcloud_api->get_carriers() )
+				if( is_wp_error( $carriers ) )
+				{
+					WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
+				}
+				else
 				{
 					foreach( $carriers as $carrier )
 					{
@@ -183,10 +215,16 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 			$available_carriers = wcsc_get_carriers();
 
+			if( is_wp_error( $available_carriers ) )
+			{
+				$available_carriers = array();
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
+			}
+
 			if( count( $available_carriers ) > 0 )
 			{
 				$standard_carrier_settings = array(
-					'title'       => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
+					'title'       => __( 'Standard Shipment Method', 'woocommerce-shipcloud' ),
 					'type'        => 'select',
 					'description' => __( 'This Carrier will be preselected if the Shop Owner selects the Carrier or will be preselected as Carrier if Customer can select the Carrier.', 'woocommerce-shipcloud' ),
 					'options'     => $available_carriers,
@@ -196,7 +234,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			else
 			{
 				$standard_carrier_settings = array(
-					'title'       => __( 'Standard Carrier', 'woocommerce-shipcloud' ),
+					'title'       => __( 'Standard Shipment Method', 'woocommerce-shipcloud' ),
 					'type'        => 'text_only',
 					'description' => __( 'You have to select at least one Carrier above to select a Standard Carrier.', 'woocommerce-shipcloud' ),
 				);
@@ -215,22 +253,22 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'description' => sprintf( __( 'Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/users/api_key' ),
 				),
 				'allowed_carriers'                  => array(
-					'title'       => __( 'Carriers', 'woocommerce-shipcloud' ),
+					'title'       => __( 'Allowed Shipment Methods', 'woocommerce-shipcloud' ),
 					'type'        => 'multi_checkbox',
 					'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
 					'desc_tip'    => TRUE,
 					'options'     => $carriers_options
 				),
 				'carrier_selection'                 => array(
-					'title'       => __( 'Carrier Selection', 'woocommerce-shipcloud' ),
+					'title'       => __( 'Shipment Method Selection', 'woocommerce-shipcloud' ),
 					'type'        => 'select',
-					'description' => __( 'Who can select the carrier?', 'woocommerce-shipcloud' ),
+					'description' => __( 'Who can select the shipment method?', 'woocommerce-shipcloud' ),
 					'class'       => 'select',
 					'desc_tip'    => TRUE,
 					'default'     => 'shopowner',
 					'options'     => array(
-						'shopowner' => __( 'Shop Owner can select Carrier', 'woocommerce-shipcloud' ),
-						'customer'  => __( 'Customer can select Carrier', 'woocommerce-shipcloud' ),
+						'shopowner' => __( 'Shop Owner can select shipment method', 'woocommerce-shipcloud' ),
+						'customer'  => __( 'Customer can select shipment method', 'woocommerce-shipcloud' ),
 					)
 				),
 				'standard_carrier'                  => $standard_carrier_settings,
@@ -356,7 +394,6 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 */
 		public function generate_multi_checkbox_html( $key, $data )
 		{
-
 			$field = $this->get_field_key( $key );
 			$defaults = array(
 				'title'             => '',
@@ -543,28 +580,28 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 						if( is_array( $parcel ) )
 						{
-							$shipment = array(
-								'carrier' => $carrier_name,
-								'service' => 'standard',
-								'to'      => $recipient,
-								'from'    => $sender,
-								'package' => array(
-									'width'  => $parcel[ 'width' ],
-									'height' => $parcel[ 'height' ],
-									'length' => $parcel[ 'length' ],
-									'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
-								)
+							$package = array(
+								'width'  => $parcel[ 'width' ],
+								'height' => $parcel[ 'height' ],
+								'length' => $parcel[ 'length' ],
+								'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
 							);
 
 							$calculated_parcels[ $carrier_name ][] = array(
-								'carrier' => $carrier_name,
+								'carrier' => $carrier_shown_name,
 								'width'   => $parcel[ 'width' ],
 								'height'  => $parcel[ 'height' ],
 								'length'  => $parcel[ 'length' ],
 								'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
 							);
 
-							$price = $shipcloud_api->get_price( $shipment );
+							$price = $shipcloud_api->get_price( $carrier_name, $sender, $recipient, $package );
+
+							if( is_wp_error( $price ) )
+							{
+								$this->log( $price->get_error_message() );
+								continue;
+							}
 						}
 						else
 						{
@@ -590,17 +627,11 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					{
 						if( is_array( $parcel ) )
 						{
-							$shipment = array(
-								'carrier' => $carrier_name,
-								'service' => 'standard',
-								'to'      => $recipient,
-								'from'    => $sender,
-								'package' => array(
-									'width'  => $parcel[ 'width' ],
-									'height' => $parcel[ 'height' ],
-									'length' => $parcel[ 'length' ],
-									'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
-								)
+							$package = array(
+								'width'  => $parcel[ 'width' ],
+								'height' => $parcel[ 'height' ],
+								'length' => $parcel[ 'length' ],
+								'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
 							);
 
 							$calculated_parcels[ $carrier_name ][] = array(
@@ -611,7 +642,13 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 								'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
 							);
 
-							$price = $shipcloud_api->get_price( $shipment );
+							$price = $shipcloud_api->get_price( $carrier_name, $sender, $recipient, $package );
+
+							if( is_wp_error( $price ) )
+							{
+								$this->log( $price->get_error_message() );
+								continue;
+							}
 						}
 						else
 						{
@@ -633,7 +670,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 
 				$rate = array(
 					'id'    => $carrier_name,
-					'label' => strtoupper( $carrier_name ),
+					'label' => $shipcloud_api->get_carrier_display_name_short( $carrier_name ),
 					'cost'  => $sum,
 				);
 

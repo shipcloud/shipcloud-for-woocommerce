@@ -4,13 +4,13 @@
  *
  * Loading extensions for Woo
  *
- * @author  awesome.ug <very@awesome.ug>, Sven Wagener <sven@awesome.ug>
+ * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/Woo
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
  *
- * Copyright 2015 (very@awesome.ug)
+ * Copyright 2016 (support@awesome.ug)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -63,7 +63,7 @@ function wcsc_order_package_by_shipping_class( $package )
 /**
  * Calculate Needed Parcels by Ordered package
  *
- * @param $shipping_classes
+ * @param $ordered_package
  */
 function wcsc_get_order_parcels( $ordered_package )
 {
@@ -80,7 +80,7 @@ function wcsc_get_order_parcels( $ordered_package )
 			foreach( $products AS $product )
 			{
 				$length = get_post_meta( $product[ 'product_id' ], '_length', TRUE );
-				$width = get_post_meta( $product[ 'product_id' ], '_width', TRUE );
+				$width  = get_post_meta( $product[ 'product_id' ], '_width', TRUE );
 				$height = get_post_meta( $product[ 'product_id' ], '_height', TRUE );
 				$weight = get_post_meta( $product[ 'product_id' ], '_weight', TRUE );
 
@@ -125,7 +125,7 @@ function wcsc_get_order_parcels( $ordered_package )
 			 */
 			$taxonomy = get_term_by( 'name', $shipping_class, 'product_shipping_class' );
 
-			$width = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_width' );
+			$width  = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_width' );
 			$height = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_height' );
 			$length = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_length' );
 			$weight = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_weight' );

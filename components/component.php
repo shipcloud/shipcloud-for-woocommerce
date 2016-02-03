@@ -4,13 +4,13 @@
  *
  * Mother of all Components
  *
- * @author  awesome.ug <very@awesome.ug>, Sven Wagener <sven@awesome.ug>
+ * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
  *
- * Copyright 2015 awesome.ug (very@awesome.ug)
+ * Copyright 2015 awesome.ug (support@awesome.ug)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -29,7 +29,7 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-abstract class WCSCComponent
+abstract class WCSC_Component
 {
 	/**
 	 * @var The Single instance of the class
@@ -69,7 +69,7 @@ abstract class WCSCComponent
 			self::$_instances[ $class ] = new $class();
 			self::$_instances[ $class ]->init_base_hooks();
 
-			add_action( 'plugins_loaded' , array( self::$_instances[ $class ], 'check_and_start' ) );
+			add_action( 'plugins_loaded' , array( self::$_instances[ $class ], 'check_and_start' ), 30 );
 		}
 
 		return self::$_instances[ $class ];
@@ -146,15 +146,16 @@ abstract class WCSCComponent
 			$message = $message . ' (in Module "' .  $this->name . '")';
 		}
 
-		WooCommerceShipcloud::admin_notice( $message , $type );
+		WooCommerce_Shipcloud::admin_notice( $message , $type );
 	}
 }
 
 function wcsc_load_component( $component_name )
 {
-	if( class_exists( $component_name ) ):
+	if( class_exists( $component_name ) )
+	{
 		global $wcsc;
 		$component = $component_name::instance();
 		$wcsc[ 'components' ][ $component->slug ] = $component;
-	endif;
+	}
 }

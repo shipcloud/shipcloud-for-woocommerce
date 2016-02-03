@@ -4,13 +4,13 @@
  *
  * Loading extensions for Woo
  *
- * @author  awesome.ug <very@awesome.ug>, Sven Wagener <sven@awesome.ug>
+ * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/Woo
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
  *
- * Copyright 2015 (very@awesome.ug)
+ * Copyright 2016 (support@awesome.ug)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -29,7 +29,7 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-class WCSCWoo extends WCSCComponent
+class WCSC_Woo extends WCSC_Component
 {
 	/**
 	 * Initializes the Component.
@@ -81,4 +81,4 @@ class WCSCWoo extends WCSCComponent
 	}
 }
 
-wcsc_load_component( 'WCSCWoo' );
+wcsc_load_component( 'WCSC_Woo' );

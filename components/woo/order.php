@@ -4,13 +4,13 @@
  *
  * Loading postboxes
  *
- * @author  awesome.ug <very@awesome.ug>, Sven Wagener <sven@awesome.ug>
+ * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/Woo
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
  *
- * Copyright 2015 (very@awesome.ug)
+ * Copyright 2016 (support@awesome.ug)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -719,32 +719,30 @@ class WC_Shipcloud_Order
 
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
-		$shipment = array(
-			'carrier' => $_POST[ 'carrier' ],
-			'service' => 'standard',
-			'to'      => array(
-				'street'    => $_POST[ 'recipient_street' ],
-				'street_no' => $_POST[ 'recipient_street_nr' ],
-				'zip_code'  => $_POST[ 'recipient_postcode' ],
-				'city'      => $_POST[ 'recipient_city' ],
-				'country'   => $_POST[ 'recipient_country' ]
-			),
-			'from'    => array(
-				'street'    => $_POST[ 'sender_street' ],
-				'street_no' => $_POST[ 'sender_street_nr' ],
-				'zip_code'  => $_POST[ 'sender_postcode' ],
-				'city'      => $_POST[ 'sender_city' ],
-				'country'   => $_POST[ 'sender_country' ]
-			),
-			'package' => array(
-				'width'  => $_POST[ 'width' ],
-				'height' => $_POST[ 'height' ],
-				'length' => $_POST[ 'length' ],
-				'weight' => str_replace( ',', '.', $_POST[ 'weight' ] ),
-			)
+		$from = array(
+			'street'    => $_POST[ 'sender_street' ],
+			'street_no' => $_POST[ 'sender_street_nr' ],
+			'zip_code'  => $_POST[ 'sender_postcode' ],
+			'city'      => $_POST[ 'sender_city' ],
+			'country'   => $_POST[ 'sender_country' ]
 		);
 
-		$request = $shipcloud_api->send_request( 'shipment_quotes', $shipment, 'POST' );
+		$to = array(
+			'street'    => $_POST[ 'recipient_street' ],
+			'street_no' => $_POST[ 'recipient_street_nr' ],
+			'zip_code'  => $_POST[ 'recipient_postcode' ],
+			'city'      => $_POST[ 'recipient_city' ],
+			'country'   => $_POST[ 'recipient_country' ]
+		);
+
+		$package = array(
+			'width'  => $_POST[ 'width' ],
+			'height' => $_POST[ 'height' ],
+			'length' => $_POST[ 'length' ],
+			'weight' => str_replace( ',', '.', $_POST[ 'weight' ] ),
+		);
+
+		$request = $shipcloud_api->get_price( $_POST[ 'carrier' ], $from, $to, $package );
 
 		if( is_wp_error( $request ) ){
 			$errors[] = $request->get_error_message();
@@ -797,43 +795,42 @@ class WC_Shipcloud_Order
 
 		$order_id = $_POST[ 'order_id' ];
 
-		$shipment = array(
-			'carrier'               => $_POST[ 'carrier' ],
-			'service'               => 'standard',
-			'to'                    => array(
-				'first_name' => $_POST[ 'recipient_first_name' ],
-				'last_name'  => $_POST[ 'recipient_last_name' ],
-				'company'    => $_POST[ 'recipient_company' ],
-				'street'     => $_POST[ 'recipient_street' ],
-				'street_no'  => $_POST[ 'recipient_street_nr' ],
-				'zip_code'   => $_POST[ 'recipient_postcode' ],
-				'city'       => $_POST[ 'recipient_city' ],
-				'country'    => $_POST[ 'recipient_country' ]
-			),
-			'from'                  => array(
-				'first_name' => $_POST[ 'sender_first_name' ],
-				'last_name'  => $_POST[ 'sender_last_name' ],
-				'company'    => $_POST[ 'sender_company' ],
-				'street'     => $_POST[ 'sender_street' ],
-				'street_no'  => $_POST[ 'sender_street_nr' ],
-				'zip_code'   => $_POST[ 'sender_postcode' ],
-				'city'       => $_POST[ 'sender_city' ],
-				'country'    => $_POST[ 'sender_country' ]
-			),
-			'package'               => array(
-				'width'  => $_POST[ 'width' ],
-				'height' => $_POST[ 'height' ],
-				'length' => $_POST[ 'length' ],
-				'weight' => $_POST[ 'weight' ],
-			)
+		$from = array(
+			'first_name' => $_POST[ 'sender_first_name' ],
+			'last_name'  => $_POST[ 'sender_last_name' ],
+			'company'    => $_POST[ 'sender_company' ],
+			'street'     => $_POST[ 'sender_street' ],
+			'street_no'  => $_POST[ 'sender_street_nr' ],
+			'zip_code'   => $_POST[ 'sender_postcode' ],
+			'city'       => $_POST[ 'sender_city' ],
+			'country'    => $_POST[ 'sender_country' ]
 		);
+
+		$to = array(
+			'first_name' => $_POST[ 'recipient_first_name' ],
+			'last_name'  => $_POST[ 'recipient_last_name' ],
+			'company'    => $_POST[ 'recipient_company' ],
+			'street'     => $_POST[ 'recipient_street' ],
+			'street_no'  => $_POST[ 'recipient_street_nr' ],
+			'zip_code'   => $_POST[ 'recipient_postcode' ],
+			'city'       => $_POST[ 'recipient_city' ],
+			'country'    => $_POST[ 'recipient_country' ]
+		);
+
+		$package = array(
+			'width'  => $_POST[ 'width' ],
+			'height' => $_POST[ 'height' ],
+			'length' => $_POST[ 'length' ],
+			'weight' => $_POST[ 'weight' ],
+		);
+
 
 		if( 'shipcloud_create_shipment_label' == $_POST[ 'action' ] )
 		{
-			$shipment[ 'create_shipping_label' ] = TRUE;
+			$create_label = TRUE;
 		}
 
-		$request = $shipcloud_api->send_request( 'shipments', $shipment, 'POST' );
+		$request = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label );
 
 		if( is_wp_error( $request ) ){
 			$errors[] = $request->get_error_message();
