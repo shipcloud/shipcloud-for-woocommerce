@@ -57,19 +57,24 @@ class Woocommerce_Shipcloud_API
 
 		$request = $this->send_request( $action, $params, 'POST' );
 
-		if( FALSE != $request && 200 == $request[ 'header' ][ 'status' ] ):
+		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
+		{
 			return $request[ 'body' ][ 'shipment_quote' ][ 'price' ];
-		else:
-			return FALSE;
-		endif;
+		}
+		else
+		{
+			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+		}
 	}
 
 	public function update_carriers()
 	{
 		$shipment_carriers = $this->request_carriers();
 
-		if( FALSE === $shipment_carriers ){
-			return FALSE;
+		if( is_wp_error( $shipment_carriers ) || FALSE === $shipment_carriers )
+		{
+			return $shipment_carriers;
 		}
 
 		update_option( 'woocommerce_shipcloud_carriers', $shipment_carriers );
@@ -95,10 +100,15 @@ class Woocommerce_Shipcloud_API
 		$action = 'carriers';
 		$request = $this->send_request( $action );
 
-		if( FALSE != $request && 200 == (int) $request[ 'header' ][ 'status' ] ) {
+		if( is_wp_error( $request ) ){
+			return $request;
+		}
+
+		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] ) {
 			return $request[ 'body' ];
 		}else {
-			return false;
+			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
 		}
 	}
 
@@ -118,6 +128,59 @@ class Woocommerce_Shipcloud_API
 		}
 
 		return $services[ $service_name ];
+	}
+
+	public function translate_error_code( $error_code )
+	{
+		$error_codes = array(
+			'204'   => array(
+				'name' => 'no content',
+				'description' => __( 'There is no message body. You\'ll get this code when deleting a shipment was successful.', 'woocommerce-shipcloud' )
+			),
+			'400'   => array(
+				'name' => 'bad_request',
+				'description' => __( 'Your request was not correct. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
+			),
+			'401'   => array(
+				'name' => 'access_denies',
+				'description' => __( 'Access denied! Please check your API Key.', 'woocommerce-shipcloud' )
+			),
+			'402'   => array(
+				'name' => 'payment_required',
+				'description' => __( 'You\'ve reached the maximum of your current plan. Please upgrade to a higher plan.', 'woocommerce-shipcloud' )
+			),
+			'403'   => array(
+				'name' => 'forbidden',
+				'description' => __( 'You are not allowed to talk to this endpoint. This can either be due to a wrong authentication or when you\'re trying to reach an endpoint that your account isn\'t allowed to access.', 'woocommerce-shipcloud' )
+			),
+			'404'   => array(
+				'name' => 'not_found',
+				'description' => __( 'The api endpoint you were trying to reach can\'t be found.', 'woocommerce-shipcloud' )
+			),
+			'422'   => array(
+				'name' => 'unprocessable_entity',
+				'description' => __( 'Your request was well-formed but couldn\'t be followed due to semantic errors. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
+			),
+			'500'   => array(
+				'name' => 'internal_server_error',
+				'description' => __( 'Something has seriously gone wrong. Don\'t worry, we\'ll have a look at it.', 'woocommerce-shipcloud' )
+			),
+			'502'   => array(
+				'name' => 'bad_gateway',
+				'description' => __( 'Something has gone wrong while talking to the carrier backend. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
+			),
+			'504'   => array(
+				'name' => 'gateway_timeout',
+				'description' => __( 'Unfortunately we couldn\'t connect to the carrier backend. It is either very slow or not reachable at all. If you want to stay informed about the carrier status, follow our developer twitter account at @shipcloud_devs.', 'woocommerce-shipcloud' )
+			)
+		);
+
+		if( ! array_key_exists( $error_code, $error_codes ) )
+		{
+			return array( 'name' => 'unknown', 'description' => __( 'Unknown Error', 'woocommerce-shipcloud' ) );
+		}
+
+		return $error_codes[ $error_code ];
 	}
 
 	public function get_tracking_status( $shipment_id )
@@ -154,11 +217,15 @@ class Woocommerce_Shipcloud_API
 		$action = 'pickup_requests';
 		$request = $this->send_request( $action, $params, 'POST' );
 
-		if( FALSE != $request && 200 == $request[ 'header' ][ 'status' ] ):
+		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
+		{
 			return $request[ 'body' ];
-		else:
-			return FALSE;
-		endif;
+		}
+		else
+		{
+			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+		}
 	}
 
 	/**
@@ -254,5 +321,22 @@ class Woocommerce_Shipcloud_API
 		);
 
 		return $response_arr;
+	}
+
+	public function test(){
+		$action = 'carriers';
+		$request = $this->send_request( $action );
+
+		if( is_wp_error( $request ) ){
+			return $request;
+		}
+
+		if( 200 !== (int) $request[ 'header' ][ 'status' ] )
+		{
+			$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+		}
+
+		return TRUE;
 	}
 }

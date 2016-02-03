@@ -74,6 +74,11 @@ function wcsc_get_carriers()
 		$shipcloud_carriers = $shipcloud->get_carriers();
 	}
 
+	if( is_wp_error( $shipcloud_carriers ) )
+	{
+		return $shipcloud_carriers;
+	}
+
 	$carriers = array();
 
 	if( is_array( $allowed_carriers ) )

@@ -98,6 +98,24 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		 */
 		public function check_settings()
 		{
+
+			// Testing Connection after setting up API Key
+			if ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
+			{
+				$api_key = $_POST[ 'woocommerce_shipcloud_api_key' ];
+
+				$shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
+				$test_result = $shipcloud_api->test();
+
+				if ( is_wp_error( $test_result ) )
+				{
+					WooCommerce_Shipcloud::admin_notice( $test_result->get_error_message(), 'error' );
+					return FALSE;
+				}
+
+				return TRUE;
+			}
+
 			// If Gateway is disabled after submit
 			if( ( !isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) && isset( $_POST[ 'save' ] ) ) )
 			{
@@ -157,6 +175,14 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		}
 
 		/**
+		 * Own processes on saving settings
+		 */
+		public function process_admin_options()
+		{
+			parent::process_admin_options();
+		}
+
+		/**
 		 * Gateway settings
 		 * @since 1.0.0
 		 */
@@ -171,21 +197,28 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			if( array_key_exists( 'api_key', $this->settings ) )
 			{
 				$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
+				$carriers = $shipcloud_api->get_carriers();
 
-				if( $carriers = $shipcloud_api->get_carriers() )
+				if( is_wp_error( $carriers ) )
+				{
+					WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
+				}
+				else
 				{
 					foreach( $carriers as $carrier )
 					{
 						$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
 					}
 				}
-				else
-				{
-					WooCommerce_Shipcloud::admin_notice( __( 'Could not update carriers.', 'woocommerce-shipcloud' ), 'error' );
-				}
 			}
 
 			$available_carriers = wcsc_get_carriers();
+
+			if( is_wp_error( $available_carriers ) )
+			{
+				$available_carriers = array();
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
+			}
 
 			if( count( $available_carriers ) > 0 )
 			{
