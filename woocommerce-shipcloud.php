@@ -6,10 +6,10 @@
  * Version: 1.0.0 alpha 4
  * Author: awesome.ug
  * Author URI: http://www.awesome.ug
- * Author Email: very@awesome.ug
+ * Author Email: support@awesome.ug
  * License:
  *
- * Copyright 2015 (very@awesome.ug)
+ * Copyright 2016 (support@awesome.ug)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -30,7 +30,7 @@
  *
  * This class initializes the Plugin.
  *
- * @author  rheinschmiede.de, Author <very@awesome.ug>
+ * @author  rheinschmiede.de, Author <support@awesome.ug>
  * @package WooCommerceShipCloud
  * @since   1.0.0
  * @license GPL 2
