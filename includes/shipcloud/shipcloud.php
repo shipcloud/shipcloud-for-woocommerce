@@ -390,7 +390,7 @@ class Woocommerce_Shipcloud_API
 	 * @param array $package
 	 * @param bool $create_label
 	 *
-	 * @return float|WP_Error
+	 * @return string|WP_Error
 	 *
 	 * @since 1.0.0
 	 */
@@ -411,7 +411,26 @@ class Woocommerce_Shipcloud_API
 
 		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
 		{
-			return $request[ 'body' ][ 'shipment_quote' ][ 'price' ];
+			if( $create_label )
+			{
+				return array(
+					'id'                    => $request[ 'body' ][ 'id' ],
+					'carrier_tracking_no'   => $request[ 'body' ][ 'carrier_tracking_no' ],
+					'tracking_url'          => $request[ 'body' ][ 'tracking_url' ],
+					'label_url'             => $request[ 'body' ][ 'label_url' ],
+					'price'                 => $request[ 'body' ][ 'price' ]
+				);
+			}
+			else
+			{
+				return array(
+					'id'                    => $request[ 'body' ][ 'id' ],
+					'carrier_tracking_no'   => '',
+					'tracking_url'          => $request[ 'body' ][ 'tracking_url' ],
+					'label_url'             => '',
+					'price'                 => ''
+				);
+			}
 		}
 		else
 		{
@@ -436,7 +455,24 @@ class Woocommerce_Shipcloud_API
 		);
 
 		$action = 'shipments/' . $shipment_id;
-		$request_data = $this->send_request( $action, $params, 'PUT' );
+		$request = $this->send_request( $action, $params, 'PUT' );
+
+		p( $request );
+
+		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
+		{
+			return $request;
+
+			return array(
+				'id' => $request[ 'body' ][ 'id' ],
+				'tracking_url' => $request[ 'body' ][ 'tracking_url' ]
+			);
+		}
+		else
+		{
+			$error = $this->get_error( $request );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+		}
 
 		return $request_data;
 	}

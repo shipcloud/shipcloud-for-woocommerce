@@ -319,8 +319,9 @@ class WC_Shipcloud_Order
 	private function parcel_form(){
 		$carriers = wcsc_get_carriers();
 
-		$settings = get_option( 'woocommerce_shipcloud_settings' );
-		$standard_carrier = $settings[ 'standard_carrier' ];
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		$standard_carrier = $options[ 'standard_carrier' ];
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		ob_start();
 		?>
@@ -359,9 +360,9 @@ class WC_Shipcloud_Order
 						<select name="parcel_carrier">
 							<?php foreach( $carriers AS $name => $display_name ): ?>
 								<?php if( $name == $standard_carrier ): ?>
-									<option value="<?php echo $name; ?>" selected><?php echo $display_name; ?></option>
+									<option value="<?php echo $name; ?>" selected><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
 								<?php else: ?>
-									<option value="<?php echo $name; ?>"><?php echo $display_name; ?></option>
+									<option value="<?php echo $name; ?>"><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
 								<?php endif; ?>
 							<?php endforeach; ?>
 						</select>
@@ -385,6 +386,9 @@ class WC_Shipcloud_Order
 	 */
 	private function parcel_templates()
 	{
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+
 		$args = array(
 			'post_type'   => 'sc_parcel_template',
 			'post_status' => 'publish'
@@ -407,7 +411,7 @@ class WC_Shipcloud_Order
 									. get_post_meta( $post->ID, 'height', TRUE ) . esc_attr( 'x', 'woocommerce-shipcloud' )
 									. get_post_meta( $post->ID, 'length', TRUE ) . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
 									. get_post_meta( $post->ID, 'weight', TRUE ) . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
-									. strtoupper( get_post_meta( $post->ID, 'carrier', TRUE ) ),
+									. $shipcloud_api->get_carrier_display_name_short( get_post_meta( $post->ID, 'carrier', TRUE ) ),
 				);
 			}
 		}
@@ -428,7 +432,7 @@ class WC_Shipcloud_Order
 						. $parcel[ 'height' ] . esc_attr( 'x', 'woocommerce-shipcloud' )
 						. $parcel[ 'length' ] . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - '
 						. $parcel[ 'weight' ] . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - '
-						. strtoupper( $parcel[ 'carrier' ] ),
+						. $shipcloud_api->get_carrier_display_name_short( $parcel[ 'carrier' ] ),
 				);
 			}
 		}
@@ -661,7 +665,6 @@ class WC_Shipcloud_Order
 	 */
 	public function save_settings( $post_id )
 	{
-
 		if( ! isset( $_POST[ 'save_settings' ] ) ){
 			return $post_id;
 		}
@@ -716,7 +719,6 @@ class WC_Shipcloud_Order
 	public function ajax_calculate_shipping()
 	{
 		$options = get_option( 'woocommerce_shipcloud_settings' );
-
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		$from = array(
@@ -742,43 +744,16 @@ class WC_Shipcloud_Order
 			'weight' => str_replace( ',', '.', $_POST[ 'weight' ] ),
 		);
 
-		$request = $shipcloud_api->get_price( $_POST[ 'carrier' ], $from, $to, $package );
+		$price = $shipcloud_api->get_price( $_POST[ 'carrier' ], $from, $to, $package );
 
-		if( is_wp_error( $request ) ){
-			$errors[] = $request->get_error_message();
+		if( is_wp_error( $price ) ){
+			$errors[] = $price->get_error_message();
 			$result = array( 'errors' => $errors );
 			echo json_encode( $result );
 			exit;
 		}
 
-		$request_status = (int) $request[ 'header' ][ 'status' ];
-
-		// Getting errors if existing
-		if( 200 != $request_status ):
-
-			$errors = $request[ 'body' ][ 'errors' ];
-			$result = array();
-
-			switch ( $request_status )
-			{
-				case 422:
-					$result[] = __( 'Parcel dimensions are not supported by carrier.', 'woocommerce-shipcloud' );
-					break;
-				default:
-					foreach( $errors AS $key => $error ):
-						$result[ $key ] = wcsc_translate_shipcloud_text( $error );
-					endforeach;
-					break;
-			}
-
-			$result = array( 'errors' => $result );
-		endif;
-
-		// Getting price if successful
-		if( array_key_exists( 'shipment_quote', $request[ 'body' ] ) ):
-			$result = $request[ 'body' ][ 'shipment_quote' ];
-			$result[ 'price' ] = wc_price( $result[ 'price' ], array( 'currency' => 'EUR' ) );
-		endif;
+		$result[ 'price' ] = wc_price( $price, array( 'currency' => 'EUR' ) );
 
 		echo json_encode( $result );
 		exit;
@@ -824,41 +799,17 @@ class WC_Shipcloud_Order
 			'weight' => $_POST[ 'weight' ],
 		);
 
-
+		$create_label = FALSE;
 		if( 'shipcloud_create_shipment_label' == $_POST[ 'action' ] )
 		{
 			$create_label = TRUE;
 		}
 
-		$request = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label );
+		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label );
 
-		if( is_wp_error( $request ) ){
-			$errors[] = $request->get_error_message();
+		if( is_wp_error( $shipment ) ){
+			$errors[] = $shipment->get_error_message();
 			$result = array( 'errors' => $errors );
-			echo json_encode( $result );
-			exit;
-		}
-
-		$request_status = (int) $request[ 'header' ][ 'status' ];
-
-		// Getting errors if existing
-		if( 200 != $request_status ) {
-			$errors = $request[ 'body' ][ 'errors' ];
-			$result = array();
-
-			switch ( $request_status ) {
-				case 422:
-					$result[] = __( 'Parcel dimensions are not supported by carrier.', 'woocommerce-shipcloud' );
-					break;
-				default:
-					foreach ( $errors AS $key => $error ) {
-						$result[ $key ] = wcsc_translate_shipcloud_text( $error );
-					}
-					break;
-			}
-
-			$result = array( 'errors' => $result );
-
 			echo json_encode( $result );
 			exit;
 		}
@@ -870,12 +821,12 @@ class WC_Shipcloud_Order
 		$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
 
 		$data = array(
-			'id'                   => $request[ 'body' ][ 'id' ],
-			'carrier_tracking_no'  => '',
-			'tracking_url'         => $request[ 'body' ][ 'tracking_url' ],
-			'label_url'            => '',
-			'price'                => '',
-			'parcel_id'            => '',
+			'id'                   => $shipment[ 'id' ],
+			'carrier_tracking_no'  => $shipment[ 'carrier_tracking_no' ],
+			'tracking_url'         => $shipment[ 'tracking_url' ],
+			'label_url'            => $shipment[ 'label_url' ],
+			'price'                => $shipment[ 'price' ],
+			'parcel_id'            => $shipment[ 'id' ],
 			'parcel_title'         => $parcel_title,
 			'carrier'              => $_POST[ 'carrier' ],
 			'width'                => $_POST[ 'width' ],
