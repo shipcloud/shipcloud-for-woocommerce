@@ -456,9 +456,7 @@ class Woocommerce_Shipcloud_API
 
 		$action = 'shipments/' . $shipment_id;
 		$request = $this->send_request( $action, $params, 'PUT' );
-
-		p( $request );
-
+		
 		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
 		{
 			return $request;
