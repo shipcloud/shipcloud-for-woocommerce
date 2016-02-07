@@ -202,9 +202,11 @@ function wcsc_explode_street( $street )
  */
 function wcsc_translate_shipcloud_text( $error_text )
 {
+	$error_text = trim( $error_text );
+
 	$translations = array(
 		"Carrier can't be blank"                                => __( 'Carrier can\'t be blank.', 'woocommerce-shipcloud' ),
-		"Sender: last name can't be blank"                          => __( 'Sender Last Name can\'t be blank.', 'woocommerce-shipcloud' ),
+		"Sender: last name can't be blank"                      => __( 'Sender Last Name can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Sender Street can't be blank"                          => __( 'Sender Street can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Sender: street can't be blank"                         => __( 'Sender Street can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Sender Street number can't be blank"                   => __( 'Sender Street number can\'t be blank.', 'woocommerce-shipcloud' ),
@@ -232,14 +234,15 @@ function wcsc_translate_shipcloud_text( $error_text )
 		"Package Width (in cm) is not a number"                 => __( 'Width (in cm) is not a number.', 'woocommerce-shipcloud' ),
 		"Package Weight (in kg) can't be blank"                 => __( 'Weight (in kg) can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Package Weight (in kg) is not a number"                => __( 'Weight (in kg) is not a number.', 'woocommerce-shipcloud' ),
-		"Height (in cm) can't be blank"                 => __( 'Height (in cm) can\'t be blank.', 'woocommerce-shipcloud' ),
-		"Height (in cm) is not a number"                => __( 'Height (in cm) is not a number.', 'woocommerce-shipcloud' ),
-		"Length (in cm) can't be blank"                 => __( 'Length (in cm) can\'t be blank.', 'woocommerce-shipcloud' ),
-		"Length (in cm) is not a number"                => __( 'Length (in cm) is not a number.', 'woocommerce-shipcloud' ),
-		"Width (in cm) can't be blank"                  => __( 'Width (in cm) can\'t be blank.', 'woocommerce-shipcloud' ),
-		"Width (in cm) is not a number"                 => __( 'Width (in cm) is not a number.', 'woocommerce-shipcloud' ),
-		"Weight (in kg) can't be blank"                 => __( 'Weight (in kg) can\'t be blank.', 'woocommerce-shipcloud' ),
-		"Weight (in kg) is not a number"                => __( 'Weight (in kg) is not a number.', 'woocommerce-shipcloud' ),
+		"Height (in cm) can't be blank"                         => __( 'Height (in cm) can\'t be blank.', 'woocommerce-shipcloud' ),
+		"Height (in cm) is not a number"                        => __( 'Height (in cm) is not a number.', 'woocommerce-shipcloud' ),
+		"Length (in cm) can't be blank"                         => __( 'Length (in cm) can\'t be blank.', 'woocommerce-shipcloud' ),
+		"Length (in cm) is not a number"                        => __( 'Length (in cm) is not a number.', 'woocommerce-shipcloud' ),
+		"Width (in cm) can't be blank"                          => __( 'Width (in cm) can\'t be blank.', 'woocommerce-shipcloud' ),
+		"Width (in cm) is not a number"                         => __( 'Width (in cm) is not a number.', 'woocommerce-shipcloud' ),
+		"Weight (in kg) can't be blank"                         => __( 'Weight (in kg) can\'t be blank.', 'woocommerce-shipcloud' ),
+		"Weight (in kg) is not a number"                        => __( 'Weight (in kg) is not a number.', 'woocommerce-shipcloud' ),
+		"HTTP Basic: Access denied."                            => __( 'HTTP Basic: Access denied.', 'woocommerce-shipcloud' ),
 		"Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted" => __( 'Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted', 'woocommerce-shipcloud' )
 	);
 

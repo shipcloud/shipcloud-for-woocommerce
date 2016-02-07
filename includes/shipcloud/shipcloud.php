@@ -139,7 +139,7 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 	}
 
@@ -278,7 +278,7 @@ class Woocommerce_Shipcloud_API
 				'description' => __( 'Your request was not correct. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
 			),
 			'401'   => array(
-				'name' => 'access_denies',
+				'name' => 'access_denied',
 				'description' => __( 'Access denied! Please check your API Key.', 'woocommerce-shipcloud' )
 			),
 			'402'   => array(
@@ -328,18 +328,22 @@ class Woocommerce_Shipcloud_API
 	 *
 	 * @since 1.0.0
 	 */
-	private function get_body_errors( $body ){
+	private function get_body_errors( $body )
+	{
 		if( isset( $body[ 'errors' ] ) )
 		{
 			$error_str = '';
 
 			foreach( $body[ 'errors' ] as $error )
 			{
-				$error_str .= $error;
+				$error_str .= wcsc_translate_shipcloud_text( $error );
 			}
 			return $error_str;
 		}
-		return FALSE;
+		else
+		{
+			return wcsc_translate_shipcloud_text( $body );
+		}
 	}
 
 	/**
