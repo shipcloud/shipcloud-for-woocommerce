@@ -748,12 +748,22 @@ class WC_Shipcloud_Order
 
 		if( is_wp_error( $price ) ){
 			$errors[] = $price->get_error_message();
-			$result = array( 'errors' => $errors );
+			$result = array(
+				'status'    => 'ERROR',
+				'errors' => $errors
+			);
 			echo json_encode( $result );
 			exit;
 		}
 
-		$result[ 'price' ] = wc_price( $price, array( 'currency' => 'EUR' ) );
+		$price_html = wc_price( $price, array( 'currency' => 'EUR' ) );
+		$html = '<div class="notice">' . sprintf( __( 'The calculated price is %s.', 'woocommerce-shipcloud' ), $price_html ) . '</div>';
+
+		$result = array(
+			'status'    => 'OK',
+			'price'     => $price,
+			'html'      => $html
+		);
 
 		echo json_encode( $result );
 		exit;
@@ -855,8 +865,13 @@ class WC_Shipcloud_Order
 		$order = wc_get_order( $order_id );
 		$order->add_order_note( __( 'shipcloud.io label was prepared.', 'woocommerce-shipcloud' ) );
 
-		echo $this->get_label_html( $data );
+		$result = array(
+			'status'        => 'OK',
+			'shipment_id'   => $data[ 'id' ],
+			'html'          => $this->get_label_html( $data )
+		);
 
+		echo json_encode( $result );
 		exit;
 	}
 
@@ -875,75 +890,54 @@ class WC_Shipcloud_Order
 
 		if( is_wp_error( $request ) ){
 			$errors[] = $request->get_error_message();
-			$result = array( 'errors' => $errors );
+
+			$result = $result = array(
+				'status' => 'ERROR',
+				'errors' => $result
+			);
+
 			echo json_encode( $result );
 			exit;
 		}
 
-		$request_status = (int) $request[ 'header' ][ 'status' ];
-
-		// Getting errors if existing
-		if( 200 != $request_status )
-		{
-			$errors = $request[ 'body' ][ 'errors' ];
-			$result = array();
-
-			switch ( $request_status )
-			{
-				case 422:
-					$result[] = __( 'Parcel dimensions are not supported by carrier.', 'woocommerce-shipcloud' );
-					break;
-				default:
-					foreach( $errors AS $key => $error ):
-						$result[ $key ] = wcsc_translate_shipcloud_text( $error );
-					endforeach;
-					break;
-			}
-
-			$result = array( 'errors' => $result );
-		}
-
 		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
-		// Saving shipment data to order
-		if( 200 == $request_status ):
+		$order = wc_get_order( $order_id );
+		$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
-			$order = wc_get_order( $order_id );
-			$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+		$shipments_old = $shipments;
 
-			$shipments_old = $shipments;
-
-			foreach( $shipments AS $key => $shipment )
+		// Finding shipment key for updating postmeta
+		foreach( $shipments AS $key => $shipment )
+		{
+			if( $shipment[ 'id' ] == $request[ 'body' ][ 'id' ] )
 			{
-				if( $shipment[ 'id' ] == $request[ 'body' ][ 'id' ] )
-				{
-					$shipments[ $key ][ 'tracking_url' ] = $request[ 'body' ][ 'tracking_url' ];
-					$shipments[ $key ][ 'label_url' ] = $request[ 'body' ][ 'label_url' ];
-					$shipments[ $key ][ 'price' ] = $request[ 'body' ][ 'price' ];
-					break;
-				}
+				$shipments[ $key ][ 'tracking_url' ] = $request[ 'body' ][ 'tracking_url' ];
+				$shipments[ $key ][ 'label_url' ] = $request[ 'body' ][ 'label_url' ];
+				$shipments[ $key ][ 'price' ] = $request[ 'body' ][ 'price' ];
+				break;
 			}
+		}
 
-			update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments[ $key ], $shipments_old[ $key ] );
+		update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments[ $key ], $shipments_old[ $key ] );
 
-			$result = array(
-				'id' => $request[ 'body' ][ 'id' ],
-				'tracking_url' => $request[ 'body' ][ 'tracking_url' ],
-				'label_url' => $request[ 'body' ][ 'label_url' ],
-				'price' => $request[ 'body' ][ 'price' ]
-			);
-
-		endif;
+		$result = array(
+			'status'        => 'OK',
+			'id'            => $request[ 'body' ][ 'id' ],
+			'tracking_url'  => $request[ 'body' ][ 'tracking_url' ],
+			'label_url'     => $request[ 'body' ][ 'label_url' ],
+			'price'         => $request[ 'body' ][ 'price' ]
+		);
 
 		echo json_encode( $result );
-
 		exit;
 	}
 
 	/**
 	 * Deleting a shipment
 	 */
-	public function ajax_delete_shipment(){
+	public function ajax_delete_shipment()
+	{
 		$order_id = $_POST[ 'order_id' ];
 		$shipment_id = $_POST[ 'shipment_id' ];
 
@@ -951,72 +945,61 @@ class WC_Shipcloud_Order
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 		$request = $shipcloud_api->delete_shipment( $shipment_id );
 
-		if( is_wp_error( $request ) ){
-			$errors[] = $request->get_error_message();
-			$result = array( 'errors' => $errors );
-			echo json_encode( $result );
-			exit;
-		}
-
-		$request_status = (int) $request[ 'header' ][ 'status' ];
-
-		// Getting errors
-		if( 200 != $request_status && 404 != $request_status && 204 != $request_status )
+		if( is_wp_error( $request ) )
 		{
-			$errors = $request[ 'body' ][ 'errors' ];
-			$result = array();
-
-			switch ( $request_status )
+			// Do nothing if shipment was not found
+			if( 'shipcloud_api_error_not_found' !== $request->get_error_code() )
 			{
-				default:
-					foreach( $errors AS $key => $error ) {
-						$result[ $key ] = wcsc_translate_shipcloud_text( $error );
-					}
-					break;
-			}
 
-			$result = array( 'errors' => $result );
-			echo json_encode( $result );
-			exit;
+				$errors[] = $request->get_error_message();
+				$result   = array(
+					'status' => 'ERROR',
+					'errors' => $errors
+				);
+
+				echo json_encode( $result );
+				exit;
+			}
 		}
 
 		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
-		// Deleting shipment form post meta
-		if( 200 == $request_status || 404 == $request_status || 204 == $request_status ):
+		$order = wc_get_order( $order_id );
+		$order->add_order_note( __( 'shipcloud.io shipment was deleted.', 'woocommerce-shipcloud' ) );
 
-			$order = wc_get_order( $order_id );
-			$order->add_order_note( __( 'shipcloud.io shipment was deleted.', 'woocommerce-shipcloud' ) );
+		$shipments_old = $shipments;
 
-			$shipments_old = $shipments;
+		$delete_shipment_key = '';
 
-			$delete_shipment_key = '';
-
-			foreach( $shipments AS $key => $shipment )
+		// Finding shipment key to delete postmeta
+		foreach( $shipments AS $key => $shipment )
+		{
+			if( $shipment[ 'id' ] == $shipment_id )
 			{
-				if( $shipment[ 'id' ] == $shipment_id )
-				{
-					$delete_shipment_key = $shipments[ $key ];
-					break;
-				}
+				$delete_shipment_key = $shipments[ $key ];
+				break;
 			}
+		}
 
-			if( ! empty( $delete_shipment_key ) ) {
+		if( ! empty( $delete_shipment_key ) )
+		{
+			delete_post_meta( $order_id, 'shipcloud_shipment_data', $delete_shipment_key, $shipments_old[ $key ] );
 
-				delete_post_meta( $order_id, 'shipcloud_shipment_data', $delete_shipment_key, $shipments_old[ $key ] );
-
-				$result = array(
-					'id' => $shipment_id,
-				);
-			}else{
-				$errors[] = __( 'Shipment was not found.', 'woocommerce-shipcloud' );
-				$result = array( 'errors' => $errors );
-			}
-
-		endif;
+			$result = array(
+				'status'    => 'OK',
+				'shipment_id'        => $shipment_id
+			);
+		}
+		else
+		{
+			$errors[] = __( 'Shipment was not found in post meta.', 'woocommerce-shipcloud' );
+			$result = array(
+				'status'    => 'ERROR',
+				'errors'    => $errors
+			);
+		}
 
 		echo json_encode( $result );
-
 		exit;
 	}
 
