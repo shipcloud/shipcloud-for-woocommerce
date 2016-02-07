@@ -398,14 +398,45 @@ class Woocommerce_Shipcloud_API
 	{
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
-		$params = array(
-			'carrier' => $carrier[ 'carrier' ],
-			'service' => $carrier[ 'service' ],
-			'to'      => $to,
-			'from'    => $from,
-			'package' => $package,
-			'create_shipping_label' => $create_label
-		);
+		switch( $carrier[ 'carrier' ] ){
+
+			case 'dpd':
+				$to_email = $to[ 'email' ];
+				unset( $to[ 'email' ] );
+
+				$params = array(
+					'carrier' => $carrier[ 'carrier' ],
+					'service' => $carrier[ 'service' ],
+					'from'    => $from,
+					'to'      => $to,
+					'package' => $package,
+					'create_shipping_label' => $create_label,
+					'additional_services'   => array(
+						array(
+							'name'  => 'advance_notice',
+							'properties' => array(
+								'email'  =>  $to_email,
+								'language' => strtolower( $to[ 'country' ] )
+							)
+						)
+					)
+				);
+
+				break;
+
+			default:
+				unset( $to[ 'email' ] );
+				$params = array(
+					'carrier' => $carrier[ 'carrier' ],
+					'service' => $carrier[ 'service' ],
+					'from'    => $from,
+					'to'      => $to,
+					'package' => $package,
+					'create_shipping_label' => $create_label
+				);
+
+				break;
+		}
 
 		$request = $this->send_request( 'shipments', $params, 'POST' );
 
@@ -435,6 +466,7 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
+			p( $error );
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
 		}
 	}
@@ -456,7 +488,7 @@ class Woocommerce_Shipcloud_API
 
 		$action = 'shipments/' . $shipment_id;
 		$request = $this->send_request( $action, $params, 'PUT' );
-		
+
 		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
 		{
 			return $request;

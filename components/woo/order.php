@@ -765,10 +765,10 @@ class WC_Shipcloud_Order
 	public function ajax_create_shipment()
 	{
 		$options = get_option( 'woocommerce_shipcloud_settings' );
-
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		$order_id = $_POST[ 'order_id' ];
+		$order = new WC_Order( $order_id );
 
 		$from = array(
 			'first_name' => $_POST[ 'sender_first_name' ],
@@ -778,7 +778,7 @@ class WC_Shipcloud_Order
 			'street_no'  => $_POST[ 'sender_street_nr' ],
 			'zip_code'   => $_POST[ 'sender_postcode' ],
 			'city'       => $_POST[ 'sender_city' ],
-			'country'    => $_POST[ 'sender_country' ]
+			'country'    => $_POST[ 'sender_country' ],
 		);
 
 		$to = array(
@@ -789,7 +789,8 @@ class WC_Shipcloud_Order
 			'street_no'  => $_POST[ 'recipient_street_nr' ],
 			'zip_code'   => $_POST[ 'recipient_postcode' ],
 			'city'       => $_POST[ 'recipient_city' ],
-			'country'    => $_POST[ 'recipient_country' ]
+			'country'    => $_POST[ 'recipient_country' ],
+			'email'      => $order->billing_email
 		);
 
 		$package = array(
@@ -813,10 +814,6 @@ class WC_Shipcloud_Order
 			echo json_encode( $result );
 			exit;
 		}
-
-		// For testing purposes
-		// delete_post_meta( $order_id, 'shipcloud_shipment_data' );
-		// $parcel = wcsc_get_parceltemplate( $parcel_id );
 
 		$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
 
