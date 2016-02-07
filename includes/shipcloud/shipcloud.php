@@ -139,7 +139,7 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 	}
 
@@ -251,7 +251,7 @@ class Woocommerce_Shipcloud_API
 
 		if( isset( $request[ 'body' ] ) )
 		{
-			$error[ 'description' ] .= ' - ' . $this->get_body_errors( $request[ 'body' ] );
+			$error[ 'description' ] = $this->get_body_errors( $request[ 'body' ] );
 		}
 
 		return $error;
@@ -278,7 +278,7 @@ class Woocommerce_Shipcloud_API
 				'description' => __( 'Your request was not correct. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
 			),
 			'401'   => array(
-				'name' => 'access_denies',
+				'name' => 'access_denied',
 				'description' => __( 'Access denied! Please check your API Key.', 'woocommerce-shipcloud' )
 			),
 			'402'   => array(
@@ -328,18 +328,22 @@ class Woocommerce_Shipcloud_API
 	 *
 	 * @since 1.0.0
 	 */
-	private function get_body_errors( $body ){
+	private function get_body_errors( $body )
+	{
 		if( isset( $body[ 'errors' ] ) )
 		{
 			$error_str = '';
 
 			foreach( $body[ 'errors' ] as $error )
 			{
-				$error_str .= $error;
+				$error_str .= wcsc_translate_shipcloud_text( $error );
 			}
 			return $error_str;
 		}
-		return FALSE;
+		else
+		{
+			return wcsc_translate_shipcloud_text( $body );
+		}
 	}
 
 	/**
@@ -377,7 +381,7 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 	}
 
@@ -398,14 +402,45 @@ class Woocommerce_Shipcloud_API
 	{
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
-		$params = array(
-			'carrier' => $carrier[ 'carrier' ],
-			'service' => $carrier[ 'service' ],
-			'to'      => $to,
-			'from'    => $from,
-			'package' => $package,
-			'create_shipping_label' => $create_label
-		);
+		switch( $carrier[ 'carrier' ] ){
+
+			case 'dpd':
+				$to_email = $to[ 'email' ];
+				unset( $to[ 'email' ] );
+
+				$params = array(
+					'carrier' => $carrier[ 'carrier' ],
+					'service' => $carrier[ 'service' ],
+					'from'    => $from,
+					'to'      => $to,
+					'package' => $package,
+					'create_shipping_label' => $create_label,
+					'additional_services'   => array(
+						array(
+							'name'  => 'advance_notice',
+							'properties' => array(
+								'email'  =>  $to_email,
+								'language' => strtolower( $to[ 'country' ] )
+							)
+						)
+					)
+				);
+
+				break;
+
+			default:
+				unset( $to[ 'email' ] );
+				$params = array(
+					'carrier' => $carrier[ 'carrier' ],
+					'service' => $carrier[ 'service' ],
+					'from'    => $from,
+					'to'      => $to,
+					'package' => $package,
+					'create_shipping_label' => $create_label
+				);
+
+				break;
+		}
 
 		$request = $this->send_request( 'shipments', $params, 'POST' );
 
@@ -435,7 +470,7 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 	}
 
@@ -456,7 +491,7 @@ class Woocommerce_Shipcloud_API
 
 		$action = 'shipments/' . $shipment_id;
 		$request = $this->send_request( $action, $params, 'PUT' );
-		
+
 		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
 		{
 			return $request;
@@ -469,7 +504,7 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 
 		return $request_data;
@@ -489,9 +524,19 @@ class Woocommerce_Shipcloud_API
 		$params = array();
 
 		$action = 'shipments/' . $shipment_id;
-		$request_data = $this->send_request( $action, $params, 'DELETE' );
+		$request = $this->send_request( $action, $params, 'DELETE' );
 
-		return $request_data;
+		$request_status = (int) $request[ 'header' ][ 'status' ];
+
+		if( 204 === $request_status )
+		{
+			return TRUE;
+		}
+		else
+		{
+			$error = $this->get_error( $request );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
+		}
 	}
 
 	/**
@@ -530,7 +575,7 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 	}
 
@@ -647,7 +692,7 @@ class Woocommerce_Shipcloud_API
 		if( 200 !== (int) $request[ 'header' ][ 'status' ] )
 		{
 			$error = $this->get_error( $request );
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], __( 'API error:', 'woocommerce-shipcloud' ) . ' ' . $error[ 'description' ] );
+			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 
 		return TRUE;

@@ -117,62 +117,53 @@ jQuery( function( $ ) {
 		var button = $( this );
 		button.addClass( 'button-loading' );
 
-		$.post( ajaxurl, data, function( response ) {
-
+		$.post( ajaxurl, data, function( response )
+		{
 			var result = jQuery.parseJSON( response );
 
-			if( result.errors ){
-				var html = '<div class="error"><ul class="errors">';
-				result.errors.forEach( function( entry ){
-					html+= '<li>' + entry + '</li>';
-				});
-				html+= '</ul></div>';
+			if( result.status == 'ERROR' )
+			{
+				print_errors( result.errors );
+			}
 
-				$( '#shipment-center .info' ).fadeIn().html( html );
-				$( '#shipcloud_create_label').fadeOut();
-
-			}if( result.price ){
-				var html = '<div class="notice">';
-				html+= wcsc_translate.price_text + ' ' +  result.price;
-				html+= '</div>';
-
-				$( '#shipment-center .info' ).fadeIn().html( html );
+			if( result.status == 'OK' )
+			{
+				print_notice( result.html );
 				$( '#shipcloud_create_label').fadeIn();
 			}
+
 			button.removeClass( 'button-loading' );
 		});
 
 
 	});
 
-	$( '#shipcloud_create_shipment' ).click( function(){
+	$( '#shipcloud_create_shipment' ).click( function()
+	{
 		$( '#shipment-center .info').empty();
 		var data = get_shipment_form_data( 'shipcloud_create_shipment' );
 
 		var button = $( '#shipcloud_create_shipment' );
 		button.addClass( 'button-loading' );
 
-		$.post( ajaxurl, data, function( response ) {
-			try
+		$.post( ajaxurl, data, function( response )
+		{
+			var result = JSON.parse( response );
+
+			if( result.status == 'ERROR' )
 			{
-				var result = JSON.parse( response );
-
-				if( result.errors != null ){
-					var html = '<div class="error"><ul class="errors">';
-					result.errors.forEach( function( entry ){
-						html+= '<li>' + entry + '</li>';
-					});
-					html+= '</ul></div>';
-
-					$( '#shipment-center .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
-				}
+				print_errors( result.errors );
 			}
-			catch( e )
+
+			if( result.status == 'OK' )
 			{
-				$( '.shipment-labels' ).prepend( response );
+				$( '.shipment-labels' ).prepend( result.html );
 				shipcloud_create_label_buttons();
 				shipcloud_delete_shipment_buttons();
+
+				// $( '#shipcloud_create_label').fadeIn();
 			}
+
 			button.removeClass( 'button-loading' );
 		});
 	});
@@ -210,7 +201,6 @@ jQuery( function( $ ) {
 
 		ask_create_label.dialog("open");
 	});
-
 
 	function shipcloud_delete_shipment_buttons() {
 		$('.shipcloud_delete_shipment').click(function () {
@@ -251,38 +241,33 @@ jQuery( function( $ ) {
 	}
 	shipcloud_delete_shipment_buttons();
 
-	var shipcloud_create_shipment_label = function( data ){
-
+	var shipcloud_create_shipment_label = function( data )
+	{
 		var button = $( '#shipcloud_create_shipment_label' );
 		button.addClass( 'button-loading-blue' );
 
 		$.post( ajaxurl, data, function( response ) {
-			try
+
+			var result = JSON.parse( response );
+
+			if( result.status == 'ERROR' )
 			{
-				var result = JSON.parse( response );
-
-				if( result.errors != null ){
-					var html = '<div class="error"><ul class="errors">';
-					result.errors.forEach( function( entry ){
-						html+= '<li>' + entry + '</li>';
-					});
-					html+= '</ul></div>';
-
-					$( '#shipment-center .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
-				}
+				print_errors( result.errors );
 			}
-			catch( e )
+
+			if( result.status == 'OK' )
 			{
-				$( '.shipment-labels' ).prepend( response );
+				$( '.shipment-labels' ).prepend( result.html );
 				shipcloud_create_label_buttons();
 				shipcloud_delete_shipment_buttons();
 			}
+
 			button.removeClass( 'button-loading-blue' );
 		});
 	}
 
-	var shipcloud_create_label = function( shipment_id, button ){
-
+	var shipcloud_create_label = function( shipment_id, button )
+	{
 		var order_id = $( "#post_ID" ).val();
 
 		var data = {
@@ -293,44 +278,35 @@ jQuery( function( $ ) {
 
         button.addClass( 'button-loading-blue' );
 
-		$.post( ajaxurl, data, function( response ) {
-			try
+		$.post( ajaxurl, data, function( response )
+		{
+			var result = JSON.parse( response );
+
+			if( result.status == 'ERROR' )
 			{
-				var result = JSON.parse( response );
-
-				if( result.errors != null )
-                {
-					var html = '<div class="error"><ul class="errors">';
-					result.errors.forEach( function( entry ){
-						html+= '<li>' + entry + '</li>';
-					});
-					html+= '</ul></div>';
-
-					$( '#shipment-center .info' ).fadeIn().html( html );
-				}
-                else
-                {
-                    var div_create_label = button.parent();
-                    var div_download_label = button.parent().parent().find( '.button-download-label' );
-                    var div_delete_label = button.parent().parent().find( '.button-delete-shipment' );
-
-                    div_download_label.find( 'a' ).attr( 'href', result.label_url );
-                    div_download_label.find( 'a' ).attr( 'target', '_blank' );
-
-					div_delete_label.remove();
-
-                    div_create_label.removeClass( 'show' );
-                    div_create_label.addClass( 'hide' );
-
-                    div_download_label.removeClass( 'hide' );
-                    div_download_label.addClass( 'show' );
-                }
-
+				print_errors( result.errors );
 			}
-			catch( e )
+
+			if( result.status == 'OK' )
 			{
-				$( '.shipment-labels' ).prepend( response );
+				var div_create_label = button.parent();
+				var div_download_label = button.parent().parent().find( '.button-download-label' );
+				var div_delete_label = button.parent().parent().find( '.button-delete-shipment' );
+
+				div_download_label.find( 'a' ).attr( 'href', result.label_url );
+				div_download_label.find( 'a' ).attr( 'target', '_blank' );
+
+				div_delete_label.remove();
+
+				div_create_label.removeClass( 'show' );
+				div_create_label.addClass( 'hide' );
+
+				div_download_label.removeClass( 'hide' );
+				div_download_label.addClass( 'show' );
+
+				$( '.shipment-labels' ).prepend( result.html );
 			}
+
             button.removeClass( 'button-loading-blue' );
 		});
 	}
@@ -343,32 +319,17 @@ jQuery( function( $ ) {
 		};
 
 		$.post( ajaxurl, data, function( response ) {
-			try
-			{
-				var result = JSON.parse( response );
+			var result = JSON.parse(response);
 
-				if( result.errors != null )
-				{
-					var html = '<div class="error"><ul class="errors">';
-					result.errors.forEach( function( entry ){
-						html+= '<li>' + entry + '</li>';
-					});
-					html+= '</ul></div>';
-
-					$( '#shipment-center .info' ).fadeIn().html( html );
-				}
-				else
-				{
-					$( '#shipment-' +  shipment_id ).remove();
-				}
-
+			if (result.status == 'ERROR') {
+				print_errors(result.errors);
 			}
-			catch( e )
-			{
-				$( '.shipment-labels' ).prepend( response );
+
+			if (result.status == 'OK') {
+				$('#shipment-' + shipment_id).remove();
 			}
 		});
-	}
+	};
 
 	var shipcloud_create_label_buttons = function () {
 		$('.shipcloud_create_label').click( function ( e ) {
@@ -407,6 +368,21 @@ jQuery( function( $ ) {
 		});
 	}
 	shipcloud_create_label_buttons();
+
+	function print_errors( errors ){
+		var html = '<div class="error"><ul class="errors">';
+		errors.forEach( function( entry ){
+			html+= '<li>' + entry + '</li>';
+		});
+		html+= '</ul></div>';
+
+		$( '#shipment-center .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+	}
+
+	function print_notice( text )
+	{
+		$( '#shipment-center .info' ).fadeIn().html( text );
+	}
 
 	/**
 	 * Hiding parcel template adding button if value in form has changed
