@@ -64,15 +64,9 @@ function wcsc_get_carriers()
 		return array();
 	}
 
-	$allowed_carriers = $settings[ 'allowed_carriers' ];
-
 	$shipcloud = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
-
-	if( empty( $allowed_carriers ) ){
-		$shipcloud_carriers = $shipcloud->get_carriers( TRUE );
-	}else{
-		$shipcloud_carriers = $shipcloud->get_carriers();
-	}
+	$allowed_carriers = $settings[ 'allowed_carriers' ];
+	$shipcloud_carriers = $shipcloud->get_carriers();
 
 	if( is_wp_error( $shipcloud_carriers ) )
 	{
@@ -242,7 +236,7 @@ function wcsc_translate_shipcloud_text( $error_text )
 		"Width (in cm) is not a number"                         => __( 'Width (in cm) is not a number.', 'woocommerce-shipcloud' ),
 		"Weight (in kg) can't be blank"                         => __( 'Weight (in kg) can\'t be blank.', 'woocommerce-shipcloud' ),
 		"Weight (in kg) is not a number"                        => __( 'Weight (in kg) is not a number.', 'woocommerce-shipcloud' ),
-		"HTTP Basic: Access denied."                            => __( 'HTTP Basic: Access denied.', 'woocommerce-shipcloud' ),
+		"HTTP Basic: Access denied."                            => __( 'Authentication failure! Please check your API Key.', 'woocommerce-shipcloud' ),
 		"Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted" => __( 'Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted', 'woocommerce-shipcloud' )
 	);
 
@@ -288,6 +282,41 @@ function wcsc_is_enabled()
 	if( 'yes' != $settings[ 'enabled' ] )
 	{
 		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * Checking if we are on shipclud.io settings screen
+ *
+ * @return bool
+ * @since 1.0.0
+ */
+function wcsc_is_settings_screen(){
+	$page = '';
+
+	if( array_key_exists( 'page', $_GET ) )
+	{
+		$page = $_GET[ 'page' ];
+	}
+
+	$tab = '';
+	if( array_key_exists( 'tab', $_GET ) )
+	{
+		$tab = $_GET[ 'tab' ];
+	}
+
+	$section = '';
+	if( array_key_exists( 'section', $_GET ) )
+	{
+		$section = $_GET[ 'section' ];
+	}
+
+	// If page should noz show a message, interrupt the check and gibe back true
+	if( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === $section )
+	{
+		return TRUE;
 	}
 
 	return TRUE;
