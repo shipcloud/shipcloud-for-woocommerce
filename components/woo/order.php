@@ -820,7 +820,10 @@ class WC_Shipcloud_Order
 
 		if( is_wp_error( $shipment ) ){
 			$errors[] = $shipment->get_error_message();
-			$result = array( 'errors' => $errors );
+			$result = array(
+				'status'    => 'ERROR',
+				'errors' => $errors
+			);
 			echo json_encode( $result );
 			exit;
 		}
