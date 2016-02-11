@@ -61,6 +61,14 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 		private $callback_url;
 
 		/**
+		 * Passed Check
+		 *
+		 * @var bool
+		 * @since 1.0.0
+		 */
+		private $passed_check = FALSE;
+
+		/**
 		 * Constructor for your shipping class
 		 *
 		 * @since 1.0.0
@@ -88,7 +96,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			}
 
 			$this->init();
-			$this->check_settings();
+			$this->passed_check = $this->check_settings();
 		}
 
 		/**
