@@ -164,6 +164,13 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				return FALSE;
 			}
 
+			if( empty( $this->settings[ 'sender_street' ] ) || empty( $this->settings[ 'sender_street_nr' ] ) || empty( $this->settings[ 'sender_postcode' ] ) || empty( $this->settings[ 'sender_city' ] ) || empty( $this->settings[ 'sender_country' ] ) )
+			{
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter your <a href="%s">standard sender data</a>! At least, street, street number, postcode, city and country.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
+				return FALSE;
+			}
+
 			return TRUE;
 		}
 
