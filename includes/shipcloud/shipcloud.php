@@ -443,6 +443,10 @@ class Woocommerce_Shipcloud_API
 		}
 
 		$request = $this->send_request( 'shipments', $params, 'POST' );
+		if( is_wp_error( $request ) )
+		{
+			return $request;
+		}
 
 		if( FALSE !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
 		{
