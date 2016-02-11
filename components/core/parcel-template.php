@@ -140,9 +140,6 @@ class WCSC_Parceltemplate_Posttype
 			return;
 		}
 
-		$options = get_option( 'woocommerce_shipcloud_settings' );
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
-
 		$carriers = wcsc_get_carriers();
 
 		$selected_carrier = get_post_meta( $post->ID, 'carrier', TRUE );
