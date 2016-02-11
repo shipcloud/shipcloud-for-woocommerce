@@ -140,7 +140,7 @@ class WCSC_Parceltemplate_Posttype
 			return;
 		}
 
-		$carriers = wcsc_get_carriers();
+		$carriers = wcsc_get_allowed_carriers();
 
 		$selected_carrier = get_post_meta( $post->ID, 'carrier', TRUE );
 		$width = get_post_meta( $post->ID, 'width', TRUE );

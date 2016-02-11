@@ -55,7 +55,7 @@ if( !function_exists( 'p' ) )
  *
  * @return array $carriers
  */
-function wcsc_get_carriers()
+function wcsc_get_allowed_carriers()
 {
 	$settings = get_option( 'woocommerce_shipcloud_settings' );
 

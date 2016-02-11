@@ -273,7 +273,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				}
 			}
 
-			$available_carriers = wcsc_get_carriers();
+			$available_carriers = wcsc_get_allowed_carriers();
 
 			if( is_wp_error( $available_carriers ) )
 			{
@@ -617,7 +617,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			}
 			else
 			{
-				$carriers = wcsc_get_carriers();
+				$carriers = wcsc_get_allowed_carriers();
 			}
 
 			/**

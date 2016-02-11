@@ -317,7 +317,7 @@ class WC_Shipcloud_Order
 	 * @return string
 	 */
 	private function parcel_form(){
-		$carriers = wcsc_get_carriers();
+		$carriers = wcsc_get_allowed_carriers();
 
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 		$standard_carrier = $options[ 'standard_carrier' ];
