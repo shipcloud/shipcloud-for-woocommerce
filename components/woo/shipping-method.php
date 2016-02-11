@@ -313,22 +313,22 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 					'description' => sprintf( __( 'Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/users/api_key' ),
 				),
 				'allowed_carriers'                  => array(
-					'title'       => __( 'Allowed Shipment Methods', 'woocommerce-shipcloud' ),
+					'title'       => __( 'Shipment Methods', 'woocommerce-shipcloud' ),
 					'type'        => 'multi_checkbox',
 					'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
 					'desc_tip'    => TRUE,
 					'options'     => $carriers_options
 				),
 				'carrier_selection'                 => array(
-					'title'       => __( 'Shipment Method Selection', 'woocommerce-shipcloud' ),
+					'title'       => __( 'Shipment Selection', 'woocommerce-shipcloud' ),
 					'type'        => 'select',
-					'description' => __( 'Who can select the shipment method?', 'woocommerce-shipcloud' ),
+					'description' => __( 'Who selects the shipment method?', 'woocommerce-shipcloud' ),
 					'class'       => 'select',
 					'desc_tip'    => TRUE,
 					'default'     => 'shopowner',
 					'options'     => array(
-						'shopowner' => __( 'Shop Owner can select shipment method', 'woocommerce-shipcloud' ),
-						'customer'  => __( 'Customer can select shipment method', 'woocommerce-shipcloud' ),
+						'shopowner' => __( 'Shop Owner', 'woocommerce-shipcloud' ),
+						'customer'  => __( 'Customer', 'woocommerce-shipcloud' ),
 					)
 				),
 				'standard_carrier'                  => $standard_carrier_settings,
