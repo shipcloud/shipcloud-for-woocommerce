@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-11 15:36+0100\n"
-"PO-Revision-Date: 2016-02-11 15:37+0100\n"
+"PO-Revision-Date: 2016-02-11 15:49+0100\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -355,7 +355,8 @@ msgstr ""
 #, php-format
 msgid "Please enter a <a href=\"%s\">Standard Price</a> for Shipment Classes."
 msgstr ""
-"Bitte geben Sie einen<a href=\"%s\">Standard-Preis</a> für Versandklassen an."
+"Bitte geben Sie einen <a href=\"%s\">Standard-Preis</a> für Versandklassen "
+"an."
 
 #: ../components/woo/shipping-method.php:214
 #, php-format
