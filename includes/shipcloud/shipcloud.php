@@ -93,6 +93,11 @@ class Woocommerce_Shipcloud_API
 			WooCommerce_Shipcloud::admin_notice( __( 'Updated Carriers!', 'woocommerce-shipcloud' ) );
 		}
 
+		if( is_wp_error( $shipment_carriers ) )
+		{
+			return $shipment_carriers;
+		}
+
 		$carriers = array();
 		foreach( $shipment_carriers AS $shipment_carrier )
 		{

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-07 16:15+0100\n"
-"PO-Revision-Date: 2016-02-07 16:15+0100\n"
+"POT-Creation-Date: 2016-02-11 15:36+0100\n"
+"PO-Revision-Date: 2016-02-11 15:37+0100\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -18,10 +18,10 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 
 #: ../components/core/core-functions.php:46
-#: ../components/core/parcel-template.php:161
-#: ../components/core/parcel-template.php:167
-#: ../components/core/parcel-template.php:173
-#: ../components/core/parcel-template.php:238 ../components/woo/order.php:335
+#: ../components/core/parcel-template.php:158
+#: ../components/core/parcel-template.php:164
+#: ../components/core/parcel-template.php:170
+#: ../components/core/parcel-template.php:235 ../components/woo/order.php:335
 #: ../components/woo/order.php:341 ../components/woo/order.php:347
 #: ../components/woo/order.php:412 ../components/woo/order.php:433
 #: ../components/woo/order.php:828 ../components/woo/shipping-classes.php:95
@@ -34,8 +34,8 @@ msgid "cm"
 msgstr "cm"
 
 #: ../components/core/core-functions.php:46
-#: ../components/core/parcel-template.php:179
-#: ../components/core/parcel-template.php:238 ../components/woo/order.php:353
+#: ../components/core/parcel-template.php:176
+#: ../components/core/parcel-template.php:235 ../components/woo/order.php:353
 #: ../components/woo/order.php:413 ../components/woo/order.php:434
 #: ../components/woo/order.php:828 ../components/woo/shipping-classes.php:122
 #: ../components/woo/shipping-classes.php:150 ../woocommerce-shipcloud.php:253
@@ -119,35 +119,35 @@ msgstr "Paketvorlagen"
 msgid "Tools"
 msgstr "Tools"
 
-#: ../components/core/parcel-template.php:159 ../components/woo/order.php:333
+#: ../components/core/parcel-template.php:156 ../components/woo/order.php:333
 #: ../components/woo/shipping-classes.php:101
 #: ../components/woo/shipping-classes.php:141
 msgid "Width"
 msgstr "Breite"
 
-#: ../components/core/parcel-template.php:165 ../components/woo/order.php:339
+#: ../components/core/parcel-template.php:162 ../components/woo/order.php:339
 #: ../components/woo/shipping-classes.php:110
 #: ../components/woo/shipping-classes.php:145
 msgid "Height"
 msgstr "Höhe"
 
-#: ../components/core/parcel-template.php:171 ../components/woo/order.php:345
+#: ../components/core/parcel-template.php:168 ../components/woo/order.php:345
 #: ../components/woo/shipping-classes.php:92
 #: ../components/woo/shipping-classes.php:137
 msgid "Length"
 msgstr "Länge"
 
-#: ../components/core/parcel-template.php:177 ../components/woo/order.php:351
+#: ../components/core/parcel-template.php:174 ../components/woo/order.php:351
 #: ../components/woo/shipping-classes.php:119
 #: ../components/woo/shipping-classes.php:149
 msgid "Weight"
 msgstr "Gewicht"
 
-#: ../components/core/parcel-template.php:183
+#: ../components/core/parcel-template.php:180
 msgid "Shipping Company"
 msgstr "Versandunternehmen"
 
-#: ../components/core/parcel-template.php:186
+#: ../components/core/parcel-template.php:183
 msgid "[ Select a Carrier ]"
 msgstr "[ Versandunternehmen wählen ]"
 
@@ -160,22 +160,22 @@ msgid "Sender Address"
 msgstr "Absenderadresse"
 
 #: ../components/woo/order.php:181 ../components/woo/order.php:236
-#: ../components/woo/shipping-method.php:333
+#: ../components/woo/shipping-method.php:393
 msgid "Company"
 msgstr "Firma"
 
 #: ../components/woo/order.php:186 ../components/woo/order.php:241
-#: ../components/woo/shipping-method.php:339
+#: ../components/woo/shipping-method.php:399
 msgid "First Name"
 msgstr "Vorname"
 
 #: ../components/woo/order.php:191 ../components/woo/order.php:246
-#: ../components/woo/shipping-method.php:345
+#: ../components/woo/shipping-method.php:405
 msgid "Last Name"
 msgstr "Nachname"
 
 #: ../components/woo/order.php:196 ../components/woo/order.php:251
-#: ../components/woo/shipping-method.php:351
+#: ../components/woo/shipping-method.php:411
 msgid "Street"
 msgstr "Straße"
 
@@ -184,17 +184,17 @@ msgid "Number"
 msgstr "Nummer"
 
 #: ../components/woo/order.php:206 ../components/woo/order.php:261
-#: ../components/woo/shipping-method.php:363
+#: ../components/woo/shipping-method.php:423
 msgid "Postcode"
 msgstr "PLZ"
 
 #: ../components/woo/order.php:211 ../components/woo/order.php:266
-#: ../components/woo/shipping-method.php:369
+#: ../components/woo/shipping-method.php:429
 msgid "City"
 msgstr "Ort"
 
 #: ../components/woo/order.php:222 ../components/woo/order.php:277
-#: ../components/woo/shipping-method.php:375
+#: ../components/woo/shipping-method.php:435
 msgid "Country"
 msgstr "Land"
 
@@ -324,54 +324,64 @@ msgstr "Die Lieferung wurde nicht in der Post Meta gefunden."
 #: ../components/woo/shipping-classes.php:86
 #: ../components/woo/shipping-classes.php:135
 msgid "Shipment Settings"
-msgstr "Versand-Einstellungen"
+msgstr "Versand Einstellungen"
 
-#: ../components/woo/shipping-method.php:71
+#: ../components/woo/shipping-method.php:79
 msgid "shipcloud.io"
 msgstr "shipcloud.io"
 
-#: ../components/woo/shipping-method.php:72
+#: ../components/woo/shipping-method.php:80
 msgid "Add shipcloud to your shipping methods"
 msgstr "Fügen Sie Shipcloud zu Ihren Versandarten hinzu"
 
-#: ../components/woo/shipping-method.php:133
+#: ../components/woo/shipping-method.php:111
 #, php-format
 msgid "Please enter a <a href=\"%s\">ShipCloud API Key</a>."
 msgstr "Bitte geben Sie einen <a href=\"%s\">ShipCloud-API-Schlüssel</a> ein."
 
-#: ../components/woo/shipping-method.php:140
+#: ../components/woo/shipping-method.php:146
 #, php-format
-msgid "Please select at least one <a href=\"%s\">Carrier</a>."
-msgstr "Bitte wählen Sie mindestens ein <a href=\"%s\">Versandunternehmen</a>."
+msgid "Please select at least one allowed <a href=\"%s\">shipment method</a>."
+msgstr ""
+"Bitte wählen Sie mindestens eine zulässige <a href=\"%s\">Versandmethode</a>."
 
-#: ../components/woo/shipping-method.php:147
+#: ../components/woo/shipping-method.php:153
 #, php-format
 msgid "Please enter a <a href=\"%s\">Standard Price</a> for Products."
 msgstr ""
 "Bitte geben Sie einen <a href=\"%s\">Standard-Preis</a> für Produkte an."
 
-#: ../components/woo/shipping-method.php:154
+#: ../components/woo/shipping-method.php:160
 #, php-format
 msgid "Please enter a <a href=\"%s\">Standard Price</a> for Shipment Classes."
 msgstr ""
 "Bitte geben Sie einen<a href=\"%s\">Standard-Preis</a> für Versandklassen an."
 
-#: ../components/woo/shipping-method.php:205
+#: ../components/woo/shipping-method.php:214
+#, php-format
+msgid ""
+"Please enter your <a href=\"%s\">standard sender data</a>! At least, street, "
+"street number, postcode, city and country."
+msgstr ""
+"Bitte geben Sie Ihre <a href=\"%s\">Standard Absenderdaten</a> an! Bitte "
+"geben Sie Straße, Strasse Nummer, Postleitzahl, Stadt und Land ein."
+
+#: ../components/woo/shipping-method.php:265
 #, php-format
 msgid "Could not update carriers: %s"
 msgstr "Versandunternehmen konnten nicht aktualisiert werden: %s"
 
-#: ../components/woo/shipping-method.php:221
+#: ../components/woo/shipping-method.php:280
 #, php-format
 msgid "Could not get available carriers: %s"
 msgstr "Versandunternehmen konnten nicht geladen werden: %s"
 
-#: ../components/woo/shipping-method.php:227
-#: ../components/woo/shipping-method.php:237
+#: ../components/woo/shipping-method.php:287
+#: ../components/woo/shipping-method.php:297
 msgid "Standard Shipment Method"
-msgstr "Standard-Versandmethode"
+msgstr "Standard Versandmethode"
 
-#: ../components/woo/shipping-method.php:229
+#: ../components/woo/shipping-method.php:289
 msgid ""
 "This Carrier will be preselected if the Shop Owner selects the Carrier or "
 "will be preselected as Carrier if Customer can select the Carrier."
@@ -380,62 +390,62 @@ msgstr ""
 "Versandunternehmen auswählt oder als vorausgewählt, wenn der Kunde das "
 "Versandunternehmen wählt."
 
-#: ../components/woo/shipping-method.php:239
+#: ../components/woo/shipping-method.php:299
 msgid ""
 "You have to select at least one Carrier above to select a Standard Carrier."
 msgstr ""
 "Sie müssen mindestens ein Versandunternehmen wählen um ein Standard "
 "Versandunternehmen wählen zu können."
 
-#: ../components/woo/shipping-method.php:245
+#: ../components/woo/shipping-method.php:305
 msgid "Enable"
 msgstr "Aktivieren"
 
-#: ../components/woo/shipping-method.php:247
+#: ../components/woo/shipping-method.php:307
 msgid "Enable shipcloud.io"
 msgstr "shipcloud.io aktivieren"
 
-#: ../components/woo/shipping-method.php:251
+#: ../components/woo/shipping-method.php:311
 msgid "API Key"
 msgstr "API Key"
 
-#: ../components/woo/shipping-method.php:253
+#: ../components/woo/shipping-method.php:313
 #, php-format
 msgid "Enter your <a href=\"%s\" target=\"_blank\">shipcloud.io API Key</a>."
 msgstr ""
 "Geben Sie Ihren <a href=\"%s\" target=\"_blank\">shipcloud.com API-"
 "Schlüssel</a> ein."
 
-#: ../components/woo/shipping-method.php:256
-msgid "Allowed Shipment Methods"
-msgstr "Erlaubte Versandmethoden"
+#: ../components/woo/shipping-method.php:316
+msgid "Shipment Methods"
+msgstr "Versandmethoden"
 
-#: ../components/woo/shipping-method.php:258
+#: ../components/woo/shipping-method.php:318
 msgid "Select the Carriers which you want to use in your Shop."
 msgstr ""
 "Wählen Sie die Versandunternehmen, die Sie in Ihrem Shop verwenden möchten."
 
-#: ../components/woo/shipping-method.php:263
-msgid "Shipment Method Selection"
-msgstr "Auswahl der Versandmethode"
+#: ../components/woo/shipping-method.php:323
+msgid "Shipment Selection"
+msgstr "Versandauswahl"
 
-#: ../components/woo/shipping-method.php:265
-msgid "Who can select the shipment method?"
-msgstr "Wer kann die Versandmethode wählen?"
+#: ../components/woo/shipping-method.php:325
+msgid "Who selects the shipment method?"
+msgstr "Wer wählt die Versandmethode?"
 
-#: ../components/woo/shipping-method.php:270
-msgid "Shop Owner can select shipment method"
-msgstr "Shop-Betreiber kann Versandmethode wählen"
+#: ../components/woo/shipping-method.php:330
+msgid "Shop Owner"
+msgstr "Shopbetreiber"
 
-#: ../components/woo/shipping-method.php:271
-msgid "Customer can select shipment method"
-msgstr "Der Kunde kann Versandmethode wählen"
+#: ../components/woo/shipping-method.php:331
+msgid "Customer"
+msgstr "Kunde"
 
-#: ../components/woo/shipping-method.php:276
+#: ../components/woo/shipping-method.php:336
 msgid "Webhook URL"
 msgstr "Webhook URL"
 
-#: ../components/woo/shipping-method.php:278
+#: ../components/woo/shipping-method.php:338
 #, php-format
 msgid ""
 "%s<br /><br />You want to get noticed about the Shipment Status? Copy the "
@@ -446,19 +456,19 @@ msgstr ""
 "Sie die Webhook URL in Ihre <a href=„%s“ target=„_blank“>shipcloud.io "
 "Webhook</a> Einstellungen."
 
-#: ../components/woo/shipping-method.php:282
+#: ../components/woo/shipping-method.php:342
 msgid "Debug"
 msgstr "Debug"
 
-#: ../components/woo/shipping-method.php:284
+#: ../components/woo/shipping-method.php:344
 msgid "Enable logging if you experience problems."
 msgstr "Aktivieren der Protokollierung, wenn Probleme auftreten."
 
-#: ../components/woo/shipping-method.php:288
+#: ../components/woo/shipping-method.php:348
 msgid "Automatic Price Calculation"
 msgstr "Automatische Preisberechnung"
 
-#: ../components/woo/shipping-method.php:290
+#: ../components/woo/shipping-method.php:350
 msgid ""
 "To get a price for the customers order, you have to setup the price "
 "calculation."
@@ -466,31 +476,31 @@ msgstr ""
 "Um einen Preis für die Bestellung des Kunden zu erhalten, müssen Sie die "
 "automatische Preisberechnung einrichten."
 
-#: ../components/woo/shipping-method.php:293
+#: ../components/woo/shipping-method.php:353
 msgid "Calculate Products"
 msgstr "Produkte berechnen"
 
-#: ../components/woo/shipping-method.php:295
+#: ../components/woo/shipping-method.php:355
 msgid "How should the price for products be calculated."
 msgstr "Wie soll der Preis für Produkte berechnet werden."
 
-#: ../components/woo/shipping-method.php:300
+#: ../components/woo/shipping-method.php:360
 msgid "Per Product: Charge shipping for each Product individually"
 msgstr "Pro Artikel: Versandkosten für jedes Produkt einzeln ermitteln"
 
-#: ../components/woo/shipping-method.php:301
+#: ../components/woo/shipping-method.php:361
 msgid ""
 "Per Order: Charge shipping for the most expensive shipping for a product"
 msgstr ""
 "Pro Bestellung: Versandkosten entsprechend die teuersten Versandkosten eines "
 "Produktes ermitteln"
 
-#: ../components/woo/shipping-method.php:306
-#: ../components/woo/shipping-method.php:323
+#: ../components/woo/shipping-method.php:366
+#: ../components/woo/shipping-method.php:383
 msgid "Standard Price"
 msgstr "Standardpreis"
 
-#: ../components/woo/shipping-method.php:308
+#: ../components/woo/shipping-method.php:368
 msgid ""
 "Will be used if no sizes or weight is given to a Product (have to be entered "
 "in €)."
@@ -498,23 +508,23 @@ msgstr ""
 "Wird verwendet wenn für ein Produkt keine Größen oder Gewicht eingegeben "
 "wurde (muss in € einegegeben werden)."
 
-#: ../components/woo/shipping-method.php:311
+#: ../components/woo/shipping-method.php:371
 msgid "Calculate Shipment Classes"
 msgstr "Versandklasse berechnen"
 
-#: ../components/woo/shipping-method.php:313
+#: ../components/woo/shipping-method.php:373
 msgid "How should the price for shipment classes be calculated."
 msgstr "Wie soll der Preis für Versandklassen berechnet werden."
 
-#: ../components/woo/shipping-method.php:318
+#: ../components/woo/shipping-method.php:378
 msgid "Per Class: Charge shipping for each shipping class individually"
 msgstr "Pro Klasse: Versandkosten für jede Versandklasse einzeln ermitteln"
 
-#: ../components/woo/shipping-method.php:319
+#: ../components/woo/shipping-method.php:379
 msgid "Per Order: Charge shipping for the most expensive shipping class"
 msgstr "Pro Bestellung Versandkosten für die teuerste Versandklasse ermitteln"
 
-#: ../components/woo/shipping-method.php:325
+#: ../components/woo/shipping-method.php:385
 msgid ""
 "Will be used if no sizes or weight is given to a Shipment Class (have to be "
 "entered in €)."
@@ -522,72 +532,72 @@ msgstr ""
 "Wird verwendet wenn für eine Versandklasse keine Größen oder Gewicht "
 "eingegeben wurde (muss in € einegegeben werden)."
 
-#: ../components/woo/shipping-method.php:328
+#: ../components/woo/shipping-method.php:388
 msgid "Standard sender data"
 msgstr "Standard-Absender Daten"
 
-#: ../components/woo/shipping-method.php:330
+#: ../components/woo/shipping-method.php:390
 msgid "Setup your standard sender data for sending parcels."
 msgstr "Geben Sie einen Standardabsender für den Versand an."
 
-#: ../components/woo/shipping-method.php:335
+#: ../components/woo/shipping-method.php:395
 msgid "Enter standard sender company for shipment."
 msgstr "Geben Sie ein Standardabsender-Firma für den Versand an."
 
-#: ../components/woo/shipping-method.php:341
+#: ../components/woo/shipping-method.php:401
 msgid "Enter standard sender first name for shipment."
 msgstr "Geben Sie einen Standardabsender-Vornamen für den Versand an."
 
-#: ../components/woo/shipping-method.php:347
+#: ../components/woo/shipping-method.php:407
 msgid "Enter standard sender last name for shipment."
 msgstr "Geben Sie einen Standardabsender-Nachnamen für den Versand an."
 
-#: ../components/woo/shipping-method.php:353
+#: ../components/woo/shipping-method.php:413
 msgid "Enter standard sender street for shipment."
 msgstr "Geben Sie eine Standardabsender-Straße für den Versand an."
 
-#: ../components/woo/shipping-method.php:357
+#: ../components/woo/shipping-method.php:417
 msgid "Street number"
 msgstr "Hausnummer"
 
-#: ../components/woo/shipping-method.php:359
+#: ../components/woo/shipping-method.php:419
 msgid "Enter standard sender street number for shipment."
 msgstr "Geben Sie die Standardabsender-Hausnummer für Versand an."
 
-#: ../components/woo/shipping-method.php:365
+#: ../components/woo/shipping-method.php:425
 msgid "Enter standard sender postcode for shipment."
 msgstr "Geben Sie Standardabsender-Postleitzahl für den Versand an."
 
-#: ../components/woo/shipping-method.php:371
+#: ../components/woo/shipping-method.php:431
 msgid "Enter standard sender city for shipment."
 msgstr "Geben Sie eine Standardsender-Stadt für den Versand an."
 
-#: ../components/woo/shipping-method.php:377
+#: ../components/woo/shipping-method.php:437
 msgid "Enter standard sender country for shipment."
 msgstr "Geben Sie ein Standardabsender-Land für den Versand an."
 
-#: ../components/woo/shipping-method.php:433
+#: ../components/woo/shipping-method.php:493
 msgid "Please enter an API key to get available shipment Carriers."
 msgstr ""
 "Bitte geben Sie einen API Key ein um verfügbare Versandunternehmen "
 "anzuzeigen."
 
-#: ../components/woo/shipping-method.php:725
+#: ../components/woo/shipping-method.php:785
 #, php-format
 msgid "No term found for shipping class #%s"
 msgstr "Kein Term für die Versandklasse #%s gefunden"
 
-#: ../components/woo/shipping-method.php:737
+#: ../components/woo/shipping-method.php:797
 #, php-format
 msgid "No parcel found for product id #%s"
 msgstr "Kein Paket für Produkt ID #%s gefunden"
 
-#: ../components/woo/shipping-method.php:781
+#: ../components/woo/shipping-method.php:841
 #, php-format
 msgid "No price found for parcel. Using fallback price %s"
 msgstr "Kein Preis für Paket gefunden. Nutze Fallback-Preis %s"
 
-#: ../components/woo/shipping-method.php:847
+#: ../components/woo/shipping-method.php:907
 #, php-format
 msgid "Shipment status changed to: %s"
 msgstr "Versandstatus geändert zu: %s"
@@ -600,27 +610,27 @@ msgstr "WooCommerce Funktionen"
 msgid "Updated Carriers!"
 msgstr "Versandunternehmen aktualisiert!"
 
-#: ../includes/shipcloud/shipcloud.php:224
+#: ../includes/shipcloud/shipcloud.php:229
 msgid "Standard"
 msgstr "Standard"
 
-#: ../includes/shipcloud/shipcloud.php:225
+#: ../includes/shipcloud/shipcloud.php:230
 msgid "Returns"
 msgstr "Rücksendung"
 
-#: ../includes/shipcloud/shipcloud.php:226
+#: ../includes/shipcloud/shipcloud.php:231
 msgid "One Day"
 msgstr "Ein Tag"
 
-#: ../includes/shipcloud/shipcloud.php:227
+#: ../includes/shipcloud/shipcloud.php:232
 msgid "One Day Early"
 msgstr "Einen Tag morgens"
 
-#: ../includes/shipcloud/shipcloud.php:228
+#: ../includes/shipcloud/shipcloud.php:233
 msgid "Same Day"
 msgstr "Gleicher Tag"
 
-#: ../includes/shipcloud/shipcloud.php:274
+#: ../includes/shipcloud/shipcloud.php:279
 msgid ""
 "There is no message body. You'll get this code when deleting a shipment was "
 "successful."
@@ -628,7 +638,7 @@ msgstr ""
 "Es gibt keine Nachrichtentext. Sie werden diesen Code erhalten, wenn eine "
 "Sendung Löschen erfolgreich war."
 
-#: ../includes/shipcloud/shipcloud.php:278
+#: ../includes/shipcloud/shipcloud.php:283
 msgid ""
 "Your request was not correct. Please see the response body for more detailed "
 "information."
@@ -636,11 +646,11 @@ msgstr ""
 "Ihre Anfrage war nicht korrekt. Bitte beachten Sie den Antworttext für "
 "weitere Informationen."
 
-#: ../includes/shipcloud/shipcloud.php:282
+#: ../includes/shipcloud/shipcloud.php:287
 msgid "Access denied! Please check your API Key."
 msgstr "Zugriff verweigert! Bitte überprüfen Sie Ihre API-Key."
 
-#: ../includes/shipcloud/shipcloud.php:286
+#: ../includes/shipcloud/shipcloud.php:291
 msgid ""
 "You've reached the maximum of your current plan. Please upgrade to a higher "
 "plan."
@@ -648,198 +658,199 @@ msgstr ""
 "Sie haben die maximale Anzahl an Anfragen in Ihrem aktuellen Tarif erreicht. "
 "Bitte aktualisieren Sie auf einen höheren Tarif."
 
-#: ../includes/shipcloud/shipcloud.php:290
+#: ../includes/shipcloud/shipcloud.php:295
 msgid ""
 "You are not allowed to talk to this endpoint. This can either be due to a "
 "wrong authentication or when you're trying to reach an endpoint that your "
 "account isn't allowed to access."
 msgstr ""
 
-#: ../includes/shipcloud/shipcloud.php:294
+#: ../includes/shipcloud/shipcloud.php:299
 msgid "The api endpoint you were trying to reach can't be found."
 msgstr ""
 
-#: ../includes/shipcloud/shipcloud.php:298
+#: ../includes/shipcloud/shipcloud.php:303
 msgid ""
 "Your request was well-formed but couldn't be followed due to semantic "
 "errors. Please see the response body for more detailed information."
 msgstr ""
 
-#: ../includes/shipcloud/shipcloud.php:302
+#: ../includes/shipcloud/shipcloud.php:307
 msgid ""
 "Something has seriously gone wrong. Don't worry, we'll have a look at it."
 msgstr ""
 
-#: ../includes/shipcloud/shipcloud.php:306
+#: ../includes/shipcloud/shipcloud.php:311
 msgid ""
 "Something has gone wrong while talking to the carrier backend. Please see "
 "the response body for more detailed information."
 msgstr ""
 
-#: ../includes/shipcloud/shipcloud.php:310
+#: ../includes/shipcloud/shipcloud.php:315
 msgid ""
 "Unfortunately we couldn't connect to the carrier backend. It is either very "
 "slow or not reachable at all. If you want to stay informed about the carrier "
 "status, follow our developer twitter account at @shipcloud_devs."
 msgstr ""
 
-#: ../includes/shipcloud/shipcloud.php:316
+#: ../includes/shipcloud/shipcloud.php:321
 msgid "Unknown Error"
 msgstr "Unbekannter Fehler"
 
-#: ../woocommerce-shipcloud-functions.php:134
+#: ../woocommerce-shipcloud-functions.php:128
 msgid "Picked up"
 msgstr "Abgeholt"
 
-#: ../woocommerce-shipcloud-functions.php:138
+#: ../woocommerce-shipcloud-functions.php:132
 msgid "In transit"
 msgstr "Unterwegs"
 
-#: ../woocommerce-shipcloud-functions.php:142
+#: ../woocommerce-shipcloud-functions.php:136
 msgid "Out for delivery"
 msgstr "Wird zugestellt"
 
-#: ../woocommerce-shipcloud-functions.php:146
+#: ../woocommerce-shipcloud-functions.php:140
 msgid "Delivered"
 msgstr "Ausgeliefert"
 
-#: ../woocommerce-shipcloud-functions.php:150
+#: ../woocommerce-shipcloud-functions.php:144
 msgid "Awaits pickup by Receiver"
 msgstr "Abholung vom Empfänger erwartet"
 
-#: ../woocommerce-shipcloud-functions.php:154
+#: ../woocommerce-shipcloud-functions.php:148
 msgid "Delayed"
 msgstr "Verzögert"
 
-#: ../woocommerce-shipcloud-functions.php:158
+#: ../woocommerce-shipcloud-functions.php:152
 msgid "Not delivered"
 msgstr "Nicht ausgeliefert"
 
-#: ../woocommerce-shipcloud-functions.php:162
+#: ../woocommerce-shipcloud-functions.php:156
 msgid ""
 "Carrier internal notification. Tracking events within the shipment will "
 "carry more elaborate information."
 msgstr ""
 
-#: ../woocommerce-shipcloud-functions.php:166
+#: ../woocommerce-shipcloud-functions.php:160
 msgid "Status unknown"
 msgstr "Status unbekannt"
 
-#: ../woocommerce-shipcloud-functions.php:170
+#: ../woocommerce-shipcloud-functions.php:164
 msgid "Not available yet"
 msgstr "Noch nicht verfügbar"
 
-#: ../woocommerce-shipcloud-functions.php:206
+#: ../woocommerce-shipcloud-functions.php:202
 msgid "Carrier can't be blank."
 msgstr "Versandunternehmen darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:207
+#: ../woocommerce-shipcloud-functions.php:203
 msgid "Sender Last Name can't be blank."
 msgstr "Absender-Nachname darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:208
-#: ../woocommerce-shipcloud-functions.php:209
+#: ../woocommerce-shipcloud-functions.php:204
+#: ../woocommerce-shipcloud-functions.php:205
 msgid "Sender Street can't be blank."
 msgstr "Absender-Straße darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:210
-#: ../woocommerce-shipcloud-functions.php:211
+#: ../woocommerce-shipcloud-functions.php:206
+#: ../woocommerce-shipcloud-functions.php:207
 msgid "Sender Street number can't be blank."
 msgstr "Absender-Hausnummer darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:212
-#: ../woocommerce-shipcloud-functions.php:213
+#: ../woocommerce-shipcloud-functions.php:208
+#: ../woocommerce-shipcloud-functions.php:209
 msgid "Sender ZIP code can't be blank."
 msgstr "Absender-Postleitzahl darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:214
-#: ../woocommerce-shipcloud-functions.php:215
+#: ../woocommerce-shipcloud-functions.php:210
+#: ../woocommerce-shipcloud-functions.php:211
 msgid "Sender City can't be blank."
 msgstr "Absender-Stadt darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:216
+#: ../woocommerce-shipcloud-functions.php:212
 msgid "Sender Country can't be blank."
 msgstr "Absender-Land darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:217
+#: ../woocommerce-shipcloud-functions.php:213
 msgid "Sender Country  is not an ALPHA-2 ISO country code."
 msgstr "Absender-Land ist kein ALPHA-2-ISO-Ländercode."
 
-#: ../woocommerce-shipcloud-functions.php:218
+#: ../woocommerce-shipcloud-functions.php:214
 msgid "Receiver Last Name can't be blank."
 msgstr "Empfänger-Nachname darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:219
+#: ../woocommerce-shipcloud-functions.php:215
 msgid "Receiver Street can't be blank."
 msgstr "Empfänger-Straße darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:220
+#: ../woocommerce-shipcloud-functions.php:216
 msgid "Receiver Street number can't be blank."
 msgstr "Empfänger-Hausnummer darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:221
-#: ../woocommerce-shipcloud-functions.php:222
+#: ../woocommerce-shipcloud-functions.php:217
+#: ../woocommerce-shipcloud-functions.php:218
 msgid "Receiver ZIP code can't be blank."
 msgstr "Empfänger-Postleitzahl darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:223
-#: ../woocommerce-shipcloud-functions.php:224
+#: ../woocommerce-shipcloud-functions.php:219
+#: ../woocommerce-shipcloud-functions.php:220
 msgid "Receiver City can't be blank."
 msgstr "Empfänger Stadt darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:225
+#: ../woocommerce-shipcloud-functions.php:221
 msgid "Receiver Country can't be blank."
 msgstr "Empfänger Land darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:226
+#: ../woocommerce-shipcloud-functions.php:222
 msgid "Receiver Country  is not an ALPHA-2 ISO country code."
 msgstr "Empfänger-Land ist kein ALPHA-2-ISO-Ländercode."
 
-#: ../woocommerce-shipcloud-functions.php:227
-#: ../woocommerce-shipcloud-functions.php:235
+#: ../woocommerce-shipcloud-functions.php:223
+#: ../woocommerce-shipcloud-functions.php:231
 msgid "Height (in cm) can't be blank."
 msgstr "Höhe (in cm) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:228
-#: ../woocommerce-shipcloud-functions.php:236
+#: ../woocommerce-shipcloud-functions.php:224
+#: ../woocommerce-shipcloud-functions.php:232
 msgid "Height (in cm) is not a number."
 msgstr "Höhe (in cm) ist keine Zahl."
 
-#: ../woocommerce-shipcloud-functions.php:229
-#: ../woocommerce-shipcloud-functions.php:237
+#: ../woocommerce-shipcloud-functions.php:225
+#: ../woocommerce-shipcloud-functions.php:233
 msgid "Length (in cm) can't be blank."
 msgstr "Länge (in cm) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:230
-#: ../woocommerce-shipcloud-functions.php:238
+#: ../woocommerce-shipcloud-functions.php:226
+#: ../woocommerce-shipcloud-functions.php:234
 msgid "Length (in cm) is not a number."
 msgstr "Länge (in cm) ist keine Zahl."
 
-#: ../woocommerce-shipcloud-functions.php:231
-#: ../woocommerce-shipcloud-functions.php:239
+#: ../woocommerce-shipcloud-functions.php:227
+#: ../woocommerce-shipcloud-functions.php:235
 msgid "Width (in cm) can't be blank."
 msgstr "Breite (in cm) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:232
-#: ../woocommerce-shipcloud-functions.php:240
+#: ../woocommerce-shipcloud-functions.php:228
+#: ../woocommerce-shipcloud-functions.php:236
 msgid "Width (in cm) is not a number."
 msgstr "Breite (in cm) ist keine Zahl."
 
-#: ../woocommerce-shipcloud-functions.php:233
-#: ../woocommerce-shipcloud-functions.php:241
+#: ../woocommerce-shipcloud-functions.php:229
+#: ../woocommerce-shipcloud-functions.php:237
 msgid "Weight (in kg) can't be blank."
 msgstr "Gewicht (in kg) darf nicht leer sein."
 
-#: ../woocommerce-shipcloud-functions.php:234
-#: ../woocommerce-shipcloud-functions.php:242
+#: ../woocommerce-shipcloud-functions.php:230
+#: ../woocommerce-shipcloud-functions.php:238
 msgid "Weight (in kg) is not a number."
 msgstr "Gewicht (in kg) ist keine Zahl."
 
-#: ../woocommerce-shipcloud-functions.php:243
-msgid "HTTP Basic: Access denied."
-msgstr "HTTP Basic: Zugriff verweigert."
+#: ../woocommerce-shipcloud-functions.php:239
+msgid "Authentication failure! Please check your API Key."
+msgstr ""
+"Authentifizierung fehlgeschlagen! Bitte überprüfen Sie Ihren API-Schlüssel."
 
-#: ../woocommerce-shipcloud-functions.php:244
+#: ../woocommerce-shipcloud-functions.php:240
 msgid ""
 "Tip: A label has already been created. Only prepared shipments (the ones "
 "without a label) can be updated or deleted"
@@ -892,6 +903,28 @@ msgstr "Ja"
 #: ../woocommerce-shipcloud.php:256
 msgid "No"
 msgstr "Nein"
+
+#~ msgid "Allowed Shipment Methods"
+#~ msgstr "Erlaubte Versandmethoden"
+
+#~ msgid "Please select at least one <a href=\"%s\">Carrier</a>."
+#~ msgstr ""
+#~ "Bitte wählen Sie mindestens ein <a href=\"%s\">Versandunternehmen</a>."
+
+#~ msgid "Shipment Method Selection"
+#~ msgstr "Auswahl der Versandmethode"
+
+#~ msgid "Who can select the shipment method?"
+#~ msgstr "Wer kann die Versandmethode wählen?"
+
+#~ msgid "Shop Owner can select shipment method"
+#~ msgstr "Shop-Betreiber kann Versandmethode wählen"
+
+#~ msgid "Customer can select shipment method"
+#~ msgstr "Der Kunde kann Versandmethode wählen"
+
+#~ msgid "HTTP Basic: Access denied."
+#~ msgstr "HTTP Basic: Zugriff verweigert."
 
 #~ msgid "API error:"
 #~ msgstr "API-Fehler:"
