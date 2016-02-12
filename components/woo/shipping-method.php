@@ -254,12 +254,12 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			$default_country = wc_get_base_location();
 			$default_country = $default_country[ 'country' ];
 
+			$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
+			$carriers = $shipcloud_api->get_carriers();
+
 			$carriers_options = array();
 			if( array_key_exists( 'api_key', $this->settings ) )
 			{
-				$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
-				$carriers = $shipcloud_api->get_carriers();
-
 				if( is_wp_error( $carriers ) )
 				{
 					WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
@@ -273,7 +273,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 				}
 			}
 
-			$available_carriers = wcsc_get_allowed_carriers();
+			$available_carriers = $shipcloud_api->get_allowed_carriers();
 
 			if( is_wp_error( $available_carriers ) )
 			{
@@ -617,7 +617,7 @@ if( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', ge
 			}
 			else
 			{
-				$carriers = wcsc_get_allowed_carriers();
+				$carriers = $shipcloud_api->get_allowed_carriers( TRUE );
 			}
 
 			/**

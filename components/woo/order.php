@@ -317,7 +317,8 @@ class WC_Shipcloud_Order
 	 * @return string
 	 */
 	private function parcel_form(){
-		$carriers = wcsc_get_allowed_carriers();
+		$shipcloud_api = new Woocommerce_Shipcloud_API();
+		$carriers = $shipcloud_api->get_allowed_carriers();
 
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 		$standard_carrier = $options[ 'standard_carrier' ];
@@ -368,7 +369,7 @@ class WC_Shipcloud_Order
 					</td>
 				</tr>
 				<tr>
-					<th><?php _e( 'Carrier', 'woocommerce-shipcloud' ); ?></th>
+					<th><?php _e( 'Shipment Method', 'woocommerce-shipcloud' ); ?></th>
 					<td>
 						<?php if( count( $carriers ) > 0 ): ?>
 						<select name="parcel_carrier">

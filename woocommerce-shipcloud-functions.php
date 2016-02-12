@@ -38,6 +38,8 @@ endif;
 
 /**
  * Debugging helper function
+ *
+ * @since 1.0.0
  */
 if( !function_exists( 'p' ) )
 {
@@ -49,52 +51,14 @@ if( !function_exists( 'p' ) )
 	}
 }
 
-
-/**
- * Get allowed Carriers
- *
- * @return array $carriers
- */
-function wcsc_get_allowed_carriers()
-{
-	$settings = get_option( 'woocommerce_shipcloud_settings' );
-
-	if( '' == $settings || !array_key_exists( 'api_key', $settings ) || '' == $settings[ 'api_key' ] )
-	{
-		return array();
-	}
-
-	$shipcloud = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
-	$allowed_carriers = $settings[ 'allowed_carriers' ];
-	$shipcloud_carriers = $shipcloud->get_carriers();
-
-	if( is_wp_error( $shipcloud_carriers ) )
-	{
-		return $shipcloud_carriers;
-	}
-
-	$carriers = array();
-
-	if( is_array( $allowed_carriers ) )
-	{
-		foreach( $shipcloud_carriers AS $shipcloud_carrier )
-		{
-			if( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
-			{
-				$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
-			}
-		}
-	}
-
-	return $carriers;
-}
-
 /**
  * Get carrier display_name from name
  *
  * @param string $name
  *
  * @return string $display_name
+ *
+ * @since 1.0.0
  */
 function wcsc_get_carrier_display_name( $name )
 {

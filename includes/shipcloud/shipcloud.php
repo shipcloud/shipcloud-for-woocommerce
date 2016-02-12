@@ -28,8 +28,41 @@
  */
 class Woocommerce_Shipcloud_API
 {
-	private $api_key;
-	private $api_url;
+	/**
+	 * API Key
+	 *
+	 * @var string
+	 *
+	 * @since 1.0.0
+	 */
+	private $api_key = null;
+
+	/**
+	 * API Url
+	 *
+	 * @var string
+	 *
+	 * @since 1.0.0
+	 */
+	private $api_url = null;
+
+	/**
+	 * Saved shipcloud settings
+	 *
+	 * @var array
+	 *
+	 * @since 1.0.0
+	 */
+	private $settings = array();
+
+	/**
+	 * Shipcloud service informations
+	 *
+	 * @var array
+	 *
+	 * @since 1.0.0
+	 */
+	private $services = array();
 
 	/**
 	 * Woocommerce_Shipcloud_API constructor.
@@ -37,10 +70,53 @@ class Woocommerce_Shipcloud_API
 	 * @param string $apiKey
 	 * @since 1.0.0
 	 */
-	public function __construct( $apiKey )
+	public function __construct( $api_key = null )
 	{
-		$this->api_key = $apiKey;
+		$this->settings = get_option( 'woocommerce_shipcloud_settings' );
+
+		if ( null !== $api_key )
+		{
+			$this->api_key = $api_key;
+		}
+		else
+		{
+			if( ! empty( $this->settings[ 'api_key' ] ) )
+			{
+				return new WP_Error( 'shipcloud_api_error_no_api_key', __( 'No API Key given', 'woocommerce-shipcloud' ) );
+			}
+
+			$this->api_key = $this->settings[ 'api_key' ];
+		}
+
 		$this->api_url = 'https://api.shipcloud.io/v1';
+
+		$this->services = array(
+			'standard' => array(
+				'name' => __( 'Standard', 'woocommerce-shipcloud' ),
+				'description' => __( 'A normal shipping label without any fancy stuff like express shipping', 'woocommerce-shipcloud' ),
+			    'customer_service' => TRUE
+			),
+			'one_day' => array(
+				'name' => __( 'Express', 'woocommerce-shipcloud' ),
+				'description' => __( 'Express shipping where the package will arrive the next day', 'woocommerce-shipcloud' ),
+				'customer_service' => TRUE
+			),
+			'one_day_early' => array(
+				'name' => __( 'Express Morning', 'woocommerce-shipcloud' ),
+				'description' => __( 'Express shipping where the package will arrive the next day until 12pm', 'woocommerce-shipcloud' ),
+				'customer_service' => TRUE
+			),
+			'same_day' => array(
+				'name' => __( 'Same Day', 'woocommerce-shipcloud' ),
+				'description' => __( 'Same Day Delivery', 'woocommerce-shipcloud' ),
+				'customer_service' => TRUE
+			),
+			'returns' => array(
+				'name' => __( 'Returns', 'woocommerce-shipcloud' ),
+				'description' => __( 'Shipments that are being send back to the shop', 'woocommerce-shipcloud' ),
+				'customer_service' => FALSE
+			)
+		);
 	}
 
 	/**
@@ -106,7 +182,7 @@ class Woocommerce_Shipcloud_API
 				{
 					$carriers[] = array(
 						'name' => $shipment_carrier[ 'name' ] . '_' . $service,
-						'display_name' => $shipment_carrier[ 'display_name' ] . ' - ' . $this->translate_service_name( $service )
+						'display_name' => $shipment_carrier[ 'display_name' ] . ' - ' . $this->get_service_name( $service )
 					);
 				}
 			}else{
@@ -114,6 +190,49 @@ class Woocommerce_Shipcloud_API
 					'name'	=> $shipment_carrier[ 'name' ],
 					'display_name'	=> $shipment_carrier[ 'display_name' ]
 				);
+			}
+		}
+
+		return $carriers;
+	}
+
+	/**
+	 * Get allowed Carriers
+	 *
+	 * @param bool $only_customer_services
+	 *
+	 * @return array $carriers
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_allowed_carriers( $only_customer_services = FALSE )
+	{
+		$allowed_carriers   = $this->settings[ 'allowed_carriers' ];
+		$shipcloud_carriers = $this->get_carriers();
+
+		if ( is_wp_error( $shipcloud_carriers ) )
+		{
+			return $shipcloud_carriers;
+		}
+
+		$carriers = array();
+
+		if ( is_array( $allowed_carriers ) )
+		{
+			foreach ( $shipcloud_carriers AS $shipcloud_carrier )
+			{
+				if ( $only_customer_services )
+				{
+					$carrier_arr = $this->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
+					if ( ! $this->is_customer_service( $carrier_arr[ 'service' ] ) )
+					{
+						continue;
+					}
+				}
+				if ( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
+				{
+					$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
+				}
 			}
 		}
 
@@ -155,7 +274,7 @@ class Woocommerce_Shipcloud_API
 	 *
 	 * @return array
 	 */
-	private function disassemble_carrier_name( $carrier_name )
+	public function disassemble_carrier_name( $carrier_name )
 	{
 		$carrier_arr = explode( '_', $carrier_name );
 
@@ -209,36 +328,70 @@ class Woocommerce_Shipcloud_API
 	public function get_carrier_display_name_short( $carrier_name )
 	{
 		$carrier_name_arr = $this->disassemble_carrier_name( $carrier_name );
-		$display_name = strtoupper( $carrier_name_arr[ 'carrier' ] ) . ' - ' . $this->translate_service_name( $carrier_name_arr[ 'service' ] );
+		$display_name = strtoupper( $carrier_name_arr[ 'carrier' ] ) . ' - ' . $this->get_service_name( $carrier_name_arr[ 'service' ] );
 
 		return $display_name;
 	}
 
 	/**
-	 * Translating service to a readable name
+	 * Getting service name by service id
 	 *
-	 * @param $service_name
+	 * @param $service_id
+	 *
+	 * @return string
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_service_name( $service_id )
+	{
+		if( ! array_key_exists( $service_id, $this->services ) )
+		{
+			return FALSE;
+		}
+
+		return $this->services[ $service_id ][ 'name' ];
+	}
+
+	/**
+	 * Getting service description by service id
+	 *
+	 * @param $service_id
+	 *
+	 * @return string
+	 *
+	 * @since 1.0.0
+	 */
+	public function get_service_description( $service_id )
+	{
+		if( ! array_key_exists( $service_id, $this->services ) )
+		{
+			return FALSE;
+		}
+
+		return $this->services[ $service_id ][ 'description' ];
+	}
+
+	/**
+	 * Is the service a customer Service
+	 *
+	 * @param $service_id
 	 *
 	 * @return bool
 	 *
 	 * @since 1.0.0
 	 */
-	private function translate_service_name( $service_name )
+	public function is_customer_service( $service_id )
 	{
-		$services = array(
-			'standard' => __( 'Standard', 'woocommerce-shipcloud' ),
-			'returns' => __( 'Returns', 'woocommerce-shipcloud' ),
-			'one_day' => __( 'One Day', 'woocommerce-shipcloud' ),
-			'one_day_early' => __( 'One Day Early', 'woocommerce-shipcloud' ),
-			'same_day' => __( 'Same Day', 'woocommerce-shipcloud' ),
-		);
-
-		if( ! array_key_exists( $service_name, $services ) )
+		if( ! array_key_exists( $service_id, $this->services ) )
 		{
 			return FALSE;
 		}
 
-		return $services[ $service_name ];
+		if( $this->services[ $service_id ][ 'customer_service' ] ){
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 	/**
