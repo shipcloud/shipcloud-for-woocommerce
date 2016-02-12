@@ -376,7 +376,7 @@ jQuery( function( $ ) {
 		});
 		html+= '</ul></div>';
 
-		$( '#shipment-center .info' ).fadeIn().html( html ).delay( 5000 ).fadeOut( 2000 );
+		$( '#shipment-center .info' ).fadeIn().html( html );
 	}
 
 	function print_notice( text )
