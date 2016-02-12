@@ -323,6 +323,19 @@ class WC_Shipcloud_Order
 		$standard_carrier = $options[ 'standard_carrier' ];
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
+		$order = new WC_Order( $this->order_id );
+
+		$selected_shipping_method = '';
+		$shipping_methods = $order->get_shipping_methods();
+		foreach( $shipping_methods AS $shipping_method )
+		{
+			if( 'shipping' === $shipping_method[ 'type' ] )
+			{
+				$selected_shipping_method = $shipping_method[ 'method_id' ];
+				break;
+			}
+		}
+
 		ob_start();
 		?>
 		<div class="create-label fifty">
@@ -359,7 +372,9 @@ class WC_Shipcloud_Order
 						<?php if( count( $carriers ) > 0 ): ?>
 						<select name="parcel_carrier">
 							<?php foreach( $carriers AS $name => $display_name ): ?>
-								<?php if( $name == $standard_carrier ): ?>
+								<?php if( $name === $selected_shipping_method ): ?>
+									<option value="<?php echo $name; ?>" selected><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
+								<?php elseif( $name === $standard_carrier && empty( $selected_shipping_method ) ): ?>
 									<option value="<?php echo $name; ?>" selected><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
 								<?php else: ?>
 									<option value="<?php echo $name; ?>"><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
