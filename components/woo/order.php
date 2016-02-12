@@ -323,6 +323,20 @@ class WC_Shipcloud_Order
 		$standard_carrier = $options[ 'standard_carrier' ];
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
+		$order = new WC_Order( $this->order_id );
+
+		$selected_shipping_method = '';
+		$shipping_methods = $order->get_shipping_methods();
+		foreach( $shipping_methods AS $shipping_method )
+		{
+			if( 'shipping' === $shipping_method[ 'type' ] )
+			{
+				$selected_shipping_method = $shipping_method[ 'method_id' ];
+				break;
+			}
+		}
+		$shipping_method_name = $order->get_shipping_method();
+
 		ob_start();
 		?>
 		<div class="create-label fifty">
@@ -359,7 +373,9 @@ class WC_Shipcloud_Order
 						<?php if( count( $carriers ) > 0 ): ?>
 						<select name="parcel_carrier">
 							<?php foreach( $carriers AS $name => $display_name ): ?>
-								<?php if( $name == $standard_carrier ): ?>
+								<?php if( $name === $selected_shipping_method ): ?>
+									<option value="<?php echo $name; ?>" selected><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
+								<?php elseif( $name === $standard_carrier && empty( $selected_shipping_method ) ): ?>
 									<option value="<?php echo $name; ?>" selected><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
 								<?php else: ?>
 									<option value="<?php echo $name; ?>"><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
@@ -368,6 +384,9 @@ class WC_Shipcloud_Order
 						</select>
 						<?php else: ?>
 							<?php echo sprintf( __( '<a href="%s">Please select a Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ); ?>
+						<?php endif; ?>
+						<?php if( ! empty( $shipping_method_name ) ): ?>
+							<br /><small><?php echo sprintf( __( 'Ordered: %s', 'woocommerce-shipcloud' ), $shipping_method_name ); ?></small>
 						<?php endif; ?>
 					</td>
 				</tr>
@@ -747,7 +766,7 @@ class WC_Shipcloud_Order
 		$price = $shipcloud_api->get_price( $_POST[ 'carrier' ], $from, $to, $package );
 
 		if( is_wp_error( $price ) ){
-			$errors[] = $price->get_error_message();
+			$errors[] = nl2br( $price->get_error_message() );
 			$result = array(
 				'status'    => 'ERROR',
 				'errors' => $errors
@@ -819,8 +838,11 @@ class WC_Shipcloud_Order
 		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label );
 
 		if( is_wp_error( $shipment ) ){
-			$errors[] = $shipment->get_error_message();
-			$result = array( 'errors' => $errors );
+			$errors[] = nl2br( $shipment->get_error_message() );
+			$result = array(
+				'status'    => 'ERROR',
+				'errors' => $errors
+			);
 			echo json_encode( $result );
 			exit;
 		}
@@ -889,7 +911,7 @@ class WC_Shipcloud_Order
 		$request = $shipcloud_api->create_label( $shipment_id );
 
 		if( is_wp_error( $request ) ){
-			$errors[] = $request->get_error_message();
+			$errors[] = nl2br( $request->get_error_message() );
 
 			$result = $result = array(
 				'status' => 'ERROR',
@@ -951,7 +973,7 @@ class WC_Shipcloud_Order
 			if( 'shipcloud_api_error_not_found' !== $request->get_error_code() )
 			{
 
-				$errors[] = $request->get_error_message();
+				$errors[] = nl2br( $request->get_error_message() );
 				$result   = array(
 					'status' => 'ERROR',
 					'errors' => $errors

@@ -341,7 +341,7 @@ class Woocommerce_Shipcloud_API
 
 			foreach( $body[ 'errors' ] as $error )
 			{
-				$error_str .= wcsc_translate_shipcloud_text( $error );
+				$error_str .= wcsc_translate_shipcloud_text( $error ) . chr( 13 );
 			}
 			return $error_str;
 		}

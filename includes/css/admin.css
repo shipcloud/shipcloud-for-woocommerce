@@ -103,6 +103,11 @@
 }
 #shipcloud-io .parcel-form-table th{
     font-weight: normal;
+    vertical-align: top;
+    padding-top: 8px;
+}
+#shipcloud-io .parcel-form-table td{
+    vertical-align: top;
 }
 #shipcloud-io .parcel-form-table input[type="text"]{
     width:50px;
