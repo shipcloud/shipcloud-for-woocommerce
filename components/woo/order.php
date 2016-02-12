@@ -386,7 +386,7 @@ class WC_Shipcloud_Order
 							<?php echo sprintf( __( '<a href="%s">Please select a Carrier</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ); ?>
 						<?php endif; ?>
 						<?php if( ! empty( $shipping_method_name ) ): ?>
-							<br /><small><?php echo sprintf( __( 'Ordered: %s' ), $shipping_method_name ); ?></small>
+							<br /><small><?php echo sprintf( __( 'Ordered: %s', 'woocommerce-shipcloud' ), $shipping_method_name ); ?></small>
 						<?php endif; ?>
 					</td>
 				</tr>
