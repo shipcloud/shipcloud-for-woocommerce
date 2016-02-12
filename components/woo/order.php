@@ -747,7 +747,7 @@ class WC_Shipcloud_Order
 		$price = $shipcloud_api->get_price( $_POST[ 'carrier' ], $from, $to, $package );
 
 		if( is_wp_error( $price ) ){
-			$errors[] = $price->get_error_message();
+			$errors[] = nl2br( $price->get_error_message() );
 			$result = array(
 				'status'    => 'ERROR',
 				'errors' => $errors
@@ -819,7 +819,7 @@ class WC_Shipcloud_Order
 		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label );
 
 		if( is_wp_error( $shipment ) ){
-			$errors[] = $shipment->get_error_message();
+			$errors[] = nl2br( $shipment->get_error_message() );
 			$result = array(
 				'status'    => 'ERROR',
 				'errors' => $errors
@@ -892,7 +892,7 @@ class WC_Shipcloud_Order
 		$request = $shipcloud_api->create_label( $shipment_id );
 
 		if( is_wp_error( $request ) ){
-			$errors[] = $request->get_error_message();
+			$errors[] = nl2br( $request->get_error_message() );
 
 			$result = $result = array(
 				'status' => 'ERROR',
@@ -954,7 +954,7 @@ class WC_Shipcloud_Order
 			if( 'shipcloud_api_error_not_found' !== $request->get_error_code() )
 			{
 
-				$errors[] = $request->get_error_message();
+				$errors[] = nl2br( $request->get_error_message() );
 				$result   = array(
 					'status' => 'ERROR',
 					'errors' => $errors
