@@ -149,29 +149,24 @@ class WooCommerce_Shipcloud
 	 */
 	public function check_requirements()
 	{
-		$passed = TRUE;
-
 		if( !class_exists( 'WooCommerce' ) )
 		{
 			self::admin_notice( __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' ), 'error' );
-			$passed = FALSE;
+			return;
 		}
 
 		if( !function_exists( 'json_decode' ) )
 		{
 			self::admin_notice( __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' ), 'error' );
-			$passed = FALSE;
+			return;
 		}
 
 		if( !function_exists( 'mb_detect_encoding' ) ){
 			self::admin_notice( __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' ), 'error' );
-			$passed = FALSE;
+			return;
 		}
 
-		if( $passed )
-		{
-			$this->passed_requirements = TRUE;
-		}
+		$this->passed_requirements = TRUE;
 	}
 
 	/**
