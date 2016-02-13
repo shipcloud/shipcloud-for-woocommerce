@@ -32,7 +32,11 @@ if( !defined( 'ABSPATH' ) )
 abstract class WCSC_Component
 {
 	/**
-	 * @var The Single instance of the class
+	 * The Single instance of the class
+	 *
+	 * @var $_instances
+	 *
+	 * @since 1.0.0
 	 */
 	protected static $_instances = NULL;
 
@@ -40,6 +44,8 @@ abstract class WCSC_Component
 	 * Name of Component
 	 *
 	 * @var $name
+	 *
+	 * @since 1.0.0
 	 */
 	var $name;
 
@@ -47,6 +53,8 @@ abstract class WCSC_Component
 	 * Slug of Component
 	 *
 	 * @var $slug
+	 *
+	 * @since 1.0.0
 	 */
 	var $slug;
 
@@ -54,11 +62,15 @@ abstract class WCSC_Component
 	 * Is Plugin active?
 	 *
 	 * @var $active
+	 *
+	 * @since 1.0.0
 	 */
 	var $active = TRUE;
 
 	/**
 	 * Main Instance
+	 *
+	 * @since 1.0.0
 	 */
 	public static function instance()
 	{
@@ -77,6 +89,8 @@ abstract class WCSC_Component
 
 	/**
 	 * Checking and starting
+	 *
+	 * @since 1.0.0
 	 */
 	public function check_and_start(){
 		$class = get_called_class();
@@ -90,7 +104,10 @@ abstract class WCSC_Component
 
 	/**
 	 * Function fot Checks
+	 *
 	 * @return mixed
+	 *
+	 * @since 1.0.0
 	 */
 	protected function check()
 	{
@@ -127,6 +144,8 @@ abstract class WCSC_Component
 
 	/**
 	 * Initializing Base Hooks for all Components
+	 *
+	 * @since 1.0.0
 	 */
 	private function init_base_hooks()
 	{
@@ -136,8 +155,10 @@ abstract class WCSC_Component
 	/**
 	 * Adds a notice to
 	 *
-	 * @param        $message
+	 * @param string $message
 	 * @param string $type
+	 *
+	 * @since 1.0.0
 	 */
 	protected function admin_notice( $message, $type = 'updated' )
 	{
@@ -150,6 +171,11 @@ abstract class WCSC_Component
 	}
 }
 
+/**
+ * Function to load WooCommerce Shipcloud components
+ *
+ * @since 1.0.0
+ */
 function wcsc_load_component( $component_name )
 {
 	if( class_exists( $component_name ) )

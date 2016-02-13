@@ -32,17 +32,27 @@ if( !defined( 'ABSPATH' ) )
 class WC_Shipcloud_Order
 {
 	/**
-	 * @var int Order ID
+	 * Order ID
+	 *
+	 * @var $order_id
+	 *
+	 * @since 1.0.0
 	 */
 	protected $order_id;
 
 	/**
-	 * @var The Single instance of the class
+	 * The Single instance of the class
+	 *
+	 * @var $_instance
+	 *
+	 * @since 1.0.0
 	 */
 	protected static $_instance = NULL;
 
 	/**
-	 * Construct
+	 * Constructor
+	 *
+	 * @since 1.0.0
 	 */
 	private function __construct()
 	{
@@ -51,6 +61,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Initialize Hooks
+	 *
+	 * @since 1.0.0
 	 */
 	private function init_hooks()
 	{
@@ -70,6 +82,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Main Instance
+	 *
+	 * @since 1.0.0
 	 */
 	public static function instance()
 	{
@@ -83,6 +97,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Adding meta boxes
+	 *
+	 * @since 1.0.0
 	 */
 	public function add_metaboxes()
 	{
@@ -91,6 +107,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Product metabox
+	 *
+	 * @since 1.0.0
 	 */
 	public function shipment_center()
 	{
@@ -112,7 +130,10 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Shows Addresses Content
+	 *
 	 * @return string
+	 *
+	 * @since 1.0.0
 	 */
 	private function addresses()
 	{
@@ -287,7 +308,10 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Returns Parcel Content
+	 *
 	 * @return string
+	 *
+	 * @since 1.0.0
 	 */
 	private function parcel()
 	{
@@ -314,7 +338,10 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Returns Parcel Form Content
+	 *
 	 * @return string
+	 *
+	 * @since 1.0.0
 	 */
 	private function parcel_form(){
 		$shipcloud_api = new Woocommerce_Shipcloud_API();
@@ -402,7 +429,10 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Returns Parcel Template Form
+	 *
 	 * @return string
+	 *
+	 * @since 1.0.0
 	 */
 	private function parcel_templates()
 	{
@@ -502,7 +532,10 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Returns Labels
+	 *
 	 * @return string
+	 *
+	 * @since 1.0.0
 	 */
 	private function labels()
 	{
@@ -547,7 +580,10 @@ class WC_Shipcloud_Order
 	 * Creates label HTML
 	 *
 	 * @param array $data
+	 *
 	 * @return string $html
+	 *
+	 *  @since 1.0.0
 	 */
 	private function get_label_html( $data )
 	{
@@ -667,7 +703,10 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Returns Tracking status HTML
+	 *
 	 * @param $shipment_id
+	 *
+	 * @since 1.0.0
 	 */
 	private function get_tracking_status_html( $shipment_id )
 	{
@@ -681,7 +720,10 @@ class WC_Shipcloud_Order
 	 * Saving product metabox
 	 *
 	 * @param int $post_id
+	 *
 	 * @return void
+	 *
+	 * @since 1.0.0
 	 */
 	public function save_settings( $post_id )
 	{
@@ -724,7 +766,10 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Saving Data Calculated Parcels
+	 *
 	 * @param $order_id
+	 *
+	 * @since 1.0.0
 	 */
 	public function save_determined_parcels( $order_id, $posted ){
 		$shipcloud_parcels = WC()->session->get( 'shipcloud_parcels' );
@@ -735,6 +780,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Calulating shipping after submitting calculation
+	 *
+	 * @since 1.0.0
 	 */
 	public function ajax_calculate_shipping()
 	{
@@ -791,6 +838,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Creating shipment
+	 *
+	 * @since 1.0.0
 	 */
 	public function ajax_create_shipment()
 	{
@@ -900,6 +949,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Calulating shipping after sublitting calculation
+	 *
+	 * @since 1.0.0
 	 */
 	public function ajax_create_label()
 	{
@@ -958,6 +1009,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Deleting a shipment
+	 *
+	 * @since 1.0.0
 	 */
 	public function ajax_delete_shipment()
 	{
@@ -1028,6 +1081,8 @@ class WC_Shipcloud_Order
 
 	/**
 	 * Enqueuing needed Scripts & Styles
+	 *
+	 * @since 1.0.0
 	 */
 	public function enqueue_scripts()
 	{

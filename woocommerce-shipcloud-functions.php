@@ -4,9 +4,10 @@ if( !defined( 'ABSPATH' ) )
 	exit;
 
 /**
-* Getting Plugin Template
-* @since 1.0.0
-*/
+ * Getting Plugin Template
+ *
+ * @since 1.0.0
+ */
 if( defined( 'WCSC_FOLDER' ) ):
 	function wcsc_locate_template( $template_names, $load = FALSE, $require_once = TRUE )
 	{
@@ -79,7 +80,10 @@ function wcsc_get_carrier_display_name( $name )
  * Getting shipment status by string (Needed for translations)
  *
  * @param string $status
+ *
  * @return string $message
+ *
+ * @since 1.0.0
  */
 function wcsc_get_shipment_status_string( $status )
 {
@@ -157,6 +161,8 @@ function wcsc_explode_street( $street )
  * @param string $error_text
  *
  * @return string $error_text
+ *
+ * @since 1.0.0
  */
 function wcsc_translate_shipcloud_text( $error_text )
 {
@@ -216,6 +222,8 @@ function wcsc_translate_shipcloud_text( $error_text )
  * Checking if payment gateway is enabled
  *
  * @return bool
+ *
+ * @since 1.0.0
  */
 function wcsc_is_enabled()
 {
@@ -255,6 +263,7 @@ function wcsc_is_enabled()
  * Checking if we are on shipclud.io settings screen
  *
  * @return bool
+ *
  * @since 1.0.0
  */
 function wcsc_is_settings_screen(){
@@ -290,6 +299,8 @@ wcsc_is_enabled();
 
 /**
  * Deleting values
+ *
+ * @since 1.0.0
  */
 function wcsc_delete_values()
 {

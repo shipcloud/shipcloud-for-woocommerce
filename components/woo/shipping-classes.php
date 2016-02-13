@@ -32,12 +32,18 @@ if ( !defined( 'ABSPATH' ) ) exit;
 class WC_Shipcloud_Shippig_Classes{
 
     /**
-     * @var The Single instance of the class
+     * The Single instance of the class
+     *
+     * @var $_instance
+     *
+     * @since 1.0.0
      */
     protected static $_instance = NULL;
 
     /**
      * Construct
+     *
+     * @since 1.0.0
      */
     private function __construct()
     {
@@ -46,6 +52,8 @@ class WC_Shipcloud_Shippig_Classes{
 
     /**
      * Main Instance
+     *
+     * @since 1.0.0
      */
     public static function instance()
     {
@@ -59,6 +67,8 @@ class WC_Shipcloud_Shippig_Classes{
 
     /**
      * Initializing functions
+     *
+     * @since 1.0.0
      */
     public function init_hooks(){
         add_action( 'product_shipping_class_edit_form_fields', array( $this, 'shipping_class_edit_form_fields' ), 10, 2 );
@@ -70,8 +80,11 @@ class WC_Shipcloud_Shippig_Classes{
 
     /**
      * Selecting Parcel for shipping class on editing Shipment Class
+     *
      * @param $tag
      * @param $taxonomy
+     *
+     * @since 1.0.0
      */
     public function shipping_class_edit_form_fields( $tag, $taxonomy ){
         $term_id = $_GET[ 'tag_ID' ]; // $tag doesn't work really, so use $_GET[ 'tag_ID' ]
@@ -129,6 +142,8 @@ class WC_Shipcloud_Shippig_Classes{
 
     /**
      * Selecting Parcel for shipping class on adding Shipment Class
+     *
+     * @since 1.0.0
      */
     public function shipping_class_add_form_fields(){
 
@@ -154,8 +169,10 @@ class WC_Shipcloud_Shippig_Classes{
 
     /**
      * Saving Shipping Class data on editing Shipment Class
+     *
      * @param int $term_id Term ID
-     * @param int $tt_id Term taxonomy ID
+     *                   
+     * @since 1.0.0
      */
     public function shipping_class_edit_form_fields_save( $term_id )
     {

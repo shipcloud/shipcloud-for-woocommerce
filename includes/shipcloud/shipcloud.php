@@ -68,6 +68,7 @@ class Woocommerce_Shipcloud_API
 	 * Woocommerce_Shipcloud_API constructor.
 	 *
 	 * @param string $apiKey
+	 *
 	 * @since 1.0.0
 	 */
 	public function __construct( $api_key = null )
@@ -135,6 +136,8 @@ class Woocommerce_Shipcloud_API
 	 * Updating carriers and saving in WP options
 	 *
 	 * @return array|WP_Error
+	 *
+	 * @since 1.0.0
 	 */
 	private function update_carriers()
 	{
@@ -273,6 +276,8 @@ class Woocommerce_Shipcloud_API
 	 * @param $carrier_name
 	 *
 	 * @return array
+	 *
+	 * @since 1.0.0
 	 */
 	public function disassemble_carrier_name( $carrier_name )
 	{
@@ -723,6 +728,8 @@ class Woocommerce_Shipcloud_API
 	 * @param $params
 	 *
 	 * @return WP_Error
+	 *
+	 * @since 1.0.0
 	 */
 	public function request_pickup( $params )
 	{
@@ -749,6 +756,8 @@ class Woocommerce_Shipcloud_API
 	 * @param string $method
 	 *
 	 * @return array $response_arr
+	 *
+	 * @since 1.0.0
 	 */
 	private function send_request( $action = '', $params = array(), $method = 'GET' )
 	{
