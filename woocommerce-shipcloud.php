@@ -44,22 +44,36 @@ if( !defined( 'ABSPATH' ) )
 class WooCommerce_Shipcloud
 {
 	/**
-	 * @var The Single instance of the class
+	 * The Single instance of the class
+	 *
+	 * @var $_instance
+	 *
+	 * @since 1.0.0
 	 */
 	protected static $_instance = NULL;
 
 	/**
-	 * @var Notices for screening in Admin
+	 * Notices for screening in Admin
+	 *
+	 * @var $passed_requirements
+	 *
+	 * @since 1.0.0
 	 */
 	private $passed_requirements = FALSE;
 
 	/**
-	 * @var Notices for screening in Admin
+	 * Notices for screening in Admin
+	 *
+	 * @var $notices
+	 *
+	 * @since 1.0.0
 	 */
 	static $notices = array();
 
 	/**
 	 * Construct
+	 *
+	 * @since 1.0.0
 	 */
 	private function __construct()
 	{
@@ -68,6 +82,10 @@ class WooCommerce_Shipcloud
 
 	/**
 	 * Main Instance
+	 *
+	 * @return object
+	 *
+	 * @since 1.0.0
 	 */
 	public static function instance()
 	{
@@ -257,7 +275,7 @@ class WooCommerce_Shipcloud
 	}
 
 	/**
-	 * Registers and enqueues plugin-specific styles.
+	 * Registers and enqueues plugin specific styles.
 	 *
 	 * @since 1.0.0
 	 */
@@ -267,7 +285,7 @@ class WooCommerce_Shipcloud
 	}
 
 	/**
-	 * Registers and enqueues plugin-specific scripts.
+	 * Registers and enqueues plugin specific scripts.
 	 *
 	 * @since 1.0.0
 	 */
@@ -277,7 +295,7 @@ class WooCommerce_Shipcloud
 	}
 
 	/**
-	 * Getting URL
+	 * Getting Plugin URL
 	 *
 	 * @since 1.0.0
 	 */
@@ -290,7 +308,7 @@ class WooCommerce_Shipcloud
 	}
 
 	/**
-	 * Getting Folder
+	 * Getting Plugin Folder
 	 *
 	 * @since 1.0.0
 	 */
@@ -300,10 +318,12 @@ class WooCommerce_Shipcloud
 	}
 
 	/**
-	 * Adds a notice to
+	 * Adds a notice to the admin
 	 *
 	 * @param        $message
 	 * @param string $type
+	 *
+	 * @since 1.0.0
 	 */
 	public static function admin_notice( $message, $type = 'updated' )
 	{
@@ -315,6 +335,8 @@ class WooCommerce_Shipcloud
 
 	/**
 	 * Show Notices in Admin
+	 *
+	 * @since 1.0.0
 	 */
 	public function show_admin_notices()
 	{
@@ -336,6 +358,11 @@ register_activation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'activate' )
 register_deactivation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'deactivate' ) );
 register_uninstall_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'uninstall' ) );
 
+/**
+ * Actionhook Function to load plugin
+ *
+ * @since 1.0.0
+ */
 function woocommerce_shipcloud_init(){
 	WooCommerce_Shipcloud::instance();
 }
