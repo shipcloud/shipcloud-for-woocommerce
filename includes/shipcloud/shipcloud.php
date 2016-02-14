@@ -84,16 +84,16 @@ class Woocommerce_Shipcloud_API
 		$this->services = array(
 			'standard'      => array(
 				'name'             => __( 'Standard', 'woocommerce-shipcloud' ),
-				'description'      => __( 'A normal shipping label without any fancy stuff like express shipping', 'woocommerce-shipcloud' ),
+				'description'      => __( 'Normal shipping', 'woocommerce-shipcloud' ),
 				'customer_service' => true
 			),
 			'one_day'       => array(
-				'name'             => __( 'Express', 'woocommerce-shipcloud' ),
+				'name'             => __( 'Express (1 Day)', 'woocommerce-shipcloud' ),
 				'description'      => __( 'Express shipping where the package will arrive the next day', 'woocommerce-shipcloud' ),
 				'customer_service' => true
 			),
 			'one_day_early' => array(
-				'name'             => __( 'Express Morning', 'woocommerce-shipcloud' ),
+				'name'             => __( 'Express (1 Day Early)', 'woocommerce-shipcloud' ),
 				'description'      => __( 'Express shipping where the package will arrive the next day until 12pm', 'woocommerce-shipcloud' ),
 				'customer_service' => true
 			),
