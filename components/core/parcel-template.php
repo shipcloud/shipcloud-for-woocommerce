@@ -158,7 +158,8 @@ class WCSC_Parceltemplate_Posttype
 			return;
 		}
 
-		$carriers = wcsc_get_allowed_carriers();
+		$shipcloud_api = new Woocommerce_Shipcloud_API();
+		$carriers = $shipcloud_api->get_allowed_carriers();
 
 		$selected_carrier = get_post_meta( $post->ID, 'carrier', true );
 		$width            = get_post_meta( $post->ID, 'width', true );

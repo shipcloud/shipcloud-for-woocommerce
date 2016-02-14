@@ -71,7 +71,7 @@ class Woocommerce_Shipcloud_API
 		}
 		else
 		{
-			if ( ! empty( $this->settings[ 'api_key' ] ) )
+			if ( empty( $this->settings[ 'api_key' ] ) )
 			{
 				return new WP_Error( 'shipcloud_api_error_no_api_key', __( 'No API Key given', 'woocommerce-shipcloud' ) );
 			}
