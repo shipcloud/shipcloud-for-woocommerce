@@ -2,32 +2,28 @@
 /**
  * WooCommerce Core Component
  *
- * Loading extensions for Woo
- *
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/Woo
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
- *
- * Copyright 2016 (support@awesome.ug)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *          Copyright 2016 (support@awesome.ug)
+ *          This program is free software; you can redistribute it and/or modify
+ *          it under the terms of the GNU General Public License, version 2, as
+ *          published by the Free Software Foundation.
+ *          This program is distributed in the hope that it will be useful,
+ *          but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *          GNU General Public License for more details.
+ *          You should have received a copy of the GNU General Public License
+ *          along with this program; if not, write to the Free Software
+ *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-if( !defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) )
+{
 	exit;
+}
 
 class WCSC_Woo extends WCSC_Component
 {
@@ -45,17 +41,34 @@ class WCSC_Woo extends WCSC_Component
 	}
 
 	/**
+	 * Adding Shipping Method
+	 *
+	 * @param $methods
+	 *
+	 * @return array
+	 * @since 1.0.0
+	 */
+	public function add_shipping_method( $methods )
+	{
+		$methods[] = 'WC_Shipcloud_Shipping';
+
+		return $methods;
+	}
+
+	/**
 	 * Including Files
+	 *
+	 * @since 1.0.0
 	 */
 	protected function includes()
 	{
-		include( __DIR__ . '/shipping-method.php' );
+		require_once( __DIR__ . '/shipping-method.php' );
 
-		if( wcsc_is_enabled() )
+		if ( wcsc_is_enabled() )
 		{
-			include( __DIR__ . '/woo-functions.php' );
-			include( __DIR__ . '/order.php' );
-			include( __DIR__ . '/shipping-classes.php' );
+			require_once( __DIR__ . '/woo-functions.php' );
+			require_once( __DIR__ . '/order.php' );
+			require_once( __DIR__ . '/shipping-classes.php' );
 
 			// Shipment Listener for WebHook Calls
 			add_action( 'woocommerce_api_shipcloud', array( 'WC_Shipcloud_Shipping', 'shipment_listener' ) );
@@ -64,20 +77,6 @@ class WCSC_Woo extends WCSC_Component
 			add_action( 'woocommerce_shipping_calculator_enable_city', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_form_fields' ) );
 			add_action( 'woocommerce_calculated_shipping', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_fields' ) );
 		}
-	}
-
-	/**
-	 * Adding Shipping Method
-	 *
-	 * @param $methods
-	 *
-	 * @return array
-	 */
-	public function add_shipping_method( $methods )
-	{
-		$methods[] = 'WC_Shipcloud_Shipping';
-
-		return $methods;
 	}
 }
 

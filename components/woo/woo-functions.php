@@ -1,7 +1,6 @@
 <?php
 /**
  * WooCommerce Functions
- *
  * Loading extensions for Woo
  *
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
@@ -9,24 +8,20 @@
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
- *
- * Copyright 2016 (support@awesome.ug)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *          Copyright 2016 (support@awesome.ug)
+ *          This program is free software; you can redistribute it and/or modify
+ *          it under the terms of the GNU General Public License, version 2, as
+ *          published by the Free Software Foundation.
+ *          This program is distributed in the hope that it will be useful,
+ *          but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *          GNU General Public License for more details.
+ *          You should have received a copy of the GNU General Public License
+ *          along with this program; if not, write to the Free Software
+ *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-if( !defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) )
 {
 	exit;
 }
@@ -37,18 +32,19 @@ if( !defined( 'ABSPATH' ) )
  * @param $package Package given on
  *
  * @return array $shipping_classes
+ * @since 1.0.0
  */
 function wcsc_order_package_by_shipping_class( $package )
 {
 	$shipping_classes = array();
 
-	foreach( $package[ 'contents' ] as $item_id => $values )
+	foreach ( $package[ 'contents' ] as $item_id => $values )
 	{
-		if( $values[ 'data' ]->needs_shipping() )
+		if ( $values[ 'data' ]->needs_shipping() )
 		{
 			$found_class = $values[ 'data' ]->get_shipping_class();
 
-			if( !isset( $shipping_classes[ $found_class ] ) )
+			if ( ! isset( $shipping_classes[ $found_class ] ) )
 			{
 				$shipping_classes[ $found_class ] = array();
 			}
@@ -68,24 +64,24 @@ function wcsc_order_package_by_shipping_class( $package )
 function wcsc_get_order_parcels( $ordered_package )
 {
 	$settings = get_option( 'woocommerce_shipcloud_settings' );
-	$parcels = array();
+	$parcels  = array();
 
-	foreach( $ordered_package AS $shipping_class => $products )
+	foreach ( $ordered_package AS $shipping_class => $products )
 	{
-		if( '' == $shipping_class )
+		if ( '' == $shipping_class )
 		{
 			/**
 			 * Products
 			 */
-			foreach( $products AS $product )
+			foreach ( $products AS $product )
 			{
-				$length = get_post_meta( $product[ 'product_id' ], '_length', TRUE );
-				$width  = get_post_meta( $product[ 'product_id' ], '_width', TRUE );
-				$height = get_post_meta( $product[ 'product_id' ], '_height', TRUE );
-				$weight = get_post_meta( $product[ 'product_id' ], '_weight', TRUE );
+				$length = get_post_meta( $product[ 'product_id' ], '_length', true );
+				$width  = get_post_meta( $product[ 'product_id' ], '_width', true );
+				$height = get_post_meta( $product[ 'product_id' ], '_height', true );
+				$weight = get_post_meta( $product[ 'product_id' ], '_weight', true );
 
 				// If there is missing a dimension, set FALSE
-				if( '' == $length || '' == $width || '' == $height || '' == $weight )
+				if ( '' == $length || '' == $width || '' == $height || '' == $weight )
 				{
 					$dimensions = $settings[ 'standard_price_products' ];
 				}
@@ -103,7 +99,7 @@ function wcsc_get_order_parcels( $ordered_package )
 				{
 					case 'product':
 
-						for( $i = 0; $i < $product[ 'quantity' ]; $i++ )
+						for ( $i = 0; $i < $product[ 'quantity' ]; $i ++ )
 						{
 							$parcels[ 'products' ][] = $dimensions;
 						}
@@ -131,7 +127,7 @@ function wcsc_get_order_parcels( $ordered_package )
 			$weight = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_weight' );
 
 			// If there is missing a dimension, set FALSE
-			if( '' == $length || '' == $width || '' == $height || '' == $weight )
+			if ( '' == $length || '' == $width || '' == $height || '' == $weight )
 			{
 				$dimensions = $settings[ 'standard_price_shipment_classes' ];
 			}
@@ -152,12 +148,12 @@ function wcsc_get_order_parcels( $ordered_package )
 	return $parcels;
 }
 
-function wcsc_get_shipment_request_data( $sender = FALSE, $recipient, $parcel, $carrier, $service = 'standard' )
+function wcsc_get_shipment_request_data( $sender = false, $recipient, $parcel, $carrier, $service = 'standard' )
 {
 	$settings = get_option( 'woocommerce_shipcloud_settings' );
 
 	// Use default data if nothing was saved before
-	if( '' == $sender || 0 == count( $sender ) )
+	if ( '' == $sender || 0 == count( $sender ) )
 	{
 		$sender = array(
 			'first_name' => $settings[ 'sender_first_name' ],
@@ -172,17 +168,17 @@ function wcsc_get_shipment_request_data( $sender = FALSE, $recipient, $parcel, $
 	}
 
 	// Use default data if nothing was saved before
-	if( '' == $recipient || 0 == count( $recipient ) )
+	if ( '' == $recipient || 0 == count( $recipient ) )
 	{
 		$order = new WC_Order( $order_id );
 
 		$recipient_street_nr = '';
-		$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
+		$recipient_street    = wcsc_explode_street( $order->shipping_address_1 );
 
-		if( is_array( $recipient_street ) )
+		if ( is_array( $recipient_street ) )
 		{
 			$recipient_street_name = $recipient_street[ 'address' ];
-			$recipient_street_nr = $recipient_street[ 'number' ];
+			$recipient_street_nr   = $recipient_street[ 'number' ];
 		}
 
 		$recipient = array(
@@ -202,7 +198,7 @@ function wcsc_get_shipment_request_data( $sender = FALSE, $recipient, $parcel, $
 		'service' => $service,
 		'to'      => $recipient,
 		'from'    => $sender,
-	    'package' => $parcel
+		'package' => $parcel
 	);
 
 	return $data;

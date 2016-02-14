@@ -7,24 +7,20 @@
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
- *
- * Copyright 2016 (support@awesome.ug)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *          Copyright 2016 (support@awesome.ug)
+ *          This program is free software; you can redistribute it and/or modify
+ *          it under the terms of the GNU General Public License, version 2, as
+ *          published by the Free Software Foundation.
+ *          This program is distributed in the hope that it will be useful,
+ *          but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *          GNU General Public License for more details.
+ *          You should have received a copy of the GNU General Public License
+ *          along with this program; if not, write to the Free Software
+ *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-if( !defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) )
 {
 	exit;
 }
@@ -33,12 +29,14 @@ if( !defined( 'ABSPATH' ) )
  * Adds a Parcel Template
  *
  * @param string $carrier The Carrier Name
- * @param int $width The width in cm
- * @param $height The height in cm
- * @param $length The length in cm
- * @param $weight The weight in kg
+ * @param int    $width   The width in cm
+ * @param int    $height  The height in cm
+ * @param int    $length  The length in cm
+ * @param int    $weight  The weight in kg
  *
  * @return int|WP_Error Returns the new Parcel Template ID or on failure WP_Error
+ *
+ * @since   1.0.0
  */
 function wcsc_add_parceltemplate( $carrier, $width, $height, $length, $weight )
 {
@@ -67,6 +65,8 @@ function wcsc_add_parceltemplate( $carrier, $width, $height, $length, $weight )
  * @param $template_id
  *
  * @return array|false|WP_Post
+ *
+ * @since   1.0.0
  */
 function wcsc_delete_parceltemplate( $template_id )
 {
@@ -81,11 +81,13 @@ function wcsc_delete_parceltemplate( $template_id )
  * @param $template_id
  *
  * @return mixed
+ *
+ * @since   1.0.0
  */
 function wcsc_get_parceltemplate( $template_id )
 {
 	$parcels = wcsc_get_parceltemplates( array( 'include' => $template_id ) );
-	$parcel = $parcels[ 0 ];
+	$parcel  = $parcels[ 0 ];
 
 	return $parcel;
 }
@@ -96,33 +98,35 @@ function wcsc_get_parceltemplate( $template_id )
  * @param array $args
  *
  * @return array $parcel_templates Parcel Templates in an Array
+ *
+ * @since   1.0.0
  */
 function wcsc_get_parceltemplates( $args = array() )
 {
 	global $wpdb;
 
 	$defaults = array(
-		'posts_per_page' => -1,
+		'posts_per_page' => - 1,
 		'orderby'        => '',
 		'order'          => '',
 		'include'        => '',
 		'exclude'        => ''
 	);
 
-	$args = wp_parse_args( $args, $defaults );
+	$args                = wp_parse_args( $args, $defaults );
 	$args[ 'post_type' ] = 'sc_parcel_template';
 
-	$posts = get_posts( $args );
+	$posts            = get_posts( $args );
 	$parcel_templates = array();
 
-	foreach( $posts AS $key => $post )
+	foreach ( $posts AS $key => $post )
 	{
-		$parcel_templates[ $key ] = (array) $post;
-		$parcel_templates[ $key ][ 'values' ][ 'carrier' ] = get_post_meta( $post->ID, 'carrier', TRUE );
-		$parcel_templates[ $key ][ 'values' ][ 'width' ] = get_post_meta( $post->ID, 'width', TRUE );
-		$parcel_templates[ $key ][ 'values' ][ 'height' ] = get_post_meta( $post->ID, 'height', TRUE );
-		$parcel_templates[ $key ][ 'values' ][ 'length' ] = get_post_meta( $post->ID, 'length', TRUE );
-		$parcel_templates[ $key ][ 'values' ][ 'weight' ] = get_post_meta( $post->ID, 'weight', TRUE );
+		$parcel_templates[ $key ]                          = (array) $post;
+		$parcel_templates[ $key ][ 'values' ][ 'carrier' ] = get_post_meta( $post->ID, 'carrier', true );
+		$parcel_templates[ $key ][ 'values' ][ 'width' ]   = get_post_meta( $post->ID, 'width', true );
+		$parcel_templates[ $key ][ 'values' ][ 'height' ]  = get_post_meta( $post->ID, 'height', true );
+		$parcel_templates[ $key ][ 'values' ][ 'length' ]  = get_post_meta( $post->ID, 'length', true );
+		$parcel_templates[ $key ][ 'values' ][ 'weight' ]  = get_post_meta( $post->ID, 'weight', true );
 	}
 
 	return $parcel_templates;
