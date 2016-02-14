@@ -1,7 +1,6 @@
 <?php
 /**
  * WooCommerce shipcloud.io parcel class
- *
  * Loading parcel functions
  *
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
@@ -9,35 +8,39 @@
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
- *
- * Copyright 2016 (support@awesome.ug)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License, version 2, as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *          Copyright 2016 (support@awesome.ug)
+ *          This program is free software; you can redistribute it and/or modify
+ *          it under the terms of the GNU General Public License, version 2, as
+ *          published by the Free Software Foundation.
+ *          This program is distributed in the hope that it will be useful,
+ *          but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *          MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *          GNU General Public License for more details.
+ *          You should have received a copy of the GNU General Public License
+ *          along with this program; if not, write to the Free Software
+ *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-if( !defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) )
+{
 	exit;
+}
 
 class WCSC_Parceltemplate_Posttype
 {
 	/**
-	 * @var The Single instance of the class
+	 * The Single instance of the class
+	 *
+	 * @var object $_instance
+	 *
+	 * @since 1.0.0
 	 */
-	protected static $_instance = NULL;
+	protected static $_instance = null;
 
 	/**
 	 * Construct
+	 *
+	 * @since 1.0.0
 	 */
 	private function __construct()
 	{
@@ -45,20 +48,9 @@ class WCSC_Parceltemplate_Posttype
 	}
 
 	/**
-	 * Main Instance
-	 */
-	public static function instance()
-	{
-		if( is_null( self::$_instance ) )
-		{
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
-	}
-
-	/**
 	 * Initializing Post type
+	 *
+	 * @since 1.0.0
 	 */
 	private static function init_hooks()
 	{
@@ -73,7 +65,24 @@ class WCSC_Parceltemplate_Posttype
 	}
 
 	/**
+	 * Main Instance
+	 *
+	 * @since 1.0.0
+	 */
+	public static function instance()
+	{
+		if ( is_null( self::$_instance ) )
+		{
+			self::$_instance = new self();
+		}
+
+		return self::$_instance;
+	}
+
+	/**
 	 * Registering Post type
+	 *
+	 * @since 1.0.0
 	 */
 	public static function register_post_types()
 	{
@@ -97,16 +106,16 @@ class WCSC_Parceltemplate_Posttype
 		$args = array(
 			'labels'             => $labels,
 			'description'        => __( 'Description', 'woocommerce-shipcloud' ),
-			'public'             => FALSE,
-			'publicly_queryable' => FALSE,
-			'show_ui'            => TRUE,
+			'public'             => false,
+			'publicly_queryable' => false,
+			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=shop_order',
-			'query_var'          => TRUE,
+			'query_var'          => true,
 			'capability_type'    => 'post',
-			'has_archive'        => FALSE,
-			'hierarchical'       => FALSE,
-			'menu_position'      => NULL,
-			'supports'           => FALSE
+			'has_archive'        => false,
+			'hierarchical'       => false,
+			'menu_position'      => null,
+			'supports'           => false
 		);
 
 		register_post_type( 'sc_parcel_template', $args );
@@ -114,6 +123,8 @@ class WCSC_Parceltemplate_Posttype
 
 	/**
 	 * Adding Parcels to Woo Menu
+	 *
+	 * @since 1.0.0
 	 */
 	public static function add_menu()
 	{
@@ -122,31 +133,38 @@ class WCSC_Parceltemplate_Posttype
 
 	/**
 	 * Adding Metaboxes
+	 *
+	 * @since 1.0.0
 	 */
 	public static function meta_boxes()
 	{
 		add_meta_box( 'box-tools', __( 'Tools', 'woocommerce-shipcloud' ), array(
-			                         __CLASS__,
-			                         'box_settings'
-		                         ), 'sc_parcel_template', 'normal' );
+			__CLASS__,
+			'box_settings'
+		), 'sc_parcel_template', 'normal' );
 	}
 
+	/**
+	 * Settings Box
+	 *
+	 * @since 1.0.0
+	 */
 	public static function box_settings()
 	{
 		global $post;
 
-		if( 'sc_parcel_template' != $post->post_type )
+		if ( 'sc_parcel_template' != $post->post_type )
 		{
 			return;
 		}
 
 		$carriers = wcsc_get_allowed_carriers();
 
-		$selected_carrier = get_post_meta( $post->ID, 'carrier', TRUE );
-		$width = get_post_meta( $post->ID, 'width', TRUE );
-		$height = get_post_meta( $post->ID, 'height', TRUE );
-		$length = get_post_meta( $post->ID, 'length', TRUE );
-		$weight = get_post_meta( $post->ID, 'weight', TRUE );
+		$selected_carrier = get_post_meta( $post->ID, 'carrier', true );
+		$width            = get_post_meta( $post->ID, 'width', true );
+		$height           = get_post_meta( $post->ID, 'height', true );
+		$length           = get_post_meta( $post->ID, 'length', true );
+		$weight           = get_post_meta( $post->ID, 'weight', true );
 
 		?>
 		<div id="shipcloud-parcel-settings">
@@ -181,8 +199,8 @@ class WCSC_Parceltemplate_Posttype
 					<td>
 						<select name="carrier">
 							<option value="none"><?php _e( '[ Select a Carrier ]', 'woocommerce-shipcloud' ); ?></option>
-							<?php foreach( $carriers AS $name => $display_name ): ?>
-								<?php if( $selected_carrier == $name ): $selected = ' selected="selected"';
+							<?php foreach ( $carriers AS $name => $display_name ): ?>
+								<?php if ( $selected_carrier == $name ): $selected = ' selected="selected"';
 								else: $selected = ''; endif; ?>
 								<option value="<?php echo $name; ?>"<?php echo $selected; ?>><?php echo $display_name; ?></option>
 							<?php endforeach; ?>
@@ -206,31 +224,31 @@ class WCSC_Parceltemplate_Posttype
 	{
 		global $wpdb;
 
-		if( wp_is_post_revision( $post_id ) )
+		if ( wp_is_post_revision( $post_id ) )
 		{
 			return;
 		}
 
-		if( !array_key_exists( 'post_type', $_POST ) )
+		if ( ! array_key_exists( 'post_type', $_POST ) )
 		{
 			return;
 		}
 
-		if( 'sc_parcel_template' != $_POST[ 'post_type' ] )
+		if ( 'sc_parcel_template' != $_POST[ 'post_type' ] )
 		{
 			return;
 		}
 
-		if( !array_key_exists( 'carrier', $_POST ) )
+		if ( ! array_key_exists( 'carrier', $_POST ) )
 		{
 			return;
 		}
 
 		$carrier = $_POST[ 'carrier' ];
-		$width = $_POST[ 'width' ];
-		$height = $_POST[ 'height' ];
-		$length = $_POST[ 'length' ];
-		$weight = $_POST[ 'weight' ];
+		$width   = $_POST[ 'width' ];
+		$height  = $_POST[ 'height' ];
+		$length  = $_POST[ 'length' ];
+		$weight  = $_POST[ 'weight' ];
 
 		$post_title = wcsc_get_carrier_display_name( $carrier ) . ' - ' . $width . ' x ' . $height . ' x ' . $length . ' ' . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $weight . __( 'kg', 'woocommerce-shipcloud' );
 
@@ -244,21 +262,35 @@ class WCSC_Parceltemplate_Posttype
 		update_post_meta( $post_id, 'weight', $weight );
 	}
 
+	/**
+	 * Notice Area
+	 *
+	 * @since 1.0.0
+	 */
 	public static function notice_area()
 	{
 		echo '<div class="shipcloud-message updated" style="display: none;"><p class="info"></p></div>';
 	}
 
+	/**
+	 * Removing all messages
+	 *
+	 * @param array $messages
+	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
+	 */
 	public static function remove_all_messages( $messages )
 	{
 		global $post;
 
-		if( get_class( $post ) != 'WP_Post' )
+		if ( get_class( $post ) != 'WP_Post' )
 		{
 			return $messages;
 		}
 
-		if( 'sc_parcel_template' == $post->post_type )
+		if ( 'sc_parcel_template' == $post->post_type )
 		{
 			return array();
 		}

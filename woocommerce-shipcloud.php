@@ -8,18 +8,14 @@
  * Author URI: http://www.awesome.ug
  * Author Email: support@awesome.ug
  * License:
- *
  * Copyright 2016 (support@awesome.ug)
- *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
  * published by the Free Software Foundation.
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
@@ -27,7 +23,6 @@
 
 /**
  * WooCommerce Shipcloud initializing class
- *
  * This class initializes the Plugin.
  *
  * @author  rheinschmiede.de, Author <support@awesome.ug>
@@ -36,7 +31,7 @@
  * @license GPL 2
  */
 
-if( !defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) )
 {
 	exit;
 }
@@ -44,31 +39,28 @@ if( !defined( 'ABSPATH' ) )
 class WooCommerce_Shipcloud
 {
 	/**
-	 * The Single instance of the class
-	 *
-	 * @var $_instance
-	 *
-	 * @since 1.0.0
-	 */
-	protected static $_instance = NULL;
-
-	/**
 	 * Notices for screening in Admin
 	 *
-	 * @var $passed_requirements
-	 *
-	 * @since 1.0.0
-	 */
-	private $passed_requirements = FALSE;
-
-	/**
-	 * Notices for screening in Admin
-	 *
-	 * @var $notices
-	 *
+	 * @var array $notices
 	 * @since 1.0.0
 	 */
 	static $notices = array();
+
+	/**
+	 * The Single instance of the class
+	 *
+	 * @var object $_instance
+	 * @since 1.0.0
+	 */
+	protected static $_instance = null;
+
+	/**
+	 * Notices for screening in Admin
+	 *
+	 * @var bool $passed_requirements
+	 * @since 1.0.0
+	 */
+	private $passed_requirements = false;
 
 	/**
 	 * Construct
@@ -78,23 +70,6 @@ class WooCommerce_Shipcloud
 	private function __construct()
 	{
 		$this->load_plugin();
-	}
-
-	/**
-	 * Main Instance
-	 *
-	 * @return object
-	 *
-	 * @since 1.0.0
-	 */
-	public static function instance()
-	{
-		if( is_null( self::$_instance ) )
-		{
-			self::$_instance = new self();
-		}
-
-		return self::$_instance;
 	}
 
 	/**
@@ -112,7 +87,7 @@ class WooCommerce_Shipcloud
 		add_action( 'plugins_loaded', array( $this, 'check_requirements' ), 20 );
 		add_action( 'plugins_loaded', array( $this, 'load_components' ), 25 );
 
-		if( is_admin() )
+		if ( is_admin() )
 		{
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
@@ -139,13 +114,36 @@ class WooCommerce_Shipcloud
 	}
 
 	/**
+	 * Getting Plugin Folder
+	 *
+	 * @since 1.0.0
+	 */
+	private function get_folder()
+	{
+		return plugin_dir_path( __FILE__ );
+	}
+
+	/**
+	 * Getting Plugin URL
+	 *
+	 * @since 1.0.0
+	 */
+	private function get_url_path()
+	{
+		$sub_path   = substr( WCSC_FOLDER, strlen( ABSPATH ), ( strlen( WCSC_FOLDER ) - 11 ) );
+		$script_url = get_bloginfo( 'wpurl' ) . '/' . $sub_path;
+
+		return $script_url;
+	}
+
+	/**
 	 * Loads the plugin text domain for translation.
 	 *
 	 * @since 1.0.0
 	 */
 	private function load_textdomain()
 	{
-		load_plugin_textdomain( 'woocommerce-shipcloud', FALSE, WCSC_RELATIVE_FOLDER . '/languages' );
+		load_plugin_textdomain( 'woocommerce-shipcloud', false, WCSC_RELATIVE_FOLDER . '/languages' );
 	}
 
 	/**
@@ -156,52 +154,24 @@ class WooCommerce_Shipcloud
 	private function includes()
 	{
 		// Loading functions
-		include( WCSC_FOLDER . '/woocommerce-shipcloud-functions.php' );
-		include( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
+		require_once( WCSC_FOLDER . '/woocommerce-shipcloud-functions.php' );
+		require_once( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
 	}
 
 	/**
-	 * Checking Requirements and adding Error Messages.
+	 * Main Instance
 	 *
+	 * @return object
 	 * @since 1.0.0
 	 */
-	public function check_requirements()
+	public static function instance()
 	{
-		if( !class_exists( 'WooCommerce' ) )
+		if ( is_null( self::$_instance ) )
 		{
-			self::admin_notice( __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' ), 'error' );
-			return;
+			self::$_instance = new self();
 		}
 
-		if( !function_exists( 'json_decode' ) )
-		{
-			self::admin_notice( __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' ), 'error' );
-			return;
-		}
-
-		if( !function_exists( 'mb_detect_encoding' ) ){
-			self::admin_notice( __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' ), 'error' );
-			return;
-		}
-
-		$this->passed_requirements = TRUE;
-	}
-
-	/**
-	 * Loading components
-	 *
-	 * @since 1.0.0
-	 */
-	public function load_components()
-	{
-		if( ! $this->passed_requirements )
-		{
-			return;
-		}
-
-		include( WCSC_FOLDER . '/components/component.php' );
-		include( WCSC_FOLDER . '/components/core/core.php' );
-		include( WCSC_FOLDER . '/components/woo/woo.php' );
+		return self::$_instance;
 	}
 
 	/**
@@ -237,6 +207,70 @@ class WooCommerce_Shipcloud
 	 */
 	public static function uninstall( $network_wide )
 	{
+	}
+
+	/**
+	 * Checking Requirements and adding Error Messages.
+	 *
+	 * @since 1.0.0
+	 */
+	public function check_requirements()
+	{
+		if ( ! class_exists( 'WooCommerce' ) )
+		{
+			self::admin_notice( __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' ), 'error' );
+
+			return;
+		}
+
+		if ( ! function_exists( 'json_decode' ) )
+		{
+			self::admin_notice( __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' ), 'error' );
+
+			return;
+		}
+
+		if ( ! function_exists( 'mb_detect_encoding' ) )
+		{
+			self::admin_notice( __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' ), 'error' );
+
+			return;
+		}
+
+		$this->passed_requirements = true;
+	}
+
+	/**
+	 * Adds a notice to the admin
+	 *
+	 * @param string $message
+	 * @param string $type
+	 *
+	 * @since 1.0.0
+	 */
+	public static function admin_notice( $message, $type = 'updated' )
+	{
+		self::$notices[] = array(
+			'message' => '<b>ShipCloud for WooCommerce</b>: ' . $message,
+			'type'    => $type
+		);
+	}
+
+	/**
+	 * Loading components
+	 *
+	 * @since 1.0.0
+	 */
+	public function load_components()
+	{
+		if ( ! $this->passed_requirements )
+		{
+			return;
+		}
+
+		require_once( WCSC_FOLDER . '/components/component.php' );
+		require_once( WCSC_FOLDER . '/components/core/core.php' );
+		require_once( WCSC_FOLDER . '/components/woo/woo.php' );
 	}
 
 	/**
@@ -295,58 +329,19 @@ class WooCommerce_Shipcloud
 	}
 
 	/**
-	 * Getting Plugin URL
-	 *
-	 * @since 1.0.0
-	 */
-	private function get_url_path()
-	{
-		$sub_path = substr( WCSC_FOLDER, strlen( ABSPATH ), ( strlen( WCSC_FOLDER ) - 11 ) );
-		$script_url = get_bloginfo( 'wpurl' ) . '/' . $sub_path;
-
-		return $script_url;
-	}
-
-	/**
-	 * Getting Plugin Folder
-	 *
-	 * @since 1.0.0
-	 */
-	private function get_folder()
-	{
-		return plugin_dir_path( __FILE__ );
-	}
-
-	/**
-	 * Adds a notice to the admin
-	 *
-	 * @param        $message
-	 * @param string $type
-	 *
-	 * @since 1.0.0
-	 */
-	public static function admin_notice( $message, $type = 'updated' )
-	{
-		self::$notices[] = array(
-			'message' => '<b>ShipCloud for WooCommerce</b>: ' . $message,
-			'type'    => $type
-		);
-	}
-
-	/**
 	 * Show Notices in Admin
 	 *
 	 * @since 1.0.0
 	 */
 	public function show_admin_notices()
 	{
-		if( is_array( self::$notices ) && count( self::$notices ) > 0 )
+		if ( is_array( self::$notices ) && count( self::$notices ) > 0 )
 		{
 			$html = '';
-			foreach( self::$notices AS $notice )
+			foreach ( self::$notices AS $notice )
 			{
 				$message = $notice[ 'message' ];
-				$html .= '<div class="' . $notice[ 'type' ] . '"><p>' .$message . '</p></div>';
+				$html .= '<div class="' . $notice[ 'type' ] . '"><p>' . $message . '</p></div>';
 			}
 			echo $html;
 		}
@@ -363,7 +358,8 @@ register_uninstall_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'uninstall' )
  *
  * @since 1.0.0
  */
-function woocommerce_shipcloud_init(){
+function woocommerce_shipcloud_init()
+{
 	WooCommerce_Shipcloud::instance();
 }
 
