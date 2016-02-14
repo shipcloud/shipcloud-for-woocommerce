@@ -105,7 +105,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( ( empty( $this->settings[ 'api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 				return false;
 			}
 
@@ -127,7 +126,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( is_wp_error( $test_result ) )
 				{
 					WooCommerce_Shipcloud::admin_notice( $test_result->get_error_message(), 'error' );
-
 					return false;
 				}
 			}
@@ -141,21 +139,18 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( empty( $this->settings[ 'allowed_carriers' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one allowed <a href="%s">shipment method</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 				return false;
 			}
 
 			if ( ( '' == $this->settings[ 'standard_price_products' ] && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 				return false;
 			}
 
 			if ( ( '' == $this->settings[ 'standard_price_shipment_classes' ] && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 				return false;
 			}
 
@@ -219,7 +214,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			if ( $standard_address_err )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter your <a href="%s">standard sender data</a>! At least, street, street number, postcode, city and country.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 				return false;
 			}
 
@@ -261,7 +255,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			$default_country = wc_get_base_location();
 			$default_country = $default_country[ 'country' ];
 
-			$shipcloud_api = new Woocommerce_Shipcloud_API( $this->settings[ 'api_key' ] );
+			$shipcloud_api = new Woocommerce_Shipcloud_API();
 			$carriers      = $shipcloud_api->get_carriers();
 
 			$carriers_options = array();
