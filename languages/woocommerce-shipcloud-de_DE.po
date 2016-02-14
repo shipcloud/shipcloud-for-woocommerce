@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-14 10:43+0100\n"
-"PO-Revision-Date: 2016-02-14 10:55+0100\n"
+"PO-Revision-Date: 2016-02-14 11:00+0100\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -145,11 +145,11 @@ msgstr "Gewicht"
 
 #: ../components/core/parcel-template.php:198
 msgid "Shipping Company"
-msgstr "Versandunternehmen"
+msgstr "Paketdienst"
 
 #: ../components/core/parcel-template.php:201
 msgid "[ Select a Carrier ]"
-msgstr "[ Versandunternehmen wählen ]"
+msgstr "[ Paketdienst wählen ]"
 
 #: ../components/woo/order.php:100
 msgid "shipcloud.io Shipment-Center"
@@ -225,7 +225,7 @@ msgstr "Versandmethode"
 #: ../components/woo/order.php:410
 #, php-format
 msgid "<a href=\"%s\">Please select a Carrier</a>."
-msgstr "<a href=\"%s\">Bitte wählen Sie ein Versandunternehmen</a>."
+msgstr "<a href=\"%s\">Bitte wählen Sie einen Paketdienst</a>."
 
 #: ../components/woo/order.php:414
 #, php-format
@@ -273,8 +273,8 @@ msgid ""
 "Depending on the carrier, there will be a fee fo for creating the label. Do "
 "you really want to create a label?"
 msgstr ""
-"Abhängig von dem Versandunternehmen wird eine Gebühr fällig um die "
-"Versandmarke zu erstellen. Wollen Sie wirklich eine Versandmarke erstellen?"
+"Abhängig von dem Paketdienst wird eine Gebühr fällig um die Versandmarke zu "
+"erstellen. Wollen Sie wirklich eine Versandmarke erstellen?"
 
 #: ../components/woo/order.php:554
 msgid "Do you really want to delete this shipment?"
@@ -374,12 +374,12 @@ msgstr ""
 #: ../components/woo/shipping-method.php:272
 #, php-format
 msgid "Could not update carriers: %s"
-msgstr "Versandunternehmen konnten nicht aktualisiert werden: %s"
+msgstr "Paketdienste konnten nicht aktualisiert werden: %s"
 
 #: ../components/woo/shipping-method.php:287
 #, php-format
 msgid "Could not get available carriers: %s"
-msgstr "Versandunternehmen konnten nicht geladen werden: %s"
+msgstr "Paketdienste konnten nicht geladen werden: %s"
 
 #: ../components/woo/shipping-method.php:294
 #: ../components/woo/shipping-method.php:304
@@ -391,16 +391,16 @@ msgid ""
 "This Carrier will be preselected if the Shop Owner selects the Carrier or "
 "will be preselected as Carrier if Customer can select the Carrier."
 msgstr ""
-"Dieses Versandunternehmen wird vorgeschlagen, wenn der Shopbetreiber das "
-"Versandunternehmen auswählt oder als vorausgewählt, wenn der Kunde das "
-"Versandunternehmen wählt."
+"Dieser Paketdienst wird vorgeschlagen, wenn der Shopbetreiber den "
+"Paketdienst auswählt oder er wird vorausgewählt, wenn der Kunde den "
+"Paketdienst wählt."
 
 #: ../components/woo/shipping-method.php:306
 msgid ""
 "You have to select at least one Carrier above to select a Standard Carrier."
 msgstr ""
-"Sie müssen mindestens ein Versandunternehmen wählen um ein Standard "
-"Versandunternehmen wählen zu können."
+"Sie müssen mindestens einen Paketdienst wählen um ein Standard Paketdienst "
+"wählen zu können."
 
 #: ../components/woo/shipping-method.php:312
 msgid "Enable"
@@ -427,8 +427,7 @@ msgstr "Versandmethoden"
 
 #: ../components/woo/shipping-method.php:325
 msgid "Select the Carriers which you want to use in your Shop."
-msgstr ""
-"Wählen Sie die Versandunternehmen, die Sie in Ihrem Shop verwenden möchten."
+msgstr "Wählen Sie die Paketdienste, die Sie in Ihrem Shop verwenden möchten."
 
 #: ../components/woo/shipping-method.php:330
 msgid "Shipment Selection"
@@ -584,8 +583,7 @@ msgstr "Geben Sie ein Standardabsender-Land für den Versand an."
 #: ../components/woo/shipping-method.php:500
 msgid "Please enter an API key to get available shipment Carriers."
 msgstr ""
-"Bitte geben Sie einen API Key ein um verfügbare Versandunternehmen "
-"anzuzeigen."
+"Bitte geben Sie einen API Key ein um verfügbare Paketdienste anzuzeigen."
 
 #: ../components/woo/shipping-method.php:795
 #, php-format
@@ -658,7 +656,7 @@ msgstr "Sendungen, die an den Shop zurückgesendet werden"
 
 #: ../includes/shipcloud/shipcloud.php:170
 msgid "Updated Carriers!"
-msgstr "Versandunternehmen aktualisiert!"
+msgstr "Paketdienste aktualisiert!"
 
 #: ../includes/shipcloud/shipcloud.php:393
 msgid ""
@@ -723,7 +721,7 @@ msgid ""
 "Something has gone wrong while talking to the carrier backend. Please see "
 "the response body for more detailed information."
 msgstr ""
-"Etwas ist schief gelaufen als versucht wurde mit dem Versandunternehmen zu "
+"Etwas ist schief gelaufen als versucht wurde mit dem Paketdienst zu "
 "kommunizieren. Bitte beachten Sie die Antworttext für weitere Informationen."
 
 #: ../includes/shipcloud/shipcloud.php:429
@@ -732,10 +730,10 @@ msgid ""
 "slow or not reachable at all. If you want to stay informed about the carrier "
 "status, follow our developer twitter account at @shipcloud_devs."
 msgstr ""
-"Leider konnte das Versandunternehmen nicht erreicht werden. Entweder ist "
-"dieser zu langsam oder nicht erreichbar. Wenn Sie weiterhin über den Status "
-"über das Versandunternehmen informiert werden wollen, folgen Sie unserem "
-"Twitter Account unter @shipcloud_devs."
+"Leider konnte der Paketdienst nicht erreicht werden. Entweder ist dieser zu "
+"langsam oder nicht erreichbar. Wenn Sie weiterhin über den Status über den "
+"Paketdienst informiert werden wollen, folgen Sie unserem Twitter Account "
+"unter @shipcloud_devs."
 
 #: ../includes/shipcloud/shipcloud.php:435
 msgid "Unknown Error"
@@ -774,8 +772,8 @@ msgid ""
 "Carrier internal notification. Tracking events within the shipment will "
 "carry more elaborate information."
 msgstr ""
-"Interne Mitteilung des Versandunternehmens. Tracking-Ereignisse innerhalb "
-"der Sendung beinhalten weitere Informationen."
+"Interne Mitteilung des Paketdienstes. Tracking-Ereignisse innerhalb der "
+"Sendung beinhalten weitere Informationen."
 
 #: ../woocommerce-shipcloud-functions.php:128
 msgid "Status unknown"
@@ -787,7 +785,7 @@ msgstr "Noch nicht verfügbar"
 
 #: ../woocommerce-shipcloud-functions.php:172
 msgid "Carrier can't be blank."
-msgstr "Versandunternehmen darf nicht leer sein."
+msgstr "Paketdienst darf nicht leer sein."
 
 #: ../woocommerce-shipcloud-functions.php:173
 msgid "Sender Last Name can't be blank."
