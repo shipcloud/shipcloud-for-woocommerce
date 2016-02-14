@@ -23,6 +23,16 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 == Changelog ==
 
+= 1.0.0 beta 1 =
+* Return services are only allowed for shop customers
+* Preselection of user selected shipment method in admin
+* Adjusted shipment service names
+
+= 1.0.0 alpha 5 =
+* Added service predict for DPD
+* Added shipment services
+* Deletion of shipments
+
 = 1.0.0 alpha 4 =
 * Finished Shipment Listener
 
