@@ -47,7 +47,7 @@ jQuery( function( $ ) {
 		}
 	});
 
-	var get_shipment_form_data = function( ajax_action, inverse = false ){
+	var get_shipment_form_data = function( ajax_action, inverse ){
 
 		var order_id = $( "#post_ID" ).val();
 
@@ -130,7 +130,7 @@ jQuery( function( $ ) {
 	$( '#shipcloud_calculate_price' ).click( function(){
 		$( '#shipment-center .info').empty();
 
-		var data = get_shipment_form_data( 'shipcloud_calculate_shipping' );
+		var data = get_shipment_form_data( 'shipcloud_calculate_shipping', false );
 
 		var button = $( this );
 		button.addClass( 'button-loading' );
@@ -159,7 +159,7 @@ jQuery( function( $ ) {
 	$( '#shipcloud_create_shipment' ).click( function()
 	{
 		$( '#shipment-center .info').empty();
-		var data = get_shipment_form_data( 'shipcloud_create_shipment' );
+		var data = get_shipment_form_data( 'shipcloud_create_shipment', false );
 
 		var button = $( '#shipcloud_create_shipment' );
 		button.addClass( 'button-loading' );
@@ -218,7 +218,7 @@ jQuery( function( $ ) {
 
 	$( '#shipcloud_create_shipment_label' ).click( function(){
 		$( '#shipment-center .info').empty();
-		var data = get_shipment_form_data( 'shipcloud_create_shipment_label' );
+		var data = get_shipment_form_data( 'shipcloud_create_shipment_label', false );
 
 		var ask_create_label = $('#ask-create-label');
 
@@ -387,7 +387,6 @@ jQuery( function( $ ) {
 
 		$.post( ajaxurl, data, function( response )
 		{
-			console.log( response );
 			var result = JSON.parse( response );
 
 			if( result.status == 'ERROR' )
