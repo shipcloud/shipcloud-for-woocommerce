@@ -634,7 +634,7 @@ class WC_Shipcloud_Order
 							<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download Label', 'woocommerce-shipcloud' ); ?></a>
 						</p>
 
-						<p class="fullsize">
+						<p class="button-tracking-url">
 							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
 						</p>
 

@@ -91,6 +91,7 @@
 
 #shipcloud-io .parcel-form-table select{
     font-size:13px;
+    max-width:70%;
 }
 
 #shipcloud-io .btn-edit-address {
@@ -125,6 +126,9 @@
 /**
  * 	Action Buttons
  */
+#button-actions input[type="button"]{
+    margin:0 2px 5px 0;
+}
 #shipcloud-io .button-loading{
     background-image: url('../../assets/images/loading.gif');
     background-repeat: no-repeat;
@@ -221,6 +225,9 @@
 #shipcloud-io .parcel-templates  label{
     margin-bottom: 5px;
     font-weight: bold;
+}
+#shipcloud-io .parcel-templates select{
+    max-width:60%;
 }
 /**
  * Post type Page
