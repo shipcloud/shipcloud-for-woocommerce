@@ -325,6 +325,8 @@ class WC_Shipcloud_Order
 				<input id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate Price', 'woocommerce-shipcloud' ); ?>" class="button"/>
 				<input id="shipcloud_create_shipment" type="button" value="<?php _e( 'Prepare Label', 'woocommerce-shipcloud' ); ?>" class="button"/>
 				<input id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create Label', 'woocommerce-shipcloud' ); ?>" class="button-primary"/>
+				<input id="shipcloud_create_shipment_return" type="button" value="<?php _e( 'Prepare Return Label', 'woocommerce-shipcloud' ); ?>" class="button"/>
+				<input id="shipcloud_create_shipment_return_label" type="button" value="<?php _e( 'Create Return Label', 'woocommerce-shipcloud' ); ?>" class="button-primary"/>
 			</div>
 
 		</div>
@@ -935,7 +937,7 @@ class WC_Shipcloud_Order
 
 			$result = $result = array(
 				'status' => 'ERROR',
-				'errors' => $result
+				'errors' => $errors
 			);
 
 			echo json_encode( $result );

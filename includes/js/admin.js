@@ -47,27 +47,47 @@ jQuery( function( $ ) {
 		}
 	});
 
-	var get_shipment_form_data = function( ajax_action ){
+	var get_shipment_form_data = function( ajax_action, inverse = false ){
 
 		var order_id = $( "#post_ID" ).val();
 
-		var sender_first_name 	= $( "input[name='sender_address[first_name]']" ).val( );
-		var sender_last_name 	= $( "input[name='sender_address[last_name]']" ).val( );
-		var sender_company 	= $( "input[name='sender_address[company]']" ).val( );
-		var sender_street 	= $( "input[name='sender_address[street]']" ).val( );
-		var sender_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
-		var sender_postcode = $( "input[name='sender_address[postcode]']" ).val( );
-		var sender_city 	= $( "input[name='sender_address[city]']" ).val( );
-		var sender_country 	= $( "select[name='sender_address[country]']" ).val( );
+		if( false == inverse ) {
+			var sender_first_name = $("input[name='sender_address[first_name]']").val();
+			var sender_last_name = $("input[name='sender_address[last_name]']").val();
+			var sender_company = $("input[name='sender_address[company]']").val();
+			var sender_street = $("input[name='sender_address[street]']").val();
+			var sender_street_nr = $("input[name='sender_address[street_nr]']").val();
+			var sender_postcode = $("input[name='sender_address[postcode]']").val();
+			var sender_city = $("input[name='sender_address[city]']").val();
+			var sender_country = $("select[name='sender_address[country]']").val();
 
-		var recipient_first_name 	= $( "input[name='recipient_address[first_name]']" ).val( );
-		var recipient_last_name 	= $( "input[name='recipient_address[last_name]']" ).val( );
-		var recipient_company 	= $( "input[name='recipient_address[company]']" ).val( );
-		var recipient_street 	= $( "input[name='recipient_address[street]']" ).val( );
-		var recipient_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
-		var recipient_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
-		var recipient_city 	= $( "input[name='recipient_address[city]']" ).val( );
-		var recipient_country 	= $( "select[name='recipient_address[country]']" ).val( );
+			var recipient_first_name = $("input[name='recipient_address[first_name]']").val();
+			var recipient_last_name = $("input[name='recipient_address[last_name]']").val();
+			var recipient_company = $("input[name='recipient_address[company]']").val();
+			var recipient_street = $("input[name='recipient_address[street]']").val();
+			var recipient_street_nr = $("input[name='recipient_address[street_nr]']").val();
+			var recipient_postcode = $("input[name='recipient_address[postcode]']").val();
+			var recipient_city = $("input[name='recipient_address[city]']").val();
+			var recipient_country = $("select[name='recipient_address[country]']").val();
+		}else{
+			var sender_first_name 	= $( "input[name='recipient_address[first_name]']" ).val( );
+			var sender_last_name 	= $( "input[name='recipient_address[last_name]']" ).val( );
+			var sender_company 	= $( "input[name='recipient_address[company]']" ).val( );
+			var sender_street 	= $( "input[name='recipient_address[street]']" ).val( );
+			var sender_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
+			var sender_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
+			var sender_city 	= $( "input[name='recipient_address[city]']" ).val( );
+			var sender_country 	= $( "select[name='recipient_address[country]']" ).val( );
+
+			var recipient_first_name 	= $( "input[name='sender_address[first_name]']" ).val( );
+			var recipient_last_name 	= $( "input[name='sender_address[last_name]']" ).val( );
+			var recipient_company 	= $( "input[name='sender_address[company]']" ).val( );
+			var recipient_street 	= $( "input[name='sender_address[street]']" ).val( );
+			var recipient_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
+			var recipient_postcode = $( "input[name='sender_address[postcode]']" ).val( );
+			var recipient_city 	= $( "input[name='sender_address[city]']" ).val( );
+			var recipient_country 	= $( "select[name='sender_address[country]']" ).val( );
+		}
 
 		var parcel_id 	= $( "select[name=parcel_id" ).val( );
 
@@ -76,8 +96,6 @@ jQuery( function( $ ) {
 		var height 		= $( "input[name='parcel_height']" ).val( );
 		var length 		= $( "input[name='parcel_length']" ).val( );
 		var weight 		= $( "input[name='parcel_weight']" ).val( );
-
-		var parcel_title = '';
 
 		var data = {
 			'action': ajax_action,
@@ -168,6 +186,36 @@ jQuery( function( $ ) {
 		});
 	});
 
+	$( '#shipcloud_create_shipment_return' ).click( function()
+	{
+		$( '#shipment-center .info').empty();
+		var data = get_shipment_form_data( 'shipcloud_create_shipment', true );
+
+		var button = $( '#shipcloud_create_shipment_return' );
+		button.addClass( 'button-loading' );
+
+		$.post( ajaxurl, data, function( response )
+		{
+			var result = JSON.parse( response );
+
+			if( result.status == 'ERROR' )
+			{
+				print_errors( result.errors );
+			}
+
+			if( result.status == 'OK' )
+			{
+				$( '.shipment-labels' ).prepend( result.html );
+				shipcloud_create_label_buttons();
+				shipcloud_delete_shipment_buttons();
+
+				// $( '#shipcloud_create_label').fadeIn();
+			}
+
+			button.removeClass( 'button-loading' );
+		});
+	});
+
 	$( '#shipcloud_create_shipment_label' ).click( function(){
 		$( '#shipment-center .info').empty();
 		var data = get_shipment_form_data( 'shipcloud_create_shipment_label' );
@@ -185,6 +233,40 @@ jQuery( function( $ ) {
 				click: function () {
 
 					shipcloud_create_shipment_label(data);
+
+					$(this).dialog("close");
+				}
+			},
+				{
+					text: wcsc_translate.no,
+					click: function () {
+						$(this).dialog("close");
+					}
+				},
+			],
+
+		});
+
+		ask_create_label.dialog("open");
+	});
+
+	$( '#shipcloud_create_shipment_return_label' ).click( function(){
+		$( '#shipment-center .info').empty();
+		var data = get_shipment_form_data( 'shipcloud_create_shipment_label', true );
+
+		var ask_create_label = $('#ask-create-label');
+
+		ask_create_label.dialog({
+			'dialogClass': 'wcsc-dialog wp-dialog',
+			'modal': true,
+			'autoOpen': false,
+			'closeOnEscape': true,
+			'minHeight': 80,
+			'buttons': [{
+				text: wcsc_translate.yes,
+				click: function () {
+
+					shipcloud_create_shipment_return_label(data);
 
 					$(this).dialog("close");
 				}
@@ -266,6 +348,31 @@ jQuery( function( $ ) {
 		});
 	}
 
+	var shipcloud_create_shipment_return_label = function( data )
+	{
+		var button = $( '#shipcloud_create_shipment_return_label' );
+		button.addClass( 'button-loading-blue' );
+
+		$.post( ajaxurl, data, function( response ) {
+
+			var result = JSON.parse( response );
+
+			if( result.status == 'ERROR' )
+			{
+				print_errors( result.errors );
+			}
+
+			if( result.status == 'OK' )
+			{
+				$( '.shipment-labels' ).prepend( result.html );
+				shipcloud_create_label_buttons();
+				shipcloud_delete_shipment_buttons();
+			}
+
+			button.removeClass( 'button-loading-blue' );
+		});
+	}
+
 	var shipcloud_create_label = function( shipment_id, button )
 	{
 		var order_id = $( "#post_ID" ).val();
@@ -280,6 +387,7 @@ jQuery( function( $ ) {
 
 		$.post( ajaxurl, data, function( response )
 		{
+			console.log( response );
 			var result = JSON.parse( response );
 
 			if( result.status == 'ERROR' )
