@@ -719,15 +719,15 @@ class WC_Shipcloud_Order
 			}
 		}
 
-		if ( array_key_exists( 'draft', $_POST[ 'parcel' ] ) ):
-			$parcel_templates   = get_option( 'woocommerce_shipcloud_parcel_templates', array() );
-			$parcel_templates[] = $_POST[ 'parcel' ];
-			update_option( 'woocommerce_shipcloud_parcel_templates', $parcel_templates );
-		endif;
+		if( isset( $_POST[ 'sender_address' ] ) )
+		{
+			update_post_meta( $post_id, 'shipcloud_sender_address', $_POST[ 'sender_address' ] );
+		}
 
-		update_post_meta( $post_id, 'shipcloud_sender_address', $_POST[ 'sender_address' ] );
-		update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST[ 'recipient_address' ] );
-		update_post_meta( $post_id, 'shipcloud_parcel', $_POST[ 'parcel' ] );
+		if( isset( $_POST[ 'recipient_address' ] ) )
+		{
+			update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST[ 'recipient_address' ] );
+		}
 	}
 
 	/**
