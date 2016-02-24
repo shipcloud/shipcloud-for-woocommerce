@@ -372,25 +372,25 @@ class WC_Shipcloud_Order
 				<tr>
 					<th><?php _e( 'Width', 'woocommerce-shipcloud' ); ?></th>
 					<td>
-						<input type="text" name="parcel_width"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_width" class="lengths" /> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
 					<th><?php _e( 'Height', 'woocommerce-shipcloud' ); ?></th>
 					<td>
-						<input type="text" name="parcel_height"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_height" class="lengths" /> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
 					<th><?php _e( 'Length', 'woocommerce-shipcloud' ); ?> </th>
 					<td>
-						<input type="text" name="parcel_length"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_length" class="lengths" /> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
 					<th><?php _e( 'Weight', 'woocommerce-shipcloud' ); ?></th>
 					<td>
-						<input type="text" name="parcel_weight"/> <?php _e( 'kg', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="parcel_weight" class="lengths" /> <?php _e( 'kg', 'woocommerce-shipcloud' ); ?>
 					</td>
 				</tr>
 				<tr>
@@ -415,6 +415,12 @@ class WC_Shipcloud_Order
 							<br/>
 							<small><?php echo sprintf( __( 'Ordered: %s', 'woocommerce-shipcloud' ), $shipping_method_name ); ?></small>
 						<?php endif; ?>
+					</td>
+				</tr>
+				<tr>
+					<th><?php _e( 'Description', 'woocommerce-shipcloud' ); ?></th>
+					<td>
+						<input type="text" name="parcel_description"/> <small><?php echo sprintf( __( 'Required for carriers: %s', 'woocommerce-shipcloud' ), 'DPD' ); ?></small>
 					</td>
 				</tr>
 				</tbody>
@@ -654,6 +660,10 @@ class WC_Shipcloud_Order
 						<table>
 							<tbody>
 							<tr>
+								<th><?php _e( 'Description:', 'woocommerce-shipcloud' ); ?></th>
+								<td><?php echo $data[ 'description' ]; ?></td>
+							</tr>
+							<tr>
 								<th><?php _e( 'Shipment ID:', 'woocommerce-shipcloud' ); ?></th>
 								<td><?php echo $display_id; ?></td>
 							</tr>
@@ -845,6 +855,7 @@ class WC_Shipcloud_Order
 			'height' => $_POST[ 'height' ],
 			'length' => $_POST[ 'length' ],
 			'weight' => $_POST[ 'weight' ],
+			'description' => $_POST[ 'description' ],
 		);
 
 		$create_label = false;
@@ -881,6 +892,7 @@ class WC_Shipcloud_Order
 			'height'               => $_POST[ 'height' ],
 			'length'               => $_POST[ 'length' ],
 			'weight'               => $_POST[ 'weight' ],
+			'description'          => $_POST[ 'description' ],
 			'sender_first_name'    => $_POST[ 'sender_first_name' ],
 			'sender_last_name'     => $_POST[ 'sender_last_name' ],
 			'sender_company'       => $_POST[ 'sender_company' ],
