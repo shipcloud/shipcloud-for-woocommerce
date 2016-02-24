@@ -375,7 +375,11 @@ class Woocommerce_Shipcloud_API
 
 		if ( isset( $request[ 'body' ] ) )
 		{
-			$error[ 'description' ] = $this->get_body_errors( $request[ 'body' ] );
+			$error_string = $this->get_body_errors( $request[ 'body' ] );
+			if ( false !== $error_string )
+			{
+				$error[ 'description' ] = $error_string;
+			}
 		}
 
 		return $error;
@@ -456,12 +460,16 @@ class Woocommerce_Shipcloud_API
 		{
 			$error_str = '';
 
-			foreach ( $body[ 'errors' ] as $error )
+			if( isset( $body[ 'errors' ] ) )
 			{
-				$error_str .= wcsc_translate_shipcloud_text( $error ) . chr( 13 );
-			}
+				foreach ( $body[ 'errors' ] as $error )
+				{
+					$error_str .= wcsc_translate_shipcloud_text( $error ) . chr( 13 );
+				}
 
-			return $error_str;
+				return $error_str;
+			}
+			return false;
 		}
 		else
 		{
