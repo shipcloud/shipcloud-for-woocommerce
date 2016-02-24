@@ -684,6 +684,28 @@ class Woocommerce_Shipcloud_API
 
 				break;
 
+			case 'ups':
+
+				unset( $to[ 'email' ] );
+
+				$params = array(
+					'carrier'               => $carrier[ 'carrier' ],
+					'service'               => $carrier[ 'service' ],
+					'from'                  => $from,
+					'to'                    => $to,
+					'package'               => $package,
+					'create_shipping_label' => $create_label
+				);
+
+				// Moving the description to the root on international shipment
+				if( $from[ 'country' ] !== $to[ 'country' ] )
+				{
+					$params[ 'description' ] = $params[ 'package' ][ 'description' ];
+					unset( $params[ 'package' ][ 'description' ] );
+				}
+
+				break;
+
 			default:
 				unset( $to[ 'email' ] );
 				$params = array(
