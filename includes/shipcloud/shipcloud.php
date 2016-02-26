@@ -462,9 +462,16 @@ class Woocommerce_Shipcloud_API
 
 			if( isset( $body[ 'errors' ] ) )
 			{
-				foreach ( $body[ 'errors' ] as $error )
+				if( is_array( $body[ 'errors' ] ) )
 				{
-					$error_str .= wcsc_translate_shipcloud_text( $error ) . chr( 13 );
+					foreach ( $body[ 'errors' ] as $error )
+					{
+						$error_str .= wcsc_translate_shipcloud_text( $error ) . chr( 13 );
+					}
+				}
+				else
+				{
+					$error_str .= wcsc_translate_shipcloud_text( $body[ 'errors' ] ) . chr( 13 );
 				}
 
 				return $error_str;
