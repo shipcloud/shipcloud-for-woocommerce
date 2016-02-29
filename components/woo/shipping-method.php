@@ -57,12 +57,20 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		private $callback_url;
 
 		/**
-		 * Passed Check
+		 * Loaded Carriers
 		 *
-		 * @var bool
+		 * @var array
 		 * @since 1.0.0
 		 */
-		private $passed_check = false;
+		private $carriers = array();
+
+		/**
+		 * Available Carriers
+		 *
+		 * @var array
+		 * @since 1.0.0
+		 */
+		private $available_carriers = array();
 
 		/**
 		 * Constructor for your shipping class
@@ -91,8 +99,23 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$this->debug = false;
 			}
 
+			$this->start();
+		}
+
+		/**
+		 * Init your settings
+		 *
+		 * @access public
+		 * @return void
+		 * @since  1.0.0
+		 */
+		public function start()
+		{
+			$this->init_settings();
 			$this->init();
-			$this->passed_check = $this->check_settings();
+			$this->init_settings_fields();
+
+			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 		}
 
 		/**
@@ -100,12 +123,18 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.0.0
 		 */
-		public function check_settings()
+		public function init()
 		{
 			if ( ( empty( $this->settings[ 'api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 				return false;
+			}
+
+			// If Gateway is disabled just return true for passing further error meessages
+			if ( ( 'no' === $this->settings[ 'enabled' ] && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) )
+			{
+				return true;
 			}
 
 			// Testing Connection on Settings Page
@@ -128,12 +157,22 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					WooCommerce_Shipcloud::admin_notice( $test_result->get_error_message(), 'error' );
 					return false;
 				}
-			}
 
-			// If Gateway is disabled just return true for passing further error meessages
-			if ( 'no' === $this->settings[ 'enabled' ] && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) )
-			{
-				return true;
+				$carriers = $shipcloud_api->get_carriers();
+				if ( is_wp_error( $carriers ) )
+				{
+					WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
+					return false;
+				}
+				$this->carriers = $carriers;
+
+				$available_carriers = $shipcloud_api->get_allowed_carriers();
+				if ( is_wp_error( $available_carriers ) )
+				{
+					WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $available_carriers->get_error_message() ), 'error' );
+					return false;
+				}
+				$this->available_carriers = $available_carriers;
 			}
 
 			if ( empty( $this->settings[ 'allowed_carriers' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
@@ -221,21 +260,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 
 		/**
-		 * Init your settings
-		 *
-		 * @access public
-		 * @return void
-		 * @since  1.0.0
-		 */
-		public function init()
-		{
-			$this->init_settings();
-			$this->init_form_fields();
-
-			add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
-		}
-
-		/**
 		 * Own processes on saving settings
 		 */
 		public function process_admin_options()
@@ -248,47 +272,26 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		 *
 		 * @since 1.0.0
 		 */
-		public function init_form_fields()
+		public function init_settings_fields()
 		{
 			global $woocommerce;
 
 			$default_country = wc_get_base_location();
 			$default_country = $default_country[ 'country' ];
 
-			$shipcloud_api = new Woocommerce_Shipcloud_API();
-			$carriers      = $shipcloud_api->get_carriers();
-
 			$carriers_options = array();
-			if ( array_key_exists( 'api_key', $this->settings ) )
+			foreach ( $this->carriers as $carrier )
 			{
-				if ( is_wp_error( $carriers ) )
-				{
-					WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
-				}
-				else
-				{
-					foreach ( $carriers as $carrier )
-					{
-						$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
-					}
-				}
+				$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
 			}
 
-			$available_carriers = $shipcloud_api->get_allowed_carriers();
-
-			if ( is_wp_error( $available_carriers ) )
-			{
-				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $available_carriers->get_error_message() ), 'error' );
-				$available_carriers = array();
-			}
-
-			if ( count( $available_carriers ) > 0 )
+			if ( count( $this->available_carriers ) > 0 )
 			{
 				$standard_carrier_settings = array(
 					'title'       => __( 'Standard Shipment Method', 'woocommerce-shipcloud' ),
 					'type'        => 'select',
 					'description' => __( 'This Carrier will be preselected if the Shop Owner selects the Carrier or will be preselected as Carrier if Customer can select the Carrier.', 'woocommerce-shipcloud' ),
-					'options'     => $available_carriers,
+					'options'     => $this->available_carriers,
 					'desc_tip'    => true
 				);
 			}
