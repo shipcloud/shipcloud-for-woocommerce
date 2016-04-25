@@ -1,12 +1,13 @@
 <?php
 /**
  * Plugin Name: WooCommerce shipcloud.io
- * Plugin URI: http://www.awesome.ug
+ * Plugin URI: http://www.woothemes.com/products/woocommerce-shipcloud/
  * Description: Integrates shipcloud.io shipment services to your WooCommerce shop.
- * Version: 1.0.0 beta 1
- * Author: awesome.ug
- * Author URI: http://www.awesome.ug
- * Author Email: support@awesome.ug
+ * Version: 1.0.0
+ * Author: WooThemes
+ * Author URI: http://woothemes.com/
+ * Developer: awesome.ug
+ * Developer URI: http://www.awesome.ug
  * License:
  * Copyright 2016 (support@awesome.ug)
  * This program is free software; you can redistribute it and/or modify
@@ -35,6 +36,18 @@ if ( ! defined( 'ABSPATH' ) )
 {
 	exit;
 }
+
+/**
+ * Required functions
+ */
+if ( ! function_exists( 'woothemes_queue_update' ) ) {
+	require_once( 'woo-includes/woo-functions.php' );
+}
+
+/**
+ * Plugin updates
+ */
+woothemes_queue_update( plugin_basename( __FILE__ ), '99377680d6954f5c19a76538a369fc7e', '1503949' );
 
 class WooCommerce_Shipcloud
 {
