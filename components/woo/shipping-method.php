@@ -150,13 +150,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				}
 
 				$shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
-				$test_result   = $shipcloud_api->test();
-
-				if ( is_wp_error( $test_result ) )
-				{
-					WooCommerce_Shipcloud::admin_notice( $test_result->get_error_message(), 'error' );
-					return false;
-				}
 
 				$carriers = $shipcloud_api->get_carriers();
 				if ( is_wp_error( $carriers ) )
