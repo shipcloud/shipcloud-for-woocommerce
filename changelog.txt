@@ -1,4 +1,7 @@
 *** WooCommerce Shipcloud Changelog ***
 
+2016.05.18 - version 1.0.1
+* Fixed massive number of calls for carriers
+
 2016.04.14 - version 1.0.0
 * Initial release!

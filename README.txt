@@ -23,6 +23,9 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 == Changelog ==
 
+= 1.0.1 =
+* Fixed massive number of calls for carriers
+
 = 1.0.0 beta 1 =
 * Return services are only allowed for shop customers
 * Preselection of user selected shipment method in admin
