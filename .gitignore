@@ -1,5 +1,6 @@
 .settings
 .project
 .DS_Store
+.idea
 apigen-report.xml
 phpunit-selenium/
