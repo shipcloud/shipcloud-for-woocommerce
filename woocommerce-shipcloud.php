@@ -94,11 +94,10 @@ class WooCommerce_Shipcloud
 	{
 		$this->constants();
 		$this->load_textdomain();
-		$this->includes();
+        $this->includes();
 
-		// Check Requirements and loading core
-		add_action( 'plugins_loaded', array( $this, 'check_requirements' ), 20 );
-		add_action( 'plugins_loaded', array( $this, 'load_components' ), 25 );
+        $this->check_requirements();
+        $this->load_components();
 
 		if ( is_admin() )
 		{
