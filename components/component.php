@@ -74,7 +74,7 @@ abstract class WCSC_Component
 			self::$_instances[ $class ] = new $class();
 			self::$_instances[ $class ]->init_base_hooks();
 
-			add_action( 'plugins_loaded', array( self::$_instances[ $class ], 'check_and_start' ), 30 );
+			add_action( 'plugins_loaded', array( self::$_instances[ $class ], 'check_and_start' ), 50 );
 		}
 
 		return self::$_instances[ $class ];
