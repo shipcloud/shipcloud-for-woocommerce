@@ -25,6 +25,7 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 = 1.0.2 =
 * Fixed problems on loading shipment method by changing to direct loading without hooks
+* Fixed compatibility problems with WooCommerce 2.6 parent class.
 
 = 1.0.1 =
 * Fixed massive number of calls for carriers
