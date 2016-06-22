@@ -710,7 +710,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function calculate_shipping( $package )
+	public function calculate_shipping( $package = array() )
 	{
 		if ( '' == $package[ 'destination' ][ 'city' ] || '' == $package[ 'destination' ][ 'country' ] || '' == $package[ 'destination' ][ 'postcode' ] || '' == $package[ 'destination' ][ 'address' ] )
 		{
