@@ -130,7 +130,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		// If Gateway is disabled just return true for passing further error meessages
-		if ( ( 'no' === $this->settings[ 'enabled' ] && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) )
+		if ( ( array_key_exists( 'enabled', $this->settings ) && 'no' === $this->settings[ 'enabled' ] && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) )
 		{
 			return true;
 		}
