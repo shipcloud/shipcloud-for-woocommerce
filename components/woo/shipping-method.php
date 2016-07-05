@@ -74,24 +74,24 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 *
 	 * @since 1.0.0
 	 */
-	public function __construct()
+	public function __construct( $instance_id = 0 )
 	{
 		$this->id                 = 'shipcloud';
+		$this->instance_id 		  = absint( $instance_id );
 		$this->title              = __( 'shipcloud.io', 'woocommerce-shipcloud' );
 		$this->method_description = __( 'Add shipcloud to your shipping methods', 'woocommerce-shipcloud' );
 		$this->callback_url       = WC()->api_request_url( 'shipcloud' );
 
-		// Is gateway enabled
-		if ( is_array( $this->settings ) && array_key_exists( 'enabled', $this->settings ) && 'yes' == $this->settings[ 'enabled' ] )
-		{
-			$this->enabled = 'yes';
-		}
-		else
-		{
-			$this->enabled = 'no';
-		}
+        $this->supports              = array(
+            'settings',
+            'shipping-zones',
+			'instance-settings',
+			'instance-settings-modal',
+        );
 
-		if ( isset( $this->settings[ 'debug' ] ) && 'no' == $this->settings[ 'debug' ] )
+		$this->enabled = $this->get_option( 'enabled' );
+
+		if ( 'no' == $this->get_option( 'debug' ) )
 		{
 			$this->debug = false;
 		}
@@ -108,7 +108,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function start()
 	{
-		$this->init_settings();
 		$this->init();
 		$this->init_settings_fields();
 
@@ -122,7 +121,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function init()
 	{
-		if ( ( empty( $this->settings[ 'api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
+		if ( ( empty( $this->get_option( 'api_key' ) ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
@@ -130,7 +129,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		// If Gateway is disabled just return true for passing further error meessages
-		if ( ( array_key_exists( 'enabled', $this->settings ) && 'no' === $this->settings[ 'enabled' ] && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) )
+		if ( ( 'no' === $this->get_option( 'enabled' ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) )
 		{
 			return true;
 		}
@@ -144,7 +143,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			}
 			else
 			{
-				$api_key = $this->settings[ 'api_key' ];
+				$api_key = $this->get_option( 'api_key' );
 			}
 
 			$shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
@@ -168,21 +167,21 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$this->available_carriers = $available_carriers;
 		}
 
-		if ( empty( $this->settings[ 'allowed_carriers' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
+		if ( empty( $this->get_option( 'allowed_carriers' ) ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one allowed <a href="%s">shipment method</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
 			return false;
 		}
 
-		if ( ( '' == $this->settings[ 'standard_price_products' ] && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
+		if ( ( '' == $this->get_option( 'standard_price_products' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
 			return false;
 		}
 
-		if ( ( '' == $this->settings[ 'standard_price_shipment_classes' ] && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
+		if ( ( '' == $this->get_option( 'standard_price_shipment_classes' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
@@ -191,7 +190,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		$standard_address_err = false;
 
-		$sender_val = $this->settings[ 'sender_street' ];
+		$sender_val = $this->get_option( 'sender_street' );
 		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_street' ] ) )
 		{
 			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_street' ];
@@ -202,7 +201,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$standard_address_err = true;
 		}
 
-		$sender_val = $this->settings[ 'sender_street_nr' ];
+		$sender_val = $this->get_option( 'sender_street_nr' );
 		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_street_nr' ] ) )
 		{
 			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_street_nr' ];
@@ -213,7 +212,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$standard_address_err = true;
 		}
 
-		$sender_val = $this->settings[ 'sender_postcode' ];
+		$sender_val = $this->get_option( 'sender_postcode' );
 		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_postcode' ] ) )
 		{
 			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_postcode' ];
@@ -224,7 +223,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$standard_address_err = true;
 		}
 
-		$sender_val = $this->settings[ 'sender_city' ];
+		$sender_val = $this->get_option( 'sender_city' );
 		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_city' ] ) )
 		{
 			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_city' ];
@@ -235,7 +234,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$standard_address_err = true;
 		}
 
-		$sender_val = $this->settings[ 'sender_country' ];
+		$sender_val = $this->get_option( 'sender_country' );
 		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_country' ] ) )
 		{
 			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_country' ];
@@ -434,6 +433,69 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'default'     => $default_country
 			),
 		);
+
+		$this->instance_form_fields = array(
+			'allowed_carriers'                  => array(
+				'title'       => __( 'Shipment Methods', 'woocommerce-shipcloud' ),
+				'type'        => 'multi_checkbox',
+				'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+				'options'     => $carriers_options
+			),
+			'carrier_selection'                 => array(
+				'title'       => __( 'Shipment Selection', 'woocommerce-shipcloud' ),
+				'type'        => 'select',
+				'description' => __( 'Who selects the shipment method?', 'woocommerce-shipcloud' ),
+				'class'       => 'select',
+				'desc_tip'    => true,
+				'default'     => 'shopowner',
+				'options'     => array(
+					'shopowner' => __( 'Shop Owner', 'woocommerce-shipcloud' ),
+					'customer'  => __( 'Customer', 'woocommerce-shipcloud' ),
+				)
+			),
+			'standard_carrier'                  => $standard_carrier_settings,
+			'calculation'                       => array(
+				'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
+				'type'        => 'title',
+				'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'woocommerce-shipcloud' ) )
+			),
+			'calculate_products_type'           => array(
+				'title'       => __( 'Calculate Products', 'woocommerce-shipcloud' ),
+				'type'        => 'select',
+				'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+				'class'       => 'select',
+				'default'     => 'class',
+				'options'     => array(
+					'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
+					'order'   => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
+					// todo Wording is bad!
+				)
+			),
+			'standard_price_products'           => array(
+				'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+				'type'        => 'price',
+				'description' => __( 'Will be used if no sizes or weight is given to a Product (have to be entered in €).', 'woocommerce-shipcloud' ),
+			),
+			'calculation_type_shipment_classes' => array(
+				'title'       => __( 'Calculate Shipment Classes', 'woocommerce-shipcloud' ),
+				'type'        => 'select',
+				'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+				'class'       => 'select',
+				'default'     => 'class',
+				'options'     => array(
+					'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce' ),
+					'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce' ),
+				)
+			),
+			'standard_price_shipment_classes'   => array(
+				'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+				'type'        => 'price',
+				'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class (have to be entered in €).', 'woocommerce-shipcloud' ),
+			)
+		);
 	}
 
 	/**
@@ -627,7 +689,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data[ 'title' ] ); ?></span>
 					</legend>
 					<div class="multi-checkbox <?php _e( $data[ 'class' ] ); ?>" id="<?php _e( $field ); ?>" style="<?php _e( $data[ 'css' ] ); ?>" <?php disabled( $data[ 'disabled' ], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); ?>>
-						<?php if ( count( $data[ 'options' ] ) > 0 && '' != trim( $this->settings[ 'api_key' ] ) ): ?>
+						<?php if ( count( $data[ 'options' ] ) > 0 && '' != trim( $this->get_option('api_key' ) ) ): ?>
 							<?php foreach ( (array) $data[ 'options' ] as $option_key => $option_value ) : ?>
 								<div>
 									<input id="<?php _e( $field ); ?>_<?php _e( $option_key ); ?>" type="checkbox" name="<?php _e( $field ); ?>[]" value="<?php _e( $option_key ); ?>" <?php checked( in_array( $option_key, $value ), true ); ?>> <?php _e( $option_value ); ?>
@@ -957,7 +1019,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		// Price fallback
 		if ( '' == $retail_price )
 		{
-			$retail_price = $this->settings[ 'standard_price' ];
+			$retail_price = $this->get_option( 'standard_price' );
 			if ( $this->debug )
 			{
 				self::log( sprintf( __( 'No price found for parcel. Using fallback price %s', 'woocommerce-shipcloud' ), $retail_price ) );
