@@ -52,7 +52,7 @@ class WCSC_Woo extends WCSC_Component
 	{
 		if( class_exists( 'WC_Shipcloud_Shipping' ) )
 		{
-			$methods[] = 'WC_Shipcloud_Shipping';
+			$methods[ 'shipcloud' ] = 'WC_Shipcloud_Shipping';
 		}
         else
         {
