@@ -323,3 +323,20 @@ if( array_key_exists( 'wcscdeletevalues', $_GET ) )
 {
 	add_action( 'init', 'wcsc_delete_values' );
 }
+/**
+ * Returns the object of the shipping method
+ *
+ * @return bool|WC_Shipcloud_Shipping
+ * @since 1.1.0
+ */
+function wcsc_shipping_method()
+{
+	$shipping_methods = WC()->shipping()->get_shipping_methods();
+
+	if( ! array_key_exists( 'shipcloud', $shipping_methods ) )
+	{
+		return false;
+	}
+
+	return $shipping_methods['shipcloud'];
+}

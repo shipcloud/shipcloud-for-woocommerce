@@ -157,7 +157,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			}
 			$this->carriers = $carriers;
 
-			$available_carriers = $shipcloud_api->get_allowed_carriers();
+			$available_carriers = $this->get_allowed_carriers();
 			if ( is_wp_error( $available_carriers ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $available_carriers->get_error_message() ), 'error' );
@@ -779,18 +779,17 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			return; // Can't calculate without Address - Stop here!
 		}
 
-		$settings      = get_option( 'woocommerce_shipcloud_settings' );
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $this->get_option( 'api_key' ) );
 
 		/**
 		 * Getting Adresses
 		 */
 		$sender = array(
-			'street'    => $settings[ 'sender_street' ],
-			'street_no' => $settings[ 'sender_street_nr' ],
-			'zip_code'  => $settings[ 'sender_postcode' ],
-			'city'      => $settings[ 'sender_city' ],
-			'country'   => $settings[ 'sender_country' ],
+			'street'    => $this->get_option( 'sender_street' ),
+			'street_no' => $this->get_option( 'sender_street_nr' ),
+			'zip_code'  => $this->get_option( 'sender_postcode' ),
+			'city'      => $this->get_option( 'sender_city' ),
+			'country'   => $this->get_option( 'sender_country' ),
 		);
 
 		$recipient_street = wcsc_explode_street( $package[ 'destination' ][ 'address' ] );
@@ -818,13 +817,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		/**
 		 * Setup Carrier
 		 */
-		if ( 'shopowner' == $settings[ 'carrier_selection' ] )
+		if ( 'shopowner' === $this->get_option( 'carrier_selection' ) )
 		{
-			$carriers = array( $settings[ 'standard_carrier' ] => wcsc_get_carrier_display_name( $settings[ 'standard_carrier' ] ) );
+			$carriers = array( $this->get_option( 'standard_carrier' ) => wcsc_get_carrier_display_name( $this->get_option( 'standard_carrier' ) ) );
 		}
 		else
 		{
-			$carriers = $shipcloud_api->get_allowed_carriers( true );
+			$carriers = $this->get_allowed_carriers( true );
 		}
 
 		/**
@@ -875,7 +874,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 						$price = $parcel;
 					}
 
-					if ( 'class' == $settings[ 'calculation_type_shipment_classes' ] )
+					if ( 'class' == $this->get_option( 'calculation_type_shipment_classes' ) )
 					{
 						$sum += $price;
 					}
@@ -922,7 +921,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 						$price = $parcel;
 					}
 
-					if ( 'product' == $settings[ 'calculate_products_type' ] )
+					if ( 'product' == $this->get_option( 'calculate_products_type' ) )
 					{
 						$sum += $price;
 					}
@@ -1042,5 +1041,54 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$retail_price = $this->get_parcel_retail_price( $parcel_id );
 
 		return $retail_price;
+	}
+
+	/**
+	 * Get allowed Carriers
+	 *
+	 * @param bool $only_customer_services If is set true, function returns only services which are available for customers
+	 *
+	 * @return array $carriers
+	 * @since 1.1.0
+	 */
+	public function get_allowed_carriers( $only_customer_services = false )
+	{
+		$allowed_carriers   = $this->get_option( 'allowed_carriers' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $this->get_option( 'shipcloud_api' ) );
+
+		if ( is_wp_error( $shipcloud_api ) )
+		{
+			return $shipcloud_api;
+		}
+
+		$shipcloud_carriers = $shipcloud_api->get_carriers();
+
+		if ( is_wp_error( $shipcloud_carriers ) )
+		{
+			return $shipcloud_carriers;
+		}
+
+		$carriers = array();
+
+		if ( is_array( $allowed_carriers ) )
+		{
+			foreach ( $shipcloud_carriers AS $shipcloud_carrier )
+			{
+				if ( $only_customer_services )
+				{
+					$carrier_arr = $shipcloud_api->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
+					if ( ! $shipcloud_api->is_customer_service( $carrier_arr[ 'service' ] ) )
+					{
+						continue;
+					}
+				}
+				if ( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
+				{
+					$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
+				}
+			}
+		}
+
+		return $carriers;
 	}
 }

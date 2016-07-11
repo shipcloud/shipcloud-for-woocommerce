@@ -127,15 +127,13 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * Shows Addresses Content
+	 * Getting addresses
 	 *
-	 * @return string
-	 * @since 1.0.0
+	 * @return array $addresses
+	 * @since 1.1.0
 	 */
-	private function addresses()
+	private function get_addresses()
 	{
-		global $woocommerce;
-
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 
 		$sender    = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
@@ -182,6 +180,25 @@ class WC_Shipcloud_Order
 				'country'    => $order->shipping_country,
 			);
 		}
+
+		return array(
+			'sender' => $sender,
+			'recipient' => $recipient
+		);
+	}
+
+	/**
+	 * Shows Addresses Content
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
+	private function addresses()
+	{
+		global $woocommerce;
+
+		$addresses = $this->get_addresses();
+		extract( $addresses );
 
 		ob_start();
 		?>
@@ -287,7 +304,7 @@ class WC_Shipcloud_Order
 					<p class="fullsize">
 						<select name="recipient_address[country]" disabled>
 							<?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
-								<?php if ( $key == $sender[ 'country' ] ): $selected = ' selected';
+								<?php if ( $key == $recipient[ 'country' ] ): $selected = ' selected';
 								else: $selected = ''; endif; ?>
 								<option value="<?php echo $key; ?>"<?php echo $selected; ?>><?php echo $country; ?></option>
 							<?php endforeach; ?>
@@ -335,6 +352,51 @@ class WC_Shipcloud_Order
 	}
 
 	/**
+	 * Getting package
+	 *
+	 * @return array
+	 * @since 1.1.0
+	 */
+	private function get_package()
+	{
+		$addresses = $this->get_addresses();
+		extract( $addresses );
+
+		$package = array();
+		$package['destination']['country']   = $recipient['country'];
+		$package['destination']['postcode']  = $recipient['postcode'];
+		$package['destination']['city']      = $recipient['city'];
+		$package['destination']['address']   = $recipient['street'] . ' ' . $recipient['street_nr'];
+
+		return $package;
+	}
+
+	/**
+	 * Getting Carriers
+	 *
+	 * @return array $carriers
+	 * @since 1.1.0
+	 */
+	private function get_carriers()
+	{
+		$shipping_zone = wc_get_shipping_zone( $this->get_package() );
+		$shipping_methods = $shipping_zone->get_shipping_methods( true );
+		$carriers = array();
+
+		foreach( $shipping_methods AS $shipping_method )
+		{
+			if( 'WC_Shipcloud_Shipping' !== get_class( $shipping_method ) )
+			{
+				continue;
+			}
+
+			$carriers = array_merge( $carriers, $shipping_method->get_allowed_carriers() );
+		}
+
+		return $carriers;
+	}
+
+	/**
 	 * Returns Parcel Form Content
 	 *
 	 * @return string
@@ -342,17 +404,16 @@ class WC_Shipcloud_Order
 	 */
 	private function parcel_form()
 	{
-		$shipcloud_api = new Woocommerce_Shipcloud_API();
-		$carriers      = $shipcloud_api->get_allowed_carriers();
+		$order = new WC_Order( $this->order_id );
+		$carriers = $this->get_carriers();
 
 		$options          = get_option( 'woocommerce_shipcloud_settings' );
 		$standard_carrier = $options[ 'standard_carrier' ];
 		$shipcloud_api    = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
-		$order = new WC_Order( $this->order_id );
-
 		$selected_shipping_method = '';
 		$shipping_methods         = $order->get_shipping_methods();
+
 		foreach ( $shipping_methods AS $shipping_method )
 		{
 			if ( 'shipping' === $shipping_method[ 'type' ] )

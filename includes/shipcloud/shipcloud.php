@@ -111,48 +111,6 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
-	 * Get allowed Carriers
-	 *
-	 * @param bool $only_customer_services If is set true, function returns only services which are available for customers
-	 *
-	 * @return array $carriers
-	 * @since 1.0.0
-	 */
-	public function get_allowed_carriers( $only_customer_services = false )
-	{
-		$allowed_carriers   = $this->settings[ 'allowed_carriers' ];
-		$shipcloud_carriers = $this->get_carriers();
-
-		if ( is_wp_error( $shipcloud_carriers ) )
-		{
-			return $shipcloud_carriers;
-		}
-
-		$carriers = array();
-
-		if ( is_array( $allowed_carriers ) )
-		{
-			foreach ( $shipcloud_carriers AS $shipcloud_carrier )
-			{
-				if ( $only_customer_services )
-				{
-					$carrier_arr = $this->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
-					if ( ! $this->is_customer_service( $carrier_arr[ 'service' ] ) )
-					{
-						continue;
-					}
-				}
-				if ( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
-				{
-					$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
-				}
-			}
-		}
-
-		return $carriers;
-	}
-
-	/**
 	 * Getting carriers
 	 *
 	 * @param bool $force_update
