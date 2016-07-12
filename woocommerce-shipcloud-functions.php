@@ -323,3 +323,64 @@ if( array_key_exists( 'wcscdeletevalues', $_GET ) )
 {
 	add_action( 'init', 'wcsc_delete_values' );
 }
+
+/**
+ * Returns the object of the shipping method
+ *
+ * @return bool|WC_Shipcloud_Shipping
+ * @since 1.1.0
+ */
+function wcsc_shipping_method()
+{
+	$shipping_methods = WC()->shipping()->get_shipping_methods();
+
+	if( ! array_key_exists( 'shipcloud', $shipping_methods ) )
+	{
+		return false;
+	}
+
+	return $shipping_methods['shipcloud'];
+}
+
+/**
+ * Checks if we are a products post type in admin
+ *
+ * @return bool
+ * @since 1.0.0
+ */
+function wcsc_is_admin_screen()
+{
+	if ( ! is_admin() ) {
+		return false;
+	}
+
+	// Shop order
+	if( 'shop_order' === get_current_screen()->id )
+	{
+		return true;
+	}
+
+	// Settings screen
+	if( 'woocommerce_page_wc-settings' === get_current_screen()->id && 'shipcloud' === $_GET['section'] )
+	{
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Checks if we are a products post type in frontend
+ *
+ * @return bool
+ * @since 1.0.0
+ */
+function wcsc_is_frontend_screen()
+{
+	if( is_cart() || is_checkout() || is_checkout_pay_page() )
+	{
+		return true;
+	}
+
+	return false;
+}
