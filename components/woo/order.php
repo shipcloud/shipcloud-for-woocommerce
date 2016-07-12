@@ -379,18 +379,26 @@ class WC_Shipcloud_Order
 	 */
 	private function get_carriers()
 	{
-		$shipping_zone = wc_get_shipping_zone( $this->get_package() );
-		$shipping_methods = $shipping_zone->get_shipping_methods( true );
 		$carriers = array();
 
-		foreach( $shipping_methods AS $shipping_method )
+		if( function_exists( 'wc_get_shipping_zone' ) )
 		{
-			if( 'WC_Shipcloud_Shipping' !== get_class( $shipping_method ) )
-			{
-				continue;
-			}
+			$shipping_zone = wc_get_shipping_zone( $this->get_package() );
+			$shipping_methods = $shipping_zone->get_shipping_methods( true );
 
-			$carriers = array_merge( $carriers, $shipping_method->get_allowed_carriers() );
+			foreach( $shipping_methods AS $shipping_method )
+			{
+				if( 'WC_Shipcloud_Shipping' !== get_class( $shipping_method ) )
+				{
+					continue;
+				}
+
+				$carriers = array_merge( $carriers, $shipping_method->get_allowed_carriers() );
+			}
+		}
+		else
+		{
+			$carriers = wcsc_shipping_method()->get_allowed_carriers();
 		}
 
 		return $carriers;
