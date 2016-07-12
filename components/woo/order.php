@@ -720,11 +720,9 @@ class WC_Shipcloud_Order
 							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking Link', 'woocommerce-shipcloud' ); ?></a>
 						</p>
 
-						<?php if ( empty( $data[ 'label_url' ] ) ): ?>
-							<p class="button-delete-shipment">
-								<input type="button" value="<?php _e( 'Delete Shipment', 'woocommerce-shipcloud' ); ?>" class="shipcloud_delete_shipment button"/>
-							</p>
-						<?php endif; ?>
+						<p class="button-delete-shipment">
+							<input type="button" value="<?php _e( 'Delete Shipment', 'woocommerce-shipcloud' ); ?>" class="shipcloud_delete_shipment button"/>
+						</p>
 
 						<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
 						<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
