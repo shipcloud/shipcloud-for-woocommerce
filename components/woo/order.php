@@ -386,6 +386,7 @@ class WC_Shipcloud_Order
 			$shipping_zone = wc_get_shipping_zone( $this->get_package() );
 			$shipping_methods = $shipping_zone->get_shipping_methods( true );
 
+
 			foreach( $shipping_methods AS $shipping_method )
 			{
 				if( 'WC_Shipcloud_Shipping' !== get_class( $shipping_method ) )
@@ -394,6 +395,12 @@ class WC_Shipcloud_Order
 				}
 
 				$carriers = array_merge( $carriers, $shipping_method->get_allowed_carriers() );
+			}
+
+			// Fallback to general settings if there was no shipcloud in shipping zone
+			if( 0 === count( $carriers ) )
+			{
+				$carriers = wcsc_shipping_method()->get_allowed_carriers();
 			}
 		}
 		else
