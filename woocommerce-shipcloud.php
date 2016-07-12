@@ -289,6 +289,10 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_admin_styles()
 	{
+		if( ! wcsc_is_admin_screen() )
+		{
+			return;
+		}
 		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . 'includes/css/admin.css' );
 	}
 
@@ -299,6 +303,11 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_admin_scripts()
 	{
+		if( ! wcsc_is_admin_screen() )
+		{
+			return;
+		}
+
 		$translation_array = array(
 			'parcel_added'                => __( 'Parcel template added!', 'woocommerce-shipcloud' ),
 			'parcel_dimensions_check_yes' => __( 'Parcel dimensions verified!', 'woocommerce-shipcloud' ),
@@ -312,7 +321,7 @@ class WooCommerce_Shipcloud
 			'no'                          => __( 'No', 'woocommerce-shipcloud' )
 		);
 
-		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );
+		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . 'includes/js/admin.js' );
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
 		wp_enqueue_script( 'wcsc-admin-script' );
 	}
