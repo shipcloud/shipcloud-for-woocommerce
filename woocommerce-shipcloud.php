@@ -142,10 +142,7 @@ class WooCommerce_Shipcloud
 	 */
 	private function get_url_path()
 	{
-		$sub_path   = substr( WCSC_FOLDER, strlen( ABSPATH ), ( strlen( WCSC_FOLDER ) - 11 ) );
-		$script_url = get_bloginfo( 'wpurl' ) . '/' . $sub_path;
-
-		return $script_url;
+		return plugin_dir_url( __FILE__ );
 	}
 
 	/**
@@ -292,7 +289,7 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_admin_styles()
 	{
-		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . '/includes/css/admin.css' );
+		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . 'includes/css/admin.css' );
 	}
 
 	/**
