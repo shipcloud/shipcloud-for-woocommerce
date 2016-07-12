@@ -776,6 +776,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
 		if ( '' == $package[ 'destination' ][ 'city' ] || '' == $package[ 'destination' ][ 'country' ] || '' == $package[ 'destination' ][ 'postcode' ] || '' == $package[ 'destination' ][ 'address' ] )
 		{
+			wc_add_notice( __( 'Please enter an address to calculate shipping costs.', 'woocommerce-shipcloud' ), 'notice' );
 			return; // Can't calculate without Address - Stop here!
 		}
 
