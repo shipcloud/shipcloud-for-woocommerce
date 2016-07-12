@@ -89,7 +89,7 @@ jQuery( function( $ ) {
 			var recipient_country 	= $( "select[name='sender_address[country]']" ).val( );
 		}
 
-		var parcel_id 	= $( "select[name=parcel_id" ).val( );
+		var parcel_id 	= $( "select[name='parcel_id']" ).val( );
 
 		var carrier 	= $( "select[name='parcel_carrier']" ).val( );
 		var width 		= $( "input[name='parcel_width']" ).val( );
