@@ -333,6 +333,10 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_plugin_styles()
 	{
+		if( ! wcsc_is_frontend_screen() )
+		{
+			return;
+		}
 		wp_enqueue_style( 'wcsc-plugin-styles', WCSC_URLPATH . '/includes/css/display.css' );
 	}
 
@@ -343,6 +347,10 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_plugin_scripts()
 	{
+		if( ! wcsc_is_frontend_screen() )
+		{
+			return;
+		}
 		wp_enqueue_script( 'wcsc-plugin-script', WCSC_URLPATH . '/includes/js/display.js' );
 	}
 

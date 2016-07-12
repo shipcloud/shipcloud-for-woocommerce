@@ -368,3 +368,19 @@ function wcsc_is_admin_screen()
 
 	return false;
 }
+
+/**
+ * Checks if we are a products post type in frontend
+ *
+ * @return bool
+ * @since 1.0.0
+ */
+function wcsc_is_frontend_screen()
+{
+	if( is_cart() || is_checkout() || is_checkout_pay_page() )
+	{
+		return true;
+	}
+
+	return false;
+}
