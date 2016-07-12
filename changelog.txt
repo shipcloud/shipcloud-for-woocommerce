@@ -1,5 +1,9 @@
 *** WooCommerce Shipcloud Changelog ***
 
+2016.06.22 - version 1.0.2
+* Fixed problems on loading shipment method by changing to direct loading without hooks
+* Fixed compatibility problems with WooCommerce 2.6 parent class.
+
 2016.05.18 - version 1.0.1
 * Fixed massive number of calls for carriers
 

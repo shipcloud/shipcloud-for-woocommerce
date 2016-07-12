@@ -30,6 +30,7 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 * Fixed: Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
 * Fixed: JavaScript which stopped all JS in WP-Admin in Safari Browser
 * Fixed: Changed to WordPress function get_plugin_url() instead of older own function
+* Fixed: Compatibility problems with WooCommerce 2.6 parent class
 
 = 1.0.1 =
 * Fixed massive number of calls for carriers
