@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug
 Tags: woocommerce, shipcloud
 Requires at least: 3.0.0
 Tested up to: 4.3.0
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 
 This plugin integrates shipcloud.io into WooCommerce.
 
@@ -23,8 +23,13 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 == Changelog ==
 
-= 1.0.2 =
-* Fixed problems on loading shipment method by changing to direct loading without hooks
+= 1.1.0 =
+* Enhanced: Added shipping zone support which have been introduced in WooCommerce 2.6.0
+* Enhanced: Added option for people who only want to use label creation
+* Enhanced: Only loading JS and CSS when plugin needs it
+* Fixed: Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
+* Fixed: JavaScript which stopped all JS in WP-Admin in Safari Browser
+* Fixed: Changed to WordPress function get_plugin_url() instead of older own function
 
 = 1.0.1 =
 * Fixed massive number of calls for carriers
