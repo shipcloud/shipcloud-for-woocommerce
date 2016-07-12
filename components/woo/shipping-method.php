@@ -341,6 +341,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'type'        => 'title',
 				'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'woocommerce-shipcloud' ) )
 			),
+			'disable_calculation'                           => array(
+				'title'   => __( 'Disable', 'woocommerce-shipcloud' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Disable shipping cost calculation in cart and checkout page (if you only want to use label creation).', 'woocommerce-shipcloud' ),
+				'default' => 'no'
+			),
 			'calculate_products_type'           => array(
 				'title'       => __( 'Calculate Products', 'woocommerce-shipcloud' ),
 				'type'        => 'select',
@@ -774,6 +780,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function calculate_shipping( $package = array() )
 	{
+		if( 'yes' === $this->get_option( 'disable_calculation' ) )
+		{
+			return;
+		}
 		if ( '' == $package[ 'destination' ][ 'city' ] || '' == $package[ 'destination' ][ 'country' ] || '' == $package[ 'destination' ][ 'postcode' ] || '' == $package[ 'destination' ][ 'address' ] )
 		{
 			wc_add_notice( __( 'Please enter an address to calculate shipping costs.', 'woocommerce-shipcloud' ), 'notice' );
