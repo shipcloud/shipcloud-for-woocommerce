@@ -82,12 +82,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->method_description = __( 'Add shipcloud to your shipping methods', 'woocommerce-shipcloud' );
 		$this->callback_url       = WC()->api_request_url( 'shipcloud' );
 
-        $this->supports              = array(
-            'settings',
-            'shipping-zones',
+		$this->supports              = array(
+			'settings',
+			'shipping-zones',
 			'instance-settings',
 			'instance-settings-modal',
-        );
+		);
 
 		$this->enabled = $this->get_option( 'enabled' );
 
@@ -355,8 +355,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'class'       => 'select',
 				'default'     => 'class',
 				'options'     => array(
-					'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
-					'order'   => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
+					'product'      => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
+					'product_sum'   => __( 'Sum Products: Charge shipping by adding all weights and an average of all sizes. ', 'woocommerce-shipcloud' ),
+					'order'        => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
 					// todo Wording is bad!
 				)
 			),
@@ -472,8 +473,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'options'     => array(
-					'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
-					'order'   => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
+					'product'       => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
+					'product_sum'   => __( 'Sum Products: Charge shipping by adding all weights and an average of all sizes. ', 'woocommerce-shipcloud' ),
+					'order'         => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
 					// todo Wording is bad!
 				)
 			),
@@ -862,7 +864,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 						);
 
 						$calculated_parcels[ $carrier_name ][] = array(
-							'carrier' => $carrier_shown_name,
+							'carrier' => $carrier_display_name,
 							'width'   => $parcel[ 'width' ],
 							'height'  => $parcel[ 'height' ],
 							'length'  => $parcel[ 'length' ],
@@ -897,6 +899,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			if ( isset( $parcels[ 'products' ] ) )
 			{
 				// Running each Product
+				$total_weight = 0;
+				$total_volume = 0;
 				foreach ( $parcels[ 'products' ] AS $key => $parcel )
 				{
 					if ( is_array( $parcel ) )
@@ -908,13 +912,20 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 							'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
 						);
 
-						$calculated_parcels[ $carrier_name ][] = array(
-							'carrier' => $carrier_name,
-							'width'   => $parcel[ 'width' ],
-							'height'  => $parcel[ 'height' ],
-							'length'  => $parcel[ 'length' ],
-							'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
-						);
+						if( 'product_sum' !== $this->get_option( 'calculate_products_type' ) ) {
+							$calculated_parcels[ $carrier_name ][] = array(
+								'carrier' => $carrier_name,
+								'width'   => $parcel[ 'width' ],
+								'height'  => $parcel[ 'height' ],
+								'length'  => $parcel[ 'length' ],
+								'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
+							);
+						}
+
+						$parcel_volume = absint( $parcel['width'] ) * absint( $parcel['height'] ) * absint( $parcel['length'] );
+
+						$total_volume += $parcel_volume;
+						$total_weight += floatval( $parcel[ 'weight' ] );
 
 						$price = $shipcloud_api->get_price( $carrier_name, $sender, $recipient, $package );
 
@@ -929,13 +940,44 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 						$price = $parcel;
 					}
 
-					if ( 'product' == $this->get_option( 'calculate_products_type' ) )
+					if ( 'product' === $this->get_option( 'calculate_products_type' ) )
 					{
 						$sum += $price;
+					}
+					elseif( 'product_sum' === $this->get_option( 'calculate_products_type' ) )
+					{
+						$sum += $price; // Fallback price getting price for a virtual parcel will fail
 					}
 					else
 					{
 						$sum = $price > $sum ? $price : $sum;
+					}
+				}
+
+				if( 'product_sum' === $this->get_option( 'calculate_products_type' ) ) {
+					$average_length = round( sqrt( sqrt( $total_volume ) ), 2 );
+
+					$package = array(
+						'width'  => $average_length,
+						'height' => $average_length,
+						'length' => $average_length,
+						'weight' => str_replace( ',', '.', $total_weight )
+					);
+
+					$calculated_parcels[ $carrier_name ][] = array(
+						'carrier' => $carrier_name,
+						'width'  => $average_length,
+						'height' => $average_length,
+						'length' => $average_length,
+						'weight'  => str_replace( ',', '.', $total_weight )
+					);
+
+					$price = $shipcloud_api->get_price( $carrier_name, $sender, $recipient, $package );
+
+					if ( is_wp_error( $price ) ) {
+						$this->log( $price->get_error_message() );
+					} else {
+						$sum = $price;
 					}
 				}
 			}
@@ -1011,6 +1053,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * Get retail price for parcel.
 	 *
 	 * @param string $parcel_id
+	 * @return float $retail_price
 	 *
 	 * @since 1.0.0
 	 */
@@ -1040,6 +1083,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * Get price for parcel which have been selected in product.
 	 *
 	 * @param $product_id
+	 * @return float $retail_price
 	 *
 	 * @since 1.0.0
 	 */
@@ -1111,12 +1155,11 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	public function get_option( $key, $empty_value = null ) {
 		$option = parent::get_option( $key, $empty_value );
 
-		// Return instance option, default instance option or if instance option not exists, check global options
 		if( ! empty( $option ) ) {
 			return $option;
 		}
 
-		// If there is no value in instance settings get value from global options
+		// If there is no value in instance settings get value from global settings
 		return WC_Settings_API::get_option( $key, $empty_value );
 	}
 }

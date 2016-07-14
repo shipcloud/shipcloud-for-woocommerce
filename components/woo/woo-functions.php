@@ -97,14 +97,23 @@ function wcsc_get_order_parcels( $ordered_package )
 
 				switch ( $settings[ 'calculate_products_type' ] )
 				{
-					case 'product':
+                    case 'product':
 
-						for ( $i = 0; $i < $product[ 'quantity' ]; $i ++ )
-						{
-							$parcels[ 'products' ][] = $dimensions;
-						}
+                        for ( $i = 0; $i < $product[ 'quantity' ]; $i ++ )
+                        {
+                            $parcels[ 'products' ][] = $dimensions;
+                        }
 
-						break;
+                        break;
+
+                    case 'product_sum':
+
+                        for ( $i = 0; $i < $product[ 'quantity' ]; $i ++ )
+                        {
+                            $parcels[ 'products' ][] = $dimensions;
+                        }
+
+                        break;
 
 					case 'order':
 
