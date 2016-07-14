@@ -454,7 +454,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'Who selects the shipment method?', 'woocommerce-shipcloud' ),
 				'class'       => 'select',
 				'desc_tip'    => true,
-				'default'     => 'shopowner',
 				'options'     => array(
 					'shopowner' => __( 'Shop Owner', 'woocommerce-shipcloud' ),
 					'customer'  => __( 'Customer', 'woocommerce-shipcloud' ),
@@ -472,7 +471,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
-				'default'     => 'class',
 				'options'     => array(
 					'product' => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
 					'order'   => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
@@ -490,7 +488,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
-				'default'     => 'class',
 				'options'     => array(
 					'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce' ),
 					'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce' ),
@@ -773,7 +770,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	/**
 	 * Calculate_shipping function
 	 *
-	 * @param mixed $packages
+	 * @param array $package
 	 *
 	 * @return void
 	 * @since 1.0.0
@@ -1101,5 +1098,25 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		return $carriers;
+	}
+
+	/**
+	 * Getting option (overwrite instance values if there option of instance is empty
+	 *
+	 * @param string $key
+	 * @param null   $empty_value
+	 *
+	 * @return mixed|string
+	 */
+	public function get_option( $key, $empty_value = null ) {
+		$option = parent::get_option( $key, $empty_value );
+
+		// Return instance option, default instance option or if instance option not exists, check global options
+		if( ! empty( $option ) ) {
+			return $option;
+		}
+
+		// If there is no value in instance settings get value from global options
+		return WC_Settings_API::get_option( $key, $empty_value );
 	}
 }
