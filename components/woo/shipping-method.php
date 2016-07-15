@@ -867,6 +867,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$carriers = $this->get_allowed_carriers( true );
 		}
 
+		if( is_wp_error( $carriers ) )
+		{
+			$this->log( $carriers->get_error_message() );
+			return;
+		}
+
 		/**
 		 * Calculating
 		 */
