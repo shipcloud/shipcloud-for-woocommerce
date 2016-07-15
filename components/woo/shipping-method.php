@@ -408,7 +408,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'default'     => 'class',
 				'options'     => array(
 					'product'      => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
-					'product_sum'   => __( 'Sum Products: Charge shipping by adding all weights and an average of all sizes. ', 'woocommerce-shipcloud' ),
+					'product_sum'   => __( 'Sum Products: Charge shipping by adding all weights and an average of all sizes.', 'woocommerce-shipcloud' ),
 					'order'        => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
 					// todo Wording is bad!
 				)
@@ -526,7 +526,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'class'       => 'select',
 				'options'     => array(
 					'product'       => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
-					'product_sum'   => __( 'Sum Products: Charge shipping by adding all weights and an average of all sizes. ', 'woocommerce-shipcloud' ),
+					'product_sum'   => __( 'Sum Products: Charge shipping by sum all weights and volume of products.', 'woocommerce-shipcloud' ),
 					'order'         => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
 					// todo Wording is bad!
 				)
