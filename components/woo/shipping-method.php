@@ -70,6 +70,38 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	private $available_carriers = array();
 
 	/**
+	 * Shipcloud API Object
+	 *
+	 * @var Woocommerce_Shipcloud_API
+	 * @since 1.1.0
+	 */
+	private $shipcloud_api;
+
+	/**
+	 * Sender data
+	 *
+	 * @var array
+	 * @since 1.1.0
+	 */
+	private $sender = array();
+
+	/**
+	 * Recipient data
+	 *
+	 * @var array
+	 * @since 1.1.0
+	 */
+	private $recipient = array();
+
+	/**
+	 * All Parcels which have been requested at shipcloud for later usage
+	 *
+	 * @var array
+	 * @since 1.1.0
+	 */
+	private $calculated_parcels = array();
+
+	/**
 	 * Constructor for your shipping class
 	 *
 	 * @since 1.0.0
@@ -97,6 +129,31 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		$this->start();
+	}
+
+	/**
+	 * Initialize Shipcloud API
+	 *
+	 * @since 1.1.0
+	 */
+	private function init_shipcloud_api( $api_key = null ){
+		if( is_object( $this->shipcloud_api ) ) {
+			return true;
+		}
+
+		if( empty( $api_key ) ) {
+			$api_key = $this->get_option( 'api_key' );
+		}
+
+		// Initializing
+		$this->shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
+
+		if( is_wp_error( $this->shipcloud_api ) ) {
+			$this->log( $price->get_error_message() );
+			return $this->shipcloud_api;
+		}
+
+		return true;
 	}
 
 	/**
@@ -137,22 +194,22 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		// Testing Connection on Settings Page
 		if ( wcsc_is_settings_screen() )
 		{
+			$api_key = '';
 			if ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 			{
 				$api_key = $_POST[ 'woocommerce_shipcloud_api_key' ];
 			}
-			else
-			{
-				$api_key = $this->get_option( 'api_key' );
-			}
 
-			$shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
+			$init_shipcloud_api = $this->init_shipcloud_api( $api_key );
+			if( is_wp_error( $init_shipcloud_api ) ) {
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not initialize shipcloud API.', 'woocommerce-shipcloud' ), $init_shipcloud_api->get_error_message() ), 'error' );
+				return false;
+		    }
 
-			$carriers = $shipcloud_api->get_carriers();
+			$carriers = $this->shipcloud_api->get_carriers();
 			if ( is_wp_error( $carriers ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
-
 				return false;
 			}
 			$this->carriers = $carriers;
@@ -161,7 +218,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			if ( is_wp_error( $available_carriers ) )
 			{
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $available_carriers->get_error_message() ), 'error' );
-
 				return false;
 			}
 			$this->available_carriers = $available_carriers;
@@ -170,21 +226,18 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if ( empty( $this->get_option( 'allowed_carriers' ) ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one allowed <a href="%s">shipment method</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 			return false;
 		}
 
 		if ( ( '' == $this->get_option( 'standard_price_products' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 			return false;
 		}
 
 		if ( ( '' == $this->get_option( 'standard_price_shipment_classes' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 			return false;
 		}
 
@@ -248,7 +301,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if ( $standard_address_err )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter your <a href="%s">standard sender data</a>! At least, street, street number, postcode, city and country.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
 			return false;
 		}
 
@@ -789,34 +841,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			return; // Can't calculate without Address - Stop here!
 		}
 
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $this->get_option( 'api_key' ) );
+		$this->init_shipcloud_api();
 
 		/**
 		 * Getting Adresses
 		 */
-		$sender = array(
-			'street'    => $this->get_option( 'sender_street' ),
-			'street_no' => $this->get_option( 'sender_street_nr' ),
-			'zip_code'  => $this->get_option( 'sender_postcode' ),
-			'city'      => $this->get_option( 'sender_city' ),
-			'country'   => $this->get_option( 'sender_country' ),
-		);
-
-		$recipient_street = wcsc_explode_street( $package[ 'destination' ][ 'address' ] );
-
-		if ( is_array( $recipient_street ) )
-		{
-			$recipient_street_name = $recipient_street[ 'address' ];
-			$recipient_street_nr   = $recipient_street[ 'number' ];
-		}
-
-		$recipient = array(
-			'street'    => $recipient_street_name,
-			'street_no' => $recipient_street_nr,
-			'zip_code'  => $package[ 'destination' ][ 'postcode' ],
-			'city'      => $package[ 'destination' ][ 'city' ],
-			'country'   => $package[ 'destination' ][ 'country' ]
-		);
+		$this->sender = $this->get_sender();
+		$this->recipient = $this->get_recipient( $package );
 
 		/**
 		 * Ordering Parcels
@@ -825,7 +856,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$parcels         = wcsc_get_order_parcels( $ordered_package );
 
 		/**
-		 * Setup Carrier
+		 * Getting carriers which have to be calculated
 		 */
 		if ( 'shopowner' === $this->get_option( 'carrier_selection' ) )
 		{
@@ -839,177 +870,252 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		/**
 		 * Calculating
 		 */
-		$prices             = array();
-		$calculated_parcels = array();
-
 		foreach ( $carriers AS $carrier_name => $carrier_display_name )
 		{
 			$sum = 0;
 
-			// Shipping Classes
 			if ( isset( $parcels[ 'shipping_classes' ] ) )
 			{
-
-				// Running each Shipping Class
-				foreach ( $parcels[ 'shipping_classes' ] AS $key => $parcel )
-				{
-
-					if ( is_array( $parcel ) )
-					{
-						$package = array(
-							'width'  => $parcel[ 'width' ],
-							'height' => $parcel[ 'height' ],
-							'length' => $parcel[ 'length' ],
-							'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
-						);
-
-						$calculated_parcels[ $carrier_name ][] = array(
-							'carrier' => $carrier_display_name,
-							'width'   => $parcel[ 'width' ],
-							'height'  => $parcel[ 'height' ],
-							'length'  => $parcel[ 'length' ],
-							'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
-						);
-
-						$price = $shipcloud_api->get_price( $carrier_name, $sender, $recipient, $package );
-
-						if ( is_wp_error( $price ) )
-						{
-							$this->log( $price->get_error_message() );
-							continue;
-						}
-					}
-					else
-					{
-						$price = $parcel;
-					}
-
-					if ( 'class' == $this->get_option( 'calculation_type_shipment_classes' ) )
-					{
-						$sum += $price;
-					}
-					else
-					{
-						$sum = $price > $sum ? $price : $sum;
-					}
-				}
+				$sum = $this->get_price_for_shipping_classes( $carrier_name, $parcels[ 'shipping_classes' ] );
 			}
 
-			// Products
 			if ( isset( $parcels[ 'products' ] ) )
 			{
-				// Running each Product
-				$total_weight = 0;
-				$total_volume = 0;
-				foreach ( $parcels[ 'products' ] AS $key => $parcel )
-				{
-					if ( is_array( $parcel ) )
-					{
-						$package = array(
-							'width'  => $parcel[ 'width' ],
-							'height' => $parcel[ 'height' ],
-							'length' => $parcel[ 'length' ],
-							'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
-						);
-
-						if( 'product_sum' !== $this->get_option( 'calculate_products_type' ) ) {
-							$calculated_parcels[ $carrier_name ][] = array(
-								'carrier' => $carrier_name,
-								'width'   => $parcel[ 'width' ],
-								'height'  => $parcel[ 'height' ],
-								'length'  => $parcel[ 'length' ],
-								'weight'  => str_replace( ',', '.', $parcel[ 'weight' ] )
-							);
-						}
-
-						$parcel_volume = absint( $parcel['width'] ) * absint( $parcel['height'] ) * absint( $parcel['length'] );
-
-						$total_volume += $parcel_volume;
-						$total_weight += floatval( $parcel[ 'weight' ] );
-
-						$price = $shipcloud_api->get_price( $carrier_name, $sender, $recipient, $package );
-
-						if ( is_wp_error( $price ) )
-						{
-							$this->log( $price->get_error_message() );
-							continue;
-						}
-					}
-					else
-					{
-						$price = $parcel;
-					}
-
-					if ( 'product' === $this->get_option( 'calculate_products_type' ) )
-					{
-						$sum += $price;
-					}
-					elseif( 'product_sum' === $this->get_option( 'calculate_products_type' ) )
-					{
-						$sum += $price; // Fallback price getting price for a virtual parcel will fail
-					}
-					else
-					{
-						$sum = $price > $sum ? $price : $sum;
-					}
-				}
-
-				if( 'product_sum' === $this->get_option( 'calculate_products_type' ) ) {
-					$average_length = round( sqrt( sqrt( $total_volume ) ), 2 );
-
-					$package = array(
-						'width'  => $average_length,
-						'height' => $average_length,
-						'length' => $average_length,
-						'weight' => str_replace( ',', '.', $total_weight )
-					);
-
-					$calculated_parcels[ $carrier_name ][] = array(
-						'carrier' => $carrier_name,
-						'width'  => $average_length,
-						'height' => $average_length,
-						'length' => $average_length,
-						'weight'  => str_replace( ',', '.', $total_weight )
-					);
-
-					$price = $shipcloud_api->get_price( $carrier_name, $sender, $recipient, $package );
-
-					if ( is_wp_error( $price ) ) {
-						$this->log( $price->get_error_message() );
-					} else {
-						$sum = $price;
-					}
-				}
+				$sum = $this->get_price_for_products( $carrier_name, $parcels[ 'products' ] );
 			}
-
-			$prices[ $carrier_name ] = $sum;
 
 			$rate = array(
 				'id'    => $carrier_name,
-				'label' => $shipcloud_api->get_carrier_display_name_short( $carrier_name ),
+				'label' => $this->shipcloud_api->get_carrier_display_name_short( $carrier_name ),
 				'cost'  => $sum,
 			);
 
 			$this->add_rate( $rate );
 		}
-		WC()->session->set( 'shipcloud_parcels', $calculated_parcels );
+
+		WC()->session->set( 'shipcloud_parcels', $this->calculated_parcels );
 	}
 
 	/**
-	 * Adding logentry on debug mode
+	 * Getting sender address
 	 *
-	 * @param $message
-	 *
-	 * @since 1.0.0
+	 * @return array $sender
+	 * @since 1.1.0
 	 */
-	public static function log( $message )
+	public function get_sender()
 	{
-		if ( ! is_object( self::$logger ) )
+		return array(
+			'street'    => $this->get_option( 'sender_street' ),
+			'street_no' => $this->get_option( 'sender_street_nr' ),
+			'zip_code'  => $this->get_option( 'sender_postcode' ),
+			'city'      => $this->get_option( 'sender_city' ),
+			'country'   => $this->get_option( 'sender_country' ),
+		);
+	}
+
+	/**
+	 * Geting recipient address from package
+	 *
+	 * @param $package
+	 * @return array
+	 * @since 1.1.0
+	 */
+	public function get_recipient( $package )
+	{
+		$recipient_street = wcsc_explode_street( $package[ 'destination' ][ 'address' ] );
+
+		if ( is_array( $recipient_street ) )
 		{
-			self::$logger = new WC_Logger();
+			$recipient_street_name = $recipient_street[ 'address' ];
+			$recipient_street_nr   = $recipient_street[ 'number' ];
 		}
 
-		self::$logger->add( 'shipcloud', $message );
+		return array(
+			'street'    => $recipient_street_name,
+			'street_no' => $recipient_street_nr,
+			'zip_code'  => $package[ 'destination' ][ 'postcode' ],
+			'city'      => $package[ 'destination' ][ 'city' ],
+			'country'   => $package[ 'destination' ][ 'country' ]
+		);
+	}
+
+	/**
+	 * Getting price for products within shipping classes
+	 *
+	 * @param string $carrier_name
+	 * @param array $parcels
+	 *
+	 * @return float|WP_Error $sum
+	 * @since 1.1.0
+	 */
+	public function get_price_for_shipping_classes( $carrier_name, $parcels )
+	{
+		$sum = 0;
+		$calculation_type_shipment_classes = $this->get_option( 'calculation_type_shipment_classes' );
+
+		switch( $calculation_type_shipment_classes )
+		{
+			// Charge for all products
+			case 'class':
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$sum = array_sum( $prices );
+				break;
+
+			// Charge only for the most expensive parcel
+			case 'order':
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$sum = max( $prices );
+				break;
+		}
+
+		return $sum;
+	}
+
+	/**
+	 * Getting price for products without shipping classes
+	 *
+	 * @param string $carrier_name
+	 * @param array $parcels
+	 *
+	 * @return float|WP_Error $sum
+	 * @since 1.1.0
+	 */
+	public function get_price_for_products( $carrier_name, $parcels )
+	{
+		$sum = 0;
+		$calculate_products_type = $this->get_option( 'calculate_products_type' );
+
+		switch( $calculate_products_type )
+		{
+			// Charge for all products
+			case 'product':
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$sum = array_sum( $prices );
+				break;
+
+			// Charge for a virtual parcel
+			case 'product_sum':
+				$sum = $this->get_price_for_virtual_parcel( $carrier_name, $parcels );
+				break;
+
+			// Charge only for the most expensive parcel
+			case 'order':
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$sum = max( $prices );
+				break;
+		}
+
+		return $sum;
+	}
+
+	/**
+	 * Getting prices for parcels
+	 *
+	 * @param string $carrier_name
+	 * @param array $parcels
+	 *
+	 * @return array $prices
+	 * @since 1.1.0
+	 */
+	public function get_prices_for_parcels( $carrier_name, $parcels )
+	{
+		$prices = array();
+
+		foreach ( $parcels AS $key => $parcel )
+		{
+			if ( is_array( $parcel ) )
+			{
+				$prices[] = $this->get_price( $carrier_name, $parcel );
+
+				if ( is_wp_error( $price ) )
+				{
+					$this->log( $price->get_error_message() );
+					continue;
+				}
+			}
+		}
+
+		return $prices;
+	}
+
+	/**
+	 * Getting prices for a virtual created parcel
+	 *
+	 * @param string $carrier_name
+	 * @param array $parcels
+	 *
+	 * @return float|WP_Error $price
+	 * @since 1.1.0
+	 */
+	public function get_price_for_virtual_parcel( $carrier_name, $parcels )
+	{
+		$virtual_parcel = $this->calculate_virtual_parcel( $parcels );
+		return $this->get_price( $carrier_name, $virtual_parcel );
+	}
+
+	/**
+	 * Getting a price for a parcel
+	 *
+	 * @param string $carrier_name
+	 * @param array $parcel
+	 *
+	 * @return float|WP_Error
+	 * @since 1.1.0
+	 */
+	public function get_price( $carrier_name, $parcel ) {
+		$this->init_shipcloud_api();
+
+		$package = array(
+			'width'  => $parcel[ 'width' ],
+			'height' => $parcel[ 'height' ],
+			'length' => $parcel[ 'length' ],
+			'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
+		);
+
+		$this->calculated_parcels[ $carrier_name ][] = $package;
+
+		$price = $this->shipcloud_api->get_price( $carrier_name, $this->sender, $this->recipient, $package );
+
+		if ( is_wp_error( $price ) )
+		{
+			$this->log( $price->get_error_message() );
+		}
+
+		return $price;
+	}
+
+	/**
+	 * Returns a virtual parcel as base for price calculations
+	 *
+	 * @param array $parcels
+	 *
+	 * @return array $virtual_parcel
+	 * @since 1.1.0
+	 */
+	public function calculate_virtual_parcel( $parcels )
+	{
+		$total_weight = 0;
+		$total_volume = 0;
+
+		foreach ( $parcels AS $key => $parcel )
+		{
+			if ( is_array( $parcel ) ) {
+				$parcel_volume = absint( $parcel[ 'width' ] ) * absint( $parcel[ 'height' ] ) * absint( $parcel[ 'length' ] );
+				$total_volume += $parcel_volume;
+				$total_weight += floatval( $parcel[ 'weight' ] );
+			}
+		}
+
+		$average_length = round( sqrt( sqrt( $total_volume ) ), 2 );
+
+		$virtual_parcel = array(
+			'width'  => $average_length,
+			'height'  => $average_length,
+			'length'  => $average_length,
+			'weight' => $total_weight
+		);
+
+		return $virtual_parcel;
 	}
 
 	/**
@@ -1105,18 +1211,14 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function get_allowed_carriers( $only_customer_services = false )
 	{
+		$this->init_shipcloud_api();
+
 		$allowed_carriers   = $this->get_option( 'allowed_carriers' );
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $this->get_option( 'shipcloud_api' ) );
-
-		if ( is_wp_error( $shipcloud_api ) )
-		{
-			return $shipcloud_api;
-		}
-
-		$shipcloud_carriers = $shipcloud_api->get_carriers();
+		$shipcloud_carriers = $this->shipcloud_api->get_carriers();
 
 		if ( is_wp_error( $shipcloud_carriers ) )
 		{
+			$this->log( $shipcloud_carriers->get_error_message() );
 			return $shipcloud_carriers;
 		}
 
@@ -1128,8 +1230,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			{
 				if ( $only_customer_services )
 				{
-					$carrier_arr = $shipcloud_api->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
-					if ( ! $shipcloud_api->is_customer_service( $carrier_arr[ 'service' ] ) )
+					$carrier_arr = $this->shipcloud_api->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
+					if ( ! $this->shipcloud_api->is_customer_service( $carrier_arr[ 'service' ] ) )
 					{
 						continue;
 					}
@@ -1161,5 +1263,22 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		// If there is no value in instance settings get value from global settings
 		return WC_Settings_API::get_option( $key, $empty_value );
+	}
+
+	/**
+	 * Adding logentry on debug mode
+	 *
+	 * @param $message
+	 *
+	 * @since 1.0.0
+	 */
+	public static function log( $message )
+	{
+		if ( ! is_object( self::$logger ) )
+		{
+			self::$logger = new WC_Logger();
+		}
+
+		self::$logger->add( 'shipcloud', $message );
 	}
 }

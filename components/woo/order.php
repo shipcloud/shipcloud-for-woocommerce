@@ -544,12 +544,15 @@ class WC_Shipcloud_Order
 
 		if ( is_array( $shipcloud_parcels ) && count( $shipcloud_parcels ) > 0 )
 		{
-			foreach ( $shipcloud_parcels AS $parcel )
+			foreach ( $shipcloud_parcels AS $carrier_name => $parcels )
 			{
-				$determined_parcels[] = array(
-					'value'  => $parcel[ 'width' ] . ';' . $parcel[ 'height' ] . ';' . $parcel[ 'length' ] . ';' . $parcel[ 'weight' ] . ';' . $parcel[ 'carrier' ] . ';',
-					'option' => $parcel[ 'width' ] . esc_attr( 'x', 'woocommerce-shipcloud' ) . $parcel[ 'height' ] . esc_attr( 'x', 'woocommerce-shipcloud' ) . $parcel[ 'length' ] . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - ' . $parcel[ 'weight' ] . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - ' . $shipcloud_api->get_carrier_display_name_short( $parcel[ 'carrier' ] ),
-				);
+				foreach( $parcels AS $parcel )
+				{
+					$determined_parcels[] = array(
+						'value'  => $parcel[ 'width' ] . ';' . $parcel[ 'height' ] . ';' . $parcel[ 'length' ] . ';' . $parcel[ 'weight' ] . ';' . $carrier_name . ';',
+						'option' => $parcel[ 'width' ] . esc_attr( 'x', 'woocommerce-shipcloud' ) . $parcel[ 'height' ] . esc_attr( 'x', 'woocommerce-shipcloud' ) . $parcel[ 'length' ] . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - ' . $parcel[ 'weight' ] . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - ' . $shipcloud_api->get_carrier_display_name_short( $carrier_name ),
+					);
+				}
 			}
 		}
 
@@ -824,8 +827,6 @@ class WC_Shipcloud_Order
 	public function save_determined_parcels( $order_id, $posted )
 	{
 		$shipcloud_parcels = WC()->session->get( 'shipcloud_parcels' );
-		$shipcloud_parcels = $shipcloud_parcels[ $posted[ 'shipping_method' ][ 0 ] ];
-
 		update_post_meta( $order_id, 'shipcloud_parcels', $shipcloud_parcels );
 	}
 
