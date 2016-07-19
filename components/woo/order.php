@@ -386,7 +386,6 @@ class WC_Shipcloud_Order
 			$shipping_zone = wc_get_shipping_zone( $this->get_package() );
 			$shipping_methods = $shipping_zone->get_shipping_methods( true );
 
-
 			foreach( $shipping_methods AS $shipping_method )
 			{
 				if( 'WC_Shipcloud_Shipping' !== get_class( $shipping_method ) )
@@ -396,6 +395,8 @@ class WC_Shipcloud_Order
 
 				$carriers = array_merge( $carriers, $shipping_method->get_allowed_carriers() );
 			}
+
+
 
 			// Fallback to general settings if there was no shipcloud in shipping zone
 			if( 0 === count( $carriers ) )
@@ -420,11 +421,13 @@ class WC_Shipcloud_Order
 	private function parcel_form()
 	{
 		$order = new WC_Order( $this->order_id );
+
 		$carriers = $this->get_carriers();
 
 		$options          = get_option( 'woocommerce_shipcloud_settings' );
 		$standard_carrier = $options[ 'standard_carrier' ];
 		$shipcloud_api    = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+
 
 		$selected_shipping_method = '';
 		$shipping_methods         = $order->get_shipping_methods();

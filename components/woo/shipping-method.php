@@ -1525,7 +1525,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return array $carriers
 	 * @since 1.1.0
 	 */
-	private function get_allowed_carriers( $only_customer_services = false )
+	public function get_allowed_carriers( $only_customer_services = false )
 	{
 		$this->init_shipcloud_api();
 
