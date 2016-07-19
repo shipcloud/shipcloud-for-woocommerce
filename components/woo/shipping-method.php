@@ -400,7 +400,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'default' => 'no'
 			),
 			'calculate_products_type'           => array(
-				'title'       => __( 'Calculate Products', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Products', 'woocommerce-shipcloud' ),
 				'type'        => 'select',
 				'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
@@ -408,30 +408,53 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'default'     => 'class',
 				'options'     => array(
 					'product'      => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
-					'product_sum'   => __( 'Sum Products: Charge shipping by adding all weights and an average of all sizes.', 'woocommerce-shipcloud' ),
 					'order'        => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
-					// todo Wording is bad!
+					'product_sum'   => __( 'Virtual Parcel: Create a virtual parcel with volume and weight of all products and charge shipping', 'woocommerce-shipcloud' ),
+				)
+			),
+			'calculate_products_type_fallback'           => array(
+				'title'       => __( 'Products (fallback)', 'woocommerce-shipcloud' ),
+				'type'        => 'select',
+				'description' => __( 'How should the price for products be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+				'class'       => 'select',
+				'default'     => 'class',
+				'options'     => array(
+					'product'      => __( 'Per Product: Charge shipping with fallback price for each product', 'woocommerce-shipcloud' ),
+					'order'        => __( 'Per Order: Charge shipping with fallback price for one product', 'woocommerce-shipcloud' ),
 				)
 			),
 			'standard_price_products'           => array(
-				'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
 				'type'        => 'price',
-				'description' => __( 'Will be used if no sizes or weight is given to a Product (have to be entered in €).', 'woocommerce-shipcloud' ),
+				'description' => __( 'Will be used if no sizes or weight is given to a Product or for fallback (have to be entered in €).', 'woocommerce-shipcloud' ),
 			),
 			'calculation_type_shipment_classes' => array(
-				'title'       => __( 'Calculate Shipment Classes', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipment Classes', 'woocommerce-shipcloud' ),
 				'type'        => 'select',
 				'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'default'     => 'class',
 				'options'     => array(
-					'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce' ),
-					'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce' ),
+					'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce-shipcloud' ),
+					'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce-shipcloud' ),
+				)
+			),
+			'calculation_type_shipment_classes_fallback' => array(
+				'title'       => __( 'Shipment Classes (fallback)', 'woocommerce-shipcloud' ),
+				'type'        => 'select',
+				'description' => __( 'How should the price for shipment classes be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+				'class'       => 'select',
+				'default'     => 'class',
+				'options'     => array(
+					'class' => __( 'Per Class: Charge shipping with fallback price for each class', 'woocommerce-shipcloud' ),
+					'order' => __( 'Per Order: Charge shipping with fallback price for one class', 'woocommerce-shipcloud' ),
 				)
 			),
 			'standard_price_shipment_classes'   => array(
-				'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
 				'type'        => 'price',
 				'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class (have to be entered in €).', 'woocommerce-shipcloud' ),
 			),
@@ -519,25 +542,36 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'woocommerce-shipcloud' ) )
 			),
 			'calculate_products_type'           => array(
-				'title'       => __( 'Calculate Products', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Products', 'woocommerce-shipcloud' ),
 				'type'        => 'select',
 				'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'options'     => array(
-					'product'       => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
-					'product_sum'   => __( 'Sum Products: Charge shipping by sum all weights and volume of products.', 'woocommerce-shipcloud' ),
+					'product'       => __( 'Per Product: Charge shipping for each product individually', 'woocommerce-shipcloud' ),
 					'order'         => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
-					// todo Wording is bad!
+					'product_sum'   => __( 'Virtual Parcel: Create a virtual parcel with volume and weight of all products and charge shipping', 'woocommerce-shipcloud' ),
+				)
+			),
+			'calculate_products_type_fallback'           => array(
+				'title'       => __( 'Products (fallback)', 'woocommerce-shipcloud' ),
+				'type'        => 'select',
+				'description' => __( 'How should the price for products be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+				'class'       => 'select',
+				'default'     => 'class',
+				'options'     => array(
+					'product'      => __( 'Per Product: Charge shipping with fallback price for each product', 'woocommerce-shipcloud' ),
+					'order'        => __( 'Per Order: Charge shipping with fallback price for whole order', 'woocommerce-shipcloud' ),
 				)
 			),
 			'standard_price_products'           => array(
-				'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
 				'type'        => 'price',
 				'description' => __( 'Will be used if no sizes or weight is given to a Product (have to be entered in €).', 'woocommerce-shipcloud' ),
 			),
 			'calculation_type_shipment_classes' => array(
-				'title'       => __( 'Calculate Shipment Classes', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipment Classes', 'woocommerce-shipcloud' ),
 				'type'        => 'select',
 				'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
@@ -547,10 +581,22 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 					'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce' ),
 				)
 			),
+			'calculation_type_shipment_classes_fallback' => array(
+				'title'       => __( 'Shipment Classes (fallback)', 'woocommerce-shipcloud' ),
+				'type'        => 'select',
+				'description' => __( 'How should the price for shipment classes be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+				'class'       => 'select',
+				'default'     => 'class',
+				'options'     => array(
+					'class' => __( 'Per Class: Charge shipping with fallback price for each class', 'woocommerce-shipcloud' ),
+					'order' => __( 'Per Order: Charge shipping with fallback price for one class', 'woocommerce-shipcloud' ),
+				)
+			),
 			'standard_price_shipment_classes'   => array(
-				'title'       => __( 'Standard Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
 				'type'        => 'price',
-				'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class (have to be entered in €).', 'woocommerce-shipcloud' ),
+				'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class or for fallback (have to be entered in €).', 'woocommerce-shipcloud' ),
 			)
 		);
 	}
@@ -776,8 +822,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function generate_text_only_html( $key, $data )
 	{
-
-		$field    = $this->get_field_key( $key );
 		$defaults = array();
 
 		$data = wp_parse_args( $data, $defaults );
@@ -852,20 +896,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		/**
 		 * Ordering Parcels
 		 */
-		$ordered_package = wcsc_order_package_by_shipping_class( $package );
-		$parcels         = wcsc_get_order_parcels( $ordered_package );
-
-		/**
-		 * Getting carriers which have to be calculated
-		 */
-		if ( 'shopowner' === $this->get_option( 'carrier_selection' ) )
-		{
-			$carriers = array( $this->get_option( 'standard_carrier' ) => wcsc_get_carrier_display_name( $this->get_option( 'standard_carrier' ) ) );
-		}
-		else
-		{
-			$carriers = $this->get_allowed_carriers( true );
-		}
+		$ordered_package = $this->order_package_by_shipping_class( $package );
+		$parcels         = $this->get_ordered_parcels( $ordered_package );
+		$carriers = $this->get_carriers();
 
 		if( is_wp_error( $carriers ) )
 		{
@@ -882,12 +915,35 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 			if ( isset( $parcels[ 'shipping_classes' ] ) )
 			{
-				$sum = $this->get_price_for_shipping_classes( $carrier_name, $parcels[ 'shipping_classes' ] );
+				$price = $this->get_price_for_shipping_classes( $carrier_name, $parcels[ 'shipping_classes' ] );
+
+
+				if( is_wp_error( $price ) )
+				{
+					$this->log( $price->get_error_message() );
+					$price = $this->get_fallback_price_for_shipment_classes( $parcels[ 'shipping_classes' ] );
+					$sum += $price;
+				}
+				else
+				{
+					$sum += $price;
+				}
 			}
 
 			if ( isset( $parcels[ 'products' ] ) )
 			{
-				$sum = $this->get_price_for_products( $carrier_name, $parcels[ 'products' ] );
+				$price = $this->get_price_for_products( $carrier_name, $parcels[ 'products' ] );
+
+				if( is_wp_error( $price ) )
+				{
+					$this->log( $price->get_error_message() );
+					$price = $this->get_fallback_price_for_products( $parcels[ 'products' ] );
+					$sum += $price;
+				}
+				else
+				{
+					$sum += $price;
+				}
 			}
 
 			$rate = array(
@@ -903,12 +959,123 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	}
 
 	/**
+	 * Ordering Package by Shipping Class
+	 *
+	 * @param $package Package given on
+	 *
+	 * @return array $shipping_classes
+	 * @since 1.0.0
+	 */
+	private function order_package_by_shipping_class( $package )
+	{
+		$shipping_classes = array();
+
+		foreach ( $package[ 'contents' ] as $item_id => $values )
+		{
+			if ( $values[ 'data' ]->needs_shipping() )
+			{
+				$found_class = $values[ 'data' ]->get_shipping_class();
+
+				if ( ! isset( $shipping_classes[ $found_class ] ) )
+				{
+					$shipping_classes[ $found_class ] = array();
+				}
+
+				$shipping_classes[ $found_class ][ $item_id ] = $values;
+			}
+		}
+
+		return $shipping_classes;
+	}
+
+	/**
+	 * Calculate Needed Parcels by Ordered package
+	 *
+	 * @param array $ordered_package
+	 *
+	 * @return array $parcels
+	 * @since 1.0.0
+	 */
+	private function get_ordered_parcels( $ordered_package )
+	{
+		$parcels  = array();
+
+		foreach ( $ordered_package AS $shipping_class => $products )
+		{
+			if ( '' === $shipping_class )
+			{
+				/**
+				 * Products
+				 */
+				foreach ( $products AS $product )
+				{
+					$length = get_post_meta( $product[ 'product_id' ], '_length', true );
+					$width  = get_post_meta( $product[ 'product_id' ], '_width', true );
+					$height = get_post_meta( $product[ 'product_id' ], '_height', true );
+					$weight = get_post_meta( $product[ 'product_id' ], '_weight', true );
+
+					// If there is missing a dimension, set FALSE
+					if ( '' == $length || '' == $width || '' == $height || '' == $weight )
+					{
+						$dimensions = array(
+							'quantity' => $product[ 'quantity' ]
+						);
+					}
+					else
+					{
+						$dimensions = array(
+							'length' => $length,
+							'width'  => $width,
+							'height' => $height,
+							'weight' => $weight,
+							'quantity' => $product[ 'quantity' ]
+						);
+					}
+
+					$parcels[ 'products' ][] = $dimensions;
+				}
+			}
+			else
+			{
+				/**
+				 * Shipment Classes
+				 */
+				$taxonomy = get_term_by( 'name', $shipping_class, 'product_shipping_class' );
+
+				$width  = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_width' );
+				$height = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_height' );
+				$length = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_length' );
+				$weight = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_weight' );
+
+				// If there is missing a dimension, set FALSE
+				if ( '' == $length || '' == $width || '' == $height || '' == $weight )
+				{
+					$dimensions = null;
+				}
+				else
+				{
+					$dimensions = array(
+						'length' => $length,
+						'width'  => $width,
+						'height' => $height,
+						'weight' => $weight
+					);
+				}
+
+				$parcels[ 'shipping_classes' ][ $shipping_class ] = $dimensions;
+			}
+		}
+
+		return $parcels;
+	}
+
+	/**
 	 * Getting sender address
 	 *
 	 * @return array $sender
 	 * @since 1.1.0
 	 */
-	public function get_sender()
+	private function get_sender()
 	{
 		return array(
 			'street'    => $this->get_option( 'sender_street' ),
@@ -926,7 +1093,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return array
 	 * @since 1.1.0
 	 */
-	public function get_recipient( $package )
+	private function get_recipient( $package )
 	{
 		$recipient_street = wcsc_explode_street( $package[ 'destination' ][ 'address' ] );
 
@@ -946,6 +1113,29 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	}
 
 	/**
+	 * Getting Carriers
+	 *
+	 * @return array
+	 * @since 1.1.0
+	 */
+	private function get_carriers()
+	{
+		/**
+		 * Getting carriers which have to be calculated
+		 */
+		if ( 'shopowner' === $this->get_option( 'carrier_selection' ) )
+		{
+			$carriers = array( $this->get_option( 'standard_carrier' ) => wcsc_get_carrier_display_name( $this->get_option( 'standard_carrier' ) ) );
+		}
+		else
+		{
+			$carriers = $this->get_allowed_carriers( true );
+		}
+
+		return $carriers;
+	}
+
+	/**
 	 * Getting price for products within shipping classes
 	 *
 	 * @param string $carrier_name
@@ -954,7 +1144,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return float|WP_Error $sum
 	 * @since 1.1.0
 	 */
-	public function get_price_for_shipping_classes( $carrier_name, $parcels )
+	private function get_price_for_shipping_classes( $carrier_name, $parcels )
 	{
 		$sum = 0;
 		$calculation_type_shipment_classes = $this->get_option( 'calculation_type_shipment_classes' );
@@ -963,13 +1153,19 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		{
 			// Charge for all products
 			case 'class':
-				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'shipping_class' );
+				if( is_wp_error( $prices ) ){
+					return $prices;
+				}
 				$sum = array_sum( $prices );
 				break;
 
 			// Charge only for the most expensive parcel
 			case 'order':
-				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'shipping_class' );
+				if( is_wp_error( $prices ) ) {
+					return $prices;
+				}
 				$sum = max( $prices );
 				break;
 		}
@@ -986,7 +1182,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return float|WP_Error $sum
 	 * @since 1.1.0
 	 */
-	public function get_price_for_products( $carrier_name, $parcels )
+	private function get_price_for_products( $carrier_name, $parcels )
 	{
 		$sum = 0;
 		$calculate_products_type = $this->get_option( 'calculate_products_type' );
@@ -995,19 +1191,99 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		{
 			// Charge for all products
 			case 'product':
-				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'product' );
+
+				if( is_wp_error( $prices ) )
+				{
+					return $prices;
+				}
 				$sum = array_sum( $prices );
+
 				break;
 
 			// Charge for a virtual parcel
 			case 'product_sum':
-				$sum = $this->get_price_for_virtual_parcel( $carrier_name, $parcels );
+				$price = $this->get_price_for_virtual_parcel( $carrier_name, $parcels, 'product' );
+
+				if( is_wp_error( $price ) ){
+					return $price;
+				}
+				$sum = $price;
 				break;
 
 			// Charge only for the most expensive parcel
 			case 'order':
-				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels );
+				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'product' );
+
+				if( is_wp_error( $prices ) )
+				{
+					return $prices;
+				}
 				$sum = max( $prices );
+				break;
+		}
+
+		return $sum;
+	}
+
+	/**
+	 * Getting fallback price for products
+	 *
+	 * @param array $classes
+	 *
+	 * @return int|mixed|string
+	 * @since 1.1.0
+	 */
+	private function get_fallback_price_for_shipment_classes( $classes )
+	{
+		$calculate_products_type = $this->get_option( 'calculation_type_shipment_classes_fallback' );
+
+		$sum = 0;
+		switch( $calculate_products_type )
+		{
+			// Charge for all classes
+			case 'class':
+				$sum = count( $classes ) * $this->get_option( 'standard_price_shipment_classes' );
+				break;
+
+			// Charge only for the most expensive class
+			case 'order':
+				$sum = $this->get_option( 'standard_price_shipment_classes' );
+				break;
+		}
+
+		return $sum;
+	}
+
+	/**
+	 * Getting fallback price for products
+	 *
+	 * @param array $parcels
+	 *
+	 * @return int|mixed|string
+	 * @since 1.1.0
+	 */
+	private function get_fallback_price_for_products( $products )
+	{
+		$calculate_products_type = $this->get_option( 'calculate_products_type_fallback' );
+		$sum = 0;
+
+		switch( $calculate_products_type )
+		{
+			// Charge for all products
+			case 'product':
+				$number_products = 0;
+				foreach( $products AS $product )
+				{
+					$number_products += $product[ 'quantity' ];
+				}
+
+				$sum = $number_products * $this->get_option( 'standard_price_products' );
+				break;
+
+			// Charge only for the most expensive parcel
+			case 'order':
+				$sum = $this->get_option( 'standard_price_products' );
 				break;
 		}
 
@@ -1018,12 +1294,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * Getting prices for parcels
 	 *
 	 * @param string $carrier_name
-	 * @param array $parcels
+	 * @param array $parcel
+	 * @param string $type
 	 *
-	 * @return array $prices
+	 * @return array|WP_Error $prices
 	 * @since 1.1.0
 	 */
-	public function get_prices_for_parcels( $carrier_name, $parcels )
+	private function get_prices_for_parcels( $carrier_name, $parcels, $type )
 	{
 		$prices = array();
 
@@ -1031,13 +1308,27 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		{
 			if ( is_array( $parcel ) )
 			{
-				$prices[] = $this->get_price( $carrier_name, $parcel );
+				$price = $this->get_price( $carrier_name, $parcel );
 
-				if ( is_wp_error( $price ) )
+				if( ! is_wp_error( $price ))
 				{
-					$this->log( $price->get_error_message() );
-					continue;
+					if( array_key_exists( 'quantity', $parcel ) )
+					{
+						for( $i = 0; $i < $parcel[ 'quantity' ]; $i++ )
+						{
+							$prices[] = $price;
+						}
+					}
+					else
+					{
+						$prices[] = $price;
+					}
 				}
+				else
+				{
+					return $price;
+				}
+
 			}
 		}
 
@@ -1053,9 +1344,15 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return float|WP_Error $price
 	 * @since 1.1.0
 	 */
-	public function get_price_for_virtual_parcel( $carrier_name, $parcels )
+	private function get_price_for_virtual_parcel( $carrier_name, $parcels )
 	{
 		$virtual_parcel = $this->calculate_virtual_parcel( $parcels );
+
+		if( is_wp_error( $virtual_parcel ) )
+		{
+			return $virtual_parcel;
+		}
+
 		return $this->get_price( $carrier_name, $virtual_parcel );
 	}
 
@@ -1068,7 +1365,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return float|WP_Error
 	 * @since 1.1.0
 	 */
-	public function get_price( $carrier_name, $parcel ) {
+	private function get_price( $carrier_name, $parcel ) {
 		$this->init_shipcloud_api();
 
 		$package = array(
@@ -1095,24 +1392,37 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 *
 	 * @param array $parcels
 	 *
-	 * @return array $virtual_parcel
+	 * @return array|WP_Error $virtual_parcel
 	 * @since 1.1.0
 	 */
-	public function calculate_virtual_parcel( $parcels )
+	private function calculate_virtual_parcel( $parcels )
 	{
 		$total_weight = 0;
 		$total_volume = 0;
 
 		foreach ( $parcels AS $key => $parcel )
 		{
-			if ( is_array( $parcel ) ) {
+			if ( is_array( $parcel ) && array_key_exists( 'width', $parcel ) && array_key_exists( 'height', $parcel ) && array_key_exists( 'length', $parcel ) )
+			{
 				$parcel_volume = absint( $parcel[ 'width' ] ) * absint( $parcel[ 'height' ] ) * absint( $parcel[ 'length' ] );
+				$parcel_weight = floatval( $parcel[ 'weight' ] );;
+
+				if( array_key_exists( 'quantity', $parcel ) )
+				{
+					$parcel_volume = absint( $parcel[ 'quantity' ] ) * $parcel_volume;
+					$parcel_weight = absint( $parcel[ 'quantity' ] ) * $parcel_weight;
+				}
+
 				$total_volume += $parcel_volume;
-				$total_weight += floatval( $parcel[ 'weight' ] );
+				$total_weight += $parcel_weight;
+			}
+			else
+			{
+				return new WP_Error( 'wcsc-calculate-virtual-parcel-missing-parcel', __( 'Parcel dimensions are missing', 'woocommerce-shipcloud' ) );
 			}
 		}
 
-		$average_length = round( sqrt( sqrt( $total_volume ) ), 2 );
+		$average_length = round( pow( $total_volume, (1/3) ), 2 );
 
 		$virtual_parcel = array(
 			'width'  => $average_length,
@@ -1132,7 +1442,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return float $costs
 	 * @since 1.0.0
 	 */
-	public function get_shipping_class_costs( $shipping_class )
+	private function get_shipping_class_costs( $shipping_class )
 	{
 		$term = get_term_by( 'slug', $shipping_class, 'product_shipping_class' );
 
@@ -1169,7 +1479,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 *
 	 * @since 1.0.0
 	 */
-	public function get_parcel_retail_price( $parcel_id = 0 )
+	private function get_parcel_retail_price( $parcel_id = 0 )
 	{
 		if ( 0 != $parcel_id && '' != $parcel_id )
 		{
@@ -1199,7 +1509,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 *
 	 * @since 1.0.0
 	 */
-	public function get_product_costs( $product_id )
+	private function get_product_costs( $product_id )
 	{
 		$parcel_id    = get_post_meta( $product_id, '_wcsc_parcel_id', true );
 		$retail_price = $this->get_parcel_retail_price( $parcel_id );
@@ -1215,7 +1525,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return array $carriers
 	 * @since 1.1.0
 	 */
-	public function get_allowed_carriers( $only_customer_services = false )
+	private function get_allowed_carriers( $only_customer_services = false )
 	{
 		$this->init_shipcloud_api();
 

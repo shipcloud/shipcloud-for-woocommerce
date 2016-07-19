@@ -99,10 +99,10 @@ class WC_Shipcloud_Shippig_Classes
 	public function add_shipping_class_columns( $columns )
     {
         $shipcloud_columns = array(
-            'shipcloud-parcel-width'    => __( 'Width (cm)', 'woocommerce-shipcloud' ),
-            'shipcloud-parcel-height'  => __( 'Height (cm)', 'woocommerce-shipcloud' ),
-            'shipcloud-parcel-length'   => __( 'Length (cm)', 'woocommerce-shipcloud' ),
-            'shipcloud-parcel-weight'   => __( 'Weight (kg)', 'woocommerce-shipcloud' ),
+            'shipcloud-parcel-width'    => __( 'Shipcloud Parcel Width (cm)', 'woocommerce-shipcloud' ),
+            'shipcloud-parcel-height'  => __( 'Shipcloud Parcel Height (cm)', 'woocommerce-shipcloud' ),
+            'shipcloud-parcel-length'   => __( 'Shipcloud Parcel Length (cm)', 'woocommerce-shipcloud' ),
+            'shipcloud-parcel-weight'   => __( 'Shipcloud Parcel Weight (kg)', 'woocommerce-shipcloud' ),
         );
 
         $columns = array_merge( $columns, $shipcloud_columns );
@@ -172,20 +172,29 @@ class WC_Shipcloud_Shippig_Classes
 	 */
     public function save_class( $term_id, $data )
     {
-	    if ( isset( $data['width'] ) ) {
+	    if ( isset( $data['width'] ) )
+	    {
             $parcel_width = wc_clean( $data['width'] );
 	    }
 
-	    if ( isset( $data['height'] ) ) {
+	    if ( isset( $data['height'] ) )
+	    {
             $parcel_height = wc_clean( $data['height'] );
 	    }
 
-	    if ( isset( $data['length'] ) ) {
+	    if ( isset( $data['length'] ) )
+	    {
             $parcel_length = wc_clean( $data['length'] );
 	    }
 
-	    if ( isset( $data['weight'] ) ) {
+	    if ( isset( $data['weight'] ) )
+	    {
             $parcel_weight = wc_clean( $data['weight'] );
+	    }
+
+	    if( is_array( $term_id ) )
+	    {
+	    	$term_id = $term_id[ 'term_id' ];
 	    }
 
         update_option( 'shipping_class_' . $term_id . '_shipcloud_width', $parcel_width );

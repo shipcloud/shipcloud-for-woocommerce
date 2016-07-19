@@ -103,8 +103,6 @@ function wcsc_get_parceltemplate( $template_id )
  */
 function wcsc_get_parceltemplates( $args = array() )
 {
-	global $wpdb;
-
 	$defaults = array(
 		'posts_per_page' => - 1,
 		'orderby'        => '',
