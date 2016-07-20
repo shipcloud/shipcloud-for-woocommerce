@@ -178,7 +178,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function init()
 	{
-		if ( ( empty( $this->get_option( 'api_key' ) ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
+		$api_key = $this->get_option( 'api_key' );
+
+		if ( ( empty( $api_key ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
@@ -223,7 +225,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$this->available_carriers = $available_carriers;
 		}
 
-		if ( empty( $this->get_option( 'allowed_carriers' ) ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
+		$allowed_carriers = $this->get_option( 'allowed_carriers' );
+		if ( empty( $allowed_carriers ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
 		{
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one allowed <a href="%s">shipment method</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 			return false;
