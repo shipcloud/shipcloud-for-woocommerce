@@ -26,15 +26,18 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 = 1.1.0 =
 * Enhanced: Added shipping zone support which have been introduced in WooCommerce 2.6.0
 * Enhanced: Added option for people who only want to use label creation
-* Enhanced: Added option for calculating products by adding all sizes and volume to one virtual parcel which will be requested
+* Enhanced: Added option for calculating with a virtual parcel, by adding all volume and weights
 * Enhanced: Shipments are now also deletable if the have a label
 * Enhanced: Only loading JS and CSS when plugin needs it
 * Enhanced: Logging if API Limit is reached
-* Enhanced: Optimized shipment calculation by better code structure and better performance on APU Requests
+* Enhanced: Optimized shipment calculation by better code structure and better performance on API Requests
+* Enhanced: Created fallback options on problems with API
+* Fixed: Shipment classes could not be edited anymore in WooCommerce 2.6.0 because of GUI change
 * Fixed: Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
 * Fixed: JavaScript which stopped all JS in WP-Admin in Safari Browser
 * Fixed: Changed to WordPress function get_plugin_url() instead of older own function
 * Fixed: Compatibility problems with WooCommerce 2.6 parent class
+* Fixed: Fatal error on activation on PHP versions lower than 5.5
 
 = 1.0.1 =
 * Fixed massive number of calls for carriers
