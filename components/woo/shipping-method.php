@@ -111,6 +111,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->id                 = 'shipcloud';
 		$this->instance_id 		  = absint( $instance_id );
 		$this->title              = __( 'shipcloud.io', 'woocommerce-shipcloud' );
+		$this->method_title       = $this->title;
 		$this->method_description = __( 'Add shipcloud to your shipping methods', 'woocommerce-shipcloud' );
 		$this->callback_url       = WC()->api_request_url( 'shipcloud' );
 
