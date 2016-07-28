@@ -32,6 +32,7 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 * Enhanced: Logging if API Limit is reached
 * Enhanced: Optimized shipment calculation by better code structure and better performance on API Requests
 * Enhanced: Created fallback options on problems with API
+* Enhanced: Better street & number splitting
 * Fixed: Shipment classes could not be edited anymore in WooCommerce 2.6.0 because of GUI change
 * Fixed: Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
 * Fixed: JavaScript which stopped all JS in WP-Admin in Safari Browser

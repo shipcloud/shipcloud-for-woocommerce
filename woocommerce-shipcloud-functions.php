@@ -147,12 +147,28 @@ function wcsc_explode_street( $street )
 {
 	$matches = array();
 
-	if( !preg_match( '/(?P<address>[^\d]+) (?P<number>\d+.?)/', $street, $matches ) )
+	if( preg_match( '/(?P<address>[^\d]+) (?P<number>\d+.?)/', $street, $matches ) )
 	{
+		return $matches;
+	}
+    elseif( preg_match('/([^\d]+)\s?(.+)/i', $street, $matches ) )
+	{
+
+	    $street = array(
+	        'address'   =>  $matches[ 1 ],
+	        'number'   =>  $matches[ 2 ]
+        );
 		return $street;
 	}
-
-	return $matches;
+	else
+    {
+        explode( ' ', $street );
+        $street = array(
+            'address'   =>  $matches[ 0 ],
+            'number'   =>  $matches[ 1 ]
+        );
+        return $street;
+    }
 }
 
 /**
