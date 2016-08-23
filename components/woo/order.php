@@ -150,6 +150,7 @@ class WC_Shipcloud_Order
 				'street_nr'  => $options[ 'sender_street_nr' ],
 				'postcode'   => $options[ 'sender_postcode' ],
 				'city'       => $options[ 'sender_city' ],
+				'state'      => $options[ 'sender_state' ],
 				'country'    => $options[ 'sender_country' ],
 			);
 		}
@@ -177,6 +178,7 @@ class WC_Shipcloud_Order
 				'street_nr'  => $recipient_street_nr,
 				'postcode'   => $order->shipping_postcode,
 				'city'       => $order->shipping_city,
+				'state'      => $order->shipping_state,
 				'country'    => $order->shipping_country,
 			);
 		}
@@ -247,6 +249,11 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="fullsize">
+						<input type="text" name="sender_address[state]" value="<?php echo $sender[ 'state' ]; ?>" disabled>
+						<label for="sender_address[state]"><?php _e( 'State', 'woocommerce-shipcloud' ); ?></label>
+					</p>
+
+					<p class="fullsize">
 						<select name="sender_address[country]" disabled>
 							<?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
 								<?php if ( $key == $sender[ 'country' ] ): $selected = ' selected';
@@ -299,6 +306,11 @@ class WC_Shipcloud_Order
 					<p class="fullsize">
 						<input type="text" name="recipient_address[city]" value="<?php echo $recipient[ 'city' ]; ?>" disabled>
 						<label for="recipient_address[city]"><?php _e( 'City', 'woocommerce-shipcloud' ); ?></label>
+					</p>
+
+					<p class="fullsize">
+						<input type="text" name="recipient_address[state]" value="<?php echo $recipient[ 'state' ]; ?>" disabled>
+						<label for="recipient_address[state]"><?php _e( 'State', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="fullsize">
@@ -365,6 +377,7 @@ class WC_Shipcloud_Order
 		$package = array();
 		$package['destination']['country']   = $recipient['country'];
 		$package['destination']['postcode']  = $recipient['postcode'];
+		$package['destination']['state']     = $recipient['state'];
 		$package['destination']['city']      = $recipient['city'];
 		$package['destination']['address']   = $recipient['street'] . ' ' . $recipient['street_nr'];
 
@@ -701,7 +714,8 @@ class WC_Shipcloud_Order
 						<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
 						<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?><?php echo $data[ 'sender_last_name' ]; ?></div>
 						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?><?php echo $data[ 'sender_street_no' ]; ?></div>
-						<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?><?php echo $data[ 'sender_city' ]; ?></div>
+						<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
+						<div class="sender_state"><?php echo $data[ 'sender_state' ]; ?></div>
 						<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
 					</div>
 
@@ -709,7 +723,8 @@ class WC_Shipcloud_Order
 						<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
 						<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?><?php echo $data[ 'recipient_last_name' ]; ?></div>
 						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?><?php echo $data[ 'recipient_street_no' ]; ?></div>
-						<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?><?php echo $data[ 'recipient_city' ]; ?></div>
+						<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
+						<div class="recipient_state"><?php echo $data[ 'recipient_state' ]; ?></div>
 						<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
 					</div>
 
@@ -862,6 +877,7 @@ class WC_Shipcloud_Order
 			'street_no' => $_POST[ 'sender_street_nr' ],
 			'zip_code'  => $_POST[ 'sender_postcode' ],
 			'city'      => $_POST[ 'sender_city' ],
+			'state'     => $_POST[ 'sender_state' ],
 			'country'   => $_POST[ 'sender_country' ]
 		);
 
@@ -870,6 +886,7 @@ class WC_Shipcloud_Order
 			'street_no' => $_POST[ 'recipient_street_nr' ],
 			'zip_code'  => $_POST[ 'recipient_postcode' ],
 			'city'      => $_POST[ 'recipient_city' ],
+			'state'     => $_POST[ 'recipient_state' ],
 			'country'   => $_POST[ 'recipient_country' ]
 		);
 
@@ -927,6 +944,7 @@ class WC_Shipcloud_Order
 			'street_no'  => $_POST[ 'sender_street_nr' ],
 			'zip_code'   => $_POST[ 'sender_postcode' ],
 			'city'       => $_POST[ 'sender_city' ],
+			'state'      => $_POST[ 'sender_state' ],
 			'country'    => $_POST[ 'sender_country' ],
 		);
 
@@ -938,6 +956,7 @@ class WC_Shipcloud_Order
 			'street_no'  => $_POST[ 'recipient_street_nr' ],
 			'zip_code'   => $_POST[ 'recipient_postcode' ],
 			'city'       => $_POST[ 'recipient_city' ],
+			'state'      => $_POST[ 'recipient_state' ],
 			'country'    => $_POST[ 'recipient_country' ],
 			'email'      => $order->billing_email
 		);
@@ -992,6 +1011,7 @@ class WC_Shipcloud_Order
 			'sender_street_no'     => $_POST[ 'sender_street_nr' ],
 			'sender_zip_code'      => $_POST[ 'sender_postcode' ],
 			'sender_city'          => $_POST[ 'sender_city' ],
+			'sender_state'         => $_POST[ 'sender_state' ],
 			'country'              => $_POST[ 'sender_country' ],
 			'recipient_first_name' => $_POST[ 'recipient_first_name' ],
 			'recipient_last_name'  => $_POST[ 'recipient_last_name' ],
@@ -1000,6 +1020,7 @@ class WC_Shipcloud_Order
 			'recipient_street_no'  => $_POST[ 'recipient_street_nr' ],
 			'recipient_zip_code'   => $_POST[ 'recipient_postcode' ],
 			'recipient_city'       => $_POST[ 'recipient_city' ],
+			'recipient_state'      => $_POST[ 'recipient_state' ],
 			'recipient_country'    => $_POST[ 'recipient_country' ],
 			'date_created'         => time()
 		);

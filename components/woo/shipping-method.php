@@ -304,7 +304,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( $standard_address_err )
 		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter your <a href="%s">standard sender data</a>! At least, street, street number, postcode, city and country.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter your <a href="%s">standard sender data</a>! At least, street, street number, postcode, city, state and country.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 			return false;
 		}
 
@@ -501,6 +501,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'title'       => __( 'Postcode', 'woocommerce-shipcloud' ),
 				'type'        => 'text',
 				'description' => __( 'Enter standard sender postcode for shipment.', 'woocommerce-shipcloud' ),
+				'desc_tip'    => true,
+			),
+			'sender_state'                      => array(
+				'title'       => __( 'State', 'woocommerce-shipcloud' ),
+				'type'        => 'text',
+				'description' => __( 'Enter standard sender state for shipment.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
 			),
 			'sender_city'                       => array(
@@ -1086,6 +1092,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			'street_no' => $this->get_option( 'sender_street_nr' ),
 			'zip_code'  => $this->get_option( 'sender_postcode' ),
 			'city'      => $this->get_option( 'sender_city' ),
+			'state'     => $this->get_option( 'sender_state' ),
 			'country'   => $this->get_option( 'sender_country' ),
 		);
 	}
@@ -1112,6 +1119,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			'street_no' => $recipient_street_nr,
 			'zip_code'  => $package[ 'destination' ][ 'postcode' ],
 			'city'      => $package[ 'destination' ][ 'city' ],
+			'state'     => $package[ 'destination' ][ 'state' ],
 			'country'   => $package[ 'destination' ][ 'country' ]
 		);
 	}
