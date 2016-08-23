@@ -730,7 +730,7 @@ class Woocommerce_Shipcloud_API
 	 *
 	 * @param string $shipment_id
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 * @since 1.0.0
 	 */
 	public function create_label( $shipment_id )
@@ -745,11 +745,6 @@ class Woocommerce_Shipcloud_API
 		if ( false !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
 		{
 			return $request;
-
-			return array(
-				'id'           => $request[ 'body' ][ 'id' ],
-				'tracking_url' => $request[ 'body' ][ 'tracking_url' ]
-			);
 		}
 		else
 		{
@@ -757,8 +752,6 @@ class Woocommerce_Shipcloud_API
 
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
-
-		return $request_data;
 	}
 
 	/**
