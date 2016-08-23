@@ -748,15 +748,29 @@ class WC_Shipcloud_Order
 								<td><?php echo $display_id; ?></td>
 							</tr>
 							<tr>
+								<th><?php _e( 'Tracking Number:', 'woocommerce-shipcloud' ); ?></th>
+								<td class="tracking-number">
+								<?php if( array_key_exists( 'carrier_tracking_no', $data ) && ! empty( $data[ 'carrier_tracking_no' ] ) ): ?>
+									<?php echo $data[ 'carrier_tracking_no' ]; ?>
+								<?php else: ?>
+									<?php _e( 'Not available yet', 'woocommerce-shipcloud' ); ?>
+								<?php endif; ?>
+								</td>
+							</tr>
+							<tr>
 								<th><?php _e( 'Tracking Status:', 'woocommerce-shipcloud' ); ?></th>
 								<td><?php echo $shipment_status; ?></td>
 							</tr>
-							<?php if ( ! empty( $data[ 'price' ] ) ): ?>
 								<tr>
 									<th><?php _e( 'Price:', 'woocommerce-shipcloud' ); ?></strong></th>
-									<td><?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?></td>
+									<td class="price">
+										<?php if ( ! empty( $data[ 'price' ] ) ): ?>
+											<?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?>
+										<?php else: ?>
+											<?php _e( 'Not available yet', 'woocommerce-shipcloud' ); ?>
+										<?php endif; ?>
+									</td>
 								</tr>
-							<?php endif; ?>
 							</tbody>
 						</table>
 					</div>
@@ -1046,9 +1060,10 @@ class WC_Shipcloud_Order
 		{
 			if ( $shipment[ 'id' ] == $request[ 'body' ][ 'id' ] )
 			{
-				$shipments[ $key ][ 'tracking_url' ] = $request[ 'body' ][ 'tracking_url' ];
-				$shipments[ $key ][ 'label_url' ]    = $request[ 'body' ][ 'label_url' ];
-				$shipments[ $key ][ 'price' ]        = $request[ 'body' ][ 'price' ];
+				$shipments[ $key ][ 'tracking_url' ]               = $request[ 'body' ][ 'tracking_url' ];
+				$shipments[ $key ][ 'label_url' ]                  = $request[ 'body' ][ 'label_url' ];
+				$shipments[ $key ][ 'price' ]                      = $request[ 'body' ][ 'price' ];
+				$shipments[ $key ][ 'carrier_tracking_no' ]        = $request[ 'body' ][ 'carrier_tracking_no' ];
 				break;
 			}
 		}
@@ -1056,11 +1071,12 @@ class WC_Shipcloud_Order
 		update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments[ $key ], $shipments_old[ $key ] );
 
 		$result = array(
-			'status'       => 'OK',
-			'id'           => $request[ 'body' ][ 'id' ],
-			'tracking_url' => $request[ 'body' ][ 'tracking_url' ],
-			'label_url'    => $request[ 'body' ][ 'label_url' ],
-			'price'        => $request[ 'body' ][ 'price' ]
+			'status'                     => 'OK',
+			'id'                         => $request[ 'body' ][ 'id' ],
+			'tracking_url'               => $request[ 'body' ][ 'tracking_url' ],
+			'label_url'                  => $request[ 'body' ][ 'label_url' ],
+			'price'                      => wc_price( $request[ 'body' ][ 'price' ], array( 'currency' => 'EUR' ) ),
+			'carrier_tracking_no'        => $request[ 'body' ][ 'carrier_tracking_no' ]
 		);
 
 		echo json_encode( $result );

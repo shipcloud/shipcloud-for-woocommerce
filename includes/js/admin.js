@@ -401,6 +401,11 @@ jQuery( function( $ ) {
 				var div_create_label = button.parent();
 				var div_download_label = button.parent().parent().find( '.button-download-label' );
 				var div_delete_label = button.parent().parent().find( '.button-delete-shipment' );
+				var tracking_nr_text = button.parent().parent().parent().find( '.tracking-number' );
+				var price_text = button.parent().parent().parent().find( '.price' );
+
+				tracking_nr_text.text( result.carrier_tracking_no );
+				price_text.html( result.price );
 
 				div_download_label.find( 'a' ).attr( 'href', result.label_url );
 				div_download_label.find( 'a' ).attr( 'target', '_blank' );

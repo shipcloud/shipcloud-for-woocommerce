@@ -24,6 +24,8 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 == Changelog ==
 
 = 1.1.0 =
+* Enhanced: Added Tracking numbers in labels
+* Enhanced: Added API functions wcsc_get_shipments() and wcsc_get_tracking_numbers()
 * Enhanced: Added shipping zone support which have been introduced in WooCommerce 2.6.0
 * Enhanced: Added option for people who only want to use label creation
 * Enhanced: Added option for calculating with a virtual parcel, by adding all volume and weights
