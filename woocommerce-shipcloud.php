@@ -164,6 +164,7 @@ class WooCommerce_Shipcloud
 	{
 		// Loading functions
 		require_once( WCSC_FOLDER . '/woocommerce-shipcloud-functions.php' );
+		require_once( WCSC_FOLDER . '/includes/shipcloud/i18n-iso-convert-class.php' );
 		require_once( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
 	}
 

@@ -640,12 +640,12 @@ class Woocommerce_Shipcloud_API
 					'package'               => $package,
 					'create_shipping_label' => $create_label,
 					'notification_email'    => $notification_email,
-					'additional_services'   => array( // Needed for
+					'additional_services'   => array(
 						array(
 							'name'       => 'advance_notice',
 							'properties' => array(
 								'email'    => $to_email,
-								'language' => strtolower( $to[ 'country' ] )
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '693-1', strtolupper( $to[ 'country' ] ) )
 							)
 						)
 					)
