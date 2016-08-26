@@ -1,6 +1,7 @@
 *** WooCommerce Shipcloud Changelog ***
 
 2016.**.** - version 1.1.0
+* Enhanced: Added base functionality for converting ISO language strings for DPD
 * Enhanced: Added Notification Email for sending status changes to recipient
 * Enhanced: Added state to addresses
 * Enhanced: Added Tracking numbers in labels
