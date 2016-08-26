@@ -24,6 +24,7 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 == Changelog ==
 
 = 1.1.0 =
+* Enhanced: Added Notification Email for sending status changes to recipient
 * Enhanced: Added state to addresses
 * Enhanced: Added Tracking numbers in labels
 * Enhanced: Added API functions wcsc_get_shipments() and wcsc_get_tracking_numbers()

@@ -621,7 +621,7 @@ class Woocommerce_Shipcloud_API
 	 * @return string|WP_Error
 	 * @since 1.0.0
 	 */
-	public function create_shipment( $carrier, $from, $to, $package, $create_label = false )
+	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '' )
 	{
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
@@ -639,6 +639,7 @@ class Woocommerce_Shipcloud_API
 					'to'                    => $to,
 					'package'               => $package,
 					'create_shipping_label' => $create_label,
+					'notification_email'    => $notification_email,
 					'additional_services'   => array( // Needed for
 						array(
 							'name'       => 'advance_notice',
@@ -662,7 +663,8 @@ class Woocommerce_Shipcloud_API
 					'from'                  => $from,
 					'to'                    => $to,
 					'package'               => $package,
-					'create_shipping_label' => $create_label
+					'create_shipping_label' => $create_label,
+				    'notification_email'    => $notification_email,
 				);
 
 				// Moving the description to the root on international shipment
@@ -682,7 +684,8 @@ class Woocommerce_Shipcloud_API
 					'from'                  => $from,
 					'to'                    => $to,
 					'package'               => $package,
-					'create_shipping_label' => $create_label
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $notification_email,
 				);
 
 				break;

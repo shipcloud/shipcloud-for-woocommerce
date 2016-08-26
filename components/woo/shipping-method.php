@@ -380,6 +380,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				)
 			),
 			'standard_carrier'                  => $standard_carrier_settings,
+			'notification_email'                => array(
+				'title'       => __( 'Notification Email', 'woocommerce-shipcloud' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Send notification emails to recipients on status changes of shipment.', 'woocommerce-shipcloud' ),
+				'default'     => 'yes'
+			),
 			'callback_url'                      => array(
 				'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
 				'type'        => 'text_only',

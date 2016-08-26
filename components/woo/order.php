@@ -975,7 +975,12 @@ class WC_Shipcloud_Order
 			$create_label = true;
 		}
 
-		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label );
+		$notification_email = '';
+		if( array_key_exists( 'notification_email', $options ) && 'yes' === $options[ 'notification_email' ] ){
+			$notification_email = apply_filters( 'wcsc_notification_email', $order->billing_email, $order );
+		}
+
+		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email );
 
 		if ( is_wp_error( $shipment ) )
 		{
