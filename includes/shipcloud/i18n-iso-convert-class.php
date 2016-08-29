@@ -56,41 +56,41 @@ class I18n_ISO_Convert {
 				'language'       => 'German',
 				'3166-1-alpha-2' => 'AT',
 				'3166-1-alpha-3' => 'AUT',
-				'693-1'          => 'ES',
+				'639-1'          => 'ES',
 			),
 			array(
 				'country'        => 'Ethiopia',
 				'language'       => 'Amharic',
 				'3166-1-alpha-2' => 'ET',
 				'3166-1-alpha-3' => 'ETH',
-				'693-1'          => 'AM',
+				'639-1'          => 'AM',
 			),
 			array(
 				'country'        => 'Denmark',
 				'language'       => 'Danish',
 				'3166-1-alpha-2' => 'DK',
 				'3166-1-alpha-3' => 'DNK',
-				'693-1'          => 'DA',
+				'639-1'          => 'DA',
 			),
 			array(
 				'country'        => 'France',
 				'language'       => 'French',
 				'3166-1-alpha-2' => 'FR',
 				'3166-1-alpha-3' => 'FRA',
-				'693-1'          => 'FR',
+				'639-1'          => 'FR',
 			),
 			array(
 				'country'        => 'Germany',
 				'3166-1-alpha-2' => 'DE',
 				'3166-1-alpha-3' => 'DEU',
-				'693-1'          => 'DE',
+				'639-1'          => 'DE',
 			),
 			array(
 				'country'        => 'Italy',
 				'language'       => 'Italian',
 				'3166-1-alpha-2' => 'IT',
 				'3166-1-alpha-3' => 'ITA',
-				'693-1'          => 'IT',
+				'639-1'          => 'IT',
 			),
 			array(
 				'country'        => 'Netherlands',
@@ -104,35 +104,34 @@ class I18n_ISO_Convert {
 				'language'       => 'Spanish',
 				'3166-1-alpha-2' => 'ES',
 				'3166-1-alpha-3' => 'ESP',
-				'693-1'          => 'ES',
+				'639-1'          => 'ES',
 			),
 			array(
 				'country'        => 'Poland',
 				'language'       => 'Polish',
 				'3166-1-alpha-2' => 'PL',
 				'3166-1-alpha-3' => 'POL',
-				'693-1'          => 'PL',
+				'639-1'          => 'PL',
 			),
 			array(
 				'country'        => 'Portugal',
 				'language'       => 'Polish',
 				'3166-1-alpha-2' => 'PT',
 				'3166-1-alpha-3' => 'PRT',
-				'693-1'          => 'PT',
+				'639-1'          => 'PT',
 			),
 			array(
 				'country'        => 'Switzerland',
 				'language'       => 'German',
 				'3166-1-alpha-2' => 'CH',
 				'3166-1-alpha-3' => 'CHE',
-				'693-1'          => 'ES',
 			),
 			array(
 				'country'        => 'United Kingdom',
 				'language'       => 'English',
 				'3166-1-alpha-2' => 'GB',
 				'3166-1-alpha-3' => 'GBR',
-				'693-1'          => 'EN',
+				'639-1'          => 'EN',
 			)
 		);
 	}
@@ -155,8 +154,8 @@ class I18n_ISO_Convert {
 	/**
 	 * Converting country/language code
 	 *
-	 * @param string $from ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 693-1)
-	 * @param string $to   ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 693-1)
+	 * @param string $from ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 639-1)
+	 * @param string $to   ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 639-1)
 	 * @param string $code ISO code
 	 * @param string $language Language which have to be choosen
 	 *
@@ -196,8 +195,8 @@ class I18n_ISO_Convert {
 /**
  * Converting country/language code
  *
- * @param string $from ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 693-1)
- * @param string $to   ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 693-1)
+ * @param string $from ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 639-1)
+ * @param string $to   ISO Standard (3166-1-alpha-2, 3166-1-alpha-3 or 639-1)
  * @param string $code ISO code
  * @param string $language Language which have to be choosen
  *

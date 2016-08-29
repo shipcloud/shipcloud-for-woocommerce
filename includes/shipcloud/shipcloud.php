@@ -645,7 +645,7 @@ class Woocommerce_Shipcloud_API
 							'name'       => 'advance_notice',
 							'properties' => array(
 								'email'    => $to_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '693-1', strtolupper( $to[ 'country' ] ) )
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtolupper( $to[ 'country' ] ) )
 							)
 						)
 					)
