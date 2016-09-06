@@ -1404,13 +1404,15 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
 		);
 
-		$this->calculated_parcels[ $carrier_name ][] = $package;
-
 		$price = $this->shipcloud_api->get_price( $carrier_name, $this->sender, $this->recipient, $package );
 
 		if ( is_wp_error( $price ) )
 		{
 			$this->log( $price->get_error_message() );
+		}
+		else
+		{
+			$this->calculated_parcels[ $carrier_name ][] = $package;
 		}
 
 		return $price;
