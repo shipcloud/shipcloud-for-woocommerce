@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-06 16:54+0200\n"
-"PO-Revision-Date: 2016-09-06 17:21+0200\n"
+"POT-Creation-Date: 2016-09-06 17:44+0200\n"
+"PO-Revision-Date: 2016-09-06 17:46+0200\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -478,32 +478,32 @@ msgstr ""
 "Schlüssel</a> ein."
 
 #: ../components/woo/shipping-method.php:364
-#: ../components/woo/shipping-method.php:537
+#: ../components/woo/shipping-method.php:548
 msgid "Shipment Methods"
 msgstr "Versandmethoden"
 
 #: ../components/woo/shipping-method.php:366
-#: ../components/woo/shipping-method.php:539
+#: ../components/woo/shipping-method.php:550
 msgid "Select the Carriers which you want to use in your Shop."
 msgstr "Wählen Sie die Paketdienste, die Sie in Ihrem Shop verwenden möchten."
 
 #: ../components/woo/shipping-method.php:371
-#: ../components/woo/shipping-method.php:544
+#: ../components/woo/shipping-method.php:555
 msgid "Shipment Selection"
 msgstr "Versandauswahl"
 
 #: ../components/woo/shipping-method.php:373
-#: ../components/woo/shipping-method.php:546
+#: ../components/woo/shipping-method.php:557
 msgid "Who selects the shipment method?"
 msgstr "Wer wählt die Versandmethode?"
 
 #: ../components/woo/shipping-method.php:378
-#: ../components/woo/shipping-method.php:550
+#: ../components/woo/shipping-method.php:561
 msgid "Shop Owner"
 msgstr "Shopbetreiber"
 
 #: ../components/woo/shipping-method.php:379
-#: ../components/woo/shipping-method.php:551
+#: ../components/woo/shipping-method.php:562
 msgid "Customer"
 msgstr "Kunde"
 
@@ -541,12 +541,12 @@ msgid "Enable logging if you experience problems."
 msgstr "Aktivieren der Protokollierung, wenn Probleme auftreten."
 
 #: ../components/woo/shipping-method.php:402
-#: ../components/woo/shipping-method.php:556
+#: ../components/woo/shipping-method.php:567
 msgid "Automatic Price Calculation"
 msgstr "Automatische Preisberechnung"
 
 #: ../components/woo/shipping-method.php:404
-#: ../components/woo/shipping-method.php:558
+#: ../components/woo/shipping-method.php:569
 msgid ""
 "To get a price for the customers order, you have to setup the price "
 "calculation."
@@ -567,12 +567,12 @@ msgstr ""
 "Chekout (sofern sie nur die Label-Erstellung verwenden möchten)."
 
 #: ../components/woo/shipping-method.php:413
-#: ../components/woo/shipping-method.php:561
+#: ../components/woo/shipping-method.php:572
 msgid "Products"
 msgstr "Produkte"
 
 #: ../components/woo/shipping-method.php:415
-#: ../components/woo/shipping-method.php:563
+#: ../components/woo/shipping-method.php:574
 msgid "How should the price for products be calculated."
 msgstr "Wie soll der Preis für Produkte berechnet werden."
 
@@ -581,7 +581,7 @@ msgid "Per Product: Charge shipping for each Product individually"
 msgstr "Pro Artikel: Versandkosten für jedes Produkt einzeln ermitteln"
 
 #: ../components/woo/shipping-method.php:421
-#: ../components/woo/shipping-method.php:568
+#: ../components/woo/shipping-method.php:579
 msgid ""
 "Per Order: Charge shipping for the most expensive shipping for a product"
 msgstr ""
@@ -589,7 +589,7 @@ msgstr ""
 "Produktes ermitteln"
 
 #: ../components/woo/shipping-method.php:422
-#: ../components/woo/shipping-method.php:569
+#: ../components/woo/shipping-method.php:580
 msgid ""
 "Virtual Parcel: Create a virtual parcel with volume and weight of all "
 "products and charge shipping"
@@ -598,12 +598,12 @@ msgstr ""
 "aller Produkte und Versand kostenlos"
 
 #: ../components/woo/shipping-method.php:426
-#: ../components/woo/shipping-method.php:573
+#: ../components/woo/shipping-method.php:584
 msgid "Products (fallback)"
 msgstr "Produkte (Fallback)"
 
 #: ../components/woo/shipping-method.php:428
-#: ../components/woo/shipping-method.php:575
+#: ../components/woo/shipping-method.php:586
 msgid ""
 "How should the price for products be calculated if API limit is reached."
 msgstr ""
@@ -611,7 +611,7 @@ msgstr ""
 "ist."
 
 #: ../components/woo/shipping-method.php:433
-#: ../components/woo/shipping-method.php:580
+#: ../components/woo/shipping-method.php:591
 msgid "Per Product: Charge shipping with fallback price for each product"
 msgstr ""
 "Pro Produkt: Berechne den Versand mit einem Fallback-Preis für jedes Produkt"
@@ -623,8 +623,8 @@ msgstr ""
 
 #: ../components/woo/shipping-method.php:438
 #: ../components/woo/shipping-method.php:467
-#: ../components/woo/shipping-method.php:585
-#: ../components/woo/shipping-method.php:613
+#: ../components/woo/shipping-method.php:596
+#: ../components/woo/shipping-method.php:624
 msgid "Fallback Price"
 msgstr "Fallback Preis"
 
@@ -637,32 +637,32 @@ msgstr ""
 "wurde (muss in € einegegeben werden)."
 
 #: ../components/woo/shipping-method.php:443
-#: ../components/woo/shipping-method.php:590
+#: ../components/woo/shipping-method.php:601
 msgid "Shipment Classes"
 msgstr "Versandklassen"
 
 #: ../components/woo/shipping-method.php:445
-#: ../components/woo/shipping-method.php:592
+#: ../components/woo/shipping-method.php:603
 msgid "How should the price for shipment classes be calculated."
 msgstr "Wie soll der Preis für Versandklassen berechnet werden."
 
 #: ../components/woo/shipping-method.php:450
-#: ../components/woo/shipping-method.php:596
+#: ../components/woo/shipping-method.php:607
 msgid "Per Class: Charge shipping for each shipping class individually"
 msgstr "Pro Klasse: Versandkosten für jede Versandklasse einzeln ermitteln"
 
 #: ../components/woo/shipping-method.php:451
-#: ../components/woo/shipping-method.php:597
+#: ../components/woo/shipping-method.php:608
 msgid "Per Order: Charge shipping for the most expensive shipping class"
 msgstr "Pro Bestellung Versandkosten für die teuerste Versandklasse ermitteln"
 
 #: ../components/woo/shipping-method.php:455
-#: ../components/woo/shipping-method.php:601
+#: ../components/woo/shipping-method.php:612
 msgid "Shipment Classes (fallback)"
 msgstr "Versandklassen (Fallback)"
 
 #: ../components/woo/shipping-method.php:457
-#: ../components/woo/shipping-method.php:603
+#: ../components/woo/shipping-method.php:614
 msgid ""
 "How should the price for shipment classes be calculated if API limit is "
 "reached."
@@ -671,12 +671,12 @@ msgstr ""
 "erreicht ist."
 
 #: ../components/woo/shipping-method.php:462
-#: ../components/woo/shipping-method.php:608
+#: ../components/woo/shipping-method.php:619
 msgid "Per Class: Charge shipping with fallback price for each class"
 msgstr "Pro Klasse: Versandkosten für jede Versandklasse berechnen"
 
 #: ../components/woo/shipping-method.php:463
-#: ../components/woo/shipping-method.php:609
+#: ../components/woo/shipping-method.php:620
 msgid "Per Order: Charge shipping with fallback price for one class"
 msgstr ""
 "Pro Bestellung: Berechne den Versand mit einem Fallback-Preis für eine "
@@ -691,12 +691,12 @@ msgstr ""
 "eingegeben wurde (muss in € einegegeben werden)."
 
 #: ../components/woo/shipping-method.php:472
-msgid "Standard sender data"
-msgstr "Standard-Absender Daten"
+msgid "Sender Information"
+msgstr "Absenderdaten"
 
 #: ../components/woo/shipping-method.php:474
-msgid "Setup your standard sender data for sending parcels."
-msgstr "Geben Sie einen Standardabsender für den Versand an."
+msgid "Setup information for the standard sender."
+msgstr ""
 
 #: ../components/woo/shipping-method.php:479
 msgid "Enter standard sender company for shipment."
@@ -738,17 +738,38 @@ msgstr "Geben Sie eine Standardsender-Stadt für den Versand an."
 msgid "Enter standard sender country for shipment."
 msgstr "Geben Sie ein Standardabsender-Land für den Versand an."
 
-#: ../components/woo/shipping-method.php:567
+#: ../components/woo/shipping-method.php:534
+msgid "Recipient Information"
+msgstr "Empfängerdaten"
+
+#: ../components/woo/shipping-method.php:536
+msgid "Setup information for the recipient."
+msgstr "Stellen Sie die Informationen für den Empfänger ein."
+
+#: ../components/woo/shipping-method.php:539
+msgid "Street Detection"
+msgstr "Straßen Erkennung"
+
+#: ../components/woo/shipping-method.php:541
+msgid ""
+"Automatic split street from street number (In some countries this do not "
+"work correct because of different street number schemes)."
+msgstr ""
+"Automatisches Teilen von Straße und Hausnummer (In manchen Ländern "
+"funktioniert dies nicht korrekt aufgrund der unterschiedlichen Hausnummer "
+"Regelungen)."
+
+#: ../components/woo/shipping-method.php:578
 msgid "Per Product: Charge shipping for each product individually"
 msgstr "Pro Artikel: Versandkosten für jedes Produkt einzeln ermitteln"
 
-#: ../components/woo/shipping-method.php:581
+#: ../components/woo/shipping-method.php:592
 msgid "Per Order: Charge shipping with fallback price for whole order"
 msgstr ""
 "Pro Bestellung: Berechne den Versand mit einem Fallback-Preis für die "
 "gesamte Bestellung"
 
-#: ../components/woo/shipping-method.php:587
+#: ../components/woo/shipping-method.php:598
 msgid ""
 "Will be used if no sizes or weight is given to a Product (have to be entered "
 "in €)."
@@ -756,7 +777,7 @@ msgstr ""
 "Wird verwendet wenn für ein Produkt keine Größen oder Gewicht eingegeben "
 "wurde (muss in € einegegeben werden)."
 
-#: ../components/woo/shipping-method.php:615
+#: ../components/woo/shipping-method.php:626
 msgid ""
 "Will be used if no sizes or weight is given to a Shipment Class or for "
 "fallback (have to be entered in €)."
@@ -764,37 +785,37 @@ msgstr ""
 "Wird verwendet wenn für eine Versandklasse keine Größen oder Gewicht "
 "eingegeben wurde (muss in € einegegeben werden)."
 
-#: ../components/woo/shipping-method.php:711
+#: ../components/woo/shipping-method.php:722
 #, php-format
 msgid "Shipment status changed to: %s"
 msgstr "Versandstatus geändert zu: %s"
 
-#: ../components/woo/shipping-method.php:818
+#: ../components/woo/shipping-method.php:829
 msgid "Please enter an API key to get available shipment Carriers."
 msgstr ""
 "Bitte geben Sie einen API Key ein um verfügbare Paketdienste anzuzeigen."
 
-#: ../components/woo/shipping-method.php:900
+#: ../components/woo/shipping-method.php:911
 msgid "Please enter an address to calculate shipping costs."
 msgstr ""
 "Bitte geben sie eine Adresse ein, damit die Versandkosten berechnet werden "
 "können."
 
-#: ../components/woo/shipping-method.php:1439
+#: ../components/woo/shipping-method.php:1450
 msgid "Parcel dimensions are missing"
 msgstr "Paketmaße fehlen"
 
-#: ../components/woo/shipping-method.php:1471
+#: ../components/woo/shipping-method.php:1482
 #, php-format
 msgid "No term found for shipping class #%s"
 msgstr "Kein Term für die Versandklasse #%s gefunden"
 
-#: ../components/woo/shipping-method.php:1483
+#: ../components/woo/shipping-method.php:1494
 #, php-format
 msgid "No parcel found for product id #%s"
 msgstr "Kein Paket für Produkt ID #%s gefunden"
 
-#: ../components/woo/shipping-method.php:1515
+#: ../components/woo/shipping-method.php:1526
 #, php-format
 msgid "No price found for parcel. Using fallback price %s"
 msgstr "Kein Preis für Paket gefunden. Nutze Fallback-Preis %s"
@@ -1142,6 +1163,32 @@ msgstr "Ja"
 #: ../woocommerce-shipcloud.php:322
 msgid "No"
 msgstr "Nein"
+
+#~ msgid ""
+#~ "Automatic split street from street number (In some countries this do not "
+#~ "work correct for streets)."
+#~ msgstr ""
+#~ "Automatisches Teilen von Straße und Hausnummer (In manchen Ländern "
+#~ "funktioniert dies nicht korrekt für Straßen)."
+
+#~ msgid ""
+#~ "Automatic split street from street number (In some cases this do not work "
+#~ "well for streets in some countries)."
+#~ msgstr ""
+#~ "Automatisches Teilen von Straße und Hausnummer (In einigen Fällen dies "
+#~ "funktionieren nicht gut für Straßen aus diversen Ländern)."
+
+#~ msgid "Setup information for your standard sender."
+#~ msgstr "Stellen Sie die Informationen für den Standardsender ein."
+
+#~ msgid "Setup information for your recipient."
+#~ msgstr "Stellen Sie die Informationen für den "
+
+#~ msgid "Standard sender data"
+#~ msgstr "Standard-Absender Daten"
+
+#~ msgid "Setup your standard sender data for sending parcels."
+#~ msgstr "Geben Sie einen Standardabsender für den Versand an."
 
 #~ msgid ""
 #~ "Please enter your <a href=\"%s\">standard sender data</a>! At least, "

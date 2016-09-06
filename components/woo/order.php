@@ -160,14 +160,17 @@ class WC_Shipcloud_Order
 		{
 			$order = new WC_Order( $this->order_id );
 
-			$recipient_street_name = '';
+			$recipient_street_name = $order->shipping_address_1;
 			$recipient_street_nr   = '';
-			$recipient_street      = wcsc_explode_street( $order->shipping_address_1 );
 
-			if ( is_array( $recipient_street ) )
-			{
-				$recipient_street_name = $recipient_street[ 'address' ];
-				$recipient_street_nr   = $recipient_street[ 'number' ];
+			if( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
+				$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
+
+				if ( is_array( $recipient_street ) )
+				{
+					$recipient_street_name = $recipient_street[ 'address' ];
+					$recipient_street_nr   = $recipient_street[ 'number' ];
+				}
 			}
 
 			$recipient = array(

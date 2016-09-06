@@ -469,9 +469,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class (have to be entered in €).', 'woocommerce-shipcloud' ),
 			),
 			'standard_sender_data'              => array(
-				'title'       => __( 'Standard sender data', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Sender Information', 'woocommerce-shipcloud' ),
 				'type'        => 'title',
-				'description' => sprintf( __( 'Setup your standard sender data for sending parcels.', 'woocommerce-shipcloud' ) ),
+				'description' => sprintf( __( 'Setup information for the standard sender.', 'woocommerce-shipcloud' ) ),
 			),
 			'sender_company'                    => array(
 				'title'       => __( 'Company', 'woocommerce-shipcloud' ),
@@ -529,6 +529,17 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'class'       => 'wc-enhanced-select',
 				'options'     => $woocommerce->countries->countries,
 				'default'     => $default_country
+			),
+			'recipient_information'              => array(
+				'title'       => __( 'Recipient Information', 'woocommerce-shipcloud' ),
+				'type'        => 'title',
+				'description' => sprintf( __( 'Setup information for the recipient.', 'woocommerce-shipcloud' ) ),
+			),
+			'street_detection'               => array(
+				'title'   => __( 'Street Detection', 'woocommerce-shipcloud' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Automatic split street from street number (In some countries this do not work correct because of different street number schemes).', 'woocommerce-shipcloud' ),
+				'default' => 'yes'
 			),
 		);
 
