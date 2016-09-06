@@ -628,6 +628,31 @@ class Woocommerce_Shipcloud_API
 		switch ( $carrier[ 'carrier' ] )
 		{
 
+			case 'dhl':
+				$to_email = $to[ 'email' ];
+				unset( $to[ 'email' ] );
+
+				$params = array(
+					'carrier'               => $carrier[ 'carrier' ],
+					'service'               => $carrier[ 'service' ],
+					'from'                  => $from,
+					'to'                    => $to,
+					'package'               => $package,
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $notification_email,
+					'additional_services'   => array(
+						array(
+							'name'       => 'advance_notice',
+							'properties' => array(
+								'email'    => $to_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtolupper( $to[ 'country' ] ) )
+							)
+						)
+					)
+				);
+
+				break;
+
 			case 'dpd':
 				$to_email = $to[ 'email' ];
 				unset( $to[ 'email' ] );
