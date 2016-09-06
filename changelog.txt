@@ -19,6 +19,7 @@
 * Enhanced: Optimized shipment calculation by better code structure and better performance on API Requests
 * Enhanced: Created fallback options on problems with API
 * Enhanced: Better street & number splitting
+* Fixed: Only adding calculated parcels if there have been parcels determined
 * Fixed: Wrong ISO format for DHL and DPD advanced notice
 * Fixed: Shipment classes could not be edited anymore in WooCommerce 2.6.0 because of GUI change
 * Fixed: Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
