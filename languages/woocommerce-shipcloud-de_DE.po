@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WordPress Plugin Boilerplate\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-06 16:54+0200\n"
-"PO-Revision-Date: 2016-09-06 17:00+0200\n"
+"PO-Revision-Date: 2016-09-06 17:21+0200\n"
 "Last-Translator: Awesome UG <support@awesome.ug>\n"
 "Language-Team: Tom McFarlin <tom@tommcfarlin.com>\n"
 "Language: de_DE\n"
@@ -556,7 +556,7 @@ msgstr ""
 
 #: ../components/woo/shipping-method.php:407
 msgid "Disable"
-msgstr "deaktivieren"
+msgstr "Deaktivieren"
 
 #: ../components/woo/shipping-method.php:409
 msgid ""
