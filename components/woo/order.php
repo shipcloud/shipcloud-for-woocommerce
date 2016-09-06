@@ -980,7 +980,21 @@ class WC_Shipcloud_Order
 			$notification_email = apply_filters( 'wcsc_notification_email', $order->billing_email, $order );
 		}
 
-		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email );
+		$reference_number = sprintf( __( 'Order %s', 'woocommerce-shipcloud' ), $order->get_order_number() );
+
+		/**
+		 * Filtering reference number
+		 *
+		 * @param string $reference_number The Reference Number
+		 * @param string $order_number The WooCommerce order number
+		 * @param string $order_id The WooCommerce order id
+		 *
+		 * @return string $reference_number The filtered order number
+		 * @since 1.1.0
+		 */
+		$reference_number = apply_filters( 'wcsc_reference_number', $reference_number, $order->get_order_number(), $order_id );
+
+		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email, $reference_number );
 
 		if ( is_wp_error( $shipment ) )
 		{
