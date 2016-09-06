@@ -1624,6 +1624,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			self::$logger = new WC_Logger();
 		}
 
+		$message = trim(preg_replace( '/\s+/', ' ', $message ) );
+
 		self::$logger->add( 'shipcloud', $message );
 	}
 }
