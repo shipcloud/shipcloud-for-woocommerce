@@ -111,48 +111,6 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
-	 * Get allowed Carriers
-	 *
-	 * @param bool $only_customer_services If is set true, function returns only services which are available for customers
-	 *
-	 * @return array $carriers
-	 * @since 1.0.0
-	 */
-	public function get_allowed_carriers( $only_customer_services = false )
-	{
-		$allowed_carriers   = $this->settings[ 'allowed_carriers' ];
-		$shipcloud_carriers = $this->get_carriers();
-
-		if ( is_wp_error( $shipcloud_carriers ) )
-		{
-			return $shipcloud_carriers;
-		}
-
-		$carriers = array();
-
-		if ( is_array( $allowed_carriers ) )
-		{
-			foreach ( $shipcloud_carriers AS $shipcloud_carrier )
-			{
-				if ( $only_customer_services )
-				{
-					$carrier_arr = $this->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
-					if ( ! $this->is_customer_service( $carrier_arr[ 'service' ] ) )
-					{
-						continue;
-					}
-				}
-				if ( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
-				{
-					$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];
-				}
-			}
-		}
-
-		return $carriers;
-	}
-
-	/**
 	 * Getting carriers
 	 *
 	 * @param bool $force_update
@@ -266,9 +224,6 @@ class Woocommerce_Shipcloud_API
 	{
 		$count_requests = get_option( 'woocommerce_shipcloud_count_requests', 0 ) + 1;
 		update_option( 'woocommerce_shipcloud_count_requests', $count_requests );
-
-		$logger = new WC_Logger();
-		$logger->add( 'shipcloud', sprintf( 'Requesting shipcloud "%s"', $action ) );
 
 		$url     = $this->get_endpoint( $action );
 		$headers = array(
@@ -663,16 +618,27 @@ class Woocommerce_Shipcloud_API
 	 * @return string|WP_Error
 	 * @since 1.0.0
 	 */
-	public function create_shipment( $carrier, $from, $to, $package, $create_label = false )
+	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '' )
 	{
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
 		switch ( $carrier[ 'carrier' ] )
 		{
 
-			case 'dpd':
-				$to_email = $to[ 'email' ];
-				unset( $to[ 'email' ] );
+			case 'dhl':
+				$additional_services = array();
+
+				if( ! empty ( $carrier_email ) ) {
+					$additional_services = array(
+						array(
+							'name'       => 'advance_notice',
+							'properties' => array(
+								'email'    => $carrier_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to[ 'country' ] ) )
+							)
+						)
+					);
+				}
 
 				$params = array(
 					'carrier'               => $carrier[ 'carrier' ],
@@ -681,15 +647,36 @@ class Woocommerce_Shipcloud_API
 					'to'                    => $to,
 					'package'               => $package,
 					'create_shipping_label' => $create_label,
-					'additional_services'   => array( // Needed for
+					'notification_email'    => $notification_email,
+					'additional_services'   => $additional_services
+				);
+
+				break;
+
+			case 'dpd':
+				$additional_services = array();
+
+				if( ! empty ( $carrier_email ) ) {
+					$additional_services = array(
 						array(
 							'name'       => 'advance_notice',
 							'properties' => array(
-								'email'    => $to_email,
-								'language' => strtolower( $to[ 'country' ] )
+								'email'    => $carrier_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to[ 'country' ] ) )
 							)
 						)
-					)
+					);
+				}
+
+				$params = array(
+					'carrier'               => $carrier[ 'carrier' ],
+					'service'               => $carrier[ 'service' ],
+					'from'                  => $from,
+					'to'                    => $to,
+					'package'               => $package,
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $carrier_email,
+					'additional_services'   => $additional_services
 				);
 
 				break;
@@ -704,7 +691,8 @@ class Woocommerce_Shipcloud_API
 					'from'                  => $from,
 					'to'                    => $to,
 					'package'               => $package,
-					'create_shipping_label' => $create_label
+					'create_shipping_label' => $create_label,
+				    'notification_email'    => $notification_email,
 				);
 
 				// Moving the description to the root on international shipment
@@ -724,10 +712,15 @@ class Woocommerce_Shipcloud_API
 					'from'                  => $from,
 					'to'                    => $to,
 					'package'               => $package,
-					'create_shipping_label' => $create_label
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $notification_email,
 				);
 
 				break;
+		}
+
+		if( ! empty( $reference_number ) ) {
+			$params[ 'reference_number' ] = $reference_number;
 		}
 
 		$request = $this->send_request( 'shipments', $params, 'POST' );
@@ -772,7 +765,7 @@ class Woocommerce_Shipcloud_API
 	 *
 	 * @param string $shipment_id
 	 *
-	 * @return array
+	 * @return array|WP_Error
 	 * @since 1.0.0
 	 */
 	public function create_label( $shipment_id )
@@ -787,11 +780,6 @@ class Woocommerce_Shipcloud_API
 		if ( false !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
 		{
 			return $request;
-
-			return array(
-				'id'           => $request[ 'body' ][ 'id' ],
-				'tracking_url' => $request[ 'body' ][ 'tracking_url' ]
-			);
 		}
 		else
 		{
@@ -799,8 +787,6 @@ class Woocommerce_Shipcloud_API
 
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
-
-		return $request_data;
 	}
 
 	/**

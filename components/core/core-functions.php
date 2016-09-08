@@ -103,8 +103,6 @@ function wcsc_get_parceltemplate( $template_id )
  */
 function wcsc_get_parceltemplates( $args = array() )
 {
-	global $wpdb;
-
 	$defaults = array(
 		'posts_per_page' => - 1,
 		'orderby'        => '',
@@ -130,4 +128,44 @@ function wcsc_get_parceltemplates( $args = array() )
 	}
 
 	return $parcel_templates;
+}
+
+/**
+ * Getting shipments of an order
+ *
+ * @param int $order_id
+ *
+ * @return mixed
+ *
+ * @since   1.1.0
+ */
+function wcsc_get_shipments( $order_id ) {
+	return get_post_meta( $order_id, 'shipcloud_shipment_data' );
+}
+
+
+/**
+ * Getting tracking numbers of an order
+ *
+ * @param int $order_id
+ *
+ * @return mixed
+ *
+ * @since   1.1.0
+ */
+function wcsc_get_tracking_numbers( $order_id ) {
+	$tracking_numbers = array();
+	$shipments = wcsc_get_shipments( $order_id );
+
+	if( empty( $shipments ) ) {
+		return $tracking_numbers;
+	}
+
+	foreach( $shipments AS $shipment ) {
+		if( array_key_exists( 'carrier_tracking_no', $shipment ) && ! empty( $shipment[ 'carrier_tracking_no' ] ) ) {
+			$tracking_numbers[] = $shipment[ 'carrier_tracking_no' ];
+		}
+	}
+
+	return $tracking_numbers;
 }

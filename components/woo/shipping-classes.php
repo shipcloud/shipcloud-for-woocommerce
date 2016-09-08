@@ -54,11 +54,22 @@ class WC_Shipcloud_Shippig_Classes
 	 */
 	public function init_hooks()
 	{
+	    // WooCommerce until 2.5
 		add_action( 'product_shipping_class_edit_form_fields', array( $this, 'shipping_class_edit_form_fields' ), 10, 2 );
 		add_action( 'edited_product_shipping_class', array( $this, 'shipping_class_edit_form_fields_save' ), 10, 1 );
 
 		add_action( 'product_shipping_class_add_form_fields', array( $this, 'shipping_class_add_form_fields' ), 10, 1 );
 		add_action( 'create_product_shipping_class', array( $this, 'shipping_class_edit_form_fields_save' ), 10, 1 );
+
+        // WooCommerce since 2.6
+        add_filter( 'woocommerce_shipping_classes_columns', array( $this, 'add_shipping_class_columns' ) );
+        add_action( 'woocommerce_shipping_classes_column_shipcloud-parcel-width', array( $this, 'add_shipping_class_row_width' ) );
+        add_action( 'woocommerce_shipping_classes_column_shipcloud-parcel-height', array( $this, 'add_shipping_class_row_height' ) );
+        add_action( 'woocommerce_shipping_classes_column_shipcloud-parcel-length', array( $this, 'add_shipping_class_row_length' ) );
+        add_action( 'woocommerce_shipping_classes_column_shipcloud-parcel-weight', array( $this, 'add_shipping_class_row_weight' ) );
+
+		add_action( 'woocommerce_shipping_classes_save_class', array( $this, 'save_class' ), 10, 2 );
+		add_filter( 'woocommerce_get_shipping_classes', array( $this, 'extend_terms' ), 10, 1 );
 	}
 
 	/**
@@ -76,6 +87,143 @@ class WC_Shipcloud_Shippig_Classes
 
 		return self::$_instance;
 	}
+
+    /**
+     * Adding Shipcloud columns to shipping classes (since WooCommerce 2.6)
+     *
+     * @param $columns
+     *
+     * @return array
+     * @since 1.1.0
+     */
+	public function add_shipping_class_columns( $columns )
+    {
+        $shipcloud_columns = array(
+            'shipcloud-parcel-width'    => __( 'Shipcloud Parcel Width (cm)', 'woocommerce-shipcloud' ),
+            'shipcloud-parcel-height'  => __( 'Shipcloud Parcel Height (cm)', 'woocommerce-shipcloud' ),
+            'shipcloud-parcel-length'   => __( 'Shipcloud Parcel Length (cm)', 'woocommerce-shipcloud' ),
+            'shipcloud-parcel-weight'   => __( 'Shipcloud Parcel Weight (kg)', 'woocommerce-shipcloud' ),
+        );
+
+        $columns = array_merge( $columns, $shipcloud_columns );
+
+        return $columns;
+    }
+
+    /**
+     * Adding field for width (since WooCommerce 2.6)
+     *
+     * @since 1.1.0
+     */
+    public function add_shipping_class_row_width()
+    {
+        ?>
+        <div class="view">{{ data.width }}</div>
+        <div class="edit"><input type="text" name="width[{{ data.term_id }}]" data-attribute="width" value="{{ data.width }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
+        <?php
+    }
+
+    /**
+     * Adding field for height (since WooCommerce 2.6)
+     *
+     * @since 1.1.0
+     */
+    public function add_shipping_class_row_height()
+    {
+        ?>
+        <div class="view">{{ data.height }}</div>
+        <div class="edit"><input type="text" name="height[{{ data.term_id }}]" data-attribute="height" value="{{ data.height }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
+        <?php
+    }
+
+    /**
+     * Adding field for length (since WooCommerce 2.6)
+     *
+     * @since 1.1.0
+     */
+    public function add_shipping_class_row_length()
+    {
+        ?>
+        <div class="view">{{ data.length }}</div>
+        <div class="edit"><input type="text" name="length[{{ data.term_id }}]" data-attribute="length" value="{{ data.length }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
+        <?php
+    }
+
+    /**
+     * Adding field for weight (since WooCommerce 2.6)
+     *
+     * @since 1.1.0
+     */
+    public function add_shipping_class_row_weight()
+    {
+        ?>
+        <div class="view">{{ data.weight }}</div>
+        <div class="edit"><input type="text" name="weight[{{ data.term_id }}]" data-attribute="weight" value="{{ data.weight }}" placeholder="<?php esc_attr_e( '0.0', 'woocommerce' ); ?>" /></div>
+        <?php
+    }
+
+	/**
+	 * Saving class data (since WooCommerce 2.6)
+	 *
+	 * @param $term_id
+	 * @param $data
+	 *
+	 * @since 1.1.0
+	 */
+    public function save_class( $term_id, $data )
+    {
+	    if ( isset( $data['width'] ) )
+	    {
+            $parcel_width = wc_clean( $data['width'] );
+	    }
+
+	    if ( isset( $data['height'] ) )
+	    {
+            $parcel_height = wc_clean( $data['height'] );
+	    }
+
+	    if ( isset( $data['length'] ) )
+	    {
+            $parcel_length = wc_clean( $data['length'] );
+	    }
+
+	    if ( isset( $data['weight'] ) )
+	    {
+            $parcel_weight = wc_clean( $data['weight'] );
+	    }
+
+	    if( is_array( $term_id ) )
+	    {
+	    	$term_id = $term_id[ 'term_id' ];
+	    }
+
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_width', $parcel_width );
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_height', $parcel_height );
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_length', $parcel_length );
+        update_option( 'shipping_class_' . $term_id . '_shipcloud_weight', $parcel_weight );
+    }
+
+    /**
+     * Extending terms with data from shipcloud fields (since WooCommerce 2.6)
+     *
+     * @param WP_Term[] $shipping_classes
+     *
+     * @return WP_Term[] $shipping_classes
+     * @since 1.0.0
+     */
+    public function extend_terms( $shipping_classes )
+    {
+        foreach( $shipping_classes AS $key => $shipping_class )
+        {
+            $term_id = $shipping_class->term_id;
+            $shipping_classes[ $key ]->width =  get_option( 'shipping_class_' . $term_id . '_shipcloud_width' );
+            $shipping_classes[ $key ]->height =  get_option( 'shipping_class_' . $term_id . '_shipcloud_height' );
+            $shipping_classes[ $key ]->length =  get_option( 'shipping_class_' . $term_id . '_shipcloud_length' );
+            $shipping_classes[ $key ]->weight =  get_option( 'shipping_class_' . $term_id . '_shipcloud_weight' );
+        }
+
+        return $shipping_classes;
+    }
 
 	/**
 	 * Selecting Parcel for shipping class on editing Shipment Class

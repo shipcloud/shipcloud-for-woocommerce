@@ -50,7 +50,14 @@ class WCSC_Woo extends WCSC_Component
 	 */
 	public function add_shipping_method( $methods )
 	{
-		$methods[] = 'WC_Shipcloud_Shipping';
+		if( class_exists( 'WC_Shipcloud_Shipping' ) )
+		{
+			$methods[ 'shipcloud' ] = 'WC_Shipcloud_Shipping';
+		}
+        else
+        {
+            WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not load %s.', 'woocommerce-shipcloud' ), 'WC_Shipcloud_Shipping' ), 'error' );
+        }
 
 		return $methods;
 	}

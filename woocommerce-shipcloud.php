@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce shipcloud.io
  * Plugin URI: http://www.woothemes.com/products/woocommerce-shipcloud/
  * Description: Integrates shipcloud.io shipment services to your WooCommerce shop.
- * Version: 1.0.1
+ * Version: 1.1.0
  * Author: WooThemes
  * Author URI: http://woothemes.com/
  * Developer: awesome.ug
@@ -94,11 +94,10 @@ class WooCommerce_Shipcloud
 	{
 		$this->constants();
 		$this->load_textdomain();
-		$this->includes();
+        $this->includes();
 
-		// Check Requirements and loading core
-		add_action( 'plugins_loaded', array( $this, 'check_requirements' ), 20 );
-		add_action( 'plugins_loaded', array( $this, 'load_components' ), 25 );
+        $this->check_requirements();
+        $this->load_components();
 
 		if ( is_admin() )
 		{
@@ -143,10 +142,7 @@ class WooCommerce_Shipcloud
 	 */
 	private function get_url_path()
 	{
-		$sub_path   = substr( WCSC_FOLDER, strlen( ABSPATH ), ( strlen( WCSC_FOLDER ) - 11 ) );
-		$script_url = get_bloginfo( 'wpurl' ) . '/' . $sub_path;
-
-		return $script_url;
+		return plugin_dir_url( __FILE__ );
 	}
 
 	/**
@@ -168,6 +164,7 @@ class WooCommerce_Shipcloud
 	{
 		// Loading functions
 		require_once( WCSC_FOLDER . '/woocommerce-shipcloud-functions.php' );
+		require_once( WCSC_FOLDER . '/includes/shipcloud/i18n-iso-convert-class.php' );
 		require_once( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
 	}
 
@@ -293,7 +290,11 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_admin_styles()
 	{
-		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . '/includes/css/admin.css' );
+		if( ! wcsc_is_admin_screen() )
+		{
+			return;
+		}
+		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . 'includes/css/admin.css' );
 	}
 
 	/**
@@ -303,6 +304,11 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_admin_scripts()
 	{
+		if( ! wcsc_is_admin_screen() )
+		{
+			return;
+		}
+
 		$translation_array = array(
 			'parcel_added'                => __( 'Parcel template added!', 'woocommerce-shipcloud' ),
 			'parcel_dimensions_check_yes' => __( 'Parcel dimensions verified!', 'woocommerce-shipcloud' ),
@@ -316,7 +322,7 @@ class WooCommerce_Shipcloud
 			'no'                          => __( 'No', 'woocommerce-shipcloud' )
 		);
 
-		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . '/includes/js/admin.js' );
+		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . 'includes/js/admin.js' );
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
 		wp_enqueue_script( 'wcsc-admin-script' );
 	}
@@ -328,6 +334,10 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_plugin_styles()
 	{
+		if( ! wcsc_is_frontend_screen() )
+		{
+			return;
+		}
 		wp_enqueue_style( 'wcsc-plugin-styles', WCSC_URLPATH . '/includes/css/display.css' );
 	}
 
@@ -338,6 +348,10 @@ class WooCommerce_Shipcloud
 	 */
 	public function register_plugin_scripts()
 	{
+		if( ! wcsc_is_frontend_screen() )
+		{
+			return;
+		}
 		wp_enqueue_script( 'wcsc-plugin-script', WCSC_URLPATH . '/includes/js/display.js' );
 	}
 

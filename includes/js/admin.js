@@ -59,6 +59,7 @@ jQuery( function( $ ) {
 			var sender_street_nr = $("input[name='sender_address[street_nr]']").val();
 			var sender_postcode = $("input[name='sender_address[postcode]']").val();
 			var sender_city = $("input[name='sender_address[city]']").val();
+			var sender_state = $("input[name='sender_address[state]']").val();
 			var sender_country = $("select[name='sender_address[country]']").val();
 
 			var recipient_first_name = $("input[name='recipient_address[first_name]']").val();
@@ -68,6 +69,7 @@ jQuery( function( $ ) {
 			var recipient_street_nr = $("input[name='recipient_address[street_nr]']").val();
 			var recipient_postcode = $("input[name='recipient_address[postcode]']").val();
 			var recipient_city = $("input[name='recipient_address[city]']").val();
+			var recipient_state = $("input[name='recipient_address[state]']").val();
 			var recipient_country = $("select[name='recipient_address[country]']").val();
 		}else{
 			var sender_first_name 	= $( "input[name='recipient_address[first_name]']" ).val( );
@@ -77,6 +79,7 @@ jQuery( function( $ ) {
 			var sender_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
 			var sender_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
 			var sender_city 	= $( "input[name='recipient_address[city]']" ).val( );
+			var sender_state 	= $( "input[name='recipient_address[state]']" ).val( );
 			var sender_country 	= $( "select[name='recipient_address[country]']" ).val( );
 
 			var recipient_first_name 	= $( "input[name='sender_address[first_name]']" ).val( );
@@ -86,10 +89,11 @@ jQuery( function( $ ) {
 			var recipient_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
 			var recipient_postcode = $( "input[name='sender_address[postcode]']" ).val( );
 			var recipient_city 	= $( "input[name='sender_address[city]']" ).val( );
+			var recipient_state 	= $( "input[name='sender_address[state]']" ).val( );
 			var recipient_country 	= $( "select[name='sender_address[country]']" ).val( );
 		}
 
-		var parcel_id 	= $( "select[name=parcel_id" ).val( );
+		var parcel_id 	= $( "select[name='parcel_id']" ).val( );
 
 		var carrier 	= $( "select[name='parcel_carrier']" ).val( );
 		var width 		= $( "input[name='parcel_width']" ).val( );
@@ -108,6 +112,7 @@ jQuery( function( $ ) {
 			'sender_street_nr' : sender_street_nr,
 			'sender_postcode' : sender_postcode,
 			'sender_city' : sender_city,
+			'sender_state' : sender_state,
 			'sender_country' : sender_country,
 			'recipient_first_name' : recipient_first_name,
 			'recipient_last_name' : recipient_last_name,
@@ -116,6 +121,7 @@ jQuery( function( $ ) {
 			'recipient_street_nr': recipient_street_nr,
 			'recipient_postcode' : recipient_postcode,
 			'recipient_city' : recipient_city,
+			'recipient_state' : recipient_state,
 			'recipient_country' : recipient_country,
 			'parcel_id' : parcel_id,
 			'carrier': carrier,
@@ -401,6 +407,11 @@ jQuery( function( $ ) {
 				var div_create_label = button.parent();
 				var div_download_label = button.parent().parent().find( '.button-download-label' );
 				var div_delete_label = button.parent().parent().find( '.button-delete-shipment' );
+				var tracking_nr_text = button.parent().parent().parent().find( '.tracking-number' );
+				var price_text = button.parent().parent().parent().find( '.price' );
+
+				tracking_nr_text.text( result.carrier_tracking_no );
+				price_text.html( result.price );
 
 				div_download_label.find( 'a' ).attr( 'href', result.label_url );
 				div_download_label.find( 'a' ).attr( 'target', '_blank' );
