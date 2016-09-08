@@ -234,8 +234,6 @@ class Woocommerce_Shipcloud_API
 			'Affiliate-ID'  => 'plugin.woocommerce.z4NVoYhp'
 		);
 
-		FB::log( $params );
-
 		$params = json_encode( $params );
 
 		switch ( $method )
