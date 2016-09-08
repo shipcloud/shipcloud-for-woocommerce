@@ -904,6 +904,8 @@ class WC_Shipcloud_Order
 
 		if ( is_wp_error( $price ) )
 		{
+			WC_Shipcloud_Shipping::log( 'Could not calculate shipping - ' . $price->get_error_message() );
+
 			$errors[] = nl2br( $price->get_error_message() );
 			$result   = array(
 				'status' => 'ERROR',
@@ -912,6 +914,8 @@ class WC_Shipcloud_Order
 			echo json_encode( $result );
 			exit;
 		}
+
+		WC_Shipcloud_Shipping::log( 'Calculated shipping with - ' . $price . ' (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')');
 
 		$price_html = wc_price( $price, array( 'currency' => 'EUR' ) );
 		$html       = '<div class="notice">' . sprintf( __( 'The calculated price is %s.', 'woocommerce-shipcloud' ), $price_html ) . '</div>';
@@ -1006,7 +1010,10 @@ class WC_Shipcloud_Order
 
 		if ( is_wp_error( $shipment ) )
 		{
-			$errors[] = nl2br( $shipment->get_error_message() );
+			$error_message = $shipment->get_error_message();
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
+
+			$errors[] = nl2br( $error_message );
 			$result   = array(
 				'status' => 'ERROR',
 				'errors' => $errors
@@ -1014,6 +1021,8 @@ class WC_Shipcloud_Order
 			echo json_encode( $result );
 			exit;
 		}
+
+		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
 
 		$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
 
@@ -1081,11 +1090,16 @@ class WC_Shipcloud_Order
 		$order_id    = $_POST[ 'order_id' ];
 		$shipment_id = $_POST[ 'shipment_id' ];
 
+		$order = wc_get_order( $order_id );
+
 		$request = $shipcloud_api->create_label( $shipment_id );
 
 		if ( is_wp_error( $request ) )
 		{
-			$errors[] = nl2br( $request->get_error_message() );
+			$error_message = $request->get_error_message();
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
+
+			$errors[] = nl2br( $error_message );
 
 			$result = $result = array(
 				'status' => 'ERROR',
@@ -1096,9 +1110,10 @@ class WC_Shipcloud_Order
 			exit;
 		}
 
+		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created label successful (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
+
 		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
-		$order = wc_get_order( $order_id );
 		$order->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
 		$shipments_old = $shipments;
@@ -1141,6 +1156,8 @@ class WC_Shipcloud_Order
 		$order_id    = $_POST[ 'order_id' ];
 		$shipment_id = $_POST[ 'shipment_id' ];
 
+		$order = wc_get_order( $order_id );
+
 		$options       = get_option( 'woocommerce_shipcloud_settings' );
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 		$request       = $shipcloud_api->delete_shipment( $shipment_id );
@@ -1150,6 +1167,7 @@ class WC_Shipcloud_Order
 			// Do nothing if shipment was not found
 			if ( 'shipcloud_api_error_not_found' !== $request->get_error_code() )
 			{
+				WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Could not delete shipment (' . $shipment_id . ')' );
 
 				$errors[] = nl2br( $request->get_error_message() );
 				$result   = array(
@@ -1162,9 +1180,10 @@ class WC_Shipcloud_Order
 			}
 		}
 
+		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Deleted shipment successfully (' . $shipment_id . ')' );
+
 		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
-		$order = wc_get_order( $order_id );
 		$order->add_order_note( __( 'shipcloud.io shipment was deleted.', 'woocommerce-shipcloud' ) );
 
 		$shipments_old = $shipments;

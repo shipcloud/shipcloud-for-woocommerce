@@ -225,8 +225,6 @@ class Woocommerce_Shipcloud_API
 		$count_requests = get_option( 'woocommerce_shipcloud_count_requests', 0 ) + 1;
 		update_option( 'woocommerce_shipcloud_count_requests', $count_requests );
 
-		WC_Shipcloud_Shipping::log( sprintf( 'Requesting shipcloud "%s"', $action ) );
-
 		$url     = $this->get_endpoint( $action );
 		$headers = array(
 			'Authorization' => 'Basic ' . base64_encode( $this->api_key ),

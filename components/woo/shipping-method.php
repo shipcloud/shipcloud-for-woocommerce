@@ -130,6 +130,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		$this->start();
+
+		self::log( 'TEST' );
 	}
 
 	/**
@@ -205,6 +207,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 			$init_shipcloud_api = $this->init_shipcloud_api( $api_key );
 			if( is_wp_error( $init_shipcloud_api ) ) {
+				self::log( 'Could not initialize shipcloud API - ' . $init_shipcloud_api->get_error_message() );
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not initialize shipcloud API.', 'woocommerce-shipcloud' ), $init_shipcloud_api->get_error_message() ), 'error' );
 				return false;
 		    }
@@ -212,6 +215,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$carriers = $this->shipcloud_api->get_carriers();
 			if ( is_wp_error( $carriers ) )
 			{
+				self::log( 'Could not update carriers - ' . $carriers->get_error_message() );
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
 				return false;
 			}
@@ -220,6 +224,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$available_carriers = $this->get_allowed_carriers();
 			if ( is_wp_error( $available_carriers ) )
 			{
+				self::log( 'Could not get available carriers - ' . $available_carriers->get_error_message() );
 				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $available_carriers->get_error_message() ), 'error' );
 				return false;
 			}
@@ -935,6 +940,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if( is_wp_error( $carriers ) )
 		{
+			self::log( 'Could not get carriers - ' . $carriers->get_error_message() );
 			$this->log( $carriers->get_error_message() );
 			return;
 		}
@@ -953,7 +959,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 				if( is_wp_error( $price ) )
 				{
-					$this->log( $price->get_error_message() );
+					self::log( $price->get_error_message() );
 					$price = $this->get_fallback_price_for_shipment_classes( $parcels[ 'shipping_classes' ] );
 					$sum += $price;
 				}
@@ -969,7 +975,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 				if( is_wp_error( $price ) )
 				{
-					$this->log( $price->get_error_message() );
+					self::log( $price->get_error_message() );
 					$price = $this->get_fallback_price_for_products( $parcels[ 'products' ] );
 					$sum += $price;
 				}
@@ -1414,7 +1420,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( is_wp_error( $price ) )
 		{
-			$this->log( $price->get_error_message() );
+			self::log( $price->get_error_message() );
 		}
 		else
 		{
@@ -1571,7 +1577,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( is_wp_error( $shipcloud_carriers ) )
 		{
-			$this->log( $shipcloud_carriers->get_error_message() );
+			self::log( $shipcloud_carriers->get_error_message() );
 			return $shipcloud_carriers;
 		}
 
