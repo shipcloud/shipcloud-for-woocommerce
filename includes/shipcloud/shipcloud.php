@@ -234,6 +234,8 @@ class Woocommerce_Shipcloud_API
 			'Affiliate-ID'  => 'plugin.woocommerce.z4NVoYhp'
 		);
 
+		FB::log( $params );
+
 		$params = json_encode( $params );
 
 		switch ( $method )
@@ -620,7 +622,7 @@ class Woocommerce_Shipcloud_API
 	 * @return string|WP_Error
 	 * @since 1.0.0
 	 */
-	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $reference_number = '' )
+	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '' )
 	{
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
@@ -628,8 +630,19 @@ class Woocommerce_Shipcloud_API
 		{
 
 			case 'dhl':
-				$to_email = $to[ 'email' ];
-				unset( $to[ 'email' ] );
+				$additional_services = array();
+
+				if( ! empty ( $carrier_email ) ) {
+					$additional_services = array(
+						array(
+							'name'       => 'advance_notice',
+							'properties' => array(
+								'email'    => $carrier_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to[ 'country' ] ) )
+							)
+						)
+					);
+				}
 
 				$params = array(
 					'carrier'               => $carrier[ 'carrier' ],
@@ -639,22 +652,25 @@ class Woocommerce_Shipcloud_API
 					'package'               => $package,
 					'create_shipping_label' => $create_label,
 					'notification_email'    => $notification_email,
-					'additional_services'   => array(
-						array(
-							'name'       => 'advance_notice',
-							'properties' => array(
-								'email'    => $to_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtolupper( $to[ 'country' ] ) )
-							)
-						)
-					)
+					'additional_services'   => $additional_services
 				);
 
 				break;
 
 			case 'dpd':
-				$to_email = $to[ 'email' ];
-				unset( $to[ 'email' ] );
+				$additional_services = array();
+
+				if( ! empty ( $carrier_email ) ) {
+					$additional_services = array(
+						array(
+							'name'       => 'advance_notice',
+							'properties' => array(
+								'email'    => $carrier_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to[ 'country' ] ) )
+							)
+						)
+					);
+				}
 
 				$params = array(
 					'carrier'               => $carrier[ 'carrier' ],
@@ -663,16 +679,8 @@ class Woocommerce_Shipcloud_API
 					'to'                    => $to,
 					'package'               => $package,
 					'create_shipping_label' => $create_label,
-					'notification_email'    => $notification_email,
-					'additional_services'   => array(
-						array(
-							'name'       => 'advance_notice',
-							'properties' => array(
-								'email'    => $to_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtolupper( $to[ 'country' ] ) )
-							)
-						)
-					)
+					'notification_email'    => $carrier_email,
+					'additional_services'   => $additional_services
 				);
 
 				break;

@@ -983,6 +983,11 @@ class WC_Shipcloud_Order
 			$notification_email = apply_filters( 'wcsc_notification_email', $order->billing_email, $order );
 		}
 
+		$carrier_email = '';
+		if( array_key_exists( 'carrier_email', $options ) && 'yes' === $options[ 'carrier_email' ] ){
+			$carrier_email = apply_filters( 'wcsc_carrier_email', $order->billing_email, $order );
+		}
+
 		$reference_number = sprintf( __( 'Order %s', 'woocommerce-shipcloud' ), $order->get_order_number() );
 
 		/**
@@ -997,7 +1002,7 @@ class WC_Shipcloud_Order
 		 */
 		$reference_number = apply_filters( 'wcsc_reference_number', $reference_number, $order->get_order_number(), $order_id );
 
-		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email, $reference_number );
+		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number );
 
 		if ( is_wp_error( $shipment ) )
 		{

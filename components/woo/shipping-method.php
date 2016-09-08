@@ -383,7 +383,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			'notification_email'                => array(
 				'title'       => __( 'Notification Email', 'woocommerce-shipcloud' ),
 				'type'        => 'checkbox',
-				'label'       => __( 'Send notification emails to recipients on status changes of shipment.', 'woocommerce-shipcloud' ),
+				'label'       => __( 'Send notification emails from shipcloud.io to recipients on status changes of shipment.', 'woocommerce-shipcloud' ),
+				'default'     => 'yes'
+			),
+			'carrier_email'                => array(
+				'title'       => __( 'Carrier Email', 'woocommerce-shipcloud' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Send notification emails from carriers (supported by DHL and DPD) to recipients on status changes of shipment.', 'woocommerce-shipcloud' ),
 				'default'     => 'yes'
 			),
 			'callback_url'                      => array(
