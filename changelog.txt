@@ -1,6 +1,7 @@
 *** WooCommerce Shipcloud Changelog ***
 
-2016.**.** - version 1.1.0
+2016.09.08 - version 1.1.0
+* Enhanced: Better logging information
 * Enhanced: Replaced new lines on Logging and only using Shipping method logger
 * Enhanced: Added option for automatic street detection
 * Enhanced: Added advanced notice for DHL

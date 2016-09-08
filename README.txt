@@ -24,6 +24,12 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 == Changelog ==
 
 = 1.1.0 =
+* Enhanced: Better logging information
+* Enhanced: Replaced new lines on Logging and only using Shipping method logger
+* Enhanced: Added option for automatic street detection
+* Enhanced: Added advanced notice for DHL
+* Enhanced: Added reference number and filter for reference number
+* Enhanced: Added base functionality for converting ISO language strings for DPD
 * Enhanced: Added Notification Email for sending status changes to recipient
 * Enhanced: Added state to addresses
 * Enhanced: Added Tracking numbers in labels
@@ -37,6 +43,8 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 * Enhanced: Optimized shipment calculation by better code structure and better performance on API Requests
 * Enhanced: Created fallback options on problems with API
 * Enhanced: Better street & number splitting
+* Fixed: Only adding calculated parcels if there have been parcels determined
+* Fixed: Wrong ISO format for DHL and DPD advanced notice
 * Fixed: Shipment classes could not be edited anymore in WooCommerce 2.6.0 because of GUI change
 * Fixed: Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
 * Fixed: JavaScript which stopped all JS in WP-Admin in Safari Browser
