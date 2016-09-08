@@ -130,8 +130,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		$this->start();
-
-		self::log( 'TEST' );
 	}
 
 	/**
