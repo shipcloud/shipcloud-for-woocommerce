@@ -38,14 +38,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	private static $logger;
 
 	/**
-	 * Debug mode
-	 *
-	 * @var bool $debug
-	 * @since 1.0.0
-	 */
-	private $debug = true;
-
-	/**
 	 * Callback URL
 	 *
 	 * @var string $callback_url
@@ -124,11 +116,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		$this->enabled = $this->get_option( 'enabled' );
 
-		if ( 'no' == $this->get_option( 'debug' ) )
-		{
-			$this->debug = false;
-		}
-
 		$this->start();
 	}
 
@@ -150,7 +137,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
 
 		if( is_wp_error( $this->shipcloud_api ) ) {
-			$this->log( $price->get_error_message() );
+			self::log( $this->shipcloud_api->get_error_message() );
 			return $this->shipcloud_api;
 		}
 
@@ -680,19 +667,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( ( json_last_error() !== JSON_ERROR_NONE ) )
 		{
-			if ( self::$debug )
-			{
-				self::log( sprintf( 'Shipment Listener: JSON error (%s).', json_last_error_msg() ) );
-			}
+			self::log( sprintf( 'Shipment Listener: JSON error (%s).', json_last_error_msg() ) );
 			exit;
 		}
 
 		if ( ! property_exists( $shipment, 'data' ) || ! property_exists( $shipment->data, 'id' ) )
 		{
-			if ( self::$debug )
-			{
-				self::log( 'Shipment Listener: Wrong data format.' );
-			}
+			self::log( 'Shipment Listener: Wrong data format.' );
 			exit;
 		}
 
@@ -700,10 +681,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( empty( $shipment_id ) )
 		{
-			if ( self::$debug )
-			{
-				self::log( 'Shipment Listener: Shipment ID not given.' );
-			}
+			self::log( 'Shipment Listener: Shipment ID not given.' );
 			exit;
 		}
 
@@ -713,18 +691,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( null == $order_id )
 		{
-			if ( self::$debug )
-			{
-				self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID #%s not found', $shipment_id ) );
-			}
+			self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID #%s not found', $shipment_id ) );
 			exit;
 		}
 		else
 		{
-			if ( self::$debug )
-			{
-				self::log( sprintf( 'Shipment Listener: Changed status to "%s" for Shipment ID %s (Order ID %s) ', $shipment->type, $shipment_id, $order_id ) );
-			}
+			self::log( sprintf( 'Shipment Listener: Changed status to "%s" for Shipment ID %s (Order ID %s) ', $shipment->type, $shipment_id, $order_id ) );
 		}
 
 		$order = wc_get_order( $order_id );
@@ -735,6 +707,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		/**
 		 * Hooks in for further functions after status changes
 		 */
+		do_action( 'shipcloud_shipment_tracking_change', $order_id, $shipment_id, $shipment->type );
+
 		switch ( $shipment->type )
 		{
 			case 'shipment.tracking.picked_up':
@@ -1480,7 +1454,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 *
 	 * @param string $shipping_class
 	 *
-	 * @return float $costs
+	 * @return float|boolean $costs
 	 * @since 1.0.0
 	 */
 	private function get_shipping_class_costs( $shipping_class )
@@ -1489,11 +1463,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( ! is_object( $term ) )
 		{
-			if ( $this->debug )
-			{
-				self::log( sprintf( __( 'No term found for shipping class #%s', 'woocommerce-shipcloud' ), $shipping_class ) );
-			}
-
+			self::log( sprintf( __( 'No term found for shipping class #%s', 'woocommerce-shipcloud' ), $shipping_class ) );
 			return false;
 		}
 
@@ -1501,10 +1471,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( 0 == $parcel_id )
 		{
-			if ( $this->debug )
-			{
-				self::log( sprintf( __( 'No parcel found for product id #%s', 'woocommerce-shipcloud' ), $product_id ) );
-			}
+			self::log( sprintf( __( 'No parcel found for product id #%s', 'woocommerce-shipcloud' ), $product_id ) );
 		}
 
 		$retail_price = $this->get_parcel_retail_price( $parcel_id );
@@ -1533,10 +1500,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if ( '' == $retail_price )
 		{
 			$retail_price = $this->get_option( 'standard_price' );
-			if ( $this->debug )
-			{
-				self::log( sprintf( __( 'No price found for parcel. Using fallback price %s', 'woocommerce-shipcloud' ), $retail_price ) );
-			}
+			self::log( sprintf( __( 'No price found for parcel. Using fallback price %s', 'woocommerce-shipcloud' ), $retail_price ) );
 		}
 
 		return $retail_price;
@@ -1610,6 +1574,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @param null   $empty_value
 	 *
 	 * @return mixed|string
+	 * @since 1.0.0
 	 */
 	public function get_option( $key, $empty_value = null ) {
 		$option = parent::get_option( $key, $empty_value );
@@ -1631,6 +1596,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public static function log( $message )
 	{
+		if( 'no' === WC_Settings_API::get_option( 'debug', 'no' ) ) {
+			return;
+		}
+
 		if ( ! is_object( self::$logger ) )
 		{
 			self::$logger = new WC_Logger();

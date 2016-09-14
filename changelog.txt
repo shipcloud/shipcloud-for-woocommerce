@@ -1,5 +1,10 @@
 *** WooCommerce Shipcloud Changelog ***
 
+2016.*.* - version 1.1.1
+* Tweaked: Checking if logger is enabled within logger function
+* Tweaked: Added Actionhook 'shipcloud_shipment_tracking_change' for all tracking status changes
+* Fixed: Error 500 on calling Webhook URL
+
 2016.09.08 - version 1.1.0
 * Enhanced: Better logging information
 * Enhanced: Replaced new lines on Logging and only using Shipping method logger
