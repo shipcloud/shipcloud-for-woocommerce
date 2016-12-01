@@ -43,7 +43,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @var bool $debug
 	 * @since 1.0.0
 	 */
-	private $debug = true;
+	private static $debug = true;
 
 	/**
 	 * Callback URL
