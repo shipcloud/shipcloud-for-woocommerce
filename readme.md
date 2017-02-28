@@ -1,6 +1,6 @@
 # shipcloud.io for WooCommerce
 
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 
 This plugin integrates shipcloud.io into WooCommerce.
 
