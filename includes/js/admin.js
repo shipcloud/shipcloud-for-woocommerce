@@ -67,6 +67,7 @@ jQuery( function( $ ) {
 			var recipient_company = $("input[name='recipient_address[company]']").val();
 			var recipient_street = $("input[name='recipient_address[street]']").val();
 			var recipient_street_nr = $("input[name='recipient_address[street_nr]']").val();
+			var recipient_care_of = $("input[name='recipient_address[care_of]']").val();
 			var recipient_postcode = $("input[name='recipient_address[postcode]']").val();
 			var recipient_city = $("input[name='recipient_address[city]']").val();
 			var recipient_state = $("input[name='recipient_address[state]']").val();
@@ -85,6 +86,7 @@ jQuery( function( $ ) {
 			var recipient_first_name 	= $( "input[name='sender_address[first_name]']" ).val( );
 			var recipient_last_name 	= $( "input[name='sender_address[last_name]']" ).val( );
 			var recipient_company 	= $( "input[name='sender_address[company]']" ).val( );
+            var recipient_care_of = $("input[name='recipient_address[care_of]']").val();
 			var recipient_street 	= $( "input[name='sender_address[street]']" ).val( );
 			var recipient_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
 			var recipient_postcode = $( "input[name='sender_address[postcode]']" ).val( );
@@ -119,6 +121,7 @@ jQuery( function( $ ) {
 			'recipient_company' : recipient_company,
 			'recipient_street' : recipient_street,
 			'recipient_street_nr': recipient_street_nr,
+			'recipient_care_of' : recipient_care_of,
 			'recipient_postcode' : recipient_postcode,
 			'recipient_city' : recipient_city,
 			'recipient_state' : recipient_state,

@@ -291,6 +291,11 @@ class WC_Shipcloud_Order
 						<label for="recipient_address[last_name]"><?php _e( 'Last Name', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
+                    <p class="fullsize">
+                        <input type="text" name="recipient_address[care_of]" value="<?php echo $recipient[ 'care_of' ]; ?>" disabled>
+                        <label for="recipient_address[care_of]"><?php _e( 'Care of', 'woocommerce-shipcloud' ); ?></label>
+                    </p>
+
 					<p class="seventyfive">
 						<input type="text" name="recipient_address[street]" value="<?php echo $recipient[ 'street' ]; ?>" disabled>
 						<label for="recipient_address[street]"><?php _e( 'Street', 'woocommerce-shipcloud' ); ?></label>
@@ -961,6 +966,7 @@ class WC_Shipcloud_Order
 			'company'    => $_POST[ 'recipient_company' ],
 			'street'     => $_POST[ 'recipient_street' ],
 			'street_no'  => $_POST[ 'recipient_street_nr' ],
+			'care_of'    => $_POST[ 'recipient_care_of' ],
 			'zip_code'   => $_POST[ 'recipient_postcode' ],
 			'city'       => $_POST[ 'recipient_city' ],
 			'state'      => $_POST[ 'recipient_state' ],
@@ -1110,9 +1116,6 @@ class WC_Shipcloud_Order
 
 		$request = $shipcloud_api->create_label( $shipment_id );
 		
-		var_dump($request, $shipment_id);
-		exit;
-
 		if ( is_wp_error( $request ) ) {
 			$error_message = $request->get_error_message();
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message . ' (' . wcsc_get_carrier_display_name( $carrier_id ) . ')' );
