@@ -110,6 +110,10 @@ class Woocommerce_Shipcloud_API
 		);
 	}
 
+	public function get_services() {
+		return $this->services;
+	}
+
 	/**
 	 * Getting carriers
 	 *

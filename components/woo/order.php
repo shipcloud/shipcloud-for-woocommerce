@@ -1082,35 +1082,45 @@ class WC_Shipcloud_Order
 	 *
 	 * @since 1.0.0
 	 */
-	public function ajax_create_label()
-	{
-		$options       = get_option( 'woocommerce_shipcloud_settings' );
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+	public function ajax_create_label() {
+		$result = $this->create_label($_POST['order_id'], $_POST['carrier'], $_POST['shipment_id']);
 
-		$order_id    = $_POST[ 'order_id' ];
-		$shipment_id = $_POST[ 'shipment_id' ];
+		if ( is_wp_error( $result ) ) {
+			$error_message = $result->get_error_message();
+
+			echo json_encode(
+				array(
+					'status' => 'ERROR',
+					'errors' => nl2br( $error_message )
+				)
+			);
+
+			exit;
+		}
+
+		echo json_encode( $result );
+		exit;
+	}
+
+	public function create_label( $order_id, $carrier_id, $shipment_id = null ) {
+		$options       = get_option( 'woocommerce_shipcloud_settings' );
+		$shipcloud_api = new Woocommerce_Shipcloud_API( $options['api_key'] );
 
 		$order = wc_get_order( $order_id );
 
 		$request = $shipcloud_api->create_label( $shipment_id );
+		
+		var_dump($request, $shipment_id);
+		exit;
 
-		if ( is_wp_error( $request ) )
-		{
+		if ( is_wp_error( $request ) ) {
 			$error_message = $request->get_error_message();
-			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message . ' (' . wcsc_get_carrier_display_name( $carrier_id ) . ')' );
 
-			$errors[] = nl2br( $error_message );
-
-			$result = $result = array(
-				'status' => 'ERROR',
-				'errors' => $errors
-			);
-
-			echo json_encode( $result );
-			exit;
+			return $request;
 		}
 
-		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created label successful (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
+		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created label successful (' . wcsc_get_carrier_display_name( $carrier_id ) . ')' );
 
 		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
@@ -1141,9 +1151,6 @@ class WC_Shipcloud_Order
 			'price'                      => wc_price( $request[ 'body' ][ 'price' ], array( 'currency' => 'EUR' ) ),
 			'carrier_tracking_no'        => $request[ 'body' ][ 'carrier_tracking_no' ]
 		);
-
-		echo json_encode( $result );
-		exit;
 	}
 
 	/**

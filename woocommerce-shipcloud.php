@@ -391,3 +391,68 @@ function woocommerce_shipcloud_init()
 }
 
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
+
+
+add_filter( 'bulk_actions-edit-shop_order', function ( $actions ) {
+	$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
+
+	return $actions;
+} );
+
+
+add_filter( 'handle_bulk_actions-edit-shop_order', function ( $foo ) {
+	return $foo;
+} );
+
+add_action( 'load-edit.php', function () {
+	wp_register_script(
+		'wcsc_bulk_order_label',
+		WCSC_URLPATH . '/includes/js/bulk-order-label.js',
+		array( 'jquery' )
+	);
+
+	wp_enqueue_script( 'wcsc_bulk_order_label', false, array(), false, true );
+} );
+
+add_action( 'admin_print_footer_scripts', function () {
+	require_once WCSC_FOLDER . '/includes/shipcloud/block-order-labels-bulk.php';
+
+	$block = new WooCommerce_Shipcloud_Block_Order_Labels_Bulk(
+		WCSC_COMPONENTFOLDER . '/block/order-labels-bulk.php',
+		wcsc_shipping_method()->get_allowed_carriers(),
+		new Woocommerce_Shipcloud_API()
+	);
+
+	$block->dispatch();
+} );
+
+add_action( 'load-edit.php', function () {
+	if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' != get_current_screen()->id ) {
+		// None of our business.
+		return;
+	}
+
+	$request = $_GET; // XSS: OK.
+
+	if ( ! isset( $request['action'] ) || 'wcsc_order_bulk_label' !== $request['action'] ) {
+		return;
+	}
+
+	if ( ! isset( $request['wcsc_carrier'] ) && ! $request['wcsc_carrier'] ) {
+		return;
+	}
+
+	$order_handler = WC_Shipcloud_Order::instance();
+
+	foreach ( $request['post'] as $order_id ) {
+		// Shipment id
+		$shipment_data = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+
+		$shipment_id = null;
+		if ( $shipment_data && isset( $shipment_data['id'] ) && $shipment_data['id'] ) {
+			$shipment_id = $shipment_data['id'];
+		}
+
+		$order_handler->create_label( $order_id, $request['wcsc_carrier'], $shipment_id );
+	}
+} );
