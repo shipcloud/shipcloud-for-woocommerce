@@ -448,6 +448,15 @@ add_action( 'load-edit.php', function () {
 		// Shipment id
 		$shipment_data = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
+		// We really need those shipment data.
+		if ( ! $shipment_data ) {
+			$shipment_data = woocommerce_shipcloud_create_shipment_data(
+				WC()->order_factory->get_order( $order_id ),
+				$request['wcsc_carrier'],
+				new Woocommerce_Shipcloud_API()
+			);
+		}
+
 		$shipment_id = null;
 		if ( $shipment_data && isset( $shipment_data['id'] ) && $shipment_data['id'] ) {
 			$shipment_id = $shipment_data['id'];
@@ -456,3 +465,86 @@ add_action( 'load-edit.php', function () {
 		$order_handler->create_label( $order_id, $request['wcsc_carrier'], $shipment_id );
 	}
 } );
+
+/**
+ * @param WC_Order $order
+ */
+function woocommerce_shipcloud_create_shipment_data( $order, $carrier, $shipcloud_api = null, $shipping = null ) {
+	if ( null === $shipcloud_api ) {
+		$shipcloud_api = new Woocommerce_Shipcloud_API();
+	}
+
+	if (null === $shipping) {
+		$shipping = new WC_Shipcloud_Shipping();
+	}
+
+
+	// Sender - defaults will be overridden by shipment address per order if given.
+	$from = array(
+		'first_name' => $shipping->get_option('sender_first_name'),
+		'last_name'  => $shipping->get_option('sender_last_name'),
+		'company'    => $shipping->get_option('sender_company'),
+		'street'     => $shipping->get_option('sender_street'),
+		'street_no'  => $shipping->get_option('sender_street_nr'),
+		'zip_code'   => $shipping->get_option('sender_postcode'),
+		'city'       => $shipping->get_option('sender_city'),
+		'state'      => $shipping->get_option('sender_state'),
+		'country'    => $shipping->get_option('sender_country'),
+	);
+
+	// Check if there are special settings for the order.
+	$order_sender_address = get_post_meta( $order->id, 'shipcloud_sender_address', true );
+	if ($order_sender_address) {
+		$from = array_merge( $from, $order_sender_address );
+	}
+
+	// Recipient - will be overridden by custom data in shipcloud meta box.
+	$to = array(
+		'first_name' => $order->shipping_first_name,
+		'last_name'  => $order->shipping_last_name,
+		'company'    => $order->shipping_company,
+		'street'     => $order->shipping_address_1,
+		'street_no'  => $order->shipping_address_2,
+		'care_of'    => null,
+		'zip_code'   => $order->shipping_postcode,
+		'city'       => $order->shipping_city,
+		'state'      => $order->shipping_state,
+		'country'    => $order->shipping_country,
+		'email'      => $order->billing_email,
+	);
+
+	$order_recipient_address = get_post_meta($order->id, 'shipcloud_recipient_address', true);
+	if ($order_recipient_address) {
+		$to = array_merge( $to, $order_recipient_address );
+	}
+
+	$shipment = $shipcloud_api->create_shipment( $carrier, $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number );
+
+	$parcel_title = ''; // TODO wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $_POST[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
+
+	$data = array(
+		'id'                   => $shipment['id'],
+		'carrier_tracking_no'  => $shipment['carrier_tracking_no'],
+		'tracking_url'         => $shipment['tracking_url'],
+		'label_url'            => $shipment['label_url'],
+		'price'                => $shipment['price'],
+		'parcel_id'            => $shipment['id'],
+
+		'parcel_title'         => $parcel_title,
+
+		'carrier'              => $_POST['carrier'],
+		'width'                => $_POST['width'],
+		'height'               => $_POST['height'],
+		'length'               => $_POST['length'],
+		'weight'               => $_POST['weight'],
+		'description'          => $_POST['description'],
+
+		'date_created'         => time()
+	);
+
+	// TODO $data = array_merge($data, $from);
+	// TODO $data = array_merge($data, $to);
+
+	update_post_meta( $order->id, 'shipcloud_shipment_ids', $data['id'] );
+	update_post_meta( $order->id, 'shipcloud_shipment_data', $data );
+}
