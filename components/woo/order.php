@@ -520,7 +520,10 @@ class WC_Shipcloud_Order
 				<tr>
 					<th><?php _e( 'Description', 'woocommerce-shipcloud' ); ?></th>
 					<td>
-						<input type="text" name="parcel_description"/> <small><?php echo sprintf( __( 'Required for carriers: %s', 'woocommerce-shipcloud' ), 'DPD' ); ?></small>
+						<input type="text"
+                               name="parcel_description"
+                               value="<?php esc_attr_e( wcsc_order_get_parcel_description( $order ) ) ?>"/>
+                        <small><?php echo sprintf( __( 'Required for carriers: %s', 'woocommerce-shipcloud' ), 'DPD' ); ?></small>
 					</td>
 				</tr>
 				</tbody>

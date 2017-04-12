@@ -400,3 +400,13 @@ function wcsc_is_frontend_screen()
 
 	return false;
 }
+
+function wcsc_order_get_parcel_description( WC_Order $order ) {
+	$shipping_data = (array) get_post_meta( $order->id, 'shipcloud_shipment_data', true );
+
+	if ( isset( $shipping_data['description'] ) ) {
+		return $shipping_data['description'];
+	}
+
+	return $order->post->post_excerpt;
+}
