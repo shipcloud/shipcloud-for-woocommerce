@@ -235,69 +235,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			return false;
 		}
 
-		$standard_address_err = false;
-
-		$sender_val = $this->get_option( 'sender_street' );
-		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_street' ] ) )
-		{
-			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_street' ];
-		}
-
-		if ( empty( $sender_val ) )
-		{
-			$standard_address_err = true;
-		}
-
-		$sender_val = $this->get_option( 'sender_street_nr' );
-		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_street_nr' ] ) )
-		{
-			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_street_nr' ];
-		}
-
-		if ( empty( $sender_val ) )
-		{
-			$standard_address_err = true;
-		}
-
-		$sender_val = $this->get_option( 'sender_postcode' );
-		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_postcode' ] ) )
-		{
-			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_postcode' ];
-		}
-
-		if ( empty( $sender_val ) )
-		{
-			$standard_address_err = true;
-		}
-
-		$sender_val = $this->get_option( 'sender_city' );
-		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_city' ] ) )
-		{
-			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_city' ];
-		}
-
-		if ( empty( $sender_val ) )
-		{
-			$standard_address_err = true;
-		}
-
-		$sender_val = $this->get_option( 'sender_country' );
-		if ( isset( $_POST[ 'woocommerce_shipcloud_sender_country' ] ) )
-		{
-			$sender_val = $_POST[ 'woocommerce_shipcloud_sender_country' ];
-		}
-
-		if ( empty( $sender_val ) )
-		{
-			$standard_address_err = true;
-		}
-
-		if ( $standard_address_err )
-		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter your <a href="%s">standard sender data</a>! At least, street, street number, postcode, city, state and country.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-			return false;
-		}
-
 		return true;
 	}
 
