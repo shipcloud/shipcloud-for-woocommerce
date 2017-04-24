@@ -424,7 +424,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'How should the price for products be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
-				'default'     => 'class',
+				'default'     => 'product',
 				'options'     => array(
 					'product'      => __( 'Per Product: Charge shipping with fallback price for each product', 'woocommerce-shipcloud' ),
 					'order'        => __( 'Per Order: Charge shipping with fallback price for one product', 'woocommerce-shipcloud' ),
@@ -582,7 +582,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'How should the price for products be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
-				'default'     => 'class',
+				'default'     => 'product',
 				'options'     => array(
 					'product'      => __( 'Per Product: Charge shipping with fallback price for each product', 'woocommerce-shipcloud' ),
 					'order'        => __( 'Per Order: Charge shipping with fallback price for whole order', 'woocommerce-shipcloud' ),
