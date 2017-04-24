@@ -540,7 +540,8 @@ class WC_Shipcloud_Order
 
 		$args = array(
 			'post_type'   => 'sc_parcel_template',
-			'post_status' => 'publish'
+			'post_status' => 'publish',
+            'posts_per_page' => -1
 		);
 
 		$posts = get_posts( $args );
