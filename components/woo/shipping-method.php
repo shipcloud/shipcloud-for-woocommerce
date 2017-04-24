@@ -157,6 +157,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->init_settings_fields();
 
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
+        add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'set_standard_carrier' ) );
 	}
 
 	/**
@@ -1566,6 +1567,18 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		return $carriers;
 	}
+
+    /**
+     * Setting standard carrier if no was selected
+     *
+     * @param $method string Old Shipment Method
+     * @return string New Shipment Method
+     *
+     * @since 1.1.2
+     */
+	public function set_standard_carrier( $method ) {
+        return $this->get_option( 'standard_carrier' );
+    }
 
 	/**
 	 * Getting option (overwrite instance values if there option of instance is empty
