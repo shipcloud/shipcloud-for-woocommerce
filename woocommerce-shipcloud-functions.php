@@ -428,3 +428,21 @@ function _wcsc_is_sender_address_valid() {
 
 	return true;
 }
+
+function wcsc_care_of_frontend( $data ) {
+	$pos = array_search( 'shipping_company', array_keys( $data ) );
+
+	$final                 = array_slice( $data, 0, $pos );
+	$final['wcsc_care_of'] = array(
+		'label'       => __( 'Care of', 'wcsc' ),
+		'description' => '',
+		'class'       => array( 'form-row-wide' ),
+		'clear'       => true,
+	);
+
+	$data = $final + array_slice( $data, $pos );
+
+	return $data;
+}
+
+add_filter( 'woocommerce_shipping_fields', 'wcsc_care_of_frontend' );
