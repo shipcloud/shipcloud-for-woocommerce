@@ -408,7 +408,7 @@ function wcsc_order_get_parcel_description( WC_Order $order ) {
 		return $shipping_data['description'];
 	}
 
-	return $order->post->post_excerpt;
+	return '';
 }
 
 function _wcsc_is_sender_address_valid() {
