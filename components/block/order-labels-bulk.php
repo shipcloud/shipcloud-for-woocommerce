@@ -1,5 +1,5 @@
 <?php /** @var WooCommerce_Shipcloud_Block_Order_Labels_Bulk $this */ ?>
-<table style="display: none">
+<table style="">
     <tbody id="wcsc">
 
     <tr id="wcsc-order-bulk-labels"
@@ -18,30 +18,78 @@
                 </div>
             </fieldset>
 
-
             <fieldset class="inline-edit-col-right">
+                <div class="inline-edit-col">
+                    <div class="inline-edit-group wp-clearfix">
+                        <label class="alignleft">
+                            <span class="title">Size</span>
+							<?php if ( wcsc_get_parceltemplates() ): ?>
+                                <select name="wcsc_template" id="wcsc_template">
+                                    <option value="">
+										<?php esc_html_e( '(choose from templates here)' ) ?>
+                                    </option>
+									<?php foreach ( wcsc_get_parceltemplates() as $service_id => $template ): ?>
+                                        <option value="<?php echo esc_attr( $service_id ) ?>"
+                                                data-carrier="<?php esc_attr_e( $template['values']['carrier'] ) ?>"
+                                                data-width="<?php esc_attr_e( $template['values']['width'] ) ?>"
+                                                data-height="<?php esc_attr_e( $template['values']['height'] ) ?>"
+                                                data-length="<?php esc_attr_e( $template['values']['length'] ) ?>"
+                                                data-weight="<?php esc_attr_e( $template['values']['weight'] ) ?>"
+                                        >
+											<?php echo esc_html( $template['post_title'] ) ?>
+                                        </option>
+									<?php endforeach; ?>
+                                </select>
+							<?php endif; ?>
+                        </label>
+
+                        <div class="inline-edit-group wp-clearfix">
+                            <label class="alignleft">
+                                <span class="title">
+                                    <?php esc_html_e( 'Width', 'woocommerce-shipcloud' ) ?>
+                                </span>
+                                <input type="text" name="wcsc_width" id="wcsc_width"/>
+                            </label>
+                        </div>
+
+                        <div class="inline-edit-group wp-clearfix">
+                            <label class="alignleft">
+                                <span class="title">
+                                    <?php esc_html_e( 'Height', 'woocommerce-shipcloud' ) ?>
+                                </span>
+                                <input type="text" name="wcsc_height" id="wcsc_height"/>
+                            </label>
+                        </div>
+
+                        <div class="inline-edit-group wp-clearfix">
+                            <label class="alignleft">
+                                <span class="title">
+                                    <?php esc_html_e( 'Length', 'woocommerce-shipcloud' ) ?>
+                                </span>
+                                <input type="text" name="wcsc_length" id="wcsc_length"/>
+                            </label>
+                        </div>
+
+                        <div class="inline-edit-group wp-clearfix">
+                            <label class="alignleft">
+                                <span class="title">
+                                    <?php esc_html_e( 'Weight', 'woocommerce-shipcloud' ) ?>
+                                </span>
+                                <input type="text" name="wcsc_weigth" id="wcsc_weight"/>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="inline-edit-col">
 
                     <div class="inline-edit-group wp-clearfix">
                         <label class="alignleft">
                             <span class="title">Carrier</span>
-                            <select name="wcsc_carrier">
-								<?php foreach ( $this->get_allowed_carriers() as $carrier_id => $carrier_label ): ?>
-                                    <option value="<?php echo esc_attr( $carrier_id ) ?>">
-										<?php echo esc_html( $carrier_label ) ?>
-                                    </option>
-								<?php endforeach; ?>
-                            </select>
-                        </label>
-                    </div>
-
-                    <div class="inline-edit-group wp-clearfix">
-                        <label class="alignleft">
-                            <span class="title">Service</span>
-                            <select name="wcsc_service">
-								<?php foreach ( $this->get_services() as $service_id => $service_label ): ?>
-                                    <option value="<?php echo esc_attr( $service_id ) ?>">
-										<?php echo esc_html( $service_label ) ?>
+                            <select name="wcsc_carrier" id="wcsc_carrier">
+								<?php foreach ( wcsc_api()->get_carriers() as $carrier ): ?>
+                                    <option value="<?php echo esc_attr( $carrier['name'] ) ?>">
+										<?php echo esc_html( $carrier['display_name'] ) ?>
                                     </option>
 								<?php endforeach; ?>
                             </select>
@@ -65,6 +113,20 @@
     </tr>
     </tbody>
 </table>
+
+<script type="application/javascript">
+    jQuery(function ($) {
+        $('#wcsc_template').change(function () {
+            var selected_data = $(':selected', this).data();
+
+            $(['width', 'height', 'length', 'weight']).each(function (i, elem) {
+                $('#wcsc_' + elem).val(selected_data[elem]);
+            });
+
+            $('#wcsc_carrier').val(selected_data.carrier);
+        });
+    });
+</script>
 
 <script type="template/html" id="tmpl-wcsc-order-labels-bulk-items">
     <div data-id="{{ data.id }}"

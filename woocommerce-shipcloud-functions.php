@@ -446,3 +446,18 @@ function wcsc_care_of_frontend( $data ) {
 }
 
 add_filter( 'woocommerce_shipping_fields', 'wcsc_care_of_frontend' );
+
+/**
+ * Reusable connection to the API.
+ *
+ * @return Woocommerce_Shipcloud_API
+ */
+function wcsc_api() {
+	static $api;
+
+	if (!$api) {
+		$api = new Woocommerce_Shipcloud_API( wcsc_shipping_method()->get_option( 'api_key' ) );
+	}
+
+	return $api;
+}
