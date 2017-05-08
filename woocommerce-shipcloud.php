@@ -426,7 +426,10 @@ add_action( 'admin_print_footer_scripts', function () {
 	$block->dispatch();
 } );
 
-add_action( 'load-edit.php', function () {
+/**
+ * Handle bulk action on orders.
+ */
+function _wcsc_order_bulk() {
 	if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' != get_current_screen()->id ) {
 		// None of our business.
 		return;
@@ -443,6 +446,14 @@ add_action( 'load-edit.php', function () {
 	}
 
 	$order_handler = WC_Shipcloud_Order::instance();
+
+	$package = array(
+		'width'  => $_POST[ 'width' ],
+		'height' => $_POST[ 'height' ],
+		'length' => $_POST[ 'length' ],
+		'weight' => $_POST[ 'weight' ],
+		'description' => $_POST[ 'description' ],
+	);
 
 	foreach ( $request['post'] as $order_id ) {
 		// Shipment id
@@ -462,9 +473,74 @@ add_action( 'load-edit.php', function () {
 			$shipment_id = $shipment_data['id'];
 		}
 
+		$from = array(
+			'first_name' => $_POST[ 'sender_first_name' ],
+			'last_name'  => $_POST[ 'sender_last_name' ],
+			'company'    => $_POST[ 'sender_company' ],
+			'street'     => $_POST[ 'sender_street' ],
+			'street_no'  => $_POST[ 'sender_street_nr' ],
+			'zip_code'   => $_POST[ 'sender_postcode' ],
+			'city'       => $_POST[ 'sender_city' ],
+			'state'      => $_POST[ 'sender_state' ],
+			'country'    => $_POST[ 'sender_country' ],
+		);
+
+		$to = array(
+			'first_name' => $_POST[ 'recipient_first_name' ],
+			'last_name'  => $_POST[ 'recipient_last_name' ],
+			'company'    => $_POST[ 'recipient_company' ],
+			'street'     => $_POST[ 'recipient_street' ],
+			'street_no'  => $_POST[ 'recipient_street_nr' ],
+			'care_of'    => $_POST[ 'recipient_care_of' ],
+			'zip_code'   => $_POST[ 'recipient_postcode' ],
+			'city'       => $_POST[ 'recipient_city' ],
+			'state'      => $_POST[ 'recipient_state' ],
+			'country'    => $_POST[ 'recipient_country' ],
+			'email'      => $order->billing_email
+		);
+
+		$options       = get_option( 'woocommerce_shipcloud_settings' );
+
+		$notification_email = '';
+		if( array_key_exists( 'notification_email', $options ) && 'yes' === $options[ 'notification_email' ] ){
+			$notification_email = apply_filters( 'wcsc_notification_email', $order->billing_email, $order );
+		}
+
+		$carrier_email = '';
+		if( array_key_exists( 'carrier_email', $options ) && 'yes' === $options[ 'carrier_email' ] ){
+			$carrier_email = apply_filters( 'wcsc_carrier_email', $order->billing_email, $order );
+		}
+
+		$reference_number = sprintf( __( 'Order %s', 'woocommerce-shipcloud' ), $order->get_order_number() );
+
+		/**
+		 * Filtering reference number
+		 *
+		 * @param string $reference_number The Reference Number
+		 * @param string $order_number The WooCommerce order number
+		 * @param string $order_id The WooCommerce order id
+		 *
+		 * @return string $reference_number The filtered order number
+		 * @since 1.1.0
+		 */
+		$reference_number = apply_filters( 'wcsc_reference_number', $reference_number, $order->get_order_number(), $order_id );
+
+		wcsc_api()->create_shipment(
+			$_POST['wcsc_carrier'],
+			$from,
+			$to,
+			$package,
+			true,
+			$notification_email,
+			$carrier_email,
+			$reference_number
+		);
+
 		$order_handler->create_label( $order_id, $request['wcsc_carrier'], $shipment_id );
 	}
-} );
+}
+
+add_action( 'load-edit.php', '_wcsc_order_bulk' );
 
 /**
  * @param WC_Order $order
