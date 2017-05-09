@@ -47,17 +47,15 @@ wcsc.OrderBulkLabels = function (submitButton) {
                 'title': '#' + $(this).val()
             };
 
-            console.log(data);
-
             $('.bulk-titles', self.bulkScreen).append(template(data));
         });
     };
 
     this.setBulk = function () {
-        $('td', self.bulkScreen).attr('colspan', $('th:visible, td:visible', '.widefat:first thead').length);
-
         self.populateTitles();
 
+        $('td', self.bulkScreen).attr('colspan', $('th:visible, td:visible', '.widefat:first thead').length);
+        // Insert the editor at the top of the table with an empty row above to maintain zebra striping.
         $('table.widefat tbody').prepend($(self.bulkScreen)).prepend('<tr class="hidden"></tr>');
         $(self.bulkScreen).show();
 

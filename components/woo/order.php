@@ -49,8 +49,10 @@ class WC_Shipcloud_Order
 	 *
 	 * @since 1.0.0
 	 */
-	private function __construct()
+	private function __construct($order_id = null)
 	{
+	    $this->order_id = $order_id;
+
 		$this->init_hooks();
 	}
 
@@ -88,6 +90,10 @@ class WC_Shipcloud_Order
 		}
 
 		return self::$_instance;
+	}
+
+	public static function create_order( $order_id ) {
+        return new self($order_id);
 	}
 
 	/**
@@ -134,61 +140,9 @@ class WC_Shipcloud_Order
 	 */
 	private function get_addresses()
 	{
-		$options = get_option( 'woocommerce_shipcloud_settings' );
-
-		$sender    = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
-		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
-
-		// Use default data if nothing was saved before
-		if ( '' == $sender || 0 == count( $sender ) )
-		{
-			$sender = array(
-				'first_name' => $options[ 'sender_first_name' ],
-				'last_name'  => $options[ 'sender_last_name' ],
-				'company'    => $options[ 'sender_company' ],
-				'street'     => $options[ 'sender_street' ],
-				'street_nr'  => $options[ 'sender_street_nr' ],
-				'postcode'   => $options[ 'sender_postcode' ],
-				'city'       => $options[ 'sender_city' ],
-				'state'      => $options[ 'sender_state' ],
-				'country'    => $options[ 'sender_country' ],
-			);
-		}
-
-		// Use default data if nothing was saved before
-		if ( '' == $recipient || 0 == count( $recipient ) )
-		{
-			$order = new WC_Order( $this->order_id );
-
-			$recipient_street_name = $order->shipping_address_1;
-			$recipient_street_nr   = '';
-
-			if( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
-				$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
-
-				if ( is_array( $recipient_street ) )
-				{
-					$recipient_street_name = $recipient_street[ 'address' ];
-					$recipient_street_nr   = $recipient_street[ 'number' ];
-				}
-			}
-
-			$recipient = array(
-				'first_name' => $order->shipping_first_name,
-				'last_name'  => $order->shipping_last_name,
-				'company'    => $order->shipping_company,
-				'street'     => $recipient_street_name,
-				'street_nr'  => $recipient_street_nr,
-				'postcode'   => $order->shipping_postcode,
-				'city'       => $order->shipping_city,
-				'state'      => $order->shipping_state,
-				'country'    => $order->shipping_country,
-			);
-		}
-
 		return array(
-			'sender' => $sender,
-			'recipient' => $recipient
+			'sender' => $this->get_sender(),
+			'recipient' => $this->get_recipient( )
 		);
 	}
 
@@ -455,7 +409,7 @@ class WC_Shipcloud_Order
 
 		$carriers = $this->get_carriers();
 
-		$options          = get_option( 'woocommerce_shipcloud_settings' );
+		$options          = $this->get_options();
 		$standard_carrier = $options[ 'standard_carrier' ];
 		$shipcloud_api    = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
@@ -553,7 +507,7 @@ class WC_Shipcloud_Order
 	 */
 	private function parcel_templates()
 	{
-		$options       = get_option( 'woocommerce_shipcloud_settings' );
+		$options       = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		$args = array(
@@ -890,7 +844,7 @@ class WC_Shipcloud_Order
 	 */
 	public function ajax_calculate_shipping()
 	{
-		$options       = get_option( 'woocommerce_shipcloud_settings' );
+		$options       = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		$from = array(
@@ -955,11 +909,11 @@ class WC_Shipcloud_Order
 	 */
 	public function ajax_create_shipment()
 	{
-		$options       = get_option( 'woocommerce_shipcloud_settings' );
+		$options       = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		$order_id = $_POST[ 'order_id' ];
-		$order    = new WC_Order( $order_id );
+		$order    = $this->get_wc_order( $order_id );
 
 		$from = array(
 			'first_name' => $_POST[ 'sender_first_name' ],
@@ -1001,15 +955,8 @@ class WC_Shipcloud_Order
 			$create_label = true;
 		}
 
-		$notification_email = '';
-		if( array_key_exists( 'notification_email', $options ) && 'yes' === $options[ 'notification_email' ] ){
-			$notification_email = apply_filters( 'wcsc_notification_email', $order->billing_email, $order );
-		}
-
-		$carrier_email = '';
-		if( array_key_exists( 'carrier_email', $options ) && 'yes' === $options[ 'carrier_email' ] ){
-			$carrier_email = apply_filters( 'wcsc_carrier_email', $order->billing_email, $order );
-		}
+		$notification_email = $this->get_notification_email( );
+		$carrier_email = $this->get_carrier_mail();
 
 		$reference_number = sprintf( __( 'Order %s', 'woocommerce-shipcloud' ), $order->get_order_number() );
 
@@ -1122,13 +1069,13 @@ class WC_Shipcloud_Order
 	}
 
 	public function create_label( $order_id, $carrier_id, $shipment_id = null ) {
-		$options       = get_option( 'woocommerce_shipcloud_settings' );
+		$options       = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options['api_key'] );
 
 		$order = wc_get_order( $order_id );
 
 		$request = $shipcloud_api->create_label( $shipment_id );
-		
+
 		if ( is_wp_error( $request ) ) {
 			$error_message = $request->get_error_message();
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message . ' (' . wcsc_get_carrier_display_name( $carrier_id ) . ')' );
@@ -1181,7 +1128,7 @@ class WC_Shipcloud_Order
 
 		$order = wc_get_order( $order_id );
 
-		$options       = get_option( 'woocommerce_shipcloud_settings' );
+		$options       = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 		$request       = $shipcloud_api->delete_shipment( $shipment_id );
 
@@ -1271,10 +1218,168 @@ class WC_Shipcloud_Order
 	 */
 	private function get_tracking_status_html( $shipment_id )
 	{
-		$settings      = get_option( 'woocommerce_shipcloud_settings' );
+		$settings      = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 
 		$response = $shipcloud_api->get_tracking_status( $shipment_id );
+	}
+
+	/**
+	 * @param $options
+	 *
+	 * @return array|mixed
+	 */
+	public function get_sender() {
+		$options = $this->get_options();
+
+		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
+
+		// Use default data if nothing was saved before
+		if ( '' == $sender || 0 == count( $sender ) ) {
+			$sender = array(
+				'first_name' => $options['sender_first_name'],
+				'last_name'  => $options['sender_last_name'],
+				'company'    => $options['sender_company'],
+				'street'     => $options['sender_street'],
+				'street_no'  => $options['sender_street_nr'],
+				'zip_code'   => $options['sender_postcode'],
+				'city'       => $options['sender_city'],
+				'state'      => $options['sender_state'],
+				'country'    => $options['sender_country'],
+			);
+		}
+
+		if (isset($sender['street_nr'])) {
+			// Backward compatibility.
+			$sender['street_no'] = $sender['street_nr'];
+			unset($sender['street_nr']);
+		}
+
+		if (isset($sender['postcode'])) {
+			// Backward compatibility.
+			$sender['zip_code'] = $sender['postcode'];
+			unset($sender['postcode']);
+		}
+
+		return $sender;
+	}
+
+	/**
+	 * @param $options
+	 *
+	 * @return array|mixed
+	 */
+	public function get_recipient( ) {
+		$options = $this->get_options();
+
+		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
+
+		// Use default data if nothing was saved before
+		if ( '' == $recipient || 0 == count( $recipient ) ) {
+			$order = new WC_Order( $this->order_id );
+
+			$recipient_street_name = $order->shipping_address_1;
+			$recipient_street_nr   = '';
+
+			if ( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
+				$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
+
+				if ( is_array( $recipient_street ) ) {
+					$recipient_street_name = $recipient_street['address'];
+					$recipient_street_nr   = $recipient_street['number'];
+				}
+			}
+
+			$recipient = array(
+				'first_name' => $order->shipping_first_name,
+				'last_name'  => $order->shipping_last_name,
+				'company'    => $order->shipping_company,
+				'street'     => $recipient_street_name,
+				'street_no'  => $recipient_street_nr,
+				'zip_code'   => $order->shipping_postcode,
+				'city'       => $order->shipping_city,
+				'state'      => $order->shipping_state,
+				'country'    => $order->shipping_country,
+			);
+		}
+
+		if (isset($recipient['street_nr'])) {
+		    // Backward compatibility.
+		    $recipient['street_no'] = $recipient['street_nr'];
+		    unset($recipient['street_nr']);
+		}
+
+		if (isset($recipient['postcode'])) {
+			// Backward compatibility.
+			$recipient['zip_code'] = $recipient['postcode'];
+			unset($recipient['postcode']);
+		}
+
+		return $recipient;
+	}
+
+	/**
+	 * @param $options
+	 * @param $order
+	 *
+	 * @return mixed|string|void
+	 */
+	public function get_notification_email() {
+	    $options = $this->get_options();
+
+		$notification_email = '';
+		if ( array_key_exists( 'notification_email', $options ) && 'yes' === $options['notification_email'] ) {
+			$order              = $this->get_wc_order();
+			$notification_email = apply_filters(
+				'wcsc_notification_email',
+				$order->billing_email,
+				$order
+			);
+		}
+
+		return $notification_email;
+	}
+
+	/**
+	 * @param $order_id
+	 *
+	 * @return WC_Order
+	 */
+	public function get_wc_order( $order_id = null ) {
+		if ( null === $order_id ) {
+			$order_id = $this->order_id;
+		}
+
+		if ( null == $order_id ) {
+			$order_id = $_POST['order_id'];
+		}
+
+		return new WC_Order( $order_id );
+	}
+
+	/**
+	 * @return mixed|void
+	 */
+	private function get_options() {
+		return get_option( 'woocommerce_shipcloud_settings' );
+	}
+
+	/**
+	 * @param $options
+	 * @param $order
+	 *
+	 * @return mixed|string|void
+	 */
+	public function get_carrier_mail( ) {
+	    $order = $this->get_wc_order();
+	    $options = $this->get_options();
+
+		$carrier_email = '';
+		if ( array_key_exists( 'carrier_email', $options ) && 'yes' === $options['carrier_email'] ) {
+			$carrier_email = apply_filters( 'wcsc_carrier_email', $order->billing_email, $order );
+		}
+
+		return $carrier_email;
 	}
 }
 

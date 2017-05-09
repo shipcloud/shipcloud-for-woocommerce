@@ -4,7 +4,7 @@
 
     <tr id="wcsc-order-bulk-labels"
         class="inline-edit-row inline-edit-row-page inline-edit-shop_order bulk-edit-row bulk-edit-row-page bulk-edit-shop_order"
-        style="display: none">
+        style="">
         <td colspan="10" class="colspanchange">
 
             <fieldset class="inline-edit-col-left">
@@ -19,6 +19,7 @@
             </fieldset>
 
             <fieldset class="inline-edit-col-right">
+                <input type="hidden" name="foo" value="bazinga">
                 <div class="inline-edit-col">
                     <div class="inline-edit-group wp-clearfix">
                         <label class="alignleft">
@@ -48,7 +49,7 @@
                                 <span class="title">
                                     <?php esc_html_e( 'Width', 'woocommerce-shipcloud' ) ?>
                                 </span>
-                                <input type="text" name="wcsc_width" id="wcsc_width"/>
+                                <input type="text" name="wcsc_width"/>
                             </label>
                         </div>
 
@@ -57,7 +58,7 @@
                                 <span class="title">
                                     <?php esc_html_e( 'Height', 'woocommerce-shipcloud' ) ?>
                                 </span>
-                                <input type="text" name="wcsc_height" id="wcsc_height"/>
+                                <input type="text" name="wcsc_height"/>
                             </label>
                         </div>
 
@@ -66,7 +67,7 @@
                                 <span class="title">
                                     <?php esc_html_e( 'Length', 'woocommerce-shipcloud' ) ?>
                                 </span>
-                                <input type="text" name="wcsc_length" id="wcsc_length"/>
+                                <input type="text" name="wcsc_length"/>
                             </label>
                         </div>
 
@@ -75,7 +76,7 @@
                                 <span class="title">
                                     <?php esc_html_e( 'Weight', 'woocommerce-shipcloud' ) ?>
                                 </span>
-                                <input type="text" name="wcsc_weigth" id="wcsc_weight"/>
+                                <input type="text" name="wcsc_weight"/>
                             </label>
                         </div>
                     </div>
@@ -86,7 +87,7 @@
                     <div class="inline-edit-group wp-clearfix">
                         <label class="alignleft">
                             <span class="title">Carrier</span>
-                            <select name="wcsc_carrier" id="wcsc_carrier">
+                            <select name="wcsc_carrier">
 								<?php foreach ( wcsc_api()->get_carriers() as $carrier ): ?>
                                     <option value="<?php echo esc_attr( $carrier['name'] ) ?>">
 										<?php echo esc_html( $carrier['display_name'] ) ?>
@@ -117,13 +118,13 @@
 <script type="application/javascript">
     jQuery(function ($) {
         $('#wcsc_template').change(function () {
-            var selected_data = $(':selected', this).data();
+            var data = $(':selected', this).data();
+            console.log(data);
+            for (var key in data) {
+                $('input[name=wcsc_' + key + ']').val(data[key]);
+            }
 
-            $(['width', 'height', 'length', 'weight']).each(function (i, elem) {
-                $('#wcsc_' + elem).val(selected_data[elem]);
-            });
-
-            $('#wcsc_carrier').val(selected_data.carrier);
+            $('#wcsc_carrier').val(data['carrier']);
         });
     });
 </script>

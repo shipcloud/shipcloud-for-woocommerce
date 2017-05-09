@@ -445,73 +445,20 @@ function _wcsc_order_bulk() {
 		return;
 	}
 
-	$order_handler = WC_Shipcloud_Order::instance();
-
 	$package = array(
-		'width'  => $_POST[ 'width' ],
-		'height' => $_POST[ 'height' ],
-		'length' => $_POST[ 'length' ],
-		'weight' => $_POST[ 'weight' ],
-		'description' => $_POST[ 'description' ],
+		'width'  => $request[ 'wcsc_width' ],
+		'height' => $request[ 'wcsc_height' ],
+		'length' => $request[ 'wcsc_length' ],
+		'weight' => $request[ 'wcsc_weight' ],
 	);
 
 	foreach ( $request['post'] as $order_id ) {
-		// Shipment id
-		$shipment_data = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+		$order = WC_Shipcloud_Order::create_order($order_id);
 
-		// We really need those shipment data.
-		if ( ! $shipment_data ) {
-			$shipment_data = woocommerce_shipcloud_create_shipment_data(
-				WC()->order_factory->get_order( $order_id ),
-				$request['wcsc_carrier'],
-				new Woocommerce_Shipcloud_API()
-			);
-		}
-
-		$shipment_id = null;
-		if ( $shipment_data && isset( $shipment_data['id'] ) && $shipment_data['id'] ) {
-			$shipment_id = $shipment_data['id'];
-		}
-
-		$from = array(
-			'first_name' => $_POST[ 'sender_first_name' ],
-			'last_name'  => $_POST[ 'sender_last_name' ],
-			'company'    => $_POST[ 'sender_company' ],
-			'street'     => $_POST[ 'sender_street' ],
-			'street_no'  => $_POST[ 'sender_street_nr' ],
-			'zip_code'   => $_POST[ 'sender_postcode' ],
-			'city'       => $_POST[ 'sender_city' ],
-			'state'      => $_POST[ 'sender_state' ],
-			'country'    => $_POST[ 'sender_country' ],
+		$reference_number = sprintf(
+			__( 'Order %s', 'woocommerce-shipcloud' ),
+			$order->get_wc_order()->get_order_number()
 		);
-
-		$to = array(
-			'first_name' => $_POST[ 'recipient_first_name' ],
-			'last_name'  => $_POST[ 'recipient_last_name' ],
-			'company'    => $_POST[ 'recipient_company' ],
-			'street'     => $_POST[ 'recipient_street' ],
-			'street_no'  => $_POST[ 'recipient_street_nr' ],
-			'care_of'    => $_POST[ 'recipient_care_of' ],
-			'zip_code'   => $_POST[ 'recipient_postcode' ],
-			'city'       => $_POST[ 'recipient_city' ],
-			'state'      => $_POST[ 'recipient_state' ],
-			'country'    => $_POST[ 'recipient_country' ],
-			'email'      => $order->billing_email
-		);
-
-		$options       = get_option( 'woocommerce_shipcloud_settings' );
-
-		$notification_email = '';
-		if( array_key_exists( 'notification_email', $options ) && 'yes' === $options[ 'notification_email' ] ){
-			$notification_email = apply_filters( 'wcsc_notification_email', $order->billing_email, $order );
-		}
-
-		$carrier_email = '';
-		if( array_key_exists( 'carrier_email', $options ) && 'yes' === $options[ 'carrier_email' ] ){
-			$carrier_email = apply_filters( 'wcsc_carrier_email', $order->billing_email, $order );
-		}
-
-		$reference_number = sprintf( __( 'Order %s', 'woocommerce-shipcloud' ), $order->get_order_number() );
 
 		/**
 		 * Filtering reference number
@@ -523,20 +470,75 @@ function _wcsc_order_bulk() {
 		 * @return string $reference_number The filtered order number
 		 * @since 1.1.0
 		 */
-		$reference_number = apply_filters( 'wcsc_reference_number', $reference_number, $order->get_order_number(), $order_id );
+		$reference_number = apply_filters(
+			'wcsc_reference_number',
+			$reference_number,
+			$order->get_wc_order()->get_order_number(),
+			$order_id
+		);
 
-		wcsc_api()->create_shipment(
-			$_POST['wcsc_carrier'],
-			$from,
-			$to,
+		$shipment = wcsc_api()->create_shipment(
+			$request['wcsc_carrier'],
+			$order->get_sender(),
+			$order->get_recipient(),
 			$package,
 			true,
-			$notification_email,
-			$carrier_email,
+			$order->get_notification_email(),
+			$order->get_carrier_mail(),
 			$reference_number
 		);
 
-		$order_handler->create_label( $order_id, $request['wcsc_carrier'], $shipment_id );
+		if ( is_wp_error( $shipment ) )
+		{
+			$error_message = $shipment->get_error_message();
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ')' );
+
+			$errors[] = nl2br( $error_message );
+		}
+
+		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ')' );
+
+		$parcel_title = wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ' - ' . $request[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $request[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $request[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $request[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
+
+		$data = array(
+			'id'                   => $shipment[ 'id' ],
+			'carrier_tracking_no'  => $shipment[ 'carrier_tracking_no' ],
+			'tracking_url'         => $shipment[ 'tracking_url' ],
+			'label_url'            => $shipment[ 'label_url' ],
+			'price'                => $shipment[ 'price' ],
+			'parcel_id'            => $shipment[ 'id' ],
+			'parcel_title'         => $parcel_title,
+			'carrier'              => $request[ 'carrier' ],
+			'width'                => $request[ 'width' ],
+			'height'               => $request[ 'height' ],
+			'length'               => $request[ 'length' ],
+			'weight'               => $request[ 'weight' ],
+			'description'          => $_POST[ 'description' ],
+			'sender_first_name'    => $_POST[ 'sender_first_name' ],
+			'sender_last_name'     => $_POST[ 'sender_last_name' ],
+			'sender_company'       => $_POST[ 'sender_company' ],
+			'sender_street'        => $_POST[ 'sender_street' ],
+			'sender_street_no'     => $_POST[ 'sender_street_nr' ],
+			'sender_zip_code'      => $_POST[ 'sender_postcode' ],
+			'sender_city'          => $_POST[ 'sender_city' ],
+			'sender_state'         => $_POST[ 'sender_state' ],
+			'country'              => $_POST[ 'sender_country' ],
+			'recipient_first_name' => $_POST[ 'recipient_first_name' ],
+			'recipient_last_name'  => $_POST[ 'recipient_last_name' ],
+			'recipient_company'    => $_POST[ 'recipient_company' ],
+			'recipient_street'     => $_POST[ 'recipient_street' ],
+			'recipient_street_no'  => $_POST[ 'recipient_street_nr' ],
+			'recipient_zip_code'   => $_POST[ 'recipient_postcode' ],
+			'recipient_city'       => $_POST[ 'recipient_city' ],
+			'recipient_state'      => $_POST[ 'recipient_state' ],
+			'recipient_country'    => $_POST[ 'recipient_country' ],
+			'date_created'         => time()
+		);
+
+		add_post_meta( $order_id, 'shipcloud_shipment_ids', $data[ 'id' ] );
+		add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
+
+		$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 	}
 }
 
