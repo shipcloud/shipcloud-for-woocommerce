@@ -28,6 +28,8 @@ if ( ! defined( 'ABSPATH' ) )
 
 class WC_Shipcloud_Order
 {
+	const META_OTHER = 'shipcloud_other';
+
 	/**
 	 * The Single instance of the class
 	 *
@@ -287,6 +289,17 @@ class WC_Shipcloud_Order
 					</p>
 				</div>
 			</div>
+
+            <div class="address full">
+                <h3><?php esc_html_e('Other information', 'woocommerce-shipcloud') ?></h3>
+
+                <p class="fullsize">
+                    <input type="text" name="shipcloud_other[description]" value="<?php echo esc_attr($this->get_description()); ?>">
+                    <label for="shipcloud_other[description]">
+                        <?php _e( 'Internal description for this order.', 'woocommerce-shipcloud' ); ?>
+                    </label>
+                </p>
+            </div>
 			<div style="clear: both"></div>
 		</div>
 		<?php
@@ -811,6 +824,11 @@ class WC_Shipcloud_Order
 		if( isset( $_POST[ 'recipient_address' ] ) )
 		{
 			update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST[ 'recipient_address' ] );
+		}
+
+		if( isset( $_POST[ 'shipcloud_other' ] ) )
+		{
+			update_post_meta( $post_id, static::META_OTHER, $_POST[ 'shipcloud_other' ] );
 		}
 	}
 
@@ -1371,6 +1389,16 @@ class WC_Shipcloud_Order
 		}
 
 		return $carrier_email;
+	}
+
+	public function get_description() {
+		$other = get_post_meta( $this->order_id, static::META_OTHER, true );
+
+		if ( ! isset( $other['description'] ) ) {
+			return null;
+		}
+
+		return $other['description'];
 	}
 }
 
