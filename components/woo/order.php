@@ -170,16 +170,6 @@ class WC_Shipcloud_Order
 						<a class="btn-edit-address"><img width="14" alt="Edit" src="<?php echo $woocommerce->plugin_url(); ?>/assets/images/icons/edit.png"></a>
 					</h3>
 
-                    <?php _wcsc_is_sender_address_valid() || printf(
-	                    __(
-		                    'Please enter your <a href="%s">standard sender data</a>! At least, street, street number, postcode, city, state and country.',
-		                    'woocommerce-shipcloud'
-	                    ),
-	                    admin_url(
-		                    'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping'
-	                    )
-                    ) ?>
-
 					<p class="fullsize">
 						<input type="text" name="sender_address[company]" value="<?php echo $sender[ 'company' ]; ?>" disabled>
 						<label for="sender_address[company]"><?php _e( 'Company', 'woocommerce-shipcloud' ); ?></label>
@@ -1236,6 +1226,7 @@ class WC_Shipcloud_Order
 
 		// Use default data if nothing was saved before
 		if ( '' == $sender || 0 == count( $sender ) ) {
+
 			$sender = array(
 				'first_name' => $options['sender_first_name'],
 				'last_name'  => $options['sender_last_name'],
@@ -1261,7 +1252,7 @@ class WC_Shipcloud_Order
 			unset($sender['postcode']);
 		}
 
-		return $sender;
+		return array_filter( $sender );
 	}
 
 	/**
