@@ -4,7 +4,7 @@
 
     <tr id="wcsc-order-bulk-labels"
         class="inline-edit-row inline-edit-row-page inline-edit-shop_order bulk-edit-row bulk-edit-row-page bulk-edit-shop_order"
-        style="">
+        style="display: none">
         <td colspan="10" class="colspanchange">
 
             <fieldset class="inline-edit-col-left">
