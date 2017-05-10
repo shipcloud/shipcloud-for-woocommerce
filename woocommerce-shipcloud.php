@@ -494,46 +494,43 @@ function _wcsc_order_bulk() {
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ')' );
 
 			$errors[] = nl2br( $error_message );
+
+			continue;
 		}
 
 		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ')' );
 
-		$parcel_title = wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ' - ' . $request[ 'width' ] . __( 'x', 'woocommerce-shipcloud' ) . $request[ 'height' ] . __( 'x', 'woocommerce-shipcloud' ) . $request[ 'length' ] . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $request[ 'weight' ] . __( 'kg', 'woocommerce-shipcloud' );
+		$parcel_title = wcsc_get_carrier_display_name( $request[ 'wcsc_carrier' ] )
+		                . ' - '
+		                . $request[ 'wcsc_width' ]
+		                . __( 'x', 'woocommerce-shipcloud' )
+		                . $request[ 'wcsc_height' ]
+		                . __( 'x', 'woocommerce-shipcloud' )
+		                . $request[ 'wcsc_length' ]
+		                . __( 'cm', 'woocommerce-shipcloud' )
+		                . ' '
+		                . $request[ 'wcsc_weight' ]
+		                . __( 'kg', 'woocommerce-shipcloud' );
 
 		$data = array(
-			'id'                   => $shipment[ 'id' ],
-			'carrier_tracking_no'  => $shipment[ 'carrier_tracking_no' ],
-			'tracking_url'         => $shipment[ 'tracking_url' ],
-			'label_url'            => $shipment[ 'label_url' ],
-			'price'                => $shipment[ 'price' ],
-			'parcel_id'            => $shipment[ 'id' ],
-			'parcel_title'         => $parcel_title,
-			'carrier'              => $request[ 'carrier' ],
-			'width'                => $request[ 'width' ],
-			'height'               => $request[ 'height' ],
-			'length'               => $request[ 'length' ],
-			'weight'               => $request[ 'weight' ],
-			'description'          => $_POST[ 'description' ],
-			'sender_first_name'    => $_POST[ 'sender_first_name' ],
-			'sender_last_name'     => $_POST[ 'sender_last_name' ],
-			'sender_company'       => $_POST[ 'sender_company' ],
-			'sender_street'        => $_POST[ 'sender_street' ],
-			'sender_street_no'     => $_POST[ 'sender_street_nr' ],
-			'sender_zip_code'      => $_POST[ 'sender_postcode' ],
-			'sender_city'          => $_POST[ 'sender_city' ],
-			'sender_state'         => $_POST[ 'sender_state' ],
-			'country'              => $_POST[ 'sender_country' ],
-			'recipient_first_name' => $_POST[ 'recipient_first_name' ],
-			'recipient_last_name'  => $_POST[ 'recipient_last_name' ],
-			'recipient_company'    => $_POST[ 'recipient_company' ],
-			'recipient_street'     => $_POST[ 'recipient_street' ],
-			'recipient_street_no'  => $_POST[ 'recipient_street_nr' ],
-			'recipient_zip_code'   => $_POST[ 'recipient_postcode' ],
-			'recipient_city'       => $_POST[ 'recipient_city' ],
-			'recipient_state'      => $_POST[ 'recipient_state' ],
-			'recipient_country'    => $_POST[ 'recipient_country' ],
-			'date_created'         => time()
+			'id'                  => $shipment['id'],
+			'carrier_tracking_no' => $shipment['carrier_tracking_no'],
+			'tracking_url'        => $shipment['tracking_url'],
+			'label_url'           => $shipment['label_url'],
+			'price'               => $shipment['price'],
+			'parcel_id'           => $shipment['id'],
+			'parcel_title'        => $parcel_title,
+			'carrier'             => $request['carrier'],
+			'width'               => $request['width'],
+			'height'              => $request['height'],
+			'length'              => $request['length'],
+			'weight'              => $request['weight'],
+			'description'         => $request['description'],
+			'date_created'        => time(),
 		);
+
+		$data = array_merge( $data, $order->get_sender( 'sender_' ) );
+		$data = array_merge( $data, $order->get_recipient( 'recipient_' ) );
 
 		add_post_meta( $order_id, 'shipcloud_shipment_ids', $data[ 'id' ] );
 		add_post_meta( $order_id, 'shipcloud_shipment_data', $data );

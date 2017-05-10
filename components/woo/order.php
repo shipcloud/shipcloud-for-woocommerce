@@ -1237,7 +1237,7 @@ class WC_Shipcloud_Order
 	 *
 	 * @return array|mixed
 	 */
-	public function get_sender() {
+	public function get_sender($prefix = '') {
 		$options = $this->get_options();
 
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
@@ -1246,31 +1246,19 @@ class WC_Shipcloud_Order
 		if ( '' == $sender || 0 == count( $sender ) ) {
 
 			$sender = array(
-				'first_name' => $options['sender_first_name'],
-				'last_name'  => $options['sender_last_name'],
-				'company'    => $options['sender_company'],
-				'street'     => $options['sender_street'],
-				'street_no'  => $options['sender_street_nr'],
-				'zip_code'   => $options['sender_postcode'],
-				'city'       => $options['sender_city'],
-				'state'      => $options['sender_state'],
-				'country'    => $options['sender_country'],
+				$prefix . 'first_name' => $options['sender_first_name'],
+				$prefix . 'last_name'  => $options['sender_last_name'],
+				$prefix . 'company'    => $options['sender_company'],
+				$prefix . 'street'     => $options['sender_street'],
+				$prefix . 'street_no'  => $options['sender_street_nr'],
+				$prefix . 'zip_code'   => $options['sender_postcode'],
+				$prefix . 'city'       => $options['sender_city'],
+				$prefix . 'state'      => $options['sender_state'],
+				$prefix . 'country'    => $options['sender_country'],
 			);
 		}
 
-		if (isset($sender['street_nr'])) {
-			// Backward compatibility.
-			$sender['street_no'] = $sender['street_nr'];
-			unset($sender['street_nr']);
-		}
-
-		if (isset($sender['postcode'])) {
-			// Backward compatibility.
-			$sender['zip_code'] = $sender['postcode'];
-			unset($sender['postcode']);
-		}
-
-		return array_filter( $sender );
+		return $this->sanitize_address( $sender, $prefix );
 	}
 
 	/**
@@ -1278,7 +1266,7 @@ class WC_Shipcloud_Order
 	 *
 	 * @return array|mixed
 	 */
-	public function get_recipient( ) {
+	public function get_recipient( $prefix = '' ) {
 		$options = $this->get_options();
 
 		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
@@ -1300,31 +1288,36 @@ class WC_Shipcloud_Order
 			}
 
 			$recipient = array(
-				'first_name' => $order->shipping_first_name,
-				'last_name'  => $order->shipping_last_name,
-				'company'    => $order->shipping_company,
-				'street'     => $recipient_street_name,
-				'street_no'  => $recipient_street_nr,
-				'zip_code'   => $order->shipping_postcode,
-				'city'       => $order->shipping_city,
-				'state'      => $order->shipping_state,
-				'country'    => $order->shipping_country,
+				$prefix . 'first_name' => $order->shipping_first_name,
+				$prefix . 'last_name'  => $order->shipping_last_name,
+				$prefix . 'company'    => $order->shipping_company,
+				$prefix . 'street'     => $recipient_street_name,
+				$prefix . 'street_no'  => $recipient_street_nr,
+				$prefix . 'zip_code'   => $order->shipping_postcode,
+				$prefix . 'city'       => $order->shipping_city,
+				$prefix . 'state'      => $order->shipping_state,
+				$prefix . 'country'    => $order->shipping_country,
 			);
 		}
 
-		if (isset($recipient['street_nr'])) {
-		    // Backward compatibility.
-		    $recipient['street_no'] = $recipient['street_nr'];
-		    unset($recipient['street_nr']);
-		}
+		return $this->sanitize_address( $recipient, $prefix );
+	}
 
-		if (isset($recipient['postcode'])) {
+	protected function sanitize_address( $data, $prefix = '' ) {
+
+		if ( isset( $data[ $prefix . 'street_nr' ] ) ) {
 			// Backward compatibility.
-			$recipient['zip_code'] = $recipient['postcode'];
-			unset($recipient['postcode']);
+			$data[ $prefix . 'street_no' ] = $data[ $prefix . 'street_nr' ];
+			unset( $data[ $prefix . 'street_nr' ] );
 		}
 
-		return $recipient;
+		if ( isset( $data[ $prefix . 'postcode' ] ) ) {
+			// Backward compatibility.
+			$data[ $prefix . 'zip_code' ] = $data[ $prefix . 'postcode' ];
+			unset( $data[ $prefix . 'postcode' ] );
+		}
+
+		return array_filter( $data );
 	}
 
 	/**
