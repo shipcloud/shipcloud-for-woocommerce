@@ -28,6 +28,7 @@ if ( ! defined( 'ABSPATH' ) )
 
 class WCSC_Parceltemplate_Posttype
 {
+	const POST_TYPE = 'sc_parcel_template';
 	/**
 	 * The Single instance of the class
 	 *
@@ -118,7 +119,11 @@ class WCSC_Parceltemplate_Posttype
 			'supports'           => false
 		);
 
-		register_post_type( 'sc_parcel_template', $args );
+		register_post_type( self::POST_TYPE, $args );
+	}
+
+	public static function get_create_link() {
+		return get_admin_url( null, 'post-new.php?post_type=' . self::POST_TYPE );
 	}
 
 	/**

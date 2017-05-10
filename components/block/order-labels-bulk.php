@@ -23,7 +23,9 @@
                 <div class="inline-edit-col">
                     <div class="inline-edit-group wp-clearfix">
                         <label class="alignleft">
-                            <span class="title">Size</span>
+                            <span class="title">
+                                <?php esc_html_e( 'Template', 'woocommerce-shipcloud' ) ?>
+                            </span>
 							<?php if ( wcsc_get_parceltemplates() ): ?>
                                 <select name="wcsc_template" id="wcsc_template">
                                     <option value="">
@@ -41,6 +43,11 @@
                                         </option>
 									<?php endforeach; ?>
                                 </select>
+                            <?php else: ?>
+                                <a href="<?php echo WCSC_Parceltemplate_Posttype::get_create_link() ?>"
+                                   target="_blank">
+                                    <?php esc_html_e('Create new parcel template') ?>
+                                </a>
 							<?php endif; ?>
                         </label>
 
