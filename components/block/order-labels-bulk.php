@@ -50,6 +50,7 @@
                                     <?php esc_html_e( 'Width', 'woocommerce-shipcloud' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_width"/>
+                                <?php echo get_option('woocommerce_dimension_unit') ?>
                             </label>
                         </div>
 
@@ -59,6 +60,7 @@
                                     <?php esc_html_e( 'Height', 'woocommerce-shipcloud' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_height"/>
+	                            <?php echo get_option('woocommerce_dimension_unit') ?>
                             </label>
                         </div>
 
@@ -68,6 +70,7 @@
                                     <?php esc_html_e( 'Length', 'woocommerce-shipcloud' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_length"/>
+	                            <?php echo get_option('woocommerce_dimension_unit') ?>
                             </label>
                         </div>
 
@@ -77,6 +80,7 @@
                                     <?php esc_html_e( 'Weight', 'woocommerce-shipcloud' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_weight"/>
+	                            <?php echo get_option('woocommerce_weight_unit') ?>
                             </label>
                         </div>
                     </div>
