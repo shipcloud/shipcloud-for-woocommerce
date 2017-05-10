@@ -135,7 +135,7 @@
                 $('input[name=wcsc_' + key + ']').val(data[key]);
             }
 
-            $('#wcsc_carrier').val(data['carrier']);
+            $('select[name=wcsc_carrier]').val(data['carrier']);
         });
     });
 </script>
