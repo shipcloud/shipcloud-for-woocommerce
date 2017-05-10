@@ -1,5 +1,10 @@
 *** WooCommerce Shipcloud Changelog ***
 
+2017.04.24 - version 1.1.2
+* Fixed: Wrong standard value for fallback price
+* Fixed: Not working default value for shipment method
+* Fixed: Only 5 Parcel Templates showed up
+
 2017.02.28 - version 1.1.1
 * Tweaked: Checking if logger is enabled within logger function
 * Tweaked: Added Actionhook 'shipcloud_shipment_tracking_change' for all tracking status changes
