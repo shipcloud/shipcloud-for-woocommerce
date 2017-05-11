@@ -236,6 +236,8 @@ class Woocommerce_Shipcloud_API
 			'Affiliate-ID'  => 'plugin.woocommerce.z4NVoYhp'
 		);
 
+		$params = $this->sanitize_params($params);
+
 		$params = json_encode( $params );
 
 		switch ( $method )
@@ -887,5 +889,52 @@ class Woocommerce_Shipcloud_API
 		}
 
 		return true;
+	}
+
+	/**
+	 * Clean up invalid params.
+	 *
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	protected function sanitize_params( $params ) {
+		if ( isset( $params['from'] ) ) {
+			$params['from'] = $this->sanitize_params_from( $params['from'] );
+		}
+
+		return $params;
+	}
+
+	/**
+	 * Clean up invalid from fields.
+	 *
+	 * The user can define a default sender address
+	 * in the shipcloud.io backend
+	 * and does not need to fill out the shipcloud config in WooCommerce.
+	 * Unfortunately the WooCommerce settings have a default for the country
+	 * so the from-data always contain a country
+	 * making the API consider the from-address as incomplete.
+	 * To suppress this the from address will be sanitized before submitting
+	 * removing the from address when it only contains the country.
+	 *
+	 * @param array $from_data
+	 *
+	 * @return array
+	 */
+	protected function sanitize_params_from( $from_data ) {
+		$from_data = (array) $from_data;
+		foreach ( $from_data as $id => $value ) {
+			if ( ! trim( $value ) ) {
+				unset( $from_data[ $id ] );
+			}
+		}
+
+		if ( array_key_exists('country', $from_data ) && 1 === count( $from_data ) ) {
+			// Seems like no address configured => make completely empty then.
+			return array();
+		}
+
+		return $from_data;
 	}
 }

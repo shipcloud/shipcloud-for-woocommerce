@@ -558,6 +558,8 @@ function _wcsc_order_bulk() {
 		add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
 
 		$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+
+		$succeeded++;
 	}
 
 	WooCommerce_Shipcloud::admin_notice(
