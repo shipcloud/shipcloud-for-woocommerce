@@ -193,12 +193,12 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="twentyfive">
-						<input type="text" name="sender_address[street_nr]" value="<?php echo $sender[ 'street_nr' ]; ?>" disabled>
+						<input type="text" name="sender_address[street_nr]" value="<?php echo $sender[ 'street_nr' ]?: $sender[ 'street_no' ]; ?>" disabled>
 						<label for="sender_address[street_nr]"><?php _e( 'Number', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="fullsize">
-						<input type="text" name="sender_address[postcode]" value="<?php echo $sender[ 'postcode' ]; ?>" disabled>
+						<input type="text" name="sender_address[postcode]" value="<?php echo $sender[ 'postcode' ]?: $sender[ 'zip_code' ]; ?>" disabled>
 						<label for="sender_address[postcode]"><?php _e( 'Postcode', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
@@ -258,12 +258,12 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="twentyfive">
-						<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient[ 'street_nr' ]; ?>" disabled>
+						<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient[ 'street_no' ]?: $recipient[ 'street_nr' ]; ?>" disabled>
 						<label for="recipient_address[street_nr]"><?php _e( 'Number', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
 					<p class="fullsize">
-						<input type="text" name="recipient_address[postcode]" value="<?php echo $recipient[ 'postcode' ]; ?>" disabled>
+						<input type="text" name="recipient_address[postcode]" value="<?php echo $recipient[ 'postcode' ]?: $recipient[ 'zip_code' ]; ?>" disabled>
 						<label for="recipient_address[postcode]"><?php _e( 'Postcode', 'woocommerce-shipcloud' ); ?></label>
 					</p>
 
@@ -692,7 +692,7 @@ class WC_Shipcloud_Order
 					<div class="label-shipment-sender address">
 						<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
 						<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?><?php echo $data[ 'sender_last_name' ]; ?></div>
-						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?><?php echo $data[ 'sender_street_no' ]; ?></div>
+						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?><?php echo $data[ 'sender_street_no' ]?: $data[ 'sender_street_nr' ]; ?></div>
 						<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
 						<div class="sender_state"><?php echo $data[ 'sender_state' ]; ?></div>
 						<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
@@ -701,7 +701,7 @@ class WC_Shipcloud_Order
 					<div class="label-shipment-recipient address">
 						<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
 						<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?><?php echo $data[ 'recipient_last_name' ]; ?></div>
-						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?><?php echo $data[ 'recipient_street_no' ]; ?></div>
+						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?><?php echo $data[ 'recipient_street_no' ]?: $data[ 'recipient_street_nr' ]; ?></div>
 						<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
 						<div class="recipient_state"><?php echo $data[ 'recipient_state' ]; ?></div>
 						<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
@@ -1309,13 +1309,11 @@ class WC_Shipcloud_Order
 		if ( isset( $data[ $prefix . 'street_nr' ] ) ) {
 			// Backward compatibility.
 			$data[ $prefix . 'street_no' ] = $data[ $prefix . 'street_nr' ];
-			unset( $data[ $prefix . 'street_nr' ] );
 		}
 
 		if ( isset( $data[ $prefix . 'postcode' ] ) ) {
 			// Backward compatibility.
 			$data[ $prefix . 'zip_code' ] = $data[ $prefix . 'postcode' ];
-			unset( $data[ $prefix . 'postcode' ] );
 		}
 
 		return array_filter( $data );
