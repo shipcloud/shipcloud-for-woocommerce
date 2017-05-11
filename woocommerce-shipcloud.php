@@ -96,6 +96,7 @@ class WooCommerce_Shipcloud
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
 			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
+			//add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
 		}
 		else
 		{
@@ -254,7 +255,7 @@ class WooCommerce_Shipcloud
 	{
 		static::assert_session();
 
-		$_SESSION['wcsc']['notices'][] = array(
+		$_SESSION['wcsc']['notices'][ md5( $type . ':' . $message ) ] = array(
 			'message' => '<b>ShipCloud for WooCommerce</b>: ' . $message,
 			'type'    => $type
 		);
@@ -375,13 +376,16 @@ class WooCommerce_Shipcloud
 	public function show_admin_notices() {
 		static::assert_session();
 
-		$notices                     = array_unique( $_SESSION['wcsc']['notices'] );
-		$_SESSION['wcsc']['notices'] = array();
-
-		foreach ( $notices as $notice ) {
+		foreach ( $_SESSION['wcsc']['notices'] as $notice ) {
 			echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
 		}
 
+	}
+
+	public function clear_admin_notices() {
+		static::assert_session();
+
+		$_SESSION['wcsc']['notices'] = array();
 	}
 
 }
@@ -462,6 +466,7 @@ function _wcsc_order_bulk() {
 		'weight' => $request[ 'wcsc_weight' ],
 	);
 
+	$succeeded = 0;
 	foreach ( $request['post'] as $order_id ) {
 		$order = WC_Shipcloud_Order::create_order($order_id);
 
@@ -503,7 +508,14 @@ function _wcsc_order_bulk() {
 			$error_message = $shipment->get_error_message();
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ')' );
 
-			$errors[] = nl2br( $error_message );
+			WooCommerce_Shipcloud::admin_notice(
+				sprintf(
+					__( 'No label for order #%d created: %s' ),
+					$order->get_wc_order()->id,
+					str_replace( "\n", ', ', $error_message )
+				),
+				'error'
+			);
 
 			continue;
 		}
@@ -549,7 +561,7 @@ function _wcsc_order_bulk() {
 	}
 
 	WooCommerce_Shipcloud::admin_notice(
-		sprintf( 'Created %d labels.', count( $request['post'] ) )
+		sprintf( 'Created %d labels.', $succeeded ), 'updated'
 	);
 }
 
