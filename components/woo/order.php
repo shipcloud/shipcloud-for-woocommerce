@@ -296,7 +296,7 @@ class WC_Shipcloud_Order
                 <p class="fullsize">
                     <input type="text" name="shipcloud_other[description]" value="<?php echo esc_attr($this->get_description()); ?>">
                     <label for="shipcloud_other[description]">
-                        <?php _e( 'Internal description for this order.', 'woocommerce-shipcloud' ); ?>
+                        <?php _e( 'Shipment description', 'woocommerce-shipcloud' ); ?>
                     </label>
                 </p>
             </div>
@@ -485,7 +485,7 @@ class WC_Shipcloud_Order
 					</td>
 				</tr>
 				<tr>
-					<th><?php _e( 'Description', 'woocommerce-shipcloud' ); ?></th>
+					<th><?php _e( 'Shipment description', 'woocommerce-shipcloud' ); ?></th>
 					<td>
 						<input type="text"
                                name="parcel_description"
@@ -734,7 +734,7 @@ class WC_Shipcloud_Order
 						<table>
 							<tbody>
 							<tr>
-								<th><?php _e( 'Description:', 'woocommerce-shipcloud' ); ?></th>
+								<th><?php _e( 'Shipment description:', 'woocommerce-shipcloud' ); ?></th>
 								<td><?php echo $data[ 'description' ]; ?></td>
 							</tr>
 							<tr>
@@ -951,11 +951,11 @@ class WC_Shipcloud_Order
 		);
 
 		$package = array(
-			'width'  => $_POST[ 'width' ],
-			'height' => $_POST[ 'height' ],
-			'length' => $_POST[ 'length' ],
-			'weight' => $_POST[ 'weight' ],
-			'description' => $_POST[ 'description' ],
+			'width'       => $_POST['width'],
+			'height'      => $_POST['height'],
+			'length'      => $_POST['length'],
+			'weight'      => $_POST['weight'],
+			'description' => $_POST['description'],
 		);
 
 		$create_label = false;
