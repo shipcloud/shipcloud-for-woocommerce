@@ -411,24 +411,6 @@ function wcsc_order_get_parcel_description( WC_Order $order ) {
 	return '';
 }
 
-function _wcsc_is_sender_address_valid() {
-	$standard_address_err = false;
-
-	$shipping = new \WC_Shipcloud_Shipping();
-
-	if ( $shipping->get_option( 'sender_street' )
-		|| ! $shipping->get_option( 'sender_street_nr' )
-		|| ! $shipping->get_option( 'sender_postcode' )
-		|| ! $shipping->get_option( 'sender_city' )
-		|| ! $shipping->get_option( 'sender_country' )
-	)
-	{
-		return false;
-	}
-
-	return true;
-}
-
 function wcsc_care_of_frontend( $data ) {
 	$pos = array_search( 'shipping_company', array_keys( $data ) );
 
