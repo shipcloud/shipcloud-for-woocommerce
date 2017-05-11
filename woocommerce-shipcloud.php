@@ -52,14 +52,6 @@ woothemes_queue_update( plugin_basename( __FILE__ ), '99377680d6954f5c19a76538a3
 class WooCommerce_Shipcloud
 {
 	/**
-	 * Notices for screening in Admin
-	 *
-	 * @var array $notices
-	 * @since 1.0.0
-	 */
-	static $notices = array();
-
-	/**
 	 * The Single instance of the class
 	 *
 	 * @var object $_instance
@@ -260,10 +252,29 @@ class WooCommerce_Shipcloud
 	 */
 	public static function admin_notice( $message, $type = 'updated' )
 	{
-		self::$notices[] = array(
+		static::assert_session();
+
+		$_SESSION['wcsc']['notices'][] = array(
 			'message' => '<b>ShipCloud for WooCommerce</b>: ' . $message,
 			'type'    => $type
 		);
+	}
+
+	/**
+	 * Assert that a session has been started.
+	 *
+	 * @since 1.2.0
+	 */
+	protected static function assert_session() {
+		if ( ! session_id() ) {
+			session_start();
+		}
+
+		if ( ! isset( $_SESSION['wcsc'] ) ) {
+			$_SESSION['wcsc'] = array(
+				'notices' => array(),
+			);
+		}
 	}
 
 	/**
@@ -359,19 +370,18 @@ class WooCommerce_Shipcloud
 	 * Show Notices in Admin
 	 *
 	 * @since 1.0.0
+	 * @since 1.2.0 Uses session as collection of notices.
 	 */
-	public function show_admin_notices()
-	{
-		if ( is_array( self::$notices ) && count( self::$notices ) > 0 )
-		{
-			$html = '';
-			foreach ( self::$notices AS $notice )
-			{
-				$message = $notice[ 'message' ];
-				$html .= '<div class="' . $notice[ 'type' ] . '"><p>' . $message . '</p></div>';
-			}
-			echo $html;
+	public function show_admin_notices() {
+		static::assert_session();
+
+		$notices                     = array_unique( $_SESSION['wcsc']['notices'] );
+		$_SESSION['wcsc']['notices'] = array();
+
+		foreach ( $notices as $notice ) {
+			echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
 		}
+
 	}
 
 }
@@ -537,6 +547,10 @@ function _wcsc_order_bulk() {
 
 		$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 	}
+
+	WooCommerce_Shipcloud::admin_notice(
+		sprintf( 'Created %d labels.', count( $request['post'] ) )
+	);
 }
 
 add_action( 'load-edit.php', '_wcsc_order_bulk' );
