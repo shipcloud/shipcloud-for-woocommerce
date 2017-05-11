@@ -96,7 +96,7 @@ class WooCommerce_Shipcloud
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
 			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
-			//add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
+			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
 		}
 		else
 		{
