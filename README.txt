@@ -23,6 +23,22 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 == Changelog ==
 
+= 1.2.0 =
+* Enhanced: Added bulk label creation
+* Enhanced: Added shipment description
+* Enhanced: Added packstation adress possibility
+
+= 1.1.2 =
+* Fixed: Wrong standard value for fallback price
+* Fixed: Not working default value for shipment method
+* Fixed: Only 5 Parcel Templates showed up
+
+= 1.1.1 =
+* Tweaked: Checking if logger is enabled within logger function
+* Tweaked: Added Actionhook 'shipcloud_shipment_tracking_change' for all tracking status changes
+* Fixed: Error on logging because of static call of WC_Settings_API
+* Fixed: Error 500 on calling Webhook URL
+
 = 1.1.0 =
 * Enhanced: Better logging information
 * Enhanced: Replaced new lines on Logging and only using Shipping method logger

@@ -1,5 +1,10 @@
 *** WooCommerce Shipcloud Changelog ***
 
+2017.05.12 - version 1.2.0
+* Enhanced: Added bulk label creation
+* Enhanced: Added shipment description
+* Enhanced: Added packstation adress possibility
+
 2017.04.24 - version 1.1.2
 * Fixed: Wrong standard value for fallback price
 * Fixed: Not working default value for shipment method
