@@ -103,6 +103,7 @@ jQuery( function( $ ) {
 		var length 		= $( "input[name='parcel_length']" ).val( );
 		var weight 		= $( "input[name='parcel_weight']" ).val( );
 		var description 		= $( "input[name='parcel_description']" ).val( );
+        var other_description = $("input[name='other_description']").val();
 
 		var data = {
 			'action': ajax_action,
@@ -132,7 +133,8 @@ jQuery( function( $ ) {
 			'height': height,
 			'length': length,
 			'weight': weight,
-			'description': description
+			'description': description,
+			'other_description': other_description
 		};
 
 		return data;

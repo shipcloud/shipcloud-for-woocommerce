@@ -294,8 +294,8 @@ class WC_Shipcloud_Order
                 <h3><?php esc_html_e('Other information', 'woocommerce-shipcloud') ?></h3>
 
                 <p class="fullsize">
-                    <input type="text" name="shipcloud_other[description]" value="<?php echo esc_attr($this->get_description()); ?>">
-                    <label for="shipcloud_other[description]">
+                    <input type="text" name="other_description" value="<?php echo esc_attr($this->get_description()); ?>">
+                    <label for="other_description">
                         <?php _e( 'Shipment description', 'woocommerce-shipcloud' ); ?>
                     </label>
                 </p>
@@ -981,7 +981,7 @@ class WC_Shipcloud_Order
 		 */
 		$reference_number = apply_filters( 'wcsc_reference_number', $reference_number, $order->get_order_number(), $order_id );
 
-		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number );
+		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number, $_POST['other_description'] );
 
 		if ( is_wp_error( $shipment ) )
 		{

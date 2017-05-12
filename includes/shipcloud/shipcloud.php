@@ -624,7 +624,7 @@ class Woocommerce_Shipcloud_API
 	 * @return string|WP_Error
 	 * @since 1.0.0
 	 */
-	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '' )
+	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '', $description = '' )
 	{
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
@@ -723,6 +723,10 @@ class Woocommerce_Shipcloud_API
 				);
 
 				break;
+		}
+
+		if ( $description ) {
+			$params['description'] = $description;
 		}
 
 		if( ! empty( $reference_number ) ) {
