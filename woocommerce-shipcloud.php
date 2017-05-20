@@ -444,18 +444,17 @@ add_action( 'admin_print_footer_scripts', function () {
  * Handle bulk action on orders.
  */
 function _wcsc_order_bulk() {
-	if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' != get_current_screen()->id ) {
+	if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' !== get_current_screen()->id ) {
 		// None of our business.
 		return;
 	}
 
 	$request = $_GET; // XSS: OK.
 
-	if ( ! isset( $request['action'] ) || 'wcsc_order_bulk_label' !== $request['action'] ) {
-		return;
-	}
-
-	if ( ! isset( $request['wcsc_carrier'] ) && ! $request['wcsc_carrier'] ) {
+	if ( 'wcsc_order_bulk_label' !== $request['action']
+	     || ! isset( $request['action'], $request['wcsc_carrier'] )
+		 || ! $request['wcsc_carrier']
+	) {
 		return;
 	}
 
@@ -470,49 +469,26 @@ function _wcsc_order_bulk() {
 	foreach ( $request['post'] as $order_id ) {
 		$order = WC_Shipcloud_Order::create_order($order_id);
 
-		$reference_number = sprintf(
-			__( 'Order %s', 'woocommerce-shipcloud' ),
-			$order->get_wc_order()->get_order_number()
-		);
-
-		/**
-		 * Filtering reference number
-		 *
-		 * @param string $reference_number The Reference Number
-		 * @param string $order_number The WooCommerce order number
-		 * @param string $order_id The WooCommerce order id
-		 *
-		 * @return string $reference_number The filtered order number
-		 * @since 1.1.0
-		 */
-		$reference_number = apply_filters(
-			'wcsc_reference_number',
-			$reference_number,
-			$order->get_wc_order()->get_order_number(),
-			$order_id
-		);
-
-		$shipment = wcsc_api()->create_shipment(
+		$shipment = wcsc_api()->create_shipment_by_order(
+			$order,
 			$request['wcsc_carrier'],
-			$order->get_sender(),
-			$order->get_recipient(),
-			$package,
-			true,
-			$order->get_notification_email(),
-			$order->get_carrier_mail(),
-			$reference_number
+			$package
 		);
 
 		if ( is_wp_error( $shipment ) )
 		{
-			$error_message = $shipment->get_error_message();
-			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ')' );
+			/** @var \WP_Error $shipment */
+			WC_Shipcloud_Shipping::log(
+				'Order #' . $order->get_wc_order()->get_order_number()
+				. ' - ' . $shipment->get_error_message()
+				.  ' (' . wcsc_get_carrier_display_name( $request[ 'carrier' ] ) . ')'
+			);
 
 			WooCommerce_Shipcloud::admin_notice(
 				sprintf(
 					__( 'No label for order #%d created: %s' ),
 					$order->get_wc_order()->id,
-					str_replace( "\n", ', ', $error_message )
+					str_replace( "\n", ', ', $shipment->get_error_message() )
 				),
 				'error'
 			);

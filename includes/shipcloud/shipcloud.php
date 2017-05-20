@@ -613,6 +613,48 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
+	 * Create shipment label for an order.
+	 *
+	 * @param WC_Shipcloud_Order $order
+	 * @param string $carrier
+	 * @param string $package
+	 */
+	public function create_shipment_by_order( WC_Shipcloud_Order $order, $carrier, $package ) {
+		$reference_number = sprintf(
+			__( 'Order %s', 'woocommerce-shipcloud' ),
+			$order->get_wc_order()->get_order_number()
+		);
+
+		/**
+		 * Filtering reference number
+		 *
+		 * @param string $reference_number The Reference Number
+		 * @param string $order_number The WooCommerce order number
+		 * @param string $order_id The WooCommerce order id
+		 *
+		 * @return string $reference_number The filtered order number
+		 * @since 1.1.0
+		 */
+		$reference_number = apply_filters(
+			'wcsc_reference_number',
+			$reference_number,
+			$order->get_wc_order()->get_order_number(),
+			$order->get_wc_order()->id
+		);
+
+		$this->create_shipment(
+			$carrier,
+			$order->get_sender(),
+			$order->get_recipient(),
+			$package,
+			true,
+			$order->get_notification_email(),
+			$order->get_carrier_mail(),
+			$reference_number
+		);
+	}
+
+	/**
 	 * Creating a shipment
 	 *
 	 * @param string $carrier
