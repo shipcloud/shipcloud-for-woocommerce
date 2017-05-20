@@ -945,7 +945,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return array $parcels
 	 * @since 1.0.0
 	 */
-	private function get_ordered_parcels( $ordered_package )
+	protected function get_ordered_parcels( $ordered_package )
 	{
 		$parcels  = array();
 
@@ -958,61 +958,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				 */
 				foreach ( $products AS $product )
 				{
-					$length = get_post_meta( $product[ 'product_id' ], '_length', true );
-					$width  = get_post_meta( $product[ 'product_id' ], '_width', true );
-					$height = get_post_meta( $product[ 'product_id' ], '_height', true );
-					$weight = get_post_meta( $product[ 'product_id' ], '_weight', true );
-
-					// If there is missing a dimension, set FALSE
-					if ( '' == $length || '' == $width || '' == $height || '' == $weight )
-					{
-						$dimensions = array(
-							'quantity' => $product[ 'quantity' ]
-						);
-					}
-					else
-					{
-						$dimensions = array(
-							'length' => $length,
-							'width'  => $width,
-							'height' => $height,
-							'weight' => $weight,
-							'quantity' => $product[ 'quantity' ]
-						);
-					}
-
-					$parcels[ 'products' ][] = $dimensions;
+					$parcels[ 'products' ][] = $this->get_product_dimensions( $product );
 				}
+
+				continue;
 			}
-			else
-			{
-				/**
-				 * Shipment Classes
-				 */
-				$taxonomy = get_term_by( 'name', $shipping_class, 'product_shipping_class' );
 
-				$width  = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_width' );
-				$height = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_height' );
-				$length = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_length' );
-				$weight = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_weight' );
-
-				// If there is missing a dimension, set FALSE
-				if ( '' == $length || '' == $width || '' == $height || '' == $weight )
-				{
-					$dimensions = null;
-				}
-				else
-				{
-					$dimensions = array(
-						'length' => $length,
-						'width'  => $width,
-						'height' => $height,
-						'weight' => $weight
-					);
-				}
-
-				$parcels[ 'shipping_classes' ][ $shipping_class ] = $dimensions;
-			}
+			$parcels[ 'shipping_classes' ][ $shipping_class ] = $this->get_shipping_class_dimensions( $shipping_class );
 		}
 
 		return $parcels;
@@ -1564,5 +1516,63 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$message = trim(preg_replace( '/\s+/', ' ', $message ) );
 
 		self::$logger->add( 'shipcloud', $message );
+	}
+
+	/**
+	 * @param $product
+	 *
+	 * @return array
+	 */
+	protected function get_product_dimensions( $product ) {
+		$dimensions = array(
+			'quantity' => $product['quantity']
+		);
+
+		$length = get_post_meta( $product['product_id'], '_length', true );
+		$width  = get_post_meta( $product['product_id'], '_width', true );
+		$height = get_post_meta( $product['product_id'], '_height', true );
+		$weight = get_post_meta( $product['product_id'], '_weight', true );
+
+		if ( '' !== $length && '' !== $width && '' !== $height && '' !== $weight ) {
+			$dimensions = array(
+				'length'   => $length,
+				'width'    => $width,
+				'height'   => $height,
+				'weight'   => $weight,
+				'quantity' => $product['quantity']
+			);
+		}
+
+		return $dimensions;
+	}
+
+	/**
+	 * @param $shipping_class
+	 *
+	 * @return array|null
+	 */
+	private function get_shipping_class_dimensions( $shipping_class ) {
+		/**
+		 * Shipment Classes
+		 */
+		$taxonomy = get_term_by( 'name', $shipping_class, 'product_shipping_class' );
+
+		$width  = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_width' );
+		$height = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_height' );
+		$length = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_length' );
+		$weight = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_weight' );
+
+		// If there is missing a dimension, set FALSE
+		$dimensions = null;
+		if ( $length && $width && $height && $weight ) {
+			$dimensions = array(
+				'length' => $length,
+				'width'  => $width,
+				'height' => $height,
+				'weight' => $weight
+			);
+		}
+
+		return $dimensions;
 	}
 }
