@@ -827,9 +827,17 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		{
 			return;
 		}
-		if ( '' == $package[ 'destination' ][ 'city' ] || '' == $package[ 'destination' ][ 'country' ] || '' == $package[ 'destination' ][ 'postcode' ] || '' == $package[ 'destination' ][ 'address' ] )
-		{
-			wc_add_notice( __( 'Please enter an address to calculate shipping costs.', 'woocommerce-shipcloud' ), 'notice' );
+
+		if ( '' == $package['destination']['city']
+		     || '' == $package['destination']['country']
+		     || '' == $package['destination']['postcode']
+		     || '' == $package['destination']['address']
+		) {
+			wc_add_notice(
+				__( 'Please enter an address to calculate shipping costs.', 'woocommerce-shipcloud' ),
+				'notice'
+			);
+
 			return; // Can't calculate without Address - Stop here!
 		}
 
@@ -851,7 +859,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if( is_wp_error( $carriers ) )
 		{
 			self::log( 'Could not get carriers - ' . $carriers->get_error_message() );
-			$this->log( $carriers->get_error_message() );
+			static::log( $carriers->get_error_message() );
+
 			return;
 		}
 
@@ -864,35 +873,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 			if ( isset( $parcels[ 'shipping_classes' ] ) )
 			{
-				$price = $this->get_price_for_shipping_classes( $carrier_name, $parcels[ 'shipping_classes' ] );
-
-
-				if( is_wp_error( $price ) )
-				{
-					self::log( $price->get_error_message() );
-					$price = $this->get_fallback_price_for_shipment_classes( $parcels[ 'shipping_classes' ] );
-					$sum += $price;
-				}
-				else
-				{
-					$sum += $price;
-				}
+                $sum += $this->get_price_for_shipping_classes( $carrier_name, $parcels[ 'shipping_classes' ] );
 			}
 
 			if ( isset( $parcels[ 'products' ] ) )
 			{
-				$price = $this->get_price_for_products( $carrier_name, $parcels[ 'products' ] );
-
-				if( is_wp_error( $price ) )
-				{
-					self::log( $price->get_error_message() );
-					$price = $this->get_fallback_price_for_products( $parcels[ 'products' ] );
-					$sum += $price;
-				}
-				else
-				{
-					$sum += $price;
-				}
+                $sum += $this->get_price_for_products( $carrier_name, $parcels[ 'products' ] );
 			}
 
 			$rate = array(
@@ -1057,9 +1043,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			// Charge for all products
 			case 'class':
 				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'shipping_class' );
+
 				if( is_wp_error( $prices ) ){
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_shipment_classes( $parcels );
 				}
+
 				$sum = array_sum( $prices );
 				break;
 
@@ -1067,7 +1056,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			case 'order':
 				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'shipping_class' );
 				if( is_wp_error( $prices ) ) {
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_shipment_classes( $parcels );
 				}
 				$sum = max( $prices );
 				break;
@@ -1098,7 +1088,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 				if( is_wp_error( $prices ) )
 				{
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_products( $parcels );
 				}
 				$sum = array_sum( $prices );
 
@@ -1109,8 +1100,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				$price = $this->get_price_for_virtual_parcel( $carrier_name, $parcels, 'product' );
 
 				if( is_wp_error( $price ) ){
-					return $price;
+					self::log( $price->get_error_message() );
+					return $this->get_fallback_price_for_products( $parcels );
 				}
+
 				$sum = $price;
 				break;
 
@@ -1120,8 +1113,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 				if( is_wp_error( $prices ) )
 				{
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_products( $parcels );
 				}
+
 				$sum = max( $prices );
 				break;
 		}
@@ -1247,7 +1242,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return float|WP_Error $price
 	 * @since 1.1.0
 	 */
-	private function get_price_for_virtual_parcel( $carrier_name, $parcels )
+	protected function get_price_for_virtual_parcel( $carrier_name, $parcels )
 	{
 		$virtual_parcel = $this->calculate_virtual_parcel( $parcels );
 
