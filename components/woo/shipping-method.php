@@ -647,48 +647,25 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		 */
 		do_action( 'shipcloud_shipment_tracking_change', $order_id, $shipment_id, $shipment->type );
 
-		switch ( $shipment->type )
-		{
-			case 'shipment.tracking.picked_up':
-				do_action( 'shipcloud_shipment_tracking_picked_up', $order_id, $shipment_id );
-				break;
 
-			case 'shipment.tracking.transit':
-				do_action( 'shipcloud_shipment_tracking_transit', $order_id, $shipment_id );
-				break;
+		/**
+		 * shipcloud_shipment_tracking_default action
+         *
+         * @param int $order_id ID of the order.
+		 * @param int $shipment_id ID of the shipment.
+		 */
+		do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
 
-			case 'shipment.tracking.out_for_delivery':
-				do_action( 'shipcloud_shipment_tracking_out_for_delivery', $order_id, $shipment_id );
-				break;
+		$shipment_action = 'shipcloud_' . str_replace( $shipment->type, '.', '_' );
 
-			case 'shipment.tracking.delivered':
-				do_action( 'shipcloud_shipment_tracking_delivered', $order_id, $shipment_id );
-				break;
+		/**
+		 * shipcloud_shipment_{{ shipment type }} action
+         *
+		 * @param int $order_id ID of the order.
+		 * @param int $shipment_id ID of the shipment.
+		 */
+		do_action( $shipment_action, $order_id, $shipment_id );
 
-			case 'shipment.tracking.awaits_pickup_by_receiver':
-				do_action( 'shipcloud_shipment_tracking_awaits_pickup_by_receiver', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.delayed':
-				do_action( 'shipcloud_shipment_tracking_delayed', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.not_delivered':
-				do_action( 'shipcloud_shipment_tracking_not_delivered', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.notification':
-				do_action( 'shipcloud_shipment_tracking_notification', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.unknown':
-				do_action( 'shipcloud_shipment_tracking_unknown', $order_id, $shipment_id );
-				break;
-
-			default:
-				do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
-				break;
-		}
 		exit;
 	}
 
