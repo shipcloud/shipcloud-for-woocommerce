@@ -663,153 +663,47 @@ class Woocommerce_Shipcloud_API
 	 * @param array  $package
 	 * @param bool   $create_label
 	 *
-	 * @return string|WP_Error
+	 * @return string|\WP_Error
 	 * @since 1.0.0
 	 */
 	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '', $description = '' )
 	{
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
-		switch ( $carrier[ 'carrier' ] )
-		{
-
-			case 'dhl':
-				$additional_services = array();
-
-				if( ! empty ( $carrier_email ) ) {
-					$additional_services = array(
-						array(
-							'name'       => 'advance_notice',
-							'properties' => array(
-								'email'    => $carrier_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to[ 'country' ] ) )
-							)
-						)
-					);
-				}
-
-				$params = array(
-					'carrier'               => $carrier[ 'carrier' ],
-					'service'               => $carrier[ 'service' ],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-					'notification_email'    => $notification_email,
-					'additional_services'   => $additional_services
-				);
-
-				break;
-
-			case 'dpd':
-				$additional_services = array();
-
-				if( ! empty ( $carrier_email ) ) {
-					$additional_services = array(
-						array(
-							'name'       => 'advance_notice',
-							'properties' => array(
-								'email'    => $carrier_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to[ 'country' ] ) )
-							)
-						)
-					);
-				}
-
-				$params = array(
-					'carrier'               => $carrier[ 'carrier' ],
-					'service'               => $carrier[ 'service' ],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-					'notification_email'    => $carrier_email,
-					'additional_services'   => $additional_services
-				);
-
-				break;
-
-			case 'ups':
-
-				unset( $to[ 'email' ] );
-
-				$params = array(
-					'carrier'               => $carrier[ 'carrier' ],
-					'service'               => $carrier[ 'service' ],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-				    'notification_email'    => $notification_email,
-				);
-
-				// Moving the description to the root on international shipment
-				if( $from[ 'country' ] !== $to[ 'country' ] )
-				{
-					$params[ 'description' ] = $params[ 'package' ][ 'description' ];
-					unset( $params[ 'package' ][ 'description' ] );
-				}
-
-				break;
-
-			default:
-				unset( $to[ 'email' ] );
-				$params = array(
-					'carrier'               => $carrier[ 'carrier' ],
-					'service'               => $carrier[ 'service' ],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-					'notification_email'    => $notification_email,
-				);
-
-				break;
-		}
-
-		if ( $description ) {
-			$params['description'] = $description;
-		}
-
-		if( ! empty( $reference_number ) ) {
-			$params[ 'reference_number' ] = $reference_number;
-		}
+		$params = $this->get_params_by_carrier( $carrier, $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number, $description );
 
 		$request = $this->send_request( 'shipments', $params, 'POST' );
+
 		if ( is_wp_error( $request ) )
 		{
 			return $request;
 		}
 
-		if ( false !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
-		{
-			if ( $create_label )
-			{
-				return array(
-					'id'                  => $request[ 'body' ][ 'id' ],
-					'carrier_tracking_no' => $request[ 'body' ][ 'carrier_tracking_no' ],
-					'tracking_url'        => $request[ 'body' ][ 'tracking_url' ],
-					'label_url'           => $request[ 'body' ][ 'label_url' ],
-					'price'               => $request[ 'body' ][ 'price' ]
-				);
-			}
-			else
-			{
-				return array(
-					'id'                  => $request[ 'body' ][ 'id' ],
-					'carrier_tracking_no' => '',
-					'tracking_url'        => $request[ 'body' ][ 'tracking_url' ],
-					'label_url'           => '',
-					'price'               => ''
-				);
-			}
-		}
-		else
+		if ( false === $request || 2 !== (int) ( $request['header']['status'] / 100 ) )
 		{
 			$error = $this->get_error( $request );
 
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
+			return new \WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
+
+		if ( $create_label )
+		{
+			return array(
+				'id'                  => $request[ 'body' ][ 'id' ],
+				'carrier_tracking_no' => $request[ 'body' ][ 'carrier_tracking_no' ],
+				'tracking_url'        => $request[ 'body' ][ 'tracking_url' ],
+				'label_url'           => $request[ 'body' ][ 'label_url' ],
+				'price'               => $request[ 'body' ][ 'price' ]
+			);
+		}
+
+		return array(
+			'id'                  => $request[ 'body' ][ 'id' ],
+			'carrier_tracking_no' => '',
+			'tracking_url'        => $request[ 'body' ][ 'tracking_url' ],
+			'label_url'           => '',
+			'price'               => ''
+		);
 	}
 
 	/**
@@ -982,5 +876,125 @@ class Woocommerce_Shipcloud_API
 		}
 
 		return $from_data;
+	}
+
+	/**
+	 * @param $carrier
+	 * @param $from
+	 * @param $to
+	 * @param $package
+	 * @param $create_label
+	 * @param $notification_email
+	 * @param $carrier_email
+	 * @param $reference_number
+	 * @param $description
+	 *
+	 * @return array
+	 */
+	protected function get_params_by_carrier( $carrier, $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number, $description ) {
+		switch ( $carrier['carrier'] ) {
+
+			case 'dhl':
+				$additional_services = array();
+
+				if ( ! empty ( $carrier_email ) ) {
+					$additional_services = array(
+						array(
+							'name'       => 'advance_notice',
+							'properties' => array(
+								'email'    => $carrier_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to['country'] ) )
+							)
+						)
+					);
+				}
+
+				$params = array(
+					'carrier'               => $carrier['carrier'],
+					'service'               => $carrier['service'],
+					'from'                  => $from,
+					'to'                    => $to,
+					'package'               => $package,
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $notification_email,
+					'additional_services'   => $additional_services
+				);
+
+				break;
+
+			case 'dpd':
+				$additional_services = array();
+
+				if ( ! empty ( $carrier_email ) ) {
+					$additional_services = array(
+						array(
+							'name'       => 'advance_notice',
+							'properties' => array(
+								'email'    => $carrier_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to['country'] ) )
+							)
+						)
+					);
+				}
+
+				$params = array(
+					'carrier'               => $carrier['carrier'],
+					'service'               => $carrier['service'],
+					'from'                  => $from,
+					'to'                    => $to,
+					'package'               => $package,
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $carrier_email,
+					'additional_services'   => $additional_services
+				);
+
+				break;
+
+			case 'ups':
+
+				unset( $to['email'] );
+
+				$params = array(
+					'carrier'               => $carrier['carrier'],
+					'service'               => $carrier['service'],
+					'from'                  => $from,
+					'to'                    => $to,
+					'package'               => $package,
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $notification_email,
+				);
+
+				// Moving the description to the root on international shipment
+				if ( $from['country'] !== $to['country'] ) {
+					$params['description'] = $params['package']['description'];
+					unset( $params['package']['description'] );
+				}
+
+				break;
+
+			default:
+				unset( $to['email'] );
+				$params = array(
+					'carrier'               => $carrier['carrier'],
+					'service'               => $carrier['service'],
+					'from'                  => $from,
+					'to'                    => $to,
+					'package'               => $package,
+					'create_shipping_label' => $create_label,
+					'notification_email'    => $notification_email,
+				);
+
+				break;
+		}
+
+		if ( $description ) {
+			$params['description'] = $description;
+		}
+
+		if ( ! empty( $reference_number ) ) {
+			$params['reference_number'] = $reference_number;
+		}
+
+		return $params;
 	}
 }
