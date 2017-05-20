@@ -869,25 +869,15 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		 */
 		foreach ( $carriers AS $carrier_name => $carrier_display_name )
 		{
-			$sum = 0;
+			$sum = $this->get_carrier_cost( $parcels, $carrier_name );
 
-			if ( isset( $parcels[ 'shipping_classes' ] ) )
-			{
-                $sum += $this->get_price_for_shipping_classes( $carrier_name, $parcels[ 'shipping_classes' ] );
-			}
-
-			if ( isset( $parcels[ 'products' ] ) )
-			{
-                $sum += $this->get_price_for_products( $carrier_name, $parcels[ 'products' ] );
-			}
-
-			$rate = array(
-				'id'    => $carrier_name,
-				'label' => $this->shipcloud_api->get_carrier_display_name_short( $carrier_name ),
-				'cost'  => $sum,
-			);
-
-			$this->add_rate( $rate );
+			$this->add_rate(
+				array(
+					'id'    => $carrier_name,
+					'label' => $this->shipcloud_api->get_carrier_display_name_short( $carrier_name ),
+					'cost'  => $sum,
+				)
+            );
 		}
 
 		WC()->session->set( 'shipcloud_parcels', $this->calculated_parcels );
@@ -1569,5 +1559,25 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		return $dimensions;
+	}
+
+	/**
+	 * @param $parcels
+	 * @param $carrier_name
+	 *
+	 * @return float|WP_Error
+	 */
+	protected function get_carrier_cost( $parcels, $carrier_name ) {
+	    $sum = 0;
+
+		if ( isset( $parcels['shipping_classes'] ) ) {
+			$sum += $this->get_price_for_shipping_classes( $carrier_name, $parcels['shipping_classes'] );
+		}
+
+		if ( isset( $parcels['products'] ) ) {
+			$sum += $this->get_price_for_products( $carrier_name, $parcels['products'] );
+		}
+
+		return $sum;
 	}
 }
