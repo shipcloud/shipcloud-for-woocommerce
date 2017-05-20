@@ -38,21 +38,6 @@ if( defined( 'WCSC_FOLDER' ) ):
 endif;
 
 /**
- * Debugging helper function
- *
- * @since 1.0.0
- */
-if( !function_exists( 'p' ) )
-{
-	function p( $var )
-	{
-		echo '<pre>';
-		print_r( $var );
-		echo '</pre>';
-	}
-}
-
-/**
  * Get carrier display_name from name
  *
  * @param string $name
