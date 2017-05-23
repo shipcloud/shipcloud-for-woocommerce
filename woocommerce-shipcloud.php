@@ -407,13 +407,6 @@ function woocommerce_shipcloud_init()
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
 
 
-add_filter( 'bulk_actions-edit-shop_order', function ( $actions ) {
-	$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
-
-	return $actions;
-} );
-
-
 add_filter( 'handle_bulk_actions-edit-shop_order', function ( $foo ) {
 	return $foo;
 } );
