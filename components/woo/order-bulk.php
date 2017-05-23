@@ -32,7 +32,8 @@ class WC_Shipcloud_Order_Bulk {
 	}
 
 	private function init_hooks() {
-		add_action( 'load-edit.php', array( $this, 'load_edit') );
+		add_action( 'admin_print_footer_scripts', array( $this, 'admin_print_footer_scripts' ) );
+		add_action( 'load-edit.php', array( $this, 'load_edit' ) );
 
 		add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_actions' ) );
 	}
@@ -41,6 +42,18 @@ class WC_Shipcloud_Order_Bulk {
 		$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
 
 		return $actions;
+	}
+
+	public function admin_print_footer_scripts() {
+		require_once WCSC_FOLDER . '/includes/shipcloud/block-order-labels-bulk.php';
+
+		$block = new WooCommerce_Shipcloud_Block_Order_Labels_Bulk(
+			WCSC_COMPONENTFOLDER . '/block/order-labels-bulk.php',
+			wcsc_shipping_method()->get_allowed_carriers(),
+			new Woocommerce_Shipcloud_API()
+		);
+
+		$block->dispatch();
 	}
 
 	public function load_edit() {

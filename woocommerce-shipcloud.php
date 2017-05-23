@@ -407,18 +407,6 @@ function woocommerce_shipcloud_init()
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
 
 
-add_action( 'admin_print_footer_scripts', function () {
-	require_once WCSC_FOLDER . '/includes/shipcloud/block-order-labels-bulk.php';
-
-	$block = new WooCommerce_Shipcloud_Block_Order_Labels_Bulk(
-		WCSC_COMPONENTFOLDER . '/block/order-labels-bulk.php',
-		wcsc_shipping_method()->get_allowed_carriers(),
-		new Woocommerce_Shipcloud_API()
-	);
-
-	$block->dispatch();
-} );
-
 /**
  * Handle bulk action on orders.
  */
