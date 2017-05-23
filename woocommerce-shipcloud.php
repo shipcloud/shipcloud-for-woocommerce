@@ -407,20 +407,6 @@ function woocommerce_shipcloud_init()
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
 
 
-add_filter( 'handle_bulk_actions-edit-shop_order', function ( $foo ) {
-	return $foo;
-} );
-
-add_action( 'load-edit.php', function () {
-	wp_register_script(
-		'wcsc_bulk_order_label',
-		WCSC_URLPATH . '/includes/js/bulk-order-label.js',
-		array( 'jquery' )
-	);
-
-	wp_enqueue_script( 'wcsc_bulk_order_label', false, array(), false, true );
-} );
-
 add_action( 'admin_print_footer_scripts', function () {
 	require_once WCSC_FOLDER . '/includes/shipcloud/block-order-labels-bulk.php';
 
