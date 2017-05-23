@@ -405,4 +405,3 @@ function woocommerce_shipcloud_init()
 }
 
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
-
