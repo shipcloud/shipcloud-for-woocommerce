@@ -66,7 +66,7 @@ class WooCommerce_Tests extends WP_Tests
 		$this->byId( 'billing_phone' )->value( $customer_data[ 'phone' ] );
 		$this->byId( 'billing_address_1' )->value( $customer_data[ 'address_1' ] );
 		$this->byId( 'billing_address_2' )->value( $customer_data[ 'address_2' ] );
-		$this->byId( 'billing_postcode' )->value( $customer_data[ 'postcode' ] );
+		$this->byId( 'billing_zip_code' )->value( $customer_data[ 'zip_code' ] );
 		$this->byId( 'billing_city' )->value( $customer_data[ 'city' ] );
 
 		sleep( $this->std_sleep + 2 ); // Wating for AJAX

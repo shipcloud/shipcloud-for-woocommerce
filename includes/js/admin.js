@@ -57,7 +57,7 @@ jQuery( function( $ ) {
 			var sender_company = $("input[name='sender_address[company]']").val();
 			var sender_street = $("input[name='sender_address[street]']").val();
 			var sender_street_nr = $("input[name='sender_address[street_nr]']").val();
-			var sender_postcode = $("input[name='sender_address[postcode]']").val();
+			var sender_zip_code = $("input[name='sender_address[zip_code]']").val();
 			var sender_city = $("input[name='sender_address[city]']").val();
 			var sender_state = $("input[name='sender_address[state]']").val();
 			var sender_country = $("select[name='sender_address[country]']").val();
@@ -68,7 +68,7 @@ jQuery( function( $ ) {
 			var recipient_street = $("input[name='recipient_address[street]']").val();
 			var recipient_street_nr = $("input[name='recipient_address[street_nr]']").val();
 			var recipient_care_of = $("input[name='recipient_address[care_of]']").val();
-			var recipient_postcode = $("input[name='recipient_address[postcode]']").val();
+			var recipient_zip_code = $("input[name='recipient_address[zip_code]']").val();
 			var recipient_city = $("input[name='recipient_address[city]']").val();
 			var recipient_state = $("input[name='recipient_address[state]']").val();
 			var recipient_country = $("select[name='recipient_address[country]']").val();
@@ -78,7 +78,7 @@ jQuery( function( $ ) {
 			var sender_company 	= $( "input[name='recipient_address[company]']" ).val( );
 			var sender_street 	= $( "input[name='recipient_address[street]']" ).val( );
 			var sender_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
-			var sender_postcode = $( "input[name='recipient_address[postcode]']" ).val( );
+			var sender_zip_code = $( "input[name='recipient_address[zip_code]']" ).val( );
 			var sender_city 	= $( "input[name='recipient_address[city]']" ).val( );
 			var sender_state 	= $( "input[name='recipient_address[state]']" ).val( );
 			var sender_country 	= $( "select[name='recipient_address[country]']" ).val( );
@@ -89,7 +89,7 @@ jQuery( function( $ ) {
             var recipient_care_of = $("input[name='recipient_address[care_of]']").val();
 			var recipient_street 	= $( "input[name='sender_address[street]']" ).val( );
 			var recipient_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
-			var recipient_postcode = $( "input[name='sender_address[postcode]']" ).val( );
+			var recipient_zip_code = $( "input[name='sender_address[zip_code]']" ).val( );
 			var recipient_city 	= $( "input[name='sender_address[city]']" ).val( );
 			var recipient_state 	= $( "input[name='sender_address[state]']" ).val( );
 			var recipient_country 	= $( "select[name='sender_address[country]']" ).val( );
@@ -113,7 +113,7 @@ jQuery( function( $ ) {
 			'sender_company' : sender_company,
 			'sender_street' : sender_street,
 			'sender_street_nr' : sender_street_nr,
-			'sender_postcode' : sender_postcode,
+			'sender_zip_code' : sender_zip_code,
 			'sender_city' : sender_city,
 			'sender_state' : sender_state,
 			'sender_country' : sender_country,
@@ -123,7 +123,7 @@ jQuery( function( $ ) {
 			'recipient_street' : recipient_street,
 			'recipient_street_nr': recipient_street_nr,
 			'recipient_care_of' : recipient_care_of,
-			'recipient_postcode' : recipient_postcode,
+			'recipient_zip_code' : recipient_zip_code,
 			'recipient_city' : recipient_city,
 			'recipient_state' : recipient_state,
 			'recipient_country' : recipient_country,

@@ -22,7 +22,7 @@ class Order extends WoocommerceShipcloud_Tests
 			'phone' => '110',
 			'address_1' => 'Musterweg 1',
 			'address_2' => '',
-			'postcode' => '66666',
+			'zip_code' => '66666',
 			'city' => 'Musterstadt',
 		);
 
