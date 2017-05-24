@@ -73,7 +73,6 @@ class WCSC_Woo extends WCSC_Component
 
 		if ( wcsc_is_enabled() )
 		{
-			require_once( __DIR__ . '/woo-functions.php' );
 			require_once( __DIR__ . '/order.php' );
 			require_once( __DIR__ . '/shipping-classes.php' );
 
