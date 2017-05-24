@@ -5,7 +5,7 @@
  * Description: Integrates shipcloud.io shipment services to your WooCommerce shop.
  * Version: 1.2.1
  * Author: WooThemes
- * Author URI: http://woothemes.com/
+ * Author URI: http://shipcloud.io
  * Developer: awesome.ug
  * Developer URI: http://www.awesome.ug
  * License:
@@ -36,18 +36,6 @@ if ( ! defined( 'ABSPATH' ) )
 {
 	exit;
 }
-
-/**
- * Required functions
- */
-if ( ! function_exists( 'woothemes_queue_update' ) ) {
-	require_once( 'woo-includes/woo-functions.php' );
-}
-
-/**
- * Plugin updates
- */
-woothemes_queue_update( plugin_basename( __FILE__ ), '99377680d6954f5c19a76538a369fc7e', '1503949' );
 
 class WooCommerce_Shipcloud
 {
