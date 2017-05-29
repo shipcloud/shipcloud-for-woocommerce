@@ -618,6 +618,8 @@ class Woocommerce_Shipcloud_API
 	 * @param WC_Shipcloud_Order $order
 	 * @param string $carrier
 	 * @param string $package
+	 *
+	 * @return string|\WP_Error
 	 */
 	public function create_shipment_by_order( WC_Shipcloud_Order $order, $carrier, $package ) {
 		$reference_number = sprintf(
@@ -639,10 +641,10 @@ class Woocommerce_Shipcloud_API
 			'wcsc_reference_number',
 			$reference_number,
 			$order->get_wc_order()->get_order_number(),
-			$order->get_wc_order()->id
+			$order->get_wc_order()->get_id()
 		);
 
-		$this->create_shipment(
+		return $this->create_shipment(
 			$carrier,
 			$order->get_sender(),
 			$order->get_recipient(),

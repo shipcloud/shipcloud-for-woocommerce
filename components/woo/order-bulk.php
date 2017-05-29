@@ -6,7 +6,7 @@
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
  * @package WooCommerceShipCloud/Woo
  * @version 1.0.0
- * @since   1.0.0
+ * @since   1.2.1
  * @license GPL 2
  *          Copyright 2017 (support@awesome.ug)
  *          This program is free software; you can redistribute it and/or modify
@@ -25,11 +25,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Class WC_Shipcloud_Order_Bulk
+ *
+ * Bulk functionalities for Label creation
+ *
+ * @since   1.2.1
+ */
 class WC_Shipcloud_Order_Bulk {
+	/**
+	 * WC_Shipcloud_Order_Bulk constructor.
+	 *
+	 * @since   1.2.1
+	 */
 	public function __construct() {
 		$this->init_hooks();
 	}
 
+	/**
+	 * Initializing hooks and filters
+	 *
+	 * @since   1.2.1
+	 */
 	private function init_hooks() {
 		add_action( 'admin_print_footer_scripts', array( $this, 'admin_print_footer_scripts' ) );
 		add_action( 'load-edit.php', array( $this, 'load_edit' ) );
@@ -38,6 +55,11 @@ class WC_Shipcloud_Order_Bulk {
 		add_action( 'load-edit.php', array( $this, 'handle_wcsc_order_bulk' ) );
 	}
 
+	/**
+	 * Handling Submit after bulk action
+	 *
+	 * @since   1.2.1
+	 */
 	public function handle_wcsc_order_bulk() {
 		if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' !== get_current_screen()->id ) {
 			// None of our business.
@@ -81,7 +103,7 @@ class WC_Shipcloud_Order_Bulk {
 				WooCommerce_Shipcloud::admin_notice(
 					sprintf(
 						__( 'No label for order #%d created: %s' ),
-						$order->get_wc_order()->id,
+						$order->get_wc_order()->get_id(),
 						str_replace( "\n", ', ', $shipment->get_error_message() )
 					),
 					'error'
@@ -137,12 +159,26 @@ class WC_Shipcloud_Order_Bulk {
 		);
 	}
 
+	/**
+	 * Adding bulk action to dropdown
+	 *
+	 * @since   1.2.1
+	 *
+	 * @param array $actions Bulk actions
+	 *
+	 * @return array $actions Bulk actions with own Actions
+	 */
 	public function add_bulk_actions( $actions ) {
 		$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
 
 		return $actions;
 	}
 
+	/**
+	 * Adding Footer Scripts
+	 *
+	 * @since   1.2.1
+	 */
 	public function admin_print_footer_scripts() {
 		require_once WCSC_FOLDER . '/includes/shipcloud/block-order-labels-bulk.php';
 
@@ -155,6 +191,11 @@ class WC_Shipcloud_Order_Bulk {
 		$block->dispatch();
 	}
 
+	/**
+	 * Loading Scripts
+	 *
+	 * @since   1.2.1
+	 */
 	public function load_edit() {
 		wp_register_script(
 			'wcsc_bulk_order_label',
