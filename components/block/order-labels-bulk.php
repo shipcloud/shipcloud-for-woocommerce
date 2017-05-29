@@ -126,20 +126,6 @@
     </tbody>
 </table>
 
-<script type="application/javascript">
-    jQuery(function ($) {
-        $('#wcsc_template').change(function () {
-            var data = $(':selected', this).data();
-            console.log(data);
-            for (var key in data) {
-                $('input[name=wcsc_' + key + ']').val(data[key]);
-            }
-
-            $('select[name=wcsc_carrier]').val(data['carrier']);
-        });
-    });
-</script>
-
 <script type="template/html" id="tmpl-wcsc-order-labels-bulk-items">
     <div data-id="{{ data.id }}"
          class="bulk-title">

@@ -647,48 +647,25 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		 */
 		do_action( 'shipcloud_shipment_tracking_change', $order_id, $shipment_id, $shipment->type );
 
-		switch ( $shipment->type )
-		{
-			case 'shipment.tracking.picked_up':
-				do_action( 'shipcloud_shipment_tracking_picked_up', $order_id, $shipment_id );
-				break;
 
-			case 'shipment.tracking.transit':
-				do_action( 'shipcloud_shipment_tracking_transit', $order_id, $shipment_id );
-				break;
+		/**
+		 * shipcloud_shipment_tracking_default action
+         *
+         * @param int $order_id ID of the order.
+		 * @param int $shipment_id ID of the shipment.
+		 */
+		do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
 
-			case 'shipment.tracking.out_for_delivery':
-				do_action( 'shipcloud_shipment_tracking_out_for_delivery', $order_id, $shipment_id );
-				break;
+		$shipment_action = 'shipcloud_' . str_replace( $shipment->type, '.', '_' );
 
-			case 'shipment.tracking.delivered':
-				do_action( 'shipcloud_shipment_tracking_delivered', $order_id, $shipment_id );
-				break;
+		/**
+		 * shipcloud_shipment_{{ shipment type }} action
+         *
+		 * @param int $order_id ID of the order.
+		 * @param int $shipment_id ID of the shipment.
+		 */
+		do_action( $shipment_action, $order_id, $shipment_id );
 
-			case 'shipment.tracking.awaits_pickup_by_receiver':
-				do_action( 'shipcloud_shipment_tracking_awaits_pickup_by_receiver', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.delayed':
-				do_action( 'shipcloud_shipment_tracking_delayed', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.not_delivered':
-				do_action( 'shipcloud_shipment_tracking_not_delivered', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.notification':
-				do_action( 'shipcloud_shipment_tracking_notification', $order_id, $shipment_id );
-				break;
-
-			case 'shipment.tracking.unknown':
-				do_action( 'shipcloud_shipment_tracking_unknown', $order_id, $shipment_id );
-				break;
-
-			default:
-				do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
-				break;
-		}
 		exit;
 	}
 
@@ -827,9 +804,17 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		{
 			return;
 		}
-		if ( '' == $package[ 'destination' ][ 'city' ] || '' == $package[ 'destination' ][ 'country' ] || '' == $package[ 'destination' ][ 'postcode' ] || '' == $package[ 'destination' ][ 'address' ] )
-		{
-			wc_add_notice( __( 'Please enter an address to calculate shipping costs.', 'woocommerce-shipcloud' ), 'notice' );
+
+		if ( '' == $package['destination']['city']
+		     || '' == $package['destination']['country']
+		     || '' == $package['destination']['postcode']
+		     || '' == $package['destination']['address']
+		) {
+			wc_add_notice(
+				__( 'Please enter an address to calculate shipping costs.', 'woocommerce-shipcloud' ),
+				'notice'
+			);
+
 			return; // Can't calculate without Address - Stop here!
 		}
 
@@ -851,7 +836,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if( is_wp_error( $carriers ) )
 		{
 			self::log( 'Could not get carriers - ' . $carriers->get_error_message() );
-			$this->log( $carriers->get_error_message() );
+			static::log( $carriers->get_error_message() );
+
 			return;
 		}
 
@@ -860,48 +846,15 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		 */
 		foreach ( $carriers AS $carrier_name => $carrier_display_name )
 		{
-			$sum = 0;
+			$sum = $this->get_carrier_cost( $parcels, $carrier_name );
 
-			if ( isset( $parcels[ 'shipping_classes' ] ) )
-			{
-				$price = $this->get_price_for_shipping_classes( $carrier_name, $parcels[ 'shipping_classes' ] );
-
-
-				if( is_wp_error( $price ) )
-				{
-					self::log( $price->get_error_message() );
-					$price = $this->get_fallback_price_for_shipment_classes( $parcels[ 'shipping_classes' ] );
-					$sum += $price;
-				}
-				else
-				{
-					$sum += $price;
-				}
-			}
-
-			if ( isset( $parcels[ 'products' ] ) )
-			{
-				$price = $this->get_price_for_products( $carrier_name, $parcels[ 'products' ] );
-
-				if( is_wp_error( $price ) )
-				{
-					self::log( $price->get_error_message() );
-					$price = $this->get_fallback_price_for_products( $parcels[ 'products' ] );
-					$sum += $price;
-				}
-				else
-				{
-					$sum += $price;
-				}
-			}
-
-			$rate = array(
-				'id'    => $carrier_name,
-				'label' => $this->shipcloud_api->get_carrier_display_name_short( $carrier_name ),
-				'cost'  => $sum,
-			);
-
-			$this->add_rate( $rate );
+			$this->add_rate(
+				array(
+					'id'    => $carrier_name,
+					'label' => $this->shipcloud_api->get_carrier_display_name_short( $carrier_name ),
+					'cost'  => $sum,
+				)
+            );
 		}
 
 		WC()->session->set( 'shipcloud_parcels', $this->calculated_parcels );
@@ -945,7 +898,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return array $parcels
 	 * @since 1.0.0
 	 */
-	private function get_ordered_parcels( $ordered_package )
+	protected function get_ordered_parcels( $ordered_package )
 	{
 		$parcels  = array();
 
@@ -958,61 +911,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				 */
 				foreach ( $products AS $product )
 				{
-					$length = get_post_meta( $product[ 'product_id' ], '_length', true );
-					$width  = get_post_meta( $product[ 'product_id' ], '_width', true );
-					$height = get_post_meta( $product[ 'product_id' ], '_height', true );
-					$weight = get_post_meta( $product[ 'product_id' ], '_weight', true );
-
-					// If there is missing a dimension, set FALSE
-					if ( '' == $length || '' == $width || '' == $height || '' == $weight )
-					{
-						$dimensions = array(
-							'quantity' => $product[ 'quantity' ]
-						);
-					}
-					else
-					{
-						$dimensions = array(
-							'length' => $length,
-							'width'  => $width,
-							'height' => $height,
-							'weight' => $weight,
-							'quantity' => $product[ 'quantity' ]
-						);
-					}
-
-					$parcels[ 'products' ][] = $dimensions;
+					$parcels[ 'products' ][] = $this->get_product_dimensions( $product );
 				}
+
+				continue;
 			}
-			else
-			{
-				/**
-				 * Shipment Classes
-				 */
-				$taxonomy = get_term_by( 'name', $shipping_class, 'product_shipping_class' );
 
-				$width  = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_width' );
-				$height = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_height' );
-				$length = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_length' );
-				$weight = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_weight' );
-
-				// If there is missing a dimension, set FALSE
-				if ( '' == $length || '' == $width || '' == $height || '' == $weight )
-				{
-					$dimensions = null;
-				}
-				else
-				{
-					$dimensions = array(
-						'length' => $length,
-						'width'  => $width,
-						'height' => $height,
-						'weight' => $weight
-					);
-				}
-
-				$parcels[ 'shipping_classes' ][ $shipping_class ] = $dimensions;
-			}
+			$parcels[ 'shipping_classes' ][ $shipping_class ] = $this->get_shipping_class_dimensions( $shipping_class );
 		}
 
 		return $parcels;
@@ -1105,9 +1010,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			// Charge for all products
 			case 'class':
 				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'shipping_class' );
+
 				if( is_wp_error( $prices ) ){
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_shipment_classes( $parcels );
 				}
+
 				$sum = array_sum( $prices );
 				break;
 
@@ -1115,7 +1023,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			case 'order':
 				$prices = $this->get_prices_for_parcels( $carrier_name, $parcels, 'shipping_class' );
 				if( is_wp_error( $prices ) ) {
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_shipment_classes( $parcels );
 				}
 				$sum = max( $prices );
 				break;
@@ -1146,7 +1055,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 				if( is_wp_error( $prices ) )
 				{
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_products( $parcels );
 				}
 				$sum = array_sum( $prices );
 
@@ -1157,8 +1067,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				$price = $this->get_price_for_virtual_parcel( $carrier_name, $parcels, 'product' );
 
 				if( is_wp_error( $price ) ){
-					return $price;
+					self::log( $price->get_error_message() );
+					return $this->get_fallback_price_for_products( $parcels );
 				}
+
 				$sum = $price;
 				break;
 
@@ -1168,8 +1080,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 				if( is_wp_error( $prices ) )
 				{
-					return $prices;
+					self::log( $prices->get_error_message() );
+					return $this->get_fallback_price_for_products( $parcels );
 				}
+
 				$sum = max( $prices );
 				break;
 		}
@@ -1295,7 +1209,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * @return float|WP_Error $price
 	 * @since 1.1.0
 	 */
-	private function get_price_for_virtual_parcel( $carrier_name, $parcels )
+	protected function get_price_for_virtual_parcel( $carrier_name, $parcels )
 	{
 		$virtual_parcel = $this->calculate_virtual_parcel( $parcels );
 
@@ -1564,5 +1478,83 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$message = trim(preg_replace( '/\s+/', ' ', $message ) );
 
 		self::$logger->add( 'shipcloud', $message );
+	}
+
+	/**
+	 * @param $product
+	 *
+	 * @return array
+	 */
+	protected function get_product_dimensions( $product ) {
+		$dimensions = array(
+			'quantity' => $product['quantity']
+		);
+
+		$length = get_post_meta( $product['product_id'], '_length', true );
+		$width  = get_post_meta( $product['product_id'], '_width', true );
+		$height = get_post_meta( $product['product_id'], '_height', true );
+		$weight = get_post_meta( $product['product_id'], '_weight', true );
+
+		if ( '' !== $length && '' !== $width && '' !== $height && '' !== $weight ) {
+			$dimensions = array(
+				'length'   => $length,
+				'width'    => $width,
+				'height'   => $height,
+				'weight'   => $weight,
+				'quantity' => $product['quantity']
+			);
+		}
+
+		return $dimensions;
+	}
+
+	/**
+	 * @param $shipping_class
+	 *
+	 * @return array|null
+	 */
+	private function get_shipping_class_dimensions( $shipping_class ) {
+		/**
+		 * Shipment Classes
+		 */
+		$taxonomy = get_term_by( 'name', $shipping_class, 'product_shipping_class' );
+
+		$width  = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_width' );
+		$height = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_height' );
+		$length = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_length' );
+		$weight = get_option( 'shipping_class_' . $taxonomy->term_id . '_shipcloud_weight' );
+
+		// If there is missing a dimension, set FALSE
+		$dimensions = null;
+		if ( $length && $width && $height && $weight ) {
+			$dimensions = array(
+				'length' => $length,
+				'width'  => $width,
+				'height' => $height,
+				'weight' => $weight
+			);
+		}
+
+		return $dimensions;
+	}
+
+	/**
+	 * @param $parcels
+	 * @param $carrier_name
+	 *
+	 * @return float|WP_Error
+	 */
+	protected function get_carrier_cost( $parcels, $carrier_name ) {
+	    $sum = 0;
+
+		if ( isset( $parcels['shipping_classes'] ) ) {
+			$sum += $this->get_price_for_shipping_classes( $carrier_name, $parcels['shipping_classes'] );
+		}
+
+		if ( isset( $parcels['products'] ) ) {
+			$sum += $this->get_price_for_products( $carrier_name, $parcels['products'] );
+		}
+
+		return $sum;
 	}
 }

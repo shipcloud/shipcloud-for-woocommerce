@@ -510,87 +510,32 @@ class WC_Shipcloud_Order
 	 */
 	private function parcel_templates()
 	{
-		$options       = $this->get_options();
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
-
-		$args = array(
-			'post_type'   => 'sc_parcel_template',
-			'post_status' => 'publish',
-            'posts_per_page' => -1
-		);
-
-		$posts = get_posts( $args );
+		$posts = get_posts(
+			array(
+				'post_type'   => 'sc_parcel_template',
+				'post_status' => 'publish',
+				'posts_per_page' => -1
+			)
+        );
 
 		$parcel_templates = array();
-
 		if ( is_array( $posts ) && count( $posts ) > 0 )
 		{
-			foreach ( $posts AS $post )
-			{
-				$parcel_templates[] = array(
-					'value'  => get_post_meta( $post->ID, 'width', true ) . ';' . get_post_meta( $post->ID, 'height', true ) . ';' . get_post_meta( $post->ID, 'length', true ) . ';' . get_post_meta( $post->ID, 'weight', true ) . ';' . get_post_meta( $post->ID, 'carrier', true ) . ';',
-					'option' => get_post_meta( $post->ID, 'width', true ) . esc_attr( 'x', 'woocommerce-shipcloud' ) . get_post_meta( $post->ID, 'height', true ) . esc_attr( 'x', 'woocommerce-shipcloud' ) . get_post_meta( $post->ID, 'length', true ) . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - ' . get_post_meta( $post->ID, 'weight', true ) . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - ' . $shipcloud_api->get_carrier_display_name_short( get_post_meta( $post->ID, 'carrier', true ) ),
-				);
-			}
+			$parcel_templates = $this->get_parcel_templates_by_posts( $posts );
 		}
 
 		$shipcloud_parcels  = get_post_meta( $this->order_id, 'shipcloud_parcels', true );
 		$determined_parcels = array();
-
 		if ( is_array( $shipcloud_parcels ) && count( $shipcloud_parcels ) > 0 )
 		{
 			foreach ( $shipcloud_parcels AS $carrier_name => $parcels )
 			{
-				foreach( $parcels AS $parcel )
-				{
-					$determined_parcels[] = array(
-						'value'  => $parcel[ 'width' ] . ';' . $parcel[ 'height' ] . ';' . $parcel[ 'length' ] . ';' . $parcel[ 'weight' ] . ';' . $carrier_name . ';',
-						'option' => $parcel[ 'width' ] . esc_attr( 'x', 'woocommerce-shipcloud' ) . $parcel[ 'height' ] . esc_attr( 'x', 'woocommerce-shipcloud' ) . $parcel[ 'length' ] . esc_attr( 'cm', 'woocommerce-shipcloud' ) . ' - ' . $parcel[ 'weight' ] . esc_attr( 'kg', 'woocommerce-shipcloud' ) . ' - ' . $shipcloud_api->get_carrier_display_name_short( $carrier_name ),
-					);
-				}
+				$determined_parcels = $this->get_parcel_template_by_parcels( $parcels, $carrier_name );
 			}
 		}
 
 		ob_start();
-
-		?>
-		<div class="parcel-templates fifty">
-
-			<div class="parcel-template-field parcels-recommended">
-				<label for="parcels_recommended"><?php _e( 'Automatic determined Parcels', 'woocommerce-shipcloud' ); ?></label>
-				<?php if ( count( $determined_parcels ) > 0 ) : ?>
-					<input type="button" value="<?php _e( '&#8592; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button"/>
-					<select name="parcel_list">
-						<option value="none"><?php _e( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
-
-						<?php foreach ( $determined_parcels AS $determined_parcel ): ?>
-							<option value="<?php echo $determined_parcel[ 'value' ]; ?>"><?php echo $determined_parcel[ 'option' ]; ?></option>
-						<?php endforeach; ?>
-					</select>
-				<?php else: ?>
-					<p><?php _e( 'Please add weight and parcel dimensions in your Products to use automatic calculations.', 'woocommerce-shipcloud' ); ?></p>
-				<?php endif; ?>
-			</div>
-
-			<div class="parcel-template-field parcels-templates">
-				<label for="parcel_templates"><?php _e( 'Your Parcel Templates', 'woocommerce-shipcloud' ); ?></label>
-				<?php if ( count( $parcel_templates ) > 0 ) : ?>
-					<input type="button" value="<?php _e( '&#8592; Insert', 'woocommerce-shipcloud' ); ?>" class="insert-to-form button"/>
-					<select name="parcel_list">
-						<option value="none"><?php _e( '[ Select a Parcel ]', 'woocommerce-shipcloud' ); ?></option>
-
-						<?php foreach ( $parcel_templates AS $parcel_template ): ?>
-							<option value="<?php echo $parcel_template[ 'value' ]; ?>"><?php echo $parcel_template[ 'option' ]; ?></option>
-						<?php endforeach; ?>
-					</select>
-				<?php else: ?>
-					<p><?php echo sprintf( __( 'Please <a href="%s">add parcel templates</a> if you want to use.', 'woocommerce-shipcloud' ), admin_url( 'edit.php?post_type=sc_parcel_template' ) ); ?></p>
-				<?php endif; ?>
-			</div>
-
-		</div>
-		<?php
-
+		require WCSC_COMPONENTFOLDER . '/block/order-parcel-templates.php';
 		return ob_get_clean();
 	}
 
@@ -791,30 +736,23 @@ class WC_Shipcloud_Order
 	 */
 	public function save_settings( $post_id )
 	{
-		if ( ! isset( $_POST[ 'save_settings' ] ) )
-		{
-			return $post_id;
+		// Interrupt on autosave
+		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+		     || ! isset( $_POST['save_settings'] )
+		) {
+			return;
 		}
 
-		// Savety first!
+		// Safety first!
 		if ( ! wp_verify_nonce( $_POST[ 'save_settings' ], plugin_basename( __FILE__ ) ) )
 		{
-			return $post_id;
-		}
-
-		// Interrupt on autosave
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-		{
-			return $post_id;
+			return;
 		}
 
 		// Check permissions to edit products
-		if ( 'shop_order' == $_POST[ 'post_type' ] )
+		if ( 'shop_order' === $_POST[ 'post_type' ] && ! current_user_can( 'edit_product', $post_id ) )
 		{
-			if ( ! current_user_can( 'edit_product', $post_id ) )
-			{
-				return $post_id;
-			}
+            return;
 		}
 
 		if( isset( $_POST[ 'sender_address' ] ) )
@@ -1391,6 +1329,70 @@ class WC_Shipcloud_Order
 		}
 
 		return $other['description'];
+	}
+
+	/**
+	 * @param $posts
+	 * @param \Woocommerce_Shipcloud_API $shipcloud_api
+	 *
+	 * @return array
+	 */
+	private function get_parcel_templates_by_posts( $posts ) {
+		$parcel_templates = [];
+
+		foreach ( $posts AS $post ) {
+			$parcel_templates[] = $this->build_parcel_templates( $post );
+		}
+
+		return $parcel_templates;
+	}
+
+	/**
+	 * @param $parcels
+	 * @param $carrier_name
+	 *
+	 * @return array
+	 */
+	protected function get_parcel_template_by_parcels( $parcels, $carrier_name ) {
+		$determined_parcels = array();
+
+		foreach ( $parcels AS $parcel ) {
+			$parcel['carrier']    = $carrier_name;
+			$determined_parcels[] = $this->build_parcel_templates( $parcel );
+		}
+
+		return $determined_parcels;
+	}
+
+	/**
+	 * @param $data
+	 *
+	 * @return array
+	 */
+	protected function build_parcel_templates( $data ) {
+		if ( is_array( $data ) ) {
+			$data = new ArrayObject( $data );
+		}
+
+		return array(
+			'value'  => $data->width . ';'
+			            . $data->height . ';'
+			            . $data->length . ';'
+			            . $data->weight . ';'
+			            . $data->carrier . ';',
+			'option' => $data->width . esc_attr( 'x', 'woocommerce-shipcloud' )
+			            . $data->height . esc_attr( 'x', 'woocommerce-shipcloud' )
+			            . $data->length . esc_attr( 'cm', 'woocommerce-shipcloud' )
+			            . ' - ' . $data->weight . esc_attr( 'kg', 'woocommerce-shipcloud' )
+			            . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier ),
+		);
+	}
+
+	/**
+	 * @return Woocommerce_Shipcloud_API
+	 */
+	protected function get_shipcloud_api() {
+	    return wcsc_api();
 	}
 }
 
