@@ -807,7 +807,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( '' == $package['destination']['city']
 		     || '' == $package['destination']['country']
-		     || '' == $package['destination']['postcode']
+		     || '' == $package['destination']['zip_code']
 		     || '' == $package['destination']['address']
 		) {
 			wc_add_notice(
@@ -934,7 +934,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		return array(
 			'street'    => $this->get_option( 'sender_street' ),
 			'street_no' => $this->get_option( 'sender_street_nr' ),
-			'zip_code'  => $this->get_option( 'sender_postcode' ),
+			'zip_code'  => $this->get_option( 'sender_zip_code', $this->get_option('sender_postcode') ),
 			'city'      => $this->get_option( 'sender_city' ),
 			'state'     => $this->get_option( 'sender_state' ),
 			'country'   => $this->get_option( 'sender_country' ),
@@ -961,7 +961,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		return array(
 			'street'    => $recipient_street_name,
 			'street_no' => $recipient_street_nr,
-			'zip_code'  => $package[ 'destination' ][ 'postcode' ],
+			'zip_code'  => $package[ 'destination' ][ 'zip_code' ]?: $package[ 'destination' ][ 'postcode' ],
 			'city'      => $package[ 'destination' ][ 'city' ],
 			'state'     => $package[ 'destination' ][ 'state' ],
 			'country'   => $package[ 'destination' ][ 'country' ]
