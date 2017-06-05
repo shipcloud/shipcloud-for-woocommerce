@@ -175,7 +175,7 @@ class WC_Shipcloud_Order_Bulk {
 		$data = array();
 		foreach ( $request['post'] as $order_id ) {
 			$current       = $this->create_label_for_order( $order_id, $request );
-			$error_message = sprintf( 'Problem creating label for order #%d', $order_id );
+			$error_message = sprintf( 'Problem generating label for order #%d', $order_id );
 
 			if ( ! $current || ! isset( $current['label_url'] ) ) {
 				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
