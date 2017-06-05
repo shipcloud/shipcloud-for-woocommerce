@@ -191,13 +191,6 @@ class WC_Shipcloud_Order_Bulk {
 			'<a href="' . esc_attr( $pdf_url ) . '" target="_blank">' . esc_html( $pdf_url ) . '</a>'
 		);
 
-		if ( file_exists( $pdf_file ) ) {
-			WooCommerce_Shipcloud::admin_download( $pdf_url );
-			WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
-
-			return;
-		}
-
 		WooCommerce_Shipcloud::load_fpdf();
 
 		$m = new \iio\libmergepdf\Merger();
