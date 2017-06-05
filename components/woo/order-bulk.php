@@ -148,17 +148,46 @@ class WC_Shipcloud_Order_Bulk {
 		);
 	}
 
+	protected function save_label( $order_id, $url ) {
+		$path = $this->get_storage_path( $order_id )
+		        . DIRECTORY_SEPARATOR . basename( parse_url( $url, PHP_URL_PATH ) );
+
+		if ( file_exists( $path ) ) {
+			// Might be already downloaded, so we won't overwrite it.
+			return $path;
+		}
+
+		$pdf_content = wp_remote_retrieve_body( wp_remote_get( $url ) );
+
+		if ( ! $pdf_content ) {
+			// No content, so we refuse to continue.
+			throw new \RuntimeException( 'Could not download PDF - no content delivered.' );
+		}
+
+		if ( ! $this->get_filesystem()->put_contents( $path, $pdf_content ) ) {
+			throw new \RuntimeException( 'Could not store downloaded PDF contents.' );
+		}
+
+		return $path;
+	}
+
 	protected function create_pdf( $request ) {
-
+		$data = array();
 		foreach ( $request['post'] as $order_id ) {
-			$data = $this->create_label_for_order( $order_id, $request );
+			$current       = $this->create_label_for_order( $order_id, $request );
+			$error_message = sprintf( 'Problem creating label for order #%d', $order_id );
 
-			if ( ! $data || ! isset($data['label_url']) ) {
-				WooCommerce_Shipcloud::admin_notice(
-					sprintf( 'Problem creating label for order #%d', $order_id ), 'updated'
-				);
+			if ( ! $current || ! isset( $current['label_url'] ) ) {
+				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
 
 				continue;
+			}
+
+			try {
+				// Storing label.
+				$data[] = $this->save_label( $order_id, $current['label_url'] );
+			} catch ( \RuntimeException $e ) {
+				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
 			}
 		}
 
@@ -252,6 +281,69 @@ class WC_Shipcloud_Order_Bulk {
 			'length' => $request['wcsc_length'],
 			'weight' => $request['wcsc_weight'],
 		);
+	}
+
+	/**
+	 * @param null $order_id
+	 *
+	 * @return string
+	 * @throws \RuntimeException
+	 */
+	protected function get_storage_path( $order_id = null ) {
+		$path = WP_CONTENT_DIR
+		        . DIRECTORY_SEPARATOR . 'shipcloud-woocommerce';
+
+		if ( null !== $order_id && $order_id ) {
+			$path .= DIRECTORY_SEPARATOR . 'order'
+			         . DIRECTORY_SEPARATOR . sanitize_file_name( $order_id );
+		}
+
+		if ( is_dir( $path ) ) {
+			// Already created, nothing to do.
+			return $path;
+		}
+
+		$wp_filesystem = $this->get_filesystem();
+
+		$created_path = '';
+		foreach ( explode( DIRECTORY_SEPARATOR, $path ) as $dir ) {
+			$created_path .= DIRECTORY_SEPARATOR . $dir;
+			if ( is_dir( $created_path ) ) {
+				continue;
+			}
+
+			if ( ! $wp_filesystem->mkdir( $created_path ) ) {
+				throw new \RuntimeException(
+					'Could no create sub-directories for shipcloud storage.'
+				);
+			}
+		}
+
+
+		return $path;
+	}
+
+	/**
+	 * Get filesystem adapter.
+	 *
+	 * @return WP_Filesystem_Base
+	 * @throws \RuntimeException
+	 */
+	protected function get_filesystem() {
+		global $wp_filesystem;
+
+		if ( $wp_filesystem ) {
+			// Aready connectec / instantiated, so we won't do it again.
+			return $wp_filesystem;
+		}
+
+		if ( ! WP_Filesystem() ) {
+			throw new \RuntimeException(
+				'Can not access file system to download created shipping labels.'
+			);
+		}
+
+		return $wp_filesystem;
 	}
 }
 
