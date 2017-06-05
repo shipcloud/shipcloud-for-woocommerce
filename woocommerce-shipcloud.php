@@ -80,6 +80,7 @@ class WooCommerce_Shipcloud {
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
 			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
 			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
+			add_action( 'admin_footer', array( $this, 'attach_downloads' ) );
 		} else {
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
@@ -240,6 +241,12 @@ class WooCommerce_Shipcloud {
 		);
 	}
 
+	public static function admin_download( $url ) {
+		static::assert_session();
+
+		$_SESSION['wscs']['downloads'][ md5( $url ) ] = $url;
+	}
+
 	/**
 	 * Assert that a session has been started.
 	 *
@@ -252,7 +259,8 @@ class WooCommerce_Shipcloud {
 
 		if ( ! isset( $_SESSION['wcsc'] ) ) {
 			$_SESSION['wcsc'] = array(
-				'notices' => array(),
+				'notices'   => array(),
+				'downloads' => array(),
 			);
 		}
 	}
@@ -349,6 +357,18 @@ class WooCommerce_Shipcloud {
 			echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
 		}
 
+	}
+
+	public function attach_downloads() {
+		static::assert_session();
+
+		foreach ( $_SESSION['wscs']['downloads'] as $download ) {
+			?>
+            <script type="application/javascript">
+                (window.open('<?php echo $download ?>', '_blank')).focus();
+            </script>
+			<?php
+		}
 	}
 
 	public function clear_admin_notices() {

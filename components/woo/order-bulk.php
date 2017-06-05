@@ -192,6 +192,7 @@ class WC_Shipcloud_Order_Bulk {
 		);
 
 		if ( file_exists( $pdf_file ) ) {
+			WooCommerce_Shipcloud::admin_download( $pdf_url );
 			WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
 
 			return;
@@ -237,6 +238,7 @@ class WC_Shipcloud_Order_Bulk {
 
 		$wp_filesystem->put_contents( $pdf_file, $content );
 
+		WooCommerce_Shipcloud::admin_download( $pdf_url );
 		WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
 	}
 
