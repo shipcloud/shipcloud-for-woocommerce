@@ -33,6 +33,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since   1.2.1
  */
 class WC_Shipcloud_Order_Bulk {
+
+	const FORM_BULK = 'wcsc_order_bulk';
+	const BUTTON_PDF = 'wscs_order_bulk_pdf';
+
 	/**
 	 * WC_Shipcloud_Order_Bulk constructor.
 	 *
@@ -68,95 +72,20 @@ class WC_Shipcloud_Order_Bulk {
 
 		$request = $_GET; // XSS: OK.
 
-		if ( 'wcsc_order_bulk_label' !== $request['action']
+		if ( self::FORM_BULK !== $request['action']
 		     || ! isset( $request['action'], $request['wcsc_carrier'] )
 		     || ! $request['wcsc_carrier']
 		) {
 			return;
 		}
 
-		$package = array(
-			'width'  => $request['wcsc_width'],
-			'height' => $request['wcsc_height'],
-			'length' => $request['wcsc_length'],
-			'weight' => $request['wcsc_weight'],
-		);
+		if ( isset( $request[ self::BUTTON_PDF ] ) ) {
+			$this->create_pdf( $request );
 
-		$succeeded = 0;
-		foreach ( $request['post'] as $order_id ) {
-			$order = WC_Shipcloud_Order::create_order( $order_id );
-
-			$shipment = wcsc_api()->create_shipment_by_order(
-				$order,
-				$request['wcsc_carrier'],
-				$package
-			);
-
-			if ( is_wp_error( $shipment ) ) {
-				/** @var \WP_Error $shipment */
-				WC_Shipcloud_Shipping::log(
-					'Order #' . $order->get_wc_order()->get_order_number()
-					. ' - ' . $shipment->get_error_message()
-					. ' (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')'
-				);
-
-				WooCommerce_Shipcloud::admin_notice(
-					sprintf(
-						__( 'No label for order #%d created: %s' ),
-						$order->get_wc_order()->get_id(),
-						str_replace( "\n", ', ', $shipment->get_error_message() )
-					),
-					'error'
-				);
-
-				continue;
-			}
-
-			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')' );
-
-			$parcel_title = wcsc_get_carrier_display_name( $request['wcsc_carrier'] )
-			                . ' - '
-			                . $request['wcsc_width']
-			                . __( 'x', 'woocommerce-shipcloud' )
-			                . $request['wcsc_height']
-			                . __( 'x', 'woocommerce-shipcloud' )
-			                . $request['wcsc_length']
-			                . __( 'cm', 'woocommerce-shipcloud' )
-			                . ' '
-			                . $request['wcsc_weight']
-			                . __( 'kg', 'woocommerce-shipcloud' );
-
-			$data = array(
-				'id'                  => $shipment['id'],
-				'carrier_tracking_no' => $shipment['carrier_tracking_no'],
-				'tracking_url'        => $shipment['tracking_url'],
-				'label_url'           => $shipment['label_url'],
-				'price'               => $shipment['price'],
-				'parcel_id'           => $shipment['id'],
-				'parcel_title'        => $parcel_title,
-				'carrier'             => $request['carrier'],
-				'width'               => $request['width'],
-				'height'              => $request['height'],
-				'length'              => $request['length'],
-				'weight'              => $request['weight'],
-				'description'         => $request['description'],
-				'date_created'        => time(),
-			);
-
-			$data = array_merge( $data, $order->get_sender( 'sender_' ) );
-			$data = array_merge( $data, $order->get_recipient( 'recipient_' ) );
-
-			add_post_meta( $order_id, 'shipcloud_shipment_ids', $data['id'] );
-			add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
-
-			$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
-
-			$succeeded ++;
+			return;
 		}
 
-		WooCommerce_Shipcloud::admin_notice(
-			sprintf( 'Created %d labels.', $succeeded ), 'updated'
-		);
+		$this->create_label( $request );
 	}
 
 	/**
@@ -169,7 +98,7 @@ class WC_Shipcloud_Order_Bulk {
 	 * @return array $actions Bulk actions with own Actions
 	 */
 	public function add_bulk_actions( $actions ) {
-		$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
+		$actions[ self::FORM_BULK ] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
 
 		return $actions;
 	}
@@ -204,6 +133,125 @@ class WC_Shipcloud_Order_Bulk {
 		);
 
 		wp_enqueue_script( 'wcsc_bulk_order_label', false, array(), false, true );
+	}
+
+	protected function create_label( $request ) {
+		$succeeded = 0;
+		foreach ( $request['post'] as $order_id ) {
+			if ( $this->create_label_for_order( $order_id, $request ) ) {
+				$succeeded ++;
+			}
+		}
+
+		WooCommerce_Shipcloud::admin_notice(
+			sprintf( 'Created %d labels.', $succeeded ), 'updated'
+		);
+	}
+
+	protected function create_pdf( $request ) {
+
+		foreach ( $request['post'] as $order_id ) {
+			$data = $this->create_label_for_order( $order_id, $request );
+
+			if ( ! $data || ! isset($data['label_url']) ) {
+				WooCommerce_Shipcloud::admin_notice(
+					sprintf( 'Problem creating label for order #%d', $order_id ), 'updated'
+				);
+
+				continue;
+			}
+		}
+
+		WooCommerce_Shipcloud::admin_notice(
+			sprintf( 'PDF should start as download now.' ), 'updated'
+		);
+
+		return;
+	}
+
+	protected function create_label_for_order( $order_id, $request ) {
+		$order = WC_Shipcloud_Order::create_order( $order_id );
+
+		$shipment = wcsc_api()->create_shipment_by_order(
+			$order,
+			$request['wcsc_carrier'],
+			$this->get_package_data( $request )
+		);
+
+		if ( is_wp_error( $shipment ) ) {
+			/** @var \WP_Error $shipment */
+			WC_Shipcloud_Shipping::log(
+				'Order #' . $order->get_wc_order()->get_order_number()
+				. ' - ' . $shipment->get_error_message()
+				. ' (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')'
+			);
+
+			WooCommerce_Shipcloud::admin_notice(
+				sprintf(
+					__( 'No label for order #%d created: %s' ),
+					$order->get_wc_order()->id,
+					str_replace( "\n", ', ', $shipment->get_error_message() )
+				),
+				'error'
+			);
+
+			return array();
+		}
+
+		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')' );
+
+		$parcel_title = wcsc_get_carrier_display_name( $request['wcsc_carrier'] )
+		                . ' - '
+		                . $request['wcsc_width']
+		                . __( 'x', 'woocommerce-shipcloud' )
+		                . $request['wcsc_height']
+		                . __( 'x', 'woocommerce-shipcloud' )
+		                . $request['wcsc_length']
+		                . __( 'cm', 'woocommerce-shipcloud' )
+		                . ' '
+		                . $request['wcsc_weight']
+		                . __( 'kg', 'woocommerce-shipcloud' );
+
+		$data = array(
+			'id'                  => $shipment['id'],
+			'carrier_tracking_no' => $shipment['carrier_tracking_no'],
+			'tracking_url'        => $shipment['tracking_url'],
+			'label_url'           => $shipment['label_url'],
+			'price'               => $shipment['price'],
+			'parcel_id'           => $shipment['id'],
+			'parcel_title'        => $parcel_title,
+			'carrier'             => $request['carrier'],
+			'width'               => $request['width'],
+			'height'              => $request['height'],
+			'length'              => $request['length'],
+			'weight'              => $request['weight'],
+			'description'         => $request['description'],
+			'date_created'        => time(),
+		);
+
+		$data = array_merge( $data, $order->get_sender( 'sender_' ) );
+		$data = array_merge( $data, $order->get_recipient( 'recipient_' ) );
+
+		add_post_meta( $order_id, 'shipcloud_shipment_ids', $data['id'] );
+		add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
+
+		$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+
+		return $data;
+	}
+
+	/**
+	 * @param $request
+	 *
+	 * @return array
+	 */
+	protected function get_package_data( $request ) {
+		return array(
+			'width'  => $request['wcsc_width'],
+			'height' => $request['wcsc_height'],
+			'length' => $request['wcsc_length'],
+			'weight' => $request['wcsc_weight'],
+		);
 	}
 }
 

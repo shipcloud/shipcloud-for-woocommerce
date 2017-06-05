@@ -297,19 +297,17 @@ class Woocommerce_Shipcloud_API
 		$body = wp_remote_retrieve_body( $response );
 
 		// Decode if it's json
-		if ( wp_remote_retrieve_header( $response, 'content-type' ) == 'application/json; charset=utf-8' )
+		if ( wp_remote_retrieve_header( $response, 'content-type' ) === 'application/json; charset=utf-8' )
 		{
 			$body = json_decode( $body, true );
 		}
 
-		$response_arr = array(
+		return array(
 			'header' => array(
 				'status' => wp_remote_retrieve_response_code( $response )
 			),
 			'body'   => $body
 		);
-
-		return $response_arr;
 	}
 
 	/**
@@ -641,7 +639,7 @@ class Woocommerce_Shipcloud_API
 			'wcsc_reference_number',
 			$reference_number,
 			$order->get_wc_order()->get_order_number(),
-			$order->get_wc_order()->get_id()
+			$order->get_wc_order()->id
 		);
 
 		return $this->create_shipment(
@@ -665,7 +663,7 @@ class Woocommerce_Shipcloud_API
 	 * @param array  $package
 	 * @param bool   $create_label
 	 *
-	 * @return string|\WP_Error
+	 * @return array|\WP_Error
 	 * @since 1.0.0
 	 */
 	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '', $description = '' )
