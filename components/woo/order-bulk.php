@@ -149,8 +149,8 @@ class WC_Shipcloud_Order_Bulk {
 	}
 
 	protected function save_label( $order_id, $url ) {
-		$path = $this->get_storage_path( $order_id )
-		        . DIRECTORY_SEPARATOR . basename( parse_url( $url, PHP_URL_PATH ) );
+		$path = $this->get_storage_path( 'order' . DIRECTORY_SEPARATOR . $order_id )
+		        . DIRECTORY_SEPARATOR . 'label.pdf';
 
 		if ( file_exists( $path ) ) {
 			// Might be already downloaded, so we won't overwrite it.
@@ -171,8 +171,35 @@ class WC_Shipcloud_Order_Bulk {
 		return $path;
 	}
 
+	protected function get_storage_url( $suffix = null ) {
+		$url = 'shipcloud-woocommerce';
+
+		if ( null !== $suffix && $suffix ) {
+			$url .= '/' . $suffix;
+		}
+
+		return content_url( $url );
+	}
+
 	protected function create_pdf( $request ) {
-		$data = array();
+		$pdf_basename = sha1( implode( ',', $request['post'] ) ) . '.pdf';
+		$pdf_file     = $this->get_storage_path( 'labels' ) . DIRECTORY_SEPARATOR . $pdf_basename;
+		$pdf_url      = $this->get_storage_url( 'labels' ) . '/' . $pdf_basename;
+
+		$download_message = sprintf(
+			'Labels can be downloaded using this URL: %s',
+			'<a href="' . esc_attr( $pdf_url ) . '" target="_blank">' . esc_html( $pdf_url ) . '</a>'
+		);
+
+		if ( file_exists( $pdf_file ) ) {
+			WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
+
+			return;
+		}
+
+		WooCommerce_Shipcloud::load_fpdf();
+
+		$m = new \iio\libmergepdf\Merger();
 		foreach ( $request['post'] as $order_id ) {
 			$current       = $this->create_label_for_order( $order_id, $request );
 			$error_message = sprintf( 'Problem generating label for order #%d', $order_id );
@@ -185,17 +212,32 @@ class WC_Shipcloud_Order_Bulk {
 
 			try {
 				// Storing label.
-				$data[] = $this->save_label( $order_id, $current['label_url'] );
+				$path_to_pdf = $this->save_label( $order_id, $current['label_url'] );
+				$m->addFromFile( $path_to_pdf );
 			} catch ( \RuntimeException $e ) {
 				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
 			}
 		}
 
-		WooCommerce_Shipcloud::admin_notice(
-			sprintf( 'PDF should start as download now.' ), 'updated'
-		);
+		$content = $m->merge();
 
-		return;
+		if ( ! $content ) {
+			WooCommerce_Shipcloud::admin_notice( 'Could not compose labels into one PDF.', 'error' );
+
+			return;
+		}
+
+
+		/** @var WP_Filesystem_Base $wp_filesystem */
+		global $wp_filesystem;
+
+		if ( ! $wp_filesystem ) {
+			WP_Filesystem();
+		}
+
+		$wp_filesystem->put_contents( $pdf_file, $content );
+
+		WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
 	}
 
 	protected function create_label_for_order( $order_id, $request ) {
@@ -289,13 +331,11 @@ class WC_Shipcloud_Order_Bulk {
 	 * @return string
 	 * @throws \RuntimeException
 	 */
-	protected function get_storage_path( $order_id = null ) {
-		$path = WP_CONTENT_DIR
-		        . DIRECTORY_SEPARATOR . 'shipcloud-woocommerce';
+	protected function get_storage_path( $suffix = null ) {
+		$path = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'shipcloud-woocommerce';
 
-		if ( null !== $order_id && $order_id ) {
-			$path .= DIRECTORY_SEPARATOR . 'order'
-			         . DIRECTORY_SEPARATOR . sanitize_file_name( $order_id );
+		if ( null !== $suffix && $suffix ) {
+			$path .= DIRECTORY_SEPARATOR . trim( $suffix, '\\/' );
 		}
 
 		if ( is_dir( $path ) ) {
