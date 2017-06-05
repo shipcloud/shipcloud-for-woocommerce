@@ -9,7 +9,7 @@
 
             <fieldset class="inline-edit-col-left">
                 <legend class="inline-edit-legend">
-					<?php esc_html_e( 'Create shipping labels', 'woocommerce-shipcloud' ) ?>
+					<?php esc_html_e( 'Create shipping labels', 'shipcloud-for-woocommerce' ) ?>
                 </legend>
                 <div class="inline-edit-col">
                     <div class="bulk-title-div">
@@ -24,7 +24,7 @@
                     <div class="inline-edit-group wp-clearfix">
                         <label class="alignleft">
                             <span class="title">
-                                <?php esc_html_e( 'Template', 'woocommerce-shipcloud' ) ?>
+                                <?php esc_html_e( 'Template', 'shipcloud-for-woocommerce' ) ?>
                             </span>
 							<?php if ( wcsc_get_parceltemplates() ): ?>
                                 <select name="wcsc_template" id="wcsc_template">
@@ -54,7 +54,7 @@
                         <div class="inline-edit-group wp-clearfix">
                             <label class="alignleft">
                                 <span class="title">
-                                    <?php esc_html_e( 'Width', 'woocommerce-shipcloud' ) ?>
+                                    <?php esc_html_e( 'Width', 'shipcloud-for-woocommerce' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_width"/>
                                 <?php echo get_option('woocommerce_dimension_unit') ?>
@@ -64,7 +64,7 @@
                         <div class="inline-edit-group wp-clearfix">
                             <label class="alignleft">
                                 <span class="title">
-                                    <?php esc_html_e( 'Height', 'woocommerce-shipcloud' ) ?>
+                                    <?php esc_html_e( 'Height', 'shipcloud-for-woocommerce' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_height"/>
 	                            <?php echo get_option('woocommerce_dimension_unit') ?>
@@ -74,7 +74,7 @@
                         <div class="inline-edit-group wp-clearfix">
                             <label class="alignleft">
                                 <span class="title">
-                                    <?php esc_html_e( 'Length', 'woocommerce-shipcloud' ) ?>
+                                    <?php esc_html_e( 'Length', 'shipcloud-for-woocommerce' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_length"/>
 	                            <?php echo get_option('woocommerce_dimension_unit') ?>
@@ -84,7 +84,7 @@
                         <div class="inline-edit-group wp-clearfix">
                             <label class="alignleft">
                                 <span class="title">
-                                    <?php esc_html_e( 'Weight', 'woocommerce-shipcloud' ) ?>
+                                    <?php esc_html_e( 'Weight', 'shipcloud-for-woocommerce' ) ?>
                                 </span>
                                 <input type="text" name="wcsc_weight"/>
 	                            <?php echo get_option('woocommerce_weight_unit') ?>
@@ -116,7 +116,7 @@
 					<?php esc_html_e( 'Cancel' ) ?>
                 </button>
                 <input type="submit" name="bulk_edit" id="bulk_edit" class="button button-primary alignright"
-                       value="<?php esc_attr_e( 'Create labels', 'woocommerce-shipcloud' ) ?>">
+                       value="<?php esc_attr_e( 'Create labels', 'shipcloud-for-woocommerce' ) ?>">
                 <input type="hidden" name="screen" value="edit-<?php get_current_screen()->id ?>">
                 <span class="error" style="display:none"></span>
                 <br class="clear">

@@ -14,7 +14,7 @@
 
 2017.04.24 - version 1.1.2
 * Fixed: Wrong standard value for fallback price
-* Fixed: Not working default value for shipment method
+* Fixed: Not working default value for shipping method
 * Fixed: Only 5 Parcel Templates showed up
 
 2017.02.28 - version 1.1.1
@@ -53,7 +53,7 @@
 * Fixed: Fatal error on activation on PHP versions lower than 5.5
 
 2016.06.22 - version 1.0.2
-* Fixed problems on loading shipment method by changing to direct loading without hooks
+* Fixed problems on loading shipping method by changing to direct loading without hooks
 * Fixed compatibility problems with WooCommerce 2.6 parent class.
 
 2016.05.18 - version 1.0.1

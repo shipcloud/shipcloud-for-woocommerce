@@ -133,7 +133,7 @@ class WooCommerce_Shipcloud
 	 */
 	private function load_textdomain()
 	{
-		load_plugin_textdomain( 'woocommerce-shipcloud', false, WCSC_RELATIVE_FOLDER . '/languages' );
+		load_plugin_textdomain( 'shipcloud-for-woocommerce', false, WCSC_RELATIVE_FOLDER . '/languages' );
 	}
 
 	/**
@@ -209,21 +209,21 @@ class WooCommerce_Shipcloud
 	{
 		if ( ! class_exists( 'WooCommerce' ) )
 		{
-			self::admin_notice( __( 'WooCommerce is not installed. Please install before using Plugin.', 'woocommerce-shipcloud' ), 'error' );
+			self::admin_notice( __( 'WooCommerce is not installed. Please install before using plugin.', 'shipcloud-for-woocommerce' ), 'error' );
 
 			return;
 		}
 
 		if ( ! function_exists( 'json_decode' ) )
 		{
-			self::admin_notice( __( 'shipcloud.io needs the JSON PHP extension.', 'woocommerce-shipcloud' ), 'error' );
+			self::admin_notice( __( 'shipcloud needs the JSON PHP extension.', 'shipcloud-for-woocommerce' ), 'error' );
 
 			return;
 		}
 
 		if ( ! function_exists( 'mb_detect_encoding' ) )
 		{
-			self::admin_notice( __( 'shipcloud.io needs the Multibyte String PHP extension.', 'woocommerce-shipcloud' ), 'error' );
+			self::admin_notice( __( 'shipcloud needs the Multibyte String PHP extension.', 'shipcloud-for-woocommerce' ), 'error' );
 
 			return;
 		}
@@ -310,16 +310,16 @@ class WooCommerce_Shipcloud
 		}
 
 		$translation_array = array(
-			'parcel_added'                => __( 'Parcel template added!', 'woocommerce-shipcloud' ),
-			'parcel_dimensions_check_yes' => __( 'Parcel dimensions verified!', 'woocommerce-shipcloud' ),
-			'parcel_not_added'            => __( 'Parcel template not added!', 'woocommerce-shipcloud' ),
-			'price_text'                  => __( 'The calculated price is', 'woocommerce-shipcloud' ),
-			'select'                      => __( 'Select', 'woocommerce-shipcloud' ),
-			'delete'                      => __( 'Delete', 'woocommerce-shipcloud' ),
-			'kg'                          => __( 'kg', 'woocommerce-shipcloud' ),
-			'cm'                          => __( 'cm', 'woocommerce-shipcloud' ),
-			'yes'                         => __( 'Yes', 'woocommerce-shipcloud' ),
-			'no'                          => __( 'No', 'woocommerce-shipcloud' )
+			'parcel_added'                => __( 'Parcel template added!', 'shipcloud-for-woocommerce' ),
+			'parcel_dimensions_check_yes' => __( 'Parcel dimensions verified!', 'shipcloud-for-woocommerce' ),
+			'parcel_not_added'            => __( 'Parcel template not added!', 'shipcloud-for-woocommerce' ),
+			'price_text'                  => __( 'The calculated price is', 'shipcloud-for-woocommerce' ),
+			'select'                      => __( 'Select', 'shipcloud-for-woocommerce' ),
+			'delete'                      => __( 'Delete', 'shipcloud-for-woocommerce' ),
+			'kg'                          => __( 'kg', 'shipcloud-for-woocommerce' ),
+			'cm'                          => __( 'cm', 'shipcloud-for-woocommerce' ),
+			'yes'                         => __( 'Yes', 'shipcloud-for-woocommerce' ),
+			'no'                          => __( 'No', 'shipcloud-for-woocommerce' )
 		);
 
 		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . 'includes/js/admin.js' );

@@ -5,11 +5,13 @@ Requires at least: 3.0.0
 Tested up to: 4.3.0
 Stable tag: 1.2.1
 
-This plugin integrates shipcloud.io into WooCommerce.
+This plugin integrates shipcloud into WooCommerce.
 
 == Description ==
 
-Integrate your shipcloid.io account to your WooCommerce shop. Create shipment labels, view tracking info and calculate your shipment prices.
+Integrate your shipcloud.io account into your WooCommerce shop and start creating shipping labels
+for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the
+need to copy or upload your order data into another external system (no CSV upload necessary).
 
 == Installation ==
 
@@ -36,7 +38,7 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 = 1.1.2 =
 * Fixed: Wrong standard value for fallback price
-* Fixed: Not working default value for shipment method
+* Fixed: Not working default value for shipping method
 * Fixed: Only 5 Parcel Templates showed up
 
 = 1.1.1 =
@@ -79,7 +81,7 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 = 1.0.0 beta 1 =
 * Return services are only allowed for shop customers
-* Preselection of user selected shipment method in admin
+* Preselection of user selected shipping method in admin
 * Adjusted shipment service names
 
 = 1.0.0 alpha 5 =
