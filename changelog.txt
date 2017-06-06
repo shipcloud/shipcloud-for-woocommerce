@@ -1,4 +1,4 @@
-*** WooCommerce Shipcloud Changelog ***
+*** shipcloud for WooCommerce Changelog ***
 
 2017.05.12 - version 1.2.0
 * Enhanced: Added bulk label creation

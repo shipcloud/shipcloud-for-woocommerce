@@ -1,9 +1,9 @@
 <?php
 /**
- * WooCommerce shipcloud.io Core Functions
+ * shipcloud for WooCommerce Core Functions
  *
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package WooCommerceShipCloud/Core
+ * @package shipcloudForWooCommerce/Core
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2

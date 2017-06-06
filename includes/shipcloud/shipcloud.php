@@ -1,10 +1,10 @@
 <?php
 
 /**
- * WooCommerce Shipcloud API
+ * shipcloud for WooCommerce API
  *
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package WooCommerceShipCloud/API
+ * @package shipcloudForWooCommerce/API
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
