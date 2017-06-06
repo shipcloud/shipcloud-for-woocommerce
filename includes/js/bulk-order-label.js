@@ -13,6 +13,7 @@ wcsc.OrderBulkLabels = function (submitButton) {
 
     this.main = function () {
         self.$submitButton.click(self.handleSubmit);
+        $('#wcsc_template').change(self.handleTemplateSwitch);
     };
 
     this.handleSubmit = function (e) {
@@ -26,6 +27,18 @@ wcsc.OrderBulkLabels = function (submitButton) {
         e.preventDefault();
         self.setBulk();
         return false;
+    };
+
+    this.handleTemplateSwitch = function () {
+        var data = $(':selected', this).data();
+
+        for (var key in data) {
+            $('input[name=wcsc_' + key + ']').val(data[key]);
+        }
+
+        if (data['carrier']) {
+            $('select[name=wcsc_carrier]').val(data['carrier']);
+        }
     };
 
     this.emptyTitles = function () {

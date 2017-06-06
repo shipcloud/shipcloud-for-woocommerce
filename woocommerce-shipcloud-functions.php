@@ -38,21 +38,6 @@ if( defined( 'WCSC_FOLDER' ) ):
 endif;
 
 /**
- * Debugging helper function
- *
- * @since 1.0.0
- */
-if( !function_exists( 'p' ) )
-{
-	function p( $var )
-	{
-		echo '<pre>';
-		print_r( $var );
-		echo '</pre>';
-	}
-}
-
-/**
  * Get carrier display_name from name
  *
  * @param string $name
@@ -85,52 +70,26 @@ function wcsc_get_carrier_display_name( $name )
  *
  * @since 1.0.0
  */
-function wcsc_get_shipment_status_string( $status )
-{
+function wcsc_get_shipment_status_string( $status ) {
 	/**
-	 * Hooks in for further functions after status changes
+	 * Hooks in for further functions after status changes.
 	 */
-	switch( $status )
-	{
-		case 'shipment.tracking.picked_up':
-			$message = __( 'Picked up', 'woocommerce-shipcloud' );
-			break;
+	$message = __( 'Not available yet', 'woocommerce-shipcloud' );
 
-		case 'shipment.tracking.transit':
-			$message = __( 'In transit', 'woocommerce-shipcloud' );
-			break;
+	$status_mapping = array(
+		'shipment.tracking.picked_up'                 => __( 'Picked up', 'woocommerce-shipcloud' ),
+		'shipment.tracking.transit'                   => __( 'In transit', 'woocommerce-shipcloud' ),
+		'shipment.tracking.out_for_delivery'          => __( 'Out for delivery', 'woocommerce-shipcloud' ),
+		'shipment.tracking.delivered'                 => __( 'Delivered', 'woocommerce-shipcloud' ),
+		'shipment.tracking.awaits_pickup_by_receiver' => __( 'Awaits pickup by Receiver', 'woocommerce-shipcloud' ),
+		'shipment.tracking.delayed'                   => __( 'Delayed', 'woocommerce-shipcloud' ),
+		'shipment.tracking.not_delivered'             => __( 'Not delivered', 'woocommerce-shipcloud' ),
+		'shipment.tracking.notification'              => __( 'Carrier internal notification. Tracking events within the shipment will carry more elaborate information.', 'woocommerce-shipcloud' ),
+		'shipment.tracking.unknown'                   => __( 'Status unknown', 'woocommerce-shipcloud' )
+	);
 
-		case 'shipment.tracking.out_for_delivery':
-			$message = __( 'Out for delivery', 'woocommerce-shipcloud' );
-			break;
-
-		case 'shipment.tracking.delivered':
-			$message = __( 'Delivered', 'woocommerce-shipcloud' );
-			break;
-
-		case 'shipment.tracking.awaits_pickup_by_receiver':
-			$message = __( 'Awaits pickup by Receiver', 'woocommerce-shipcloud' );
-			break;
-
-		case 'shipment.tracking.delayed':
-			$message = __( 'Delayed', 'woocommerce-shipcloud' );
-			break;
-
-		case 'shipment.tracking.not_delivered':
-			$message = __( 'Not delivered', 'woocommerce-shipcloud' );
-			break;
-
-		case 'shipment.tracking.notification':
-			$message = __( 'Carrier internal notification. Tracking events within the shipment will carry more elaborate information.', 'woocommerce-shipcloud' );
-			break;
-
-		case 'shipment.tracking.unknown':
-			$message = __( 'Status unknown', 'woocommerce-shipcloud' );
-			break;
-
-		default:
-			$message = __( 'Not available yet', 'woocommerce-shipcloud' );
-			break;
+	if ( isset( $status_mapping[ $status ] ) ) {
+		$message = $status_mapping[ $status ];
 	}
 
 	return $message;
@@ -402,7 +361,7 @@ function wcsc_is_frontend_screen()
 }
 
 function wcsc_order_get_parcel_description( WC_Order $order ) {
-	$shipping_data = (array) get_post_meta( $order->id, 'shipcloud_shipment_data', true );
+	$shipping_data = (array) get_post_meta( $order->get_id(), 'shipcloud_shipment_data', true );
 
 	if ( isset( $shipping_data['description'] ) ) {
 		return $shipping_data['description'];

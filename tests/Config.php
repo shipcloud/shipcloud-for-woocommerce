@@ -20,7 +20,7 @@ class Config extends WoocommerceShipcloud_Tests
 				'last_name'                  => 'Mustermann',
 				'street'                     => 'Teststraße',
 				'street_nr'                  => '55',
-				'postcode'                   => '55555',
+				'zip_code'                   => '55555',
 				'city'                       => 'Musterstadt',
 				'price_products'             => '5',
 				'calculate_products_type'    => 'order',

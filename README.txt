@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug
 Tags: woocommerce, shipcloud
 Requires at least: 3.0.0
 Tested up to: 4.3.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 
 This plugin integrates shipcloud.io into WooCommerce.
 
@@ -22,6 +22,12 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 8. There you can calculate price for your parcels, create & download labels or view the tracking data
 
 == Changelog ==
+
+= 1.2.1 =
+* Enhanced: Added missing translations
+* Enhanced: Removed Woo Updatescripts
+* Enhanced: Refactored Code
+* Fixed: Zip code and street did not no matched between API and plugin
 
 = 1.2.0 =
 * Enhanced: Added bulk label creation

@@ -74,7 +74,7 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 		$this->byId( 'woocommerce_shipcloud_sender_last_name' )->clear();
 		$this->byId( 'woocommerce_shipcloud_sender_street' )->clear();
 		$this->byId( 'woocommerce_shipcloud_sender_street_nr' )->clear();
-		$this->byId( 'woocommerce_shipcloud_sender_postcode' )->clear();
+		$this->byId( 'woocommerce_shipcloud_sender_zip_code' )->clear();
 		$this->byId( 'woocommerce_shipcloud_sender_city' )->clear();
 
 		$this->byName( 'save' )->click();
@@ -114,7 +114,7 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 		$this->byId( 'woocommerce_shipcloud_sender_last_name' )->value( $data[ 'last_name' ] );
 		$this->byId( 'woocommerce_shipcloud_sender_street' )->value( $data[ 'street' ] );
 		$this->byId( 'woocommerce_shipcloud_sender_street_nr' )->value( $data[ 'street_nr' ] );
-		$this->byId( 'woocommerce_shipcloud_sender_postcode' )->value( $data[ 'postcode' ] );
+		$this->byId( 'woocommerce_shipcloud_sender_zip_code' )->value( $data[ 'zip_code' ] );
 		$this->byId( 'woocommerce_shipcloud_sender_city' )->value( $data[ 'city' ] );
 
 		$this->byId( 'woocommerce_shipcloud_debug' )->click();
@@ -136,7 +136,7 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 		$this->assertEquals( $data[ 'last_name' ], $this->byId( 'woocommerce_shipcloud_sender_last_name' )->attribute( 'value' ) );
 		$this->assertEquals( $data[ 'street' ], $this->byId( 'woocommerce_shipcloud_sender_street' )->attribute( 'value' ) );
 		$this->assertEquals( $data[ 'street_nr' ], $this->byId( 'woocommerce_shipcloud_sender_street_nr' )->attribute( 'value' ) );
-		$this->assertEquals( $data[ 'postcode' ], $this->byId( 'woocommerce_shipcloud_sender_postcode' )->attribute( 'value' ) );
+		$this->assertEquals( $data[ 'zip_code' ], $this->byId( 'woocommerce_shipcloud_sender_zip_code' )->attribute( 'value' ) );
 		$this->assertEquals( $data[ 'city' ], $this->byId( 'woocommerce_shipcloud_sender_city' )->attribute( 'value' ) );
 
 		$this->assertTrue( $this->byId( 'woocommerce_shipcloud_debug' )->selected() );
