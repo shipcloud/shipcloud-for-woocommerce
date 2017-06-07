@@ -53,6 +53,8 @@ class WC_Shipcloud_Order_Bulk {
 	 */
 	private function init_hooks() {
 		add_action( 'admin_print_footer_scripts', array( $this, 'admin_print_footer_scripts' ) );
+		add_action( 'admin_print_footer_scripts', array( $this, 'attach_downloads' ) );
+
 		add_action( 'load-edit.php', array( $this, 'load_edit' ) );
 
 		add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_actions' ) );
@@ -181,6 +183,27 @@ class WC_Shipcloud_Order_Bulk {
 		return content_url( $url );
 	}
 
+	public static function admin_download( $url ) {
+		WooCommerce_Shipcloud::assert_session();
+
+		$_SESSION['wscs']['downloads'][ md5( $url ) ] = $url;
+	}
+
+	public function attach_downloads() {
+		WooCommerce_Shipcloud::assert_session();
+
+		foreach ( $_SESSION['wscs']['downloads'] as $key => $download ) {
+			?>
+			<script type="application/javascript">
+                (window.open('<?php echo $download ?>', '_blank')).focus();
+			</script>
+			<?php
+
+			// Remove dispatched downloads.
+			unset( $_SESSION['wscs']['downloads'][ $key ] );
+		}
+	}
+
 	protected function create_pdf( $request ) {
 		$pdf_basename = sha1( implode( ',', $request['post'] ) ) . '.pdf';
 		$pdf_file     = $this->get_storage_path( 'labels' ) . DIRECTORY_SEPARATOR . $pdf_basename;
@@ -231,7 +254,7 @@ class WC_Shipcloud_Order_Bulk {
 
 		$wp_filesystem->put_contents( $pdf_file, $content );
 
-		WooCommerce_Shipcloud::admin_download( $pdf_url );
+		static::admin_download( $pdf_url );
 		WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
 	}
 
