@@ -361,22 +361,12 @@ class WC_Shipcloud_Order_Bulk {
 			return $path;
 		}
 
-		$wp_filesystem = $this->get_filesystem();
-
-		$created_path = '';
-		foreach ( explode( DIRECTORY_SEPARATOR, $path ) as $dir ) {
-			$created_path .= DIRECTORY_SEPARATOR . $dir;
-			if ( is_dir( $created_path ) ) {
-				continue;
-			}
-
-			if ( ! $wp_filesystem->mkdir( $created_path ) ) {
-				throw new \RuntimeException(
-					'Could no create sub-directories for shipcloud storage.'
-				);
-			}
+		// Directory not present - we try to create it.
+		if ( ! wp_mkdir_p( $path ) ) {
+			throw new \RuntimeException(
+				'Could no create sub-directories for shipcloud storage.'
+			);
 		}
-
 
 		return $path;
 	}
