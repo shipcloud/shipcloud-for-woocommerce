@@ -253,16 +253,19 @@ class WooCommerce_Shipcloud {
 	 * @since 1.2.0
 	 */
 	protected static function assert_session() {
-		if ( ! session_id() ) {
-			session_start();
-		}
+	    if (session_id()) {
+	        return;
+        }
 
-		if ( ! isset( $_SESSION['wcsc'] ) ) {
-			$_SESSION['wcsc'] = array(
+        session_start();
+
+		$_SESSION['wcsc'] = array_merge(
+			array(
 				'notices'   => array(),
 				'downloads' => array(),
-			);
-		}
+			),
+			$_SESSION['wcsc']
+        );
 	}
 
 	/**
