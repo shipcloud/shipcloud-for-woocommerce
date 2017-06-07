@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce shipcloud.io
  * Plugin URI: http://www.woothemes.com/products/woocommerce-shipcloud/
- * Description: Integrates shipcloud.io shipment services to your WooCommerce shop.
+ * Description: Integrates shipcloud shipment services to your WooCommerce shop.
  * Version: 1.2.1
  * Author: WooThemes
  * Author URI: http://shipcloud.io
