@@ -3,12 +3,12 @@
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-/**
- * Getting Plugin Template
- *
- * @since 1.0.0
- */
 if( defined( 'WCSC_FOLDER' ) ):
+	/**
+	 * Getting Plugin Template
+	 *
+	 * @since 1.0.0
+	 */
 	function wcsc_locate_template( $template_names, $load = FALSE, $require_once = TRUE )
 	{
 		$located = '';
@@ -361,6 +361,13 @@ function wcsc_is_frontend_screen()
 	return false;
 }
 
+/**
+ * Receive the parcel description of an order.
+ *
+ * @param WC_Order $order
+ *
+ * @return mixed|string
+ */
 function wcsc_order_get_parcel_description( WC_Order $order ) {
 	$shipping_data = (array) get_post_meta( $order->get_id(), 'shipcloud_shipment_data', true );
 
@@ -371,6 +378,18 @@ function wcsc_order_get_parcel_description( WC_Order $order ) {
 	return '';
 }
 
+/**
+ * Add "care of" field to recipient address.
+ *
+ * During checkout WooCommerce allows to fill some fields for the delivery address.
+ * Shipcloud is capable of "care of" fields,
+ * which allows packages to be delivered in some storage or other persons.
+ * Therefor an additional field will be shown during checkout.
+ *
+ * @param $data
+ *
+ * @return array
+ */
 function wcsc_care_of_frontend( $data ) {
 	$pos = array_search( 'shipping_company', array_keys( $data ) );
 

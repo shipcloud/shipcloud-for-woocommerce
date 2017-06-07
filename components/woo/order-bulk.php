@@ -137,6 +137,11 @@ class WC_Shipcloud_Order_Bulk {
 		wp_enqueue_script( 'wcsc_bulk_order_label', false, array(), false, true );
 	}
 
+	/**
+     * Create multiple labels.
+     *
+	 * @param array $request
+	 */
 	protected function create_label( $request ) {
 		$succeeded = 0;
 		foreach ( $request['post'] as $order_id ) {
@@ -150,6 +155,14 @@ class WC_Shipcloud_Order_Bulk {
 		);
 	}
 
+	/**
+	 * Download the label PDF.
+	 *
+	 * @param int $order_id
+	 * @param string $url URL to the label PDF as given by the API.
+	 *
+	 * @return string
+	 */
 	protected function save_label( $order_id, $url ) {
 		$path = $this->get_storage_path( 'order' . DIRECTORY_SEPARATOR . $order_id )
 		        . DIRECTORY_SEPARATOR . 'label.pdf';
@@ -173,6 +186,13 @@ class WC_Shipcloud_Order_Bulk {
 		return $path;
 	}
 
+	/**
+	 * Get the URL to some Shipcloud files.
+	 *
+	 * @param null|string $suffix Path and name of the file.
+	 *
+	 * @return string
+	 */
 	protected function get_storage_url( $suffix = null ) {
 		$url = 'shipcloud-woocommerce';
 
@@ -183,20 +203,28 @@ class WC_Shipcloud_Order_Bulk {
 		return content_url( $url );
 	}
 
+	/**
+	 * Add a new download for admin.
+	 *
+	 * @param $url
+	 */
 	public static function admin_download( $url ) {
 		WooCommerce_Shipcloud::assert_session();
 
 		$_SESSION['wscs']['downloads'][ md5( $url ) ] = $url;
 	}
 
+	/**
+	 * Dispatch downloads to frontend.
+	 */
 	public function attach_downloads() {
 		WooCommerce_Shipcloud::assert_session();
 
 		foreach ( $_SESSION['wscs']['downloads'] as $key => $download ) {
 			?>
-			<script type="application/javascript">
+            <script type="application/javascript">
                 (window.open('<?php echo $download ?>', '_blank')).focus();
-			</script>
+            </script>
 			<?php
 
 			// Remove dispatched downloads.
@@ -204,6 +232,11 @@ class WC_Shipcloud_Order_Bulk {
 		}
 	}
 
+	/**
+	 * Ask API for labels and merge their PDF into one.
+	 *
+	 * @param $request
+	 */
 	protected function create_pdf( $request ) {
 		if ( ! $request['post'] ) {
 			// Nothing selected or no post given, so we don't have anything to do.
@@ -263,6 +296,14 @@ class WC_Shipcloud_Order_Bulk {
 		WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
 	}
 
+	/**
+	 * Ask API for a new label.
+	 *
+	 * @param $order_id
+	 * @param $request
+	 *
+	 * @return array
+	 */
 	protected function create_label_for_order( $order_id, $request ) {
 		$order = WC_Shipcloud_Order::create_order( $order_id );
 

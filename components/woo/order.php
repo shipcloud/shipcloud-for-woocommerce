@@ -94,6 +94,13 @@ class WC_Shipcloud_Order
 		return self::$_instance;
 	}
 
+	/**
+     * Factory to create or load an order.
+     *
+	 * @param int $order_id ID of the order as chosen by WooCommerce and found in the database.
+	 *
+	 * @return WC_Shipcloud_Order
+	 */
 	public static function create_order( $order_id ) {
         return new self($order_id);
 	}
@@ -1018,6 +1025,15 @@ class WC_Shipcloud_Order
 		exit;
 	}
 
+	/**
+	 * Ask the API for a new label.
+	 *
+	 * @param int $order_id ID of the order as chosen by WooCommerce.
+	 * @param string $carrier_id ID of the carrier as given by the API.
+	 * @param null|int $shipment_id ID of the shipment.
+	 *
+	 * @return array|WP_Error
+	 */
 	public function create_label( $order_id, $carrier_id, $shipment_id = null ) {
 		$options       = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options['api_key'] );
@@ -1332,6 +1348,11 @@ class WC_Shipcloud_Order
 		return $carrier_email;
 	}
 
+	/**
+     * Receive the description.
+     *
+	 * @return string|null
+	 */
 	public function get_description() {
 		$other = get_post_meta( $this->order_id, static::META_OTHER, true );
 
