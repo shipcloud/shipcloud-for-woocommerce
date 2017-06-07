@@ -3,7 +3,7 @@
  * WooCommerce Core Component
  *
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package WooCommerceShipCloud/Woo
+ * @package shipcloudForWooCommerce/Woo
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2

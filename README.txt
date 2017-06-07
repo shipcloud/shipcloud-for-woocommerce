@@ -1,4 +1,4 @@
-=== shipcloud.io for WooCommerce ===
+=== shipcloud for WooCommerce ===
 Contributors: mahype, awesome-ug
 Tags: woocommerce, shipcloud
 Requires at least: 3.0.0
