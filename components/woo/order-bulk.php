@@ -205,6 +205,11 @@ class WC_Shipcloud_Order_Bulk {
 	}
 
 	protected function create_pdf( $request ) {
+		if ( ! $request['post'] ) {
+			// Nothing selected or no post given, so we don't have anything to do.
+			return;
+		}
+
 		$pdf_basename = sha1( implode( ',', $request['post'] ) ) . '.pdf';
 		$pdf_file     = $this->get_storage_path( 'labels' ) . DIRECTORY_SEPARATOR . $pdf_basename;
 		$pdf_url      = $this->get_storage_url( 'labels' ) . '/' . $pdf_basename;
