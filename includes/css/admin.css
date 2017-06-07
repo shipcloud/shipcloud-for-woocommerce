@@ -306,3 +306,7 @@
 #shipcloud-io .fullsize {
     position: inherit;
 }
+
+#wscs_order_bulk_pdf {
+    margin-right: 0.5em;
+}

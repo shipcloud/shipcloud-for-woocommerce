@@ -325,18 +325,19 @@ function wcsc_shipping_method()
  */
 function wcsc_is_admin_screen()
 {
-	if ( ! is_admin() ) {
+	if ( ! is_admin() || ! get_current_screen() ) {
 		return false;
 	}
 
 	// Shop order
-	if( 'shop_order' === get_current_screen()->id )
-	{
+	if ( 'shop_order' === get_current_screen()->id
+	     || 'edit-shop_order' === get_current_screen()->id
+	) {
 		return true;
 	}
 
 	// Settings screen
-	if( 'woocommerce_page_wc-settings' === get_current_screen()->id && 'shipcloud' === $_GET['section'] )
+	if( 'shipcloud' === $_GET['section'] && 'woocommerce_page_wc-settings' === get_current_screen()->id )
 	{
 		return true;
 	}
