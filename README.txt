@@ -91,6 +91,17 @@ Download the WooCommerce Plugin now, register for shipcloud, enter your api key 
 6. After setting up, your new orders will have a new box called `shipcloud.io Shipment center`
 8. There you can calculate price for your parcels, create & download labels or view the tracking data
 
+== Screenshots ==
+
+1. 
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+
 == Changelog ==
 
 = 1.2.1 =
