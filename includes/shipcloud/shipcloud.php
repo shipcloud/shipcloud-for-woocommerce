@@ -73,7 +73,7 @@ class Woocommerce_Shipcloud_API
 		{
 			if ( empty( $this->settings[ 'api_key' ] ) )
 			{
-				return new WP_Error( 'shipcloud_api_error_no_api_key', __( 'No API Key given', 'woocommerce-shipcloud' ) );
+				return new WP_Error( 'shipcloud_api_error_no_api_key', __( 'No api key given', 'shipcloud-for-woocommerce' ) );
 			}
 
 			$this->api_key = $this->settings[ 'api_key' ];
@@ -83,28 +83,28 @@ class Woocommerce_Shipcloud_API
 
 		$this->services = array(
 			'standard'      => array(
-				'name'             => __( 'Standard', 'woocommerce-shipcloud' ),
-				'description'      => __( 'Normal shipping', 'woocommerce-shipcloud' ),
+				'name'             => __( 'Standard', 'shipcloud-for-woocommerce' ),
+				'description'      => __( 'Normal shipping', 'shipcloud-for-woocommerce' ),
 				'customer_service' => true
 			),
 			'one_day'       => array(
-				'name'             => __( 'Express (1 Day)', 'woocommerce-shipcloud' ),
-				'description'      => __( 'Express shipping where the package will arrive the next day', 'woocommerce-shipcloud' ),
+				'name'             => __( 'Express (1 Day)', 'shipcloud-for-woocommerce' ),
+				'description'      => __( 'Express shipping where the package will arrive the next day', 'shipcloud-for-woocommerce' ),
 				'customer_service' => true
 			),
 			'one_day_early' => array(
-				'name'             => __( 'Express (1 Day Early)', 'woocommerce-shipcloud' ),
-				'description'      => __( 'Express shipping where the package will arrive the next day until 12pm', 'woocommerce-shipcloud' ),
+				'name'             => __( 'Express (1 Day Early)', 'shipcloud-for-woocommerce' ),
+				'description'      => __( 'Express shipping where the package will arrive the next day until 12pm', 'shipcloud-for-woocommerce' ),
 				'customer_service' => true
 			),
 			'same_day'      => array(
-				'name'             => __( 'Same Day', 'woocommerce-shipcloud' ),
-				'description'      => __( 'Same Day Delivery', 'woocommerce-shipcloud' ),
+				'name'             => __( 'Same Day', 'shipcloud-for-woocommerce' ),
+				'description'      => __( 'Same Day Delivery', 'shipcloud-for-woocommerce' ),
 				'customer_service' => true
 			),
 			'returns'       => array(
-				'name'             => __( 'Returns', 'woocommerce-shipcloud' ),
-				'description'      => __( 'Shipments that are being send back to the shop', 'woocommerce-shipcloud' ),
+				'name'             => __( 'Returns', 'shipcloud-for-woocommerce' ),
+				'description'      => __( 'Shipments that are being send back to the shop', 'shipcloud-for-woocommerce' ),
 				'customer_service' => false
 			)
 		);
@@ -133,7 +133,7 @@ class Woocommerce_Shipcloud_API
 			if( is_wp_error( $shipment_carriers ) ){
 				return $shipment_carriers;
 			}
-			WooCommerce_Shipcloud::admin_notice( __( 'Updated Carriers!', 'woocommerce-shipcloud' ) );
+			WooCommerce_Shipcloud::admin_notice( __( 'Carriers have been updated!', 'shipcloud-for-woocommerce' ) );
 		}
 
 		if ( is_wp_error( $shipment_carriers ) )
@@ -362,49 +362,49 @@ class Woocommerce_Shipcloud_API
 		$error_codes = array(
 			'204' => array(
 				'name'        => 'no content',
-				'description' => __( 'There is no message body. You\'ll get this code when deleting a shipment was successful.', 'woocommerce-shipcloud' )
+				'description' => __( 'There is no message body. You\'ll get this code when deleting a shipment was successful.', 'shipcloud-for-woocommerce' )
 			),
 			'400' => array(
 				'name'        => 'bad_request',
-				'description' => __( 'Your request was not correct. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
+				'description' => __( 'Your request was not correct. Please see the response body for more detailed information.', 'shipcloud-for-woocommerce' )
 			),
 			'401' => array(
 				'name'        => 'access_denied',
-				'description' => __( 'Access denied! Please check your API Key.', 'woocommerce-shipcloud' )
+				'description' => __( 'Access denied! Please check your api key.', 'shipcloud-for-woocommerce' )
 			),
 			'402' => array(
 				'name'        => 'payment_required',
-				'description' => __( 'You\'ve reached the maximum of your current plan. Please upgrade to a higher plan.', 'woocommerce-shipcloud' )
+				'description' => __( 'You\'ve reached the maximum number of requests for your current plan. Please upgrade to a higher plan.', 'shipcloud-for-woocommerce' )
 			),
 			'403' => array(
 				'name'        => 'forbidden',
-				'description' => __( 'You are not allowed to talk to this endpoint. This can either be due to a wrong authentication or when you\'re trying to reach an endpoint that your account isn\'t allowed to access.', 'woocommerce-shipcloud' )
+				'description' => __( 'You are not allowed to talk to this endpoint. This can either be due to a wrong authentication or when you\'re trying to reach an endpoint that your account isn\'t allowed to access.', 'shipcloud-for-woocommerce' )
 			),
 			'404' => array(
 				'name'        => 'not_found',
-				'description' => __( 'The api endpoint you were trying to reach can\'t be found.', 'woocommerce-shipcloud' )
+				'description' => __( 'The api endpoint you were trying to reach can\'t be found.', 'shipcloud-for-woocommerce' )
 			),
 			'422' => array(
 				'name'        => 'unprocessable_entity',
-				'description' => __( 'Your request was well-formed but couldn\'t be followed due to semantic errors. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
+				'description' => __( 'Your request was well-formed but couldn\'t be followed due to semantic errors. Please see the response body for more detailed information.', 'shipcloud-for-woocommerce' )
 			),
 			'500' => array(
 				'name'        => 'internal_server_error',
-				'description' => __( 'Something has seriously gone wrong. Don\'t worry, we\'ll have a look at it.', 'woocommerce-shipcloud' )
+				'description' => __( 'Something has seriously gone wrong. Don\'t worry, we\'ll have a look at it.', 'shipcloud-for-woocommerce' )
 			),
 			'502' => array(
 				'name'        => 'bad_gateway',
-				'description' => __( 'Something has gone wrong while talking to the carrier backend. Please see the response body for more detailed information.', 'woocommerce-shipcloud' )
+				'description' => __( 'Something has gone wrong while talking to the carrier backend. Please see the response body for more detailed information.', 'shipcloud-for-woocommerce' )
 			),
 			'504' => array(
 				'name'        => 'gateway_timeout',
-				'description' => __( 'Unfortunately we couldn\'t connect to the carrier backend. It is either very slow or not reachable at all. If you want to stay informed about the carrier status, follow our developer twitter account at @shipcloud_devs.', 'woocommerce-shipcloud' )
+				'description' => __( 'Unfortunately we couldn\'t connect to the carrier backend. It is either very slow or not reachable at all. If you want to stay informed about the carrier status, follow our developer twitter account at @shipcloud_devs.', 'shipcloud-for-woocommerce' )
 			)
 		);
 
 		if ( ! array_key_exists( $error_code, $error_codes ) )
 		{
-			return array( 'name' => 'unknown', 'description' => __( 'Unknown Error', 'woocommerce-shipcloud' ) );
+			return array( 'name' => 'unknown', 'description' => __( 'Unknown error', 'shipcloud-for-woocommerce' ) );
 		}
 
 		return $error_codes[ $error_code ];
@@ -623,7 +623,7 @@ class Woocommerce_Shipcloud_API
 	 */
 	public function create_shipment_by_order( WC_Shipcloud_Order $order, $carrier, $package ) {
 		$reference_number = sprintf(
-			__( 'Order %s', 'woocommerce-shipcloud' ),
+			__( 'Order %s', 'shipcloud-for-woocommerce' ),
 			$order->get_wc_order()->get_order_number()
 		);
 

@@ -102,9 +102,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
 		$this->id                 = 'shipcloud';
 		$this->instance_id 		  = absint( $instance_id );
-		$this->title              = __( 'shipcloud.io', 'woocommerce-shipcloud' );
+		$this->title              = __( 'shipcloud', 'shipcloud-for-woocommerce' );
 		$this->method_title       = $this->title;
-		$this->method_description = __( 'Add shipcloud to your shipping methods', 'woocommerce-shipcloud' );
+		$this->method_description = __( 'Add shipcloud to your shipping methods', 'shipcloud-for-woocommerce' );
 		$this->callback_url       = WC()->api_request_url( 'shipcloud' );
 
 		$this->supports              = array(
@@ -171,7 +171,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( ( empty( $api_key ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
 		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">ShipCloud API Key</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">shipcloud api key</a>.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 
 			return false;
 		}
@@ -193,8 +193,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 			$init_shipcloud_api = $this->init_shipcloud_api( $api_key );
 			if( is_wp_error( $init_shipcloud_api ) ) {
-				self::log( 'Could not initialize shipcloud API - ' . $init_shipcloud_api->get_error_message() );
-				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not initialize shipcloud API.', 'woocommerce-shipcloud' ), $init_shipcloud_api->get_error_message() ), 'error' );
+				self::log( 'Could not initialize shipcloud api - ' . $init_shipcloud_api->get_error_message() );
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not initialize shipcloud api.', 'shipcloud-for-woocommerce' ), $init_shipcloud_api->get_error_message() ), 'error' );
 				return false;
 		    }
 
@@ -202,7 +202,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			if ( is_wp_error( $carriers ) )
 			{
 				self::log( 'Could not update carriers - ' . $carriers->get_error_message() );
-				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'woocommerce-shipcloud' ), $carriers->get_error_message() ), 'error' );
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'shipcloud-for-woocommerce' ), $carriers->get_error_message() ), 'error' );
 				return false;
 			}
 			$this->carriers = $carriers;
@@ -211,7 +211,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			if ( is_wp_error( $available_carriers ) )
 			{
 				self::log( 'Could not get available carriers - ' . $available_carriers->get_error_message() );
-				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'woocommerce-shipcloud' ), $available_carriers->get_error_message() ), 'error' );
+				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'shipcloud-for-woocommerce' ), $available_carriers->get_error_message() ), 'error' );
 				return false;
 			}
 			$this->available_carriers = $available_carriers;
@@ -220,19 +220,19 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$allowed_carriers = $this->get_option( 'allowed_carriers' );
 		if ( empty( $allowed_carriers ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
 		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one allowed <a href="%s">shipment method</a>.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one allowed <a href="%s">shipping method</a>.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 			return false;
 		}
 
 		if ( ( '' == $this->get_option( 'standard_price_products' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
 		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Products.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">standard price</a> for products.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 			return false;
 		}
 
 		if ( ( '' == $this->get_option( 'standard_price_shipment_classes' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
 		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">Standard Price</a> for Shipment Classes.', 'woocommerce-shipcloud' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">standard price</a> for shipping classes.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
 			return false;
 		}
 
@@ -260,9 +260,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if ( count( $this->available_carriers ) > 0 )
 		{
 			$standard_carrier_settings = array(
-				'title'       => __( 'Standard Shipment Method', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Standard shipping method', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'This Carrier will be preselected if the Shop Owner selects the Carrier or will be preselected as Carrier if Customer can select the Carrier.', 'woocommerce-shipcloud' ),
+				'description' => __( 'This carrier will be preselected if the shop owner selects the carrier or will be preselected as carrier if customer can select the carrier.', 'shipcloud-for-woocommerce' ),
 				'options'     => $this->available_carriers,
 				'desc_tip'    => true
 			);
@@ -270,294 +270,294 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		else
 		{
 			$standard_carrier_settings = array(
-				'title'       => __( 'Standard Shipment Method', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Standard shipping method', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text_only',
-				'description' => __( 'You have to select at least one Carrier above to select a Standard Carrier.', 'woocommerce-shipcloud' ),
+				'description' => __( 'You have to select at least one carrier above to select a standard carrier.', 'shipcloud-for-woocommerce' ),
 			);
 		}
 
 		$this->form_fields = array(
 			'enabled'                           => array(
-				'title'   => __( 'Enable', 'woocommerce-shipcloud' ),
+				'title'   => __( 'Enable', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Enable shipcloud.io', 'woocommerce-shipcloud' ),
+				'label'   => __( 'Enable shipcloud', 'shipcloud-for-woocommerce' ),
 				'default' => 'no'
 			),
 			'api_key'                           => array(
-				'title'       => __( 'API Key', 'woocommerce-shipcloud' ),
+				'title'       => __( 'api key', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => sprintf( __( 'Enter your <a href="%s" target="_blank">shipcloud.io API Key</a>.', 'woocommerce-shipcloud' ), 'https://app.shipcloud.io/de/users/api_key' ),
+				'description' => sprintf( __( 'Enter your <a href="%s" target="_blank">shipcloud api key</a>.', 'shipcloud-for-woocommerce' ), 'https://app.shipcloud.io/de/users/api_key' ),
 			),
 			'allowed_carriers'                  => array(
-				'title'       => __( 'Shipment Methods', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipping methods', 'shipcloud-for-woocommerce' ),
 				'type'        => 'multi_checkbox',
-				'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Select the carriers that you want to use in your shop.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'options'     => $carriers_options
 			),
 			'carrier_selection'                 => array(
-				'title'       => __( 'Shipment Selection', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipment selection', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'Who selects the shipment method?', 'woocommerce-shipcloud' ),
+				'description' => __( 'Who selects the shipping method?', 'shipcloud-for-woocommerce' ),
 				'class'       => 'select',
 				'desc_tip'    => true,
 				'default'     => 'shopowner',
 				'options'     => array(
-					'shopowner' => __( 'Shop Owner', 'woocommerce-shipcloud' ),
-					'customer'  => __( 'Customer', 'woocommerce-shipcloud' ),
+					'shopowner' => __( 'Shop owner', 'shipcloud-for-woocommerce' ),
+					'customer'  => __( 'Customer', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'standard_carrier'                  => $standard_carrier_settings,
 			'notification_email'                => array(
-				'title'       => __( 'Notification Email', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Notification email', 'shipcloud-for-woocommerce' ),
 				'type'        => 'checkbox',
-				'label'       => __( 'Send notification emails from shipcloud.io to recipients on status changes of shipment.', 'woocommerce-shipcloud' ),
+				'label'       => __( 'Send notification emails from shipcloud to recipients on status changes of shipment.', 'shipcloud-for-woocommerce' ),
 				'default'     => 'yes'
 			),
 			'carrier_email'                => array(
-				'title'       => __( 'Carrier Email', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Carrier email', 'shipcloud-for-woocommerce' ),
 				'type'        => 'checkbox',
-				'label'       => __( 'Send notification emails from carriers (supported by DHL and DPD) to recipients on status changes of shipment.', 'woocommerce-shipcloud' ),
+				'label'       => __( 'Send notification emails from carriers (supported by DHL and DPD) to recipients on status changes of shipment.', 'shipcloud-for-woocommerce' ),
 				'default'     => 'yes'
 			),
 			'callback_url'                      => array(
-				'title'       => __( 'Webhook URL', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Webhook url', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text_only',
-				'description' => sprintf( __( '%s<br /><br />You want to get noticed about the Shipment Status? Copy the Webhook URL and enter it in your <a href="%s" target="_blank">shipcloud.io Webhooks Section.</a>', 'woocommerce-shipcloud' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
+				'description' => sprintf( __( '%s<br /><br />You want to get noticed about the shipment status? Copy the webhook url and enter it in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
 				'disabled'    => false
 			),
 			'debug'                             => array(
-				'title'   => __( 'Debug', 'woocommerce-shipcloud' ),
+				'title'   => __( 'Debug', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Enable logging if you experience problems.', 'woocommerce-shipcloud' ),
+				'label'   => __( 'Enable logging if you experience problems.', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
 			'calculation'                       => array(
-				'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Automatic price calculation', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
-				'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'woocommerce-shipcloud' ) )
+				'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'shipcloud-for-woocommerce' ) )
 			),
 			'disable_calculation'                           => array(
-				'title'   => __( 'Disable', 'woocommerce-shipcloud' ),
+				'title'   => __( 'Disable', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Disable shipping cost calculation in cart and checkout page (if you only want to use label creation).', 'woocommerce-shipcloud' ),
+				'label'   => __( 'Disable shipping cost calculation in cart and checkout page (if you only want to use label creation).', 'shipcloud-for-woocommerce' ),
 				'default' => 'no'
 			),
 			'calculate_products_type'           => array(
-				'title'       => __( 'Products', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Products', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for products be calculated.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'default'     => 'class',
 				'options'     => array(
-					'product'      => __( 'Per Product: Charge shipping for each Product individually', 'woocommerce-shipcloud' ),
-					'order'        => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
-					'product_sum'   => __( 'Virtual Parcel: Create a virtual parcel with volume and weight of all products and charge shipping', 'woocommerce-shipcloud' ),
+					'product'      => __( 'Per product: charge shipping for each product individually', 'shipcloud-for-woocommerce' ),
+					'order'        => __( 'Per order: charge shipping for the most expensive shipping for a product', 'shipcloud-for-woocommerce' ),
+					'product_sum'   => __( 'Virtual parcel: create a virtual parcel with volume and weight of all products and charge shipping', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'calculate_products_type_fallback'           => array(
-				'title'       => __( 'Products (fallback)', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Products (fallback)', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for products be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for products be calculated if api limit has been reached.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'default'     => 'product',
 				'options'     => array(
-					'product'      => __( 'Per Product: Charge shipping with fallback price for each product', 'woocommerce-shipcloud' ),
-					'order'        => __( 'Per Order: Charge shipping with fallback price for one product', 'woocommerce-shipcloud' ),
+					'product'      => __( 'Per product: charge shipping with fallback price for each product', 'shipcloud-for-woocommerce' ),
+					'order'        => __( 'Per order: charge shipping with fallback price for one product', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'standard_price_products'           => array(
-				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback price', 'shipcloud-for-woocommerce' ),
 				'type'        => 'price',
-				'description' => __( 'Will be used if no sizes or weight is given to a Product or for fallback (have to be entered in €).', 'woocommerce-shipcloud' ),
+				'description' => __( 'Will be used if no sizes or weight is given to a product or for fallback (have to be entered in EUR).', 'shipcloud-for-woocommerce' ),
 			),
 			'calculation_type_shipment_classes' => array(
-				'title'       => __( 'Shipment Classes', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipping classes', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for shipping classes be calculated.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'default'     => 'class',
 				'options'     => array(
-					'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce-shipcloud' ),
-					'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce-shipcloud' ),
+					'class' => __( 'Per class: charge shipping for each shipping class individually', 'shipcloud-for-woocommerce' ),
+					'order' => __( 'Per order: charge shipping for the most expensive shipping class', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'calculation_type_shipment_classes_fallback' => array(
-				'title'       => __( 'Shipment Classes (fallback)', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipping classes (fallback)', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for shipment classes be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for shipping classes be calculated if api limit has been reached.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'default'     => 'class',
 				'options'     => array(
-					'class' => __( 'Per Class: Charge shipping with fallback price for each class', 'woocommerce-shipcloud' ),
-					'order' => __( 'Per Order: Charge shipping with fallback price for one class', 'woocommerce-shipcloud' ),
+					'class' => __( 'Per class: charge shipping with fallback price for each class', 'shipcloud-for-woocommerce' ),
+					'order' => __( 'Per order: charge shipping with fallback price for one class', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'standard_price_shipment_classes'   => array(
-				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback price', 'shipcloud-for-woocommerce' ),
 				'type'        => 'price',
-				'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class (have to be entered in €).', 'woocommerce-shipcloud' ),
+				'description' => __( 'Will be used if no sizes or weight is given to a shipping class (have to be entered in EUR).', 'shipcloud-for-woocommerce' ),
 			),
 			'standard_sender_data'              => array(
-				'title'       => __( 'Sender Information', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Sender information', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
-				'description' => sprintf( __( 'Setup information for the standard sender.', 'woocommerce-shipcloud' ) ),
+				'description' => sprintf( __( 'Setup information for the standard sender.', 'shipcloud-for-woocommerce' ) ),
 			),
 			'sender_company'                    => array(
-				'title'       => __( 'Company', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Company', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender company for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender company for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_first_name'                 => array(
-				'title'       => __( 'First Name', 'woocommerce-shipcloud' ),
+				'title'       => __( 'First name', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender first name for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender first name for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_last_name'                  => array(
-				'title'       => __( 'Last Name', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Last name', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender last name for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender last name for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_street'                     => array(
-				'title'       => __( 'Street', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Street', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender street for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender street for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_street_nr'                  => array(
-				'title'       => __( 'Street number', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Street number', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender street number for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender street number for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_postcode'                   => array(
-				'title'       => __( 'Postcode', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Zipcode', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender postcode for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender zipcode for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_state'                      => array(
-				'title'       => __( 'State', 'woocommerce-shipcloud' ),
+				'title'       => __( 'State', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender state for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender state for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_city'                       => array(
-				'title'       => __( 'City', 'woocommerce-shipcloud' ),
+				'title'       => __( 'City', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
-				'description' => __( 'Enter standard sender city for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender city for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
 			'sender_country'                    => array(
-				'title'       => __( 'Country', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Country', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'Enter standard sender country for shipment.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Enter standard sender country for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'wc-enhanced-select',
 				'options'     => $woocommerce->countries->countries,
 				'default'     => $default_country
 			),
 			'recipient_information'              => array(
-				'title'       => __( 'Recipient Information', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Recipient information', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
-				'description' => sprintf( __( 'Setup information for the recipient.', 'woocommerce-shipcloud' ) ),
+				'description' => sprintf( __( 'Setup information for the recipient.', 'shipcloud-for-woocommerce' ) ),
 			),
 			'street_detection'               => array(
-				'title'   => __( 'Street Detection', 'woocommerce-shipcloud' ),
+				'title'   => __( 'Street detection', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
-				'label'   => __( 'Automatic split street from street number (In some countries this do not work correct because of different street number schemes).', 'woocommerce-shipcloud' ),
+				'label'   => __( 'Automatic split street from street number (in some countries this do not work correct because of different street number schemes).', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
 		);
 
 		$this->instance_form_fields = array(
 			'allowed_carriers'                  => array(
-				'title'       => __( 'Shipment Methods', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipping methods', 'shipcloud-for-woocommerce' ),
 				'type'        => 'multi_checkbox',
-				'description' => __( 'Select the Carriers which you want to use in your Shop.', 'woocommerce-shipcloud' ),
+				'description' => __( 'Select the carriers that you want to use in your shop.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'options'     => $carriers_options
 			),
 			'carrier_selection'                 => array(
-				'title'       => __( 'Shipment Selection', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipment selection', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'Who selects the shipment method?', 'woocommerce-shipcloud' ),
+				'description' => __( 'Who selects the shipping method?', 'shipcloud-for-woocommerce' ),
 				'class'       => 'select',
 				'desc_tip'    => true,
 				'options'     => array(
-					'shopowner' => __( 'Shop Owner', 'woocommerce-shipcloud' ),
-					'customer'  => __( 'Customer', 'woocommerce-shipcloud' ),
+					'shopowner' => __( 'Shop owner', 'shipcloud-for-woocommerce' ),
+					'customer'  => __( 'Customer', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'standard_carrier'                  => $standard_carrier_settings,
 			'calculation'                       => array(
-				'title'       => __( 'Automatic Price Calculation', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Automatic price calculation', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
-				'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'woocommerce-shipcloud' ) )
+				'description' => sprintf( __( 'To get a price for the customers order, you have to setup the price calculation.', 'shipcloud-for-woocommerce' ) )
 			),
 			'calculate_products_type'           => array(
-				'title'       => __( 'Products', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Products', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for products be calculated.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for products be calculated.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'options'     => array(
-					'product'       => __( 'Per Product: Charge shipping for each product individually', 'woocommerce-shipcloud' ),
-					'order'         => __( 'Per Order: Charge shipping for the most expensive shipping for a product', 'woocommerce-shipcloud' ),
-					'product_sum'   => __( 'Virtual Parcel: Create a virtual parcel with volume and weight of all products and charge shipping', 'woocommerce-shipcloud' ),
+					'product'       => __( 'Per product: charge shipping for each product individually', 'shipcloud-for-woocommerce' ),
+					'order'         => __( 'Per order: charge shipping for the most expensive shipping for a product', 'shipcloud-for-woocommerce' ),
+					'product_sum'   => __( 'Virtual parcel: create a virtual parcel with volume and weight of all products and charge shipping', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'calculate_products_type_fallback'           => array(
-				'title'       => __( 'Products (fallback)', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Products (fallback)', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for products be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for products be calculated if api limit has been reached.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'default'     => 'product',
 				'options'     => array(
-					'product'      => __( 'Per Product: Charge shipping with fallback price for each product', 'woocommerce-shipcloud' ),
-					'order'        => __( 'Per Order: Charge shipping with fallback price for whole order', 'woocommerce-shipcloud' ),
+					'product'      => __( 'Per product: charge shipping with fallback price for each product', 'shipcloud-for-woocommerce' ),
+					'order'        => __( 'Per order: charge shipping with fallback price for whole order', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'standard_price_products'           => array(
-				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback price', 'shipcloud-for-woocommerce' ),
 				'type'        => 'price',
-				'description' => __( 'Will be used if no sizes or weight is given to a Product (have to be entered in €).', 'woocommerce-shipcloud' ),
+				'description' => __( 'Will be used if no sizes or weight is given to a product (have to be entered in EUR).', 'shipcloud-for-woocommerce' ),
 			),
 			'calculation_type_shipment_classes' => array(
-				'title'       => __( 'Shipment Classes', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipping classes', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for shipment classes be calculated.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for shipping classes be calculated.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'options'     => array(
-					'class' => __( 'Per Class: Charge shipping for each shipping class individually', 'woocommerce' ),
-					'order' => __( 'Per Order: Charge shipping for the most expensive shipping class', 'woocommerce' ),
+					'class' => __( 'Per class: charge shipping for each shipping class individually', 'woocommerce' ),
+					'order' => __( 'Per order: charge shipping for the most expensive shipping class', 'woocommerce' ),
 				)
 			),
 			'calculation_type_shipment_classes_fallback' => array(
-				'title'       => __( 'Shipment Classes (fallback)', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Shipping classes (fallback)', 'shipcloud-for-woocommerce' ),
 				'type'        => 'select',
-				'description' => __( 'How should the price for shipment classes be calculated if API limit is reached.', 'woocommerce-shipcloud' ),
+				'description' => __( 'How should the price for shipping classes be calculated if api limit has been reached.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'select',
 				'default'     => 'class',
 				'options'     => array(
-					'class' => __( 'Per Class: Charge shipping with fallback price for each class', 'woocommerce-shipcloud' ),
-					'order' => __( 'Per Order: Charge shipping with fallback price for one class', 'woocommerce-shipcloud' ),
+					'class' => __( 'Per class: charge shipping with fallback price for each class', 'shipcloud-for-woocommerce' ),
+					'order' => __( 'Per order: charge shipping with fallback price for one class', 'shipcloud-for-woocommerce' ),
 				)
 			),
 			'standard_price_shipment_classes'   => array(
-				'title'       => __( 'Fallback Price', 'woocommerce-shipcloud' ),
+				'title'       => __( 'Fallback price', 'shipcloud-for-woocommerce' ),
 				'type'        => 'price',
-				'description' => __( 'Will be used if no sizes or weight is given to a Shipment Class or for fallback (have to be entered in €).', 'woocommerce-shipcloud' ),
+				'description' => __( 'Will be used if no sizes or weight is given to a shipping class or for fallback (have to be entered in EUR).', 'shipcloud-for-woocommerce' ),
 			)
 		);
 	}
@@ -638,7 +638,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		$order = wc_get_order( $order_id );
-		$order->add_order_note( sprintf( __( 'Shipment status changed to: %s', 'woocommerce-shipcloud' ), wcsc_get_shipment_status_string( $shipment->type ) ) );
+		$order->add_order_note( sprintf( __( 'Shipment status changed to: %s', 'shipcloud-for-woocommerce' ), wcsc_get_shipment_status_string( $shipment->type ) ) );
 
 		update_post_meta( $order_id, 'shipment_' . $shipment_id . '_status', $shipment->type );
 
@@ -724,7 +724,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 								</div>
 							<?php endforeach; ?>
 						<?php else: ?>
-							<p><?php _e( 'Please enter an API key to get available shipment Carriers.', 'woocommerce-shipcloud' ); ?></p>
+							<p><?php _e( 'Please enter an api key to get available shipping carriers.', 'shipcloud-for-woocommerce' ); ?></p>
 						<?php endif; ?>
 					</div>
 					<?php echo $this->get_description_html( $data ); ?>
@@ -811,7 +811,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		     || '' == $package['destination']['address']
 		) {
 			wc_add_notice(
-				__( 'Please enter an address to calculate shipping costs.', 'woocommerce-shipcloud' ),
+				__( 'Please enter an address to calculate shipping costs.', 'shipcloud-for-woocommerce' ),
 				'notice'
 			);
 
@@ -1285,7 +1285,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			}
 			else
 			{
-				return new WP_Error( 'wcsc-calculate-virtual-parcel-missing-parcel', __( 'Parcel dimensions are missing', 'woocommerce-shipcloud' ) );
+				return new WP_Error( 'wcsc-calculate-virtual-parcel-missing-parcel', __( 'Parcel dimensions are missing', 'shipcloud-for-woocommerce' ) );
 			}
 		}
 
@@ -1315,7 +1315,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( ! is_object( $term ) )
 		{
-			self::log( sprintf( __( 'No term found for shipping class #%s', 'woocommerce-shipcloud' ), $shipping_class ) );
+			self::log( sprintf( __( 'No term found for shipping class #%s', 'shipcloud-for-woocommerce' ), $shipping_class ) );
 			return false;
 		}
 
@@ -1323,7 +1323,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( 0 == $parcel_id )
 		{
-			self::log( sprintf( __( 'No parcel found for product id #%s', 'woocommerce-shipcloud' ), $product_id ) );
+			self::log( sprintf( __( 'No parcel found for product id #%s', 'shipcloud-for-woocommerce' ), $product_id ) );
 		}
 
 		$retail_price = $this->get_parcel_retail_price( $parcel_id );
@@ -1352,7 +1352,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if ( '' == $retail_price )
 		{
 			$retail_price = $this->get_option( 'standard_price' );
-			self::log( sprintf( __( 'No price found for parcel. Using fallback price %s', 'woocommerce-shipcloud' ), $retail_price ) );
+			self::log( sprintf( __( 'No price found for parcel. Using fallback price %s', 'shipcloud-for-woocommerce' ), $retail_price ) );
 		}
 
 		return $retail_price;
@@ -1422,8 +1422,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
     /**
      * Setting standard carrier if no was selected
      *
-     * @param $method string Old Shipment Method
-     * @return string New Shipment Method
+     * @param $method string Old shipping method
+     * @return string New shipping method
      *
      * @since 1.1.2
      */

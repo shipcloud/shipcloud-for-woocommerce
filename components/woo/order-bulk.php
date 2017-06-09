@@ -117,14 +117,14 @@ class WC_Shipcloud_Order_Bulk {
 			$parcel_title = wcsc_get_carrier_display_name( $request['wcsc_carrier'] )
 			                . ' - '
 			                . $request['wcsc_width']
-			                . __( 'x', 'woocommerce-shipcloud' )
+			                . __( 'x', 'shipcloud-for-woocommerce' )
 			                . $request['wcsc_height']
-			                . __( 'x', 'woocommerce-shipcloud' )
+			                . __( 'x', 'shipcloud-for-woocommerce' )
 			                . $request['wcsc_length']
-			                . __( 'cm', 'woocommerce-shipcloud' )
+			                . __( 'cm', 'shipcloud-for-woocommerce' )
 			                . ' '
 			                . $request['wcsc_weight']
-			                . __( 'kg', 'woocommerce-shipcloud' );
+			                . __( 'kg', 'shipcloud-for-woocommerce' );
 
 			$data = array(
 				'id'                  => $shipment['id'],
@@ -149,7 +149,7 @@ class WC_Shipcloud_Order_Bulk {
 			add_post_meta( $order_id, 'shipcloud_shipment_ids', $data['id'] );
 			add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
 
-			$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+			$order->get_wc_order()->add_order_note( __( 'shipcloud label has been created.', 'shipcloud-for-woocommerce' ) );
 
 			$succeeded ++;
 		}
@@ -169,7 +169,7 @@ class WC_Shipcloud_Order_Bulk {
 	 * @return array $actions Bulk actions with own Actions
 	 */
 	public function add_bulk_actions( $actions ) {
-		$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
+		$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'shipcloud-for-woocommerce' );
 
 		return $actions;
 	}
