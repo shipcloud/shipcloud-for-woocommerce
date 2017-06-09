@@ -158,6 +158,8 @@ class WC_Shipcloud_Order_Bulk {
 			$order->get_wc_order()->add_order_note( __( 'shipcloud label has been created.', 'shipcloud-for-woocommerce' ) );
 
 			$succeeded ++;
+		}
+
 		if ( isset( $request[ self::BUTTON_PDF ] ) ) {
 			$this->create_pdf( $request );
 
@@ -401,7 +403,7 @@ class WC_Shipcloud_Order_Bulk {
 			WooCommerce_Shipcloud::admin_notice(
 				sprintf(
 					__( 'No label for order #%d created: %s' ),
-					$order->get_wc_order()->id,
+					$order->get_wc_order()->get_id(),
 					str_replace( "\n", ', ', $shipment->get_error_message() )
 				),
 				'error'
