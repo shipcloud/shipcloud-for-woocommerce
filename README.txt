@@ -23,6 +23,11 @@ Integrate your shipcloid.io account to your WooCommerce shop. Create shipment la
 
 == Changelog ==
 
+= 1.3.0 =
+* Enhanced: Made Plugin WordPress.org ready
+* Enhanced: Return single pdf after batch label creation
+* Enhanced: Renamed Plugin
+
 = 1.2.1 =
 * Enhanced: Added missing translations
 * Enhanced: Removed Woo Updatescripts
