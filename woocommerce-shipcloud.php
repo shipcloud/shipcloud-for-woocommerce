@@ -32,13 +32,11 @@
  * @license GPL 2
  */
 
-if ( ! defined( 'ABSPATH' ) )
-{
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class WooCommerce_Shipcloud
-{
+class WooCommerce_Shipcloud {
 	/**
 	 * The Single instance of the class
 	 *
@@ -55,13 +53,14 @@ class WooCommerce_Shipcloud
 	 */
 	private $passed_requirements = false;
 
+	const VERSION = '1.2.1';
+
 	/**
 	 * Construct
 	 *
 	 * @since 1.0.0
 	 */
-	private function __construct()
-	{
+	private function __construct() {
 		$this->load_plugin();
 	}
 
@@ -70,24 +69,20 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public function load_plugin()
-	{
+	public function load_plugin() {
 		$this->constants();
 		$this->load_textdomain();
-        $this->includes();
+		$this->includes();
 
-        $this->check_requirements();
-        $this->load_components();
+		$this->check_requirements();
+		$this->load_components();
 
-		if ( is_admin() )
-		{
+		if ( is_admin() ) {
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
 			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
 			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
-		}
-		else
-		{
+		} else {
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
 		}
@@ -98,8 +93,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	private function constants()
-	{
+	private function constants() {
 		define( 'WCSC_FOLDER', $this->get_folder() );
 		define( 'WCSC_RELATIVE_FOLDER', substr( WCSC_FOLDER, strlen( WP_PLUGIN_DIR ), strlen( WCSC_FOLDER ) ) );
 		define( 'WCSC_URLPATH', $this->get_url_path() );
@@ -111,8 +105,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	private function get_folder()
-	{
+	private function get_folder() {
 		return plugin_dir_path( __FILE__ );
 	}
 
@@ -121,8 +114,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	private function get_url_path()
-	{
+	private function get_url_path() {
 		return plugin_dir_url( __FILE__ );
 	}
 
@@ -141,8 +133,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	private function includes()
-	{
+	private function includes() {
 		// Loading functions
 		require_once( WCSC_FOLDER . '/woocommerce-shipcloud-functions.php' );
 		require_once( WCSC_FOLDER . '/includes/shipcloud/i18n-iso-convert-class.php' );
@@ -155,14 +146,25 @@ class WooCommerce_Shipcloud
 	 * @return object
 	 * @since 1.0.0
 	 */
-	public static function instance()
-	{
-		if ( is_null( self::$_instance ) )
-		{
+	public static function instance() {
+		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
 
 		return self::$_instance;
+	}
+
+	public static function load_fpdf() {
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdf/fpdf.php';
+
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/filters/FilterASCII85.php';
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/filters/FilterASCIIHexDecode.php';
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/filters/FilterLZW.php';
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/fpdi.php';
+
+		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/src/Exception.php';
+		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/src/Merger.php';
+		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/src/Pages.php';
 	}
 
 	/**
@@ -173,8 +175,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function activate( $network_wide )
-	{
+	public static function activate( $network_wide ) {
 	}
 
 	/**
@@ -183,8 +184,7 @@ class WooCommerce_Shipcloud
 	 * @param    boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is
 	 *                                 disabled or plugin is activated on an individual blog
 	 */
-	public static function deactivate( $network_wide )
-	{
+	public static function deactivate( $network_wide ) {
 		delete_option( 'woocommerce_shipcloud_carriers' );
 	}
 
@@ -196,8 +196,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function uninstall( $network_wide )
-	{
+	public static function uninstall( $network_wide ) {
 	}
 
 	/**
@@ -239,8 +238,7 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public static function admin_notice( $message, $type = 'updated' )
-	{
+	public static function admin_notice( $message, $type = 'updated' ) {
 		static::assert_session();
 
 		$_SESSION['wcsc']['notices'][ md5( $type . ':' . $message ) ] = array(
@@ -254,16 +252,20 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.2.0
 	 */
-	protected static function assert_session() {
-		if ( ! session_id() ) {
-			session_start();
-		}
+	public static function assert_session() {
+	    if (session_id()) {
+	        return;
+        }
 
-		if ( ! isset( $_SESSION['wcsc'] ) ) {
-			$_SESSION['wcsc'] = array(
-				'notices' => array(),
-			);
-		}
+        session_start();
+
+		$_SESSION['wcsc'] = array_merge(
+			array(
+				'notices'   => array(),
+				'downloads' => array(),
+			),
+			$_SESSION['wcsc']
+        );
 	}
 
 	/**
@@ -271,10 +273,8 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public function load_components()
-	{
-		if ( ! $this->passed_requirements )
-		{
+	public function load_components() {
+		if ( ! $this->passed_requirements ) {
 			return;
 		}
 
@@ -288,13 +288,12 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public function register_admin_styles()
-	{
-		if( ! wcsc_is_admin_screen() )
-		{
+	public function register_admin_styles() {
+		if ( ! wcsc_is_admin_screen() ) {
 			return;
 		}
-		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . 'includes/css/admin.css' );
+
+		wp_enqueue_style( 'wcsc-admin-styles', WCSC_URLPATH . 'includes/css/admin.css', array(), static::VERSION );
 	}
 
 	/**
@@ -302,10 +301,8 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public function register_admin_scripts()
-	{
-		if( ! wcsc_is_admin_screen() )
-		{
+	public function register_admin_scripts() {
+		if ( ! wcsc_is_admin_screen() ) {
 			return;
 		}
 
@@ -322,7 +319,7 @@ class WooCommerce_Shipcloud
 			'no'                          => __( 'No', 'shipcloud-for-woocommerce' )
 		);
 
-		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . 'includes/js/admin.js' );
+		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . 'includes/js/admin.js', array(), static::VERSION );
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
 		wp_enqueue_script( 'wcsc-admin-script' );
 	}
@@ -332,13 +329,12 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public function register_plugin_styles()
-	{
-		if( ! wcsc_is_frontend_screen() )
-		{
+	public function register_plugin_styles() {
+		if ( ! wcsc_is_frontend_screen() ) {
 			return;
 		}
-		wp_enqueue_style( 'wcsc-plugin-styles', WCSC_URLPATH . '/includes/css/display.css' );
+
+		wp_enqueue_style( 'wcsc-plugin-styles', WCSC_URLPATH . '/includes/css/display.css', array(), static::VERSION );
 	}
 
 	/**
@@ -346,10 +342,8 @@ class WooCommerce_Shipcloud
 	 *
 	 * @since 1.0.0
 	 */
-	public function register_plugin_scripts()
-	{
-		if( ! wcsc_is_frontend_screen() )
-		{
+	public function register_plugin_scripts() {
+		if ( ! wcsc_is_frontend_screen() ) {
 			return;
 		}
 		wp_enqueue_script( 'wcsc-plugin-script', WCSC_URLPATH . '/includes/js/display.js' );
@@ -387,8 +381,7 @@ register_uninstall_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'uninstall' )
  *
  * @since 1.0.0
  */
-function woocommerce_shipcloud_init()
-{
+function woocommerce_shipcloud_init() {
 	WooCommerce_Shipcloud::instance();
 }
 

@@ -122,6 +122,11 @@ class WCSC_Parceltemplate_Posttype
 		register_post_type( self::POST_TYPE, $args );
 	}
 
+	/**
+     * Builds link where a new template can be created.
+     *
+	 * @return string
+	 */
 	public static function get_create_link() {
 		return get_admin_url( null, 'post-new.php?post_type=' . self::POST_TYPE );
 	}

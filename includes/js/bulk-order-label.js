@@ -6,7 +6,7 @@ wcsc.OrderBulkLabels = function (submitButton) {
     var self = this;
 
     // Protected fields
-    this.bulkId = 'wcsc_order_bulk_label';
+    this.bulkId = 'wcsc_order_bulk';
     this.bulkScreen = '#wcsc-order-bulk-labels';
     this.bulkItemTemplate = 'wcsc-order-labels-bulk-items';
     this.$submitButton = $(submitButton);
@@ -17,14 +17,18 @@ wcsc.OrderBulkLabels = function (submitButton) {
     };
 
     this.handleSubmit = function (e) {
-        var whichBulkButtonId = $(this).attr('id');
-        n = whichBulkButtonId.substr(2);
+        var n = $(this).attr('id').substr(2);
 
         if (self.bulkId !== $('select[name="' + n + '"]').val()) {
             return;
         }
 
         e.preventDefault();
+
+        if (!self.hasOrdersSelected()) {
+            return;
+        }
+
         self.setBulk();
         return false;
     };
@@ -62,6 +66,18 @@ wcsc.OrderBulkLabels = function (submitButton) {
 
             $('.bulk-titles', self.bulkScreen).append(template(data));
         });
+    };
+
+    this.hasOrdersSelected = function () {
+        var ithasOrdersSelected = false;
+
+        $('tbody th.check-column input[type="checkbox"]').each(function () {
+            if ($(this).prop('checked')) {
+                ithasOrdersSelected = true;
+            }
+        });
+
+        return ithasOrdersSelected;
     };
 
     this.setBulk = function () {
