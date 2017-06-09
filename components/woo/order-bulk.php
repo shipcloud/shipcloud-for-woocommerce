@@ -475,7 +475,7 @@ class WC_Shipcloud_Order_Bulk {
 	 * @throws \RuntimeException
 	 */
 	protected function get_storage_path( $suffix = null ) {
-		$path = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'shipcloud-woocommerce';
+		$path = wp_upload_dir() . 'shipcloud-woocommerce';
 
 		if ( null !== $suffix && $suffix ) {
 			$path .= DIRECTORY_SEPARATOR . trim( $suffix, '\\/' );
