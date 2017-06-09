@@ -29,6 +29,7 @@ need to copy or upload your order data into another external system (no CSV uplo
 * Enhanced: Made Plugin WordPress.org ready
 * Enhanced: Return single pdf after batch label creation
 * Enhanced: Renamed Plugin
+* Enhanced: Reworked language keys
 
 = 1.2.1 =
 * Enhanced: Added missing translations

@@ -4,6 +4,7 @@
 * Enhanced: Made Plugin WordPress.org ready
 * Enhanced: Return single pdf after batch label creation
 * Enhanced: Renamed Plugin
+* Enhanced: Reworked language keys
 
 2017.06.06 - version 1.2.1
 * Enhanced: Added missing translations
