@@ -1,4 +1,4 @@
-*** WooCommerce Shipcloud Changelog ***
+*** shipcloud for WooCommerce Changelog ***
 
 
 2017.06.06 - version 1.2.1

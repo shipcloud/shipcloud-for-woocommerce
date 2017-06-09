@@ -1,10 +1,10 @@
 <?php
 /**
- * WooCommerce shipcloud.io parcel class
+ * shipcloud for WooCommerce parcel class
  * Loading parcel functions
  *
  * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package WooCommerceShipCloud/Core
+ * @package shipcloudForWooCommerce/Core
  * @version 1.0.0
  * @since   1.0.0
  * @license GPL 2
