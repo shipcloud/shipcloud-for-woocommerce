@@ -154,6 +154,11 @@ class WooCommerce_Shipcloud {
 		return self::$_instance;
 	}
 
+	/**
+	 * Load PDF framework for merging.
+	 *
+	 * @see WC_Shipcloud_Order_Bulk::create_pdf()
+	 */
 	public static function load_fpdf() {
 		require_once WCSC_FOLDER . '/vendor/setasign/fpdf/fpdf.php';
 
@@ -364,6 +369,9 @@ class WooCommerce_Shipcloud {
 
 	}
 
+	/**
+	 * Reset all notices.
+	 */
 	public function clear_admin_notices() {
 		static::assert_session();
 

@@ -6,7 +6,7 @@ wcsc.OrderBulkLabels = function (submitButton) {
     var self = this;
 
     // Protected fields
-    this.bulkId = 'wcsc_order_bulk';
+    this.bulkId = 'wcsc_order_bulk_label';
     this.bulkScreen = '#wcsc-order-bulk-labels';
     this.bulkItemTemplate = 'wcsc-order-labels-bulk-items';
     this.$submitButton = $(submitButton);

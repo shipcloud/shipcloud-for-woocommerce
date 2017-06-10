@@ -74,7 +74,8 @@ class WC_Shipcloud_Order_Bulk {
 
 		$request = $_GET; // XSS: OK.
 
-		if ( self::FORM_BULK !== $request['action']
+		if ( ! isset( $request['action'] )
+		     || self::FORM_BULK !== $request['action']
 		     || ! isset( $request['action'], $request['wcsc_carrier'] )
 		     || ! $request['wcsc_carrier']
 		) {

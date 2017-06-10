@@ -115,15 +115,10 @@
 					<?php esc_html_e( 'Cancel' ) ?>
                 </button>
                 <input type="submit"
-                       id="bulk_edit"
-                       name="bulk_edit"
-                       class="button button-primary alignright"
-                       value="<?php esc_attr_e( 'Create labels', 'woocommerce-shipcloud' ) ?>">
-                <input type="submit"
                        id="<?php esc_attr_e(WC_Shipcloud_Order_Bulk::BUTTON_PDF) ?>"
                        name="<?php esc_attr_e(WC_Shipcloud_Order_Bulk::BUTTON_PDF) ?>"
-                       class="button button-default alignright"
-                       value="<?php esc_attr_e( 'Create PDF', 'woocommerce-shipcloud' ) ?>">
+                       class="button button-primary alignright"
+                       value="<?php esc_attr_e( 'Create labels', 'woocommerce-shipcloud' ) ?>">
                 <input type="hidden" name="screen" value="edit-<?php get_current_screen()->id ?>">
                 <span class="error" style="display:none"></span>
                 <br class="clear">
