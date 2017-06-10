@@ -1,35 +1,33 @@
 <?php
 
-if( !defined( 'ABSPATH' ) )
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
-if( defined( 'WCSC_FOLDER' ) ):
+if ( defined( 'WCSC_FOLDER' ) ):
 	/**
 	 * Getting Plugin Template
 	 *
 	 * @since 1.0.0
 	 */
-	function wcsc_locate_template( $template_names, $load = FALSE, $require_once = TRUE )
-	{
+	function wcsc_locate_template( $template_names, $load = false, $require_once = true ) {
 		$located = '';
 
 		$located = locate_template( $template_names, $load, $require_once );
 
-		if( '' == $located ):
-			foreach( ( array ) $template_names as $template_name ):
-				if( !$template_name )
-				{
+		if ( '' == $located ):
+			foreach ( ( array ) $template_names as $template_name ):
+				if ( ! $template_name ) {
 					continue;
 				}
-				if( file_exists( WCSC_FOLDER . '/templates/' . $template_name ) ):
+				if ( file_exists( WCSC_FOLDER . '/templates/' . $template_name ) ):
 					$located = WCSC_FOLDER . '/templates/' . $template_name;
 					break;
 				endif;
 			endforeach;
 		endif;
 
-		if( $load && '' != $located )
-		{
+		if ( $load && '' != $located ) {
 			load_template( $located, $require_once );
 		}
 
@@ -46,17 +44,15 @@ endif;
  *
  * @since 1.0.0
  */
-function wcsc_get_carrier_display_name( $name )
-{
+function wcsc_get_carrier_display_name( $name ) {
 	$settings = get_option( 'woocommerce_shipcloud_settings' );
 
-	$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
-	$carriers = $shipcloud_api->get_carriers();
+	$shipcloud_api = new Woocommerce_Shipcloud_API( $settings['api_key'] );
+	$carriers      = $shipcloud_api->get_carriers();
 
-	foreach( $carriers AS $carrier ):
-		if( $carrier[ 'name' ] == $name )
-		{
-			return $carrier[ 'display_name' ];
+	foreach ( $carriers AS $carrier ):
+		if ( $carrier['name'] == $name ) {
+			return $carrier['display_name'];
 		}
 	endforeach;
 }
@@ -102,32 +98,28 @@ function wcsc_get_shipment_status_string( $status ) {
  *
  * @return mixed $matches
  */
-function wcsc_explode_street( $street )
-{
+function wcsc_explode_street( $street ) {
 	$matches = array();
 
-	if( preg_match( '/(?P<address>[^\d]+) (?P<number>\d+.?)/', $street, $matches ) )
-	{
+	if ( preg_match( '/(?P<address>[^\d]+) (?P<number>\d+.?)/', $street, $matches ) ) {
 		return $matches;
-	}
-    elseif( preg_match('/([^\d]+)\s?(.+)/i', $street, $matches ) )
-	{
+	} elseif ( preg_match( '/([^\d]+)\s?(.+)/i', $street, $matches ) ) {
 
-	    $street = array(
-	        'address'   =>  $matches[ 1 ],
-	        'number'   =>  $matches[ 2 ]
-        );
+		$street = array(
+			'address' => $matches[1],
+			'number'  => $matches[2]
+		);
+
+		return $street;
+	} else {
+		explode( ' ', $street );
+		$street = array(
+			'address' => $matches[0],
+			'number'  => $matches[1]
+		);
+
 		return $street;
 	}
-	else
-    {
-        explode( ' ', $street );
-        $street = array(
-            'address'   =>  $matches[ 0 ],
-            'number'   =>  $matches[ 1 ]
-        );
-        return $street;
-    }
 }
 
 /**
@@ -139,54 +131,52 @@ function wcsc_explode_street( $street )
  *
  * @since 1.0.0
  */
-function wcsc_translate_shipcloud_text( $error_text )
-{
+function wcsc_translate_shipcloud_text( $error_text ) {
 	$error_text = trim( $error_text );
 
 	$translations = array(
-		"Carrier can't be blank"                                => __( 'Carrier can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender: last name can't be blank"                      => __( 'Sender last name can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender Street can't be blank"                          => __( 'Sender street can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender: street can't be blank"                         => __( 'Sender street can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender Street number can't be blank"                   => __( 'Sender street number can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender: street number can't be blank"                  => __( 'Sender street number can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender ZIP code can't be blank"                        => __( 'Sender zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender: zip code can't be blank"                       => __( 'Sender zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender City can't be blank"                            => __( 'Sender city can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender: city can't be blank"                           => __( 'Sender city can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender Country can't be blank"                         => __( 'Sender country can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Sender Country  is not an ALPHA-2 ISO country code."   => __( 'Sender country  is not an ALPHA-2 ISO country code.', 'shipcloud-for-woocommerce' ),
-		"Receiver: last name can't be blank"                    => __( 'Receiver last name can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver Street can't be blank"                        => __( 'Receiver street can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver Street number can't be blank"                 => __( 'Receiver street number can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver ZIP code can't be blank"                      => __( 'Receiver zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver: zip code can't be blank"                     => __( 'Receiver zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver City can't be blank"                          => __( 'Receiver city can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver: city can't be blank"                         => __( 'Receiver city can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver Country can't be blank"                       => __( 'Receiver country can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Receiver Country  is not an ALPHA-2 ISO country code." => __( 'Receiver country  is not an ALPHA-2 ISO country code.', 'shipcloud-for-woocommerce' ),
-		"Package Height (in cm) can't be blank"                 => __( 'Height (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Package Height (in cm) is not a number"                => __( 'Height (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
-		"Package Length (in cm) can't be blank"                 => __( 'Length (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Package Length (in cm) is not a number"                => __( 'Length (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
-		"Package Width (in cm) can't be blank"                  => __( 'Width (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Package Width (in cm) is not a number"                 => __( 'Width (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
-		"Package Weight (in kg) can't be blank"                 => __( 'Weight (in kg) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Package Weight (in kg) is not a number"                => __( 'Weight (in kg) is not a number.', 'shipcloud-for-woocommerce' ),
-		"Height (in cm) can't be blank"                         => __( 'Height (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Height (in cm) is not a number"                        => __( 'Height (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
-		"Length (in cm) can't be blank"                         => __( 'Length (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Length (in cm) is not a number"                        => __( 'Length (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
-		"Width (in cm) can't be blank"                          => __( 'Width (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Width (in cm) is not a number"                         => __( 'Width (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
-		"Weight (in kg) can't be blank"                         => __( 'Weight (in kg) can\'t be blank.', 'shipcloud-for-woocommerce' ),
-		"Weight (in kg) is not a number"                        => __( 'Weight (in kg) is not a number.', 'shipcloud-for-woocommerce' ),
-		"HTTP Basic: Access denied."                            => __( 'Authentication failure! Please check your api key.', 'shipcloud-for-woocommerce' ),
+		"Carrier can't be blank"                                                                                              => __( 'Carrier can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender: last name can't be blank"                                                                                    => __( 'Sender last name can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender Street can't be blank"                                                                                        => __( 'Sender street can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender: street can't be blank"                                                                                       => __( 'Sender street can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender Street number can't be blank"                                                                                 => __( 'Sender street number can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender: street number can't be blank"                                                                                => __( 'Sender street number can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender ZIP code can't be blank"                                                                                      => __( 'Sender zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender: zip code can't be blank"                                                                                     => __( 'Sender zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender City can't be blank"                                                                                          => __( 'Sender city can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender: city can't be blank"                                                                                         => __( 'Sender city can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender Country can't be blank"                                                                                       => __( 'Sender country can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Sender Country  is not an ALPHA-2 ISO country code."                                                                 => __( 'Sender country  is not an ALPHA-2 ISO country code.', 'shipcloud-for-woocommerce' ),
+		"Receiver: last name can't be blank"                                                                                  => __( 'Receiver last name can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver Street can't be blank"                                                                                      => __( 'Receiver street can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver Street number can't be blank"                                                                               => __( 'Receiver street number can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver ZIP code can't be blank"                                                                                    => __( 'Receiver zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver: zip code can't be blank"                                                                                   => __( 'Receiver zipcode can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver City can't be blank"                                                                                        => __( 'Receiver city can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver: city can't be blank"                                                                                       => __( 'Receiver city can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver Country can't be blank"                                                                                     => __( 'Receiver country can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Receiver Country  is not an ALPHA-2 ISO country code."                                                               => __( 'Receiver country  is not an ALPHA-2 ISO country code.', 'shipcloud-for-woocommerce' ),
+		"Package Height (in cm) can't be blank"                                                                               => __( 'Height (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Package Height (in cm) is not a number"                                                                              => __( 'Height (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
+		"Package Length (in cm) can't be blank"                                                                               => __( 'Length (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Package Length (in cm) is not a number"                                                                              => __( 'Length (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
+		"Package Width (in cm) can't be blank"                                                                                => __( 'Width (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Package Width (in cm) is not a number"                                                                               => __( 'Width (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
+		"Package Weight (in kg) can't be blank"                                                                               => __( 'Weight (in kg) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Package Weight (in kg) is not a number"                                                                              => __( 'Weight (in kg) is not a number.', 'shipcloud-for-woocommerce' ),
+		"Height (in cm) can't be blank"                                                                                       => __( 'Height (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Height (in cm) is not a number"                                                                                      => __( 'Height (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
+		"Length (in cm) can't be blank"                                                                                       => __( 'Length (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Length (in cm) is not a number"                                                                                      => __( 'Length (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
+		"Width (in cm) can't be blank"                                                                                        => __( 'Width (in cm) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Width (in cm) is not a number"                                                                                       => __( 'Width (in cm) is not a number.', 'shipcloud-for-woocommerce' ),
+		"Weight (in kg) can't be blank"                                                                                       => __( 'Weight (in kg) can\'t be blank.', 'shipcloud-for-woocommerce' ),
+		"Weight (in kg) is not a number"                                                                                      => __( 'Weight (in kg) is not a number.', 'shipcloud-for-woocommerce' ),
+		"HTTP Basic: Access denied."                                                                                          => __( 'Authentication failure! Please check your api key.', 'shipcloud-for-woocommerce' ),
 		"Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted" => __( 'Tip: A label has already been created. Only prepared shipments (the ones without a label) can be updated or deleted', 'shipcloud-for-woocommerce' )
 	);
 
-	if( array_key_exists( $error_text, $translations ) )
-	{
+	if ( array_key_exists( $error_text, $translations ) ) {
 		$error_text = $translations[ $error_text ];
 	}
 
@@ -200,38 +190,32 @@ function wcsc_translate_shipcloud_text( $error_text )
  *
  * @since 1.0.0
  */
-function wcsc_is_enabled()
-{
+function wcsc_is_enabled() {
 	$settings = get_option( 'woocommerce_shipcloud_settings' );
 
 	// Needed if options are saved in this moment
-	if( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) )
-	{
-		return TRUE;
+	if ( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) ) {
+		return true;
 	}
 
 	// Needed if options are saved in this moment
-	if( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && !array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) )
-	{
-		return FALSE;
+	if ( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && ! array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) ) {
+		return false;
 	}
 
-	if( '' == $settings )
-	{
-		return FALSE;
+	if ( '' == $settings ) {
+		return false;
 	}
 
-	if( !array_key_exists( 'enabled', $settings ) )
-	{
-		return FALSE;
+	if ( ! array_key_exists( 'enabled', $settings ) ) {
+		return false;
 	}
 
-	if( 'yes' != $settings[ 'enabled' ] )
-	{
-		return FALSE;
+	if ( 'yes' != $settings['enabled'] ) {
+		return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
 /**
@@ -241,33 +225,29 @@ function wcsc_is_enabled()
  *
  * @since 1.0.0
  */
-function wcsc_is_settings_screen(){
+function wcsc_is_settings_screen() {
 	$page = '';
 
-	if( array_key_exists( 'page', $_GET ) )
-	{
-		$page = $_GET[ 'page' ];
+	if ( array_key_exists( 'page', $_GET ) ) {
+		$page = $_GET['page'];
 	}
 
 	$tab = '';
-	if( array_key_exists( 'tab', $_GET ) )
-	{
-		$tab = $_GET[ 'tab' ];
+	if ( array_key_exists( 'tab', $_GET ) ) {
+		$tab = $_GET['tab'];
 	}
 
 	$section = '';
-	if( array_key_exists( 'section', $_GET ) )
-	{
-		$section = $_GET[ 'section' ];
+	if ( array_key_exists( 'section', $_GET ) ) {
+		$section = $_GET['section'];
 	}
 
 	// If page should noz show a message, interrupt the check and gibe back true
-	if( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === $section )
-	{
-		return TRUE;
+	if ( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === $section ) {
+		return true;
 	}
 
-	return TRUE;
+	return true;
 }
 
 wcsc_is_enabled();
@@ -277,25 +257,22 @@ wcsc_is_enabled();
  *
  * @since 1.0.0
  */
-function wcsc_delete_values()
-{
+function wcsc_delete_values() {
 	global $wpdb;
 
 	$post_type = 'shop_order';
-	$meta_key = 'shipcloud_shipment_data';
+	$meta_key  = 'shipcloud_shipment_data';
 
-	$sql = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}posts WHERE post_type=%s ", $post_type );
+	$sql     = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}posts WHERE post_type=%s ", $post_type );
 	$results = $wpdb->get_results( $sql );
 
-	foreach( $results AS $result )
-	{
+	foreach ( $results AS $result ) {
 		$post_id = $result->ID;
 		delete_post_meta( $post_id, $meta_key );
 	}
 }
 
-if( array_key_exists( 'wcscdeletevalues', $_GET ) )
-{
+if ( array_key_exists( 'wcscdeletevalues', $_GET ) ) {
 	add_action( 'init', 'wcsc_delete_values' );
 }
 
@@ -305,12 +282,10 @@ if( array_key_exists( 'wcscdeletevalues', $_GET ) )
  * @return bool|WC_Shipcloud_Shipping
  * @since 1.1.0
  */
-function wcsc_shipping_method()
-{
+function wcsc_shipping_method() {
 	$shipping_methods = WC()->shipping()->get_shipping_methods();
 
-	if( ! array_key_exists( 'shipcloud', $shipping_methods ) )
-	{
+	if ( ! array_key_exists( 'shipcloud', $shipping_methods ) ) {
 		return false;
 	}
 
@@ -323,8 +298,7 @@ function wcsc_shipping_method()
  * @return bool
  * @since 1.0.0
  */
-function wcsc_is_admin_screen()
-{
+function wcsc_is_admin_screen() {
 	if ( ! is_admin() || ! get_current_screen() ) {
 		return false;
 	}
@@ -337,8 +311,7 @@ function wcsc_is_admin_screen()
 	}
 
 	// Settings screen
-	if( 'shipcloud' === $_GET['section'] && 'woocommerce_page_wc-settings' === get_current_screen()->id )
-	{
+	if ( 'shipcloud' === $_GET['section'] && 'woocommerce_page_wc-settings' === get_current_screen()->id ) {
 		return true;
 	}
 
@@ -351,10 +324,8 @@ function wcsc_is_admin_screen()
  * @return bool
  * @since 1.0.0
  */
-function wcsc_is_frontend_screen()
-{
-	if( is_cart() || is_checkout() || is_checkout_pay_page() )
-	{
+function wcsc_is_frontend_screen() {
+	if ( is_cart() || is_checkout() || is_checkout_pay_page() ) {
 		return true;
 	}
 
@@ -368,8 +339,12 @@ function wcsc_is_frontend_screen()
  *
  * @return mixed|string
  */
-function wcsc_order_get_parcel_description( WC_Order $order ) {
-	$shipping_data = (array) get_post_meta( $order->get_id(), 'shipcloud_shipment_data', true );
+function wcsc_order_get_parcel_description( $order ) {
+	if ( ! is_object( $order ) || ! $order instanceof WC_Order ) {
+		throw new \InvalidArgumentException( 'Please provide an WC_Order instance.' );
+	}
+
+	$shipping_data = (array) get_post_meta( $order->id, 'shipcloud_shipment_data', true );
 
 	if ( isset( $shipping_data['description'] ) ) {
 		return $shipping_data['description'];
@@ -416,7 +391,7 @@ add_filter( 'woocommerce_shipping_fields', 'wcsc_care_of_frontend' );
 function wcsc_api() {
 	static $api;
 
-	if (!$api) {
+	if ( ! $api ) {
 		$api = new Woocommerce_Shipcloud_API( wcsc_shipping_method()->get_option( 'api_key' ) );
 	}
 

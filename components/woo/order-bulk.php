@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Shipcloud_Order_Bulk {
 
-	const FORM_BULK = 'wcsc_order_bulk';
+	const FORM_BULK = 'wcsc_order_bulk_label';
 	const BUTTON_PDF = 'wscs_order_bulk_pdf';
 
 	/**
@@ -80,85 +80,6 @@ class WC_Shipcloud_Order_Bulk {
 		     || ! $request['wcsc_carrier']
 		) {
 			return;
-		}
-
-		$package = array(
-			'width'  => $request['wcsc_width'],
-			'height' => $request['wcsc_height'],
-			'length' => $request['wcsc_length'],
-			'weight' => $request['wcsc_weight'],
-		);
-
-		$succeeded = 0;
-		foreach ( $request['post'] as $order_id ) {
-			$order = WC_Shipcloud_Order::create_order( $order_id );
-
-			$shipment = wcsc_api()->create_shipment_by_order(
-				$order,
-				$request['wcsc_carrier'],
-				$package
-			);
-
-			if ( is_wp_error( $shipment ) ) {
-				/** @var \WP_Error $shipment */
-				WC_Shipcloud_Shipping::log(
-					'Order #' . $order->get_wc_order()->get_order_number()
-					. ' - ' . $shipment->get_error_message()
-					. ' (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')'
-				);
-
-				WooCommerce_Shipcloud::admin_notice(
-					sprintf(
-						__( 'No label for order #%d created: %s' ),
-						$order->get_wc_order()->get_id(),
-						str_replace( "\n", ', ', $shipment->get_error_message() )
-					),
-					'error'
-				);
-
-				continue;
-			}
-
-			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')' );
-
-			$parcel_title = wcsc_get_carrier_display_name( $request['wcsc_carrier'] )
-			                . ' - '
-			                . $request['wcsc_width']
-			                . __( 'x', 'shipcloud-for-woocommerce' )
-			                . $request['wcsc_height']
-			                . __( 'x', 'shipcloud-for-woocommerce' )
-			                . $request['wcsc_length']
-			                . __( 'cm', 'shipcloud-for-woocommerce' )
-			                . ' '
-			                . $request['wcsc_weight']
-			                . __( 'kg', 'shipcloud-for-woocommerce' );
-
-			$data = array(
-				'id'                  => $shipment['id'],
-				'carrier_tracking_no' => $shipment['carrier_tracking_no'],
-				'tracking_url'        => $shipment['tracking_url'],
-				'label_url'           => $shipment['label_url'],
-				'price'               => $shipment['price'],
-				'parcel_id'           => $shipment['id'],
-				'parcel_title'        => $parcel_title,
-				'carrier'             => $request['carrier'],
-				'width'               => $request['width'],
-				'height'              => $request['height'],
-				'length'              => $request['length'],
-				'weight'              => $request['weight'],
-				'description'         => $request['description'],
-				'date_created'        => time(),
-			);
-
-			$data = array_merge( $data, $order->get_sender( 'sender_' ) );
-			$data = array_merge( $data, $order->get_recipient( 'recipient_' ) );
-
-			add_post_meta( $order_id, 'shipcloud_shipment_ids', $data['id'] );
-			add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
-
-			$order->get_wc_order()->add_order_note( __( 'shipcloud label has been created.', 'shipcloud-for-woocommerce' ) );
-
-			$succeeded ++;
 		}
 
 		if ( isset( $request[ self::BUTTON_PDF ] ) ) {
@@ -274,13 +195,15 @@ class WC_Shipcloud_Order_Bulk {
 	 * @return string
 	 */
 	protected function get_storage_url( $suffix = null ) {
-		$url = 'shipcloud-woocommerce';
+		$wp_upload_dir = wp_upload_dir();
+		$url           = $wp_upload_dir['baseurl'] . '/' . 'shipcloud-woocommerce';
 
 		if ( null !== $suffix && $suffix ) {
-			$url .= '/' . $suffix;
+			// Add suffix but disallow hopping in other path.
+			$url .= '/' . str_replace( '..', '', $suffix );
 		}
 
-		return content_url( $url );
+		return $url;
 	}
 
 	/**
@@ -334,13 +257,14 @@ class WC_Shipcloud_Order_Bulk {
 
 		WooCommerce_Shipcloud::load_fpdf();
 
+		$pdf_count = 0;
 		$m = new \iio\libmergepdf\Merger();
 		foreach ( $request['post'] as $order_id ) {
 			$current       = $this->create_label_for_order( $order_id, $request );
 			$error_message = sprintf( 'Problem generating label for order #%d', $order_id );
 
 			if ( ! $current || ! isset( $current['label_url'] ) ) {
-				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
+				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 
 				continue;
 			}
@@ -349,12 +273,15 @@ class WC_Shipcloud_Order_Bulk {
 				// Storing label.
 				$path_to_pdf = $this->save_label( $order_id, $current['label_url'] );
 				$m->addFromFile( $path_to_pdf );
+				$pdf_count++;
 			} catch ( \RuntimeException $e ) {
-				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
+				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 			}
 		}
 
-		$content = $m->merge();
+		if (0 !== $pdf_count) {
+		    $content = $m->merge();
+        }
 
 		if ( ! $content ) {
 			WooCommerce_Shipcloud::admin_notice( 'Could not compose labels into one PDF.', 'error' );
@@ -404,7 +331,7 @@ class WC_Shipcloud_Order_Bulk {
 			WooCommerce_Shipcloud::admin_notice(
 				sprintf(
 					__( 'No label for order #%d created: %s' ),
-					$order->get_wc_order()->get_id(),
+					$order->get_wc_order()->id,
 					str_replace( "\n", ', ', $shipment->get_error_message() )
 				),
 				'error'
@@ -476,7 +403,9 @@ class WC_Shipcloud_Order_Bulk {
 	 * @throws \RuntimeException
 	 */
 	protected function get_storage_path( $suffix = null ) {
-		$path = wp_upload_dir() . 'shipcloud-woocommerce';
+		$wp_upload_dir = wp_upload_dir();
+		$path          = $wp_upload_dir['basedir']
+		                 . DIRECTORY_SEPARATOR . 'shipcloud-woocommerce';
 
 		if ( null !== $suffix && $suffix ) {
 			$path .= DIRECTORY_SEPARATOR . trim( $suffix, '\\/' );
