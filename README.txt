@@ -93,14 +93,14 @@ Download the WooCommerce Plugin now, register for shipcloud, enter your api key 
 
 == Screenshots ==
 
-1. 
-2.
-3.
-4.
-5.
-6.
-7.
-8.
+1. Configure shipcloud from within the shipping settings of WooCommerce
+2. Either let your customer decide, which shipping carrier should be used or do it yourself
+3. Easy to use interface for creating shipping labels
+4. Use ore defined templates for optimizing your workflow
+5. Create parcel templates with just a few clicks
+6. Get an overview of all your parcel templates
+7. Batch label creation: Create multiple shipping labels with ease by using parcel templates
+8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
 
