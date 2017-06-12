@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Shipcloud_Order_Bulk {
 
-	const FORM_BULK = 'wcsc_order_bulk';
+	const FORM_BULK = 'wcsc_order_bulk_label';
 	const BUTTON_PDF = 'wscs_order_bulk_pdf';
 
 	/**
@@ -53,6 +53,8 @@ class WC_Shipcloud_Order_Bulk {
 	 */
 	private function init_hooks() {
 		add_action( 'admin_print_footer_scripts', array( $this, 'admin_print_footer_scripts' ) );
+		add_action( 'admin_print_footer_scripts', array( $this, 'attach_downloads' ) );
+
 		add_action( 'load-edit.php', array( $this, 'load_edit' ) );
 
 		add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_actions' ) );
@@ -72,7 +74,8 @@ class WC_Shipcloud_Order_Bulk {
 
 		$request = $_GET; // XSS: OK.
 
-		if ( self::FORM_BULK !== $request['action']
+		if ( ! isset( $request['action'] )
+		     || self::FORM_BULK !== $request['action']
 		     || ! isset( $request['action'], $request['wcsc_carrier'] )
 		     || ! $request['wcsc_carrier']
 		) {
@@ -98,7 +101,7 @@ class WC_Shipcloud_Order_Bulk {
 	 * @return array $actions Bulk actions with own Actions
 	 */
 	public function add_bulk_actions( $actions ) {
-		$actions[ self::FORM_BULK ] = __( 'Create shipping labels', 'woocommerce-shipcloud' );
+		$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'shipcloud-for-woocommerce' );
 
 		return $actions;
 	}
@@ -135,6 +138,11 @@ class WC_Shipcloud_Order_Bulk {
 		wp_enqueue_script( 'wcsc_bulk_order_label', false, array(), false, true );
 	}
 
+	/**
+     * Create multiple labels.
+     *
+	 * @param array $request
+	 */
 	protected function create_label( $request ) {
 		$succeeded = 0;
 		foreach ( $request['post'] as $order_id ) {
@@ -148,6 +156,14 @@ class WC_Shipcloud_Order_Bulk {
 		);
 	}
 
+	/**
+	 * Download the label PDF.
+	 *
+	 * @param int $order_id
+	 * @param string $url URL to the label PDF as given by the API.
+	 *
+	 * @return string
+	 */
 	protected function save_label( $order_id, $url ) {
 		$path = $this->get_storage_path( 'order' . DIRECTORY_SEPARATOR . $order_id )
 		        . DIRECTORY_SEPARATOR . 'label.pdf';
@@ -171,17 +187,65 @@ class WC_Shipcloud_Order_Bulk {
 		return $path;
 	}
 
+	/**
+	 * Get the URL to some Shipcloud files.
+	 *
+	 * @param null|string $suffix Path and name of the file.
+	 *
+	 * @return string
+	 */
 	protected function get_storage_url( $suffix = null ) {
-		$url = 'shipcloud-woocommerce';
+		$wp_upload_dir = wp_upload_dir();
+		$url           = $wp_upload_dir['baseurl'] . '/' . 'shipcloud-woocommerce';
 
 		if ( null !== $suffix && $suffix ) {
-			$url .= '/' . $suffix;
+			// Add suffix but disallow hopping in other path.
+			$url .= '/' . str_replace( '..', '', $suffix );
 		}
 
-		return content_url( $url );
+		return $url;
 	}
 
+	/**
+	 * Add a new download for admin.
+	 *
+	 * @param $url
+	 */
+	public static function admin_download( $url ) {
+		WooCommerce_Shipcloud::assert_session();
+
+		$_SESSION['wscs']['downloads'][ md5( $url ) ] = $url;
+	}
+
+	/**
+	 * Dispatch downloads to frontend.
+	 */
+	public function attach_downloads() {
+		WooCommerce_Shipcloud::assert_session();
+
+		foreach ( $_SESSION['wscs']['downloads'] as $key => $download ) {
+			?>
+            <script type="application/javascript">
+                (window.open('<?php echo $download ?>', '_blank')).focus();
+            </script>
+			<?php
+
+			// Remove dispatched downloads.
+			unset( $_SESSION['wscs']['downloads'][ $key ] );
+		}
+	}
+
+	/**
+	 * Ask API for labels and merge their PDF into one.
+	 *
+	 * @param $request
+	 */
 	protected function create_pdf( $request ) {
+		if ( ! $request['post'] ) {
+			// Nothing selected or no post given, so we don't have anything to do.
+			return;
+		}
+
 		$pdf_basename = sha1( implode( ',', $request['post'] ) ) . '.pdf';
 		$pdf_file     = $this->get_storage_path( 'labels' ) . DIRECTORY_SEPARATOR . $pdf_basename;
 		$pdf_url      = $this->get_storage_url( 'labels' ) . '/' . $pdf_basename;
@@ -193,13 +257,14 @@ class WC_Shipcloud_Order_Bulk {
 
 		WooCommerce_Shipcloud::load_fpdf();
 
+		$pdf_count = 0;
 		$m = new \iio\libmergepdf\Merger();
 		foreach ( $request['post'] as $order_id ) {
 			$current       = $this->create_label_for_order( $order_id, $request );
 			$error_message = sprintf( 'Problem generating label for order #%d', $order_id );
 
 			if ( ! $current || ! isset( $current['label_url'] ) ) {
-				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
+				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 
 				continue;
 			}
@@ -208,12 +273,15 @@ class WC_Shipcloud_Order_Bulk {
 				// Storing label.
 				$path_to_pdf = $this->save_label( $order_id, $current['label_url'] );
 				$m->addFromFile( $path_to_pdf );
+				$pdf_count++;
 			} catch ( \RuntimeException $e ) {
-				WooCommerce_Shipcloud::admin_notice( $error_message, 'updated' );
+				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 			}
 		}
 
-		$content = $m->merge();
+		if (0 !== $pdf_count) {
+		    $content = $m->merge();
+        }
 
 		if ( ! $content ) {
 			WooCommerce_Shipcloud::admin_notice( 'Could not compose labels into one PDF.', 'error' );
@@ -231,10 +299,18 @@ class WC_Shipcloud_Order_Bulk {
 
 		$wp_filesystem->put_contents( $pdf_file, $content );
 
-		WooCommerce_Shipcloud::admin_download( $pdf_url );
+		static::admin_download( $pdf_url );
 		WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
 	}
 
+	/**
+	 * Ask API for a new label.
+	 *
+	 * @param $order_id
+	 * @param $request
+	 *
+	 * @return array
+	 */
 	protected function create_label_for_order( $order_id, $request ) {
 		$order = WC_Shipcloud_Order::create_order( $order_id );
 
@@ -327,7 +403,9 @@ class WC_Shipcloud_Order_Bulk {
 	 * @throws \RuntimeException
 	 */
 	protected function get_storage_path( $suffix = null ) {
-		$path = WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'shipcloud-woocommerce';
+		$wp_upload_dir = wp_upload_dir();
+		$path          = $wp_upload_dir['basedir']
+		                 . DIRECTORY_SEPARATOR . 'shipcloud-woocommerce';
 
 		if ( null !== $suffix && $suffix ) {
 			$path .= DIRECTORY_SEPARATOR . trim( $suffix, '\\/' );
@@ -338,22 +416,12 @@ class WC_Shipcloud_Order_Bulk {
 			return $path;
 		}
 
-		$wp_filesystem = $this->get_filesystem();
-
-		$created_path = '';
-		foreach ( explode( DIRECTORY_SEPARATOR, $path ) as $dir ) {
-			$created_path .= DIRECTORY_SEPARATOR . $dir;
-			if ( is_dir( $created_path ) ) {
-				continue;
-			}
-
-			if ( ! $wp_filesystem->mkdir( $created_path ) ) {
-				throw new \RuntimeException(
-					'Could no create sub-directories for shipcloud storage.'
-				);
-			}
+		// Directory not present - we try to create it.
+		if ( ! wp_mkdir_p( $path ) ) {
+			throw new \RuntimeException(
+				'Could no create sub-directories for shipcloud storage.'
+			);
 		}
-
 
 		return $path;
 	}

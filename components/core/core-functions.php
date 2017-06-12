@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) )
 function wcsc_add_parceltemplate( $carrier, $width, $height, $length, $weight )
 {
 	$post = array(
-		'post_title'  => $carrier . ' - ' . $width . 'x' . $height . 'x' . $length . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $weight . __( 'kg', 'woocommerce-shipcloud' ),
+		'post_title'  => $carrier . ' - ' . $width . 'x' . $height . 'x' . $length . __( 'cm', 'shipcloud-for-woocommerce' ) . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' ),
 		'post_status' => 'publish',
 		'post_type'   => 'sc_parcel_template'
 	);

@@ -10,7 +10,7 @@ class Config extends WoocommerceShipcloud_Tests
 
 		$this->cleanup_wcsc_config();
 		$this->enable_wcsc_plugin();
-		$this->enter_wcsc_api_data( '9f784473673a3f195157061ece467532' );
+		$this->enter_wcsc_api_data( $api_key );
 
 		if( $this->is_wcsc_enabled() )
 		{

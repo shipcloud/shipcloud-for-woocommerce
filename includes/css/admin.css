@@ -129,8 +129,13 @@
 /**
  * 	Action Buttons
  */
-#button-actions input[type="button"]{
-    margin:0 2px 5px 0;
+#button-actions .button {
+  float: left;
+  margin-right: .25em;
+}
+#button-actions .button-primary {
+  float: none;
+  margin-right: 0;
 }
 #shipcloud-io .button-loading{
     background-image: url('../../assets/images/loading.gif');
@@ -305,4 +310,8 @@
 /* woocommerce-tm-extra-product-options */
 #shipcloud-io .fullsize {
     position: inherit;
+}
+
+#wscs_order_bulk_pdf {
+    margin-right: 0.5em;
 }

@@ -88,25 +88,25 @@ class WCSC_Parceltemplate_Posttype
 	public static function register_post_types()
 	{
 		$labels = array(
-			'name'               => _x( 'Parcel Templates', 'post type general name', 'woocommerce-shipcloud' ),
-			'singular_name'      => _x( 'Parcel Template', 'post type singular name', 'woocommerce-shipcloud' ),
-			'menu_name'          => _x( 'Parcel Templates', 'admin menu', 'woocommerce-shipcloud' ),
-			'name_admin_bar'     => _x( 'Parcel Template', 'add new on admin bar', 'woocommerce-shipcloud' ),
-			'add_new'            => _x( 'Add New', 'parcel', 'woocommerce-shipcloud' ),
-			'add_new_item'       => __( 'Add New Parcel Template', 'woocommerce-shipcloud' ),
-			'new_item'           => __( 'New Parcel Template', 'woocommerce-shipcloud' ),
-			'edit_item'          => __( 'Edit Parcel Template', 'woocommerce-shipcloud' ),
-			'view_item'          => __( 'View Parcel Template', 'woocommerce-shipcloud' ),
-			'all_items'          => __( 'All Parcel Templates', 'woocommerce-shipcloud' ),
-			'search_items'       => __( 'Search Parcel Templates', 'woocommerce-shipcloud' ),
-			'parent_item_colon'  => __( 'Parent Parcel Templates:', 'woocommerce-shipcloud' ),
-			'not_found'          => __( 'No Parcel Template found.', 'woocommerce-shipcloud' ),
-			'not_found_in_trash' => __( 'No Parcel Templates found in Trash.', 'woocommerce-shipcloud' )
+			'name'               => _x( 'Parcel templates', 'post type general name', 'shipcloud-for-woocommerce' ),
+			'singular_name'      => _x( 'Parcel template', 'post type singular name', 'shipcloud-for-woocommerce' ),
+			'menu_name'          => _x( 'Parcel templates', 'admin menu', 'shipcloud-for-woocommerce' ),
+			'name_admin_bar'     => _x( 'Parcel template', 'add new on admin bar', 'shipcloud-for-woocommerce' ),
+			'add_new'            => _x( 'Add new', 'parcel', 'shipcloud-for-woocommerce' ),
+			'add_new_item'       => __( 'Add new parcel template', 'shipcloud-for-woocommerce' ),
+			'new_item'           => __( 'New parcel template', 'shipcloud-for-woocommerce' ),
+			'edit_item'          => __( 'Edit parcel template', 'shipcloud-for-woocommerce' ),
+			'view_item'          => __( 'View parcel template', 'shipcloud-for-woocommerce' ),
+			'all_items'          => __( 'All parcel templates', 'shipcloud-for-woocommerce' ),
+			'search_items'       => __( 'Search parcel templates', 'shipcloud-for-woocommerce' ),
+			'parent_item_colon'  => __( 'Parent parcel templates:', 'shipcloud-for-woocommerce' ),
+			'not_found'          => __( 'No parcel template found.', 'shipcloud-for-woocommerce' ),
+			'not_found_in_trash' => __( 'No parcel templates found in trash.', 'shipcloud-for-woocommerce' )
 		);
 
 		$args = array(
 			'labels'             => $labels,
-			'description'        => __( 'Description', 'woocommerce-shipcloud' ),
+			'description'        => __( 'Description', 'shipcloud-for-woocommerce' ),
 			'public'             => false,
 			'publicly_queryable' => false,
 			'show_ui'            => true,
@@ -122,6 +122,11 @@ class WCSC_Parceltemplate_Posttype
 		register_post_type( self::POST_TYPE, $args );
 	}
 
+	/**
+     * Builds link where a new template can be created.
+     *
+	 * @return string
+	 */
 	public static function get_create_link() {
 		return get_admin_url( null, 'post-new.php?post_type=' . self::POST_TYPE );
 	}
@@ -133,7 +138,7 @@ class WCSC_Parceltemplate_Posttype
 	 */
 	public static function add_menu()
 	{
-		add_submenu_page( 'edit.php?post_type=product', __( 'Parcel Templates', 'woocommerce-shipcloud' ), __( 'Parcel Templates', 'woocommerce-shipcloud' ), 'manage_options', 'edit.php?post_type=sc_parcel_template' );
+		add_submenu_page( 'edit.php?post_type=product', __( 'Parcel templates', 'shipcloud-for-woocommerce' ), __( 'Parcel templates', 'shipcloud-for-woocommerce' ), 'manage_options', 'edit.php?post_type=sc_parcel_template' );
 	}
 
 	/**
@@ -143,7 +148,7 @@ class WCSC_Parceltemplate_Posttype
 	 */
 	public static function meta_boxes()
 	{
-		add_meta_box( 'box-tools', __( 'Tools', 'woocommerce-shipcloud' ), array(
+		add_meta_box( 'box-tools', __( 'Tools', 'shipcloud-for-woocommerce' ), array(
 			__CLASS__,
 			'box_settings'
 		), 'sc_parcel_template', 'normal' );
@@ -183,34 +188,34 @@ class WCSC_Parceltemplate_Posttype
 			<table class="form-table">
 				<tbody>
 				<tr>
-					<th><label for="test"><?php _e( 'Width', 'woocommerce-shipcloud' ); ?></label></th>
+					<th><label for="test"><?php _e( 'Width', 'shipcloud-for-woocommerce' ); ?></label></th>
 					<td>
-						<input type="text" name="width" value="<?php echo $width; ?>"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="width" value="<?php echo $width; ?>"/> <?php _e( 'cm', 'shipcloud-for-woocommerce' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="test"><?php _e( 'Height', 'woocommerce-shipcloud' ); ?></label></th>
+					<th><label for="test"><?php _e( 'Height', 'shipcloud-for-woocommerce' ); ?></label></th>
 					<td>
-						<input type="text" name="height" value="<?php echo $height; ?>"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="height" value="<?php echo $height; ?>"/> <?php _e( 'cm', 'shipcloud-for-woocommerce' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="test"><?php _e( 'Length', 'woocommerce-shipcloud' ); ?></label></th>
+					<th><label for="test"><?php _e( 'Length', 'shipcloud-for-woocommerce' ); ?></label></th>
 					<td>
-						<input type="text" name="length" value="<?php echo $length; ?>"/> <?php _e( 'cm', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="length" value="<?php echo $length; ?>"/> <?php _e( 'cm', 'shipcloud-for-woocommerce' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="test"><?php _e( 'Weight', 'woocommerce-shipcloud' ); ?></label></th>
+					<th><label for="test"><?php _e( 'Weight', 'shipcloud-for-woocommerce' ); ?></label></th>
 					<td>
-						<input type="text" name="weight" value="<?php echo $weight; ?>"/> <?php _e( 'kg', 'woocommerce-shipcloud' ); ?>
+						<input type="text" name="weight" value="<?php echo $weight; ?>"/> <?php _e( 'kg', 'shipcloud-for-woocommerce' ); ?>
 					</td>
 				</tr>
 				<tr>
-					<th><label for="carrier"><?php _e( 'Shipping Company', 'woocommerce-shipcloud' ); ?></label></th>
+					<th><label for="carrier"><?php _e( 'Shipping carrier', 'shipcloud-for-woocommerce' ); ?></label></th>
 					<td>
 						<select name="carrier">
-							<option value="none"><?php _e( '[ Select a Carrier ]', 'woocommerce-shipcloud' ); ?></option>
+							<option value="none"><?php _e( '[ Select a carrier ]', 'shipcloud-for-woocommerce' ); ?></option>
 							<?php foreach ( $carriers AS $name => $display_name ): ?>
 								<?php if ( $selected_carrier == $name ): $selected = ' selected="selected"';
 								else: $selected = ''; endif; ?>
@@ -262,7 +267,7 @@ class WCSC_Parceltemplate_Posttype
 		$length  = $_POST[ 'length' ];
 		$weight  = $_POST[ 'weight' ];
 
-		$post_title = wcsc_get_carrier_display_name( $carrier ) . ' - ' . $width . ' x ' . $height . ' x ' . $length . ' ' . __( 'cm', 'woocommerce-shipcloud' ) . ' ' . $weight . __( 'kg', 'woocommerce-shipcloud' );
+		$post_title = wcsc_get_carrier_display_name( $carrier ) . ' - ' . $width . ' x ' . $height . ' x ' . $length . ' ' . __( 'cm', 'shipcloud-for-woocommerce' ) . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' );
 
 		$where = array( 'ID' => $post_id );
 		$wpdb->update( $wpdb->posts, array( 'post_title' => $post_title ), $where );

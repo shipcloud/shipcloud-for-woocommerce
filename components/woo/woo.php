@@ -34,7 +34,7 @@ class WCSC_Woo extends WCSC_Component
 	 */
 	protected function __construct()
 	{
-		$this->name = __( 'WooCommerce functions', 'woocommerce-shipcloud' );
+		$this->name = __( 'WooCommerce functions', 'shipcloud-for-woocommerce' );
 		$this->slug = 'woo';
 
 		add_filter( 'woocommerce_shipping_methods', array( $this, 'add_shipping_method' ) );
@@ -56,7 +56,7 @@ class WCSC_Woo extends WCSC_Component
 		}
         else
         {
-            WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not load %s.', 'woocommerce-shipcloud' ), 'WC_Shipcloud_Shipping' ), 'error' );
+            WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not load %s.', 'shipcloud-for-woocommerce' ), 'WC_Shipcloud_Shipping' ), 'error' );
         }
 
 		return $methods;

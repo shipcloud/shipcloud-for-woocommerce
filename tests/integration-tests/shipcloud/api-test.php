@@ -8,10 +8,9 @@ use Brain\Monkey\Functions;
 /**
  * API
  *
- * @author  awesome.ug <support@awesome.ug>, Sven Wagener <sven@awesome.ug>
- * @package shipcloudForWooCommerce/Woo
- * @version 1.0.0
- * @since   1.0.0
+ * @author  awesome.ug <support@awesome.ug>
+ * @package WooCommerceShipCloud/Tests
+ * @since   1.3.0
  * @license GPL 2
  *          Copyright 2017 (support@awesome.ug)
  *          This program is free software; you can redistribute it and/or modify
