@@ -9,9 +9,77 @@ This plugin integrates shipcloud into WooCommerce.
 
 == Description ==
 
-Integrate your shipcloud.io account into your WooCommerce shop and start creating shipping labels
-for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the
-need to copy or upload your order data into another external system (no CSV upload necessary).
+shipcloud is the only shipping service provider you need! With this plugin you can create shipping labels for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the need to copy or upload your order data into another external system (no CSV upload necessary). Our direct integration with the shipcloud system not only enables you to create shipping labels, you’re also able to track your shipments for free. This way you’ll always know where your orders are currently at.
+
+All the benefits shipcloud offers you:
+
+* manage shipping labels from the WooCommerce admin panel - no need to copy data into or work in another tool
+* save a lot of time when creating shipping labels
+* choose the carrier(s) from the most popular ones that suit you best
+* same day delivery shipping possible - just use Liefery as your shipping carrier
+* let your customers decide right in the checkout, which shipping carrier they’d like to
+receive their order from
+* use your own carrier contracts or utilize shipcloud contracts for better quotes
+* create shipping labels right from a single WooCommerce order or use batch label
+creation from the orders overview page
+* create return labels and enclose them with each shipment
+* customized tracking page: shipcloud offers a tracking page for every shipment where
+your customers can track their shipment. You can customize this tracking page to
+follow your company design guidelines
+* customized status emails: Always keep your customers in the loop by sending
+customized shipping status emails that follow your company design guidelines
+
+Complete list of supported shipping carriers:
+
+* DHL
+* DHL Express
+* Deutsche Post (Letters, Books and Goods)
+* UPS
+* Hermes
+* GLS
+* MyDPD Pro
+* MyDPD Business (formerly iloxx)
+* FedEx
+* TNT
+* GO! (General Overnight)
+* Liefery
+
+Additional services*:
+
+* Bulky items
+* Saturday delivery
+* Cash on delivery
+* Advance notice
+* Visual age check
+* Drop authorization
+* DHL Packstation
+* DHL Postfiliale
+* Higher insurance
+
+shipcloud WooCommerce customers:
+
+We’ve got a lot of interesting customers who are using the shipcloud WooCommerce plugin. Here are a few of them:
+
+* bertrand.bio
+* memento-online.de
+* highderm.de
+* restube.eu
+* humanblood.de
+* city-of-shirts.de
+* css-halle.de
+* wedding-shoots.de
+* filamentworld.de
+
+One-stop national and international shipping
+Using shipcloud you can start sending international shipments from Germany right away. Seize the opportunity to reach customers outside of Germany.
+If you want to use shipcloud from outside of Germany:
+
+● It’s possible to create shipping labels from Austria, Switzerland and the Low Countries by using your own DPD business contract.
+● Create shipments from outside the EU by using your own UPS business contract.
+
+Download the WooCommerce Plugin now, register for shipcloud, enter your api key and start creating shipping labels right away!
+
+* Additional services are dependent on the carrier and contract which is being used
 
 == Installation ==
 
@@ -22,6 +90,17 @@ need to copy or upload your order data into another external system (no CSV uplo
 5. or if you are using Shipping Classes, add the Settings there
 6. After setting up, your new orders will have a new box called `shipcloud.io Shipment center`
 8. There you can calculate price for your parcels, create & download labels or view the tracking data
+
+== Screenshots ==
+
+1. Configure shipcloud from within the shipping settings of WooCommerce
+2. Either let your customer decide, which shipping carrier should be used or do it yourself
+3. Easy to use interface for creating shipping labels
+4. Use ore defined templates for optimizing your workflow
+5. Create parcel templates with just a few clicks
+6. Get an overview of all your parcel templates
+7. Batch label creation: Create multiple shipping labels with ease by using parcel templates
+8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
 
