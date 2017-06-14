@@ -264,6 +264,10 @@ class WooCommerce_Shipcloud {
 
         session_start();
 
+		if ( ! isset( $_SESSION['wcsc'] ) || ! $_SESSION['wcsc'] ) {
+			$_SESSION['wcsc'] = array();
+		}
+
 		$_SESSION['wcsc'] = array_merge(
 			array(
 				'notices'   => array(),
@@ -363,7 +367,7 @@ class WooCommerce_Shipcloud {
 	public function show_admin_notices() {
 		static::assert_session();
 
-		foreach ( $_SESSION['wcsc']['notices'] as $notice ) {
+		foreach ( (array) $_SESSION['wcsc']['notices'] as $notice ) {
 			echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
 		}
 
