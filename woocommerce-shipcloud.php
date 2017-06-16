@@ -8,6 +8,7 @@
  * Author URI: http://www.awesome.ug
  * Developer: Awesome UG
  * Developer URI: http://sven-wagener.com
+ * Text Domain: shipcloud-for-woocommerce
  * License:
  * Copyright 2017 (support@awesome.ug)
  * This program is free software; you can redistribute it and/or modify
