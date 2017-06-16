@@ -223,7 +223,7 @@ class WC_Shipcloud_Order_Bulk {
 	public function attach_downloads() {
 		WooCommerce_Shipcloud::assert_session();
 
-		foreach ( $_SESSION['wscs']['downloads'] as $key => $download ) {
+		foreach ( (array) $_SESSION['wscs']['downloads'] as $key => $download ) {
 			?>
             <script type="application/javascript">
                 (window.open('<?php echo $download ?>', '_blank')).focus();
