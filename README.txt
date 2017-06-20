@@ -1,8 +1,8 @@
 === shipcloud for WooCommerce ===
-Contributors: mahype, awesome-ug, andrecedik
+Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipcloud
 Requires at least: 3.0.0
-Tested up to: 4.3.0
+Tested up to: 4.8.0
 Stable tag: 1.3.0
 
 This plugin integrates shipcloud into WooCommerce.
