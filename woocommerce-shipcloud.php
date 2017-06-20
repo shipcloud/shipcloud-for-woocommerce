@@ -5,7 +5,7 @@
  * Description: Integrates shipcloud shipment services to your WooCommerce shop.
  * Version: 1.3.0
  * Author: Awesome UG
- * Author URI: http://www.awesome.ug
+ * Author URI: http://awesome.ug
  * Developer: Awesome UG
  * Developer URI: http://sven-wagener.com
  * Text Domain: shipcloud-for-woocommerce
