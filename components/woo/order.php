@@ -513,7 +513,7 @@ class WC_Shipcloud_Order
 					<td>
 						<input type="text"
                                name="parcel_description"
-                               value="<?php esc_attr_e( wcsc_order_get_parcel_description( $order ) ) ?>"/>
+                               value="<?php echo esc_attr( wcsc_order_get_parcel_description( $order ) ) ?>"/>
                         <small><?php echo sprintf( __( 'Required for carriers: %s', 'shipcloud-for-woocommerce' ), 'DPD' ); ?></small>
 					</td>
 				</tr>
@@ -1263,6 +1263,7 @@ class WC_Shipcloud_Order
 				$prefix . 'first_name' => $order->shipping_first_name,
 				$prefix . 'last_name'  => $order->shipping_last_name,
 				$prefix . 'company'    => $order->shipping_company,
+                $prefix . 'care_of'    => $order->billing_address_2,
 				$prefix . 'street'     => $recipient_street_name,
 				$prefix . 'street_no'  => $recipient_street_nr,
 				$prefix . 'zip_code'   => $order->shipping_postcode,
