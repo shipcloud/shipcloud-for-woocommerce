@@ -328,10 +328,19 @@ class WC_Shipcloud_Order_Bulk {
 				. ' (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')'
 			);
 
+			$order_id = null;
+			if ( method_exists( $order->get_wc_order(), 'get_id' ) ) {
+				// WooCommerce 3
+				$order_id = $order->get_wc_order()->get_id();
+			} else {
+				// Woo2
+				$order_id = $order->get_wc_order()->id;
+			}
+
 			WooCommerce_Shipcloud::admin_notice(
 				sprintf(
 					__( 'No label for order #%d created: %s' ),
-					$order->get_wc_order()->get_id(),
+					$order_id,
 					str_replace( "\n", ', ', $shipment->get_error_message() )
 				),
 				'error'
