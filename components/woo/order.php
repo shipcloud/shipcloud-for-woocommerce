@@ -205,7 +205,7 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="fullsize">
-						<input type="text" name="sender_address[zip_code]" value="<?php echo $sender[ 'postcode' ]?: $sender[ 'zip_code' ]; ?>" disabled>
+						<input type="text" name="sender_address[zip_code]" value="<?php echo $sender[ 'zip_code' ]?: $sender[ 'postcode' ]; ?>" disabled>
 						<label for="sender_address[zip_code]"><?php _e( 'Postcode', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
@@ -1223,7 +1223,7 @@ class WC_Shipcloud_Order
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
 				$prefix . 'street_no'  => $options['sender_street_nr'],
-				$prefix . 'zip_code'   => $options['sender_zip_code'],
+				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
 				$prefix . 'country'    => $options['sender_country'],

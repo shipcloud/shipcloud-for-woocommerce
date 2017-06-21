@@ -934,7 +934,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		return array(
 			'street'    => $this->get_option( 'sender_street' ),
 			'street_no' => $this->get_option( 'sender_street_nr' ),
-			'zip_code'  => $this->get_option( 'sender_zip_code', $this->get_option('sender_postcode') ),
+			'zip_code'  => $this->get_option( 'sender_postcode', $this->get_option('sender_zip_code' ) ),
 			'city'      => $this->get_option( 'sender_city' ),
 			'state'     => $this->get_option( 'sender_state' ),
 			'country'   => $this->get_option( 'sender_country' ),
