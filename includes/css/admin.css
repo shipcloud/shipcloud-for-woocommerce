@@ -81,7 +81,7 @@
  */
 #shipcloud-io .parcels {
     background: #f8f8f8 none repeat scroll 0 0;
-
+    float: left;
 }
 
 #shipcloud-io .parcel-form-table {
