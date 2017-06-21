@@ -344,7 +344,7 @@ function wcsc_order_get_parcel_description( $order ) {
 		throw new \InvalidArgumentException( 'Please provide an WC_Order instance.' );
 	}
 
-	$shipping_data = (array) get_post_meta( $order->get_id(), 'shipcloud_shipment_data', true );
+	$shipping_data = (array) get_post_meta( $order->id, 'shipcloud_shipment_data', true );
 
 	if ( isset( $shipping_data['description'] ) ) {
 		return $shipping_data['description'];
