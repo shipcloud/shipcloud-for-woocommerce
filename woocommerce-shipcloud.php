@@ -3,7 +3,7 @@
  * Plugin Name: shipcloud for WooCommerce
  * Plugin URI: http://www.woothemes.com/products/woocommerce-shipcloud/
  * Description: Integrates shipcloud shipment services to your WooCommerce shop.
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author: Awesome UG
  * Author URI: http://awesome.ug
  * Developer: Awesome UG

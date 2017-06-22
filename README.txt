@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipcloud
 Requires at least: 3.0.0
 Tested up to: 4.8.0
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 
 This plugin integrates shipcloud into WooCommerce.
 
@@ -103,6 +103,11 @@ Download the WooCommerce Plugin now, register for shipcloud, enter your api key 
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixed: Postcode not taken from Settings
+* Fixed: Create shipment form not fully shown
+* Fixed: Invoiceaddress field "suite" not used for creating shipping label
 
 = 1.3.0 =
 * Enhanced: Made Plugin WordPress.org ready
