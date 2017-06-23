@@ -1259,11 +1259,17 @@ class WC_Shipcloud_Order
 				}
 			}
 
+			$care_of = $order->billing_address_2;
+			if ( $order->shipping_address_2 ) {
+			    // Shipping address overrides billing address.
+				$care_of = $order->shipping_address_2;
+			}
+
 			$recipient = array(
 				$prefix . 'first_name' => $order->shipping_first_name,
 				$prefix . 'last_name'  => $order->shipping_last_name,
 				$prefix . 'company'    => $order->shipping_company,
-                $prefix . 'care_of'    => $order->billing_address_2,
+				$prefix . 'care_of'    => $care_of,
 				$prefix . 'street'     => $recipient_street_name,
 				$prefix . 'street_no'  => $recipient_street_nr,
 				$prefix . 'zip_code'   => $order->shipping_postcode,
