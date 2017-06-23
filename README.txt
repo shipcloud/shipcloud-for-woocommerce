@@ -108,6 +108,7 @@ Download the WooCommerce Plugin now, register for shipcloud, enter your api key 
 * Fixed: Postcode not taken from Settings
 * Fixed: Create shipment form not fully shown
 * Fixed: Invoiceaddress field "suite" not used for creating shipping label
+* Fixed: Not working shipping in frontend
 
 = 1.3.0 =
 * Enhanced: Made Plugin WordPress.org ready
