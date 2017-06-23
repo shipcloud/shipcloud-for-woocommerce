@@ -807,7 +807,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		if ( '' == $package['destination']['city']
 		     || '' == $package['destination']['country']
-		     || '' == $package['destination']['zip_code']
+		     || '' == $package['destination']['postcode']
 		     || '' == $package['destination']['address']
 		) {
 			wc_add_notice(
@@ -1245,6 +1245,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		if ( is_wp_error( $price ) )
 		{
 			self::log( $price->get_error_message() );
+			$price = $this->get_option( 'standard_price_products' );
 		}
 		else
 		{
