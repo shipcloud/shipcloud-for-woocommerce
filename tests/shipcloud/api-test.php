@@ -1,6 +1,6 @@
 <?php
 
-namespace WooCommerce_Shipcloud\Tests\Integration_Tests\Shipcloud;
+namespace WooCommerce_Shipcloud\Tests\Shipcloud;
 
 use Brain\Monkey;
 use Brain\Monkey\Functions;
