@@ -115,6 +115,46 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
+	 * Is the service a customer Service
+	 *
+	 * @param string $service_id
+	 *
+	 * @return bool
+	 * @since 1.0.0
+	 */
+	public function is_customer_service( $service_id ) {
+		if ( ! array_key_exists( $service_id, $this->services ) ) {
+			return false;
+		}
+
+		if ( $this->services[ $service_id ]['customer_service'] ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Getting display name for a carrier including service
+	 *
+	 * @param string $carrier_name
+	 *
+	 * @return bool
+	 * @since 1.0.0
+	 */
+	public function get_carrier_display_name( $carrier_name ) {
+		$carriers = $this->get_carriers();
+
+		foreach ( $carriers AS $carrier ) {
+			if ( $carrier['name'] == $carrier_name ) {
+				return $carrier['display_name'];
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Getting carriers
 	 *
 	 * @param bool $force_update
@@ -206,19 +246,17 @@ class Woocommerce_Shipcloud_API
 		{
 			return $request[ 'body' ];
 		}
-		else
-		{
-			$error = $this->get_error( $request );
 
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
-		}
+		$error = $this->get_error( $request );
+
+		return new WP_Error( 'shipcloud_api_error_' . $error['name'], $error['description'] );
 	}
 
 	/**
 	 * Sends a request to the API
 	 *
 	 * @param string $action
-	 * @param array  $params
+	 * @param array $params
 	 * @param string $method
 	 *
 	 * @return array $response_arr
@@ -229,76 +267,30 @@ class Woocommerce_Shipcloud_API
 		$count_requests = get_option( 'woocommerce_shipcloud_count_requests', 0 ) + 1;
 		update_option( 'woocommerce_shipcloud_count_requests', $count_requests );
 
-		$url     = $this->get_endpoint( $action );
-		$headers = array(
-			'Authorization' => 'Basic ' . base64_encode( $this->api_key ),
-			'Content-Type'  => 'application/json',
-			'Affiliate-ID'  => 'plugin.woocommerce.z4NVoYhp'
+		$args = array(
+			'timeout' => 10,
+			'headers' => array(
+				'Authorization' => 'Basic ' . base64_encode( $this->api_key ),
+				'Content-Type'  => 'application/json',
+				'Affiliate-ID'  => 'plugin.woocommerce.z4NVoYhp'
+			),
+			'method'  => strtoupper( $method ),
 		);
 
-		$params = $this->sanitize_params($params);
-
-		$params = json_encode( $params );
-
-		switch ( $method )
-		{
-			case "GET":
-
-				$args     = array(
-					'timeout' => 10,
-					'headers' => $headers
-				);
-				$response = wp_remote_get( $url, $args );
-
-				break;
-
-			case "POST":
-
-				$args = array(
-					'timeout' => 10,
-					'headers' => $headers,
-					'body'    => $params
-				);
-
-				$response = wp_remote_post( $url, $args );
-
-				break;
-
-			case "PUT":
-
-				$args     = array(
-					'timeout' => 10,
-					'headers' => $headers,
-					'method'  => 'PUT',
-					'body'    => $params
-				);
-				$response = wp_remote_request( $url, $args );
-
-				break;
-
-			case "DELETE":
-
-				$args = array(
-					'timeout' => 10,
-					'headers' => $headers,
-					'method'  => 'DELETE'
-				);
-
-				$response = wp_remote_request( $url, $args );
-
-				break;
+		if ( 'PUT' === $args['method'] || 'POST' === $args['method'] ) {
+			$args['body'] = json_encode( $this->sanitize_params( $params ) );
 		}
 
-		if ( is_wp_error( $response ) )
-		{
+		$response = wp_remote_request( $this->get_endpoint( $action ), $args );
+
+		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
 		$body = wp_remote_retrieve_body( $response );
 
 		// Decode if it's json
-		if ( wp_remote_retrieve_header( $response, 'content-type' ) === 'application/json; charset=utf-8' )
-		{
+		if ( wp_remote_retrieve_header( $response, 'content-type' ) === 'application/json; charset=utf-8' ) {
 			$body = json_decode( $body, true );
 		}
 
@@ -308,6 +300,53 @@ class Woocommerce_Shipcloud_API
 			),
 			'body'   => $body
 		);
+	}
+
+	/**
+	 * Clean up invalid params.
+	 *
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	protected function sanitize_params( $params ) {
+		if ( isset( $params['from'] ) ) {
+			$params['from'] = $this->sanitize_params_from( $params['from'] );
+		}
+
+		return $params;
+	}
+
+	/**
+	 * Clean up invalid from fields.
+	 *
+	 * The user can define a default sender address
+	 * in the shipcloud.io backend
+	 * and does not need to fill out the shipcloud config in WooCommerce.
+	 * Unfortunately the WooCommerce settings have a default for the country
+	 * so the from-data always contain a country
+	 * making the API consider the from-address as incomplete.
+	 * To suppress this the from address will be sanitized before submitting
+	 * removing the from address when it only contains the country.
+	 *
+	 * @param array $from_data
+	 *
+	 * @return array
+	 */
+	protected function sanitize_params_from( $from_data ) {
+		$from_data = (array) $from_data;
+		foreach ( $from_data as $id => $value ) {
+			if ( ! trim( $value ) ) {
+				unset( $from_data[ $id ] );
+			}
+		}
+
+		if ( array_key_exists( 'country', $from_data ) && 1 === count( $from_data ) ) {
+			// Seems like no address configured => make completely empty then.
+			return array();
+		}
+
+		return $from_data;
 	}
 
 	/**
@@ -335,13 +374,13 @@ class Woocommerce_Shipcloud_API
 	{
 		$error = $this->translate_error_code( $request[ 'header' ][ 'status' ] );
 
-		if ( isset( $request[ 'body' ] ) )
-		{
-			$error_string = $this->get_body_errors( $request[ 'body' ] );
-			if ( false !== $error_string )
-			{
-				$error[ 'description' ] = $error_string;
-			}
+		if ( ! isset( $request['body'] ) ) {
+			return $error;
+		}
+
+		$error_string = $this->get_body_errors( $request['body'] );
+		if ( false !== $error_string ) {
+			$error['description'] = $error_string;
 		}
 
 		return $error;
@@ -422,28 +461,18 @@ class Woocommerce_Shipcloud_API
 		{
 			$error_str = '';
 
-			if( isset( $body[ 'errors' ] ) )
-			{
-				if( is_array( $body[ 'errors' ] ) )
-				{
-					foreach ( $body[ 'errors' ] as $error )
-					{
-						$error_str .= wcsc_translate_shipcloud_text( $error ) . chr( 13 );
-					}
-				}
-				else
-				{
-					$error_str .= wcsc_translate_shipcloud_text( $body[ 'errors' ] ) . chr( 13 );
-				}
-
-				return $error_str;
+			if ( ! is_array( $body['errors'] ) ) {
+				return $error_str . wcsc_translate_shipcloud_text( $body['errors'] ) . chr( 13 );
 			}
-			return false;
+
+			foreach ( $body['errors'] as $error ) {
+				$error_str .= wcsc_translate_shipcloud_text( $error ) . chr( 13 );
+			}
+
+			return $error_str;
 		}
-		else
-		{
-			return wcsc_translate_shipcloud_text( $body );
-		}
+
+		return wcsc_translate_shipcloud_text( $body );
 	}
 
 	/**
@@ -454,14 +483,27 @@ class Woocommerce_Shipcloud_API
 	 * @return string
 	 * @since 1.0.0
 	 */
-	public function get_service_name( $service_id )
-	{
-		if ( ! array_key_exists( $service_id, $this->services ) )
-		{
+	public function get_service_name( $service_id ) {
+		if ( ! array_key_exists( $service_id, $this->services ) ) {
 			return false;
 		}
 
-		return $this->services[ $service_id ][ 'name' ];
+		return $this->services[ $service_id ]['name'];
+	}
+
+	/**
+	 * Getting display name for a carrier (short name) including service
+	 *
+	 * @param string $carrier_name
+	 *
+	 * @return string
+	 * @since 1.0.0
+	 */
+	public function get_carrier_display_name_short( $carrier_name ) {
+		$carrier_name_arr = $this->disassemble_carrier_name( $carrier_name );
+		$display_name     = strtoupper( $carrier_name_arr['carrier'] ) . ' - ' . $this->get_service_name( $carrier_name_arr['service'] );
+
+		return $display_name;
 	}
 
 	/**
@@ -472,15 +514,13 @@ class Woocommerce_Shipcloud_API
 	 * @return array
 	 * @since 1.0.0
 	 */
-	public function disassemble_carrier_name( $carrier_name )
-	{
+	public function disassemble_carrier_name( $carrier_name ) {
 		$carrier_arr = explode( '_', $carrier_name );
 
-		$carrier = $carrier_arr[ 0 ];
+		$carrier = $carrier_arr[0];
 		$service = '';
 
-		for ( $i = 1; $i < count( $carrier_arr ); $i ++ )
-		{
+		for ( $i = 1; $i < count( $carrier_arr ); $i ++ ) {
 			$service .= $i == 1 ? '' : '_';
 			$service .= $carrier_arr[ $i ];
 		}
@@ -492,68 +532,6 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
-	 * Is the service a customer Service
-	 *
-	 * @param string $service_id
-	 *
-	 * @return bool
-	 * @since 1.0.0
-	 */
-	public function is_customer_service( $service_id )
-	{
-		if ( ! array_key_exists( $service_id, $this->services ) )
-		{
-			return false;
-		}
-
-		if ( $this->services[ $service_id ][ 'customer_service' ] )
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Getting display name for a carrier including service
-	 *
-	 * @param string $carrier_name
-	 *
-	 * @return bool
-	 * @since 1.0.0
-	 */
-	public function get_carrier_display_name( $carrier_name )
-	{
-		$carriers = $this->get_carriers();
-
-		foreach ( $carriers AS $carrier )
-		{
-			if ( $carrier[ 'name' ] == $carrier_name )
-			{
-				return $carrier[ 'display_name' ];
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Getting display name for a carrier (short name) including service
-	 *
-	 * @param string $carrier_name
-	 *
-	 * @return string
-	 * @since 1.0.0
-	 */
-	public function get_carrier_display_name_short( $carrier_name )
-	{
-		$carrier_name_arr = $this->disassemble_carrier_name( $carrier_name );
-		$display_name     = strtoupper( $carrier_name_arr[ 'carrier' ] ) . ' - ' . $this->get_service_name( $carrier_name_arr[ 'service' ] );
-
-		return $display_name;
-	}
-
-	/**
 	 * Getting service description by service id
 	 *
 	 * @param string $service_id
@@ -561,23 +539,21 @@ class Woocommerce_Shipcloud_API
 	 * @return string
 	 * @since 1.0.0
 	 */
-	public function get_service_description( $service_id )
-	{
-		if ( ! array_key_exists( $service_id, $this->services ) )
-		{
+	public function get_service_description( $service_id ) {
+		if ( ! array_key_exists( $service_id, $this->services ) ) {
 			return false;
 		}
 
-		return $this->services[ $service_id ][ 'description' ];
+		return $this->services[ $service_id ]['description'];
 	}
 
 	/**
 	 * Getting the price for a shipment
 	 *
 	 * @param string $carrier
-	 * @param array  $from
-	 * @param array  $to
-	 * @param array  $package
+	 * @param array $from
+	 * @param array $to
+	 * @param array $package
 	 *
 	 * @return float|WP_Error
 	 * @since 1.0.0
@@ -666,11 +642,20 @@ class Woocommerce_Shipcloud_API
 	 * @return array|\WP_Error
 	 * @since 1.0.0
 	 */
-	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '', $description = '' )
-	{
+	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '', $description = '' ) {
 		$carrier = $this->disassemble_carrier_name( $carrier );
 
-		$params = $this->get_params_by_carrier( $carrier, $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number, $description );
+		$params = $this->get_params_by_carrier(
+			$carrier,
+			$from,
+			$to,
+			$package,
+			$create_label,
+			$notification_email,
+			$carrier_email,
+			$reference_number,
+			$description
+		);
 
 		$request = $this->send_request( 'shipments', $params, 'POST' );
 
@@ -707,6 +692,78 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
+	 * @param $carrier
+	 * @param $from
+	 * @param $to
+	 * @param $package
+	 * @param $create_label
+	 * @param $notification_email
+	 * @param $carrier_email
+	 * @param $reference_number
+	 * @param $description
+	 *
+	 * @return array
+	 */
+	public function get_params_by_carrier( $carrier, $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number = null, $description = null ) {
+		$params = array(
+			'carrier'               => $carrier['carrier'],
+			'service'               => $carrier['service'],
+			'from'                  => $from,
+			'to'                    => $to,
+			'package'               => $package,
+			'create_shipping_label' => $create_label,
+			'notification_email'    => $notification_email,
+		);
+
+		switch ( $carrier['carrier'] ) {
+			case 'dpd':
+				$params['notification_email'] = $carrier_email;
+			case 'dhl':
+				$params['additional_services'] = array();
+
+				if ( ! empty ( $carrier_email ) ) {
+					$params['additional_services'] = array(
+						array(
+							'name'       => 'advance_notice',
+							'properties' => array(
+								'email'    => $carrier_email,
+								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to['country'] ) )
+							)
+						)
+					);
+				}
+
+				break;
+
+			case 'ups':
+				unset( $params['to']['email'] );
+
+				// Moving the description to the root on international shipment
+				if ( $from['country'] !== $to['country'] ) {
+					$params['description'] = $params['package']['description'];
+					unset( $params['package']['description'] );
+				}
+
+				break;
+
+			default:
+				unset( $params['to']['email'] );
+
+				break;
+		}
+
+		if ( $description ) {
+			$params['description'] = $description;
+		}
+
+		if ( ! empty( $reference_number ) ) {
+			$params['reference_number'] = $reference_number;
+		}
+
+		return $params;
+	}
+
+	/**
 	 * Creating a shipping label
 	 *
 	 * @param string $shipment_id
@@ -727,12 +784,10 @@ class Woocommerce_Shipcloud_API
 		{
 			return $request;
 		}
-		else
-		{
-			$error = $this->get_error( $request );
 
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
-		}
+		$error = $this->get_error( $request );
+
+		return new WP_Error( 'shipcloud_api_error_' . $error['name'], $error['description'] );
 	}
 
 	/**
@@ -756,12 +811,10 @@ class Woocommerce_Shipcloud_API
 		{
 			return true;
 		}
-		else
-		{
-			$error = $this->get_error( $request );
 
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
-		}
+		$error = $this->get_error( $request );
+
+		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}
 
 	/**
@@ -797,12 +850,10 @@ class Woocommerce_Shipcloud_API
 		{
 			return $request[ 'body' ];
 		}
-		else
-		{
-			$error = $this->get_error( $request );
 
-			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
-		}
+		$error = $this->get_error( $request );
+
+		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}
 
 	/**
@@ -829,172 +880,5 @@ class Woocommerce_Shipcloud_API
 		}
 
 		return true;
-	}
-
-	/**
-	 * Clean up invalid params.
-	 *
-	 * @param array $params
-	 *
-	 * @return array
-	 */
-	protected function sanitize_params( $params ) {
-		if ( isset( $params['from'] ) ) {
-			$params['from'] = $this->sanitize_params_from( $params['from'] );
-		}
-
-		return $params;
-	}
-
-	/**
-	 * Clean up invalid from fields.
-	 *
-	 * The user can define a default sender address
-	 * in the shipcloud.io backend
-	 * and does not need to fill out the shipcloud config in WooCommerce.
-	 * Unfortunately the WooCommerce settings have a default for the country
-	 * so the from-data always contain a country
-	 * making the API consider the from-address as incomplete.
-	 * To suppress this the from address will be sanitized before submitting
-	 * removing the from address when it only contains the country.
-	 *
-	 * @param array $from_data
-	 *
-	 * @return array
-	 */
-	protected function sanitize_params_from( $from_data ) {
-		$from_data = (array) $from_data;
-		foreach ( $from_data as $id => $value ) {
-			if ( ! trim( $value ) ) {
-				unset( $from_data[ $id ] );
-			}
-		}
-
-		if ( array_key_exists('country', $from_data ) && 1 === count( $from_data ) ) {
-			// Seems like no address configured => make completely empty then.
-			return array();
-		}
-
-		return $from_data;
-	}
-
-	/**
-	 * @param $carrier
-	 * @param $from
-	 * @param $to
-	 * @param $package
-	 * @param $create_label
-	 * @param $notification_email
-	 * @param $carrier_email
-	 * @param $reference_number
-	 * @param $description
-	 *
-	 * @return array
-	 */
-	protected function get_params_by_carrier( $carrier, $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number, $description ) {
-		switch ( $carrier['carrier'] ) {
-
-			case 'dhl':
-				$additional_services = array();
-
-				if ( ! empty ( $carrier_email ) ) {
-					$additional_services = array(
-						array(
-							'name'       => 'advance_notice',
-							'properties' => array(
-								'email'    => $carrier_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to['country'] ) )
-							)
-						)
-					);
-				}
-
-				$params = array(
-					'carrier'               => $carrier['carrier'],
-					'service'               => $carrier['service'],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-					'notification_email'    => $notification_email,
-					'additional_services'   => $additional_services
-				);
-
-				break;
-
-			case 'dpd':
-				$additional_services = array();
-
-				if ( ! empty ( $carrier_email ) ) {
-					$additional_services = array(
-						array(
-							'name'       => 'advance_notice',
-							'properties' => array(
-								'email'    => $carrier_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to['country'] ) )
-							)
-						)
-					);
-				}
-
-				$params = array(
-					'carrier'               => $carrier['carrier'],
-					'service'               => $carrier['service'],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-					'notification_email'    => $carrier_email,
-					'additional_services'   => $additional_services
-				);
-
-				break;
-
-			case 'ups':
-
-				unset( $to['email'] );
-
-				$params = array(
-					'carrier'               => $carrier['carrier'],
-					'service'               => $carrier['service'],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-					'notification_email'    => $notification_email,
-				);
-
-				// Moving the description to the root on international shipment
-				if ( $from['country'] !== $to['country'] ) {
-					$params['description'] = $params['package']['description'];
-					unset( $params['package']['description'] );
-				}
-
-				break;
-
-			default:
-				unset( $to['email'] );
-				$params = array(
-					'carrier'               => $carrier['carrier'],
-					'service'               => $carrier['service'],
-					'from'                  => $from,
-					'to'                    => $to,
-					'package'               => $package,
-					'create_shipping_label' => $create_label,
-					'notification_email'    => $notification_email,
-				);
-
-				break;
-		}
-
-		if ( $description ) {
-			$params['description'] = $description;
-		}
-
-		if ( ! empty( $reference_number ) ) {
-			$params['reference_number'] = $reference_number;
-		}
-
-		return $params;
 	}
 }

@@ -1262,25 +1262,18 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * @param $options
-	 * @param $order
-	 *
-	 * @return mixed|string|void
+	 * @return string
 	 */
 	public function get_notification_email() {
-	    $options = $this->get_options();
+		$notification_email = $this->get_options( 'notification_email' );
 
-		$notification_email = '';
-		if ( array_key_exists( 'notification_email', $options ) && 'yes' === $options['notification_email'] ) {
-			$order              = $this->get_wc_order();
-			$notification_email = apply_filters(
-				'wcsc_notification_email',
-				$order->billing_email,
-				$order
-			);
+		if ( ! $notification_email || 'yes' !== $notification_email ) {
+			return '';
 		}
 
-		return $notification_email;
+		$order = $this->get_wc_order();
+
+		return apply_filters( 'wcsc_notification_email', (string) $order->billing_email, $order );
 	}
 
 	/**
@@ -1322,21 +1315,18 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * @param $options
-	 * @param $order
-	 *
-	 * @return mixed|string|void
+	 * @return string
 	 */
-	public function get_carrier_mail( ) {
-	    $order = $this->get_wc_order();
-	    $options = $this->get_options();
+	public function get_carrier_mail() {
+		$carrier_email = $this->get_options( 'carrier_email' );
 
-		$carrier_email = '';
-		if ( array_key_exists( 'carrier_email', $options ) && 'yes' === $options['carrier_email'] ) {
-			$carrier_email = apply_filters( 'wcsc_carrier_email', $order->billing_email, $order );
+		if ( ! $carrier_email || 'yes' !== $carrier_email ) {
+			return '';
 		}
 
-		return $carrier_email;
+		$order = $this->get_wc_order();
+
+		return apply_filters( 'wcsc_carrier_email', (string) $order->billing_email, $order );
 	}
 
 	/**

@@ -322,7 +322,7 @@ class Get_Params_By_Carrier_Test extends \WP_UnitTestCase {
 		unset( $to['email'] );
 
 		// Assert output
-		$this->assertSame(
+		$this->assertEquals(
 			array(
 				'carrier'               => 'ups',
 				'service'               => $service,
@@ -376,7 +376,7 @@ class Get_Params_By_Carrier_Test extends \WP_UnitTestCase {
 		unset( $to['email'] );
 
 		// Assert output
-		$this->assertSame(
+		$this->assertEquals(
 			array(
 				'carrier'               => 'ups',
 				'service'               => $service,
@@ -429,7 +429,7 @@ class Get_Params_By_Carrier_Test extends \WP_UnitTestCase {
 		unset( $to['email'] );
 
 		// Assert output
-		$this->assertSame(
+		$this->assertEquals(
 			array(
 				'carrier'               => $someOther,
 				'service'               => $service,
