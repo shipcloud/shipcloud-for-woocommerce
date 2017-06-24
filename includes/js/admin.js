@@ -48,97 +48,55 @@ jQuery( function( $ ) {
 	});
 
 	var get_shipment_form_data = function( ajax_action, inverse ){
+        var sender = {
+            'first_name': $("input[name='sender_address[first_name]']").val(),
+            'last_name' : $("input[name='sender_address[last_name]']").val(),
+            'company'   : $("input[name='sender_address[company]']").val(),
+            'street'    : $("input[name='sender_address[street]']").val(),
+            'street_nr' : $("input[name='sender_address[street_nr]']").val(),
+            'zip_code'  : $("input[name='sender_address[zip_code]']").val(),
+            'city'      : $("input[name='sender_address[city]']").val(),
+            'state'     : $("input[name='sender_address[state]']").val(),
+            'country'   : $("select[name='sender_address[country]']").val()
+        };
 
-		var order_id = $( "#post_ID" ).val();
+        var recipient = {
+            'first_name': $("input[name='recipient_address[first_name]']").val(),
+            'last_name' : $("input[name='recipient_address[last_name]']").val(),
+            'company'   : $("input[name='recipient_address[company]']").val(),
+            'street'    : $("input[name='recipient_address[street]']").val(),
+            'street_nr' : $("input[name='recipient_address[street_nr]']").val(),
+            'care_of'   : $("input[name='recipient_address[care_of]']").val(),
+            'zip_code'  : $("input[name='recipient_address[zip_code]']").val(),
+            'city'      : $("input[name='recipient_address[city]']").val(),
+            'state'     : $("input[name='recipient_address[state]']").val(),
+            'country'   : $("select[name='recipient_address[country]']").val(),
+            'phone'     : $("select[name='recipient_address[phone]']").val(),
+        };
 
-		if( false == inverse ) {
-			var sender_first_name = $("input[name='sender_address[first_name]']").val();
-			var sender_last_name = $("input[name='sender_address[last_name]']").val();
-			var sender_company = $("input[name='sender_address[company]']").val();
-			var sender_street = $("input[name='sender_address[street]']").val();
-			var sender_street_nr = $("input[name='sender_address[street_nr]']").val();
-			var sender_zip_code = $("input[name='sender_address[zip_code]']").val();
-			var sender_city = $("input[name='sender_address[city]']").val();
-			var sender_state = $("input[name='sender_address[state]']").val();
-			var sender_country = $("select[name='sender_address[country]']").val();
 
-			var recipient_first_name = $("input[name='recipient_address[first_name]']").val();
-			var recipient_last_name = $("input[name='recipient_address[last_name]']").val();
-			var recipient_company = $("input[name='recipient_address[company]']").val();
-			var recipient_street = $("input[name='recipient_address[street]']").val();
-			var recipient_street_nr = $("input[name='recipient_address[street_nr]']").val();
-			var recipient_care_of = $("input[name='recipient_address[care_of]']").val();
-			var recipient_zip_code = $("input[name='recipient_address[zip_code]']").val();
-			var recipient_city = $("input[name='recipient_address[city]']").val();
-			var recipient_state = $("input[name='recipient_address[state]']").val();
-			var recipient_country = $("select[name='recipient_address[country]']").val();
-		}else{
-			var sender_first_name 	= $( "input[name='recipient_address[first_name]']" ).val( );
-			var sender_last_name 	= $( "input[name='recipient_address[last_name]']" ).val( );
-			var sender_company 	= $( "input[name='recipient_address[company]']" ).val( );
-			var sender_street 	= $( "input[name='recipient_address[street]']" ).val( );
-			var sender_street_nr= $( "input[name='recipient_address[street_nr]']" ).val( );
-			var sender_zip_code = $( "input[name='recipient_address[zip_code]']" ).val( );
-			var sender_city 	= $( "input[name='recipient_address[city]']" ).val( );
-			var sender_state 	= $( "input[name='recipient_address[state]']" ).val( );
-			var sender_country 	= $( "select[name='recipient_address[country]']" ).val( );
+        var data = {
+            'action'           : ajax_action,
+            'order_id'         : $("#post_ID").val(),
+            'sender'           : sender,
+            'recipient'        : recipient,
+            'parcel_id'        : $("select[name='parcel_id']").val(),
+            'carrier'          : $("select[name='parcel_carrier']").val(),
+            'width'            : $("input[name='parcel_width']").val(),
+            'height'           : $("input[name='parcel_height']").val(),
+            'length'           : $("input[name='parcel_length']").val(),
+            'weight'           : $("input[name='parcel_weight']").val(),
+            'description'      : $("input[name='parcel_description']").val(),
+            'other_description': $("input[name='other_description']").val()
+        };
 
-			var recipient_first_name 	= $( "input[name='sender_address[first_name]']" ).val( );
-			var recipient_last_name 	= $( "input[name='sender_address[last_name]']" ).val( );
-			var recipient_company 	= $( "input[name='sender_address[company]']" ).val( );
-            var recipient_care_of = $("input[name='recipient_address[care_of]']").val();
-			var recipient_street 	= $( "input[name='sender_address[street]']" ).val( );
-			var recipient_street_nr= $( "input[name='sender_address[street_nr]']" ).val( );
-			var recipient_zip_code = $( "input[name='sender_address[zip_code]']" ).val( );
-			var recipient_city 	= $( "input[name='sender_address[city]']" ).val( );
-			var recipient_state 	= $( "input[name='sender_address[state]']" ).val( );
-			var recipient_country 	= $( "select[name='sender_address[country]']" ).val( );
-		}
+        if (inverse) {
+            data.sender = recipient;
+            data.recipient = sender;
+        }
 
-		var parcel_id 	= $( "select[name='parcel_id']" ).val( );
-
-		var carrier 	= $( "select[name='parcel_carrier']" ).val( );
-		var width 		= $( "input[name='parcel_width']" ).val( );
-		var height 		= $( "input[name='parcel_height']" ).val( );
-		var length 		= $( "input[name='parcel_length']" ).val( );
-		var weight 		= $( "input[name='parcel_weight']" ).val( );
-		var description 		= $( "input[name='parcel_description']" ).val( );
-        var other_description = $("input[name='other_description']").val();
-
-		var data = {
-			'action': ajax_action,
-			'order_id' : order_id,
-			'sender_first_name' : sender_first_name,
-			'sender_last_name' : sender_last_name,
-			'sender_company' : sender_company,
-			'sender_street' : sender_street,
-			'sender_street_nr' : sender_street_nr,
-			'sender_zip_code' : sender_zip_code,
-			'sender_city' : sender_city,
-			'sender_state' : sender_state,
-			'sender_country' : sender_country,
-			'recipient_first_name' : recipient_first_name,
-			'recipient_last_name' : recipient_last_name,
-			'recipient_company' : recipient_company,
-			'recipient_street' : recipient_street,
-			'recipient_street_nr': recipient_street_nr,
-			'recipient_care_of' : recipient_care_of,
-			'recipient_zip_code' : recipient_zip_code,
-			'recipient_city' : recipient_city,
-			'recipient_state' : recipient_state,
-			'recipient_country' : recipient_country,
-			'parcel_id' : parcel_id,
-			'carrier': carrier,
-			'width': width,
-			'height': height,
-			'length': length,
-			'weight': weight,
-			'description': description,
-			'other_description': other_description
-		};
-
-		return data;
-	}
+        return data;
+	};
 
 	$( '#shipcloud_calculate_price' ).click( function(){
 		$( '#shipment-center .info').empty();

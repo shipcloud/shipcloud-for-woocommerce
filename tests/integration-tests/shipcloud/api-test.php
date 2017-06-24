@@ -25,11 +25,13 @@ use Brain\Monkey\Functions;
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 class Api_Test extends \WP_UnitTestCase {
-	public function test_api_key_can_be_injected() {
-		$someKey = uniqid( 'apiKey', true );
+	public function assertApi() {
+		$subject = new \Woocommerce_Shipcloud_API();
 
-		$subject = new \Woocommerce_Shipcloud_API( $someKey );
+		$this->assertTrue($subject->test());
+	}
 
-		static::assertEqualFields($someKey, $subject->get_api_key());
+	public function testApiIsAvailable() {
+		$this->assertApi();
 	}
 }

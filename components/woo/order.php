@@ -294,6 +294,11 @@ class WC_Shipcloud_Order
 						</select>
 						<label for="recipient_address[country]"><?php _e( 'Country', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
+
+                    <p class="fullsize">
+                        <input type="text" name="recipient_address[phone]" value="<?php echo $recipient[ 'phone' ]; ?>" disabled>
+                        <label for="recipient_address[phone]"><?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?></label>
+                    </p>
 				</div>
 			</div>
 
@@ -818,24 +823,6 @@ class WC_Shipcloud_Order
 		$options       = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
-		$from = array(
-			'street'    => $_POST[ 'sender_street' ],
-			'street_no' => $_POST[ 'sender_street_nr' ],
-			'zip_code'  => $_POST[ 'sender_zip_code' ],
-			'city'      => $_POST[ 'sender_city' ],
-			'state'     => $_POST[ 'sender_state' ],
-			'country'   => $_POST[ 'sender_country' ]
-		);
-
-		$to = array(
-			'street'    => $_POST[ 'recipient_street' ],
-			'street_no' => $_POST[ 'recipient_street_nr' ],
-			'zip_code'  => $_POST[ 'recipient_zip_code' ],
-			'city'      => $_POST[ 'recipient_city' ],
-			'state'     => $_POST[ 'recipient_state' ],
-			'country'   => $_POST[ 'recipient_country' ]
-		);
-
 		$package = array(
 			'width'  => $_POST[ 'width' ],
 			'height' => $_POST[ 'height' ],
@@ -843,7 +830,7 @@ class WC_Shipcloud_Order
 			'weight' => str_replace( ',', '.', $_POST[ 'weight' ] ),
 		);
 
-		$price = $shipcloud_api->get_price( $_POST[ 'carrier' ], $from, $to, $package );
+		$price = $shipcloud_api->get_price( $_POST[ 'carrier' ], $_POST['sender'], $_POST['recipient'], $package );
 
 		if ( is_wp_error( $price ) )
 		{
@@ -880,37 +867,11 @@ class WC_Shipcloud_Order
 	 */
 	public function ajax_create_shipment()
 	{
-		$options       = $this->get_options();
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
+		$order_id      = $_POST['order_id'];
+		$order         = $this->get_wc_order( $order_id );
 
-		$order_id = $_POST[ 'order_id' ];
-		$order    = $this->get_wc_order( $order_id );
-
-		$from = array(
-			'first_name' => $_POST[ 'sender_first_name' ],
-			'last_name'  => $_POST[ 'sender_last_name' ],
-			'company'    => $_POST[ 'sender_company' ],
-			'street'     => $_POST[ 'sender_street' ],
-			'street_no'  => $_POST[ 'sender_street_nr' ],
-			'zip_code'   => $_POST[ 'sender_zip_code' ],
-			'city'       => $_POST[ 'sender_city' ],
-			'state'      => $_POST[ 'sender_state' ],
-			'country'    => $_POST[ 'sender_country' ],
-		);
-
-		$to = array(
-			'first_name' => $_POST[ 'recipient_first_name' ],
-			'last_name'  => $_POST[ 'recipient_last_name' ],
-			'company'    => $_POST[ 'recipient_company' ],
-			'street'     => $_POST[ 'recipient_street' ],
-			'street_no'  => $_POST[ 'recipient_street_nr' ],
-			'care_of'    => $_POST[ 'recipient_care_of' ],
-			'zip_code'   => $_POST[ 'recipient_zip_code' ],
-			'city'       => $_POST[ 'recipient_city' ],
-			'state'      => $_POST[ 'recipient_state' ],
-			'country'    => $_POST[ 'recipient_country' ],
-			'email'      => $order->billing_email
-		);
+		$to            = $_POST['recipient'];
+		$to['email']   = $order->billing_email;
 
 		$package = array(
 			'width'       => $_POST['width'],
@@ -920,16 +881,10 @@ class WC_Shipcloud_Order
 			'description' => $_POST['description'],
 		);
 
-		$create_label = false;
-		if ( 'shipcloud_create_shipment_label' == $_POST[ 'action' ] )
-		{
-			$create_label = true;
-		}
-
-		$notification_email = $this->get_notification_email( );
-		$carrier_email = $this->get_carrier_mail();
-
-		$reference_number = sprintf( __( 'Order %s', 'shipcloud-for-woocommerce' ), $order->get_order_number() );
+		/**
+		 * TODO boolean switch inside of method indicated different strategies. Separate them in different methods.
+		 */
+		$create_label = ( 'shipcloud_create_shipment_label' === $_POST['action'] );
 
 		/**
 		 * Filtering reference number
@@ -941,9 +896,24 @@ class WC_Shipcloud_Order
 		 * @return string $reference_number The filtered order number
 		 * @since 1.1.0
 		 */
-		$reference_number = apply_filters( 'wcsc_reference_number', $reference_number, $order->get_order_number(), $order_id );
+		$reference_number = apply_filters(
+		        'wcsc_reference_number',
+                sprintf( __( 'Order %s', 'shipcloud-for-woocommerce' ), $order->get_order_number() ),
+                $order->get_order_number(),
+                $order_id
+        );
 
-		$shipment = $shipcloud_api->create_shipment( $_POST[ 'carrier' ], $from, $to, $package, $create_label, $notification_email, $carrier_email, $reference_number, $_POST['other_description'] );
+		$shipment = $this->get_shipcloud_api()->create_shipment(
+		        $_POST[ 'carrier' ],
+                $_POST['sender'],
+                $to,
+                $package,
+                $create_label,
+			    $this->get_notification_email( ),
+			    $this->get_carrier_mail(),
+                $reference_number,
+                $_POST['other_description']
+        );
 
 		if ( is_wp_error( $shipment ) )
 		{
@@ -977,24 +947,24 @@ class WC_Shipcloud_Order
 			'length'               => $_POST[ 'length' ],
 			'weight'               => $_POST[ 'weight' ],
 			'description'          => $_POST[ 'description' ],
-			'sender_first_name'    => $_POST[ 'sender_first_name' ],
-			'sender_last_name'     => $_POST[ 'sender_last_name' ],
-			'sender_company'       => $_POST[ 'sender_company' ],
-			'sender_street'        => $_POST[ 'sender_street' ],
-			'sender_street_no'     => $_POST[ 'sender_street_nr' ],
-			'sender_zip_code'      => $_POST[ 'sender_zip_code' ],
-			'sender_city'          => $_POST[ 'sender_city' ],
-			'sender_state'         => $_POST[ 'sender_state' ],
-			'country'              => $_POST[ 'sender_country' ],
-			'recipient_first_name' => $_POST[ 'recipient_first_name' ],
-			'recipient_last_name'  => $_POST[ 'recipient_last_name' ],
-			'recipient_company'    => $_POST[ 'recipient_company' ],
-			'recipient_street'     => $_POST[ 'recipient_street' ],
-			'recipient_street_no'  => $_POST[ 'recipient_street_nr' ],
-			'recipient_zip_code'   => $_POST[ 'recipient_zip_code' ],
-			'recipient_city'       => $_POST[ 'recipient_city' ],
-			'recipient_state'      => $_POST[ 'recipient_state' ],
-			'recipient_country'    => $_POST[ 'recipient_country' ],
+			'sender_first_name'    => $_POST[ 'sender' ][ 'first_name' ],
+			'sender_last_name'     => $_POST[ 'sender' ][ 'last_name' ],
+			'sender_company'       => $_POST[ 'sender' ][ 'company' ],
+			'sender_street'        => $_POST[ 'sender' ][ 'street' ],
+			'sender_street_no'     => $_POST[ 'sender' ][ 'street_nr' ],
+			'sender_zip_code'      => $_POST[ 'sender' ][ 'zip_code' ],
+			'sender_city'          => $_POST[ 'sender' ][ 'city' ],
+			'sender_state'         => $_POST[ 'sender' ][ 'state' ],
+			'country'              => $_POST[ 'sender' ][ 'country' ],
+			'recipient_first_name' => $_POST[ 'recipient' ][ 'first_name' ],
+			'recipient_last_name'  => $_POST[ 'recipient' ][ 'last_name' ],
+			'recipient_company'    => $_POST[ 'recipient' ][ 'company' ],
+			'recipient_street'     => $_POST[ 'recipient' ][ 'street' ],
+			'recipient_street_no'  => $_POST[ 'recipient' ][ 'street_nr' ],
+			'recipient_zip_code'   => $_POST[ 'recipient' ][ 'zip_code' ],
+			'recipient_city'       => $_POST[ 'recipient' ][ 'city' ],
+			'recipient_state'      => $_POST[ 'recipient' ][ 'state' ],
+			'recipient_country'    => $_POST[ 'recipient' ][ 'country' ],
 			'date_created'         => time()
 		);
 
@@ -1010,6 +980,7 @@ class WC_Shipcloud_Order
 			'html'        => $this->get_label_html( $data )
 		);
 
+		// TODO This should be wp_send_json_success()!
 		echo json_encode( $result );
 		exit;
 	}
@@ -1020,7 +991,7 @@ class WC_Shipcloud_Order
 	 * @since 1.0.0
 	 */
 	public function ajax_create_label() {
-		$result = $this->create_label($_POST['order_id'], $_POST['carrier'], $_POST['shipment_id']);
+		$result = $this->create_label( $_POST['order_id'], $_POST['carrier'], $_POST['shipment_id'] );
 
 		if ( is_wp_error( $result ) ) {
 			$error_message = $result->get_error_message();
@@ -1086,7 +1057,7 @@ class WC_Shipcloud_Order
 
 		update_post_meta( $order_id, 'shipcloud_shipment_data', $shipments[ $key ], $shipments_old[ $key ] );
 
-		$result = array(
+		return array(
 			'status'                     => 'OK',
 			'id'                         => $request[ 'body' ][ 'id' ],
 			'tracking_url'               => $request[ 'body' ][ 'tracking_url' ],
@@ -1101,22 +1072,16 @@ class WC_Shipcloud_Order
 	 *
 	 * @since 1.0.0
 	 */
-	public function ajax_delete_shipment()
-	{
-		$order_id    = $_POST[ 'order_id' ];
-		$shipment_id = $_POST[ 'shipment_id' ];
-
+	public function ajax_delete_shipment() {
+		$order_id    = $_POST['order_id'];
+		$shipment_id = $_POST['shipment_id'];
 		$order = wc_get_order( $order_id );
+		$request       = $this->get_shipcloud_api()->delete_shipment( $shipment_id );
 
-		$options       = $this->get_options();
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
-		$request       = $shipcloud_api->delete_shipment( $shipment_id );
-
-		if ( is_wp_error( $request ) )
-		{
+		if ( is_wp_error( $request ) ) {
 			// Do nothing if shipment was not found
-			if ( 'shipcloud_api_error_not_found' !== $request->get_error_code() )
-			{
+            /** @var \WP_Error $request */
+			if ( 'shipcloud_api_error_not_found' !== $request->get_error_code() ) {
 				WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Could not delete shipment (' . $shipment_id . ')' );
 
 				$errors[] = nl2br( $request->get_error_message() );
@@ -1130,45 +1095,35 @@ class WC_Shipcloud_Order
 			}
 		}
 
+
 		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Deleted shipment successfully (' . $shipment_id . ')' );
 
 		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
 		$order->add_order_note( __( 'shipcloud shipment has been deleted.', 'shipcloud-for-woocommerce' ) );
 
-		$shipments_old = $shipments;
-
-		$delete_shipment_key = '';
-
 		// Finding shipment key to delete postmeta
-		foreach ( $shipments AS $key => $shipment )
-		{
-			if ( $shipment[ 'id' ] == $shipment_id )
-			{
-				$delete_shipment_key = $shipments[ $key ];
-				break;
+		foreach ( $shipments AS $key => $shipment ) {
+			if ( $shipment['id'] == $shipment_id ) {
+				delete_post_meta( $order_id, 'shipcloud_shipment_data', $shipment );
+
+				echo json_encode(
+					array(
+						'status'      => 'OK',
+						'shipment_id' => $shipment_id
+					)
+				);
+				exit;
 			}
 		}
 
-		if ( ! empty( $delete_shipment_key ) )
-		{
-			delete_post_meta( $order_id, 'shipcloud_shipment_data', $delete_shipment_key, $shipments_old[ $key ] );
-
-			$result = array(
-				'status'      => 'OK',
-				'shipment_id' => $shipment_id
-			);
-		}
-		else
-		{
-			$errors[] = __( 'Shipment was not found in post meta.', 'shipcloud-for-woocommerce' );
-			$result   = array(
+		// Went through whole shipments and did't find it.
+		echo json_encode(
+			array(
 				'status' => 'ERROR',
-				'errors' => $errors
-			);
-		}
-
-		echo json_encode( $result );
+				'errors' => __( 'Shipment was not found in post meta.', 'shipcloud-for-woocommerce' )
+			)
+		);
 		exit;
 	}
 
@@ -1261,7 +1216,7 @@ class WC_Shipcloud_Order
 
 			$care_of = $order->billing_address_2;
 			if ( $order->shipping_address_2 ) {
-			    // Shipping address overrides billing address.
+			    // Shipping address overrides billing address.x
 				$care_of = $order->shipping_address_2;
 			}
 
@@ -1276,6 +1231,7 @@ class WC_Shipcloud_Order
 				$prefix . 'city'       => $order->shipping_city,
 				$prefix . 'state'      => $order->shipping_state,
 				$prefix . 'country'    => $order->shipping_country,
+                $prefix . 'phone'      => $order->billing_phone
 			);
 		}
 
@@ -1345,10 +1301,24 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * @return mixed|void
+     * Fetch complete of specific config.
+     *
+	 * @param null|string $field Fetch a specific config.
+	 *
+	 * @return array|null
 	 */
-	private function get_options() {
-		return get_option( 'woocommerce_shipcloud_settings' );
+	private function get_options( $field = null ) {
+		$options = get_option( 'woocommerce_shipcloud_settings' );
+
+		if ( null === $field ) {
+			return $options;
+		}
+
+		if ( ! isset( $options[ $field ] ) ) {
+			return null;
+		}
+
+		return $options[ $field ];
 	}
 
 	/**
