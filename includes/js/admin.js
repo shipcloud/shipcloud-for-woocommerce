@@ -71,7 +71,7 @@ jQuery( function( $ ) {
             'city'      : $("input[name='recipient_address[city]']").val(),
             'state'     : $("input[name='recipient_address[state]']").val(),
             'country'   : $("select[name='recipient_address[country]']").val(),
-            'phone'     : $("select[name='recipient_address[phone]']").val(),
+            'phone'     : $("input[name='recipient_address[phone]']").val(),
         };
 
 
