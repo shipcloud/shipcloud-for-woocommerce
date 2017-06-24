@@ -167,74 +167,80 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function init()
 	{
-		$api_key = $this->get_option( 'api_key' );
-
-		if ( ( empty( $api_key ) && ! isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && '' == $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
-		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">shipcloud api key</a>.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
-
-			return false;
-		}
+		$this->check_api_key();
 
 		// If Gateway is disabled just return true for passing further error meessages
-		if ( ( 'no' === $this->get_option( 'enabled' ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_enabled' ] ) ) )
-		{
+		if ( $this->is_disabled() ) {
 			return true;
 		}
 
 		// Testing Connection on Settings Page
-		if ( wcsc_is_settings_screen() )
-		{
-			$api_key = '';
-			if ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) )
-			{
-				$api_key = $_POST[ 'woocommerce_shipcloud_api_key' ];
-			}
-
-			$init_shipcloud_api = $this->init_shipcloud_api( $api_key );
-			if( is_wp_error( $init_shipcloud_api ) ) {
-				self::log( 'Could not initialize shipcloud api - ' . $init_shipcloud_api->get_error_message() );
-				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not initialize shipcloud api.', 'shipcloud-for-woocommerce' ), $init_shipcloud_api->get_error_message() ), 'error' );
-				return false;
-		    }
-
-			$carriers = $this->shipcloud_api->get_carriers();
-			if ( is_wp_error( $carriers ) )
-			{
-				self::log( 'Could not update carriers - ' . $carriers->get_error_message() );
-				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'shipcloud-for-woocommerce' ), $carriers->get_error_message() ), 'error' );
+		if ( wcsc_is_settings_screen() ) {
+			if ( ! $this->init_settings_screen() ) {
 				return false;
 			}
-			$this->carriers = $carriers;
-
-			$available_carriers = $this->get_allowed_carriers();
-			if ( is_wp_error( $available_carriers ) )
-			{
-				self::log( 'Could not get available carriers - ' . $available_carriers->get_error_message() );
-				WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'shipcloud-for-woocommerce' ), $available_carriers->get_error_message() ), 'error' );
-				return false;
-			}
-			$this->available_carriers = $available_carriers;
 		}
 
-		$allowed_carriers = $this->get_option( 'allowed_carriers' );
-		if ( empty( $allowed_carriers ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) || ( isset( $_POST[ 'woocommerce_shipcloud_api_key' ] ) && ! isset( $_POST[ 'woocommerce_shipcloud_allowed_carriers' ] ) ) )
-		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please select at least one allowed <a href="%s">shipping method</a>.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+		if ( ! $this->init_allowed_carriers() ) {
 			return false;
 		}
 
-		if ( ( '' == $this->get_option( 'standard_price_products' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_products' ] ) )
-		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">standard price</a> for products.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+		if ( ! $this->check_standard_price_products() ) {
 			return false;
 		}
 
-		if ( ( '' == $this->get_option( 'standard_price_shipment_classes' ) && ! isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) ) || ( isset( $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) && '' == $_POST[ 'woocommerce_shipcloud_standard_price_shipment_classes' ] ) )
-		{
-			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">standard price</a> for shipping classes.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+		if ( ! $this->check_shipment_classes() ) {
 			return false;
 		}
+
+		return true;
+	}
+
+	private function check_api_key() {
+		$api_key = $this->get_option( 'api_key' );
+
+		if ( ( empty( $api_key ) && ! isset( $_POST['woocommerce_shipcloud_api_key'] ) )
+			 || ( isset( $_POST['woocommerce_shipcloud_api_key'] )
+				  && ! $_POST['woocommerce_shipcloud_api_key'] )
+		) {
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">shipcloud api key</a>.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
+			return false;
+		}
+	}
+
+	private function init_settings_screen() {
+		$api_key = '';
+		if ( isset( $_POST['woocommerce_shipcloud_api_key'] ) ) {
+			$api_key = $_POST['woocommerce_shipcloud_api_key'];
+		}
+
+		$init_shipcloud_api = $this->init_shipcloud_api( $api_key );
+		if ( is_wp_error( $init_shipcloud_api ) ) {
+			self::log( 'Could not initialize shipcloud api - ' . $init_shipcloud_api->get_error_message() );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not initialize shipcloud api.', 'shipcloud-for-woocommerce' ), $init_shipcloud_api->get_error_message() ), 'error' );
+
+			return false;
+		}
+
+		$carriers = $this->shipcloud_api->get_carriers();
+		if ( is_wp_error( $carriers ) ) {
+			self::log( 'Could not update carriers - ' . $carriers->get_error_message() );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'shipcloud-for-woocommerce' ), $carriers->get_error_message() ), 'error' );
+
+			return false;
+		}
+		$this->carriers = $carriers;
+
+		$available_carriers = $this->get_allowed_carriers();
+		if ( is_wp_error( $available_carriers ) ) {
+			self::log( 'Could not get available carriers - ' . $available_carriers->get_error_message() );
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not get available carriers: %s', 'shipcloud-for-woocommerce' ), $available_carriers->get_error_message() ), 'error' );
+
+			return false;
+		}
+
+		$this->available_carriers = $available_carriers;
 
 		return true;
 	}
@@ -1303,6 +1309,17 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function is_disabled() {
+		return ( 'no' === $this->get_option( 'enabled' ) && ! isset( $_POST['woocommerce_shipcloud_enabled'] ) )
+			   || (
+				   isset( $_POST['woocommerce_shipcloud_api_key'] )
+				   && ! isset( $_POST['woocommerce_shipcloud_enabled'] )
+			   );
+	}
+
+	/**
 	 * Get price for parcel which have been selected in Shipping Class.
 	 *
 	 * @param string $shipping_class
@@ -1557,5 +1574,51 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		return $sum;
+	}
+
+	private function init_allowed_carriers() {
+		$allowed_carriers = $this->get_option( 'allowed_carriers' );
+		if (
+			( empty( $allowed_carriers ) && ! isset( $_POST['woocommerce_shipcloud_allowed_carriers'] ) )
+			|| ( isset( $_POST['woocommerce_shipcloud_api_key'] ) && ! isset( $_POST['woocommerce_shipcloud_allowed_carriers'] ) )
+		) {
+			WooCommerce_Shipcloud::admin_notice(
+				sprintf(
+					__(
+						'Please select at least one allowed <a href="%s">shipping method</a>.',
+						'shipcloud-for-woocommerce'
+					),
+					admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' )
+				),
+				'error'
+			);
+
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Add message when no standard price is set.
+	 */
+	private function check_standard_price_products() {
+		if ( ( '' == $this->get_option( 'standard_price_products' ) && ! isset( $_POST['woocommerce_shipcloud_standard_price_products'] ) ) || ( isset( $_POST['woocommerce_shipcloud_standard_price_products'] ) && '' == $_POST['woocommerce_shipcloud_standard_price_products'] ) ) {
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">standard price</a> for products.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
+			return false;
+		}
+
+		return true;
+	}
+
+	private function check_shipment_classes() {
+		if ( ( '' == $this->get_option( 'standard_price_shipment_classes' ) && ! isset( $_POST['woocommerce_shipcloud_standard_price_shipment_classes'] ) ) || ( isset( $_POST['woocommerce_shipcloud_standard_price_shipment_classes'] ) && '' == $_POST['woocommerce_shipcloud_standard_price_shipment_classes'] ) ) {
+			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Please enter a <a href="%s">standard price</a> for shipping classes.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ), 'error' );
+
+			return false;
+		}
+
+		return true;
 	}
 }
