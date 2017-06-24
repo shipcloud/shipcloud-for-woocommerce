@@ -110,6 +110,11 @@ class Woocommerce_Shipcloud_API
 		);
 	}
 
+	/**
+	 * Retrieve all services.
+	 *
+	 * @return array
+	 */
 	public function get_services() {
 		return $this->services;
 	}
