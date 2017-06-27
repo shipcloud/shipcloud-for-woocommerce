@@ -101,25 +101,36 @@ function wcsc_get_shipment_status_string( $status ) {
 function wcsc_explode_street( $street ) {
 	$matches = array();
 
-	if ( preg_match( '/(?P<address>[^\d]+) (?P<number>\d+.?)/', $street, $matches ) ) {
-		return $matches;
-	} elseif ( preg_match( '/([^\d]+)\s?(.+)/i', $street, $matches ) ) {
+	if ( ! preg_match( '/\d/', $street ) ) {
+		// No number, just a street.
+		return array(
+			'address' => trim( $street ),
+			'number'  => null,
+		);
+	}
 
-		$street = array(
+	if ( preg_match( '/(?P<address>[^\d]+)\s+(?P<number>.*)/u', $street, $matches ) ) {
+		// Named match.
+		return $matches;
+	}
+
+	if ( preg_match( '/([^\d]+)\s+(.+)/i', $street, $matches ) ) {
+		// Classical match (as above but without names).
+		return array(
 			'address' => $matches[1],
 			'number'  => $matches[2]
 		);
-
-		return $street;
-	} else {
-		explode( ' ', $street );
-		$street = array(
-			'address' => $matches[0],
-			'number'  => $matches[1]
-		);
-
-		return $street;
 	}
+
+	// Last try via explode.
+	$parts = explode( ' ', $street );
+	$number = array_pop( $parts );
+	$street = array(
+		'address' => implode( ' ', $parts ),
+		'number'  => $number
+	);
+
+	return $street;
 }
 
 /**

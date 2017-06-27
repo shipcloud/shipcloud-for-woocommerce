@@ -1257,6 +1257,11 @@ class WC_Shipcloud_Order
 					$recipient_street_name = $recipient_street['address'];
 					$recipient_street_nr   = $recipient_street['number'];
 				}
+
+				if ( ! $recipient_street_nr && $order->shipping_address_2 ) {
+					// No house number given but we got secondary information to use for that.
+					$recipient_street_nr = $order->shipping_address_2;
+				}
 			}
 
 			$care_of = $order->billing_address_2;
