@@ -17,10 +17,11 @@ need to copy or upload your order data into another external system (no CSV uplo
 ## Installation
 1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to `WooCommerce/Settings/Shipping` tab in the WordPress Admin, add your api key and put in the rest of the settings
-4. Be sure that you have setup the necessary settings (Length, Height, Width and Weight) for shipping in your products
-5. or if you are using shipping classes, add the settings there
-6. After setting up, your new orders will have a new box called `shipcloud shipping center`
+3. Register an account with shipcloud.io at http://bit.ly/shipcloud_for_woocommerce
+4. Go to `WooCommerce/Settings/Shipping` tab in the WordPress Admin, add your api key and put in the rest of the settings
+5. Be sure that you have setup the necessary settings (Length, Height, Width and Weight) for shipping in your products
+6. or if you are using shipping classes, add the settings there
+7. After setting up, your new orders will have a new box called `shipcloud shipping center`
 8. There you can calculate price for your parcels, create & download labels or view the tracking data
 
 ## Languages
