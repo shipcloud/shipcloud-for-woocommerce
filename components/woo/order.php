@@ -520,6 +520,7 @@ class WC_Shipcloud_Order
 								<?php foreach ( $this->get_package_carrier_map() AS $name => $carriers ): ?>
                                     <option value="<?php esc_attr_e( $name ) ?>"
                                             <?php selected( $this->get_package_type() == $name ) ?>
+                                            data-carrier="<?php echo implode(' ', $carriers) ?>"
                                     >
 										<?php esc_html_e( $this->get_package_label( $name ) ) ?>
                                     </option>
@@ -1442,26 +1443,6 @@ class WC_Shipcloud_Order
 
 
 	/**
-	 * Map package type to carrier.
-	 *
-	 * True means it is available for all carrier.
-	 * Otherwise an array limits the usage to those carriers.
-	 *
-	 * @see \Woocommerce_Shipcloud_API::get_carriers
-	 *
-	 * @return array
-	 */
-	private function get_package_carrier_map() {
-		return array(
-			'books'         => true,
-			'bulk'          => true,
-			'letter'        => true,
-			'parcel'        => true,
-			'parcel_letter' => array( 'dhl', 'dpd' ),
-		);
-	}
-
-	/**
 	 * Turn package type to readable label.
 	 *
 	 * @param string $slug
@@ -1482,6 +1463,26 @@ class WC_Shipcloud_Order
 		}
 
 		return $labels[ $slug ];
+	}
+
+	/**
+	 * Map package type to carrier.
+	 *
+	 * It is either "all" to be available for all carrier.
+	 * Otherwise an array limits the usage to those carriers.
+	 *
+	 * @see \Woocommerce_Shipcloud_API::get_carriers
+	 *
+	 * @return array
+	 */
+	private function get_package_carrier_map() {
+		return array(
+			'books'         => array( 'all' ),
+			'bulk'          => array( 'all' ),
+			'letter'        => array( 'all' ),
+			'parcel'        => array( 'all' ),
+			'parcel_letter' => array( 'dhl', 'dpd' ),
+		);
 	}
 }
 
