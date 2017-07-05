@@ -5,7 +5,7 @@ Requires at least: 3.0.0
 Tested up to: 4.8.0
 Stable tag: 1.3.1
 
-This plugin integrates shipcloud (http://bit.ly/shipcloud_for_woocommerce) into WooCommerce.
+This plugin integrates shipcloud (http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
 == Description ==
 
@@ -79,7 +79,7 @@ If you want to use shipcloud from outside of Germany:
 * It's possible to create shipping labels from Austria, Switzerland and the Low Countries by using your own DPD business contract.
 * Create shipments from outside the EU by using your own UPS business contract.
 
-Download the WooCommerce Plugin now, register for shipcloud at http://bit.ly/shipcloud_for_woocommerce, enter your api key and start creating shipping labels right away!
+Download the WooCommerce Plugin now, register for shipcloud at http://bit.ly/shipcloud-for-woocommerce-en, enter your api key and start creating shipping labels right away!
 
 \* Additional services are dependent on the carrier and contract which is being used
 
@@ -87,7 +87,7 @@ Download the WooCommerce Plugin now, register for shipcloud at http://bit.ly/shi
 
 1. Upload the folder `shipcloud-for-woocommerce` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Register an account with shipcloud.io at http://bit.ly/shipcloud_for_woocommerce
+3. Register an account with shipcloud.io at http://bit.ly/shipcloud-for-woocommerce-en
 4. Go to the `WooCommerce/Settings/Shipping` tab in the WordPress Admin, select `shipcloud`, add your API Key and put in the rest of the settings
 5a. Be sure that you have setup the shipment related settings (length, height, width and weight) in your products
 5b. or if you are using Shipping Classes, add the settings there
