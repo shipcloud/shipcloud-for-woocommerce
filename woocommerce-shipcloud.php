@@ -291,6 +291,21 @@ class WooCommerce_Shipcloud {
 		require_once( WCSC_FOLDER . '/components/component.php' );
 		require_once( WCSC_FOLDER . '/components/core/core.php' );
 		require_once( WCSC_FOLDER . '/components/woo/woo.php' );
+
+		// Add autoloader for everything else.
+		spl_autoload_register( array( $this, 'load_vendor' ) );
+	}
+
+	public function load_vendor( $class ) {
+		$filename = WCSC_FOLDER
+					. DIRECTORY_SEPARATOR . 'vendor'
+					. DIRECTORY_SEPARATOR . str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php';
+
+		if ( file_exists( $filename ) ) {
+			require_once $filename;
+		}
+
+		return class_exists( $class, false );
 	}
 
 	/**
