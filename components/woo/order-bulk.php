@@ -397,12 +397,19 @@ class WC_Shipcloud_Order_Bulk {
 	 * @return array
 	 */
 	protected function get_package_data( $request ) {
-		return array(
+		$package_data = array(
 			'width'  => $request['wcsc_width'],
 			'height' => $request['wcsc_height'],
 			'length' => $request['wcsc_length'],
 			'weight' => $request['wcsc_weight'],
+			'type'   => 'parcel',
 		);
+
+		if ( isset( $request['wcsc_type'] ) ) {
+			$package_data['type'] = $request['wcsc_type'];
+		}
+
+		return $package_data;
 	}
 
 	/**

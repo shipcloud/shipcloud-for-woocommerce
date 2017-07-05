@@ -82,6 +82,7 @@ jQuery( function( $ ) {
             'recipient'        : recipient,
             'parcel_id'        : $("select[name='parcel_id']").val(),
             'carrier'          : $("select[name='parcel_carrier']").val(),
+            'package_type'     : $( "select[name='package_type']" ).val( ),
             'width'            : $("input[name='parcel_width']").val(),
             'height'           : $("input[name='parcel_height']").val(),
             'length'           : $("input[name='parcel_length']").val(),

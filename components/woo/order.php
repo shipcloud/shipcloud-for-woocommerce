@@ -513,6 +513,24 @@ class WC_Shipcloud_Order
 						<?php endif; ?>
 					</td>
 				</tr>
+                <tr>
+                    <th><?php _ex( 'Package type', 'label to choose the package type', 'shipcloud-for-woocommerce' ); ?></th>
+                    <td>
+                            <select name="package_type">
+								<?php foreach ( $this->get_package_carrier_map() AS $name => $carriers ): ?>
+                                    <option value="<?php esc_attr_e( $name ) ?>"
+                                            <?php selected( $this->get_package_type() == $name ) ?>
+                                    >
+										<?php esc_html_e( $this->get_package_label( $name ) ) ?>
+                                    </option>
+								<?php endforeach; ?>
+                            </select>
+						<?php if ( ! empty( $shipping_method_name ) ): ?>
+                            <br/>
+                            <small><?php echo sprintf( __( 'Ordered: %s', 'shipcloud-for-woocommerce' ), $shipping_method_name ); ?></small>
+						<?php endif; ?>
+                    </td>
+                </tr>
 				<tr>
 					<th><?php _e( 'Package description', 'shipcloud-for-woocommerce' ); ?></th>
 					<td>
@@ -879,7 +897,12 @@ class WC_Shipcloud_Order
 			'length'      => $_POST['length'],
 			'weight'      => $_POST['weight'],
 			'description' => $_POST['description'],
+			'type'        => 'parcel', // default
 		);
+
+		if ( isset( $_POST['package_type'] ) && $_POST['package_type'] ) {
+		    $package['type'] = $_POST['package_type'];
+        }
 
 		/**
 		 * TODO boolean switch inside of method indicated different strategies. Separate them in different methods.
@@ -1216,7 +1239,7 @@ class WC_Shipcloud_Order
 
 			$care_of = $order->billing_address_2;
 			if ( $order->shipping_address_2 ) {
-			    // Shipping address overrides billing address.x
+			    // Shipping address overrides billing address.
 				$care_of = $order->shipping_address_2;
 			}
 
@@ -1406,6 +1429,59 @@ class WC_Shipcloud_Order
 	 */
 	protected function get_shipcloud_api() {
 	    return wcsc_api();
+	}
+
+	/**
+     * Current chosen package type.
+     *
+	 * @return string
+	 */
+	public function get_package_type() {
+		return 'parcel';
+	}
+
+
+	/**
+	 * Map package type to carrier.
+	 *
+	 * True means it is available for all carrier.
+	 * Otherwise an array limits the usage to those carriers.
+	 *
+	 * @see \Woocommerce_Shipcloud_API::get_carriers
+	 *
+	 * @return array
+	 */
+	private function get_package_carrier_map() {
+		return array(
+			'books'         => true,
+			'bulk'          => true,
+			'letter'        => true,
+			'parcel'        => true,
+			'parcel_letter' => array( 'dhl', 'dpd' ),
+		);
+	}
+
+	/**
+	 * Turn package type to readable label.
+	 *
+	 * @param string $slug
+	 *
+	 * @return string The proper label or the slug itself if no label was found.
+	 */
+	private function get_package_label( $slug ) {
+		$labels = array(
+			'books'         => _x( 'Books', 'label while creating shipping label', 'shipcloud-woocommerce' ),
+			'bulk'          => _x( 'Bulk', 'label for oversize packages', 'shipcloud-woocommerce' ),
+			'letter'        => _x( 'Letter', 'label for simple letters', 'shipcloud-woocommerce' ),
+			'parcel'        => _x( 'Parcel', 'label for simple packages', 'shipcloud-woocommerce' ),
+			'parcel_letter' => _x( 'Parcel letter', 'letter for goods', 'shipcloud-woocommerce' ),
+		);
+
+		if ( ! isset( $labels[ $slug ] ) ) {
+			return $slug;
+		}
+
+		return $labels[ $slug ];
 	}
 }
 
