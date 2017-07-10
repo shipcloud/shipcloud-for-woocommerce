@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipcloud
 Requires at least: 3.0.0
 Tested up to: 4.8.0
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 
 This plugin integrates shipcloud into WooCommerce.
 
@@ -103,6 +103,11 @@ Download the WooCommerce Plugin now, register for shipcloud, enter your api key 
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.3.2 =
+* Fixed: Correctly explode street numbers when there are digits in the street name.
+* Fixed: Start session earlier but never when headers are already sent.
+
 
 = 1.3.1 =
 * Fixed: Postcode not taken from Settings
