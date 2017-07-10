@@ -109,7 +109,7 @@ function wcsc_explode_street( $street ) {
 		);
 	}
 
-	if ( preg_match( '/(?P<address>[^\d]+)\s+(?P<number>.*)/u', $street, $matches ) ) {
+	if ( preg_match( '/(?P<address>.*)\s+(?P<number>[\d]+\s*[\w]*)/u', $street, $matches ) ) {
 		// Named match.
 		return $matches;
 	}

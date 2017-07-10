@@ -30,6 +30,7 @@ class Functions_Test extends \WP_UnitTestCase {
 			['   Ei nb ahns traß e  ', 'Ei nb ahns traß e', null],
 			['Züm Humpfen Stobel 12a', 'Züm Humpfen Stobel', '12a'],
 			['Heidenackerweg 15', 'Heidenackerweg', '15'],
+			['Straße des 17. Juni 152', 'Straße des 17. Juni', '152'],
 		];
 	}
 	/**

@@ -259,7 +259,7 @@ class WooCommerce_Shipcloud {
 	 * @since 1.2.0
 	 */
 	public static function assert_session() {
-	    if (session_id()) {
+	    if ( session_id() ) {
 	        return;
         }
 
