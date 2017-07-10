@@ -396,7 +396,7 @@ class WC_Shipcloud_Order_Bulk {
 	 *
 	 * @return array
 	 */
-	protected function get_package_data( $request ) {
+	public function get_package_data( $request ) {
 		$package_data = array(
 			'width'  => $request['wcsc_width'],
 			'height' => $request['wcsc_height'],

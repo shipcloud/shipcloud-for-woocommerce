@@ -219,17 +219,20 @@ class WC_Shipcloud_Order
 						<label for="sender_address[state]"><?php _e( 'State', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
-					<p class="fullsize">
-						<select name="sender_address[country]" disabled>
+                    <p class="fullsize">
+                        <select name="sender_address[country]" disabled>
 							<?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
-								<?php if ( $key == $sender[ 'country' ] ): $selected = ' selected';
-								else: $selected = ''; endif; ?>
-								<option value="<?php echo $key; ?>"<?php echo $selected; ?>><?php echo $country; ?></option>
+                                <option value="<?php esc_attr_e( $key ); ?>"
+									<?php selected( $key === $sender['country'] ); ?>>
+									<?php echo $country; ?>
+                                </option>
 							<?php endforeach; ?>
-						</select>
-						<label for="sender_address[country]"><?php _e( 'Country', 'shipcloud-for-woocommerce' ); ?></label>
-					</p>
-				</div>
+                        </select>
+                        <label for="sender_address[country]">
+                            <?php _e( 'Country', 'shipcloud-for-woocommerce' ); ?>
+                        </label>
+                    </p>
+                </div>
 			</div>
 
 			<div class="address fifty">
@@ -255,7 +258,7 @@ class WC_Shipcloud_Order
 					</p>
 
                     <p class="fullsize">
-                        <input type="text" name="recipient_address[care_of]" value="<?php echo $recipient[ 'care_of' ]; ?>" disabled>
+                        <input type="text" name="recipient_address[care_of]" value="<?php esc_attr_e( $recipient[ 'care_of' ] ); ?>" disabled>
                         <label for="recipient_address[care_of]"><?php _e( 'Care of', 'shipcloud-for-woocommerce' ); ?></label>
                     </p>
 
@@ -285,14 +288,17 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="fullsize">
-						<select name="recipient_address[country]" disabled>
+                        <select name="recipient_address[country]" disabled>
 							<?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
-								<?php if ( $key == $recipient[ 'country' ] ): $selected = ' selected';
-								else: $selected = ''; endif; ?>
-								<option value="<?php echo $key; ?>"<?php echo $selected; ?>><?php echo $country; ?></option>
+                                <option value="<?php esc_attr_e( $key ); ?>"
+									<?php selected( $key === $recipient['country'] ) ?>>
+									<?php echo $country; ?>
+                                </option>
 							<?php endforeach; ?>
-						</select>
-						<label for="recipient_address[country]"><?php _e( 'Country', 'shipcloud-for-woocommerce' ); ?></label>
+                        </select>
+                        <label for="recipient_address[country]">
+                            <?php _e( 'Country', 'shipcloud-for-woocommerce' ); ?>
+                        </label>
 					</p>
 
                     <p class="fullsize">
