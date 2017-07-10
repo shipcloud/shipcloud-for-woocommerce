@@ -405,19 +405,18 @@ add_filter( 'woocommerce_shipping_fields', 'wcsc_care_of_frontend' );
  * @return array
  */
 function wcsc_sender_phone_frontend( $data ) {
-	$pos = array_search( 'shipping_city', array_keys( $data ) ) + 2;
+	// Place it after the shipping city.
+	$pos = array_search( 'shipping_city', array_keys( $data ), true ) + 2;
 
 	$final                 = array_slice( $data, 0, $pos );
 	$final['wcsc_sender_phone'] = array(
-		'label'       => __( 'Phone', 'wcsc' ),
+		'label'       => _x( 'Phone', 'Frontend label for entering the phone number', 'wcsc' ),
 		'description' => '',
 		'class'       => array( 'form-row-wide' ),
 		'clear'       => true,
 	);
 
-	$data = $final + array_slice( $data, $pos );
-
-	return $data;
+	return $final + array_slice( $data, $pos );
 }
 
 add_filter( 'woocommerce_shipping_fields', 'wcsc_sender_phone_frontend' );
