@@ -378,7 +378,7 @@ function wcsc_care_of_frontend( $data ) {
 	$pos = array_search( 'shipping_company', array_keys( $data ) );
 
 	$final                 = array_slice( $data, 0, $pos );
-	$final['wcsc_care_of'] = array(
+	$final['shipping_care_of'] = array(
 		'label'       => __( 'Care of', 'wcsc' ),
 		'description' => '',
 		'class'       => array( 'form-row-wide' ),
@@ -409,8 +409,9 @@ function wcsc_sender_phone_frontend( $data ) {
 	$pos = array_search( 'shipping_city', array_keys( $data ), true ) + 2;
 
 	$final                 = array_slice( $data, 0, $pos );
-	$final['wcsc_sender_phone'] = array(
+	$final['shipping_phone'] = array(
 		'label'       => _x( 'Phone', 'Frontend label for entering the phone number', 'wcsc' ),
+		'placeholder' => _x( 'To be updated about the package.', 'phone input placeholder', 'woocommerce' ),
 		'description' => '',
 		'class'       => array( 'form-row-wide' ),
 		'clear'       => true,
