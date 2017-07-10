@@ -393,6 +393,36 @@ function wcsc_care_of_frontend( $data ) {
 add_filter( 'woocommerce_shipping_fields', 'wcsc_care_of_frontend' );
 
 /**
+ * Add "phone" field to shipping address.
+ *
+ * During checkout WooCommerce allows to fill some fields for the delivery address.
+ * Shipcloud is capable of "phone" fields,
+ * which allows the carrier to call a customer before the delivery.
+ * Therefor an additional field will be shown during checkout.
+ *
+ * @param $data
+ *
+ * @return array
+ */
+function wcsc_sender_phone_frontend( $data ) {
+	$pos = array_search( 'shipping_city', array_keys( $data ) ) + 2;
+
+	$final                 = array_slice( $data, 0, $pos );
+	$final['wcsc_sender_phone'] = array(
+		'label'       => __( 'Phone', 'wcsc' ),
+		'description' => '',
+		'class'       => array( 'form-row-wide' ),
+		'clear'       => true,
+	);
+
+	$data = $final + array_slice( $data, $pos );
+
+	return $data;
+}
+
+add_filter( 'woocommerce_shipping_fields', 'wcsc_sender_phone_frontend' );
+
+/**
  * Reusable connection to the API.
  *
  * @return Woocommerce_Shipcloud_API
