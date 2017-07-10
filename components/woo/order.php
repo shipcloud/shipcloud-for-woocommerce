@@ -47,6 +47,13 @@ class WC_Shipcloud_Order
 	protected $order_id;
 
 	/**
+     * WooCommerce Order object
+     *
+	 * @var \WC_Order
+	 */
+	private $wc_order;
+
+	/**
 	 * Constructor
 	 *
 	 * @since 1.0.0
@@ -57,6 +64,76 @@ class WC_Shipcloud_Order
 
 		$this->init_hooks();
 	}
+
+	/**
+     * Backward compatibility to WC2
+     *
+     * The current WC3 has almost anything covered by getter methods
+     * while the old WC2 used simple fields for that.
+     * This layer allows using the old syntax
+     * and makes it compatible with the new one.
+     *
+	 * @param string $name
+	 *
+	 * @return mixed
+	 */
+	public function __get( $name ) {
+		$order = $this->get_wc_order();
+
+		if ( property_exists( '\\WC_Order', $name ) ) {
+			// WooCommerce 2
+			return $order->$name;
+		}
+
+		$method = 'get_' . $name;
+
+		if ( is_callable( array( $order, $method ) ) ) {
+			return $order->$method();
+		}
+	}
+
+	/**
+     * Backward compatibility to WC2
+     *
+	 * The current WC3 has almost anything covered by getter methods
+	 * while the old WC2 used simple fields for that.
+	 * This layer allows using the old syntax
+	 * and makes it compatible with the new one.
+     *
+	 * @param string $name
+	 * @param mixed $value
+	 */
+	public function __set( $name, $value ) {
+		$order = $this->get_wc_order();
+
+		if ( property_exists( '\\WC_Order', $name ) ) {
+			// WooCommerce 2
+			$order->$name = $value;
+		}
+
+		$method = 'set_' . $name;
+
+		if ( is_callable( array( $order, $method ) ) ) {
+			$order->$method($value);
+		}
+	}
+
+	/**
+     * Backward compatibility to WC2.
+     *
+	 * The current WC3 has almost anything covered by getter methods
+	 * while the old WC2 used simple fields for that.
+	 * This layer allows using the old syntax
+	 * and makes it compatible with the new one.
+     *
+	 * @param $name
+	 *
+	 * @return bool
+	 */
+	public function __isset( $name ) {
+		return property_exists( '\\WC_Order', $name ) || method_exists( $this->get_wc_order(), 'get_' . $name );
+	}
+
 
 	/**
 	 * Initialize Hooks
@@ -1230,7 +1307,7 @@ class WC_Shipcloud_Order
 
 		// Use default data if nothing was saved before
 		if ( '' == $recipient || 0 == count( $recipient ) ) {
-			$order = new WC_Order( $this->order_id );
+			$order = $this->get_wc_order();
 
 			$recipient_street_name = $order->shipping_address_1;
 			$recipient_street_nr   = '';
@@ -1244,28 +1321,65 @@ class WC_Shipcloud_Order
 				}
 			}
 
-			$care_of = $order->billing_address_2;
-			if ( $order->shipping_address_2 ) {
-			    // Shipping address overrides billing address.
-				$care_of = $order->shipping_address_2;
-			}
-
 			$recipient = array(
 				$prefix . 'first_name' => $order->shipping_first_name,
 				$prefix . 'last_name'  => $order->shipping_last_name,
 				$prefix . 'company'    => $order->shipping_company,
-				$prefix . 'care_of'    => $care_of,
+				$prefix . 'care_of'    => $this->get_care_of(),
 				$prefix . 'street'     => $recipient_street_name,
 				$prefix . 'street_no'  => $recipient_street_nr,
 				$prefix . 'zip_code'   => $order->shipping_postcode,
 				$prefix . 'city'       => $order->shipping_city,
 				$prefix . 'state'      => $order->shipping_state,
 				$prefix . 'country'    => $order->shipping_country,
-                $prefix . 'phone'      => $order->billing_phone
+                $prefix . 'phone'      => $this->get_phone(),
 			);
 		}
 
 		return $this->sanitize_address( $recipient, $prefix );
+	}
+
+	/**
+	 * Resolve phone number from order.
+     *
+     * @return string
+	 */
+	public function get_phone() {
+		$order = $this->get_wc_order();
+
+		if ( $phone = $order->get_meta('_shipping_phone') ) {
+			return (string) $phone;
+		}
+
+		if ($order->get_billing_phone())
+
+		return (string) $order->get_billing_phone();
+	}
+
+	/**
+     * Resolve care of from order.
+     *
+     * This will take in advance:
+     *
+     * - The custom field "care of"
+     * - The shipping address
+     * - At last the billing address
+     *
+	 * @return string
+	 */
+	public function get_care_of() {
+		$order = $this->get_wc_order();
+
+		if ( $care_of = $order->get_meta( '_shipping_care_of' ) ) {
+			return (string) $care_of;
+		}
+
+		if ( $order->shipping_address_2 ) {
+			// Shipping address overrides billing address.
+			return (string) $order->shipping_address_2;
+		}
+
+		return (string) $order->billing_address_2;
 	}
 
 	/**
@@ -1313,6 +1427,10 @@ class WC_Shipcloud_Order
 	 */
 	public function get_wc_order( $order_id = null ) {
 		if ( null === $order_id ) {
+			if ( $this->wc_order ) {
+				return $this->wc_order;
+			}
+
 			$order_id = $this->order_id;
 		}
 
@@ -1320,7 +1438,9 @@ class WC_Shipcloud_Order
 			$order_id = $_POST['order_id'];
 		}
 
-		return new WC_Order( $order_id );
+		$factory = WC()->order_factory;
+
+		return $this->wc_order = $factory::get_order( $order_id );
 	}
 
 	/**
