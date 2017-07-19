@@ -81,6 +81,8 @@ class WooCommerce_Shipcloud {
 		if ( is_admin() ) {
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
+			// Assert session early before headers are sent.
+			add_action( 'admin_init', array( $this, 'assert_session' ) );
 			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
 			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
 		} else {
@@ -257,13 +259,17 @@ class WooCommerce_Shipcloud {
 	 * Assert that a session has been started.
 	 *
 	 * @since 1.2.0
+	 * @since 1.3.2 For usage in frontend: Only start session when no headers are sent.
 	 */
 	public static function assert_session() {
-	    if (session_id()) {
+	    if ( session_id() ) {
 	        return;
         }
 
-        session_start();
+		if ( ! headers_sent() ) {
+	    	// Only start new session when no headers are send.
+			session_start();
+		}
 
 		if ( ! isset( $_SESSION['wcsc'] ) || ! $_SESSION['wcsc'] ) {
 			$_SESSION['wcsc'] = array();
