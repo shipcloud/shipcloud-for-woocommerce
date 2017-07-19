@@ -300,12 +300,34 @@ class WooCommerce_Shipcloud {
 
 		// Add autoloader for everything else.
 		spl_autoload_register( array( $this, 'load_vendor' ) );
+		spl_autoload_register( array( $this, 'load_shipcloud' ) );
 	}
 
 	public function load_vendor( $class ) {
 		$filename = WCSC_FOLDER
 					. DIRECTORY_SEPARATOR . 'vendor'
 					. DIRECTORY_SEPARATOR . str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php';
+
+		if ( file_exists( $filename ) ) {
+			require_once $filename;
+		}
+
+		return class_exists( $class, false );
+	}
+
+	/**
+	 * @param $class
+	 *
+	 * @deprecated 2.0.0 Use ::load_vendor() instead and make file names upper camelCase.
+	 *
+	 * @return bool
+	 */
+	public function load_shipcloud( $class ) {
+		$filename = WCSC_FOLDER
+					. DIRECTORY_SEPARATOR . 'includes'
+					. DIRECTORY_SEPARATOR . strtolower(
+						str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php'
+					);
 
 		if ( file_exists( $filename ) ) {
 			require_once $filename;
