@@ -234,27 +234,21 @@ class Woocommerce_Shipcloud_API
 	/**
 	 * Requesting carriers
 	 *
-	 * @return array|WP_Error
+	 * @return array|\Shipcloud\Domain\Carrier[]|WP_Error
 	 * @since 1.0.0
+	 * @since 1.4.0 Returns \Shipcloud\Domain\Carrier[] which will replace the simple array.
+	 *
+	 * @deprecated 2.0.0 Use Carriers::get() instead.
 	 */
-	private function request_carriers()
+	public function request_carriers()
 	{
-		$action  = 'carriers';
-		$request = $this->send_request( $action );
+		$api = new Shipcloud\Api( $this->api_key, $this->api_url, 'plugin.woocommerce.z4NVoYhp' );
 
-		if ( is_wp_error( $request ) )
-		{
-			return $request;
+		try {
+			return $api->carriers()->get();
+		} catch (\Exception $e) {
+			return new \WP_Error( 'shipcloud_api_error_' . $e->getCode(), $e->getMessage() );
 		}
-
-		if ( false !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
-		{
-			return $request[ 'body' ];
-		}
-
-		$error = $this->get_error( $request );
-
-		return new WP_Error( 'shipcloud_api_error_' . $error['name'], $error['description'] );
 	}
 
 	/**
