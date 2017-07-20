@@ -61,10 +61,10 @@ class Api {
 	 * Api constructor.
 	 *
 	 * @param string $apiKey Key to access the API.
-	 * @param string $url    URL to the API.
 	 * @param string $affiliateId
+	 * @param string $url    URL to the API.
 	 */
-	public function __construct( $apiKey, $url = 'https://api.shipcloud.io/v1', $affiliateId = '' ) {
+	public function __construct( $apiKey, $affiliateId = '', $url = 'https://api.shipcloud.io/v1' ) {
 		$this->apiKey        = $apiKey;
 		$this->url           = $url;
 		$this->request_count = 0;

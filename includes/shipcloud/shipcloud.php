@@ -49,6 +49,8 @@ class Woocommerce_Shipcloud_API
 	/**
 	 * Shipcloud service informations
 	 *
+	 * @deprecated 2.0.0 Should be in some separate storage and not defined within the class.
+	 *
 	 * @var array $services
 	 * @since 1.0.0
 	 */
@@ -117,6 +119,23 @@ class Woocommerce_Shipcloud_API
 	 */
 	public function get_services() {
 		return $this->services;
+	}
+
+	/**
+	 * Turn service into label.
+	 *
+	 * @param $service_name
+	 *
+	 * @return string Label of the service (the name if non was found).
+	 */
+	public function get_service_label( $service_name ) {
+		if ( ! isset( $this->services[ $service_name ] )
+			 || ! isset( $this->services[ $service_name ]['name'] )
+		) {
+			return $service_name;
+		}
+
+		return $this->services[ $service_name ]['name'];
 	}
 
 	/**
@@ -242,7 +261,7 @@ class Woocommerce_Shipcloud_API
 	 */
 	public function request_carriers()
 	{
-		$api = new Shipcloud\Api( $this->api_key, $this->api_url, 'plugin.woocommerce.z4NVoYhp' );
+		$api = new Shipcloud\Api( $this->api_key, 'plugin.woocommerce.z4NVoYhp', $this->api_url );
 
 		try {
 			return $api->carriers()->get();

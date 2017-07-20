@@ -436,6 +436,8 @@ add_filter( 'woocommerce_shipping_fields', 'wcsc_sender_phone_frontend' );
 /**
  * Reusable connection to the API.
  *
+ * @deprecated 2.0.0 Use internal `_wcsc_api` instead.
+ *
  * @return Woocommerce_Shipcloud_API
  */
 function wcsc_api() {
@@ -446,4 +448,25 @@ function wcsc_api() {
 	}
 
 	return $api;
+}
+
+$_wcsc_api = null;
+
+/**
+ * Connection to the API.
+ *
+ * @return \Shipcloud\Api
+ */
+function _wcsc_api() {
+	global $_wcsc_api;
+
+	if ( ! $_wcsc_api ) {
+		$_wcsc_api = new Shipcloud\Api(
+			wcsc_shipping_method()->get_option( 'api_key' ),
+			'plugin.woocommerce.z4NVoYhp'
+		);
+	}
+
+
+	return $_wcsc_api;
 }

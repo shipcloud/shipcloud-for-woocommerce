@@ -6,6 +6,7 @@
 namespace Shipcloud\Api;
 
 use Shipcloud\Api;
+use Shipcloud\Domain\Carrier;
 
 /**
  * Access the API for carrier information.
@@ -42,6 +43,11 @@ class Carriers {
 		$this->api = $api;
 	}
 
+	/**
+	 * Fetch all carriers.
+	 *
+	 * @return Carrier[]
+	 */
 	public function get() {
 		$response = $this->api->request( 'carriers' );
 

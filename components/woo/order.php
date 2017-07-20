@@ -575,18 +575,67 @@ class WC_Shipcloud_Order
 				<tr>
 					<th><?php _e( 'Shipping method', 'shipcloud-for-woocommerce' ); ?></th>
 					<td>
-						<?php if ( count( $carriers ) > 0 ): ?>
-							<select name="parcel_carrier">
-								<?php foreach ( $carriers AS $name => $display_name ): ?>
-									<?php if ( $name === $selected_shipping_method ): ?>
-										<option value="<?php echo $name; ?>" selected><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
-									<?php elseif ( $name === $standard_carrier && empty( $selected_shipping_method ) ): ?>
-										<option value="<?php echo $name; ?>" selected><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
-									<?php else: ?>
-										<option value="<?php echo $name; ?>"><?php echo $shipcloud_api->get_carrier_display_name_short( $name ); ?></option>
-									<?php endif; ?>
-								<?php endforeach; ?>
-							</select>
+						<?php if ( count( _wcsc_api()->carriers()->get() ) > 0 ): ?>
+                            <div id="shipcloud_csp_wrapper">
+                                <select name="shipcloud_carrier" id="shipcloud_carrier">
+                                    <option value="">
+										<?php echo esc_html_x(
+											'(select a carrier)',
+											'Backend order: label and option placeholder while selecting a carrier.',
+											'shipcloud-for-woocommerce'
+										); ?>
+                                    </option>
+									<?php foreach ( _wcsc_api()->carriers()->get() as $carrier ): ?>
+                                        <option
+                                                rel="shipcloud_carrier"
+                                                data-rel="<?php esc_attr_e( 'shipcloud_carrier_' . $carrier->getName() ) ?>"
+                                                value="<?php esc_attr_e( $carrier->getName() ) ?>">
+											<?php esc_html_e( $carrier->getDisplayName() ) ?>
+                                        </option>
+									<?php endforeach; ?>
+                                </select>
+
+                                <select name="shipcloud_carrier_service"
+                                        id="shipcloud_carrier_service"
+                                        data-parent="#shipcloud_carrier">
+                                    <option value="">
+										<?php echo esc_html_x(
+											'(select a service)',
+											'Backend order: label and option placeholder while selecting a service.',
+											'shipcloud-for-woocommerce'
+										); ?>
+                                    </option>
+									<?php foreach ( _wcsc_api()->carriers()->get() as $carrier ): ?>
+										<?php foreach ( $carrier->getServices() as $service ): ?>
+                                            <option rel="<?php esc_attr_e( 'shipcloud_carrier_' . $carrier->getName() ) ?>"
+                                                    value="<?php esc_attr_e( $service ) ?>">
+												<?php esc_html_e( wcsc_api()->get_service_label( $service ) ) ?>
+                                            </option>
+										<?php endforeach; ?>
+									<?php endforeach; ?>
+                                </select>
+
+                                <select name="shipcloud_carrier_package"
+                                        id="shipcloud_carrier_package"
+                                        data-parent="#shipcloud_carrier">
+                                    <option value="">
+										<?php echo esc_html_x(
+											'(select a package)',
+											'Backend order: label and option placeholder while selecting a package.',
+											'shipcloud-for-woocommerce'
+										); ?>
+                                    </option>
+									<?php foreach ( _wcsc_api()->carriers()->get() as $carrier ): ?>
+                                        <?php $carrier_rel = esc_attr( 'shipcloud_carrier_' . $carrier->getName() ) ?>
+										<?php foreach ( $carrier->getPackageTypes() as $package_type ): ?>
+                                            <option rel="<?php echo $carrier_rel ?>"
+                                                    value="<?php esc_attr_e( $package_type ) ?>">
+												<?php esc_html_e( $this->get_package_label( $package_type ) ) ?>
+                                            </option>
+										<?php endforeach; ?>
+									<?php endforeach; ?>
+                                </select>
+                            </div>
 						<?php else: ?>
 							<?php echo sprintf( __( '<a href="%s">Please select a carrier</a>.', 'shipcloud-for-woocommerce' ), admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' ) ); ?>
 						<?php endif; ?>
@@ -596,25 +645,6 @@ class WC_Shipcloud_Order
 						<?php endif; ?>
 					</td>
 				</tr>
-                <tr>
-                    <th><?php _ex( 'Package type', 'label to choose the package type', 'shipcloud-for-woocommerce' ); ?></th>
-                    <td>
-                            <select name="package_type">
-								<?php foreach ( $this->get_package_carrier_map() AS $name => $carriers ): ?>
-                                    <option value="<?php esc_attr_e( $name ) ?>"
-                                            <?php selected( $this->get_package_type() == $name ) ?>
-                                            data-carrier="<?php echo implode(' ', $carriers) ?>"
-                                    >
-										<?php esc_html_e( $this->get_package_label( $name ) ) ?>
-                                    </option>
-								<?php endforeach; ?>
-                            </select>
-						<?php if ( ! empty( $shipping_method_name ) ): ?>
-                            <br/>
-                            <small><?php echo sprintf( __( 'Ordered: %s', 'shipcloud-for-woocommerce' ), $shipping_method_name ); ?></small>
-						<?php endif; ?>
-                    </td>
-                </tr>
 				<tr>
 					<th><?php _e( 'Package description', 'shipcloud-for-woocommerce' ); ?></th>
 					<td>
@@ -626,6 +656,12 @@ class WC_Shipcloud_Order
 				</tr>
 				</tbody>
 			</table>
+
+            <script type="application/javascript">
+                jQuery(function($) {
+                    $('#shipcloud_csp_wrapper').wcscMultiSelect()
+                });
+            </script>
 
 			<div class="clear"></div>
 		</div>
@@ -1246,6 +1282,7 @@ class WC_Shipcloud_Order
 		wp_enqueue_script( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'admin-widgets' );
+		wp_enqueue_script( 'wcsc-multi-select' );
 
 		// CSS
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
