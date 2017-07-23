@@ -5,8 +5,7 @@
  *
  * @author  awesome.ug <support@awesome.ug>
  * @package shipcloudForWooCommerce
- * @version 1.0.0
- * @since   1.0.0
+ * @since   1.4.0
  * @license GPL 2
  *          Copyright 2017 (support@awesome.ug)
  *          This program is free software; you can redistribute it and/or modify
@@ -20,11 +19,19 @@
  *          along with this program; if not, write to the Free Software
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
+class WooCommerce_Shipcloud_Block_Labels_Form {
+	/**
+	 * @var \Shipcloud\Domain\Carrier[]
+	 */
 	protected $allowed_carriers;
 
 	/**
-	 * @var Woocommerce_Shipcloud_API
+	 * @var \WC_Shipcloud_Order
+	 */
+	protected $order;
+
+	/**
+	 * @var \Shipcloud\Api
 	 */
 	private $shipcloud_api;
 
@@ -34,50 +41,49 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 	 * Create new bulk view.
 	 *
 	 * @param string                      $template_file    Path to the template.
-	 * @param WC_Shipcloud_Order          $order
+	 * @param \WC_Shipcloud_Order         $order
 	 * @param \Shipcloud\Domain\Carrier[] $allowed_carriers List of carriers that can be selected.
 	 * @param \Shipcloud\Api              $shipcloud_api    Connection to the API.
 	 */
 	public function __construct( $template_file, $order, $allowed_carriers, $shipcloud_api ) {
-		$this->template_file = $template_file;
-
-		$this->label_form = new WooCommerce_Shipcloud_Block_Labels_Form(
-			WCSC_FOLDER . '/components/block/label-form.php',
-			$order,
-			$allowed_carriers,
-			$shipcloud_api
-		);
+		$this->template_file    = $template_file;
+		$this->allowed_carriers = $allowed_carriers;
+		$this->shipcloud_api    = $shipcloud_api;
+		$this->order            = $order;
 	}
 
 	/**
-	 * Associative array of carrier id and display name.
-	 *
-	 * @return string[]
+	 * @return \Shipcloud\Domain\Carrier[]
 	 */
 	public function get_allowed_carriers() {
 		return $this->allowed_carriers;
 	}
 
 	/**
-	 * Associative array of service id and labels.
-	 *
-	 * @return string[]
-	 */
-	public function get_services() {
-		$services = array();
-
-		foreach ( $this->get_shipcloud_api()->get_services() as $id => $settings ) {
-			$services[ $id ] = $settings['name'];
-		}
-
-		return $services;
-	}
-
-	/**
-	 * @return Woocommerce_Shipcloud_API
+	 * @return \Shipcloud\Api
 	 */
 	public function get_shipcloud_api() {
 		return $this->shipcloud_api;
+	}
+
+	/**
+	 * Ordered shipping method.
+	 *
+	 * @return string
+	 */
+	public function get_shipping_method_name() {
+		if ( ! $this->get_order() || ! $this->get_order()->get_wc_order() ) {
+			return '';
+		}
+
+		return $this->get_order()->get_wc_order()->get_shipping_method();
+	}
+
+	/**
+	 * @return \WC_Shipcloud_Order
+	 */
+	public function get_order() {
+		return $this->order;
 	}
 
 	/**
@@ -87,6 +93,7 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 	 */
 	public function render() {
 		ob_start();
+
 		$this->dispatch();
 
 		return ob_get_clean();

@@ -92,16 +92,18 @@ class Package {
 	/**
 	 * Package constructor.
 	 *
-	 * @param float $length Length of the package in cm.
-	 * @param float $width  Width of the package in cm.
-	 * @param float $height Height of the package in cm.
-	 * @param float $weight Weight of the package in kg.
+	 * @param float  $length Length of the package in cm.
+	 * @param float  $width  Width of the package in cm.
+	 * @param float  $height Height of the package in cm.
+	 * @param float  $weight Weight of the package in kg.
+	 * @param string $type
 	 */
-	public function __construct( $length, $width, $height, $weight ) {
+	public function __construct( $length, $width, $height, $weight, $type = 'parcel' ) {
 		$this->length = $length;
 		$this->width  = $width;
 		$this->height = $height;
 		$this->weight = $weight;
+		$this->type   = $type;
 	}
 
 	/**

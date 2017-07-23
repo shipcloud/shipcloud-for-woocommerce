@@ -9,6 +9,8 @@ if ( defined( 'WCSC_FOLDER' ) ):
 	 * Getting Plugin Template
 	 *
 	 * @since 1.0.0
+	 *
+	 * @deprecated 2.0.0 This function is no longer used.
 	 */
 	function wcsc_locate_template( $template_names, $load = false, $require_once = true ) {
 		$located = '';

@@ -21,92 +21,8 @@
             <fieldset class="inline-edit-col-right">
                 <div class="inline-edit-col">
                     <div class="inline-edit-group wp-clearfix">
-                        <label class="alignleft">
-                            <span class="title">
-                                <?php esc_html_e( 'Template', 'shipcloud-for-woocommerce' ) ?>
-                            </span>
-							<?php if ( wcsc_get_parceltemplates() ): ?>
-                                <select name="wcsc_template" id="wcsc_template">
-                                    <option value="">
-										<?php esc_html_e( '(choose from templates here)' ) ?>
-                                    </option>
-									<?php foreach ( wcsc_get_parceltemplates() as $service_id => $template ): ?>
-                                        <option value="<?php echo esc_attr( $service_id ) ?>"
-                                                data-carrier="<?php esc_attr_e( $template['values']['carrier'] ) ?>"
-                                                data-width="<?php esc_attr_e( $template['values']['width'] ) ?>"
-                                                data-height="<?php esc_attr_e( $template['values']['height'] ) ?>"
-                                                data-length="<?php esc_attr_e( $template['values']['length'] ) ?>"
-                                                data-weight="<?php esc_attr_e( $template['values']['weight'] ) ?>"
-                                        >
-											<?php echo esc_html( $template['post_title'] ) ?>
-                                        </option>
-									<?php endforeach; ?>
-                                </select>
-                            <?php else: ?>
-                                <a href="<?php echo WCSC_Parceltemplate_Posttype::get_create_link() ?>"
-                                   target="_blank">
-                                    <?php esc_html_e('Create new parcel template') ?>
-                                </a>
-							<?php endif; ?>
-                        </label>
-
-                        <div class="inline-edit-group wp-clearfix">
-                            <label class="alignleft">
-                                <span class="title">
-                                    <?php esc_html_e( 'Width', 'shipcloud-for-woocommerce' ) ?>
-                                </span>
-                                <input type="text" name="wcsc_width"/>
-                                <?php echo get_option('woocommerce_dimension_unit') ?>
-                            </label>
-                        </div>
-
-                        <div class="inline-edit-group wp-clearfix">
-                            <label class="alignleft">
-                                <span class="title">
-                                    <?php esc_html_e( 'Height', 'shipcloud-for-woocommerce' ) ?>
-                                </span>
-                                <input type="text" name="wcsc_height"/>
-	                            <?php echo get_option('woocommerce_dimension_unit') ?>
-                            </label>
-                        </div>
-
-                        <div class="inline-edit-group wp-clearfix">
-                            <label class="alignleft">
-                                <span class="title">
-                                    <?php esc_html_e( 'Length', 'shipcloud-for-woocommerce' ) ?>
-                                </span>
-                                <input type="text" name="wcsc_length"/>
-	                            <?php echo get_option('woocommerce_dimension_unit') ?>
-                            </label>
-                        </div>
-
-                        <div class="inline-edit-group wp-clearfix">
-                            <label class="alignleft">
-                                <span class="title">
-                                    <?php esc_html_e( 'Weight', 'shipcloud-for-woocommerce' ) ?>
-                                </span>
-                                <input type="text" name="wcsc_weight"/>
-	                            <?php echo get_option('woocommerce_weight_unit') ?>
-                            </label>
-                        </div>
+                        <?php echo $this->label_form->render() ?>
                     </div>
-                </div>
-
-                <div class="inline-edit-col">
-
-                    <div class="inline-edit-group wp-clearfix">
-                        <label class="alignleft">
-                            <span class="title">Carrier</span>
-                            <select name="wcsc_carrier">
-								<?php foreach ( wcsc_api()->get_carriers() as $carrier ): ?>
-                                    <option value="<?php echo esc_attr( $carrier['name'] ) ?>">
-										<?php echo esc_html( $carrier['display_name'] ) ?>
-                                    </option>
-								<?php endforeach; ?>
-                            </select>
-                        </label>
-                    </div>
-
                 </div>
             </fieldset>
 
@@ -127,6 +43,12 @@
     </tr>
     </tbody>
 </table>
+
+<script type="application/javascript">
+    jQuery(function ($) {
+        $('#shipcloud_csp_wrapper').shipcloudMultiSelect();
+    });
+</script>
 
 <script type="template/html" id="tmpl-wcsc-order-labels-bulk-items">
     <div data-id="{{ data.id }}"

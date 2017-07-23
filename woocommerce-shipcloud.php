@@ -141,6 +141,7 @@ class WooCommerce_Shipcloud {
 		require_once( WCSC_FOLDER . '/woocommerce-shipcloud-functions.php' );
 		require_once( WCSC_FOLDER . '/includes/shipcloud/i18n-iso-convert-class.php' );
 		require_once( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
+		require_once( WCSC_FOLDER . '/includes/shipcloud/block-labels-form.php' );
 	}
 
 	/**
@@ -262,9 +263,9 @@ class WooCommerce_Shipcloud {
 	 * @since 1.3.2 For usage in frontend: Only start session when no headers are sent.
 	 */
 	public static function assert_session() {
-	    if ( session_id() ) {
-	        return;
-        }
+		if ( session_id() ) {
+			return;
+		}
 
 		if ( ! headers_sent() ) {
 	    	// Only start new session when no headers are send.

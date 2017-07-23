@@ -76,8 +76,6 @@ class WC_Shipcloud_Order_Bulk {
 
 		if ( ! isset( $request['action'] )
 		     || self::FORM_BULK !== $request['action']
-		     || ! isset( $request['action'], $request['wcsc_carrier'] )
-		     || ! $request['wcsc_carrier']
 		) {
 			return;
 		}
@@ -116,7 +114,8 @@ class WC_Shipcloud_Order_Bulk {
 
 		$block = new WooCommerce_Shipcloud_Block_Order_Labels_Bulk(
 			WCSC_COMPONENTFOLDER . '/block/order-labels-bulk.php',
-			wcsc_shipping_method()->get_allowed_carriers(),
+			WC_Shipcloud_Order::create_order(null),
+			_wcsc_api()->carriers()->get(),
 			new Woocommerce_Shipcloud_API()
 		);
 
@@ -279,6 +278,7 @@ class WC_Shipcloud_Order_Bulk {
 			}
 		}
 
+		$content = '';
 		if (0 !== $pdf_count) {
 		    $content = $m->merge();
         }
@@ -314,79 +314,80 @@ class WC_Shipcloud_Order_Bulk {
 	protected function create_label_for_order( $order_id, $request ) {
 		$order = WC_Shipcloud_Order::create_order( $order_id );
 
-		$shipment = wcsc_api()->create_shipment_by_order(
-			$order,
-			$request['wcsc_carrier'],
-			$this->get_package_data( $request )
+		$reference_number = sprintf(
+			__( 'Order %s', 'shipcloud-for-woocommerce' ),
+			$order->get_wc_order()->get_order_number()
 		);
 
-		if ( is_wp_error( $shipment ) ) {
-			/** @var \WP_Error $shipment */
-			WC_Shipcloud_Shipping::log(
-				'Order #' . $order->get_wc_order()->get_order_number()
-				. ' - ' . $shipment->get_error_message()
-				. ' (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')'
+		$data = array(
+			'to'                    => $order->get_recipient(),
+			'from'                  => $order->get_sender(),
+			'package'               => new \Shipcloud\Domain\Package(
+				$request['parcel_length'],
+				$request['parcel_width'],
+				$request['parcel_height'],
+				$request['parcel_weight'],
+                $request['shipcloud_carrier_package']
+			),
+			'carrier'               => $request['shipcloud_carrier'],
+			'service'               => $request['shipcloud_carrier_service'],
+			'reference_number'      => $reference_number,
+			'notification_mail'     => $order->get_notification_email(),
+			'create_shipping_label' => true,
+		);
+
+		try {
+			$shipment = _wcsc_api()->shipment()->create( $data );
+
+			$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
+
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')' );
+
+			$parcel_title = wcsc_get_carrier_display_name( $request['shipcloud_carrier'] )
+							. ' - '
+							. $request['parcel_width']
+							. __( 'x', 'woocommerce-shipcloud' )
+							. $request['parcel_height']
+							. __( 'x', 'woocommerce-shipcloud' )
+							. $request['parcel_length']
+							. __( 'cm', 'woocommerce-shipcloud' )
+							. ' '
+							. $request['parcel_weight']
+							. __( 'kg', 'woocommerce-shipcloud' );
+
+			$label_for_order = array(
+				'id'                  => $shipment->getId(),
+				'carrier_tracking_no' => $shipment->getCarrierTrackingNo(),
+				'tracking_url'        => $shipment->getTrackingUrl(),
+				'label_url'           => $shipment->getLabelUrl(),
+				'price'               => $shipment->getPrice(),
+				'parcel_id'           => $shipment->getId(),
+				'parcel_title'        => $parcel_title,
+				'carrier'             => $request['shipcloud_carrier'],
+				'width'               => $request['parcel_width'],
+				'height'              => $request['parcel_height'],
+				'length'              => $request['parcel_length'],
+				'weight'              => $request['parcel_weight'],
+				'date_created'        => time(),
 			);
 
-			$order_id = null;
-			if ( method_exists( $order->get_wc_order(), 'get_id' ) ) {
-				// WooCommerce 3
-				$order_id = $order->get_wc_order()->get_id();
-			} else {
-				// Woo2
-				$order_id = $order->get_wc_order()->id;
-			}
+			$label_for_order = array_merge( $label_for_order, $order->get_sender( 'sender_' ) );
+			$label_for_order = array_merge( $label_for_order, $order->get_recipient( 'recipient_' ) );
 
-			WooCommerce_Shipcloud::admin_notice(
-				sprintf(
-					__( 'No label for order #%d created: %s' ),
-					$order_id,
-					str_replace( "\n", ', ', $shipment->get_error_message() )
-				),
-				'error'
+			add_post_meta( $order_id, 'shipcloud_shipment_ids', $label_for_order['id'] );
+			add_post_meta( $order_id, 'shipcloud_shipment_data', $label_for_order );
+		} catch ( \Exception $e ) {
+			$error_message = sprintf(
+				__( 'No label for order #%d created: %s' ),
+				$order_id,
+				str_replace( "\n", ', ', $e->getMessage() )
 			);
+
+			WC_Shipcloud_Shipping::log( $error_message );
+			WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 
 			return array();
 		}
-
-		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')' );
-
-		$parcel_title = wcsc_get_carrier_display_name( $request['wcsc_carrier'] )
-		                . ' - '
-		                . $request['wcsc_width']
-		                . __( 'x', 'woocommerce-shipcloud' )
-		                . $request['wcsc_height']
-		                . __( 'x', 'woocommerce-shipcloud' )
-		                . $request['wcsc_length']
-		                . __( 'cm', 'woocommerce-shipcloud' )
-		                . ' '
-		                . $request['wcsc_weight']
-		                . __( 'kg', 'woocommerce-shipcloud' );
-
-		$data = array(
-			'id'                  => $shipment['id'],
-			'carrier_tracking_no' => $shipment['carrier_tracking_no'],
-			'tracking_url'        => $shipment['tracking_url'],
-			'label_url'           => $shipment['label_url'],
-			'price'               => $shipment['price'],
-			'parcel_id'           => $shipment['id'],
-			'parcel_title'        => $parcel_title,
-			'carrier'             => $request['carrier'],
-			'width'               => $request['width'],
-			'height'              => $request['height'],
-			'length'              => $request['length'],
-			'weight'              => $request['weight'],
-			'description'         => $request['description'],
-			'date_created'        => time(),
-		);
-
-		$data = array_merge( $data, $order->get_sender( 'sender_' ) );
-		$data = array_merge( $data, $order->get_recipient( 'recipient_' ) );
-
-		add_post_meta( $order_id, 'shipcloud_shipment_ids', $data['id'] );
-		add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
-
-		$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
 		return $data;
 	}
