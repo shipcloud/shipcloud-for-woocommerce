@@ -6,6 +6,10 @@ shipcloud.LabelForm = function (wrapperSelector) {
 
     this.$wrapper = $(wrapperSelector);
 
+    this.main = function () {
+
+    };
+
     this.getRecipient = function () {
         return {
             'first_name': $('input[name="recipient_address[first_name]"]', self.$wrapper).val(),
@@ -84,7 +88,9 @@ shipcloud.LabelForm = function (wrapperSelector) {
         data.isReturn = true;
 
         return data;
-    }
+    };
+
+    self.main();
 };
 
 // Extend jQuery if present just by delegating.

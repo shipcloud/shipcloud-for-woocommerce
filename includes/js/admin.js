@@ -31,22 +31,6 @@ jQuery( function( $ ) {
 		}
 	});
 
-	$( '.insert-to-form' ).click( function (){
-		var parcel = $( this ).parent().find( "select[name='parcel_list']").val();
-
-		if( 'none' != parcel ) {
-			var form_table = $('.parcel-form-table');
-
-			parcel = parcel.split( ';' );
-
-			form_table.find( "input[name='parcel_width']" ).val( parcel[ 0 ] );
-			form_table.find( "input[name='parcel_height']" ).val( parcel[ 1 ] );
-			form_table.find( "input[name='parcel_length']" ).val( parcel[ 2 ] );
-			form_table.find( "input[name='parcel_weight']" ).val( parcel[ 3 ] );
-			form_table.find( "select[name='parcel_carrier']" ).val( parcel[ 4 ] );
-		}
-	});
-
     /**
 	 * Get action data.
 	 *

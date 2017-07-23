@@ -20,12 +20,17 @@
 	<div class="parcel-template-field parcels-templates">
 		<label for="parcel_templates"><?php _e( 'Your parcel templates', 'shipcloud-for-woocommerce' ); ?></label>
 		<?php if ( count( $parcel_templates ) > 0 ) : ?>
-			<input type="button" value="<?php _e( '&#8592; Insert', 'shipcloud-for-woocommerce' ); ?>" class="insert-to-form button"/>
 			<select name="parcel_list">
 				<option value="none"><?php _e( '[ Select a parcel ]', 'shipcloud-for-woocommerce' ); ?></option>
 
 				<?php foreach ( $parcel_templates AS $parcel_template ): ?>
-					<option value="<?php echo $parcel_template[ 'value' ]; ?>"><?php echo $parcel_template[ 'option' ]; ?></option>
+                    <option value="<?php echo $parcel_template['value']; ?>"
+						<?php foreach ( $parcel_template['data'] as $field => $value ): ?>
+                            data-<?php echo $field ?>="<?php esc_attr_e( $value ) ?>"
+						<?php endforeach; ?>
+                    >
+						<?php echo $parcel_template['option']; ?>
+                    </option>
 				<?php endforeach; ?>
 			</select>
 		<?php else: ?>

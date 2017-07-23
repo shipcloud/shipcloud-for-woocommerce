@@ -392,6 +392,13 @@ class WooCommerce_Shipcloud {
 			static::VERSION
 		);
 
+		wp_register_script(
+			'shipcloud-filler',
+			WCSC_URLPATH . 'includes/js/shipcloud-filler.js',
+			array( 'jquery' ),
+			static::VERSION
+		);
+
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
 		wp_enqueue_script( 'wcsc-admin-script' );
 	}

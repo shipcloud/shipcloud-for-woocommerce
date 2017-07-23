@@ -687,6 +687,7 @@ class WC_Shipcloud_Order
             <script type="application/javascript">
                 jQuery(function ($) {
                     $('#shipcloud_csp_wrapper').shipcloudMultiSelect();
+                    $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
                 });
             </script>
 
@@ -1267,6 +1268,7 @@ class WC_Shipcloud_Order
 		wp_enqueue_script( 'admin-widgets' );
 		wp_enqueue_script( 'wcsc-multi-select' );
 		wp_enqueue_script( 'shipcloud-label-form' );
+		wp_enqueue_script( 'shipcloud-filler' );
 
 		// CSS
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
@@ -1554,7 +1556,7 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * @param $data
+	 * @param ArrayObject|array $data
 	 *
 	 * @return array
 	 */
@@ -1563,17 +1565,34 @@ class WC_Shipcloud_Order
 			$data = new ArrayObject( $data );
 		}
 
+		$carrier = $data->carrier;
+		if ( ! is_array( $data->carrier ) ) {
+			$tmp                = explode( '_', $carrier, 2 );
+			$carrier = array();
+			$carrier['carrier'] = $tmp[0];
+			$carrier['service'] = $tmp[1];
+		}
+
 		return array(
+			/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
 			'value'  => $data->width . ';'
-			            . $data->height . ';'
-			            . $data->length . ';'
-			            . $data->weight . ';'
-			            . $data->carrier . ';',
+						. $data->height . ';'
+						. $data->length . ';'
+						. $data->weight . ';'
+						. $data->carrier . ';',
 			'option' => $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-			            . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-			            . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
-			            . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
-			            . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier ),
+						. $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
+						. $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
+						. ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
+						. ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier ),
+			'data'   => array(
+				'parcel_width'      => $data->width,
+				'parcel_height'     => $data->height,
+				'parcel_length'     => $data->length,
+				'parcel_weight'     => $data->weight,
+				'shipcloud_carrier' => $carrier['carrier'],
+				'shipcloud_carrier_service' => $carrier['service'],
+			)
 		);
 	}
 
