@@ -174,22 +174,22 @@ class WC_Shipcloud_Shippig_Classes
     {
 	    if ( isset( $data['width'] ) )
 	    {
-            $parcel_width = wc_clean( $data['width'] );
+            $parcel_width = wc_format_decimal( wc_clean( $data['width'] ) );
 	    }
 
 	    if ( isset( $data['height'] ) )
 	    {
-            $parcel_height = wc_clean( $data['height'] );
+            $parcel_height = wc_format_decimal( wc_clean( $data['height'] ) );
 	    }
 
 	    if ( isset( $data['length'] ) )
 	    {
-            $parcel_length = wc_clean( $data['length'] );
+            $parcel_length = wc_format_decimal( wc_clean( $data['length'] ) );
 	    }
 
 	    if ( isset( $data['weight'] ) )
 	    {
-            $parcel_weight = wc_clean( $data['weight'] );
+            $parcel_weight = wc_format_decimal( wc_clean( $data['weight'] ) );
 	    }
 
 	    if( is_array( $term_id ) )

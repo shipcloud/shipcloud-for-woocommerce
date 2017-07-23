@@ -364,10 +364,10 @@ class WC_Shipcloud_Order_Bulk {
 				'parcel_id'           => $shipment->getId(),
 				'parcel_title'        => $parcel_title,
 				'carrier'             => $request['shipcloud_carrier'],
-				'width'               => $request['parcel_width'],
-				'height'              => $request['parcel_height'],
-				'length'              => $request['parcel_length'],
-				'weight'              => $request['parcel_weight'],
+				'width'               => wc_format_decimal( $request['parcel_width'] ),
+				'height'              => wc_format_decimal( $request['parcel_height'] ),
+				'length'              => wc_format_decimal( $request['parcel_length'] ),
+				'weight'              => wc_format_decimal( $request['parcel_weight'] ),
 				'date_created'        => time(),
 			);
 

@@ -372,10 +372,10 @@ class WCSC_Parceltemplate_Posttype
 		        'package' => $_POST[ 'shipcloud_carrier_package' ],
         );
 
-		$width   = $_POST[ 'width' ];
-		$height  = $_POST[ 'height' ];
-		$length  = $_POST[ 'length' ];
-		$weight  = $_POST[ 'weight' ];
+		$width  = wc_format_decimal( $_POST['width'] );
+		$height = wc_format_decimal( $_POST['height'] );
+		$length = wc_format_decimal( $_POST['length'] );
+		$weight = wc_format_decimal( $_POST['weight'] );
 
 		$post_title = wcsc_get_carrier_display_name( $carrier ) . ' - ' . $width . ' x ' . $height . ' x ' . $length . ' ' . __( 'cm', 'shipcloud-for-woocommerce' ) . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' );
 

@@ -883,10 +883,10 @@ class WC_Shipcloud_Order
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		$package = array(
-			'width'  => $_POST[ 'width' ],
-			'height' => $_POST[ 'height' ],
-			'length' => $_POST[ 'length' ],
-			'weight' => str_replace( ',', '.', $_POST[ 'weight' ] ),
+			'width'  => wc_format_decimal( $_POST[ 'width' ] ),
+			'height' => wc_format_decimal( $_POST[ 'height' ] ),
+			'length' => wc_format_decimal( $_POST[ 'length' ] ),
+			'weight' => wc_format_decimal( $_POST[ 'weight' ] ),
 		);
 
 		$price = $shipcloud_api->get_price( $_POST[ 'carrier' ], $_POST['sender'], $_POST['recipient'], $package );
