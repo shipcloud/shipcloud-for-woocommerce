@@ -30,6 +30,7 @@ shipcloud.Filler = function (sourceSelect, targetForm) {
         // As objects have no guaranteed order this needs to be done by hand.
         $('[name="shipcloud_carrier"]', self.$target).val(data['shipcloud_carrier']).trigger('change');
         $('[name="shipcloud_carrier_service"]', self.$target).val(data['shipcloud_carrier_service']).trigger('change');
+        $('[name="shipcloud_carrier_package"]', self.$target).val(data['shipcloud_carrier_package']).trigger('change');
     };
 
     self.main();

@@ -321,6 +321,11 @@ function wcsc_is_admin_screen() {
 		return true;
 	}
 
+	// Parcel template
+	if ( get_current_screen()->post_type === WCSC_Parceltemplate_Posttype::POST_TYPE ) {
+		return true;
+	}
+
 	// Settings screen
 	if ( 'shipcloud' === $_GET['section'] && 'woocommerce_page_wc-settings' === get_current_screen()->id ) {
 		return true;

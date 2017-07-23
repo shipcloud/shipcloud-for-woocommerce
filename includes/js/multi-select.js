@@ -7,14 +7,15 @@ shipcloud.MultiSelect = function (wrapperSelector) {
     this.$wrapper = $(wrapperSelector);
 
     this.main = function () {
-        // Reset all root nodes on first enter.
-        self.getRootNodes().each(function (index, object) {
-            self.resetChildren(object);
-        });
 
         // Watch for changing parents to reset their nodes.
         $('select', self.$wrapper).each(function (index, object) {
             $(object).on('change', self.selectChanged);
+        });
+
+        // Trigger all nodes to show proper child nodes.
+        $('select', self.$wrapper).each(function () {
+            $(this).trigger('change');
         });
     };
 

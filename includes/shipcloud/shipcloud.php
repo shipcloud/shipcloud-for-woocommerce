@@ -518,6 +518,11 @@ class Woocommerce_Shipcloud_API
 	 * @since 1.0.0
 	 */
 	public function get_carrier_display_name_short( $carrier_name ) {
+		if (is_array($carrier_name)) {
+			/** @deprecated 2.0.0 Carrier name will be determined via array in next version. */
+			$carrier_name = $carrier_name['carrier'] . '_' . $carrier_name['service'];
+		}
+
 		$carrier_name_arr = $this->disassemble_carrier_name( $carrier_name );
 		$display_name     = strtoupper( $carrier_name_arr['carrier'] ) . ' - ' . $this->get_service_name( $carrier_name_arr['service'] );
 

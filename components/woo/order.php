@@ -1571,6 +1571,7 @@ class WC_Shipcloud_Order
 			$carrier = array();
 			$carrier['carrier'] = $tmp[0];
 			$carrier['service'] = $tmp[1];
+			$carrier['package'] = null;
 		}
 
 		return array(
@@ -1592,6 +1593,7 @@ class WC_Shipcloud_Order
 				'parcel_weight'     => $data->weight,
 				'shipcloud_carrier' => $carrier['carrier'],
 				'shipcloud_carrier_service' => $carrier['service'],
+				'shipcloud_carrier_package' => $carrier['package'],
 			)
 		);
 	}
@@ -1619,6 +1621,8 @@ class WC_Shipcloud_Order
 	 * @param string $slug
 	 *
 	 * @return string The proper label or the slug itself if no label was found.
+     *
+     * @deprecated 2.0.0 This is duplicate to \WCSC_Parceltemplate_Posttype::get_package_label and needs to be injected.
 	 */
 	private function get_package_label( $slug ) {
 		$labels = array(

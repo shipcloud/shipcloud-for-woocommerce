@@ -57,12 +57,17 @@ class WCSC_Parceltemplate_Posttype
 	{
 		add_action( 'init', array( __CLASS__, 'register_post_types' ) );
 		add_action( 'admin_menu', array( __CLASS__, 'add_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_enqueue_scripts' ) );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'meta_boxes' ), 10 );
 		add_action( 'save_post', array( __CLASS__, 'save' ) );
 
 		add_action( 'admin_notices', array( __CLASS__, 'notice_area' ) );
 
 		add_filter( 'post_updated_messages', array( __CLASS__, 'remove_all_messages' ) );
+	}
+
+	public static function admin_enqueue_scripts() {
+		wp_enqueue_script( 'wcsc-multi-select' );
 	}
 
 	/**
@@ -178,6 +183,17 @@ class WCSC_Parceltemplate_Posttype
 		}
 
 		$selected_carrier = get_post_meta( $post->ID, 'carrier', true );
+
+		/** @deprecated 2.0.0 Post-Type shall store carrier information properly. */
+		if ( ! is_array( $selected_carrier ) ) {
+			$tmp              = explode( '_', $selected_carrier, 2 );
+			$selected_carrier = array(
+				'carrier' => $tmp[0],
+				'service' => $tmp[1],
+                'package' => null,
+			);
+		}
+
 		$width            = get_post_meta( $post->ID, 'width', true );
 		$height           = get_post_meta( $post->ID, 'height', true );
 		$length           = get_post_meta( $post->ID, 'length', true );
@@ -213,21 +229,110 @@ class WCSC_Parceltemplate_Posttype
 				</tr>
 				<tr>
 					<th><label for="carrier"><?php _e( 'Shipping carrier', 'shipcloud-for-woocommerce' ); ?></label></th>
-					<td>
-						<select name="carrier">
-							<option value="none"><?php _e( '[ Select a carrier ]', 'shipcloud-for-woocommerce' ); ?></option>
-							<?php foreach ( $carriers AS $name => $display_name ): ?>
-								<?php if ( $selected_carrier == $name ): $selected = ' selected="selected"';
-								else: $selected = ''; endif; ?>
-								<option value="<?php echo $name; ?>"<?php echo $selected; ?>><?php echo $display_name; ?></option>
-							<?php endforeach; ?>
-						</select>
+					<td id="shipcloud_csp_wrapper">
+
+						<?php if ( count( _wcsc_api()->carriers()->get() ) > 0 ): ?>
+                            <div id="shipcloud_csp_wrapper">
+                                <select name="shipcloud_carrier" id="shipcloud_carrier">
+                                    <option value="">
+										<?php echo esc_html_x(
+											'(select a carrier)',
+											'Backend order: label and option placeholder while selecting a carrier.',
+											'shipcloud-for-woocommerce'
+										); ?>
+                                    </option>
+									<?php foreach ( _wcsc_api()->carriers()->get() as $carrier ): ?>
+                                        <option
+											    <?php selected($selected_carrier['carrier'] === $carrier->getName()) ?>
+                                                rel="shipcloud_carrier"
+                                                data-rel="<?php esc_attr_e( 'shipcloud_carrier_' . $carrier->getName() ) ?>"
+                                                value="<?php esc_attr_e( $carrier->getName() ) ?>">
+											<?php esc_html_e( $carrier->getDisplayName() ) ?>
+                                        </option>
+									<?php endforeach; ?>
+                                </select>
+
+                                <select name="shipcloud_carrier_service"
+                                        id="shipcloud_carrier_service"
+                                        data-parent="#shipcloud_carrier">
+                                    <option value="">
+										<?php echo esc_html_x(
+											'(select a service)',
+											'Backend order: label and option placeholder while selecting a service.',
+											'shipcloud-for-woocommerce'
+										); ?>
+                                    </option>
+									<?php foreach ( _wcsc_api()->carriers()->get() as $carrier ): ?>
+										<?php foreach ( $carrier->getServices() as $service ): ?>
+                                            <option rel="<?php esc_attr_e( 'shipcloud_carrier_' . $carrier->getName() ) ?>"
+												    <?php selected($selected_carrier['service'] === $service) ?>
+                                                    value="<?php esc_attr_e( $service ) ?>">
+												<?php esc_html_e( wcsc_api()->get_service_label( $service ) ) ?>
+                                            </option>
+										<?php endforeach; ?>
+									<?php endforeach; ?>
+                                </select>
+
+                                <select name="shipcloud_carrier_package"
+                                        id="shipcloud_carrier_package"
+                                        data-parent="#shipcloud_carrier">
+                                    <option value="">
+										<?php echo esc_html_x(
+											'(select a package)',
+											'Backend order: label and option placeholder while selecting a package.',
+											'shipcloud-for-woocommerce'
+										); ?>
+                                    </option>
+									<?php foreach ( _wcsc_api()->carriers()->get() as $carrier ): ?>
+										<?php $carrier_rel = esc_attr( 'shipcloud_carrier_' . $carrier->getName() ) ?>
+										<?php foreach ( $carrier->getPackageTypes() as $package_type ): ?>
+                                            <option rel="<?php echo $carrier_rel ?>"
+												    <?php selected($selected_carrier['package'] === $package_type) ?>
+                                                    value="<?php esc_attr_e( $package_type ) ?>">
+												<?php esc_html_e( static::get_package_label( $package_type ) ) ?>
+                                            </option>
+										<?php endforeach; ?>
+									<?php endforeach; ?>
+                                </select>
+                            </div>
+						<?php endif; ?>
 					</td>
 				</tr>
 				</tbody>
 			</table>
+
+            <script type="application/javascript">
+                jQuery(function ($) {
+                    $('#shipcloud_csp_wrapper').shipcloudMultiSelect();
+                });
+            </script>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Turn package type to readable label.
+	 *
+	 * @param string $slug
+	 *
+	 * @return string The proper label or the slug itself if no label was found.
+     *
+     * @deprecated 2.0.0 This is duplicate to \WC_Shipcloud_Order::get_package_label and needs to be injected.
+	 */
+	protected static function get_package_label( $slug ) {
+		$labels = array(
+			'books'         => _x( 'Books', 'label while creating shipping label', 'shipcloud-woocommerce' ),
+			'bulk'          => _x( 'Bulk', 'label for oversize packages', 'shipcloud-woocommerce' ),
+			'letter'        => _x( 'Letter', 'label for simple letters', 'shipcloud-woocommerce' ),
+			'parcel'        => _x( 'Parcel', 'label for simple packages', 'shipcloud-woocommerce' ),
+			'parcel_letter' => _x( 'Parcel letter', 'letter for goods', 'shipcloud-woocommerce' ),
+		);
+
+		if ( ! isset( $labels[ $slug ] ) ) {
+			return $slug;
+		}
+
+		return $labels[ $slug ];
 	}
 
 	/**
@@ -251,17 +356,22 @@ class WCSC_Parceltemplate_Posttype
 			return;
 		}
 
-		if ( 'sc_parcel_template' != $_POST[ 'post_type' ] )
+		if ( static::POST_TYPE != $_POST[ 'post_type' ] )
 		{
 			return;
 		}
 
-		if ( ! array_key_exists( 'carrier', $_POST ) )
+		if ( ! array_key_exists( 'shipcloud_carrier', $_POST ) )
 		{
 			return;
 		}
 
-		$carrier = $_POST[ 'carrier' ];
+		$carrier = array(
+		        'carrier' => $_POST[ 'shipcloud_carrier' ],
+		        'service' => $_POST[ 'shipcloud_carrier_service' ],
+		        'package' => $_POST[ 'shipcloud_carrier_package' ],
+        );
+
 		$width   = $_POST[ 'width' ];
 		$height  = $_POST[ 'height' ];
 		$length  = $_POST[ 'length' ];
