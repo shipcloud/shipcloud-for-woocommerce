@@ -69,7 +69,8 @@ shipcloud.LabelForm = function (wrapperSelector) {
             'service'          : self.getCarrierService(),
             // @todo No API data - swap to WP logic.
             'parcel_id'        : $('select[name="parcel_id"]', self.$wrapper).val(),
-            'other_description': self.getDescription()
+            'other_description': self.getDescription(),
+            isReturn           : false
         };
     };
 
@@ -80,6 +81,7 @@ shipcloud.LabelForm = function (wrapperSelector) {
         var tmp = data.to;
         data.to = data.from;
         data.from = tmp;
+        data.isReturn = true;
 
         return data;
     }

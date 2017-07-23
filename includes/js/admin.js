@@ -167,6 +167,8 @@ jQuery( function( $ ) {
 
 		var ask_create_label = $('#ask-create-label');
 
+		var self = this;
+
 		ask_create_label.dialog({
 			'dialogClass': 'wcsc-dialog wp-dialog',
 			'modal': true,
@@ -176,8 +178,7 @@ jQuery( function( $ ) {
 			'buttons': [{
 				text: wcsc_translate.yes,
 				click: function () {
-
-					shipcloud_create_shipment_label(data);
+					shipcloud_create_shipment_label(data, self);
 
 					$(this).dialog("close");
 				}
@@ -201,6 +202,8 @@ jQuery( function( $ ) {
 
 		var ask_create_label = $('#ask-create-label');
 
+		var self = this;
+
 		ask_create_label.dialog({
 			'dialogClass': 'wcsc-dialog wp-dialog',
 			'modal': true,
@@ -211,7 +214,7 @@ jQuery( function( $ ) {
 				text: wcsc_translate.yes,
 				click: function () {
 
-					shipcloud_create_shipment_return_label(data);
+					shipcloud_create_shipment_label(data, self);
 
 					$(this).dialog("close");
 				}
@@ -268,9 +271,9 @@ jQuery( function( $ ) {
 	}
 	shipcloud_delete_shipment_buttons();
 
-	var shipcloud_create_shipment_label = function( data )
+	var shipcloud_create_shipment_label = function( data, targetButton )
 	{
-		var button = $( '#shipcloud_create_shipment_label' );
+		var button = $( targetButton );
 		button.addClass( 'button-loading-blue' );
 
 		$.post( ajaxurl, data, function( response ) {
@@ -289,31 +292,6 @@ jQuery( function( $ ) {
 			shipcloud_delete_shipment_buttons();
 		});
 	};
-
-	var shipcloud_create_shipment_return_label = function( data )
-	{
-		var button = $( '#shipcloud_create_shipment_return_label' );
-		button.addClass( 'button-loading-blue' );
-
-		$.post( ajaxurl, data, function( response ) {
-
-			var result = JSON.parse( response );
-
-			if( result.status == 'ERROR' )
-			{
-				print_errors( result.errors );
-			}
-
-			if( result.status == 'OK' )
-			{
-				$( '.shipment-labels' ).prepend( result.html );
-				shipcloud_create_label_buttons();
-				shipcloud_delete_shipment_buttons();
-			}
-
-			button.removeClass( 'button-loading-blue' );
-		});
-	}
 
 	var shipcloud_create_label = function( shipment_id, button )
 	{

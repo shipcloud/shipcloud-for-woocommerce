@@ -196,6 +196,33 @@ class WC_Shipcloud_Order
 	}
 
 	/**
+     * Sanitize shop owner data.
+     *
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	protected function sanitize_shop_owner_data( $data ) {
+		$shopOwner = 'from';
+		if ( ! $data['isReturn'] ) {
+			$shopOwner = 'to';
+		}
+
+		$from = array_filter( $data[ $shopOwner ] );
+		if ( count( $from ) <= 1 ) {
+			unset( $data[ $shopOwner ] );
+		}
+
+		if ( ! $data['isReturn'] ) {
+			return $data;
+		}
+
+		$data['to'] = $this->get_sender();
+
+		return $data;
+	}
+
+	/**
 	 * Product metabox
 	 *
 	 * @since 1.0.0
@@ -1005,7 +1032,9 @@ class WC_Shipcloud_Order
 		$order_id = (int) $data['order_id'];
 		$order    = $this->get_wc_order( $order_id );
 
-		$data['to']['email'] = $order->billing_email;
+		if ( ! $data['isReturn'] ) {
+			$data['to']['email'] = $order->billing_email;
+		}
 
 		/**
 		 * TODO boolean switch inside of method indicated different strategies. Separate them in different methods.
@@ -1030,11 +1059,7 @@ class WC_Shipcloud_Order
 		);
 
 		$data['notification_mail'] = $this->get_notification_email();
-
-		$from = array_filter( $data['from'] );
-		if ( count( $from ) <= 1 ) {
-			unset( $data['from'] );
-		}
+		$data                      = $this->sanitize_shop_owner_data( $data );
 
 		try {
 			$shipment = _wcsc_api()->shipment()->create( $data );
