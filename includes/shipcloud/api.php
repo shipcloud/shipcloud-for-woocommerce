@@ -4,6 +4,7 @@ namespace Shipcloud;
 
 use Shipcloud\Api\Carriers;
 use Shipcloud\Api\Response;
+use Shipcloud\Api\Shipment;
 
 /**
  * shipcloud for WooCommerce API
@@ -49,6 +50,13 @@ class Api {
 	 * @var int
 	 */
 	protected $request_count;
+
+	/**
+	 * Access to shipment API.
+	 *
+	 * @var Shipment
+	 */
+	protected $shipment;
 
 	/**
 	 * URL to the API.
@@ -124,6 +132,20 @@ class Api {
 		$curlInfo = curl_getinfo( $ch );
 		if ( 200 > $curlInfo['http_code'] || 300 <= $curlInfo['http_code'] ) {
 			// Something was not right, so we throw an exception.
+			if ( isset( $response['errors'] ) && $response['errors'] ) {
+				$currentException = null;
+				foreach ( $response['errors'] as $error ) {
+					$currentException = new \UnexpectedValueException(
+						$error,
+						$curlInfo['http_code'],
+						$currentException
+					);
+				}
+
+				throw $currentException;
+			}
+
+			// No errors provided by API so the throw generic message.
 			throw new \UnexpectedValueException(
 				sprintf(
 					'Request was for "%s" was not successful (%d).',
@@ -149,7 +171,7 @@ class Api {
 	protected function curlInit( $action, $params = array(), $type = 'GET' ) {
 		$headers = array(
 			//'Authorization' => 'Basic ' . base64_encode( $this->apiKey ),
-			'Content-Type'  => 'application/json',
+			'Content-Type' => 'application/json',
 		);
 
 		if ( $this->affiliateId ) {
@@ -188,5 +210,18 @@ class Api {
 		}
 
 		return $ch;
+	}
+
+	/**
+	 * Handle shipment.
+	 *
+	 * @return Shipment
+	 */
+	public function shipment() {
+		if ( $this->shipment ) {
+			return $this->shipment;
+		}
+
+		return $this->shipment = new Shipment( $this );
 	}
 }

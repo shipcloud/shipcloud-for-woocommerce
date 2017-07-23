@@ -372,7 +372,12 @@ class WooCommerce_Shipcloud {
 			'no'                          => __( 'No', 'shipcloud-for-woocommerce' )
 		);
 
-		wp_register_script( 'wcsc-admin-script', WCSC_URLPATH . 'includes/js/admin.js', array(), static::VERSION );
+		wp_register_script(
+			'wcsc-admin-script',
+			WCSC_URLPATH . 'includes/js/admin.js',
+			array( 'wp-util' ),
+			static::VERSION
+		);
 		wp_register_script(
 			'wcsc-multi-select',
 			WCSC_URLPATH . 'includes/js/multi-select.js',

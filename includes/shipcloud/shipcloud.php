@@ -661,7 +661,9 @@ class Woocommerce_Shipcloud_API
 	 * @since 1.0.0
 	 */
 	public function create_shipment( $carrier, $from, $to, $package, $create_label = false, $notification_email = '', $carrier_email = '', $reference_number = '', $description = '' ) {
-		$carrier = $this->disassemble_carrier_name( $carrier );
+		if (!is_array($carrier)) {
+			$carrier = $this->disassemble_carrier_name( $carrier );
+		}
 
 		$params = $this->get_params_by_carrier(
 			$carrier,
@@ -689,24 +691,15 @@ class Woocommerce_Shipcloud_API
 			return new \WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 
-		if ( $create_label )
+		$body = $request[ 'body' ];
+		if ( ! $create_label )
 		{
-			return array(
-				'id'                  => $request[ 'body' ][ 'id' ],
-				'carrier_tracking_no' => $request[ 'body' ][ 'carrier_tracking_no' ],
-				'tracking_url'        => $request[ 'body' ][ 'tracking_url' ],
-				'label_url'           => $request[ 'body' ][ 'label_url' ],
-				'price'               => $request[ 'body' ][ 'price' ]
-			);
+			$body['carrier_tracking_no'] = '';
+			$body['label_url'] = '';
+			$body['price'] = '';
 		}
 
-		return array(
-			'id'                  => $request[ 'body' ][ 'id' ],
-			'carrier_tracking_no' => '',
-			'tracking_url'        => $request[ 'body' ][ 'tracking_url' ],
-			'label_url'           => '',
-			'price'               => ''
-		);
+		return $body;
 	}
 
 	/**

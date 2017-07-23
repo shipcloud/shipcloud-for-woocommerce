@@ -123,7 +123,7 @@ function wcsc_explode_street( $street ) {
 	}
 
 	// Last try via explode.
-	$parts = explode( ' ', $street );
+	$parts  = explode( ' ', $street );
 	$number = array_pop( $parts );
 	$street = array(
 		'address' => implode( ' ', $parts ),
@@ -316,7 +316,7 @@ function wcsc_is_admin_screen() {
 
 	// Shop order
 	if ( 'shop_order' === get_current_screen()->id
-	     || 'edit-shop_order' === get_current_screen()->id
+		 || 'edit-shop_order' === get_current_screen()->id
 	) {
 		return true;
 	}
@@ -388,7 +388,7 @@ function wcsc_order_get_parcel_description( $order ) {
 function wcsc_care_of_frontend( $data ) {
 	$pos = array_search( 'shipping_company', array_keys( $data ) );
 
-	$final                 = array_slice( $data, 0, $pos );
+	$final                     = array_slice( $data, 0, $pos );
 	$final['shipping_care_of'] = array(
 		'label'       => __( 'Care of', 'wcsc' ),
 		'description' => '',
@@ -419,7 +419,7 @@ function wcsc_sender_phone_frontend( $data ) {
 	// Place it after the shipping city.
 	$pos = array_search( 'shipping_city', array_keys( $data ), true ) + 2;
 
-	$final                 = array_slice( $data, 0, $pos );
+	$final                   = array_slice( $data, 0, $pos );
 	$final['shipping_phone'] = array(
 		'label'       => _x( 'Phone', 'Frontend label for entering the phone number', 'wcsc' ),
 		'placeholder' => _x( 'To be updated about the package.', 'phone input placeholder', 'woocommerce' ),
@@ -469,4 +469,97 @@ function _wcsc_api() {
 
 
 	return $_wcsc_api;
+}
+
+/**
+ * Add shipment to order.
+ *
+ * @param int                        $order_id
+ * @param \Shipcloud\Domain\Shipment $shipment
+ * @param array                      $data
+ * @param string                     $parcel_title
+ *
+ * @return array
+ */
+function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = '' ) {
+	if ( ! $parcel_title ) {
+		$parcel_title = wcsc_get_carrier_display_name( $data['carrier'] )
+						. ' - ' . $data['package']['width']
+						. __( 'x', 'shipcloud-for-woocommerce' ) . $data['package']['height']
+						. __( 'x', 'shipcloud-for-woocommerce' ) . $data['package']['length']
+						. __( 'cm', 'shipcloud-for-woocommerce' )
+						. ' ' . $data['package']['weight']
+						. __( 'kg', 'shipcloud-for-woocommerce' );
+	}
+
+	$shipment_data = array(
+		'id'                   => $shipment->getId(),
+		'carrier_tracking_no'  => $shipment->getCarrierTrackingNo(),
+		'tracking_url'         => $shipment->getTrackingUrl(),
+		'label_url'            => $shipment->getLabelUrl(),
+		'price'                => $shipment->getPrice(),
+		'parcel_id'            => $shipment->getId(),
+		'parcel_title'         => $parcel_title,
+		'carrier'              => $data['carrier'],
+		'width'                => $data['package']['width'],
+		'height'               => $data['package']['height'],
+		'length'               => $data['package']['length'],
+		'weight'               => $data['package']['weight'],
+		'description'          => $data['package']['description'],
+		'recipient_first_name' => $data['to']['first_name'],
+		'recipient_last_name'  => $data['to']['last_name'],
+		'recipient_company'    => $data['to']['company'],
+		'recipient_street'     => $data['to']['street'],
+		'recipient_street_no'  => $data['to']['street_nr'],
+		'recipient_zip_code'   => $data['to']['zip_code'],
+		'recipient_city'       => $data['to']['city'],
+		'recipient_state'      => $data['to']['state'],
+		'recipient_country'    => $data['to']['country'],
+		'date_created'         => time()
+	);
+
+	if ( isset( $data['from'] ) ) {
+		$shipment_data['sender_first_name'] = $data['from']['first_name'];
+		$shipment_data['sender_last_name']  = $data['from']['last_name'];
+		$shipment_data['sender_company']    = $data['from']['company'];
+		$shipment_data['sender_street']     = $data['from']['street'];
+		$shipment_data['sender_street_no']  = $data['from']['street_nr'];
+		$shipment_data['sender_zip_code']   = $data['from']['zip_code'];
+		$shipment_data['sender_city']       = $data['from']['city'];
+		$shipment_data['sender_state']      = $data['from']['state'];
+		$shipment_data['country']           = $data['from']['country'];
+	}
+
+	add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_data['id'] );
+	add_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
+
+	$order = wc_get_order( $order_id );
+	$order->add_order_note( __( 'shipcloud label has been prepared.', 'shipcloud-for-woocommerce' ) );
+
+	return $shipment_data;
+}
+
+/**
+ * Turn exceptions in \WP_Error
+ *
+ * @todo Make this a \Shipcloud_Error class with factory.
+ *
+ * @param \Exception $exception
+ *
+ * @return WP_Error
+ */
+function _wcsc_exception_to_wp_error( $exception ) {
+	$wp_error         = new \WP_Error( $exception->getCode(), $exception->getMessage() );
+	$currentException = $exception->getPrevious();
+	$maxDepth         = 20;
+
+	while ( $currentException && $maxDepth > 0 ) {
+		$wp_error->add( $currentException->getCode(), $currentException->getMessage() );
+
+		// Next exception in queue.
+		$maxDepth --;
+		$currentException = $currentException->getPrevious();
+	}
+
+	return $wp_error;
 }

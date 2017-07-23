@@ -274,24 +274,21 @@ jQuery( function( $ ) {
 		button.addClass( 'button-loading-blue' );
 
 		$.post( ajaxurl, data, function( response ) {
-
-			var result = JSON.parse( response );
-
-			if( result.status == 'ERROR' )
-			{
-				print_errors( result.errors );
-			}
-
-			if( result.status == 'OK' )
-			{
-				$( '.shipment-labels' ).prepend( result.html );
-				shipcloud_create_label_buttons();
-				shipcloud_delete_shipment_buttons();
-			}
-
 			button.removeClass( 'button-loading-blue' );
+
+			if( ! response.success )
+			{
+                print_errors(_(response.data).pluck('message'));
+				return;
+			}
+
+            $(response.data.html).prependTo('.shipment-labels')
+				.find('.widget-top').effect('highlight', {color: '#46b450'}, 3000);
+
+			shipcloud_create_label_buttons();
+			shipcloud_delete_shipment_buttons();
 		});
-	}
+	};
 
 	var shipcloud_create_shipment_return_label = function( data )
 	{

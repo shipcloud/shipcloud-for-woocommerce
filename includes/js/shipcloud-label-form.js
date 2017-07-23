@@ -38,26 +38,38 @@ shipcloud.LabelForm = function (wrapperSelector) {
 
     this.getPackage = function () {
         return {
-            'width' : $('input[name="parcel_width"]', self.$wrapper).val(),
-            'height': $('input[name="parcel_height"]', self.$wrapper).val(),
-            'length': $('input[name="parcel_length"]', self.$wrapper).val(),
-            'weight': $('input[name="parcel_weight"]', self.$wrapper).val()
+            'width'      : $('input[name="parcel_width"]', self.$wrapper).val(),
+            'height'     : $('input[name="parcel_height"]', self.$wrapper).val(),
+            'length'     : $('input[name="parcel_length"]', self.$wrapper).val(),
+            'weight'     : $('input[name="parcel_weight"]', self.$wrapper).val(),
+            'description': $('input[name="parcel_description"]', self.$wrapper).val(),
+            'type'       : $('select[name="shipcloud_carrier_package"]', self.$wrapper).val()
         }
+    };
+
+    self.getCarrier = function () {
+        return $('select[name="shipcloud_carrier"]', self.$wrapper).val()
+    };
+
+    self.getCarrierService = function () {
+        return $('select[name="shipcloud_carrier_service"]', self.$wrapper).val();
+    };
+
+    self.getDescription = function () {
+        return $('input[name="other_description"]', self.$wrapper).val();
     };
 
     this.getLabelData = function () {
         return {
-            'order_id': $("#post_ID").val(),
-            'from'    : self.getSender(),
-            'to'      : self.getRecipient(),
-            'package' : self.getPackage(),
-            'carrier' : $('select[name="shipcloud_carrier"]', self.$wrapper).val(),
-            'service' : $('select[name="shipcloud_carrier_service"]', self.$wrapper).val(),
-            // @todo 'package_type'     : $('select[name="shipcloud_carrier_package"]', self.$wrapper).val(),
+            'order_id'         : $("#post_ID").val(),
+            'from'             : self.getSender(),
+            'to'               : self.getRecipient(),
+            'package'          : self.getPackage(),
+            'carrier'          : self.getCarrier(),
+            'service'          : self.getCarrierService(),
             // @todo No API data - swap to WP logic.
             'parcel_id'        : $('select[name="parcel_id"]', self.$wrapper).val(),
-            'description'      : $('input[name="parcel_description"]', self.$wrapper).val(),
-            'other_description': $('input[name="other_description"]', self.$wrapper).val()
+            'other_description': self.getDescription()
         };
     };
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains class to access the API for carrier information.
+ * Contains class to handle shipment on API side.
  */
 
 namespace Shipcloud\Api;
@@ -9,7 +9,7 @@ use Shipcloud\Api;
 use Shipcloud\Domain\Carrier;
 
 /**
- * Access the API for carrier information.
+ * Access the API for handling shipment and labels.
  *
  * @author  awesome.ug <support@awesome.ug>
  * @package shipcloudForWooCommerce/API
@@ -27,7 +27,7 @@ use Shipcloud\Domain\Carrier;
  *          along with this program; if not, write to the Free Software
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-class Carriers {
+class Shipment {
 	/**
 	 * @var Api
 	 */
@@ -43,24 +43,13 @@ class Carriers {
 	}
 
 	/**
-	 * Fetch all carriers.
+	 * @param $data
 	 *
-	 * @return Carrier[]
+	 * @return \Shipcloud\Domain\Shipment
 	 */
-	public function get() {
-		$response = $this->api->request( 'carriers' );
-
-		$fetched = array();
-		foreach ( $response->getPayload() as $carrier ) {
-			$fetched[] = new \Shipcloud\Domain\Carrier(
-				$carrier['name'],
-				$carrier['display_name'],
-				$carrier['services'],
-				$carrier['package_types']
-			);
-		}
-
-		return $fetched;
+	public function create( $data ) {
+		return \Shipcloud\Domain\Shipment::fromResponse(
+			$this->api->request('shipments', $data, 'POST')
+		);
 	}
-
 }
