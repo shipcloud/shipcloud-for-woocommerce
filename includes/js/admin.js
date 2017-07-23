@@ -47,56 +47,29 @@ jQuery( function( $ ) {
 		}
 	});
 
+    /**
+	 * Get action data.
+	 *
+     * @param ajax_action
+     * @param inverse
+	 *
+	 * @deprecated 2.0.0 Use get_label_form_data instead and add the ajax action in your context.
+     */
 	var get_shipment_form_data = function( ajax_action, inverse ){
-        var sender = {
-            'first_name': $("input[name='sender_address[first_name]']").val(),
-            'last_name' : $("input[name='sender_address[last_name]']").val(),
-            'company'   : $("input[name='sender_address[company]']").val(),
-            'street'    : $("input[name='sender_address[street]']").val(),
-            'street_no' : $("input[name='sender_address[street_nr]']").val(),
-            'zip_code'  : $("input[name='sender_address[zip_code]']").val(),
-            'city'      : $("input[name='sender_address[city]']").val(),
-            'state'     : $("input[name='sender_address[state]']").val(),
-            'country'   : $("select[name='sender_address[country]']").val()
-        };
-
-        var recipient = {
-            'first_name': $("input[name='recipient_address[first_name]']").val(),
-            'last_name' : $("input[name='recipient_address[last_name]']").val(),
-            'company'   : $("input[name='recipient_address[company]']").val(),
-            'street'    : $("input[name='recipient_address[street]']").val(),
-            'street_no' : $("input[name='recipient_address[street_nr]']").val(),
-            'care_of'   : $("input[name='recipient_address[care_of]']").val(),
-            'zip_code'  : $("input[name='recipient_address[zip_code]']").val(),
-            'city'      : $("input[name='recipient_address[city]']").val(),
-            'state'     : $("input[name='recipient_address[state]']").val(),
-            'country'   : $("select[name='recipient_address[country]']").val(),
-            'phone'     : $("input[name='recipient_address[phone]']").val(),
-        };
-
-
-        var data = {
-            'action'           : ajax_action,
-            'order_id'         : $("#post_ID").val(),
-            'sender'           : sender,
-            'recipient'        : recipient,
-            'parcel_id'        : $("select[name='parcel_id']").val(),
-            'carrier'          : $("select[name='parcel_carrier']").val(),
-            'package_type'     : $( "select[name='package_type']" ).val( ),
-            'width'            : $("input[name='parcel_width']").val(),
-            'height'           : $("input[name='parcel_height']").val(),
-            'length'           : $("input[name='parcel_length']").val(),
-            'weight'           : $("input[name='parcel_weight']").val(),
-            'description'      : $("input[name='parcel_description']").val(),
-            'other_description': $("input[name='other_description']").val()
-        };
-
-        if (inverse) {
-            data.sender = recipient;
-            data.recipient = sender;
-        }
+        var data = get_label_form_data(inverse);
+        data.action = ajax_action;
 
         return data;
+	};
+
+	var get_label_form_data = function (inverse) {
+        var labelForm = $('#shipcloud-io').shipcloudLabelForm();
+
+        if (inverse) {
+        	return labelForm.getReturnLabelData();
+		}
+
+        return labelForm.getLabelData();
 	};
 
 	$( '#shipcloud_calculate_price' ).click( function(){

@@ -658,12 +658,12 @@ class WC_Shipcloud_Order
 			</table>
 
             <script type="application/javascript">
-                jQuery(function($) {
-                    $('#shipcloud_csp_wrapper').wcscMultiSelect()
+                jQuery(function ($) {
+                    $('#shipcloud_csp_wrapper').shipcloudMultiSelect();
                 });
             </script>
 
-			<div class="clear"></div>
+            <div class="clear"></div>
 		</div>
 		<?php
 		return ob_get_clean();
@@ -999,35 +999,32 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * Creating shipment
-	 *
-	 * @since 1.0.0
+	 * Ask the API to create a shipment label.
 	 */
-	public function ajax_create_shipment()
-	{
-		$order_id      = $_POST['order_id'];
+	public function create_shipment_label( $data ) {
+		$order_id      = $data['order_id'];
 		$order         = $this->get_wc_order( $order_id );
 
-		$to            = $_POST['recipient'];
+		$to            = $data['recipient'];
 		$to['email']   = $order->billing_email;
 
 		$package = array(
-			'width'       => $_POST['width'],
-			'height'      => $_POST['height'],
-			'length'      => $_POST['length'],
-			'weight'      => $_POST['weight'],
-			'description' => $_POST['description'],
+			'width'       => $data['width'],
+			'height'      => $data['height'],
+			'length'      => $data['length'],
+			'weight'      => $data['weight'],
+			'description' => $data['description'],
 			'type'        => 'parcel', // default
 		);
 
-		if ( isset( $_POST['package_type'] ) && $_POST['package_type'] ) {
-		    $package['type'] = $_POST['package_type'];
-        }
+		if ( isset( $data['package_type'] ) && $data['package_type'] ) {
+			$package['type'] = $data['package_type'];
+		}
 
 		/**
 		 * TODO boolean switch inside of method indicated different strategies. Separate them in different methods.
 		 */
-		$create_label = ( 'shipcloud_create_shipment_label' === $_POST['action'] );
+		$create_label = ( 'shipcloud_create_shipment_label' === $data['action'] );
 
 		/**
 		 * Filtering reference number
@@ -1040,43 +1037,44 @@ class WC_Shipcloud_Order
 		 * @since 1.1.0
 		 */
 		$reference_number = apply_filters(
-		        'wcsc_reference_number',
-                sprintf( __( 'Order %s', 'shipcloud-for-woocommerce' ), $order->get_order_number() ),
-                $order->get_order_number(),
-                $order_id
-        );
+			'wcsc_reference_number',
+			sprintf( __( 'Order %s', 'shipcloud-for-woocommerce' ), $order->get_order_number() ),
+			$order->get_order_number(),
+			$order_id
+		);
 
 		$shipment = $this->get_shipcloud_api()->create_shipment(
-			$_POST['carrier'],
-			$_POST['sender'],
-            $to,
-            $package,
-            $create_label,
-            $this->get_notification_email( ),
-            $this->get_carrier_mail(),
-            $reference_number,
-            $_POST['other_description']
-        );
+			$data['carrier'],
+			$data['sender'],
+			$to,
+			$package,
+			$create_label,
+			$this->get_notification_email( ),
+			$this->get_carrier_mail(),
+			$reference_number,
+			$data['other_description']
+		);
 
 		if ( is_wp_error( $shipment ) )
 		{
 			$error_message = $shipment->get_error_message();
-			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - ' . $error_message .  ' (' . wcsc_get_carrier_display_name( $data[ 'carrier' ] ) . ')' );
 
 			$errors[] = nl2br( $error_message );
 			$result   = array(
 				'status' => 'ERROR',
 				'errors' => $errors
 			);
+
 			echo json_encode( $result );
 			exit;
 		}
 
-		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ')' );
+		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $data[ 'carrier' ] ) . ')' );
 
-		$parcel_title = wcsc_get_carrier_display_name( $_POST[ 'carrier' ] ) . ' - ' . $_POST[ 'width' ] . __( 'x', 'shipcloud-for-woocommerce' ) . $_POST[ 'height' ] . __( 'x', 'shipcloud-for-woocommerce' ) . $_POST[ 'length' ] . __( 'cm', 'shipcloud-for-woocommerce' ) . ' ' . $_POST[ 'weight' ] . __( 'kg', 'shipcloud-for-woocommerce' );
+		$parcel_title = wcsc_get_carrier_display_name( $data[ 'carrier' ] ) . ' - ' . $data[ 'width' ] . __( 'x', 'shipcloud-for-woocommerce' ) . $data[ 'height' ] . __( 'x', 'shipcloud-for-woocommerce' ) . $data[ 'length' ] . __( 'cm', 'shipcloud-for-woocommerce' ) . ' ' . $data[ 'weight' ] . __( 'kg', 'shipcloud-for-woocommerce' );
 
-		$data = array(
+		$shipment_data = array(
 			'id'                   => $shipment[ 'id' ],
 			'carrier_tracking_no'  => $shipment[ 'carrier_tracking_no' ],
 			'tracking_url'         => $shipment[ 'tracking_url' ],
@@ -1084,48 +1082,59 @@ class WC_Shipcloud_Order
 			'price'                => $shipment[ 'price' ],
 			'parcel_id'            => $shipment[ 'id' ],
 			'parcel_title'         => $parcel_title,
-			'carrier'              => $_POST[ 'carrier' ],
-			'width'                => $_POST[ 'width' ],
-			'height'               => $_POST[ 'height' ],
-			'length'               => $_POST[ 'length' ],
-			'weight'               => $_POST[ 'weight' ],
-			'description'          => $_POST[ 'description' ],
-			'sender_first_name'    => $_POST[ 'sender' ][ 'first_name' ],
-			'sender_last_name'     => $_POST[ 'sender' ][ 'last_name' ],
-			'sender_company'       => $_POST[ 'sender' ][ 'company' ],
-			'sender_street'        => $_POST[ 'sender' ][ 'street' ],
-			'sender_street_no'     => $_POST[ 'sender' ][ 'street_nr' ],
-			'sender_zip_code'      => $_POST[ 'sender' ][ 'zip_code' ],
-			'sender_city'          => $_POST[ 'sender' ][ 'city' ],
-			'sender_state'         => $_POST[ 'sender' ][ 'state' ],
-			'country'              => $_POST[ 'sender' ][ 'country' ],
-			'recipient_first_name' => $_POST[ 'recipient' ][ 'first_name' ],
-			'recipient_last_name'  => $_POST[ 'recipient' ][ 'last_name' ],
-			'recipient_company'    => $_POST[ 'recipient' ][ 'company' ],
-			'recipient_street'     => $_POST[ 'recipient' ][ 'street' ],
-			'recipient_street_no'  => $_POST[ 'recipient' ][ 'street_nr' ],
-			'recipient_zip_code'   => $_POST[ 'recipient' ][ 'zip_code' ],
-			'recipient_city'       => $_POST[ 'recipient' ][ 'city' ],
-			'recipient_state'      => $_POST[ 'recipient' ][ 'state' ],
-			'recipient_country'    => $_POST[ 'recipient' ][ 'country' ],
+			'carrier'              => $data[ 'carrier' ],
+			'width'                => $data[ 'width' ],
+			'height'               => $data[ 'height' ],
+			'length'               => $data[ 'length' ],
+			'weight'               => $data[ 'weight' ],
+			'description'          => $data[ 'description' ],
+			'sender_first_name'    => $data[ 'sender' ][ 'first_name' ],
+			'sender_last_name'     => $data[ 'sender' ][ 'last_name' ],
+			'sender_company'       => $data[ 'sender' ][ 'company' ],
+			'sender_street'        => $data[ 'sender' ][ 'street' ],
+			'sender_street_no'     => $data[ 'sender' ][ 'street_nr' ],
+			'sender_zip_code'      => $data[ 'sender' ][ 'zip_code' ],
+			'sender_city'          => $data[ 'sender' ][ 'city' ],
+			'sender_state'         => $data[ 'sender' ][ 'state' ],
+			'country'              => $data[ 'sender' ][ 'country' ],
+			'recipient_first_name' => $data[ 'recipient' ][ 'first_name' ],
+			'recipient_last_name'  => $data[ 'recipient' ][ 'last_name' ],
+			'recipient_company'    => $data[ 'recipient' ][ 'company' ],
+			'recipient_street'     => $data[ 'recipient' ][ 'street' ],
+			'recipient_street_no'  => $data[ 'recipient' ][ 'street_nr' ],
+			'recipient_zip_code'   => $data[ 'recipient' ][ 'zip_code' ],
+			'recipient_city'       => $data[ 'recipient' ][ 'city' ],
+			'recipient_state'      => $data[ 'recipient' ][ 'state' ],
+			'recipient_country'    => $data[ 'recipient' ][ 'country' ],
 			'date_created'         => time()
 		);
 
-		add_post_meta( $order_id, 'shipcloud_shipment_ids', $data[ 'id' ] );
-		add_post_meta( $order_id, 'shipcloud_shipment_data', $data );
+		add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_data[ 'id' ] );
+		add_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
 
 		$order = wc_get_order( $order_id );
 		$order->add_order_note( __( 'shipcloud label has been prepared.', 'shipcloud-for-woocommerce' ) );
 
 		$result = array(
 			'status'      => 'OK',
-			'shipment_id' => $data[ 'id' ],
-			'html'        => $this->get_label_html( $data )
+			'shipment_id' => $shipment_data[ 'id' ],
+			'html'        => $this->get_label_html( $shipment_data )
 		);
 
 		// TODO This should be wp_send_json_success()!
 		echo json_encode( $result );
 		exit;
+	}
+
+	/**
+	 * Creating shipment
+     *
+	 * @since 1.0.0
+     * @deprecated 2.0.0 Use create_shipment_label instead.
+	 */
+	public function ajax_create_shipment()
+	{
+        $this->create_shipment_label( $_POST );
 	}
 
 	/**
@@ -1283,6 +1292,7 @@ class WC_Shipcloud_Order
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'admin-widgets' );
 		wp_enqueue_script( 'wcsc-multi-select' );
+		wp_enqueue_script( 'shipcloud-label-form' );
 
 		// CSS
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );

@@ -1,6 +1,6 @@
-;var wcsc = wcsc || {};
+;var shipcloud = shipcloud || {};
 
-wcsc.MultiSelect = function (wrapperSelector) {
+shipcloud.MultiSelect = function (wrapperSelector) {
     var $ = jQuery;
     var self = this;
 
@@ -72,8 +72,8 @@ wcsc.MultiSelect = function (wrapperSelector) {
 // Extend jQuery if present just by delegating.
 if (window.jQuery) {
     (function ($) {
-        $.fn.wcscMultiSelect = function () {
-            new wcsc.MultiSelect(this);
+        $.fn.shipcloudMultiSelect = function () {
+           return new shipcloud.MultiSelect(this);
         }
     })(jQuery);
 }
