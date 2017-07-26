@@ -1,78 +1,124 @@
-*** shipcloud for WooCommerce Changelog ***
+== Changelog ==
 
-2017.07.10 - version 1.3.2
-* Fixed: Correctly explode street numbers with digits in the street name
-* Fixed: Start session earlier but not when headers are already sent
+= 1.2.1 =
+* Release date: 2017-06-20
 
-2017.06.26 - version 1.3.1
-* Fixed: Postcode not taken from Settings
-* Fixed: Create shipment form not fully shown
-* Fixed: Invoiceaddress field "suite" not used for creating shipping label
-* Fixed: Not working shipping in frontend
+** Changed
+* Added missing translations
+* Removed Woo Updatescripts
+* Refactored Code
 
-2017.06.09 - version 1.3.0
-* Enhanced: Made Plugin WordPress.org ready
-* Enhanced: Return single pdf after batch label creation
-* Enhanced: Renamed Plugin
-* Enhanced: Reworked language keys
+** Fixed
+* Zip code and street did not no matched between API and plugin
 
-2017.06.06 - version 1.2.1
-* Enhanced: Added missing translations
-* Enhanced: Removed Woo Updatescripts
-* Enhanced: Refactored Code
-* Fixed: Zip code and street did not no matched between API and plugin
+= 1.2.0 =
+* Release date: 2017-05-12
 
-2017.05.12 - version 1.2.0
-* Enhanced: Added bulk label creation
-* Enhanced: Added shipment description
-* Enhanced: Added packstation adress possibility
+** Changed
+* Added bulk label creation
+* Added shipment description
+* Added packstation adress possibility
 
-2017.04.24 - version 1.1.2
-* Fixed: Wrong standard value for fallback price
-* Fixed: Not working default value for shipping method
-* Fixed: Only 5 Parcel Templates showed up
+= 1.1.2 =
+* Release date: 2017-04-24
 
-2017.02.28 - version 1.1.1
-* Tweaked: Checking if logger is enabled within logger function
-* Tweaked: Added Actionhook 'shipcloud_shipment_tracking_change' for all tracking status changes
-* Fixed: Error on logging because of static call of WC_Settings_API
-* Fixed: Error 500 on calling Webhook URL
+** Fixed
+* Wrong standard value for fallback price
+* Not working default value for shipping method
+* Only 5 Parcel Templates showed up
 
-2016.09.08 - version 1.1.0
-* Enhanced: Better logging information
-* Enhanced: Replaced new lines on Logging and only using Shipping method logger
-* Enhanced: Added option for automatic street detection
-* Enhanced: Added advanced notice for DHL
-* Enhanced: Added reference number and filter for reference number
-* Enhanced: Added base functionality for converting ISO language strings for DPD
-* Enhanced: Added Notification Email for sending status changes to recipient
-* Enhanced: Added state to addresses
-* Enhanced: Added Tracking numbers in labels
-* Enhanced: Added API functions wcsc_get_shipments() and wcsc_get_tracking_numbers()
-* Enhanced: Added shipping zone support which have been introduced in WooCommerce 2.6.0
-* Enhanced: Added option for people who only want to use label creation
-* Enhanced: Added option for calculating with a virtual parcel, by adding all volume and weights
-* Enhanced: Shipments are now also deletable if the have a label
-* Enhanced: Only loading JS and CSS when plugin needs it
-* Enhanced: Logging if API Limit is reached
-* Enhanced: Optimized shipment calculation by better code structure and better performance on API Requests
-* Enhanced: Created fallback options on problems with API
-* Enhanced: Better street & number splitting
-* Fixed: Only adding calculated parcels if there have been parcels determined
-* Fixed: Wrong ISO format for DHL and DPD advanced notice
-* Fixed: Shipment classes could not be edited anymore in WooCommerce 2.6.0 because of GUI change
-* Fixed: Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
-* Fixed: JavaScript which stopped all JS in WP-Admin in Safari Browser
-* Fixed: Changed to WordPress function get_plugin_url() instead of older own function
-* Fixed: Compatibility problems with WooCommerce 2.6 parent class
-* Fixed: Fatal error on activation on PHP versions lower than 5.5
+= 1.1.1 =
+* Release date: 2017-02-28
 
-2016.06.22 - version 1.0.2
-* Fixed problems on loading shipping method by changing to direct loading without hooks
-* Fixed compatibility problems with WooCommerce 2.6 parent class.
+** Changed
+* Checking if logger is enabled within logger function
+* Added Actionhook 'shipcloud_shipment_tracking_change' for all tracking status changes
 
-2016.05.18 - version 1.0.1
-* Fixed massive number of calls for carriers
+** Fixed
+* Error on logging because of static call of WC_Settings_API
+* Error 500 on calling Webhook URL
 
-2016.04.14 - version 1.0.0
+= 1.1.0 =
+* Release date: 2016-09-08
+
+** Changed
+* Better logging information
+* Replaced new lines on Logging and only using Shipping method logger
+* Shipments are now also deletable if the have a label
+* Only loading JS and CSS when plugin needs it
+* Logging if API Limit is reached
+* Optimized shipment calculation by better code structure and better performance on API Requests
+* Created fallback options on problems with API
+* Better street & number splitting
+
+** Added
+* Option for automatic street detection
+* Advanced notice for DHL
+* Reference number and filter for reference number
+* Base functionality for converting ISO language strings for DPD
+* Notification email for sending status changes to recipient
+* State to addresses
+* Tracking numbers in labels
+* API functions wcsc_get_shipments() and wcsc_get_tracking_numbers()
+* Shipping zone support which have been introduced in WooCommerce 2.6.0
+* Option for people who only want to use label creation
+* Option for calculating with a virtual parcel, by adding all volume and weights
+
+** Fixed
+* Only adding calculated parcels if there have been parcels determined
+* Wrong ISO format for DHL and DPD advanced notice
+* Shipment classes could not be edited anymore in WooCommerce 2.6.0 because of GUI change
+* Error on activation "Error: Class 'WC_Shipcloud_Shipping' not found"
+* JavaScript which stopped all JS in WP-Admin in Safari Browser
+* Changed to WordPress function get_plugin_url() instead of older own function
+* Compatibility problems with WooCommerce 2.6 parent class
+* Fatal error on activation on PHP versions lower than 5.5
+
+= 1.0.1 =
+* Release date: 2016-05-18
+
+** Fixed
+* Massive number of calls for carriers
+
+= 1.0.0 =
+* Release date: 2016-04-14
+
+** Changed
 * Initial release!
+
+= 1.0.0 beta 1 =
+** Changed
+* Return services are only allowed for shop customers
+* Preselection of user selected shipping method in admin
+* Adjusted shipment service names
+
+= 1.0.0 alpha 5 =
+** Added
+* Service 'predict' for DPD
+* Shipment services
+* Deletion of shipments
+
+= 1.0.0 alpha 4 =
+** Changed
+* Finished shipment listener
+
+= 1.0.0 alpha 3 =
+** Added
+* Shipment listener
+
+= 1.0.0 alpha 2 =
+** Changed
+* Calculate with product or shipping class sizes instead of parcel templates
+* Use singleton pattern
+* Use wp_remote_ functions instead of cURL
+
+** Added
+* Selection of allowed carriers
+* Automatic price calculation
+* Possibility for customers to select carrier
+* Standard carrier option
+* Standard parcel prices if packages have not entered values to a shipping class or product
+
+= 1.0.0 alpha 1 =
+** Changed
+* First official alpha version
