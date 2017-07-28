@@ -72,6 +72,20 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
         selectNode.prop('disabled', null);
     };
 
+    this.select = function (map) {
+        if (map.hasOwnProperty('carrier') && map['carrier']) {
+            self.$carrier.val(map['carrier']);
+        }
+
+        if (map.hasOwnProperty('service') && map['service']) {
+            self.$service.val(map['service']);
+        }
+
+        if (map.hasOwnProperty('package') && map['package']) {
+            self.$packageType.val(map['package']);
+        }
+    };
+
     self.main();
 };
 
