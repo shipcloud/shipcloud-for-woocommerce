@@ -386,6 +386,36 @@ class WooCommerce_Shipcloud {
 			static::VERSION
 		);
 
+		// Inject translations and data for carrier selection.
+		wp_localize_script(
+			'wcsc-multi-select',
+			'wcsc_carrier',
+			array(
+				'label' => array(
+					'carrier' => array(
+						'placeholder' => _x( 'Select carrier', 'backend: Selecting a carrier option for label creation', 'wcsc' ),
+					),
+					'package_types' => array(
+						'placeholder' => _x( 'Select type', 'backend: Selecting a package type option for label creation', 'wcsc' ),
+						'letter' => _x( 'Letter', 'package type: letter', 'wcsc' ),
+						'parcel_letter' => _x( 'Parcel letter', 'package type: parcel letter', 'wcsc' ),
+						'books' => _x( 'Parcel letter', 'package type: books', 'wcsc' ),
+						'parcel' => _x( 'Parcel', 'pacakge type: parcel', 'wcsc' ),
+						'bulk' => _x( 'Bulk', 'pacakge type: bulk', 'wcsc' ),
+					),
+					'services' => array(
+						'placeholder' => _x( 'Select service', 'backend: Selecting a carrier service option for label creation', 'wcsc' ),
+						'standard' => wcsc_api()->get_service_label('standard'),
+						'one_day' => wcsc_api()->get_service_label('one_day'),
+						'one_day_early' => wcsc_api()->get_service_label('one_day_early'),
+						'same_day' => wcsc_api()->get_service_label('same_day'),
+						'returns' => wcsc_api()->get_service_label('returns'),
+					),
+				),
+				'data'    => _wcsc_api()->carriers()->get(),
+			)
+		);
+
 		wp_register_script(
 			'shipcloud-label-form',
 			WCSC_URLPATH . 'includes/js/shipcloud-label-form.js',
