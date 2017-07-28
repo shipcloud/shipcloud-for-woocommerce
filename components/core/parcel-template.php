@@ -246,7 +246,9 @@ class WCSC_Parceltemplate_Posttype
 
             <script type="application/javascript">
                 jQuery(function ($) {
-                    $('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
+                    $('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier).select(
+                        <?php echo json_encode($selected_carrier); ?>
+                    );
                 });
             </script>
 		</div>
