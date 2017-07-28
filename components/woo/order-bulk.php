@@ -131,7 +131,7 @@ class WC_Shipcloud_Order_Bulk {
 		wp_register_script(
 			'wcsc_bulk_order_label',
 			WCSC_URLPATH . '/includes/js/bulk-order-label.js',
-			array( 'jquery' )
+			array( 'jquery', 'wcsc-multi-select' )
 		);
 
 		wp_enqueue_script( 'wcsc_bulk_order_label', false, array(), false, true );
@@ -262,7 +262,7 @@ class WC_Shipcloud_Order_Bulk {
 			$current       = $this->create_label_for_order( $order_id, $request );
 			$error_message = sprintf( 'Problem generating label for order #%d', $order_id );
 
-			if ( ! $current || ! isset( $current['label_url'] ) ) {
+			if ( ! $current || ! $current->getLabelUrl() ) {
 				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 
 				continue;
@@ -270,7 +270,7 @@ class WC_Shipcloud_Order_Bulk {
 
 			try {
 				// Storing label.
-				$path_to_pdf = $this->save_label( $order_id, $current['label_url'] );
+				$path_to_pdf = $this->save_label( $order_id, $current->getLabelUrl() );
 				$m->addFromFile( $path_to_pdf );
 				$pdf_count++;
 			} catch ( \RuntimeException $e ) {
@@ -309,7 +309,7 @@ class WC_Shipcloud_Order_Bulk {
 	 * @param $order_id
 	 * @param $request
 	 *
-	 * @return array
+	 * @return array|\Shipcloud\Domain\Shipment
 	 */
 	protected function create_label_for_order( $order_id, $request ) {
 		$order = WC_Shipcloud_Order::create_order( $order_id );
@@ -389,7 +389,7 @@ class WC_Shipcloud_Order_Bulk {
 			return array();
 		}
 
-		return $data;
+		return $shipment;
 	}
 
 	/**

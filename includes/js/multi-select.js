@@ -12,8 +12,6 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
 
     this.main = function () {
         self.render();
-
-        return;
     };
 
     this.getCarrierData = function (carrier) {
