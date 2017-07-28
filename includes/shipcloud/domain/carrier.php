@@ -7,7 +7,7 @@ namespace Shipcloud\Domain;
  *
  * @package Shipcloud\Domain
  */
-class Carrier implements \ArrayAccess {
+class Carrier implements \ArrayAccess, \JsonSerializable {
 	/**
 	 * @var string
 	 */
@@ -44,6 +44,9 @@ class Carrier implements \ArrayAccess {
 	}
 
 	/**
+	 * Retrieve the internal name.
+	 *
+	 * @since 1.4.0
 	 * @return string
 	 */
 	public function getName() {
@@ -51,6 +54,11 @@ class Carrier implements \ArrayAccess {
 	}
 
 	/**
+	 * Get a list of services.
+	 *
+	 * The unordered array contains the internal names of services which the carrier offers.
+	 *
+	 * @since 1.4.0
 	 * @return array
 	 */
 	public function getServices() {
@@ -60,6 +68,7 @@ class Carrier implements \ArrayAccess {
 	/**
 	 * Offset to retrieve
 	 *
+	 * @since 1.4.0
 	 * @deprecated 2.0.0 Use getter instead.
 	 */
 	public function offsetGet( $offset ) {
@@ -83,6 +92,7 @@ class Carrier implements \ArrayAccess {
 	/**
 	 * Whether a offset exists
 	 *
+	 * @since 1.4.0
 	 * @deprecated 2.0.0 Use getter instead.
 	 */
 	public function offsetExists( $offset ) {
@@ -90,6 +100,7 @@ class Carrier implements \ArrayAccess {
 	}
 
 	/**
+	 * @since 1.4.0
 	 * @return string
 	 */
 	public function getDisplayName() {
@@ -106,6 +117,7 @@ class Carrier implements \ArrayAccess {
 	/**
 	 * Offset to set
 	 *
+	 * @since 1.4.0
 	 * @deprecated 2.0.0 Refuse changing an object state.
 	 */
 	public function offsetSet( $offset, $value ) {
@@ -135,5 +147,22 @@ class Carrier implements \ArrayAccess {
 	 */
 	public function offsetUnset( $offset ) {
 		// Not provided.
+	}
+
+	/**
+	 * Specify data which should be serialized to JSON.
+	 *
+	 * This is done for using the original snake_case keys instead of the camelCase properties.
+	 *
+	 * @since 1.4.0
+	 * @return array
+	 */
+	public function jsonSerialize() {
+		return array(
+			'name'          => $this->getName(),
+			'display_name'  => $this->getDisplayName(),
+			'services'      => $this->getServices(),
+			'package_types' => $this->getPackageTypes(),
+		);
 	}
 }

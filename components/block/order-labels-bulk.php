@@ -20,7 +20,7 @@
 
             <fieldset class="inline-edit-col-right">
                 <div class="inline-edit-col">
-                    <div class="inline-edit-group wp-clearfix">
+                    <div class="inline-edit-group wp-clearfix" id="shipcloud_bulk">
                         <?php echo $this->label_form->render() ?>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
 
 <script type="application/javascript">
     jQuery(function ($) {
-        $('#shipcloud_csp_wrapper').shipcloudMultiSelect();
+        $('#shipcloud_bulk').find('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
     });
 </script>
 
