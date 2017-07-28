@@ -377,7 +377,13 @@ class WCSC_Parceltemplate_Posttype
 		$length  = $_POST[ 'length' ];
 		$weight  = $_POST[ 'weight' ];
 
-		$post_title = wcsc_get_carrier_display_name( $carrier ) . ' - ' . $width . ' x ' . $height . ' x ' . $length . ' ' . __( 'cm', 'shipcloud-for-woocommerce' ) . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' );
+		$post_title = wcsc_get_carrier_display_name( $carrier['carrier'] . '_' . $carrier['service'] )
+                      . ' (' . __( $carrier['package'], 'shipcloud-for-woocommerce' ) . ')'
+                      . ' - ' . $width
+                      . ' x ' . $height
+                      . ' x ' . $length
+                      . ' ' . __( 'cm', 'shipcloud-for-woocommerce' )
+                      . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' );
 
 		$where = array( 'ID' => $post_id );
 		$wpdb->update( $wpdb->posts, array( 'post_title' => $post_title ), $where );
