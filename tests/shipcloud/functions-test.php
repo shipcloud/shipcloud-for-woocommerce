@@ -31,6 +31,7 @@ class Functions_Test extends \WP_UnitTestCase {
 			['Züm Humpfen Stobel 12a', 'Züm Humpfen Stobel', '12a'],
 			['Heidenackerweg 15', 'Heidenackerweg', '15'],
 			['Straße des 17. Juni 152', 'Straße des 17. Juni', '152'],
+			['Gutbürger Weg 4', 'Gutbürger Weg', '4'],
 		];
 	}
 	/**
