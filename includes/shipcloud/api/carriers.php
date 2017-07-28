@@ -48,7 +48,12 @@ class Carriers {
 	 * @return Carrier[]
 	 */
 	public function get() {
-		$response = $this->api->request( 'carriers' );
+		try {
+			$response = $this->api->request( 'carriers' );
+		} catch (\Exception $e) {
+			// Problem with API connection so we stop here.
+			return array();
+		}
 
 		$fetched = array();
 		foreach ( $response->getPayload() as $carrier ) {
