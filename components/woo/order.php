@@ -562,7 +562,7 @@ class WC_Shipcloud_Order
 
             <script type="application/javascript">
                 jQuery(function ($) {
-                    $('#shipcloud_csp_wrapper').shipcloudMultiSelect();
+                    $('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
                     $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
                 });
             </script>

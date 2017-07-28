@@ -60,7 +60,7 @@ wcsc.OrderBulkLabels = function (submitButton) {
             }
 
             var data = {
-                'id': $(this).val(),
+                'id'   : $(this).val(),
                 'title': '#' + $(this).val()
             };
 
@@ -87,6 +87,7 @@ wcsc.OrderBulkLabels = function (submitButton) {
         // Insert the editor at the top of the table with an empty row above to maintain zebra striping.
         $('table.widefat tbody').prepend($(self.bulkScreen)).prepend('<tr class="hidden"></tr>');
         $(self.bulkScreen).show();
+        $('.shipcloud-carrier-select', self.bulkScreen).shipcloudMultiSelect(wcsc_carrier);
 
         $('button.cancel', self.bulkScreen).click(self.hide);
 
