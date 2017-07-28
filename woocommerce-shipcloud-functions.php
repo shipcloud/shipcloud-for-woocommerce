@@ -113,7 +113,10 @@ function wcsc_explode_street( $street ) {
 
 	if ( preg_match( '/(?P<address>.*)\s+(?P<number>[\d]+\s*[\w]*)/u', $street, $matches ) ) {
 		// Named match.
-		return $matches;
+		return array(
+			'address' => $matches['address'],
+			'number'  => $matches['number']
+		);
 	}
 
 	if ( preg_match( '/([^\d]+)\s+(.+)/i', $street, $matches ) ) {
@@ -324,7 +327,7 @@ function wcsc_is_admin_screen() {
 	}
 
 	// Parcel template
-	if ( get_current_screen()->post_type === WCSC_Parceltemplate_Posttype::POST_TYPE ) {
+	if ( get_current_screen()->post_type === 'sc_parcel_template' ) {
 		return true;
 	}
 
