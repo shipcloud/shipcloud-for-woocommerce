@@ -210,7 +210,7 @@ class Woocommerce_Shipcloud_API
 		{
 			if ( isset( $shipment_carrier[ 'services' ] ) )
 			{
-				foreach ( $shipment_carrier[ 'services' ] AS $service )
+				foreach ( (array) $shipment_carrier[ 'services' ] AS $service )
 				{
 					$carriers[] = array(
 						'name'         => $shipment_carrier[ 'name' ] . '_' . $service,
