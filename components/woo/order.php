@@ -204,20 +204,39 @@ class WC_Shipcloud_Order
 	 */
 	protected function sanitize_shop_owner_data( $data ) {
 		$shopOwner = 'from';
-		if ( ! $data['isReturn'] ) {
-			$shopOwner = 'to';
+		if ( 'false' !== $data['isReturn'] ) {
+			// It is a return so we switch addresses.
+			$shopOwner    = 'to';
+			$customer     = $data['from'];
+			$data['to']   = $data['from'];
+			$data['from'] = $customer;
 		}
 
 		$from = array_filter( $data[ $shopOwner ] );
 		if ( count( $from ) <= 1 ) {
+			// Drop shop owner when no address is given (should be only a country then / one entry).
 			unset( $data[ $shopOwner ] );
+
+			// Try one last time with the stored sender.
+			if ( count( $this->get_sender() ) > 1 ) {
+				$data[ $shopOwner ] = $this->get_sender();
+			}
 		}
 
-		if ( ! $data['isReturn'] ) {
-			return $data;
-		}
-
-		$data['to'] = $this->get_sender();
+		// Only use API fields.
+		$data = array_intersect_key(
+			$data,
+			array(
+				'carrier'           => true,
+				'from'              => true,
+				'notification_mail' => true,
+				'other_description' => true,
+				'package'           => true,
+				'reference_number'  => true,
+				'service'           => true,
+				'to'                => true,
+			)
+		);
 
 		return $data;
 	}
