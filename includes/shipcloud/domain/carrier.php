@@ -72,7 +72,7 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	 * @deprecated 2.0.0 Use getter instead.
 	 */
 	public function offsetGet( $offset ) {
-		if ( ! $this->offsetExists() ) {
+		if ( ! $this->offsetExists( $offset ) ) {
 			return null;
 		}
 
