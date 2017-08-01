@@ -337,7 +337,7 @@ class WC_Shipcloud_Order_Bulk {
 		);
 
 		try {
-			$shipment = _wcsc_api()->shipment()->create( $data );
+			$shipment = _wcsc_api()->shipment()->create( array_filter( $data ) );
 
 			$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 

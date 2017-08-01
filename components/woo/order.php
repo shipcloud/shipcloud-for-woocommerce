@@ -1227,7 +1227,14 @@ class WC_Shipcloud_Order
 			);
 		}
 
-		return $this->sanitize_address( $sender, $prefix );
+		$address = $this->sanitize_address( $sender, $prefix );
+
+		if ( count( $address ) <= 1 ) {
+			// No sender address entered (just the country autofill).
+			return array();
+		}
+
+		return $address;
 	}
 
 	/**
