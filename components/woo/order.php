@@ -223,22 +223,26 @@ class WC_Shipcloud_Order
 			}
 		}
 
+		if ( array_key_exists( 'other_description', $data ) ) {
+			$data['description'] = $data['other_description'];
+		}
+
 		// Only use API fields.
 		$data = array_intersect_key(
 			$data,
 			array(
-				'carrier'           => true,
-				'from'              => true,
-				'notification_mail' => true,
-				'other_description' => true,
-				'package'           => true,
-				'reference_number'  => true,
-				'service'           => true,
-				'to'                => true,
+				'carrier'           => null,
+				'from'              => null,
+				'notification_mail' => null,
+				'description'       => null,
+				'package'           => null,
+				'reference_number'  => null,
+				'service'           => null,
+				'to'                => null,
 			)
 		);
 
-		return $data;
+		return array_filter( $data );
 	}
 
 	/**
