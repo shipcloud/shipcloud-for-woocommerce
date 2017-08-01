@@ -21,12 +21,7 @@
             <fieldset class="inline-edit-col-right">
                 <div class="inline-edit-col">
                     <div class="inline-edit-group wp-clearfix" id="shipcloud_bulk">
-                        <div class="alignleft">
-							<?php echo $this->label_form->render() ?>
-                        </div>
-
-                        <label class="alignleft">
-                            <span class="title">
+                            <span style="display: inline-block; width: 9em; line-height: 1.3em; font-size: 14px; padding: 8px 0 42px 10px">
                                 <?php esc_html_e( 'Template', 'shipcloud-for-woocommerce' ) ?>
                             </span>
 							<?php if ( count( $this->get_parcel_templates() ) > 0 ) : ?>
@@ -46,7 +41,8 @@
 							<?php else: ?>
                                 <p><?php echo sprintf( __( 'Please <a href="%s">add parcel templates</a> if you want to use.', 'shipcloud-for-woocommerce' ), admin_url( 'edit.php?post_type=sc_parcel_template' ) ); ?></p>
 							<?php endif; ?>
-                        </label>
+
+							<?php echo $this->label_form->render() ?>
                     </div>
                 </div>
             </fieldset>
