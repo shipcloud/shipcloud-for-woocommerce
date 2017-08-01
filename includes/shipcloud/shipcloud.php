@@ -514,7 +514,9 @@ class Woocommerce_Shipcloud_API
 	 *
 	 * @param string $carrier_name
 	 *
-	 * @return string
+	 * @internal 2.0.0 Use proper Carrier instance as argument.
+	 *
+	 * @return string|array
 	 * @since 1.0.0
 	 */
 	public function get_carrier_display_name_short( $carrier_name ) {

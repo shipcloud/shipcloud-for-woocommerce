@@ -21,7 +21,32 @@
             <fieldset class="inline-edit-col-right">
                 <div class="inline-edit-col">
                     <div class="inline-edit-group wp-clearfix" id="shipcloud_bulk">
-                        <?php echo $this->label_form->render() ?>
+                        <div class="alignleft">
+							<?php echo $this->label_form->render() ?>
+                        </div>
+
+                        <label class="alignleft">
+                            <span class="title">
+                                <?php esc_html_e( 'Template', 'shipcloud-for-woocommerce' ) ?>
+                            </span>
+							<?php if ( count( $this->get_parcel_templates() ) > 0 ) : ?>
+                                <select name="parcel_list">
+                                    <option value="none"><?php _e( '[ Select a parcel ]', 'shipcloud-for-woocommerce' ); ?></option>
+
+									<?php foreach ( $this->get_parcel_templates() AS $parcel_template ): ?>
+                                        <option value="<?php echo $parcel_template['value']; ?>"
+											<?php foreach ( $parcel_template['data'] as $field => $value ): ?>
+                                                data-<?php echo $field ?>="<?php esc_attr_e( $value ) ?>"
+											<?php endforeach; ?>
+                                        >
+											<?php echo $parcel_template['option']; ?>
+                                        </option>
+									<?php endforeach; ?>
+                                </select>
+							<?php else: ?>
+                                <p><?php echo sprintf( __( 'Please <a href="%s">add parcel templates</a> if you want to use.', 'shipcloud-for-woocommerce' ), admin_url( 'edit.php?post_type=sc_parcel_template' ) ); ?></p>
+							<?php endif; ?>
+                        </label>
                     </div>
                 </div>
             </fieldset>
@@ -47,6 +72,7 @@
 <script type="application/javascript">
     jQuery(function ($) {
         $('#shipcloud_bulk').find('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
+        $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
     });
 </script>
 

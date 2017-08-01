@@ -40,6 +40,8 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 	 */
 	public function __construct( $template_file, $order, $allowed_carriers, $shipcloud_api ) {
 		$this->template_file = $template_file;
+		$this->allowed_carriers = $allowed_carriers;
+		$this->shipcloud_api = $shipcloud_api;
 
 		$this->label_form = new WooCommerce_Shipcloud_Block_Labels_Form(
 			WCSC_FOLDER . '/components/block/label-form.php',
@@ -47,6 +49,7 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 			$allowed_carriers,
 			$shipcloud_api
 		);
+
 	}
 
 	/**
@@ -104,5 +107,61 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 	 */
 	protected function get_template_file() {
 		return $this->template_file;
+	}
+
+	public function get_parcel_templates(  ) {
+		$posts = get_posts(
+			array(
+				'post_type'   => 'sc_parcel_template',
+				'post_status' => 'publish',
+				'posts_per_page' => -1
+			)
+		);
+
+		$parcel_templates = array();
+		if ( ! is_array( $posts ) || count( $posts ) <= 0 )
+		{
+			return array();
+		}
+
+		foreach ( $posts as $data ) {
+			if ( is_array( $data ) ) {
+				$data = new ArrayObject( $data );
+			}
+
+			$carrier = $data->carrier;
+			if ( ! is_array( $data->carrier ) ) {
+				$tmp                = explode( '_', $carrier, 2 );
+				$carrier = array();
+				$carrier['carrier'] = $tmp[0];
+				$carrier['service'] = $tmp[1];
+				$carrier['package'] = null;
+			}
+
+			$parcel_templates[] = array(
+				/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
+				'value'  => $data->width . ';'
+							. $data->height . ';'
+							. $data->length . ';'
+							. $data->weight . ';'
+							. $data->carrier . ';',
+				'option' => $data->width . esc_attr__( 'x', 'shipcloud-for-woocommerce' )
+							. $data->height . esc_attr__( 'x', 'shipcloud-for-woocommerce' )
+							. $data->length . esc_attr__( 'cm', 'shipcloud-for-woocommerce' )
+							. ' - ' . $data->weight . esc_attr__( 'kg', 'shipcloud-for-woocommerce' )
+							. ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier ),
+				'data'   => array(
+					'parcel_width'      => $data->width,
+					'parcel_height'     => $data->height,
+					'parcel_length'     => $data->length,
+					'parcel_weight'     => $data->weight,
+					'shipcloud_carrier' => $carrier['carrier'],
+					'shipcloud_carrier_service' => $carrier['service'],
+					'shipcloud_carrier_package' => $carrier['package'],
+				)
+			);
+		}
+
+		return $parcel_templates;
 	}
 }

@@ -116,7 +116,7 @@ class WC_Shipcloud_Order_Bulk {
 			WCSC_COMPONENTFOLDER . '/block/order-labels-bulk.php',
 			WC_Shipcloud_Order::create_order(null),
 			_wcsc_api()->carriers()->get(),
-			new Woocommerce_Shipcloud_API()
+			wcsc_api()
 		);
 
 		$block->dispatch();
