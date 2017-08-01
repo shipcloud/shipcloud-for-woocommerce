@@ -351,44 +351,58 @@ class WCSC_Parceltemplate_Posttype
 			return;
 		}
 
-		if ( ! array_key_exists( 'post_type', $_POST ) )
-		{
+		$request = array_intersect_key(
+			$_POST,
+			array(
+				'post_type'                 => null,
+				'width'                     => null,
+				'height'                    => null,
+				'length'                    => null,
+				'weight'                    => null,
+				'shipcloud_carrier'         => null,
+				'shipcloud_carrier_service' => null,
+				'shipcloud_carrier_package' => null,
+			)
+		);
+
+		if ( ! array_key_exists( 'post_type', $request ) ) {
 			return;
 		}
 
-		if ( static::POST_TYPE != $_POST[ 'post_type' ] )
-		{
+		if ( static::POST_TYPE != $request['post_type'] ) {
 			return;
 		}
 
-		if ( ! array_key_exists( 'shipcloud_carrier', $_POST ) )
-		{
+		if ( ! array_key_exists( 'shipcloud_carrier', $request ) ) {
 			return;
 		}
 
-		$carrier = array(
-		        'carrier' => $_POST[ 'shipcloud_carrier' ],
-		        'service' => $_POST[ 'shipcloud_carrier_service' ],
-		        'package' => $_POST[ 'shipcloud_carrier_package' ],
-        );
+		$width  = $request['width'];
+		$height = $request['height'];
+		$length = $request['length'];
+		$weight = $request['weight'];
 
-		$width   = $_POST[ 'width' ];
-		$height  = $_POST[ 'height' ];
-		$length  = $_POST[ 'length' ];
-		$weight  = $_POST[ 'weight' ];
 
-		$post_title = wcsc_get_carrier_display_name( $carrier['carrier'] . '_' . $carrier['service'] )
-                      . ' (' . __( $carrier['package'], 'shipcloud-for-woocommerce' ) . ')'
-                      . ' - ' . $width
-                      . ' x ' . $height
-                      . ' x ' . $length
-                      . ' ' . __( 'cm', 'shipcloud-for-woocommerce' )
-                      . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' );
+		$post_title = wcsc_get_carrier_display_name( $request['shipcloud_carrier'] )
+					  . ' ' . wcsc_api()->get_service_label( $request['shipcloud_carrier_service'] )
+					  . ' (' . WC_Shipcloud_Order::instance()->get_package_label( $request['shipcloud_carrier_package'] ) . ')'
+					  . ' - ' . $width
+					  . ' x ' . $height
+					  . ' x ' . $length
+					  . ' ' . __( 'cm', 'shipcloud-for-woocommerce' )
+					  . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' );
 
 		$where = array( 'ID' => $post_id );
 		$wpdb->update( $wpdb->posts, array( 'post_title' => $post_title ), $where );
 
-		update_post_meta( $post_id, 'carrier', $carrier );
+		update_post_meta(
+			$post_id,
+			'carrier', array(
+				'carrier' => $request['shipcloud_carrier'],
+				'service' => $request['shipcloud_carrier_service'],
+				'package' => $request['shipcloud_carrier_package'],
+			)
+		);
 		update_post_meta( $post_id, 'width', $width );
 		update_post_meta( $post_id, 'height', $height );
 		update_post_meta( $post_id, 'length', $length );

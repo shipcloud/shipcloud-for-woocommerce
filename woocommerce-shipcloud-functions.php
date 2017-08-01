@@ -8,13 +8,11 @@ if ( defined( 'WCSC_FOLDER' ) ):
 	/**
 	 * Getting Plugin Template
 	 *
-	 * @since 1.0.0
+	 * @since      1.0.0
 	 *
 	 * @deprecated 2.0.0 This function is no longer used.
 	 */
 	function wcsc_locate_template( $template_names, $load = false, $require_once = true ) {
-		$located = '';
-
 		$located = locate_template( $template_names, $load, $require_once );
 
 		if ( '' == $located ):
@@ -47,16 +45,15 @@ endif;
  * @since 1.0.0
  */
 function wcsc_get_carrier_display_name( $name ) {
-	$settings = get_option( 'woocommerce_shipcloud_settings' );
+	$carriers = _wcsc_carriers_get();
 
-	$shipcloud_api = new Woocommerce_Shipcloud_API( $settings['api_key'] );
-	$carriers      = $shipcloud_api->get_carriers();
-
-	foreach ( $carriers AS $carrier ):
-		if ( $carrier['name'] == $name ) {
-			return $carrier['display_name'];
+	foreach ( $carriers AS $carrier ) {
+		if ( $carrier->getName() === $name ) {
+			return $carrier->getDisplayName();
 		}
-	endforeach;
+	}
+
+	return $name;
 }
 
 /**
@@ -569,4 +566,30 @@ function _wcsc_exception_to_wp_error( $exception ) {
 	}
 
 	return $wp_error;
+}
+
+/**
+ * Get carriers from WordPress.
+ *
+ * This either fetched a cached version of all carriers
+ * or tries fetching the data again.
+ *
+ * @since 1.4.0
+ * @deprecated 2.0.0 This will be replaced by some other caching.
+ *
+ * @return \Shipcloud\Domain\Carrier[]
+ */
+function _wcsc_carriers_get() {
+	$cached = get_transient( '_wcsc_carriers_get' );
+	if ( $cached ) {
+		return $cached;
+	}
+
+	$data = _wcsc_api()->carriers()->get();
+
+	if ( $data ) {
+		set_transient( '_wcsc_carriers_get', $data, WEEK_IN_SECONDS );
+	}
+
+	return $data;
 }
