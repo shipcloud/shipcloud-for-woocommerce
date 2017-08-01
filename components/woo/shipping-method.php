@@ -1240,10 +1240,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->init_shipcloud_api();
 
 		$package = array(
-			'width'  => $parcel[ 'width' ],
-			'height' => $parcel[ 'height' ],
-			'length' => $parcel[ 'length' ],
-			'weight' => str_replace( ',', '.', $parcel[ 'weight' ] ),
+			'width'  => wc_format_decimal( $parcel[ 'width' ] ),
+			'height' => wc_format_decimal( $parcel[ 'height' ] ),
+			'length' => wc_format_decimal( $parcel[ 'length' ] ),
+			'weight' => wc_format_decimal( $parcel[ 'weight' ] ),
 		);
 
 		$price = $this->shipcloud_api->get_price( $carrier_name, $this->sender, $this->recipient, $package );
@@ -1276,21 +1276,20 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		foreach ( $parcels AS $key => $parcel )
 		{
-			if ( is_array( $parcel ) && array_key_exists( 'width', $parcel ) && array_key_exists( 'height', $parcel ) && array_key_exists( 'length', $parcel ) )
-			{
-				$parcel_volume = absint( $parcel[ 'width' ] ) * absint( $parcel[ 'height' ] ) * absint( $parcel[ 'length' ] );
-				$parcel_weight = floatval( $parcel[ 'weight' ] );;
+			if ( is_array( $parcel ) && array_key_exists( 'width', $parcel ) && array_key_exists( 'height', $parcel ) && array_key_exists( 'length', $parcel ) ) {
+				$parcel_volume = absint( wc_format_decimal( $parcel['width'] ) )
+								 * absint( wc_format_decimal( $parcel['height'] ) )
+								 * absint( wc_format_decimal( $parcel['length'] ) );
+				$parcel_weight = floatval( wc_format_decimal( $parcel['weight'] ) );
 
-				if( array_key_exists( 'quantity', $parcel ) )
-				{
-					$parcel_volume = absint( $parcel[ 'quantity' ] ) * $parcel_volume;
-					$parcel_weight = absint( $parcel[ 'quantity' ] ) * $parcel_weight;
+				if ( array_key_exists( 'quantity', $parcel ) ) {
+					$parcel_volume = absint( $parcel['quantity'] ) * $parcel_volume;
+					$parcel_weight = absint( $parcel['quantity'] ) * $parcel_weight;
 				}
 
 				$total_volume += $parcel_volume;
 				$total_weight += $parcel_weight;
-			}
-			else
+			} else
 			{
 				return new WP_Error( 'wcsc-calculate-virtual-parcel-missing-parcel', __( 'Parcel dimensions are missing', 'shipcloud-for-woocommerce' ) );
 			}

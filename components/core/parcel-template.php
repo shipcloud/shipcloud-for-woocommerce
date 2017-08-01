@@ -348,10 +348,11 @@ class WCSC_Parceltemplate_Posttype
 				'package' => $request['shipcloud_carrier_package'],
 			)
 		);
-		update_post_meta( $post_id, 'width', $width );
-		update_post_meta( $post_id, 'height', $height );
-		update_post_meta( $post_id, 'length', $length );
-		update_post_meta( $post_id, 'weight', $weight );
+
+		update_post_meta( $post_id, 'width', wc_format_decimal( $width ) );
+		update_post_meta( $post_id, 'height', wc_format_decimal( $height ) );
+		update_post_meta( $post_id, 'length', wc_format_decimal( $length ) );
+		update_post_meta( $post_id, 'weight', wc_format_decimal( $weight ) );
 	}
 
 	/**

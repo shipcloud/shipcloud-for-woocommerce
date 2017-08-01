@@ -246,6 +246,28 @@ class WC_Shipcloud_Order
 	}
 
 	/**
+     * Sanitize package data.
+     *
+     * User enter package data that can:
+     *
+     * - Have local decimal separator.
+     *
+     * @since 1.4.0
+     *
+	 * @param array $package_data
+	 *
+	 * @return array
+	 */
+	protected function sanitize_package( $package_data ) {
+		$package_data['width']  = wc_format_decimal( $package_data['width'] );
+		$package_data['height'] = wc_format_decimal( $package_data['height'] );
+		$package_data['length'] = wc_format_decimal( $package_data['length'] );
+		$package_data['weight'] = wc_format_decimal( $package_data['weight'] );
+
+		return $package_data;
+	}
+
+	/**
 	 * Product metabox
 	 *
 	 * @since 1.0.0
@@ -906,10 +928,10 @@ class WC_Shipcloud_Order
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
 
 		$package = array(
-			'width'  => $_POST[ 'width' ],
-			'height' => $_POST[ 'height' ],
-			'length' => $_POST[ 'length' ],
-			'weight' => str_replace( ',', '.', $_POST[ 'weight' ] ),
+			'width'  => wc_format_decimal( $_POST[ 'width' ] ),
+			'height' => wc_format_decimal( $_POST[ 'height' ] ),
+			'length' => wc_format_decimal( $_POST[ 'length' ] ),
+			'weight' => wc_format_decimal( $_POST[ 'weight' ] ),
 		);
 
 		$price = $shipcloud_api->get_price( $_POST[ 'carrier' ], $_POST['sender'], $_POST['recipient'], $package );
@@ -977,6 +999,10 @@ class WC_Shipcloud_Order
 
 		$data['notification_mail'] = $this->get_notification_email();
 		$data                      = $this->sanitize_shop_owner_data( $data );
+
+		if ( array_key_exists( 'package', $data ) ) {
+			$data['package'] = $this->sanitize_package( $data['package'] );
+		}
 
 		try {
 			$shipment = _wcsc_api()->shipment()->create( $data );
