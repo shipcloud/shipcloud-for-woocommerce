@@ -1259,6 +1259,7 @@ class WC_Shipcloud_Order
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
 				$prefix . 'country'    => $options['sender_country'],
+				$prefix . 'phone'      => $options['sender_phone'],
 			);
 		}
 
