@@ -165,7 +165,7 @@ class WC_Shipcloud_Order_Bulk {
 	 */
 	protected function save_label( $order_id, $url ) {
 		$path = $this->get_storage_path( 'order' . DIRECTORY_SEPARATOR . $order_id )
-		        . DIRECTORY_SEPARATOR . 'label.pdf';
+		        . DIRECTORY_SEPARATOR . md5( $url ) . '.pdf';
 
 		if ( file_exists( $path ) ) {
 			// Might be already downloaded, so we won't overwrite it.
