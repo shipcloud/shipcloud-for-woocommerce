@@ -207,9 +207,6 @@ class WC_Shipcloud_Order
 		if ( 'false' !== $data['isReturn'] ) {
 			// It is a return so we switch addresses.
 			$shopOwner    = 'to';
-			$customer     = $data['from'];
-			$data['to']   = $data['from'];
-			$data['from'] = $customer;
 		}
 
 		$from = array_filter( $data[ $shopOwner ] );
