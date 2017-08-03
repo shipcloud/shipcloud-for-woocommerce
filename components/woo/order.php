@@ -231,14 +231,15 @@ class WC_Shipcloud_Order
 		$data = array_intersect_key(
 			$data,
 			array(
-				'carrier'           => null,
-				'from'              => null,
-				'notification_mail' => null,
-				'description'       => null,
-				'package'           => null,
-				'reference_number'  => null,
-				'service'           => null,
-				'to'                => null,
+				'carrier'               => null,
+				'from'                  => null,
+				'notification_mail'     => null,
+				'description'           => null,
+				'package'               => null,
+				'reference_number'      => null,
+				'service'               => null,
+				'create_shipping_label' => null,
+				'to'                    => null,
 			)
 		);
 
