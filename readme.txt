@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 3.0.0
 Tested up to: 4.8.0
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
@@ -100,6 +100,11 @@ Download the WooCommerce Plugin now, [register at shipcloud.io](http://bit.ly/sh
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.4.0 =
+* Added: Support for shipcloud package types
+* Added: Phone number for sender and receiver address.
+* Fixed: Use `wc_format_decimal` to sanitize numeric inputs.
 
 = 1.3.2 =
 * Fixed: Correctly explode street numbers with digits in the street name
