@@ -412,7 +412,7 @@ class WooCommerce_Shipcloud {
 						'returns' => wcsc_api()->get_service_label('returns'),
 					),
 				),
-				'data'    => _wcsc_api()->carriers()->get(),
+				'data'    => _wcsc_carriers_get(),
 			)
 		);
 

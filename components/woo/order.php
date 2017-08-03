@@ -603,7 +603,7 @@ class WC_Shipcloud_Order
 	{
 		$order = new WC_Order( $this->order_id );
 
-		$carriers = _wcsc_api()->carriers()->get();
+		$carriers = _wcsc_carriers_get();
 
 		ob_start();
 		?>

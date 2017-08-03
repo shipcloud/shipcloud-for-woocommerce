@@ -45,6 +45,13 @@ class Api {
 	protected $carriers;
 
 	/**
+	 * Maximum number of redirects.
+	 *
+	 * @var int
+	 */
+	protected $curlMaxRedirects = 5;
+
+	/**
 	 * Amount of requests that has been fired.
 	 *
 	 * @var int
@@ -99,6 +106,9 @@ class Api {
 		return $this->request_count;
 	}
 
+	private function getStatusCode() {
+	}
+
 	/**
 	 * Fetch data from API.
 	 *
@@ -109,66 +119,105 @@ class Api {
 	 * @return Response
 	 *
 	 * @throws \InvalidArgumentException For invalid HTTP-Request type.
-	 * @throws \RuntimeException When API response was no parseable JSON.
+	 * @throws \RuntimeException
 	 * @throws \UnexpectedValueException When the API responded with something else than 2xx OK.
 	 */
 	public function request( $action, $params = array(), $type = 'GET' ) {
 		$this->request_count ++;
 
-		$ch       = $this->curlInit( $action, $params, $type );
-		$response = array();
-		$body     = curl_exec( $ch );
-
-		if ( $body && '{}' !== trim( $body ) ) {
-			// We received some data, so we parse it.
-			$response = json_decode( $body, true );
-
-			if ( ! $response ) {
-				$info = curl_getinfo( $ch );
-				throw new \RuntimeException( 'Could not parse API response.' );
-			}
-		}
-
-		$curlInfo = curl_getinfo( $ch );
-		if ( 200 > $curlInfo['http_code'] || 300 <= $curlInfo['http_code'] ) {
-			// Something was not right, so we throw an exception.
-			if ( isset( $response['errors'] ) && $response['errors'] ) {
-				$currentException = null;
-				foreach ( $response['errors'] as $error ) {
-					$currentException = new \UnexpectedValueException(
-						$error,
-						$curlInfo['http_code'],
-						$currentException
-					);
-				}
-
-				throw $currentException;
-			}
-
-			// No errors provided by API so the throw generic message.
-			throw new \UnexpectedValueException(
-				sprintf(
-					'Request was for "%s" was not successful (%d).',
-					$action,
-					$curlInfo['http_code']
-				),
-				$response['name']
-			);
-		}
-
-		return new Response( $response, $curlInfo );
+		return $this->curlExec( $action, $params, $type );
 	}
 
 	/**
-	 * Open cURL connection.
+	 * Execute cURL handler.
+	 *
+	 * @since 1.4.1 This simulates following redirects as open_basedir setting of PHP can cause problems with the
+	 *              "CURLOPT_FOLLOWLOCATION" setting.
 	 *
 	 * @param string $action The URL to access.
 	 * @param array  $params
 	 * @param string $type   HTTP-Request type.
 	 *
+	 * @return Response
+	 *
+	 * @throws \RuntimeException When API response was no parseable JSON.
+	 * @throws \UnexpectedValueException When the API ended in something else than 2xx OK.
+	 */
+	protected function curlExec( $action, $params, $type ) {
+		$url       = $this->url . '/' . $action;
+		$redirects = 0;
+
+		do {
+			$curlHandler = $this->curlInit( $url, $params, $type );
+			$response    = Response::createFromResponse(
+				curl_exec( $curlHandler ),
+				curl_getinfo( $curlHandler, CURLINFO_HEADER_SIZE )
+			);
+
+			if ( ! $response->isRedirect() ) {
+				// No longer a redirect so we stop here.
+				break;
+			}
+
+			// A redirect we will parse and follow (see http://php.net/manual/de/function.curl-setopt.php#113682)
+			$redirects ++;
+
+			$url = $response->getHeader( 'location' );
+			curl_close( $curlHandler );
+		} while ( $url && $redirects < $this->curlMaxRedirects );
+
+		if ( $response->isRedirect() ) {
+			// Still a redirect, enough is enough.
+			throw new \UnexpectedValueException( 'Too many redirects.' );
+		}
+
+		if ( ! $response->getPayload() ) {
+			throw new \RuntimeException( 'Could not parse or empty API response.' );
+		}
+
+		$payload = $response->getPayload();
+		if ( ! $response->isSuccessful() && ! empty( $payload['errors'] ) ) {
+			// Something was not right, so we throw an exception.
+			$currentException = null;
+			foreach ( $payload['errors'] as $error ) {
+				$currentException = new \UnexpectedValueException(
+					$error,
+					$response->getStatusCode(),
+					$currentException
+				);
+			}
+
+			throw $currentException;
+		}
+
+		if ( ! $response->isSuccessful() ) {
+			// Not successfull and no errors provided by API so the throw generic message.
+			throw new \UnexpectedValueException(
+				sprintf(
+					'Request was for "%s" was not successful (%d).',
+					$action,
+					$response->getStatusCode()
+				),
+				$payload['name']
+			);
+		}
+
+		return $response;
+	}
+
+	/**
+	 * Open cURL connection.
+	 *
+	 * @since 1.4.1 The cURL option CURLOPT_FOLLOWLOCATION won't be simulated
+	 *              due to conflicts with the open_basedir config of PHP.
+	 *
+	 * @param string $url  The URL to access.
+	 * @param array  $params
+	 * @param string $type HTTP-Request type.
+	 *
 	 * @return resource
 	 */
-	protected function curlInit( $action, $params = array(), $type = 'GET' ) {
+	protected function curlInit( $url, $params = array(), $type = 'GET' ) {
 		$headers = array(
 			//'Authorization' => 'Basic ' . base64_encode( $this->apiKey ),
 			'Content-Type' => 'application/json',
@@ -178,8 +227,8 @@ class Api {
 			$headers['Affiliate-ID'] = $this->affiliateId;
 		}
 
-		$ch = curl_init( $this->url . '/' . $action );
-		curl_setopt( $ch, CURLOPT_HEADER, false );
+		$ch = curl_init( $url );
+		curl_setopt( $ch, CURLOPT_HEADER, true );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
 		curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
