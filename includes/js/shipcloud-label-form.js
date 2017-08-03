@@ -87,6 +87,7 @@ shipcloud.LabelForm = function (wrapperSelector) {
         data.to = data.from;
         data.from = tmp;
         data.isReturn = true;
+        data.service = 'returns';
 
         return data;
     };
