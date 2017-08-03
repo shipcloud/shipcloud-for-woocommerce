@@ -583,15 +583,19 @@ class Woocommerce_Shipcloud_API
 	 * @return float|WP_Error
 	 * @since 1.0.0
 	 */
-	public function get_price( $carrier, $from, $to, $package )
+	public function get_price( $carrier, $from, $to, $package = array(), $service = '' )
 	{
 		$action = 'shipment_quotes';
 
-		$carrier = $this->disassemble_carrier_name( $carrier );
+		if ( ! $service && strpos( $carrier, '_' ) ) {
+			$data = $this->disassemble_carrier_name( $carrier );
+			$carrier = $data['carrier'];
+			$service = $data['service'];
+		}
 
 		$params = array(
-			'carrier' => $carrier[ 'carrier' ],
-			'service' => $carrier[ 'service' ],
+			'carrier' => $carrier,
+			'service' => $service,
 			'to'      => $to,
 			'from'    => $from,
 			'package' => $package
