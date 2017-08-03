@@ -36,7 +36,8 @@ shipcloud.LabelForm = function (wrapperSelector) {
             'zip_code'  : $('input[name="sender_address[zip_code]"]', self.$wrapper).val(),
             'city'      : $('input[name="sender_address[city]"]', self.$wrapper).val(),
             'state'     : $('input[name="sender_address[state]"]', self.$wrapper).val(),
-            'country'   : $('select[name="sender_address[country]"]', self.$wrapper).val()
+            'country'   : $('select[name="sender_address[country]"]', self.$wrapper).val(),
+            'phone'     : $('input[name="sender_address[phone]"]', self.$wrapper).val()
         };
     };
 

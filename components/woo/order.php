@@ -382,6 +382,11 @@ class WC_Shipcloud_Order
                             <?php _e( 'Country', 'shipcloud-for-woocommerce' ); ?>
                         </label>
                     </p>
+
+                    <p class="fullsize">
+                        <input type="text" name="sender_address[phone]" value="<?php echo $sender[ 'phone' ]; ?>" disabled>
+                        <label for="sender_address[phone]"><?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?></label>
+                    </p>
                 </div>
 			</div>
 
@@ -1255,6 +1260,7 @@ class WC_Shipcloud_Order
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
 				$prefix . 'country'    => $options['sender_country'],
+				$prefix . 'phone'      => $options['sender_phone'],
 			);
 		}
 

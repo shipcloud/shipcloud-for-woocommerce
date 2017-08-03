@@ -470,6 +470,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'options'     => $woocommerce->countries->countries,
 				'default'     => $default_country
 			),
+			'sender_phone'                    => array(
+				'title'       => __( 'Phone', 'shipcloud-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'Enter standard phone number for sender.', 'shipcloud-for-woocommerce' ),
+				'desc_tip'    => true,
+			),
 			'recipient_information'              => array(
 				'title'       => __( 'Recipient information', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
@@ -944,6 +950,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			'city'      => $this->get_option( 'sender_city' ),
 			'state'     => $this->get_option( 'sender_state' ),
 			'country'   => $this->get_option( 'sender_country' ),
+			'phone'   => $this->get_option( 'sender_phone' ),
 		);
 	}
 
