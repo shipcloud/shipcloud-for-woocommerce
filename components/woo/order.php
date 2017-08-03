@@ -580,12 +580,12 @@ class WC_Shipcloud_Order
 
 
 			// Fallback to general settings if there was no shipcloud in shipping zone
-			if( 0 === count( $carriers ) )
+			if( 0 === count( $carriers ) && wcsc_shipping_method() )
 			{
 				$carriers = wcsc_shipping_method()->get_allowed_carriers();
 			}
 		}
-		else
+		else if ( wcsc_shipping_method() )
 		{
 			$carriers = wcsc_shipping_method()->get_allowed_carriers();
 		}

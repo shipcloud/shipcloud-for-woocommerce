@@ -451,7 +451,11 @@ function wcsc_api() {
 	static $api;
 
 	if ( ! $api ) {
-		$api = new Woocommerce_Shipcloud_API( wcsc_shipping_method()->get_option( 'api_key' ) );
+		if ( wcsc_shipping_method() ) {
+			$api_key = wcsc_shipping_method()->get_option( 'api_key' );
+		}
+
+		$api = new Woocommerce_Shipcloud_API( $api_key );
 	}
 
 	return $api;
