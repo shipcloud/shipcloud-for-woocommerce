@@ -8,6 +8,7 @@ Stable tag: 1.4.0
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
 == Description ==
+
 shipcloud is the only shipping service provider you need! With this plugin you can create shipping labels for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the need to copy or upload your order data into another external system (no CSV upload necessary). Our direct integration with the shipcloud system not only enables you to create shipping labels, you’re also able to track your shipments for free. This way you’ll always know where your orders are currently at.
 
 = All the benefits shipcloud offers you =
@@ -70,8 +71,21 @@ We've got a lot of interesting customers who are using the shipcloud WooCommerce
 Using shipcloud you can start sending international shipments from Germany right away. Seize the opportunity to reach customers outside of Germany.
 
 = If you want to use shipcloud from outside of Germany =
+
 * It's possible to create shipping labels from Austria, Switzerland and the Low Countries by using your own DPD business contract.
 * Create shipments from outside the EU by using your own UPS business contract.
+
+= Demo-Videos =
+
+We've got a couple of videos explaining the usage of the plugin.
+
+** Setting up parcel templates **
+
+https://youtu.be/NgYNcHfrnDQ
+
+** Creating a single shipping label for an order **
+
+https://youtu.be/DQd6NC3VJEQ
 
 Download the WooCommerce Plugin now, [register at shipcloud.io](http://bit.ly/shipcloud-for-woocommerce-en), enter your api key and start creating shipping labels right away!
 
@@ -82,11 +96,7 @@ Download the WooCommerce Plugin now, [register at shipcloud.io](http://bit.ly/sh
 1. Upload the folder `shipcloud-for-woocommerce` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. [Register an account](http://bit.ly/shipcloud-for-woocommerce-en) with shipcloud
-4. Go to the `WooCommerce/Settings/Shipping` tab in the WordPress Admin, select `shipcloud`, add your API Key and put in the rest of the settings
-5. Be sure that you have setup the shipment related settings (length, height, width and weight) in your products ...
-6. ... or if you are using Shipping Classes, add the settings there
-7. After setting up, your new orders will have a box called `shipcloud shipment center`
-8. There you can calculate prices for your parcels as well as creating & downloading shipping labels
+4. Follow this simple instruction video: https://youtu.be/HE3jow15x8c
 
 == Screenshots ==
 
