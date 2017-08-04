@@ -1,5 +1,14 @@
 == Changelog ==
 
+= 1.4.1 =
+* Release date: 2017-08-04
+* Enhanced: You'll find links to YouTube videos now in the reame which show how to setup Shipcloud.
+* Enhanced: Make cURL work while "open_basedir" is active.
+* Fixed: While working on a single order the shipping labels didn't get created.
+* Fixed: Backend does not work properly when mbstring extension were missing.
+* Fixed: While working on a single order the shipping cost couldn't be calculated.
+* Fixed: Return labels wrote sender and recipient in the wrong way.
+
 = 1.4.0 =
 * Release date: 2017-08-03
 

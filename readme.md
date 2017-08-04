@@ -1,6 +1,6 @@
 # shipcloud for WooCommerce
 
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud_for_woocommerce) into WooCommerce.
 
@@ -11,8 +11,10 @@ for all popular shipping carriers in Germany right out of the WooCommerce admin 
 need to copy or upload your order data into another external system (no CSV upload necessary).
 
 ## Requirements
+
 - WordPress 4.0.0+
 - WooCommerce 2.0.0+
+- PHP 5.4+
 
 ## Installation
 1. Upload the folder `shipcloud-for-woocommerce` to the `/wp-content/plugins/` directory
