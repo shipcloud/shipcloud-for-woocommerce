@@ -95,23 +95,17 @@ jQuery( function( $ ) {
 
 		$.post( ajaxurl, data, function( response )
 		{
-			var result = JSON.parse( response );
-
-			if( result.status == 'ERROR' )
-			{
-				print_errors( result.errors );
-			}
-
-			if( result.status == 'OK' )
-			{
-				$( '.shipment-labels' ).prepend( result.html );
-				shipcloud_create_label_buttons();
-				shipcloud_delete_shipment_buttons();
-
-				// $( '#shipcloud_create_label').fadeIn();
-			}
-
 			button.removeClass( 'button-loading' );
+
+			if( ! response.success )
+			{
+				print_errors( _( response.data ).pluck('message') );
+				return;
+			}
+
+			$( '.shipment-labels' ).prepend( response.data.html );
+			shipcloud_create_label_buttons();
+			shipcloud_delete_shipment_buttons();
 		});
 	});
 
