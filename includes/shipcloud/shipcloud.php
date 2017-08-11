@@ -71,15 +71,14 @@ class Woocommerce_Shipcloud_API
 		{
 			$this->api_key = $api_key;
 		}
-		else
-		{
-			if ( empty( $this->settings[ 'api_key' ] ) )
-			{
-				return new WP_Error( 'shipcloud_api_error_no_api_key', __( 'No api key given', 'shipcloud-for-woocommerce' ) );
-			}
 
-			$this->api_key = $this->settings[ 'api_key' ];
+		if ( empty( $this->settings[ 'api_key' ] ) )
+		{
+			// No API key anywhere - stop here.
+			return;
 		}
+
+		$this->api_key = $this->settings[ 'api_key' ];
 
 		$this->api_url = 'https://api.shipcloud.io/v1';
 
@@ -110,6 +109,10 @@ class Woocommerce_Shipcloud_API
 				'customer_service' => false
 			)
 		);
+	}
+
+	public function is_valid() {
+		return '' !== (string) $this->api_key;
 	}
 
 	/**
