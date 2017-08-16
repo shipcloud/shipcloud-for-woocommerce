@@ -1335,11 +1335,14 @@ class WC_Shipcloud_Order
 	public function get_phone() {
 		$order = $this->get_wc_order();
 
-		if ( $phone = $order->get_meta('_shipping_phone') ) {
-			return (string) $phone;
+		if ( ! $order ) {
+		    // No order present.
+            return '';
 		}
 
-		if ($order->get_billing_phone())
+		if ( method_exists( $order, 'get_meta' ) && $phone = $order->get_meta( '_shipping_phone' ) ) {
+			return (string) $phone;
+		}
 
 		return (string) $order->get_billing_phone();
 	}
@@ -1358,7 +1361,12 @@ class WC_Shipcloud_Order
 	public function get_care_of() {
 		$order = $this->get_wc_order();
 
-		if ( $care_of = $order->get_meta( '_shipping_care_of' ) ) {
+		if ( ! $order ) {
+			// No order present.
+			return '';
+		}
+
+		if ( method_exists( $order, 'get_meta' ) && $care_of = $order->get_meta( '_shipping_care_of' ) ) {
 			return (string) $care_of;
 		}
 
