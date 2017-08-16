@@ -110,11 +110,20 @@ class WC_Shipcloud_Order_Bulk {
 	 * @since   1.2.1
 	 */
 	public function admin_print_footer_scripts() {
+
+		if (
+			false === get_current_screen() instanceof \WP_Screen
+			|| 'edit-shop_order' !== get_current_screen()->id
+		) {
+			// Not the context for bulk action so we won't print the bulk template.
+			return;
+		}
+
 		require_once WCSC_FOLDER . '/includes/shipcloud/block-order-labels-bulk.php';
 
 		$block = new WooCommerce_Shipcloud_Block_Order_Labels_Bulk(
 			WCSC_COMPONENTFOLDER . '/block/order-labels-bulk.php',
-			WC_Shipcloud_Order::create_order(null),
+			WC_Shipcloud_Order::create_order( null ),
 			_wcsc_carriers_get(),
 			wcsc_api()
 		);
