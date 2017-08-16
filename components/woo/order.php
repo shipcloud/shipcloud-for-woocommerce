@@ -1238,7 +1238,7 @@ class WC_Shipcloud_Order
 		$settings      = $this->get_options();
 		$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
 
-		$response = $shipcloud_api->get_tracking_status( $shipment_id );
+		$shipcloud_api->get_tracking_status( $shipment_id );
 	}
 
 	/**
@@ -1534,6 +1534,16 @@ class WC_Shipcloud_Order
 			$carrier['package'] = null;
 		}
 
+		$option = $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
+				   . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
+				   . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
+				   . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
+				   . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier );
+
+		if ( $carrier['package'] ) {
+			$option .= ' - ' . WC_Shipcloud_Order::instance()->get_package_label( $carrier['package'] );
+        }
+
 		return array(
 			/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
 			'value'  => $data->width . ';'
@@ -1541,11 +1551,7 @@ class WC_Shipcloud_Order
 						. $data->length . ';'
 						. $data->weight . ';'
 						. $data->carrier . ';',
-			'option' => $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-						. $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-						. $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
-						. ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
-						. ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier ),
+			'option' => $option,
 			'data'   => array(
 				'parcel_width'      => $data->width,
 				'parcel_height'     => $data->height,

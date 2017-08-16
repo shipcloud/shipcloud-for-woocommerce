@@ -136,9 +136,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		// Initializing
 		$this->shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
 
-		if( is_wp_error( $this->shipcloud_api ) ) {
-			self::log( $this->shipcloud_api->get_error_message() );
-			return $this->shipcloud_api;
+		if( ! $this->shipcloud_api->is_valid() ) {
+		    $error = new WP_Error(
+		            'shipcloud_api_error_no_api_key',
+                    __( 'No api key given', 'shipcloud-for-woocommerce' )
+            );
+			self::log( $error->get_error_message() );
+			return $error;
 		}
 
 		return true;
