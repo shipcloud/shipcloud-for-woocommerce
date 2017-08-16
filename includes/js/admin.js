@@ -117,26 +117,18 @@ jQuery( function( $ ) {
 		var button = $( '#shipcloud_create_shipment_return' );
 		button.addClass( 'button-loading' );
 
-		$.post( ajaxurl, data, function( response )
-		{
-			var result = JSON.parse( response );
+		$.post( ajaxurl, data, function (response) {
+            button.removeClass('button-loading');
 
-			if( result.status == 'ERROR' )
-			{
-				print_errors( result.errors );
-			}
+            if (!response.success) {
+                print_errors(_(response.data).pluck('message'));
+                return;
+            }
 
-			if( result.status == 'OK' )
-			{
-				$( '.shipment-labels' ).prepend( result.html );
-				shipcloud_create_label_buttons();
-				shipcloud_delete_shipment_buttons();
-
-				// $( '#shipcloud_create_label').fadeIn();
-			}
-
-			button.removeClass( 'button-loading' );
-		});
+            $('.shipment-labels').prepend(response.data.html);
+            shipcloud_create_label_buttons();
+            shipcloud_delete_shipment_buttons();
+        });
 	});
 
 	$( '#shipcloud_create_shipment_label' ).click( function(){
