@@ -1344,7 +1344,7 @@ class WC_Shipcloud_Order
 			return (string) $phone;
 		}
 
-		return (string) $order->get_billing_phone();
+		return (string) $order->billing_phone;
 	}
 
 	/**
