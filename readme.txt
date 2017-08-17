@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 3.0.0
 Tested up to: 4.8.1
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
@@ -105,6 +105,13 @@ Download the WooCommerce Plugin now, [register at shipcloud.io](http://bit.ly/sh
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.4.2 =
+* Enhanced: Added direct links to German customer stories to readme.txt
+* Fixed: Fatal error due to `Call to undefined method WC_Order::get_meta()` for WooCommerce 2 users
+* Fixed: Parcel template names are now shown alike at all places
+* Fixed: Workaround for when open_basedir restrictions are in effect
+* Fixed: Prepared shipments are directly shown again in list of shipments after creation
 
 = 1.4.1 =
 * Enhanced: You'll find links to YouTube videos now in the reame which show how to setup Shipcloud.

@@ -1,5 +1,13 @@
 == Changelog ==
 
+= 1.4.2 =
+* Release date: 2017-08-17
+* Enhanced: Added direct links to German customer stories to readme.txt
+* Fixed: Fatal error due to `Call to undefined method WC_Order::get_meta()` for WooCommerce 2 users
+* Fixed: Parcel template names are now shown alike at all places
+* Fixed: Workaround for when open_basedir restrictions are in effect
+* Fixed: Prepared shipments are directly shown again in list of shipments after creation
+
 = 1.4.1 =
 * Release date: 2017-08-04
 * Enhanced: You'll find links to YouTube videos now in the reame which show how to setup Shipcloud.
