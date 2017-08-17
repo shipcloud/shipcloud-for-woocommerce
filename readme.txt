@@ -54,7 +54,7 @@ receive their order from
 
 = shipcloud WooCommerce customers =
 
-A multitude of WooCommerce customers succussfully use shipcloud as their shipping service provider. 
+A multitude of WooCommerce customers succussfully use shipcloud as their shipping service provider.
 Here are a few of them:
 
 * [einhorn.my](https://www.shipcloud.io/de/company/press/references/mit-shipcloud-koennen-wir-reibungsverluste-reduzieren?utm_source=wordpressr&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
@@ -91,7 +91,14 @@ Download the WooCommerce Plugin now, [register at shipcloud.io](http://bit.ly/sh
 1. Upload the folder `shipcloud-for-woocommerce` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. [Register an account](http://bit.ly/shipcloud-for-woocommerce-en) with shipcloud
-4. Follow this simple instruction video: https://youtu.be/HE3jow15x8c
+4. Go to the `WooCommerce/Settings/Shipping` tab in the WordPress Admin, select `shipcloud`, add your API Key and put in the rest of the settings
+5. Be sure that you have setup the shipment related settings (length, height, width and weight) in your products
+6. or if you are using Shipping Classes, add the settings there
+7. After setting up, your new orders will have a box called `shipcloud shipping center`
+8. There you can calculate prices for your parcels, create & download labels or view their tracking data
+
+You can also follow this simple instruction video (in German):
+https://youtu.be/HE3jow15x8c
 
 == Screenshots ==
 
