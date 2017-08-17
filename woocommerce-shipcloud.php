@@ -54,7 +54,15 @@ class WooCommerce_Shipcloud {
 	 */
 	private $passed_requirements = false;
 
-	const VERSION = '1.4.1';
+	/**
+	 * Indicate the version of the plugin.
+	 *
+	 * This will be appended to JS and CSS files
+	 * for making them update on client site with each new plugin version.
+	 *
+	 * @since 1.2.1
+	 */
+	const VERSION = '1.4.2';
 
 	/**
 	 * Construct
