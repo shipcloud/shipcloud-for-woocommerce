@@ -65,6 +65,10 @@ class WC_Shipcloud_Order
 		$this->init_hooks();
 	}
 
+	public function filterArrayPreserveEmptyString( $var ) {
+		return ($var !== NULL && $var !== FALSE);
+	}
+
 	/**
      * Backward compatibility to WC2
      *
@@ -347,7 +351,7 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="twentyfive">
-						<input type="text" name="sender_address[street_nr]" value="<?php echo $sender[ 'street_nr' ]?: $sender[ 'street_no' ]; ?>" disabled>
+						<input type="text" name="sender_address[street_nr]" value="<?php echo isset($sender[ 'street_nr' ]) ? $sender[ 'street_nr' ] : $sender[ 'street_no' ]; ?>" disabled>
 						<label for="sender_address[street_nr]"><?php _e( 'Number', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
@@ -1248,7 +1252,7 @@ class WC_Shipcloud_Order
 	 */
 	public function get_sender($prefix = '') {
 		$options = $this->get_options();
-
+		
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
 
 		// Use default data if nothing was saved before
@@ -1259,12 +1263,12 @@ class WC_Shipcloud_Order
 				$prefix . 'last_name'  => $options['sender_last_name'],
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
-				$prefix . 'street_no'  => $options['sender_street_nr'],
+				$prefix . 'street_no'  => $options['sender_street_nr'] ?: $options['sender_street_no'],
 				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
 				$prefix . 'country'    => $options['sender_country'],
-				$prefix . 'phone'      => $options['sender_phone'],
+				$prefix . 'phone'      => isset($options['sender_phone'])?:'',
 			);
 		}
 
@@ -1317,6 +1321,7 @@ class WC_Shipcloud_Order
 				$prefix . 'street'     => $recipient_street_name,
 				$prefix . 'street_no'  => $recipient_street_nr,
 				$prefix . 'zip_code'   => $order->shipping_postcode,
+				$prefix . 'postcode'   => $order->shipping_postcode,
 				$prefix . 'city'       => $order->shipping_city,
 				$prefix . 'state'      => $order->shipping_state,
 				$prefix . 'country'    => $order->shipping_country,
@@ -1398,7 +1403,7 @@ class WC_Shipcloud_Order
 			$data[ $prefix . 'zip_code' ] = $data[ $prefix . 'postcode' ];
 		}
 
-		return array_filter( $data );
+		return array_filter( $data, array(__CLASS__, 'filterArrayPreserveEmptyString') );
 	}
 
 	/**
