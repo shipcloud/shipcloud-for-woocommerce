@@ -1434,9 +1434,9 @@ class WC_Shipcloud_Order
 			$order_id = $_POST['order_id'];
 		}
 
-		$factory = WC()->order_factory;
+		$factory = new WC_Order_Factory();
 
-		return $this->wc_order = $factory::get_order( $order_id );
+		return $this->wc_order = $factory->get_order( $order_id );
 	}
 
 	/**
