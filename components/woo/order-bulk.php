@@ -341,7 +341,7 @@ class WC_Shipcloud_Order_Bulk {
 			'carrier'               => $request['shipcloud_carrier'],
 			'service'               => $request['shipcloud_carrier_service'],
 			'reference_number'      => $reference_number,
-			'notification_mail'     => $order->get_notification_email(),
+			'notification_email'     => $order->get_notification_email(),
 			'create_shipping_label' => true,
 		);
 
