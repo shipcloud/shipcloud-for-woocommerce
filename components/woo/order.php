@@ -1403,7 +1403,7 @@ class WC_Shipcloud_Order
 			$data[ $prefix . 'zip_code' ] = $data[ $prefix . 'postcode' ];
 		}
 
-		return array_filter( $data, array(__CLASS__, 'filterArrayPreserveEmptyString') );
+		return array_filter( $data, array($this, 'filterArrayPreserveEmptyString') );
 	}
 
 	/**
