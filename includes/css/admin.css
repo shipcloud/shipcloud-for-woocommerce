@@ -192,6 +192,32 @@
     padding:20px;
 }
 
+.shipcloud .widget-quick-actions {
+    float: right;
+    position: relative;
+    padding: 10px;
+}
+
+.shipcloud .widget-quick-actions .btn-primary {
+    color:#fff;
+    background-color:#337ab7;
+    border-color:#2e6da4;
+}
+
+.shipcloud .button-delete-shipment .shipcloud_delete_shipment {
+    color:#fff;
+    background-color:#d9534f;
+    border-color:#d43f3a;
+}
+
+.shipcloud .widget-quick-actions .dashicons,
+.shipcloud .widget-quick-actions .dashicons-before:before {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 24px;
+}
+
 #shipcloud-io .shipment-labels .label {
     margin: 10px 20px;
     padding: 0;

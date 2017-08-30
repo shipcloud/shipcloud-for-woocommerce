@@ -748,11 +748,21 @@ class WC_Shipcloud_Order
 		$shipment_status = wcsc_get_shipment_status_string( $status );
 
 		?>
-	<div id="shipment-<?php echo $data[ 'id' ]; ?>" class="label widget">
+	<div id="shipment-<?php echo $data[ 'id' ]; ?>" class="label widget shipcloud">
 		<div class="widget-top">
 			<div class="widget-title-action">
 				<a class="widget-action hide-if-no-js"></a>
 			</div>
+			<div class="widget-quick-actions">
+                <a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button btn-primary">
+                    <span class="dashicons dashicons-arrow-down-alt"></span>
+                    <?php _e( 'Download', 'shipcloud-for-woocommerce' ); ?>
+                </a>
+                <a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button">
+                    <span class="dashicons dashicons-backup"></span>
+                    <?php _e( 'Tracking', 'shipcloud-for-woocommerce' ); ?>
+                </a>
+            </div>
 			<div class="widget-title">
 				<img class="shipcloud-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
 				<?php
@@ -765,6 +775,8 @@ class WC_Shipcloud_Order
 				?>
 				<h4><?php echo $title; ?></h4>
 			</div>
+            <span class="right">
+            </span>
 		</div>
 		<div class="widget-inside">
 			<div class="widget-content">
