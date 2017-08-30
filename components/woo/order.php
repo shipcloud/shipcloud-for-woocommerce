@@ -230,7 +230,7 @@ class WC_Shipcloud_Order
 			array(
 				'carrier'               => null,
 				'from'                  => null,
-				'notification_mail'     => null,
+				'notification_email'    => null,
 				'description'           => null,
 				'package'               => null,
 				'reference_number'      => null,
@@ -1007,7 +1007,7 @@ class WC_Shipcloud_Order
 			$order_id
 		);
 
-		$data['notification_mail'] = $this->get_notification_email();
+		$data['notification_email'] = $this->get_notification_email();
 		$data                      = $this->sanitize_shop_owner_data( $data );
 
 		if ( array_key_exists( 'package', $data ) ) {
