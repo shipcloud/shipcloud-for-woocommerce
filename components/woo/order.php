@@ -1007,8 +1007,8 @@ class WC_Shipcloud_Order
 			$order_id
 		);
 
-		$data['notification_email'] = $this->get_notification_email();
-		$data                      = $this->sanitize_shop_owner_data( $data );
+		$data = $this->sanitize_shop_owner_data( $data );
+		$data = $this->handle_email_notification( $data );
 
 		if ( array_key_exists( 'package', $data ) ) {
 			$data['package'] = $this->sanitize_package( $data['package'] );
@@ -1632,6 +1632,37 @@ class WC_Shipcloud_Order
 			'parcel'        => array( 'all' ),
 			'parcel_letter' => array( 'dhl', 'dpd' ),
 		);
+	}
+	
+	private function handle_email_notification( $data ) {
+		$carrier_email = $this->get_carrier_mail();
+		$notification_email = $this->get_notification_email();
+		
+		if ( $data['carrier'] == 'dpd' || $data['carrier'] == 'dhl' ) {
+			if ( ! empty ( $carrier_email ) ) {
+				unset($data['notification_email']);
+
+				$data['additional_services'] = array();
+	
+				$data['additional_services'] = array(
+					array(
+						'name'       => 'advance_notice',
+						'properties' => array(
+							'email'    => $carrier_email,
+							'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) )
+						)
+					)
+				);
+			} elseif ( ! empty ( $notification_email ) ) {
+				$data['notification_email'] = $notification_email;
+			}
+		} else {
+			if ( ! empty ( $notification_email ) ) {
+				$data['notification_email'] = $this->get_notification_email();
+			}
+		}
+
+		return $data;
 	}
 }
 
