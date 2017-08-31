@@ -113,7 +113,7 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
-= 1.5.0 =
+= 1.4.3 =
 * Fixed: Added whitespace between first and last name as well as street name and number when displaying a shipment
 * Fixed: `notification_email` is now transmitted correctly
 
