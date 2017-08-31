@@ -1566,7 +1566,7 @@ class WC_Shipcloud_Order
 						. $data->height . ';'
 						. $data->length . ';'
 						. $data->weight . ';'
-						. $data->carrier . ';',
+						. $data->carrier['carrier'] . ';',
 			'option' => $option,
 			'data'   => array(
 				'parcel_width'      => $data->width,
