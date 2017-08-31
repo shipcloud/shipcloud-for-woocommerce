@@ -763,7 +763,10 @@ class WC_Shipcloud_Order
 
 				$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
 				$title .= ' <span class="dashicons dashicons-arrow-right-alt"></span> ';
-				$title .= trim( $data[ 'recipient_company' ] ) != '' ? $data[ 'recipient_company' ] . ', ' . $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ] : $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
+				if ( isset($data['recipient_company']) ) {
+					$title .= $data[ 'recipient_company' ] . ', ';
+				}
+				$title .= $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
 				$title .= ' <span class="dashicons dashicons-screenoptions"></span> <small>' . trim($data[ 'parcel_title' ], ' -') . '</small>';
 
 				?>
