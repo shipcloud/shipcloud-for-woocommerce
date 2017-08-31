@@ -822,7 +822,7 @@ class WC_Shipcloud_Order
 						<table>
 							<tbody>
 							<?
-								if ( (isset($data['recipient_company'])) ) {
+								if ( (isset($data['description']) && !empty($data['description'])) ) {
 							?>
 							<tr>
 								<th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>:</th>
