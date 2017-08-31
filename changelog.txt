@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 1.4.3 =
+* Fixed: Added whitespace between first and last name as well as street name and number when displaying a shipment
+* Fixed: `notification_email` is now transmitted correctly
+
 = 1.4.2 =
 * Release date: 2017-08-17
 * Enhanced: Added direct links to German customer stories to readme.txt
