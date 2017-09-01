@@ -44,7 +44,7 @@ class Api_Test extends \WP_UnitTestCase {
 	 * - Content-Type (as "application/json")
 	 *
 	 * @dataProvider getRequestMethods
-	 * @group integration
+	 * @group        integration
 	 */
 	public function testSendsMandatoryHeaders( $method ) {
 		$apiKey      = uniqid( 'apiKey', true );
@@ -72,7 +72,7 @@ class Api_Test extends \WP_UnitTestCase {
 	 * When no Affiliate-Id is given or it is empty then it won't be transferred.
 	 *
 	 * @dataProvider getRequestMethods
-	 * @group integration
+	 * @group        integration
 	 */
 	public function testDoesNotSendEmptyAffiliateId( $method ) {
 		$apiKey = uniqid( 'apiKey', true );
@@ -81,7 +81,9 @@ class Api_Test extends \WP_UnitTestCase {
 		$response = $api->request( strtolower( $method ), [], $method );
 
 		// Assert mandatory headers are sent.
-		$payload = $response->getPayload();static::assertArraySubset(
+		$payload = $response->getPayload();
+
+		static::assertArraySubset(
 			[
 				'headers' => [
 					'Authorization' => 'Basic ' . base64_encode( $apiKey . ':' ),
