@@ -100,6 +100,22 @@ Download the WooCommerce Plugin now, [register at shipcloud.io](http://bit.ly/sh
 You can also follow this simple instruction video (in German):
 [youtube https://youtu.be/HE3jow15x8c]
 
+== Frequently Asked Questions ==
+
+= My customers don't see all the carriers available =
+
+When letting the customer decide, which carrier should be used for shipping, all activated carriers from the settings will be shown at checkout. If the shop owner wants to decide which carrier should be used, we only display the standard carrier from the settings at checkout.
+
+***Notice:*** Because the plugin currently requests the shipping rate at shipcloud from within the checkout, we need a valid address. If the customer isn't logged in, she/he needs to provide an address for this calculation.
+
+= I don't see all the carriers in the settings =
+
+After registering with shipcloud, you will have immediate access to DHL, UPS, DPD and Liefery. If you want to use Hermes, please send a request to support@shipcloud.io and we will arrange your registration with the required carrier. There may be a 2-3 day waiting time for this process.
+
+If you already have a direct account with FedEx, GLS or MyDPD Business from DPD (formerly iloxx/MyDPD Business) or TNT, you can easily integrate them with shipcloud. Otherwise, these carriers are not available, unfortunately.
+
+To use Deutsche Post as a shipping option in shipcloud, please contact support@shipcloud.io and we will unlock this service for you. Please note that you will need a prepaid account ("Portokasse") with Deutsche Post.
+
 == Screenshots ==
 
 1. Configure shipcloud from within the shipping settings of WooCommerce
