@@ -233,7 +233,6 @@ class Api {
 		curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
 		curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
 		curl_setopt( $ch, CURLOPT_USERPWD, $this->apiKey );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
 		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
 
 		$type = strtoupper( $type );
@@ -247,16 +246,13 @@ class Api {
 		if ( 'POST' === $type || 'PUT' === $type ) {
 			// Write operations need payload.
 			$jsonParams = json_encode( $params );
-			curl_setopt(
-				$ch,
-				CURLOPT_HTTPHEADER,
-				array(
-					'Content-Type: application/json',
-					'Content-Length: ' . strlen( $jsonParams )
-				)
-			);
 			curl_setopt( $ch, CURLOPT_POSTFIELDS, $jsonParams );
+
+			$headers['Content-Type'] = 'application/json';
+			$headers['Content-Length'] = strlen( $jsonParams );
 		}
+
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
 
 		return $ch;
 	}
