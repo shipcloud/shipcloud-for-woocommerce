@@ -118,6 +118,18 @@ class Api_Test extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Headers
+	 *
+	 * Those HTTP Methods remain unsupported:
+	 *
+	 * - HEAD
+	 * - PATCH
+	 * - TRACE
+	 * - OPTIONS
+	 * - CONNECT
+	 *
+	 * The SDK will refuse to work with them by throwing an exception.
+	 *
 	 * @dataProvider             getInvalidHttpMethods
 	 * @expectedException \InvalidArgumentException
 	 * @expectedExceptionMessage Invalid HTTP method
