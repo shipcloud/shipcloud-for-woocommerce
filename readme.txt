@@ -98,7 +98,7 @@ Download the WooCommerce Plugin now, [register at shipcloud.io](http://bit.ly/sh
 8. There you can calculate prices for your parcels, create & download labels or view their tracking data
 
 You can also follow this simple instruction video (in German):
-https://youtu.be/HE3jow15x8c
+[youtube https://youtu.be/HE3jow15x8c]
 
 == Screenshots ==
 
