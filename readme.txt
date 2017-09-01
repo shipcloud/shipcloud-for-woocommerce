@@ -9,21 +9,21 @@ This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) i
 
 == Description ==
 
-shipcloud is the only shipping service provider you need! With this plugin you can create shipping labels for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the need to copy or upload your order data into another external system (no CSV upload necessary). Our direct integration with the shipcloud system not only enables you to create shipping labels, you’re also able to track your shipments for free. This way you’ll always know where your orders are currently at.
+shipcloud is the only [shipping service provider](https://de.wikipedia.org/wiki/Shipping_Service_Provider) you need! With this plugin you can **create shipping labels** for all popular shipping carriers in Germany right **out of the WooCommerce admin panel**. Without the need to copy or upload your order data into another external system (**no CSV upload necessary**). Our direct integration with the shipcloud system not only enables you to create shipping labels, you’re also able to track your shipments for free. This way you’ll always know where your orders are currently at.
 
 = All the benefits shipcloud offers you =
 
-* manage shipping labels from the WooCommerce admin panel - no need to copy data into or work in another tool
-* save a lot of time when creating shipping labels
-* choose the carrier(s) from the most popular ones that suit you best
-* same day delivery shipping possible - just use Liefery as your shipping carrier
-* let your customers decide right in the checkout, which shipping carrier they’d like to
+* **manage shipping labels from the WooCommerce admin panel** - no need to copy data into or work in another tool
+* **save a lot of time** when creating shipping labels
+* **choose the carrier(s)** from the most popular ones that suit you best
+* **same day delivery** shipping possible - just use Liefery as your shipping carrier
+* **let your customers decide** right in the checkout, which shipping carrier they’d like to
 receive their order from
-* use your own carrier contracts or utilize shipcloud contracts for better quotes
-* create shipping labels right from a single WooCommerce order or use batch label creation from the orders overview page
-* create return labels and enclose them with each shipment
-* customized tracking page: shipcloud offers a tracking page for every shipment where your customers can track their shipment. You can customize this tracking page to follow your company design guidelines
-* customized status emails: Always keep your customers in the loop by sending customized shipping status emails that follow your company design guidelines
+* **use your own carrier contracts** or utilize shipcloud contracts for better quotes
+* create shipping labels right from a single WooCommerce order or use **batch label creation** from the orders overview page
+* **create return labels** and enclose them with each shipment
+* **customized tracking page**: shipcloud offers a tracking page for every shipment where your customers can track their shipment. You can customize this tracking page to follow your company design guidelines
+* **customized status emails**: Always keep your customers in the loop by sending customized shipping status emails that follow your company design guidelines
 
 = Complete list of supported shipping carriers =
 
@@ -74,11 +74,11 @@ Using shipcloud you can start sending international shipments from Germany right
 
 We've got a couple of videos explaining the usage of the plugin.
 
-** Setting up parcel templates **
+**Setting up parcel templates**
 
 https://youtu.be/NgYNcHfrnDQ
 
-** Creating a single shipping label for an order **
+**Creating a single shipping label for an order**
 
 https://youtu.be/DQd6NC3VJEQ
 
