@@ -219,12 +219,11 @@ class Api {
 	 */
 	protected function curlInit( $url, $params = array(), $type = 'GET' ) {
 		$headers = array(
-			//'Authorization' => 'Basic ' . base64_encode( $this->apiKey ),
-			'Content-Type' => 'application/json',
+			'Content-Type: application/json',
 		);
 
 		if ( $this->affiliateId ) {
-			$headers['Affiliate-ID'] = $this->affiliateId;
+			$headers[] = 'Affiliate-ID: ' . $this->affiliateId;
 		}
 
 		$ch = curl_init( $url );
@@ -248,8 +247,7 @@ class Api {
 			$jsonParams = json_encode( $params );
 			curl_setopt( $ch, CURLOPT_POSTFIELDS, $jsonParams );
 
-			$headers['Content-Type'] = 'application/json';
-			$headers['Content-Length'] = strlen( $jsonParams );
+			$headers[] = 'Content-Length: ' . strlen( $jsonParams );
 		}
 
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
