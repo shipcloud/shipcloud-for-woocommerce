@@ -115,6 +115,7 @@ https://youtu.be/HE3jow15x8c
 
 = 1.5.0 =
 * Fixed: Added whitespace between first and last name as well as street name and number when displaying a shipment
+* Fixed: `notification_email` is now transmitted correctly
 
 = 1.4.2 =
 * Enhanced: Added direct links to German customer stories to readme.txt

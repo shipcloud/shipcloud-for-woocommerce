@@ -230,7 +230,7 @@ class WC_Shipcloud_Order
 			array(
 				'carrier'               => null,
 				'from'                  => null,
-				'notification_mail'     => null,
+				'notification_email'    => null,
 				'description'           => null,
 				'package'               => null,
 				'reference_number'      => null,
