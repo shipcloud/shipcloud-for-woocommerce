@@ -114,6 +114,7 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.5.0 =
+* Enhanced: When using the [WooCommerce germanized plugin](https://wordpress.org/plugins/woocommerce-germanized/) the post number for using DHL Packstation will be used for creating shipping labels instead of `shipping_address_2`
 * Fixed: Added whitespace between first and last name as well as street name and number when displaying a shipment
 * Fixed: `notification_email` is now transmitted correctly
 
