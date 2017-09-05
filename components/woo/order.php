@@ -1375,6 +1375,11 @@ class WC_Shipcloud_Order
 			return (string) $order->shipping_address_2;
 		}
 
+		// check to see if WooCommerce germanized was used for supplying a post number
+		if ( $order->shipping_parcelshop_post_number) {
+			return (string) $order->shipping_parcelshop_post_number;
+		}
+
 		return (string) $order->billing_address_2;
 	}
 
