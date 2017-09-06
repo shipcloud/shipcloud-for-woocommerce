@@ -487,7 +487,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 					'shipcloud-for-woocommerce'
 				),
 				'type'        => 'title',
-				'description' => sprintf( __( 'Fill in defaults for cash on deliveryŝ.', 'shipcloud-for-woocommerce' ) ),
+				'description' => sprintf( __( 'Fill in defaults for cash on delivery.', 'shipcloud-for-woocommerce' ) ),
 			),
 			'bank_account_holder' => array(
 				'title'       => _x(
