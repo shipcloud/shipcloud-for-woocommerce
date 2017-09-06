@@ -250,13 +250,8 @@ function wcsc_is_settings_screen() {
 		$tab = $_GET['tab'];
 	}
 
-	$section = '';
-	if ( array_key_exists( 'section', $_GET ) ) {
-		$section = $_GET['section'];
-	}
-
 	// If page should noz show a message, interrupt the check and gibe back true
-	if ( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === $section ) {
+	if ( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === wcsc_get_section() ) {
 		return true;
 	}
 
@@ -329,7 +324,7 @@ function wcsc_is_admin_screen() {
 	}
 
 	// Settings screen
-	if ( 'shipcloud' === $_GET['section'] && 'woocommerce_page_wc-settings' === get_current_screen()->id ) {
+	if ( 'shipcloud' === wcsc_get_section() && 'woocommerce_page_wc-settings' === get_current_screen()->id ) {
 		return true;
 	}
 
@@ -462,6 +457,23 @@ function wcsc_api() {
 }
 
 $_wcsc_api = null;
+
+/**
+ * Get currently selected WooCommerce section
+ *
+ * @return string $section
+ *
+ * @since 1.5.0
+ */
+function wcsc_get_section() {
+	$section = '';
+
+	if ( array_key_exists( 'section', $_GET ) ) {
+		$section = $_GET['section'];
+	}
+
+	return $section;
+}
 
 /**
  * Connection to the API.

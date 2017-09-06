@@ -65,6 +65,10 @@ class WC_Shipcloud_Order
 		$this->init_hooks();
 	}
 
+	public function filterArrayPreserveEmptyString( $var ) {
+		return ($var !== NULL && $var !== FALSE);
+	}
+
 	/**
      * Backward compatibility to WC2
      *
@@ -347,7 +351,7 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="twentyfive">
-						<input type="text" name="sender_address[street_nr]" value="<?php echo $sender[ 'street_nr' ]?: $sender[ 'street_no' ]; ?>" disabled>
+						<input type="text" name="sender_address[street_nr]" value="<?php echo isset($sender[ 'street_nr' ]) ? $sender[ 'street_nr' ] : $sender[ 'street_no' ]; ?>" disabled>
 						<label for="sender_address[street_nr]"><?php _e( 'Number', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
@@ -759,7 +763,10 @@ class WC_Shipcloud_Order
 
 				$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
 				$title .= ' <span class="dashicons dashicons-arrow-right-alt"></span> ';
-				$title .= trim( $data[ 'recipient_company' ] ) != '' ? $data[ 'recipient_company' ] . ', ' . $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ] : $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
+				if ( !empty($data['recipient_company']) ) {
+					$title .= $data[ 'recipient_company' ] . ', ';
+				}
+				$title .= $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
 				$title .= ' <span class="dashicons dashicons-screenoptions"></span> <small>' . trim($data[ 'parcel_title' ], ' -') . '</small>';
 
 				?>
@@ -773,18 +780,18 @@ class WC_Shipcloud_Order
 					<div class="label-shipment-sender address">
 						<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
 						<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
-						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]?: $data[ 'sender_street_nr' ]; ?></div>
+						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo (isset($data[ 'sender_street_nr' ])) ? $data[ 'sender_street_nr' ] : $data[ 'sender_street_no' ]; ?></div>
 						<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
 						<div class="sender_state"><?php echo $data[ 'sender_state' ]; ?></div>
-						<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
+						<div class="sender_country"><?php echo (isset($data['country'])) ? $data[ 'country' ] : ''; ?></div>
 					</div>
 
 					<div class="label-shipment-recipient address">
-						<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
+						<div class="recipient_company"><?php echo (isset($data['recipient_company'])) ? $data[ 'recipient_company' ] : ''; ?></div>
 						<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
-						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]?: $data[ 'recipient_street_nr' ]; ?></div>
+						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo (isset($data[ 'recipient_street_nr' ])) ? $data[ 'recipient_street_nr' ] : $data[ 'recipient_street_no' ]; ?></div>
 						<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
-						<div class="recipient_state"><?php echo $data[ 'recipient_state' ]; ?></div>
+						<div class="recipient_state"><?php echo (isset($data['recipient_state'])) ? $data[ 'recipient_state' ] : ''; ?></div>
 						<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
 					</div>
 
@@ -814,10 +821,16 @@ class WC_Shipcloud_Order
 					<div class="label-shipment-status">
 						<table>
 							<tbody>
+							<?
+								if ( (isset($data['description']) && !empty($data['description'])) ) {
+							?>
 							<tr>
 								<th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>:</th>
 								<td><?php echo $data[ 'description' ]; ?></td>
 							</tr>
+							<?
+								}
+							?>
 							<tr>
 								<th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
 								<td><?php echo $display_id; ?></td>
@@ -1248,7 +1261,7 @@ class WC_Shipcloud_Order
 	 */
 	public function get_sender($prefix = '') {
 		$options = $this->get_options();
-
+		
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
 
 		// Use default data if nothing was saved before
@@ -1259,12 +1272,12 @@ class WC_Shipcloud_Order
 				$prefix . 'last_name'  => $options['sender_last_name'],
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
-				$prefix . 'street_no'  => $options['sender_street_nr'],
+				$prefix . 'street_no'  => $options['sender_street_nr'] ?: $options['sender_street_no'],
 				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
 				$prefix . 'country'    => $options['sender_country'],
-				$prefix . 'phone'      => $options['sender_phone'],
+				$prefix . 'phone'      => isset($options['sender_phone'])?:'',
 			);
 		}
 
@@ -1317,6 +1330,7 @@ class WC_Shipcloud_Order
 				$prefix . 'street'     => $recipient_street_name,
 				$prefix . 'street_no'  => $recipient_street_nr,
 				$prefix . 'zip_code'   => $order->shipping_postcode,
+				$prefix . 'postcode'   => $order->shipping_postcode,
 				$prefix . 'city'       => $order->shipping_city,
 				$prefix . 'state'      => $order->shipping_state,
 				$prefix . 'country'    => $order->shipping_country,
@@ -1403,7 +1417,7 @@ class WC_Shipcloud_Order
 			$data[ $prefix . 'zip_code' ] = $data[ $prefix . 'postcode' ];
 		}
 
-		return array_filter( $data );
+		return array_filter( $data, array($this, 'filterArrayPreserveEmptyString') );
 	}
 
 	/**
@@ -1439,9 +1453,9 @@ class WC_Shipcloud_Order
 			$order_id = $_POST['order_id'];
 		}
 
-		$factory = WC()->order_factory;
+		$factory = new WC_Order_Factory();
 
-		return $this->wc_order = $factory::get_order( $order_id );
+		return $this->wc_order = $factory->get_order( $order_id );
 	}
 
 	/**
@@ -1563,7 +1577,7 @@ class WC_Shipcloud_Order
 						. $data->height . ';'
 						. $data->length . ';'
 						. $data->weight . ';'
-						. $data->carrier . ';',
+						. $data->carrier['carrier'] . ';',
 			'option' => $option,
 			'data'   => array(
 				'parcel_width'      => $data->width,
