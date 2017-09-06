@@ -1633,32 +1633,45 @@ class WC_Shipcloud_Order
 			'parcel_letter' => array( 'dhl', 'dpd' ),
 		);
 	}
-	
-	private function handle_email_notification( $data ) {
-		$carrier_email = $this->get_carrier_mail();
-		$notification_email = $this->get_notification_email();
-		
-		if ( $data['carrier'] == 'dpd' || $data['carrier'] == 'dhl' ) {
-			if ( ! empty ( $carrier_email ) ) {
-				unset($data['notification_email']);
 
+	/**
+	 * @param array $data
+	 *
+	 * @return mixed
+	 */
+	private function handle_email_notification( $data ) {
+		$carrier_email      = $this->get_carrier_mail();
+		$notification_email = $this->get_notification_email();
+
+		if ( ! empty ( $notification_email ) ) {
+			// Set fallback for the notification mail
+			$data['notification_email'] = $this->get_notification_email();
+		}
+
+		if ( ( ! isset( $data['carrier'] ) || $data['carrier'] !== 'dpd' )
+			 && ( ! isset( $data['carrier'] ) || $data['carrier'] !== 'dhl' )
+		) {
+			// Nothing we need to handle, so we early break here.
+			return $data;
+		}
+
+		if ( ! empty ( $carrier_email ) ) {
+			if ( ! isset( $data['additional_services'] ) ) {
 				$data['additional_services'] = array();
-	
-				$data['additional_services'] = array(
-					array(
-						'name'       => 'advance_notice',
-						'properties' => array(
-							'email'    => $carrier_email,
-							'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) )
-						)
-					)
-				);
-			} elseif ( ! empty ( $notification_email ) ) {
-				$data['notification_email'] = $notification_email;
 			}
-		} else {
-			if ( ! empty ( $notification_email ) ) {
-				$data['notification_email'] = $this->get_notification_email();
+
+			// Append advance notice service.
+			$data['additional_services'][] = array(
+				'name'       => 'advance_notice',
+				'properties' => array(
+					'email'    => $carrier_email,
+					'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) )
+				)
+			);
+
+			if ( isset( $data['notification_email'] ) ) {
+				// No need for notification mail after advance_notice has been added.
+				unset( $data['notification_email'] );
 			}
 		}
 
