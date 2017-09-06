@@ -345,6 +345,27 @@ class WC_Shipcloud_Order_Bulk {
 			'create_shipping_label' => true,
 		);
 
+		if ( $order->get_wc_order() && 'cod' === $order->get_wc_order()->get_payment_method() ) {
+			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
+				$order->get_wc_order()->get_total(),
+				$order->get_wc_order()->get_currency(),
+				$order->get_bank_information()
+			);
+
+			if (!isset($data['additional_services'])) {
+				$data['additional_services'] = array();
+			}
+
+			$data['additional_services'][] = array(
+				'name' => \Shipcloud\Domain\Services\CashOnDelivery::NAME,
+				'properties' => $cash_on_delivery->toArray()
+			);
+		}
+
+		if ( array_key_exists( 'package', $data ) ) {
+			$data['package'] = $this->sanitize_package( $data['package'] );
+		}
+
 		try {
 			$shipment = _wcsc_api()->shipment()->create( array_filter( $data ) );
 
