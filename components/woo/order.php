@@ -612,6 +612,10 @@ class WC_Shipcloud_Order
                 jQuery(function ($) {
                     $('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
                     $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
+
+                    $('.wcsc-label-actions a').on('click', function (e) {
+                        e.stopPropagation();
+                    });
                 });
             </script>
 
@@ -753,7 +757,7 @@ class WC_Shipcloud_Order
 			<div class="widget-title-action">
 				<a class="widget-action hide-if-no-js"></a>
 			</div>
-			<div class="widget-quick-actions">
+			<div class="widget-quick-actions wcsc-label-actions">
                 <a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button btn-primary">
                     <span class="dashicons dashicons-arrow-down-alt"></span>
                     <?php _e( 'Download', 'shipcloud-for-woocommerce' ); ?>
