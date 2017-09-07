@@ -1648,8 +1648,8 @@ class WC_Shipcloud_Order
 			$data['notification_email'] = $this->get_notification_email();
 		}
 
-		if ( ( ! isset( $data['carrier'] ) || $data['carrier'] !== 'dpd' )
-			 && ( ! isset( $data['carrier'] ) || $data['carrier'] !== 'dhl' )
+		if ( ! isset( $data['carrier'] ) ||
+			 ( $data['carrier'] !== 'dpd' || $data['carrier'] !== 'dhl' )
 		) {
 			// Nothing we need to handle, so we early break here.
 			return $data;
