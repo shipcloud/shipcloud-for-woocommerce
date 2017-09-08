@@ -211,13 +211,14 @@ class Api {
 	 * @since 1.4.1 The cURL option CURLOPT_FOLLOWLOCATION won't be simulated
 	 *              due to conflicts with the open_basedir config of PHP.
 	 *
-	 * @param string $url  The URL to access.
+	 * @param string $url    The URL to access.
 	 * @param array  $params
-	 * @param string $type HTTP-Request type.
+	 * @param string $method HTTP-Request type.
 	 *
 	 * @return resource
+	 * @throws \InvalidArgumentException In case of invalid HTTP method.
 	 */
-	protected function curlInit( $url, $params = array(), $type = 'GET' ) {
+	protected function curlInit( $url, $params = array(), $method = 'GET' ) {
 		$headers = array(
 			'Content-Type: application/json',
 		);
@@ -234,15 +235,15 @@ class Api {
 		curl_setopt( $ch, CURLOPT_USERPWD, $this->apiKey );
 		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
 
-		$type = strtoupper( $type );
-		if ( ! in_array( $type, array( 'DELETE', 'GET', 'POST', 'PUT' ), true ) ) {
+		$method = strtoupper( $method );
+		if ( ! in_array( $method, array( 'DELETE', 'GET', 'POST', 'PUT' ), true ) ) {
 			// Unsupported HTTP Request.
-			throw new \InvalidArgumentException( 'Invalid HTTP request: ' . $type );
+			throw new \InvalidArgumentException( 'Invalid HTTP method: ' . $method );
 		}
 
-		curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, $type );
+		curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, $method );
 
-		if ( 'POST' === $type || 'PUT' === $type ) {
+		if ( 'POST' === $method || 'PUT' === $method ) {
 			// Write operations need payload.
 			$jsonParams = json_encode( $params );
 			curl_setopt( $ch, CURLOPT_POSTFIELDS, $jsonParams );

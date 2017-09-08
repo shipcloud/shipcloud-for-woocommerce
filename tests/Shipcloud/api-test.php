@@ -51,7 +51,7 @@ class Api_Test extends \WP_UnitTestCase {
 		$affiliateId = uniqid( 'affiliateId', true );
 		$api         = new Api( $apiKey, $affiliateId, 'https://httpbin.org' );
 
-		$response = $api->request( strtolower( $method ), [], $method );
+		$response = $api->request( 'anything', [], $method );
 
 		// Assert mandatory headers are sent.
 		static::assertArraySubset(
@@ -64,6 +64,27 @@ class Api_Test extends \WP_UnitTestCase {
 			],
 			$response->getPayload()
 		);
+	}
+
+	/**
+	 * Request
+	 *
+	 * The SDK supports some HTTP Methods:
+	 *
+	 * - GET
+	 * - POST
+	 * - PUT
+	 * - DELETE
+	 *
+	 * @dataProvider getRequestMethods
+	 * @group        integration
+	 */
+	public function testItSupportsDifferentHttpMethods( $httpMethod ) {
+		$api = new Api( uniqid( 'apiKey', true ), '', 'https://httpbin.org' );
+
+		$payload = $api->request( 'anything', [], $httpMethod )->getPayload();
+
+		static::assertEquals( $payload['method'], $httpMethod );
 	}
 
 	/**
@@ -96,11 +117,45 @@ class Api_Test extends \WP_UnitTestCase {
 		static::assertArrayNotHasKey( 'Affiliate-Id', $payload['headers'] );
 	}
 
+	/**
+	 * Headers
+	 *
+	 * Those HTTP Methods remain unsupported:
+	 *
+	 * - HEAD
+	 * - PATCH
+	 * - TRACE
+	 * - OPTIONS
+	 * - CONNECT
+	 *
+	 * The SDK will refuse to work with them by throwing an exception.
+	 *
+	 * @dataProvider             getInvalidHttpMethods
+	 * @expectedException \InvalidArgumentException
+	 * @expectedExceptionMessage Invalid HTTP method
+	 */
+	public function testUnsupportedMethodsThrowException( $httpMethod ) {
+		$api = new Api( uniqid( 'apiKey', true ), '', 'https://httpbin.org' );
+
+		$api->request( 'anything', [], $httpMethod )->getPayload();
+	}
+
 	public function getRequestMethods() {
 		return [
+			[ 'DELETE' ],
 			[ 'GET' ],
 			[ 'POST' ],
 			[ 'PUT' ],
+		];
+	}
+
+	public function getInvalidHttpMethods() {
+		return [
+			[ 'HEAD' ],
+			[ 'PATCH' ],
+			[ 'TRACE' ],
+			[ 'OPTIONS' ],
+			[ 'CONNECT' ],
 		];
 	}
 }
