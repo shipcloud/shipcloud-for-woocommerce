@@ -1668,7 +1668,7 @@ class WC_Shipcloud_Order
 		}
 
 		if ( ! isset( $data['carrier'] ) ||
-			 ( $data['carrier'] !== 'dpd' || $data['carrier'] !== 'dhl' )
+			 ( $data['carrier'] !== 'dpd' && $data['carrier'] !== 'dhl' )
 		) {
 			// Nothing we need to handle, so we early break here.
 			return $data;
