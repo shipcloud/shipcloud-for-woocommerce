@@ -481,17 +481,7 @@ function wcsc_get_section() {
  * @return \Shipcloud\Api
  */
 function _wcsc_api() {
-	global $_wcsc_api;
-
-	if ( ! $_wcsc_api ) {
-		$_wcsc_api = new Shipcloud\Api(
-			wcsc_shipping_method()->get_option( 'api_key' ),
-			'plugin.woocommerce.z4NVoYhp'
-		);
-	}
-
-
-	return $_wcsc_api;
+	return _wcsc_container()->get( '\\Shipcloud\\Api' );
 }
 
 /**

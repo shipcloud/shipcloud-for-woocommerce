@@ -492,6 +492,17 @@ register_activation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'activate' )
 register_deactivation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'deactivate' ) );
 register_uninstall_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'uninstall' ) );
 
+define( 'WCSC_FOLDER', plugin_dir_path( __FILE__ ) );
+
+/**
+ * Early add autoloader.
+ */
+spl_autoload_register( '\\WooCommerce_Shipcloud::load_vendor' );
+spl_autoload_register( '\\WooCommerce_Shipcloud::load_shipcloud' );
+
+require_once __DIR__ . '/components/service-container.php';
+
+
 /**
  * Actionhook Function to load plugin
  *
@@ -502,11 +513,3 @@ function woocommerce_shipcloud_init() {
 }
 
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
-
-define( 'WCSC_FOLDER', plugin_dir_path( __FILE__ ) );
-
-/**
- * Early add autoloader.
- */
-spl_autoload_register( '\\WooCommerce_Shipcloud::load_vendor' );
-spl_autoload_register( '\\WooCommerce_Shipcloud::load_shipcloud' );
