@@ -105,7 +105,6 @@ class WooCommerce_Shipcloud {
 	 * @since 1.0.0
 	 */
 	private function constants() {
-		define( 'WCSC_FOLDER', $this->get_folder() );
 		define( 'WCSC_RELATIVE_FOLDER', substr( WCSC_FOLDER, strlen( WP_PLUGIN_DIR ), strlen( WCSC_FOLDER ) ) );
 		define( 'WCSC_URLPATH', $this->get_url_path() );
 		define( 'WCSC_COMPONENTFOLDER', WCSC_FOLDER . '/components' );
@@ -306,13 +305,9 @@ class WooCommerce_Shipcloud {
 		require_once( WCSC_FOLDER . '/components/component.php' );
 		require_once( WCSC_FOLDER . '/components/core/core.php' );
 		require_once( WCSC_FOLDER . '/components/woo/woo.php' );
-
-		// Add autoloader for everything else.
-		spl_autoload_register( array( $this, 'load_vendor' ) );
-		spl_autoload_register( array( $this, 'load_shipcloud' ) );
 	}
 
-	public function load_vendor( $class ) {
+	public static function load_vendor( $class ) {
 		$filename = WCSC_FOLDER
 					. DIRECTORY_SEPARATOR . 'vendor'
 					. DIRECTORY_SEPARATOR . str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php';
@@ -331,7 +326,7 @@ class WooCommerce_Shipcloud {
 	 *
 	 * @return bool
 	 */
-	public function load_shipcloud( $class ) {
+	public static function load_shipcloud( $class ) {
 		$filename = WCSC_FOLDER
 					. DIRECTORY_SEPARATOR . 'includes'
 					. DIRECTORY_SEPARATOR . strtolower(
@@ -507,3 +502,11 @@ function woocommerce_shipcloud_init() {
 }
 
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
+
+define( 'WCSC_FOLDER', plugin_dir_path( __FILE__ ) );
+
+/**
+ * Early add autoloader.
+ */
+spl_autoload_register( '\\WooCommerce_Shipcloud::load_vendor' );
+spl_autoload_register( '\\WooCommerce_Shipcloud::load_shipcloud' );
