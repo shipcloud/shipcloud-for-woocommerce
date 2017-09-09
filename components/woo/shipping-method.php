@@ -471,7 +471,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'Enter standard sender country for shipment.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 				'class'       => 'wc-enhanced-select',
-				'options'     => $woocommerce->countries->countries,
+				'options'     => $woocommerce->countries ? $woocommerce->countries->countries: null,
 				'default'     => $default_country
 			),
 			'sender_phone'                    => array(
