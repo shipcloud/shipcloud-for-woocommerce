@@ -420,6 +420,13 @@ class WooCommerce_Shipcloud {
 		);
 
 		wp_register_script(
+			'shipcloud-label',
+			WCSC_URLPATH . 'includes/js/shipcloud-label.js',
+			array( 'jquery' ),
+			static::VERSION
+		);
+
+		wp_register_script(
 			'shipcloud-label-form',
 			WCSC_URLPATH . 'includes/js/shipcloud-label-form.js',
 			array( 'jquery' ),

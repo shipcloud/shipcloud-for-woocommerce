@@ -216,7 +216,9 @@
 }
 
 #shipcloud-io .label-shipment-actions a,
-#shipcloud-io .label-shipment-actions input{
+#shipcloud-io .label-shipment-actions input,
+#shipcloud-io .label-shipment-actions button
+{
     min-width: 240px;
     text-align: center;
 }
