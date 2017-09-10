@@ -17,8 +17,14 @@ if ( is_admin() && get_current_user() ) {
 	$service_config = array_merge(
 		$service_config,
 		array(
-			'\\Shipcloud\\Controller\\LabelController' => function ( \Shipcloud\ServiceContainer $container ) {
-				return new \Shipcloud\Controller\LabelController( $container->get( '\\Shipcloud\\Api' ) );
+			'\\Shipcloud\\Controller\\LabelController'    => function ( \Shipcloud\ServiceContainer $container ) {
+				return new \Shipcloud\Controller\LabelController(
+					$container->get( '\\Shipcloud\\Api' ),
+					$container->get( '\\Shipcloud\\Repository\\ShipmentRepository' )
+				);
+			},
+			'\\Shipcloud\\Repository\\ShipmentRepository' => function () {
+				return new \Shipcloud\Repository\ShipmentRepository();
 			}
 		)
 	);
