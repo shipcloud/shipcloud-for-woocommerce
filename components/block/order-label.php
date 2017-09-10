@@ -37,13 +37,14 @@
                         </span>
 					<span style="display: none;">
                             <input type="text" name="sender_company" value="<?php esc_attr_e($data[ 'sender_company' ]); ?>" />
-                            <input type="text" name="sender_name" value="<?php esc_attr_e($data[ 'sender_first_name' ]); ?>" />
+                            <input type="text" name="sender_first_name" value="<?php esc_attr_e($data[ 'sender_first_name' ]); ?>" />
                             <input type="text" name="sender_last_name" value="<?php esc_attr_e($data[ 'sender_last_name' ]); ?>" />
                             <input type="text" name="sender_street"
                                    value="<?php esc_attr_e( $data['sender_street'] ) ?>"/>
                             <input type="text" name="sender_street_no"
                                    value="<?php esc_attr_e( ( isset( $data['sender_street_nr'] ) ) ? $data['sender_street_nr'] : $data['sender_street_no'] ) ?>"/>
-                            <input type="text" name="sender_city" value="<?php esc_attr_e($data[ 'sender_zip_code' ]); ?>" />
+                            <input type="text" name="sender_zip_code" value="<?php esc_attr_e($data[ 'sender_zip_code' ]); ?>" />
+                            <input type="text" name="sender_city" value="<?php esc_attr_e($data[ 'sender_city' ]); ?>" />
                             <input type="text" name="sender_state" value="<?php esc_attr_e($data[ 'sender_state' ]); ?>" />
                             <select name="sender_country">
                                 <?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
@@ -96,6 +97,7 @@
 
 					<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
 					<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
+					<input type="hidden" name="shipment_order_id" value="<?php echo get_the_ID(); ?>"/>
 				</div>
 
 				<div style="clear: both;"></div>
