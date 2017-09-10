@@ -19,7 +19,7 @@ class ServiceContainer {
 	}
 
 	public function get( $id ) {
-		if ( ! array_key_exists( $id, $this->values ) ) {
+		if ( ! $this->has( $id ) ) {
 			throw new \DomainException( sprintf( 'Service %s does not exist.', $id ) );
 		}
 
@@ -29,11 +29,11 @@ class ServiceContainer {
 
 		$value = $this->values[ $id ];
 
-		if ( ! is_callable( $value ) ) {
-			return $value;
+		if ( is_callable( $value ) ) {
+			$value = $value( $this );
 		}
 
-		return $this->raw[ $id ] = $value( $this );
+		return $this->raw[ $id ] = $value;
 	}
 
 	public function set( $id, $value ) {
