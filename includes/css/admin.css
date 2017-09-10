@@ -180,6 +180,23 @@
     margin: 20px 0;
     padding: 12px;
 }
+#shipcloud-io .shipment-labels .loading-overlay .spin-loader {
+    height: 100px;
+    background: url("../../assets/shipcloud-load.gif") no-repeat center center transparent;
+    position: relative;
+    top: 25%;
+}
+
+#shipcloud-io .shipment-labels .loading-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    opacity: 0.6;
+}
 #shipcloud-io .shipment-labels .widget-title{
     padding:15px;
 }

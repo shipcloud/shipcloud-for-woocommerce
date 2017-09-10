@@ -1,4 +1,7 @@
 <div id="shipment-<?php echo $data[ 'id' ]; ?>" class="label widget">
+    <div class="loading-overlay">
+        <div class="spin-loader"></div>
+    </div>
 	<div class="widget-top">
 		<div class="widget-title-action">
 			<a class="widget-action hide-if-no-js"></a>
@@ -36,7 +39,10 @@
                             <input type="text" name="sender_company" value="<?php esc_attr_e($data[ 'sender_company' ]); ?>" />
                             <input type="text" name="sender_name" value="<?php esc_attr_e($data[ 'sender_first_name' ]); ?>" />
                             <input type="text" name="sender_last_name" value="<?php esc_attr_e($data[ 'sender_last_name' ]); ?>" />
-                            <input type="text" name="sender_street" value="<?php esc_attr_e($data[ 'sender_street' ] . ' ' . ((isset($data[ 'sender_street_nr' ])) ? $data[ 'sender_street_nr' ] : $data[ 'sender_street_no' ])) ?>" />
+                            <input type="text" name="sender_street"
+                                   value="<?php esc_attr_e( $data['sender_street'] ) ?>"/>
+                            <input type="text" name="sender_street_no"
+                                   value="<?php esc_attr_e( ( isset( $data['sender_street_nr'] ) ) ? $data['sender_street_nr'] : $data['sender_street_no'] ) ?>"/>
                             <input type="text" name="sender_city" value="<?php esc_attr_e($data[ 'sender_zip_code' ]); ?>" />
                             <input type="text" name="sender_state" value="<?php esc_attr_e($data[ 'sender_state' ]); ?>" />
                             <select name="sender_country">
@@ -73,7 +79,7 @@
 					</p>
 
 					<p class="button-edit-shipment" role="switch">
-						<button class="button wcsc-edit-shipment" role="switch" type="button"
+						<button class="button wcsc-save-shipment" role="switch" type="button"
 								style="display: none;">
 							<b>
 								<?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
