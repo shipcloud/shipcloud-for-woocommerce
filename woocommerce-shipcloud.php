@@ -158,11 +158,11 @@ class WooCommerce_Shipcloud {
 	 * @since 1.0.0
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( static::$_instance ) ) {
+			static::$_instance = new static();
 		}
 
-		return self::$_instance;
+		return static::$_instance;
 	}
 
 	/**
