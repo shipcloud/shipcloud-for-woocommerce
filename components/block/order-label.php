@@ -29,9 +29,24 @@
 				<div class="label-shipment-sender address" role="switch">
                         <span>
                             <div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
-                            <div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
-                            <div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo (isset($data[ 'sender_street_nr' ])) ? $data[ 'sender_street_nr' ] : $data[ 'sender_street_no' ]; ?></div>
-                            <div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
+                            <div>
+                                <span class="sender_first_name">
+                                    <?php echo $data[ 'sender_first_name' ]; ?>
+                                </span>
+                                <span class="sender_last_name">
+                                    <?php echo $data[ 'sender_last_name' ]; ?>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="sender_street"><?php echo $data[ 'sender_street' ]; ?></span>
+                                <span class="sender_street_no">
+                                    <?php echo (isset($data[ 'sender_street_nr' ])) ? $data[ 'sender_street_nr' ] : $data[ 'sender_street_no' ]; ?>
+                                </span>
+                            </div>
+                            <div>
+                                <span class="sender_zip_code"><?php echo $data[ 'sender_zip_code' ]; ?></span>
+                                <span class="sender_city"><?php echo $data[ 'sender_city' ]; ?></span>
+                            </div>
                             <div class="sender_state"><?php echo $data[ 'sender_state' ]; ?></div>
                             <div class="sender_country"><?php echo (isset($data['country'])) ? $data[ 'country' ] : ''; ?></div>
                         </span>
@@ -49,7 +64,7 @@
                             <select name="sender_country">
                                 <?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
 									<option value="<?php esc_attr_e( $key ); ?>"
-										<?php selected( $key === $data[ 'country' ] ) ?>>
+										<?php selected( $key === $data[ 'sender_country' ] ) ?>>
                                         <?php echo $country; ?>
                                     </option>
 								<?php endforeach; ?>
@@ -57,14 +72,67 @@
                         </span>
 				</div>
 
-				<div class="label-shipment-recipient address">
-					<div class="recipient_company"><?php echo (isset($data['recipient_company'])) ? $data[ 'recipient_company' ] : ''; ?></div>
-					<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
-					<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo (isset($data[ 'recipient_street_nr' ])) ? $data[ 'recipient_street_nr' ] : $data[ 'recipient_street_no' ]; ?></div>
-					<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
-					<div class="recipient_state"><?php echo (isset($data['recipient_state'])) ? $data[ 'recipient_state' ] : ''; ?></div>
-					<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
-				</div>
+                <div class="label-shipment-recipient address" role="switch">
+                    <span>
+					<div class="recipient_company"><?php echo ( isset( $data['recipient_company'] ) ) ? $data['recipient_company'] : ''; ?></div>
+					<div>
+                        <span class="recipient_first_name">
+                            <?php echo $data['recipient_first_name']; ?>
+                        </span>
+                        <span class="recipient_last_name">
+                            <?php echo $data['recipient_last_name']; ?>
+                        </span>
+                    </div>
+					<div>
+                        <span class="recipient_street">
+                            <?php echo $data['recipient_street']; ?>
+                        </span>
+                        <span class="recipient_street_no">
+                            <?php echo ( isset( $data['recipient_street_nr'] ) ) ? $data['recipient_street_nr'] : $data['recipient_street_no']; ?>
+                        </span>
+                    </div>
+					<div>
+                        <span class="recipient_zip_code">
+                            <?php echo $data['recipient_zip_code']; ?>
+                        </span>
+                        <span class="recipient_city">
+                            <?php echo $data['recipient_city']; ?>
+                        </span>
+                    </div>
+					<div class="recipient_state"><?php echo ( isset( $data['recipient_state'] ) ) ? $data['recipient_state'] : ''; ?></div>
+					<div class="recipient_country"><?php echo $data['recipient_country']; ?></div>
+                    </span>
+                    <span style="display: none;">
+                        <input type="text" name="recipient_company" value="<?php esc_attr_e( $data['recipient_company'] ) ?>" />
+                        <input type="text" name="recipient_first_name" value="<?php esc_attr_e( $data['recipient_first_name'] ) ?>" />
+                        <input type="text" name="recipient_last_name" value="<?php esc_attr_e( $data['recipient_last_name'] ) ?>" />
+
+                        <input type="text"
+                               name="recipient_street"
+                               value="<?php esc_attr_e( $data['recipient_street'] ) ?>"
+                        /><input type="text"
+                                 name="recipient_street_no"
+                                 value="<?php esc_attr_e( ( isset( $data['recipient_street_nr'] ) ) ? $data['recipient_street_nr'] : $data['recipient_street_no'] ) ?>" />
+
+                        <input
+                                type="text"
+                                name="recipient_zip_code"
+                                value="<?php esc_attr_e( $data['recipient_zip_code'] ) ?>"
+                        /><input type="text"
+                                 name="recipient_city"
+                                 value="<?php esc_attr_e( $data['recipient_city'] ) ?>" />
+
+                        <input type="text" name="recipient_state" value="<?php esc_attr_e( $data['recipient_state'] ) ?>" />
+                        <select name="recipient_country">
+                                <?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
+                                    <option value="<?php esc_attr_e( $key ); ?>"
+										<?php selected( $key === $data[ 'recipient_country' ] ) ?>>
+                                        <?php echo $country; ?>
+                                    </option>
+								<?php endforeach; ?>
+                            </select>
+                    </span>
+                </div>
 
 				<div class="label-shipment-actions">
 
@@ -80,11 +148,9 @@
 					</p>
 
 					<p class="button-edit-shipment" role="switch">
-						<button class="button wcsc-save-shipment" role="switch" type="button"
+						<button class="button wcsc-save-shipment button-primary" role="switch" type="button"
 								style="display: none;">
-							<b>
-								<?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-							</b>
+                            <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
 						</button>
 						<button class="button wcsc-edit-shipment" role="switch" type="button">
 							<?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
@@ -92,7 +158,9 @@
 					</p>
 
 					<p class="button-delete-shipment">
-						<input type="button" value="<?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>" class="shipcloud_delete_shipment button"/>
+                        <button type="button" class="shipcloud_delete_shipment button">
+							<?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>
+                        </button>
 					</p>
 
 					<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>

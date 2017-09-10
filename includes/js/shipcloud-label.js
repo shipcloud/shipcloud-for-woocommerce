@@ -29,6 +29,20 @@ shipcloud.LabelView = function (wrapper) {
         );
     };
 
+    this.setData = function (data) {
+        for (var name in data.to) {
+            self.$wrapper
+                .find('span[class="recipient_' + name + '"],div[class="recipient_' + name + '"]')
+                .html(data.to[name]);
+        }
+
+        for (name in data.from) {
+            self.$wrapper
+                .find('span[class="sender_' + name + '"],div[class="recipient_' + name + '"]')
+                .html(data.from[name]);
+        }
+    };
+
     this.getData = function () {
         var data = {
             'from': {},
@@ -65,7 +79,8 @@ shipcloud.LabelView = function (wrapper) {
         return data;
     };
 
-    this.successAction = function () {
+    this.successAction = function (data) {
+        self.setData(data);
         self.toggleScreen();
     };
 

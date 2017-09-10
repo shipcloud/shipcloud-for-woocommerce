@@ -180,6 +180,7 @@
     margin: 20px 0;
     padding: 12px;
 }
+
 #shipcloud-io .shipment-labels .loading-overlay .spin-loader {
     height: 100px;
     background: url("../../assets/shipcloud-load.gif") no-repeat center center transparent;
@@ -197,6 +198,26 @@
     background-color: #eee;
     opacity: 0.6;
 }
+
+#shipcloud-io .shipment-labels input {
+    width: 80%;
+}
+#shipcloud-io .shipment-labels input[name="recipient_street_no"],
+#shipcloud-io .shipment-labels input[name="recipient_zip_code"],
+#shipcloud-io .shipment-labels input[name="sender_street_no"],
+#shipcloud-io .shipment-labels input[name="sender_zip_code"]
+{
+    width: 20%;
+}
+
+#shipcloud-io .shipment-labels input[name="recipient_street"],
+#shipcloud-io .shipment-labels input[name="recipient_city"],
+#shipcloud-io .shipment-labels input[name="sender_street"],
+#shipcloud-io .shipment-labels input[name="sender_city"]
+{
+    width: 59%;
+}
+
 #shipcloud-io .shipment-labels .widget-title{
     padding:15px;
 }
