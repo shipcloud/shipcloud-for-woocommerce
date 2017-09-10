@@ -3,6 +3,7 @@
 namespace WooCommerce_Shipcloud\Tests\Shipcloud\Domain;
 
 use Shipcloud\Domain\Package;
+use WooCommerce_Shipcloud\Tests\Shipcloud\ShipcloudTestCase;
 
 /**
  * API
@@ -23,7 +24,7 @@ use Shipcloud\Domain\Package;
  *          along with this program; if not, write to the Free Software
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-class Package_Test extends \WP_UnitTestCase {
+class Package_Test extends ShipcloudTestCase {
 	/**
 	 * @var Package
 	 */

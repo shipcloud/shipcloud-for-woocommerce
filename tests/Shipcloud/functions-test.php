@@ -21,7 +21,7 @@ namespace WooCommerce_Shipcloud\Tests\Shipcloud;
  *          along with this program; if not, write to the Free Software
  *          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-class Functions_Test extends \WP_UnitTestCase {
+class Functions_Test extends ShipcloudTestCase {
 	public function getStreetAndNumber() {
 		return [
 			['This, That, and the other Street 123', 'This, That, and the other Street', '123'],

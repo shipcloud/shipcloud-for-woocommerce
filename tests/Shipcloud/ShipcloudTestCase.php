@@ -2,13 +2,14 @@
 
 namespace WooCommerce_Shipcloud\Tests\Shipcloud;
 
+use PHPUnit\Framework\TestCase;
 use Shipcloud\Domain\Package;
 use Shipcloud\Domain\Services\CashOnDelivery;
 use Shipcloud\Domain\ValueObject\Address;
 use Shipcloud\Domain\ValueObject\BankInformation;
 use Shipcloud\Domain\ValueObject\Location;
 
-abstract class ShipcloudTestCase extends \WP_UnitTestCase {
+abstract class ShipcloudTestCase extends TestCase {
 	public function createAddress() {
 		return new Address(
 			uniqid( 'company', true ),
