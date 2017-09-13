@@ -137,8 +137,11 @@
 				<div class="label-shipment-actions">
 
 					<p class="button-create-label<?php echo $classes_button_create_label; ?>">
-						<input type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="shipcloud_create_label button-primary"/>
+            <button class="shipcloud_create_label button-primary" type="button">
+              <?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
+            </button>
 					</p>
+
 					<p class="button-download-label<?php echo $classes_button_download_label; ?>">
 						<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?></a>
 					</p>
