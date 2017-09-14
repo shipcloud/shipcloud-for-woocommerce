@@ -155,13 +155,14 @@ class WC_Shipcloud_Order
 		add_action( 'wp_ajax_shipcloud_create_shipment', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_shipment_label', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( $this, 'ajax_create_label' ) );
+
 		add_action(
 			\Shipcloud\Controller\LabelController::AJAX_UPDATE,
-			array(
-				_wcsc_container()->get( '\\Shipcloud\\Controller\\LabelController' ),
-				'update'
-			)
+			function () {
+				_wcsc_container()->get( '\\Shipcloud\\Controller\\LabelController' )->update();
+            }
 		);
+
 		add_action( 'wp_ajax_shipcloud_delete_shipment', array( $this, 'ajax_delete_shipment' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
