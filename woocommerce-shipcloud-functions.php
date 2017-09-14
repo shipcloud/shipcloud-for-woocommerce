@@ -523,24 +523,35 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'recipient_last_name'  => $data['to']['last_name'],
 		'recipient_company'    => $data['to']['company'],
 		'recipient_street'     => $data['to']['street'],
-		'recipient_street_no'  => $data['to']['street_nr'],
+		'recipient_street_no'  => $data['to']['street_no'],
 		'recipient_zip_code'   => $data['to']['zip_code'],
 		'recipient_city'       => $data['to']['city'],
 		'recipient_state'      => $data['to']['state'],
 		'recipient_country'    => $data['to']['country'],
 		'date_created'         => time()
+
 	);
+
+	// Fallback until v2.0.0
+	if (isset($data['from']['street_nr'])) {
+		$shipment_data['recipient_street_no'] = $data['from']['street_nr'];
+	}
 
 	if ( isset( $data['from'] ) ) {
 		$shipment_data['sender_first_name'] = $data['from']['first_name'];
 		$shipment_data['sender_last_name']  = $data['from']['last_name'];
 		$shipment_data['sender_company']    = $data['from']['company'];
 		$shipment_data['sender_street']     = $data['from']['street'];
-		$shipment_data['sender_street_no']  = $data['from']['street_nr'];
+		$shipment_data['sender_street_no']  = $data['from']['street_no'];
 		$shipment_data['sender_zip_code']   = $data['from']['zip_code'];
 		$shipment_data['sender_city']       = $data['from']['city'];
 		$shipment_data['sender_state']      = $data['from']['state'];
 		$shipment_data['country']           = $data['from']['country'];
+
+		// Fallback until v2.0.0
+		if (isset($data['to']['street_nr'])) {
+			$shipment_data['sender_street_no'] = $data['to']['street_nr'];
+		}
 	}
 
 	add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_data['id'] );
