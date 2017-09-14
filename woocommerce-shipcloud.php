@@ -270,12 +270,8 @@ class WooCommerce_Shipcloud {
 	 * @since 1.3.2 For usage in frontend: Only start session when no headers are sent.
 	 */
 	public static function assert_session() {
-		if ( session_id() ) {
-			return;
-		}
-
-		if ( ! headers_sent() ) {
-	    	// Only start new session when no headers are send.
+		if ( ! headers_sent() && ! session_id() ) {
+	    	// Only start new session when no headers are send and no session started so far.
 			session_start();
 		}
 
