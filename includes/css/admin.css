@@ -199,23 +199,19 @@
     opacity: 0.6;
 }
 
-#shipcloud-io .shipment-labels input {
-    width: 80%;
-}
-#shipcloud-io .shipment-labels input[name="recipient_street_no"],
-#shipcloud-io .shipment-labels input[name="recipient_zip_code"],
-#shipcloud-io .shipment-labels input[name="sender_street_no"],
-#shipcloud-io .shipment-labels input[name="sender_zip_code"]
-{
-    width: 20%;
+#shipcloud-io .shipment-labels fieldset {
+    border: 1px solid #aaa;
+    padding: 0 1em 1em 1em;
+    margin: 1em;
 }
 
-#shipcloud-io .shipment-labels input[name="recipient_street"],
-#shipcloud-io .shipment-labels input[name="recipient_city"],
-#shipcloud-io .shipment-labels input[name="sender_street"],
-#shipcloud-io .shipment-labels input[name="sender_city"]
-{
-    width: 59%;
+#shipcloud-io .shipment-labels label {
+    display: block;
+    margin-top: 0.5em;
+}
+
+#shipcloud-io .shipment-labels input {
+    width: 100%;
 }
 
 #shipcloud-io .shipment-labels .widget-title{

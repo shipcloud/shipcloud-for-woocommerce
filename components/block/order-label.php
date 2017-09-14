@@ -26,51 +26,102 @@
 		<div class="widget-content">
 			<div class="data">
 
-				<div class="label-shipment-sender address" role="switch">
-                        <span>
-                            <div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
-                            <div>
-                                <span class="sender_first_name">
-                                    <?php echo $data[ 'sender_first_name' ]; ?>
-                                </span>
-                                <span class="sender_last_name">
-                                    <?php echo $data[ 'sender_last_name' ]; ?>
-                                </span>
-                            </div>
-                            <div>
-                                <span class="sender_street"><?php echo $data[ 'sender_street' ]; ?></span>
-                                <span class="sender_street_no">
-                                    <?php echo (isset($data[ 'sender_street_nr' ])) ? $data[ 'sender_street_nr' ] : $data[ 'sender_street_no' ]; ?>
-                                </span>
-                            </div>
-                            <div>
-                                <span class="sender_zip_code"><?php echo $data[ 'sender_zip_code' ]; ?></span>
-                                <span class="sender_city"><?php echo $data[ 'sender_city' ]; ?></span>
-                            </div>
-                            <div class="sender_state"><?php echo $data[ 'sender_state' ]; ?></div>
-                            <div class="sender_country"><?php echo (isset($data['country'])) ? $data[ 'country' ] : ''; ?></div>
-                        </span>
-					<span style="display: none;">
-                            <input type="text" name="sender_company" value="<?php esc_attr_e($data[ 'sender_company' ]); ?>" />
-                            <input type="text" name="sender_first_name" value="<?php esc_attr_e($data[ 'sender_first_name' ]); ?>" />
-                            <input type="text" name="sender_last_name" value="<?php esc_attr_e($data[ 'sender_last_name' ]); ?>" />
+                <div class="label-shipment-sender address" role="switch">
+                    <span>
+                        <div class="sender_company"><?php echo $data['sender_company']; ?></div>
+                        <div>
+                            <span class="sender_first_name">
+                                <?php echo $data['sender_first_name']; ?>
+                            </span>
+                            <span class="sender_last_name">
+                                <?php echo $data['sender_last_name']; ?>
+                            </span>
+                        </div>
+                        <div>
+                            <span class="sender_street"><?php echo $data['sender_street']; ?></span>
+                            <span class="sender_street_no">
+                                <?php echo ( isset( $data['sender_street_nr'] ) ) ? $data['sender_street_nr'] : $data['sender_street_no']; ?>
+                            </span>
+                        </div>
+                        <div>
+                            <span class="sender_zip_code"><?php echo $data['sender_zip_code']; ?></span>
+                            <span class="sender_city"><?php echo $data['sender_city']; ?></span>
+                        </div>
+                        <div class="sender_state"><?php echo $data['sender_state']; ?></div>
+                        <div class="sender_country"><?php echo ( isset( $data['country'] ) ) ? $data['country'] : ''; ?></div>
+                    </span>
+                    <fieldset style="display: none;">
+                        <legend><?php echo esc_html_x('Sender address', 'Backend: Legend for sender fieldset', 'shipcloud-for-woocommerce') ?></legend>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Company', 'Backend: Label for company input', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="sender_company"
+                                   value="<?php esc_attr_e( $data['sender_company'] ); ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'First name', 'Backend: Label for first name', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="sender_first_name"
+                                   value="<?php esc_attr_e( $data['sender_first_name'] ); ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Last name', 'Backend: Label for last name', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="sender_last_name"
+                                   value="<?php esc_attr_e( $data['sender_last_name'] ); ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Street', 'Backend: Label for street input', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
                             <input type="text" name="sender_street"
                                    value="<?php esc_attr_e( $data['sender_street'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Street number', 'Backend: Label for street no', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
                             <input type="text" name="sender_street_no"
                                    value="<?php esc_attr_e( ( isset( $data['sender_street_nr'] ) ) ? $data['sender_street_nr'] : $data['sender_street_no'] ) ?>"/>
-                            <input type="text" name="sender_zip_code" value="<?php esc_attr_e($data[ 'sender_zip_code' ]); ?>" />
-                            <input type="text" name="sender_city" value="<?php esc_attr_e($data[ 'sender_city' ]); ?>" />
-                            <input type="text" name="sender_state" value="<?php esc_attr_e($data[ 'sender_state' ]); ?>" />
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'ZIP code', 'Backend: Label for zip code', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="sender_zip_code"
+                                   value="<?php esc_attr_e( $data['sender_zip_code'] ); ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'City', 'Backend: Label for city', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="sender_city" value="<?php esc_attr_e( $data['sender_city'] ); ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'State', 'Backend: Label for state', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="sender_state"
+                                   value="<?php esc_attr_e( $data['sender_state'] ); ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Country', 'Backend: Label for country', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
                             <select name="sender_country">
                                 <?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
-									<option value="<?php esc_attr_e( $key ); ?>"
-										<?php selected( $key === $data[ 'sender_country' ] ) ?>>
+                                    <option value="<?php esc_attr_e( $key ); ?>"
+										<?php selected( $key === $data['sender_country'] ) ?>>
                                         <?php echo $country; ?>
                                     </option>
 								<?php endforeach; ?>
                             </select>
-                        </span>
-				</div>
+                        </div>
+                    </fieldset>
+                </div>
 
                 <div class="label-shipment-recipient address" role="switch">
                     <span>
@@ -102,36 +153,82 @@
 					<div class="recipient_state"><?php echo ( isset( $data['recipient_state'] ) ) ? $data['recipient_state'] : ''; ?></div>
 					<div class="recipient_country"><?php echo $data['recipient_country']; ?></div>
                     </span>
-                    <span style="display: none;">
-                        <input type="text" name="recipient_company" value="<?php esc_attr_e( $data['recipient_company'] ) ?>" />
-                        <input type="text" name="recipient_first_name" value="<?php esc_attr_e( $data['recipient_first_name'] ) ?>" />
-                        <input type="text" name="recipient_last_name" value="<?php esc_attr_e( $data['recipient_last_name'] ) ?>" />
-
-                        <input type="text"
-                               name="recipient_street"
-                               value="<?php esc_attr_e( $data['recipient_street'] ) ?>"
-                        /><input type="text"
-                                 name="recipient_street_no"
-                                 value="<?php esc_attr_e( ( isset( $data['recipient_street_nr'] ) ) ? $data['recipient_street_nr'] : $data['recipient_street_no'] ) ?>" />
-
-                        <input
-                                type="text"
-                                name="recipient_zip_code"
-                                value="<?php esc_attr_e( $data['recipient_zip_code'] ) ?>"
-                        /><input type="text"
-                                 name="recipient_city"
-                                 value="<?php esc_attr_e( $data['recipient_city'] ) ?>" />
-
-                        <input type="text" name="recipient_state" value="<?php esc_attr_e( $data['recipient_state'] ) ?>" />
-                        <select name="recipient_country">
-                                <?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
+                    <fieldset style="display: none;">
+                        <legend><?php echo esc_html_x( 'Recipient address', 'Backend: Title for recipient form-fieldset.', 'shipcloud-for-woocommerce' ) ?></legend>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Company', 'Backend: Label for company', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="recipient_company"
+                                   value="<?php esc_attr_e( $data['recipient_company'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'First name', 'Backend: Label for first name', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="recipient_first_name"
+                                   value="<?php esc_attr_e( $data['recipient_first_name'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+								<?php echo esc_html_x( 'Last name', 'Backend: Label for last name', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="recipient_last_name"
+                                   value="<?php esc_attr_e( $data['recipient_last_name'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Street', 'Backend: Label for street', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text"
+                                   name="recipient_street"
+                                   value="<?php esc_attr_e( $data['recipient_street'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Street number', 'Backend: Label for street number', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text"
+                                   name="recipient_street_no"
+                                   value="<?php esc_attr_e( ( isset( $data['recipient_street_nr'] ) ) ? $data['recipient_street_nr'] : $data['recipient_street_no'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'ZIP code', 'Backend: Label for zip code', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text"
+                                   name="recipient_zip_code"
+                                   value="<?php esc_attr_e( $data['recipient_zip_code'] ) ?>" />
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'City', 'Backend: Label for City', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text"
+                                     name="recipient_city"
+                                     value="<?php esc_attr_e( $data['recipient_city'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'State', 'Backend: Label for state', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text" name="recipient_state"
+                                   value="<?php esc_attr_e( $data['recipient_state'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="">
+                                <?php echo esc_html_x( 'Country', 'Backend: Label for country', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <select name="recipient_country">
+								<?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
                                     <option value="<?php esc_attr_e( $key ); ?>"
-										<?php selected( $key === $data[ 'recipient_country' ] ) ?>>
-                                        <?php echo $country; ?>
+										<?php selected( $key === $data['recipient_country'] ) ?>>
+										<?php echo $country; ?>
                                     </option>
 								<?php endforeach; ?>
                             </select>
-                    </span>
+                        </div>
+                    </fieldset>
                 </div>
 
 				<div class="label-shipment-actions">
