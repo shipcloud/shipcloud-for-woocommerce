@@ -1028,9 +1028,10 @@ class WC_Shipcloud_Order
 
 		if ( 'cod' === $order->get_payment_method() ) {
 		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
-		            $order->get_total(),
-                    $order->get_currency(),
-                    $this->get_bank_information()
+                $order->get_total(),
+                $order->get_currency(),
+                $this->get_bank_information(),
+                sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
             );
 
 		    if (!isset($data['additional_services'])) {

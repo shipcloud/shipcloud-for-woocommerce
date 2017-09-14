@@ -349,7 +349,8 @@ class WC_Shipcloud_Order_Bulk {
 			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
 				$order->get_wc_order()->get_total(),
 				$order->get_wc_order()->get_currency(),
-				$order->get_bank_information()
+				$order->get_bank_information(),
+				sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
 			);
 
 			if (!isset($data['additional_services'])) {
