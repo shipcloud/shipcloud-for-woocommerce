@@ -231,6 +231,12 @@ class WC_Shipcloud_Order_Bulk {
 	public function attach_downloads() {
 		WooCommerce_Shipcloud::assert_session();
 
+		if ( empty( $_SESSION['wscs'] ) ) {
+		    // Way to late during runtime.
+            // @todo This seems like a bug where the method is called way to late during shutdown.
+			return;
+		}
+
 		foreach ( (array) $_SESSION['wscs']['downloads'] as $key => $download ) {
 			?>
             <script type="application/javascript">
