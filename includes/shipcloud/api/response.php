@@ -42,6 +42,16 @@ class Response {
 		return new static( (array) json_decode( $body, true ), static::parseHeader( $header ) );
 	}
 
+	protected static function parseStatusLine( $statusLine ) {
+		$chunks = explode( ' ', $statusLine, 3 );
+
+		return array(
+			'http_protocol' => $chunks[0],
+			'http_code'     => $chunks[1],
+			'http_status'   => $chunks[2],
+		);
+	}
+
 	/**
 	 * Turn raw header into array.
 	 *
@@ -50,14 +60,23 @@ class Response {
 	 * @return array
 	 */
 	private static function parseHeader( $rawHeader ) {
-		$parseHeader                  = array();
-		$headerLines                  = explode( "\r\n", $rawHeader );
-		$statusLine                   = explode( ' ', array_shift( $headerLines ) );
-		$parseHeader['http_protocol'] = $statusLine[0];
-		$parseHeader['http_code']     = $statusLine[1];
-		$parseHeader['http_status']   = $statusLine[2];
+		$headerLines = explode( "\r\n", $rawHeader );
+		$parseHeader = static::parseStatusLine( array_shift( $headerLines ) );
 
 		foreach ( $headerLines as $i => $line ) {
+			if ( ! $line ) {
+				// Empty lines occur when multiple HTTP status codes are set.
+				continue;
+			}
+
+			$status = array();
+			if ( preg_match( '@(\w*\/[\d\.]*) (\d*) (\w*)@', $line, $status ) ) {
+				// Another response starts so we reset.
+				$parseHeader = static::parseStatusLine( $line );
+
+				continue;
+			}
+
 			$pair                                  = explode( ': ', $line, 2 );
 			$parseHeader[ strtolower( $pair[0] ) ] = trim( $pair[1] );
 		}
