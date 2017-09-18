@@ -111,10 +111,10 @@
                             <label for="">
                                 <?php echo esc_html_x( 'Country', 'Backend: Label for country', 'shipcloud-for-woocommerce' ) ?>
                             </label>
-                            <select name="sender_country">
+                            <select name="country">
                                 <?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
                                     <option value="<?php esc_attr_e( $key ); ?>"
-										<?php selected( $key === $data['sender_country'] ) ?>>
+										<?php selected( $key === $data['country'] ) ?>>
                                         <?php echo $country; ?>
                                     </option>
 								<?php endforeach; ?>

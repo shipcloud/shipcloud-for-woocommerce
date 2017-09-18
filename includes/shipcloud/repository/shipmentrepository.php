@@ -65,7 +65,7 @@ class ShipmentRepository {
 			'sender_city'          => $data['from']['city'],
 			'sender_zip_code'      => $data['from']['zip_code'],
 			'sender_state'         => $data['from']['state'],
-			'sender_country'       => $data['from']['country'],
+			'country'              => $data['country'],
 			// Recipient
 			'recipient_company'    => $data['to']['company'],
 			'recipient_first_name' => $data['to']['first_name'],
