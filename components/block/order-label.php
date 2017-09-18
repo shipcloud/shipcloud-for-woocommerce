@@ -247,15 +247,17 @@
 						<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?></a>
 					</p>
 
-					<p class="button-edit-shipment" role="switch">
-						<button class="button wcsc-save-shipment button-primary" role="switch" type="button"
-								style="display: none;">
-                            <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-						</button>
-						<button class="button wcsc-edit-shipment" role="switch" type="button">
-							<?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-						</button>
-					</p>
+                    <?php if ( empty( $data[ 'label_url' ] ) ): ?>
+                        <p class="button-edit-shipment" role="switch">
+                            <button class="button wcsc-save-shipment button-primary" role="switch" type="button"
+                                    style="display: none;">
+                                <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+                            </button>
+                            <button class="button wcsc-edit-shipment" role="switch" type="button">
+                                <?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+                            </button>
+                        </p>
+                    <?php endif; ?>
 
 					<p class="button-delete-shipment">
                         <button type="button" class="shipcloud_delete_shipment button">
