@@ -350,7 +350,7 @@ jQuery( function( $ ) {
 					text: wcsc_translate.yes,
 					click: function ()
                     {
-						var shipment_id = $(this).parent().parent().find("input[name='shipment_id']").val();
+						var shipment_id = button.closest('div.data').find("input[name='shipment_id']").val();
 
 						shipcloud_create_label( shipment_id, button );
 

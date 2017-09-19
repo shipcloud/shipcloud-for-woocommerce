@@ -528,8 +528,8 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'recipient_city'       => $data['to']['city'],
 		'recipient_state'      => $data['to']['state'],
 		'recipient_country'    => $data['to']['country'],
+		'recipient_phone'      => $data['to']['phone'],
 		'date_created'         => time()
-
 	);
 
 	// Fallback until v2.0.0
@@ -573,7 +573,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
  * @return WP_Error
  */
 function _wcsc_exception_to_wp_error( $exception ) {
-	$wp_error         = new \WP_Error( $exception->getCode(), $exception->getMessage() );
+	$wp_error         = new \WP_Error( $exception->getCode()?: 1, $exception->getMessage() );
 	$currentException = $exception->getPrevious();
 	$maxDepth         = 20;
 

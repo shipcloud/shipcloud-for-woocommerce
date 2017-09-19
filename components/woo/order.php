@@ -1005,7 +1005,15 @@ class WC_Shipcloud_Order
 
 		$order = wc_get_order( $order_id );
 
-		$request = $shipcloud_api->create_label( $shipment_id );
+		/** @var \Shipcloud\Repository\ShipmentRepository $shipmentRepo */
+		$shipmentRepo = _wcsc_container()->get('\\Shipcloud\\Repository\\ShipmentRepository');
+
+		$params = array();
+		if ($shipment_id) {
+		    $params = $shipmentRepo->findByShipmentId( $order_id, $shipment_id );
+        }
+
+		$request = $shipcloud_api->create_label( $shipment_id, $params );
 
 		if ( is_wp_error( $request ) ) {
 			$error_message = $request->get_error_message();

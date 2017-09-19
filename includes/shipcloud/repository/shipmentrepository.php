@@ -79,4 +79,22 @@ class ShipmentRepository {
 		);
 	}
 
+	/**
+	 * @param $order_id
+	 * @param $shipment_id
+	 *
+	 * @return array
+	 */
+	public function findByShipmentId( $order_id, $shipment_id ) {
+		foreach ( get_post_meta( $order_id, 'shipcloud_shipment_data' ) as $shipment ) {
+			if ($shipment['id'] === $shipment_id) {
+				$converter = new \Shipcloud\ShipmentAdapter($shipment);
+
+				return $converter->toArray();
+			}
+		}
+
+		return array();
+	}
+
 }
