@@ -26,7 +26,7 @@ use Brain\Monkey\Functions;
  *
  * @see \Woocommerce_Shipcloud_API::get_params_by_carrier()
  */
-class Get_Params_By_Carrier_Test extends ShipcloudTestCase {
+class GetParamsByCarrierTest extends ShipcloudTestCase {
 
 	/**
 	 * @var \Woocommerce_Shipcloud_API

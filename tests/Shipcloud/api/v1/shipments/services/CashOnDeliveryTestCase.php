@@ -5,7 +5,7 @@ namespace WooCommerce_Shipcloud\Tests\Shipcloud\Api\v1\Shipments\Services;
 use Shipcloud\Domain\Services\CashOnDelivery;
 use WooCommerce_Shipcloud\Tests\Shipcloud\ShipcloudTestCase;
 
-class Cash_On_Delivery_TestCase extends ShipcloudTestCase {
+class CashOnDeliveryTestCase extends ShipcloudTestCase {
 
 
 	protected function createShipmentsRequestData() {

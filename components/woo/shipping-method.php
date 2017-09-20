@@ -480,6 +480,71 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'Enter standard phone number for sender.', 'shipcloud-for-woocommerce' ),
 				'desc_tip'    => true,
 			),
+			'banking_information' => array(
+				'title'       => _x(
+					'Banking information',
+					'Backend: Title of the settings section',
+					'shipcloud-for-woocommerce'
+				),
+				'type'        => 'title',
+				'description' => sprintf( __( 'Fill in defaults for cash on deliveryŝ.', 'shipcloud-for-woocommerce' ) ),
+			),
+			'bank_account_holder' => array(
+				'title'       => _x(
+					'Bank account holder',
+					'Backend: Label for input field in settings',
+					'shipcloud-for-woocommerce'
+				),
+				'type'        => 'text',
+				'description' => _x(
+					'Enter the name of the person who holds the bank account.',
+					'Backend: Description for bank_account_holder input field in settings.',
+					'shipcloud-for-woocommerce'
+				),
+				'desc_tip'    => true,
+			),
+			'bank_name' => array(
+				'title'       => _x(
+					'Bank name',
+					'Backend: Label for bank_name input field in settings',
+					'shipcloud-for-woocommerce'
+				),
+				'type'        => 'text',
+				'description' => _x(
+					'Enter the name of the bank.',
+					'Backend: Description for bank_name input field in settings',
+					'shipcloud-for-woocommerce'
+				),
+				'desc_tip'    => true,
+			),
+			'bank_account_number' => array(
+				'title'       => _x(
+					'Bank account number (IBAN)',
+					'Backend: Label for bank_account_number input field in settings',
+					'shipcloud-for-woocommerce'
+				),
+				'type'        => 'text',
+				'description' => _x(
+					'Enter the account number for the default bank account as IBAN number.',
+					'Backend: Description for bank_account_number input field in settings',
+					'shipcloud-for-woocommerce'
+				),
+				'desc_tip'    => true,
+			),
+			'bank_code' => array(
+				'title'       => _x(
+					'Bank code (SWIFT)',
+					'Backend: Label for bank_code input field in settings',
+					'shipcloud-for-woocommerce'
+				),
+				'type'        => 'text',
+				'description' => _x(
+					'Enter the bank SWIFT code.',
+					'Backend: Description for bank_code input field in settings',
+					'shipcloud-for-woocommerce'
+				),
+				'desc_tip'    => true,
+			),
 			'recipient_information'              => array(
 				'title'       => __( 'Recipient information', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
