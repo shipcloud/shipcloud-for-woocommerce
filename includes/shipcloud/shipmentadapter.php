@@ -62,6 +62,7 @@ class ShipmentAdapter {
 			'zip_code'   => $this->shipmentData['sender_zip_code'],
 			'city'       => $this->shipmentData['sender_city'],
 			'state'      => $this->shipmentData['sender_state'],
+			'phone'      => $this->shipmentData['sender_phone'],
 			'country'    => $this->shipmentData['country'],
 		);
 	}

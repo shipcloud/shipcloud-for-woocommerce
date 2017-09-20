@@ -546,6 +546,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		$shipment_data['sender_zip_code']   = $data['from']['zip_code'];
 		$shipment_data['sender_city']       = $data['from']['city'];
 		$shipment_data['sender_state']      = $data['from']['state'];
+		$shipment_data['sender_phone']      = $data['from']['phone'];
 		$shipment_data['country']           = $data['from']['country'];
 
 		// Fallback until v2.0.0
