@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 3.0.0
 Tested up to: 4.8.1
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
@@ -115,6 +115,8 @@ https://youtu.be/HE3jow15x8c
 
 = 1.5.0 =
 * Enhanced: When using the [WooCommerce germanized plugin](https://wordpress.org/plugins/woocommerce-germanized/) the post number for using DHL Packstation will be used for creating shipping labels instead of `shipping_address_2`
+
+= 1.4.3 =
 * Fixed: Added whitespace between first and last name as well as street name and number when displaying a shipment
 * Fixed: `notification_email` is now transmitted correctly
 
