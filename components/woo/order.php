@@ -901,7 +901,7 @@ class WC_Shipcloud_Order
 		$order    = $this->get_wc_order( $order_id );
 
 		if ( ! $data['isReturn'] ) {
-			$data['to']['email'] = $order->billing_email;
+			$data['to']['email'] = $order->get_billing_email();
 		}
 
 		/**
@@ -1365,7 +1365,7 @@ class WC_Shipcloud_Order
 
 		$order = $this->get_wc_order();
 
-		return apply_filters( 'wcsc_notification_email', (string) $order->billing_email, $order );
+		return apply_filters( 'wcsc_notification_email', (string) $order->get_billing_email(), $order );
 	}
 
 	/**
@@ -1424,7 +1424,7 @@ class WC_Shipcloud_Order
 
 		$order = $this->get_wc_order();
 
-		return apply_filters( 'wcsc_carrier_email', (string) $order->billing_email, $order );
+		return apply_filters( 'wcsc_carrier_email', (string) $order->get_billing_email(), $order );
 	}
 
 	/**
