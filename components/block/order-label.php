@@ -160,6 +160,11 @@
                             <?php echo $data['recipient_care_of']; ?>
                         </span>
                     </div>
+                    <div>
+                        <span class="recipient_company">
+                            <?php echo $data['recipient_company']; ?>
+                        </span>
+                    </div>
 					<div>
                         <span class="recipient_zip_code">
                             <?php echo $data['recipient_zip_code']; ?>
