@@ -44,6 +44,11 @@
                             </span>
                         </div>
                         <div>
+                            <span class="sender_care_of">
+                                <?php echo $data['sender_care_of']; ?>
+                            </span>
+                        </div>
+                        <div>
                             <span class="sender_zip_code"><?php echo $data['sender_zip_code']; ?></span>
                             <span class="sender_city"><?php echo $data['sender_city']; ?></span>
                         </div>
@@ -72,6 +77,14 @@
                             </label>
                             <input type="text" name="sender_last_name"
                                    value="<?php esc_attr_e( $data['sender_last_name'] ); ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="sender_care_of">
+                                <?php echo esc_html_x( 'Care Of', 'Backend: Label for care of', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text"
+                                   name="sender_care_of"
+                                   value="<?php esc_attr_e( $data['sender_care_of'] ) ?>"/>
                         </div>
                         <div class="form-field">
                             <label for="">
@@ -142,6 +155,11 @@
                             <?php echo ( isset( $data['recipient_street_nr'] ) ) ? $data['recipient_street_nr'] : $data['recipient_street_no']; ?>
                         </span>
                     </div>
+                    <div>
+                        <span class="recipient_care_of">
+                            <?php echo $data['recipient_care_of']; ?>
+                        </span>
+                    </div>
 					<div>
                         <span class="recipient_zip_code">
                             <?php echo $data['recipient_zip_code']; ?>
@@ -175,6 +193,14 @@
                             </label>
                             <input type="text" name="recipient_last_name"
                                    value="<?php esc_attr_e( $data['recipient_last_name'] ) ?>"/>
+                        </div>
+                        <div class="form-field">
+                            <label for="recipient_care_of">
+                                <?php echo esc_html_x( 'Care Of', 'Backend: Label for care of', 'shipcloud-for-woocommerce' ) ?>
+                            </label>
+                            <input type="text"
+                                   name="recipient_care_of"
+                                   value="<?php esc_attr_e( $data['recipient_care_of'] ) ?>"/>
                         </div>
                         <div class="form-field">
                             <label for="">
