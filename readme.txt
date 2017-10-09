@@ -116,6 +116,7 @@ https://youtu.be/HE3jow15x8c
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
 * Fixed: `care_of` now displayed in shipment data and transmitted when updating a shipment
+* Fixed: Call to undefined method WC_Shipcloud_Order_Bulk::sanitize_package()
 
 = 1.5.0 =
 * Enhanced: When using the [WooCommerce germanized plugin](https://wordpress.org/plugins/woocommerce-germanized/) the post number for using DHL Packstation will be used for creating shipping labels instead of `shipping_address_2`
