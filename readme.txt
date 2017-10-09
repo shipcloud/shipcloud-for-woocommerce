@@ -1,15 +1,18 @@
 === shipcloud for WooCommerce ===
 Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
-Requires at least: 3.0.0
-Tested up to: 4.8.1
+Requires at least: 4.2.0
+Tested up to: 4.8.2
 Stable tag: 1.5.0
+Requires PHP: 5.4
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
 == Description ==
 
 shipcloud is the only shipping service provider you need! With this plugin you can create shipping labels for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the need to copy or upload your order data into another external system (no CSV upload necessary). Our direct integration with the shipcloud system not only enables you to create shipping labels, you’re also able to track your shipments for free. This way you’ll always know where your orders are currently at.
+
+Works for WooCommerce 2.6 as well as for WooCommerce 3.0 and above.
 
 = All the benefits shipcloud offers you =
 
@@ -115,6 +118,7 @@ https://youtu.be/HE3jow15x8c
 
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
+* Enhanced: Show minimum required versions for PHP and WooCommerce.
 * Fixed: `care_of` now displayed in shipment data and transmitted when updating a shipment
 
 = 1.5.0 =
