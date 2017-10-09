@@ -368,22 +368,28 @@ jQuery( function( $ ) {
 
 			ask_create_label.dialog("open");
 		});
-	}
+	};
+
 	shipcloud_create_label_buttons();
 
 	function print_errors( errors ){
+		if (typeof errors === "string") {
+			// Received single error message, so we convert it to the expected format.
+			errors = [errors];
+		}
+
 		var html = '<div class="error"><ul class="errors">';
 		errors.forEach( function( entry ){
 			html+= '<li>' + entry + '</li>';
 		});
 		html+= '</ul></div>';
 
-		$( '#shipment-center .info' ).fadeIn().html( html );
+		$( '#shipment-center').find('.info' ).fadeIn().html( html );
 	}
 
 	function print_notice( text )
 	{
-		$( '#shipment-center .info' ).fadeIn().html( text );
+		$( '#shipment-center').find('.info' ).fadeIn().html( text );
 	}
 
 	/**
