@@ -351,7 +351,7 @@ class WC_Shipcloud_Order_Bulk {
 			'create_shipping_label' => true,
 		);
 
-		if ( $order->get_wc_order() && 'cod' === $order->get_wc_order()->get_payment_method() ) {
+		if ( $order->get_wc_order() && wcsc_get_cod_id() === $order->get_wc_order()->get_payment_method() ) {
 			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
 				$order->get_wc_order()->get_total(),
 				$order->get_wc_order()->get_currency(),
