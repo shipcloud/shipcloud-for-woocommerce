@@ -338,11 +338,11 @@ class WC_Shipcloud_Order_Bulk {
 			'to'                    => $order->get_recipient(),
 			'from'                  => $order->get_sender(),
 			'package'               => new \Shipcloud\Domain\Package(
-				$request['parcel_length'],
-				$request['parcel_width'],
-				$request['parcel_height'],
-				$request['parcel_weight'],
-                $request['shipcloud_carrier_package']
+				wc_format_decimal( $request['parcel_length'] ),
+				wc_format_decimal( $request['parcel_width'] ),
+				wc_format_decimal( $request['parcel_height'] ),
+				wc_format_decimal( $request['parcel_weight'] ),
+				$request['shipcloud_carrier_package']
 			),
 			'carrier'               => $request['shipcloud_carrier'],
 			'service'               => $request['shipcloud_carrier_service'],
@@ -367,10 +367,6 @@ class WC_Shipcloud_Order_Bulk {
 				'name' => \Shipcloud\Domain\Services\CashOnDelivery::NAME,
 				'properties' => $cash_on_delivery->toArray()
 			);
-		}
-
-		if ( array_key_exists( 'package', $data ) ) {
-			$data['package'] = $this->sanitize_package( $data['package'] );
 		}
 
 		try {
@@ -427,28 +423,6 @@ class WC_Shipcloud_Order_Bulk {
 		}
 
 		return $shipment;
-	}
-
-	/**
-	 * Sanitize package data.
-	 *
-	 * User enter package data that can:
-	 *
-	 * - Have local decimal separator.
-	 *
-	 * @since 1.5.1
-	 *
-	 * @param array $package_data
-	 *
-	 * @return array
-	 */
-	protected function sanitize_package( $package_data ) {
-		$package_data['width']  = wc_format_decimal( $package_data['width'] );
-		$package_data['height'] = wc_format_decimal( $package_data['height'] );
-		$package_data['length'] = wc_format_decimal( $package_data['length'] );
-		$package_data['weight'] = wc_format_decimal( $package_data['weight'] );
-
-		return $package_data;
 	}
 
 	/**
