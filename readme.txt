@@ -121,6 +121,7 @@ https://youtu.be/HE3jow15x8c
 * Enhanced: Show minimum required versions for PHP and WooCommerce.
 * Enhanced: detect installed WooCommerce German Market plugin and detect cash on delivery orders differently
 * Fixed: `care_of` now displayed in shipment data and transmitted when updating a shipment
+* Fixed: Show error messages in backend when creating a label out of prepared ones fails.
 * Fixed: Call to undefined method WC_Shipcloud_Order_Bulk::sanitize_package()
 
 = 1.5.0 =
