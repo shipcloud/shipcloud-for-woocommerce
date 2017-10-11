@@ -616,3 +616,20 @@ function _wcsc_carriers_get() {
 
 	return $data;
 }
+
+/**
+ * Resolve the correct identifier for cash on delivery.
+ *
+ * @since 1.5.1 Due to plugins that rename the "cod" to something else.
+ *
+ * @return string
+ */
+function wcsc_get_cod_id() {
+	static $cod_id = null;
+
+	if ( null === $cod_id ) {
+		$cod_id = (string) apply_filters( WooCommerce_Shipcloud::FILTER_GET_COD_ID, 'cod' );
+	}
+
+	return $cod_id;
+}

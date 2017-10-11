@@ -929,7 +929,7 @@ class WC_Shipcloud_Order
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
-		if ( 'cod' === $order->get_payment_method() ) {
+		if ( wcsc_get_cod_id() === $order->get_payment_method() ) {
 		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
                 $order->get_total(),
                 $order->get_currency(),

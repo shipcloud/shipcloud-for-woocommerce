@@ -119,6 +119,7 @@ https://youtu.be/HE3jow15x8c
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
 * Enhanced: Show minimum required versions for PHP and WooCommerce.
+* Enhanced: detect installed WooCommerce German Market plugin and detect cash on delivery orders differently
 * Fixed: `care_of` now displayed in shipment data and transmitted when updating a shipment
 
 = 1.5.0 =
