@@ -60,9 +60,9 @@ receive their order from
 A multitude of WooCommerce customers succussfully use shipcloud as their shipping service provider.
 Here are a few of them:
 
-* [einhorn.my](https://www.shipcloud.io/de/company/press/references/mit-shipcloud-koennen-wir-reibungsverluste-reduzieren?utm_source=wordpressr&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
-* [grillido.de](https://www.shipcloud.io/de/company/press/references/wenn-s-um-die-wurst-geht-shipcloud?utm_source=wordpressr&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
-* [bertrand.bio](https://www.shipcloud.io/de/company/press/references/unsere-erfahrungen-waren-durchweg-positiv-sonst-waeren-wir-kein-treuer-kunde?utm_source=wordpressr&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
+* [einhorn.my](https://www.shipcloud.io/de/company/press/references/mit-shipcloud-koennen-wir-reibungsverluste-reduzieren?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
+* [grillido.de](https://www.shipcloud.io/de/company/press/references/wenn-s-um-die-wurst-geht-shipcloud?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
+* [bertrand.bio](https://www.shipcloud.io/de/company/press/references/unsere-erfahrungen-waren-durchweg-positiv-sonst-waeren-wir-kein-treuer-kunde?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
 
 = One-stop national and international shipping =
 
