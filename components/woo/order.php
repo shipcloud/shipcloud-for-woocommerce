@@ -929,7 +929,7 @@ class WC_Shipcloud_Order
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
-		if ( 'cod' === $order->get_payment_method() ) {
+		if ( wcsc_get_cod_id() === $order->get_payment_method() ) {
 		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
                 $order->get_total(),
                 $order->get_currency(),
@@ -1197,6 +1197,18 @@ class WC_Shipcloud_Order
 		
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
 
+		if ( $sender && $prefix ) {
+			foreach ( $sender as $key => $value ) {
+				if ( 0 === strpos( $key, $prefix ) ) {
+					// Has already the prefix.
+					continue;
+				}
+
+				$sender[ $prefix . $key ] = $sender[ $key ];
+				unset( $sender[ $key ] );
+			}
+		}
+
 		// Use default data if nothing was saved before
 		if ( '' == $sender || 0 == count( $sender ) ) {
 
@@ -1234,6 +1246,18 @@ class WC_Shipcloud_Order
 		$options = $this->get_options();
 
 		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
+
+		if ( $recipient && $prefix ) {
+			foreach ( $recipient as $key => $value ) {
+				if ( 0 === strpos( $key, $prefix ) ) {
+					// Has already the prefix.
+					continue;
+				}
+
+				$recipient[ $prefix . $key ] = $recipient[ $key ];
+				unset( $recipient[ $key ] );
+			}
+		}
 
 		// Use default data if nothing was saved before
 		if ( '' == $recipient || 0 == count( $recipient ) ) {
