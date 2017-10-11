@@ -169,6 +169,15 @@ class WC_Shipcloud_Order
 	}
 
 	/**
+     * @deprecated 2.0.0 The API should be fully injected instead of fetched from the container.
+     *
+	 * @return \Woocommerce_Shipcloud_API
+	 */
+	protected function get_api() {
+		return _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
+	}
+
+	/**
 	 * Main Instance
 	 *
 	 * @since 1.0.0
@@ -830,9 +839,6 @@ class WC_Shipcloud_Order
 	 */
 	public function ajax_calculate_shipping()
 	{
-		$options       = $this->get_options();
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options[ 'api_key' ] );
-
 		$package = array(
 			'width'  => wc_format_decimal( $_POST['package'][ 'width' ] ),
 			'height' => wc_format_decimal( $_POST['package'][ 'height' ] ),
@@ -841,7 +847,7 @@ class WC_Shipcloud_Order
             'type' => $_POST['package']['type'],
 		);
 
-		$price = $shipcloud_api->get_price(
+		$price = $this->get_api()->get_price(
 		        $_POST[ 'carrier' ],
                 $_POST['from'],
                 $_POST['to'],
@@ -1034,9 +1040,6 @@ class WC_Shipcloud_Order
 	 * @return array|WP_Error
 	 */
 	public function create_label( $order_id, $carrier_id, $shipment_id = null ) {
-		$options       = $this->get_options();
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $options['api_key'] );
-
 		$order = wc_get_order( $order_id );
 
 		/** @var \Shipcloud\Repository\ShipmentRepository $shipmentRepo */
@@ -1047,7 +1050,7 @@ class WC_Shipcloud_Order
 		    $params = $shipmentRepo->findByShipmentId( $order_id, $shipment_id );
         }
 
-		$request = $shipcloud_api->create_label( $shipment_id, $params );
+		$request = $this->get_api()->create_label( $shipment_id, $params );
 
 		if ( is_wp_error( $request ) ) {
 			$error_message = $request->get_error_message();
@@ -1181,10 +1184,7 @@ class WC_Shipcloud_Order
 	 */
 	private function get_tracking_status_html( $shipment_id )
 	{
-		$settings      = $this->get_options();
-		$shipcloud_api = new Woocommerce_Shipcloud_API( $settings[ 'api_key' ] );
-
-		$shipcloud_api->get_tracking_status( $shipment_id );
+		$this->get_api()->get_tracking_status( $shipment_id );
 	}
 
 	/**

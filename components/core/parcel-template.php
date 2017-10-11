@@ -71,6 +71,13 @@ class WCSC_Parceltemplate_Posttype
 	}
 
 	/**
+	 * @return array|mixed
+	 */
+	protected static function get_api() {
+		return _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
+	}
+
+	/**
 	 * Main Instance
 	 *
 	 * @since 1.0.0
@@ -173,8 +180,7 @@ class WCSC_Parceltemplate_Posttype
 			return;
 		}
 
-		$shipcloud_api = new Woocommerce_Shipcloud_API( wcsc_shipping_method()->get_option( 'api_key' ) );
-		$shipcloud_carriers = $shipcloud_api->get_carriers();
+		$shipcloud_carriers = self::get_api()->get_carriers();
 
 		$carriers = array();
 		foreach( $shipcloud_carriers AS $carrier )
