@@ -1,15 +1,18 @@
 === shipcloud for WooCommerce ===
 Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
-Requires at least: 3.0.0
-Tested up to: 4.8.1
-Stable tag: 1.5.0
+Requires at least: 4.2.0
+Tested up to: 4.8.2
+Stable tag: 1.5.1
+Requires PHP: 5.4
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
 == Description ==
 
 shipcloud is the only shipping service provider you need! With this plugin you can create shipping labels for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the need to copy or upload your order data into another external system (no CSV upload necessary). Our direct integration with the shipcloud system not only enables you to create shipping labels, you’re also able to track your shipments for free. This way you’ll always know where your orders are currently at.
+
+Works for WooCommerce 2.6 as well as for WooCommerce 3.0 and above.
 
 = All the benefits shipcloud offers you =
 
@@ -57,9 +60,9 @@ receive their order from
 A multitude of WooCommerce customers succussfully use shipcloud as their shipping service provider.
 Here are a few of them:
 
-* [einhorn.my](https://www.shipcloud.io/de/company/press/references/mit-shipcloud-koennen-wir-reibungsverluste-reduzieren?utm_source=wordpressr&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
-* [grillido.de](https://www.shipcloud.io/de/company/press/references/wenn-s-um-die-wurst-geht-shipcloud?utm_source=wordpressr&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
-* [bertrand.bio](https://www.shipcloud.io/de/company/press/references/unsere-erfahrungen-waren-durchweg-positiv-sonst-waeren-wir-kein-treuer-kunde?utm_source=wordpressr&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
+* [einhorn.my](https://www.shipcloud.io/de/company/press/references/mit-shipcloud-koennen-wir-reibungsverluste-reduzieren?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
+* [grillido.de](https://www.shipcloud.io/de/company/press/references/wenn-s-um-die-wurst-geht-shipcloud?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
+* [bertrand.bio](https://www.shipcloud.io/de/company/press/references/unsere-erfahrungen-waren-durchweg-positiv-sonst-waeren-wir-kein-treuer-kunde?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
 
 = One-stop national and international shipping =
 
@@ -112,6 +115,14 @@ https://youtu.be/HE3jow15x8c
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.5.1 =
+* Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
+* Enhanced: Show minimum required versions for PHP and WooCommerce.
+* Enhanced: detect installed WooCommerce German Market plugin and detect cash on delivery orders differently
+* Fixed: `care_of` now displayed in shipment data and transmitted when updating a shipment
+* Fixed: Show error messages in backend when creating a label out of prepared ones fails.
+* Fixed: Call to undefined method WC_Shipcloud_Order_Bulk::sanitize_package()
 
 = 1.5.0 =
 * Enhanced: When using the [WooCommerce germanized plugin](https://wordpress.org/plugins/woocommerce-germanized/) the post number for using DHL Packstation will be used for creating shipping labels instead of `shipping_address_2`

@@ -38,6 +38,15 @@ class WCSC_Woo extends WCSC_Component
 		$this->slug = 'woo';
 
 		add_filter( 'woocommerce_shipping_methods', array( $this, 'add_shipping_method' ) );
+		add_filter( 'woocommerce_settings_saved', array( $this, 'woocommerce_settings_saved' ) );
+	}
+
+	public function woocommerce_settings_saved() {
+		$options = get_option( 'woocommerce_shipcloud_settings', array() );
+
+		$allowed_carriers = $options['allowed_carriers'];
+
+		return;
 	}
 
 	/**

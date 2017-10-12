@@ -59,6 +59,13 @@ class I18n_ISO_Convert {
 				'639-1'          => 'ES',
 			),
 			array(
+				'country'        => 'Belgium',
+				'language'       => 'Dutch',
+				'3166-1-alpha-2' => 'BE',
+				'3166-1-alpha-3' => 'BEL',
+				'639-1'          => 'BE',
+			),
+			array(
 				'country'        => 'Ethiopia',
 				'language'       => 'Amharic',
 				'3166-1-alpha-2' => 'ET',

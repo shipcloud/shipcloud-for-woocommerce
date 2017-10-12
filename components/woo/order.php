@@ -431,13 +431,13 @@ class WC_Shipcloud_Order
 						<label for="recipient_address[street]"><?php _e( 'Street', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
-                                        <p class="twentyfive">
-						<input type="text" name="recipient_address[street_nr]" value="<?php echo isset($recipient[ 'street_no' ])?$recipient[ 'street_no' ]: (isset($recipient[ 'street_nr' ])? $recipient[ 'street_nr' ]:''); ?>" disabled>
+					<p class="twentyfive">
+						<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient[ 'street_no' ]?: $recipient[ 'street_nr' ]; ?>" disabled>
 						<label for="recipient_address[street_nr]"><?php _e( 'Number', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
 					<p class="fullsize">
-						<input type="text" name="recipient_address[zip_code]" value="<?php echo isset($recipient[ 'postcode' ])?$recipient[ 'postcode' ]: $recipient[ 'zip_code' ]; ?>" disabled>
+						<input type="text" name="recipient_address[zip_code]" value="<?php echo $recipient[ 'postcode' ]?: $recipient[ 'zip_code' ]; ?>" disabled>
 						<label for="recipient_address[zip_code]"><?php _e( 'Postcode', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
@@ -901,7 +901,7 @@ class WC_Shipcloud_Order
 		$order    = $this->get_wc_order( $order_id );
 
 		if ( ! $data['isReturn'] ) {
-			$data['to']['email'] = $order->get_billing_email();
+			$data['to']['email'] = $order->billing_email;
 		}
 
 		/**
@@ -929,7 +929,7 @@ class WC_Shipcloud_Order
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
-		if ( 'cod' === $order->get_payment_method() ) {
+		if ( wcsc_get_cod_id() === $order->get_payment_method() ) {
 		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
                 $order->get_total(),
                 $order->get_currency(),
@@ -1197,6 +1197,18 @@ class WC_Shipcloud_Order
 		
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
 
+		if ( $sender && $prefix ) {
+			foreach ( $sender as $key => $value ) {
+				if ( 0 === strpos( $key, $prefix ) ) {
+					// Has already the prefix.
+					continue;
+				}
+
+				$sender[ $prefix . $key ] = $sender[ $key ];
+				unset( $sender[ $key ] );
+			}
+		}
+
 		// Use default data if nothing was saved before
 		if ( '' == $sender || 0 == count( $sender ) ) {
 
@@ -1206,6 +1218,7 @@ class WC_Shipcloud_Order
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
 				$prefix . 'street_no'  => $options['sender_street_nr'] ?: $options['sender_street_no'],
+				$prefix . 'care_of'    => $options['sender_care_of'],
 				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
@@ -1234,39 +1247,51 @@ class WC_Shipcloud_Order
 
 		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
 
+		if ( $recipient && $prefix ) {
+			foreach ( $recipient as $key => $value ) {
+				if ( 0 === strpos( $key, $prefix ) ) {
+					// Has already the prefix.
+					continue;
+				}
+
+				$recipient[ $prefix . $key ] = $recipient[ $key ];
+				unset( $recipient[ $key ] );
+			}
+		}
+
 		// Use default data if nothing was saved before
 		if ( '' == $recipient || 0 == count( $recipient ) ) {
 			$order = $this->get_wc_order();
 
-			$recipient_street_name = $order->get_shipping_address_1();
+			$recipient_street_name = $order->shipping_address_1;
 			$recipient_street_nr   = '';
 
 			if ( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
-				$recipient_street = wcsc_explode_street( $order->get_shipping_address_1() );
+				$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
 
 				if ( is_array( $recipient_street ) ) {
 					$recipient_street_name = $recipient_street['address'];
 					$recipient_street_nr   = $recipient_street['number'];
 				}
 
-				if ( ! $recipient_street_nr && $order->get_shipping_address_2() ) {
+				if ( ! $recipient_street_nr && $order->shipping_address_2 ) {
 					// No house number given but we got secondary information to use for that.
-					$recipient_street_nr = $order->get_shipping_address_2();
+					$recipient_street_nr = $order->shipping_address_2;
 				}
 			}
 
 			$recipient = array(
-				$prefix . 'first_name' => $order->get_shipping_first_name(),
-				$prefix . 'last_name'  => $order->get_shipping_last_name(),
-				$prefix . 'company'    => $order->get_shipping_company(),
+				$prefix . 'first_name' => $order->shipping_first_name,
+				$prefix . 'last_name'  => $order->shipping_last_name,
+				$prefix . 'company'    => $order->shipping_company,
 				$prefix . 'care_of'    => $this->get_care_of(),
 				$prefix . 'street'     => $recipient_street_name,
 				$prefix . 'street_no'  => $recipient_street_nr,
-				$prefix . 'zip_code'   => $order->get_shipping_postcode(),
-				$prefix . 'postcode'   => $order->get_shipping_postcode(),
-				$prefix . 'city'       => $order->get_shipping_city(),
-				$prefix . 'state'      => $order->get_shipping_state(),
-				$prefix . 'country'    => $order->get_shipping_country(),
+				$prefix . 'zip_code'   => $order->shipping_postcode,
+				$prefix . 'postcode'   => $order->shipping_postcode,
+				$prefix . 'city'       => $order->shipping_city,
+				$prefix . 'state'      => $order->shipping_state,
+				$prefix . 'country'    => $order->shipping_country,
                 $prefix . 'phone'      => $this->get_phone(),
 			);
 		}
@@ -1291,7 +1316,7 @@ class WC_Shipcloud_Order
 			return (string) $phone;
 		}
 
-		return (string) $order->get_billing_phone();
+		return (string) $order->billing_phone;
 	}
 
 	/**
@@ -1317,17 +1342,17 @@ class WC_Shipcloud_Order
 			return (string) $care_of;
 		}
 
-		if ( $order->get_shipping_address_2() ) {
+		if ( $order->shipping_address_2 ) {
 			// Shipping address overrides billing address.
-			return (string) $order->get_shipping_address_2();
+			return (string) $order->shipping_address_2;
 		}
-                
+
 		// check to see if WooCommerce germanized was used for supplying a post number
-		if ( isset($order->shipping_parcelshop_post_number)) {
+		if ( $order->shipping_parcelshop_post_number) {
 			return (string) $order->shipping_parcelshop_post_number;
 		}
 
-		return (string) $order->get_billing_address_2();
+		return (string) $order->billing_address_2;
 	}
 
 	/**
@@ -1365,7 +1390,7 @@ class WC_Shipcloud_Order
 
 		$order = $this->get_wc_order();
 
-		return apply_filters( 'wcsc_notification_email', (string) $order->get_billing_email(), $order );
+		return apply_filters( 'wcsc_notification_email', (string) $order->billing_email, $order );
 	}
 
 	/**
@@ -1424,7 +1449,7 @@ class WC_Shipcloud_Order
 
 		$order = $this->get_wc_order();
 
-		return apply_filters( 'wcsc_carrier_email', (string) $order->get_billing_email(), $order );
+		return apply_filters( 'wcsc_carrier_email', (string) $order->billing_email, $order );
 	}
 
 	/**

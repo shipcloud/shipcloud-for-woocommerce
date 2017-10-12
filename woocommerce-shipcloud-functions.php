@@ -522,6 +522,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'recipient_first_name' => $data['to']['first_name'],
 		'recipient_last_name'  => $data['to']['last_name'],
 		'recipient_company'    => $data['to']['company'],
+		'recipient_care_of'    => $data['to']['care_of'],
 		'recipient_street'     => $data['to']['street'],
 		'recipient_street_no'  => $data['to']['street_no'],
 		'recipient_zip_code'   => $data['to']['zip_code'],
@@ -541,6 +542,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		$shipment_data['sender_first_name'] = $data['from']['first_name'];
 		$shipment_data['sender_last_name']  = $data['from']['last_name'];
 		$shipment_data['sender_company']    = $data['from']['company'];
+		$shipment_data['sender_care_of']    = $data['from']['care_of'];
 		$shipment_data['sender_street']     = $data['from']['street'];
 		$shipment_data['sender_street_no']  = $data['from']['street_no'];
 		$shipment_data['sender_zip_code']   = $data['from']['zip_code'];
@@ -613,4 +615,21 @@ function _wcsc_carriers_get() {
 	}
 
 	return $data;
+}
+
+/**
+ * Resolve the correct identifier for cash on delivery.
+ *
+ * @since 1.5.1 Due to plugins that rename the "cod" to something else.
+ *
+ * @return string
+ */
+function wcsc_get_cod_id() {
+	static $cod_id = null;
+
+	if ( null === $cod_id ) {
+		$cod_id = (string) apply_filters( WooCommerce_Shipcloud::FILTER_GET_COD_ID, 'cod' );
+	}
+
+	return $cod_id;
 }
