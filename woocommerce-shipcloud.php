@@ -3,7 +3,7 @@
  * Plugin Name: shipcloud for WooCommerce
  * Plugin URI: http://www.woothemes.com/products/woocommerce-shipcloud/
  * Description: Integrates shipcloud shipment services to your WooCommerce shop.
- * Version: 1.4.2
+ * Version: 1.5.1
  * Author: Awesome UG
  * Author URI: http://awesome.ug
  * Developer: Awesome UG
@@ -62,7 +62,9 @@ class WooCommerce_Shipcloud {
 	 *
 	 * @since 1.2.1
 	 */
-	const VERSION = '1.4.2';
+	const VERSION = '1.5.1';
+
+	const FILTER_GET_COD_ID = 'wcsc_get_cod_id';
 
 	/**
 	 * Construct
@@ -105,7 +107,6 @@ class WooCommerce_Shipcloud {
 	 * @since 1.0.0
 	 */
 	private function constants() {
-		define( 'WCSC_FOLDER', $this->get_folder() );
 		define( 'WCSC_RELATIVE_FOLDER', substr( WCSC_FOLDER, strlen( WP_PLUGIN_DIR ), strlen( WCSC_FOLDER ) ) );
 		define( 'WCSC_URLPATH', $this->get_url_path() );
 		define( 'WCSC_COMPONENTFOLDER', WCSC_FOLDER . '/components' );
@@ -159,11 +160,11 @@ class WooCommerce_Shipcloud {
 	 * @since 1.0.0
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( static::$_instance ) ) {
+			static::$_instance = new static();
 		}
 
-		return self::$_instance;
+		return static::$_instance;
 	}
 
 	/**
@@ -271,12 +272,8 @@ class WooCommerce_Shipcloud {
 	 * @since 1.3.2 For usage in frontend: Only start session when no headers are sent.
 	 */
 	public static function assert_session() {
-		if ( session_id() ) {
-			return;
-		}
-
-		if ( ! headers_sent() ) {
-	    	// Only start new session when no headers are send.
+		if ( ! headers_sent() && ! session_id() ) {
+	    	// Only start new session when no headers are send and no session started so far.
 			session_start();
 		}
 
@@ -306,13 +303,9 @@ class WooCommerce_Shipcloud {
 		require_once( WCSC_FOLDER . '/components/component.php' );
 		require_once( WCSC_FOLDER . '/components/core/core.php' );
 		require_once( WCSC_FOLDER . '/components/woo/woo.php' );
-
-		// Add autoloader for everything else.
-		spl_autoload_register( array( $this, 'load_vendor' ) );
-		spl_autoload_register( array( $this, 'load_shipcloud' ) );
 	}
 
-	public function load_vendor( $class ) {
+	public static function load_vendor( $class ) {
 		$filename = WCSC_FOLDER
 					. DIRECTORY_SEPARATOR . 'vendor'
 					. DIRECTORY_SEPARATOR . str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php';
@@ -331,7 +324,7 @@ class WooCommerce_Shipcloud {
 	 *
 	 * @return bool
 	 */
-	public function load_shipcloud( $class ) {
+	public static function load_shipcloud( $class ) {
 		$filename = WCSC_FOLDER
 					. DIRECTORY_SEPARATOR . 'includes'
 					. DIRECTORY_SEPARATOR . strtolower(
@@ -425,6 +418,13 @@ class WooCommerce_Shipcloud {
 		);
 
 		wp_register_script(
+			'shipcloud-label',
+			WCSC_URLPATH . 'includes/js/shipcloud-label.js',
+			array( 'jquery' ),
+			static::VERSION
+		);
+
+		wp_register_script(
 			'shipcloud-label-form',
 			WCSC_URLPATH . 'includes/js/shipcloud-label-form.js',
 			array( 'jquery' ),
@@ -496,6 +496,18 @@ class WooCommerce_Shipcloud {
 register_activation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'deactivate' ) );
 register_uninstall_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'uninstall' ) );
+
+define( 'WCSC_FOLDER', plugin_dir_path( __FILE__ ) );
+
+/**
+ * Early add autoloader.
+ */
+spl_autoload_register( '\\WooCommerce_Shipcloud::load_vendor' );
+spl_autoload_register( '\\WooCommerce_Shipcloud::load_shipcloud' );
+
+require_once __DIR__ . '/components/service-container.php';
+require_once __DIR__ . '/components/compatibility.php';
+
 
 /**
  * Actionhook Function to load plugin

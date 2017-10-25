@@ -98,12 +98,13 @@ class Package {
 	 * @param float  $weight Weight of the package in kg.
 	 * @param string $type
 	 */
-	public function __construct( $length, $width, $height, $weight, $type = 'parcel' ) {
-		$this->length = $length;
-		$this->width  = $width;
-		$this->height = $height;
-		$this->weight = $weight;
-		$this->type   = $type;
+	public function __construct( $length, $width, $height, $weight, $type = 'parcel', $description = '' ) {
+		$this->length      = $length;
+		$this->width       = $width;
+		$this->height      = $height;
+		$this->weight      = $weight;
+		$this->type        = $type;
+		$this->description = $description;
 	}
 
 	/**

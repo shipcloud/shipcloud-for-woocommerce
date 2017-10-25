@@ -65,6 +65,10 @@ class WC_Shipcloud_Order
 		$this->init_hooks();
 	}
 
+	public function filterArrayPreserveEmptyString( $var ) {
+		return ($var !== NULL && $var !== FALSE);
+	}
+
 	/**
      * Backward compatibility to WC2
      *
@@ -151,6 +155,14 @@ class WC_Shipcloud_Order
 		add_action( 'wp_ajax_shipcloud_create_shipment', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_shipment_label', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( $this, 'ajax_create_label' ) );
+
+		add_action(
+			\Shipcloud\Controller\LabelController::AJAX_UPDATE,
+			function () {
+				_wcsc_container()->get( '\\Shipcloud\\Controller\\LabelController' )->update();
+            }
+		);
+
 		add_action( 'wp_ajax_shipcloud_delete_shipment', array( $this, 'ajax_delete_shipment' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
@@ -230,7 +242,7 @@ class WC_Shipcloud_Order
 			array(
 				'carrier'               => null,
 				'from'                  => null,
-				'notification_mail'     => null,
+				'notification_email'    => null,
 				'description'           => null,
 				'package'               => null,
 				'reference_number'      => null,
@@ -347,7 +359,7 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="twentyfive">
-						<input type="text" name="sender_address[street_nr]" value="<?php echo $sender[ 'street_nr' ]?: $sender[ 'street_no' ]; ?>" disabled>
+						<input type="text" name="sender_address[street_nr]" value="<?php echo isset($sender[ 'street_nr' ]) ? $sender[ 'street_nr' ] : $sender[ 'street_no' ]; ?>" disabled>
 						<label for="sender_address[street_nr]"><?php _e( 'Number', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
@@ -612,10 +624,6 @@ class WC_Shipcloud_Order
                 jQuery(function ($) {
                     $('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
                     $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
-
-                    $('.wcsc-label-actions a').on('click', function (e) {
-                        e.stopPropagation();
-                    });
                 });
             </script>
 
@@ -734,7 +742,8 @@ class WC_Shipcloud_Order
 	 */
 	private function get_label_html( $data )
 	{
-		ob_start();
+	    global $woocommerce;
+
 
 		if ( empty( $data[ 'label_url' ] ) )
 		{
@@ -751,135 +760,9 @@ class WC_Shipcloud_Order
 		$status          = get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', true );
 		$shipment_status = wcsc_get_shipment_status_string( $status );
 
-		?>
-	<div id="shipment-<?php echo $data[ 'id' ]; ?>" class="label widget shipcloud">
-		<div class="widget-top">
-			<div class="widget-title-action">
-				<a class="widget-action hide-if-no-js"></a>
-			</div>
-            <div class="widget-quick-actions wcsc-label-actions">
-				<?php if ( empty( $data['label_url'] ) ): ?>
-                    <input type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="shipcloud_create_label button-primary"/>
-                <?php else: ?>
-                    <a href="<?php echo $data['label_url']; ?>" target="_blank" class="button btn-primary">
-                        <span class="dashicons dashicons-arrow-down-alt"></span>
-						<?php _e( 'Download', 'shipcloud-for-woocommerce' ); ?>
-                    </a>
-                    <a href="<?php echo $data['tracking_url']; ?>" target="_blank" class="button">
-                        <span class="dashicons dashicons-backup"></span>
-						<?php _e( 'Tracking', 'shipcloud-for-woocommerce' ); ?>
-                    </a>
-				<?php endif; ?>
-            </div>
-			<div class="widget-title">
-				<img class="shipcloud-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
-				<?php
-
-				$title = trim( $data[ 'sender_company' ] ) != '' ? $data[ 'sender_company' ] . ', ' . $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ] : $data[ 'sender_first_name' ] . ' ' . $data[ 'sender_last_name' ];
-				$title .= ' <span class="dashicons dashicons-arrow-right-alt"></span> ';
-				$title .= trim( $data[ 'recipient_company' ] ) != '' ? $data[ 'recipient_company' ] . ', ' . $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ] : $data[ 'recipient_first_name' ] . ' ' . $data[ 'recipient_last_name' ];
-				$title .= ' <span class="dashicons dashicons-screenoptions"></span> <small>' . trim($data[ 'parcel_title' ], ' -') . '</small>';
-
-				?>
-				<h4><?php echo $title; ?></h4>
-			</div>
-            <span class="right">
-            </span>
-		</div>
-		<div class="widget-inside">
-			<div class="widget-content">
-				<div class="data">
-
-					<div class="label-shipment-sender address">
-						<div class="sender_company"><?php echo $data[ 'sender_company' ]; ?></div>
-						<div class="sender_name"><?php echo $data[ 'sender_first_name' ]; ?> <?php echo $data[ 'sender_last_name' ]; ?></div>
-						<div class="sender_street"><?php echo $data[ 'sender_street' ]; ?> <?php echo $data[ 'sender_street_no' ]?: $data[ 'sender_street_nr' ]; ?></div>
-						<div class="sender_city"><?php echo $data[ 'sender_zip_code' ]; ?> <?php echo $data[ 'sender_city' ]; ?></div>
-						<div class="sender_state"><?php echo $data[ 'sender_state' ]; ?></div>
-						<div class="sender_country"><?php echo $data[ 'country' ]; ?></div>
-					</div>
-
-					<div class="label-shipment-recipient address">
-						<div class="recipient_company"><?php echo $data[ 'recipient_company' ]; ?></div>
-						<div class="recipient_name"><?php echo $data[ 'recipient_first_name' ]; ?> <?php echo $data[ 'recipient_last_name' ]; ?></div>
-						<div class="recipient_street"><?php echo $data[ 'recipient_street' ]; ?> <?php echo $data[ 'recipient_street_no' ]?: $data[ 'recipient_street_nr' ]; ?></div>
-						<div class="recipient_city"><?php echo $data[ 'recipient_zip_code' ]; ?> <?php echo $data[ 'recipient_city' ]; ?></div>
-						<div class="recipient_state"><?php echo $data[ 'recipient_state' ]; ?></div>
-						<div class="recipient_country"><?php echo $data[ 'recipient_country' ]; ?></div>
-					</div>
-
-					<div class="label-shipment-actions">
-
-						<p class="button-create-label<?php echo $classes_button_create_label; ?>">
-							<input type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="shipcloud_create_label button-primary"/>
-						</p>
-						<p class="button-download-label<?php echo $classes_button_download_label; ?>">
-							<a href="<?php echo $data[ 'label_url' ]; ?>" target="_blank" class="button"><?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?></a>
-						</p>
-
-						<p class="button-tracking-url">
-							<a href="<?php echo $data[ 'tracking_url' ]; ?>" target="_blank" class="button"><?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?></a>
-						</p>
-
-						<p class="button-delete-shipment">
-							<input type="button" value="<?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>" class="shipcloud_delete_shipment button"/>
-						</p>
-
-						<input type="hidden" name="carrier" value="<?php echo $data[ 'carrier' ]; ?>"/>
-						<input type="hidden" name="shipment_id" value="<?php echo $data[ 'id' ]; ?>"/>
-					</div>
-
-					<div style="clear: both;"></div>
-
-					<div class="label-shipment-status">
-						<table>
-							<tbody>
-							<tr>
-								<th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>:</th>
-								<td><?php echo $data[ 'description' ]; ?></td>
-							</tr>
-							<tr>
-								<th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
-								<td><?php echo $display_id; ?></td>
-							</tr>
-							<tr>
-								<th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>
-								<td class="tracking-number">
-								<?php if( array_key_exists( 'carrier_tracking_no', $data ) && ! empty( $data[ 'carrier_tracking_no' ] ) ): ?>
-									<?php echo $data[ 'carrier_tracking_no' ]; ?>
-								<?php else: ?>
-									<?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
-								<?php endif; ?>
-								</td>
-							</tr>
-							<tr>
-								<th><?php _e( 'Tracking status:', 'shipcloud-for-woocommerce' ); ?></th>
-								<td><?php echo $shipment_status; ?></td>
-							</tr>
-								<tr>
-									<th><?php _e( 'Price:', 'shipcloud-for-woocommerce' ); ?></strong></th>
-									<td class="price">
-										<?php if ( ! empty( $data[ 'price' ] ) ): ?>
-											<?php echo wc_price( $data[ 'price' ], array( 'currency' => 'EUR' ) ); ?>
-										<?php else: ?>
-											<?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
-										<?php endif; ?>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-
-					<div style="clear: both;"></div>
-
-				</div>
-			</div>
-		</div>
-		</div><?php
-
-		$html = ob_get_clean();
-
-		return $html;
+		ob_start();
+		require WCSC_COMPONENTFOLDER . '/block/order-label.php';
+		return ob_get_clean();
 	}
 
 	/**
@@ -995,6 +878,22 @@ class WC_Shipcloud_Order
 	}
 
 	/**
+     * Get bank information for shop owner.
+     *
+     * @since 1.5.0
+     *
+	 * @return \Shipcloud\Domain\ValueObject\BankInformation
+	 */
+	public function get_bank_information() {
+        return new \Shipcloud\Domain\ValueObject\BankInformation(
+            $this->get_options('bank_name'),
+            $this->get_options('bank_code'),
+            $this->get_options('bank_account_holder'),
+            $this->get_options('bank_account_number')
+        );
+	}
+
+	/**
 	 * Ask the API to create a shipment label.
 	 */
 	public function create_shipment_label( $data ) {
@@ -1027,8 +926,26 @@ class WC_Shipcloud_Order
 			$order_id
 		);
 
-		$data['notification_mail'] = $this->get_notification_email();
-		$data                      = $this->sanitize_shop_owner_data( $data );
+		$data = $this->sanitize_shop_owner_data( $data );
+		$data = $this->handle_email_notification( $data );
+
+		if ( wcsc_get_cod_id() === $order->get_payment_method() ) {
+		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
+                $order->get_total(),
+                $order->get_currency(),
+                $this->get_bank_information(),
+                sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
+            );
+
+		    if (!isset($data['additional_services'])) {
+		        $data['additional_services'] = array();
+            }
+
+		    $data['additional_services'][] = array(
+		        'name' => \Shipcloud\Domain\Services\CashOnDelivery::NAME,
+                'properties' => $cash_on_delivery->toArray()
+            );
+        }
 
 		if ( array_key_exists( 'package', $data ) ) {
 			$data['package'] = $this->sanitize_package( $data['package'] );
@@ -1122,7 +1039,15 @@ class WC_Shipcloud_Order
 
 		$order = wc_get_order( $order_id );
 
-		$request = $shipcloud_api->create_label( $shipment_id );
+		/** @var \Shipcloud\Repository\ShipmentRepository $shipmentRepo */
+		$shipmentRepo = _wcsc_container()->get('\\Shipcloud\\Repository\\ShipmentRepository');
+
+		$params = array();
+		if ($shipment_id) {
+		    $params = $shipmentRepo->findByShipmentId( $order_id, $shipment_id );
+        }
+
+		$request = $shipcloud_api->create_label( $shipment_id, $params );
 
 		if ( is_wp_error( $request ) ) {
 			$error_message = $request->get_error_message();
@@ -1239,6 +1164,7 @@ class WC_Shipcloud_Order
 		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'admin-widgets' );
 		wp_enqueue_script( 'wcsc-multi-select' );
+		wp_enqueue_script( 'shipcloud-label' );
 		wp_enqueue_script( 'shipcloud-label-form' );
 		wp_enqueue_script( 'shipcloud-filler' );
 
@@ -1268,8 +1194,20 @@ class WC_Shipcloud_Order
 	 */
 	public function get_sender($prefix = '') {
 		$options = $this->get_options();
-
+		
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
+
+		if ( $sender && $prefix ) {
+			foreach ( $sender as $key => $value ) {
+				if ( 0 === strpos( $key, $prefix ) ) {
+					// Has already the prefix.
+					continue;
+				}
+
+				$sender[ $prefix . $key ] = $sender[ $key ];
+				unset( $sender[ $key ] );
+			}
+		}
 
 		// Use default data if nothing was saved before
 		if ( '' == $sender || 0 == count( $sender ) ) {
@@ -1279,12 +1217,13 @@ class WC_Shipcloud_Order
 				$prefix . 'last_name'  => $options['sender_last_name'],
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
-				$prefix . 'street_no'  => $options['sender_street_nr'],
+				$prefix . 'street_no'  => $options['sender_street_nr'] ?: $options['sender_street_no'],
+				$prefix . 'care_of'    => $options['sender_care_of'],
 				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
 				$prefix . 'country'    => $options['sender_country'],
-				$prefix . 'phone'      => $options['sender_phone'],
+				$prefix . 'phone'      => isset($options['sender_phone']) ? $options['sender_phone'] : '',
 			);
 		}
 
@@ -1307,6 +1246,18 @@ class WC_Shipcloud_Order
 		$options = $this->get_options();
 
 		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
+
+		if ( $recipient && $prefix ) {
+			foreach ( $recipient as $key => $value ) {
+				if ( 0 === strpos( $key, $prefix ) ) {
+					// Has already the prefix.
+					continue;
+				}
+
+				$recipient[ $prefix . $key ] = $recipient[ $key ];
+				unset( $recipient[ $key ] );
+			}
+		}
 
 		// Use default data if nothing was saved before
 		if ( '' == $recipient || 0 == count( $recipient ) ) {
@@ -1337,6 +1288,7 @@ class WC_Shipcloud_Order
 				$prefix . 'street'     => $recipient_street_name,
 				$prefix . 'street_no'  => $recipient_street_nr,
 				$prefix . 'zip_code'   => $order->shipping_postcode,
+				$prefix . 'postcode'   => $order->shipping_postcode,
 				$prefix . 'city'       => $order->shipping_city,
 				$prefix . 'state'      => $order->shipping_state,
 				$prefix . 'country'    => $order->shipping_country,
@@ -1395,6 +1347,11 @@ class WC_Shipcloud_Order
 			return (string) $order->shipping_address_2;
 		}
 
+		// check to see if WooCommerce germanized was used for supplying a post number
+		if ( $order->shipping_parcelshop_post_number) {
+			return (string) $order->shipping_parcelshop_post_number;
+		}
+
 		return (string) $order->billing_address_2;
 	}
 
@@ -1418,7 +1375,7 @@ class WC_Shipcloud_Order
 			$data[ $prefix . 'zip_code' ] = $data[ $prefix . 'postcode' ];
 		}
 
-		return array_filter( $data );
+		return array_filter( $data, array($this, 'filterArrayPreserveEmptyString') );
 	}
 
 	/**
@@ -1454,9 +1411,9 @@ class WC_Shipcloud_Order
 			$order_id = $_POST['order_id'];
 		}
 
-		$factory = WC()->order_factory;
+		$factory = new WC_Order_Factory();
 
-		return $this->wc_order = $factory::get_order( $order_id );
+		return $this->wc_order = $factory->get_order( $order_id );
 	}
 
 	/**
@@ -1578,7 +1535,7 @@ class WC_Shipcloud_Order
 						. $data->height . ';'
 						. $data->length . ';'
 						. $data->weight . ';'
-						. $data->carrier . ';',
+						. $data->carrier['carrier'] . ';',
 			'option' => $option,
 			'data'   => array(
 				'parcel_width'      => $data->width,
@@ -1652,6 +1609,50 @@ class WC_Shipcloud_Order
 			'parcel'        => array( 'all' ),
 			'parcel_letter' => array( 'dhl', 'dpd' ),
 		);
+	}
+
+	/**
+	 * @param array $data
+	 *
+	 * @return mixed
+	 */
+	private function handle_email_notification( $data ) {
+		$carrier_email      = $this->get_carrier_mail();
+		$notification_email = $this->get_notification_email();
+
+		if ( ! empty ( $notification_email ) ) {
+			// Set fallback for the notification mail
+			$data['notification_email'] = $this->get_notification_email();
+		}
+
+		if ( ! isset( $data['carrier'] ) ||
+			 ( $data['carrier'] !== 'dpd' && $data['carrier'] !== 'dhl' )
+		) {
+			// Nothing we need to handle, so we early break here.
+			return $data;
+		}
+
+		if ( ! empty ( $carrier_email ) ) {
+			if ( ! isset( $data['additional_services'] ) ) {
+				$data['additional_services'] = array();
+			}
+
+			// Append advance notice service.
+			$data['additional_services'][] = array(
+				'name'       => 'advance_notice',
+				'properties' => array(
+					'email'    => $carrier_email,
+					'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) )
+				)
+			);
+
+			if ( isset( $data['notification_email'] ) ) {
+				// No need for notification mail after advance_notice has been added.
+				unset( $data['notification_email'] );
+			}
+		}
+
+		return $data;
 	}
 }
 

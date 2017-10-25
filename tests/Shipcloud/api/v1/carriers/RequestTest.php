@@ -1,6 +1,6 @@
 <?php
 
-class RequestTest extends \WP_UnitTestCase {
+class RequestTest extends \WooCommerce_Shipcloud\Tests\Shipcloud\ShipcloudTestCase {
 	public function testItFetchesCarriers() {
 		$api = new Woocommerce_Shipcloud_API();
 
@@ -13,5 +13,9 @@ class RequestTest extends \WP_UnitTestCase {
 			static::assertArrayHasKey( 'services', $carrier );
 			static::assertArrayHasKey( 'package_types', $carrier );
 		}
+	}
+
+	public function testItTransfersAffiliateId() {
+		$api = _wcsc_api();
 	}
 }

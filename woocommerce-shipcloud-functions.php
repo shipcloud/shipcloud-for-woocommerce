@@ -250,13 +250,8 @@ function wcsc_is_settings_screen() {
 		$tab = $_GET['tab'];
 	}
 
-	$section = '';
-	if ( array_key_exists( 'section', $_GET ) ) {
-		$section = $_GET['section'];
-	}
-
 	// If page should noz show a message, interrupt the check and gibe back true
-	if ( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === $section ) {
+	if ( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === wcsc_get_section() ) {
 		return true;
 	}
 
@@ -329,7 +324,7 @@ function wcsc_is_admin_screen() {
 	}
 
 	// Settings screen
-	if ( 'shipcloud' === $_GET['section'] && 'woocommerce_page_wc-settings' === get_current_screen()->id ) {
+	if ( 'shipcloud' === wcsc_get_section() && 'woocommerce_page_wc-settings' === get_current_screen()->id ) {
 		return true;
 	}
 
@@ -464,22 +459,29 @@ function wcsc_api() {
 $_wcsc_api = null;
 
 /**
+ * Get currently selected WooCommerce section
+ *
+ * @return string $section
+ *
+ * @since 1.5.0
+ */
+function wcsc_get_section() {
+	$section = '';
+
+	if ( array_key_exists( 'section', $_GET ) ) {
+		$section = $_GET['section'];
+	}
+
+	return $section;
+}
+
+/**
  * Connection to the API.
  *
  * @return \Shipcloud\Api
  */
 function _wcsc_api() {
-	global $_wcsc_api;
-
-	if ( ! $_wcsc_api ) {
-		$_wcsc_api = new Shipcloud\Api(
-			wcsc_shipping_method()->get_option( 'api_key' ),
-			'plugin.woocommerce.z4NVoYhp'
-		);
-	}
-
-
-	return $_wcsc_api;
+	return _wcsc_container()->get( '\\Shipcloud\\Api' );
 }
 
 /**
@@ -520,25 +522,39 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'recipient_first_name' => $data['to']['first_name'],
 		'recipient_last_name'  => $data['to']['last_name'],
 		'recipient_company'    => $data['to']['company'],
+		'recipient_care_of'    => $data['to']['care_of'],
 		'recipient_street'     => $data['to']['street'],
-		'recipient_street_no'  => $data['to']['street_nr'],
+		'recipient_street_no'  => $data['to']['street_no'],
 		'recipient_zip_code'   => $data['to']['zip_code'],
 		'recipient_city'       => $data['to']['city'],
 		'recipient_state'      => $data['to']['state'],
 		'recipient_country'    => $data['to']['country'],
+		'recipient_phone'      => $data['to']['phone'],
 		'date_created'         => time()
 	);
+
+	// Fallback until v2.0.0
+	if (isset($data['from']['street_nr'])) {
+		$shipment_data['recipient_street_no'] = $data['from']['street_nr'];
+	}
 
 	if ( isset( $data['from'] ) ) {
 		$shipment_data['sender_first_name'] = $data['from']['first_name'];
 		$shipment_data['sender_last_name']  = $data['from']['last_name'];
 		$shipment_data['sender_company']    = $data['from']['company'];
+		$shipment_data['sender_care_of']    = $data['from']['care_of'];
 		$shipment_data['sender_street']     = $data['from']['street'];
-		$shipment_data['sender_street_no']  = $data['from']['street_nr'];
+		$shipment_data['sender_street_no']  = $data['from']['street_no'];
 		$shipment_data['sender_zip_code']   = $data['from']['zip_code'];
 		$shipment_data['sender_city']       = $data['from']['city'];
 		$shipment_data['sender_state']      = $data['from']['state'];
+		$shipment_data['sender_phone']      = $data['from']['phone'];
 		$shipment_data['country']           = $data['from']['country'];
+
+		// Fallback until v2.0.0
+		if (isset($data['to']['street_nr'])) {
+			$shipment_data['sender_street_no'] = $data['to']['street_nr'];
+		}
 	}
 
 	add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_data['id'] );
@@ -560,7 +576,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
  * @return WP_Error
  */
 function _wcsc_exception_to_wp_error( $exception ) {
-	$wp_error         = new \WP_Error( $exception->getCode(), $exception->getMessage() );
+	$wp_error         = new \WP_Error( $exception->getCode()?: 1, $exception->getMessage() );
 	$currentException = $exception->getPrevious();
 	$maxDepth         = 20;
 
@@ -599,4 +615,21 @@ function _wcsc_carriers_get() {
 	}
 
 	return $data;
+}
+
+/**
+ * Resolve the correct identifier for cash on delivery.
+ *
+ * @since 1.5.1 Due to plugins that rename the "cod" to something else.
+ *
+ * @return string
+ */
+function wcsc_get_cod_id() {
+	static $cod_id = null;
+
+	if ( null === $cod_id ) {
+		$cod_id = (string) apply_filters( WooCommerce_Shipcloud::FILTER_GET_COD_ID, 'cod' );
+	}
+
+	return $cod_id;
 }

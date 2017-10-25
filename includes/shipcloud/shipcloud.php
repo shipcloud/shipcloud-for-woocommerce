@@ -792,15 +792,14 @@ class Woocommerce_Shipcloud_API
 	 * Creating a shipping label
 	 *
 	 * @param string $shipment_id
+	 * @param array  $params
 	 *
 	 * @return array|WP_Error
 	 * @since 1.0.0
 	 */
-	public function create_label( $shipment_id )
+	public function create_label( $shipment_id, $params = array() )
 	{
-		$params = array(
-			'create_shipping_label' => true
-		);
+		$params['create_shipping_label'] = true;
 
 		$action  = 'shipments/' . $shipment_id;
 		$request = $this->send_request( $action, $params, 'PUT' );
