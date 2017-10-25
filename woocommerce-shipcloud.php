@@ -380,6 +380,7 @@ class WooCommerce_Shipcloud {
 			array( 'wp-util' ),
 			static::VERSION
 		);
+
 		wp_register_script(
 			'wcsc-multi-select',
 			WCSC_URLPATH . 'includes/js/multi-select.js',
@@ -435,6 +436,13 @@ class WooCommerce_Shipcloud {
 			'shipcloud-filler',
 			WCSC_URLPATH . 'includes/js/shipcloud-filler.js',
 			array( 'jquery' ),
+			static::VERSION
+		);
+
+		wp_register_script(
+			'shipcloud-shipments',
+			WCSC_URLPATH . 'includes/js/shipcloud-shipments.js',
+			array( 'jquery', 'backbone' ),
 			static::VERSION
 		);
 

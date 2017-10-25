@@ -1167,6 +1167,7 @@ class WC_Shipcloud_Order
 		wp_enqueue_script( 'shipcloud-label' );
 		wp_enqueue_script( 'shipcloud-label-form' );
 		wp_enqueue_script( 'shipcloud-filler' );
+		wp_enqueue_script( 'shipcloud-shipments' );
 
 		// CSS
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
