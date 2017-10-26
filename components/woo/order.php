@@ -707,8 +707,10 @@ class WC_Shipcloud_Order
 		<div id="create_label">
 
 			<div class="shipping-data">
-				<div class="shipment-labels">
+				<div class="shipment-labels" id="shipment-labels"></div>
 					<?php
+
+                    $json_data = array();
 
 					if ( '' != $shipment_data && is_array( $shipment_data ) )
 					{
@@ -716,12 +718,57 @@ class WC_Shipcloud_Order
 
 						foreach ( $shipment_data AS $data )
 						{
-							echo $this->get_label_html( $data );
+						    $json_data[] = array(
+						        'id' => $data[ 'id' ],
+                                'from' => array(
+									'company'    => $data['sender_company'],
+									'first_name' => $data['sender_first_name'],
+									'last_name'  => $data['sender_last_name'],
+									'street'     => $data['sender_street'],
+									'street_no'  => $data['sender_street_no'],
+									'zip_code'   => $data['sender_zip_code'],
+									'city'       => $data['sender_city'],
+									'country'    => $data['sender_country'],
+									'phone'      => $data['sender_phone'],
+                                ),
+                                'to' => array(
+									'company'    => $data['recipient_company'],
+									'first_name' => $data['recipient_first_name'],
+									'last_name'  => $data['recipient_last_name'],
+									'street'     => $data['recipient_street'],
+									'street_no'  => $data['recipient_street_no'],
+									'zip_code'   => $data['recipient_zip_code'],
+									'city'       => $data['recipient_city'],
+									'country'    => $data['recipient_country'],
+									'phone'      => $data['recipient_phone'],
+								),
+                                'carrier_tracking_no' => $data['carrier_tracking_no'],
+                                'shipment_status' => wcsc_get_shipment_status_string(
+									get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', true )
+                                ),
+							);
 						}
 					}
 
 					?>
-				</div>
+                <script type="application/javascript">
+                    jQuery(function ($) {
+                        shipcloud.shipments = new shipcloud.ShipmentCollection();
+                        shipcloud.shipments.parse(
+							<?php echo json_encode( $json_data, JSON_PRETTY_PRINT ); ?>
+                        );
+
+                        shipcloud.shipments.each(function (model) {
+                            var view = new shipcloud.ShipmentView({model: model, el:'#shipment-labels'});
+                            
+                            console.log(view.$el);
+                        });
+
+                    });
+                </script>
+                <script type="template/html" id="tmpl-shipcloud-shipment">
+                    <?php require WCSC_COMPONENTFOLDER . '/block/order-label-template.php'; ?>
+                </script>
 				<div style="clear: both"></div>
 			</div>
 		</div>

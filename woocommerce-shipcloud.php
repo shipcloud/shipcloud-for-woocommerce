@@ -442,7 +442,7 @@ class WooCommerce_Shipcloud {
 		wp_register_script(
 			'shipcloud-shipments',
 			WCSC_URLPATH . 'includes/js/shipcloud-shipments.js',
-			array( 'jquery', 'backbone' ),
+			array( 'jquery', 'wp-backbone' ),
 			static::VERSION
 		);
 

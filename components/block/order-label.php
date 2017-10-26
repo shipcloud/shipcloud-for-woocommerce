@@ -355,38 +355,3 @@
 	</div>
 </div>
 
-<script type="application/javascript">
-    shipcloud.shipments.push(
-        new shipcloud.ShipmentModel({
-            'id'                 : '<?php echo addslashes( $display_id ); ?>',
-            'from'               : {
-                'company'   : '<?php echo addslashes( $data['sender_company'] ) ?>',
-                'first_name': '<?php echo addslashes( $data['sender_first_name'] ) ?>',
-                'last_name' : '<?php echo addslashes( $data['sender_last_name'] ) ?>',
-                'street'    : '<?php echo addslashes( $data['sender_street'] ) ?>',
-                'street_no' : '<?php echo addslashes( $data['sender_street_no'] ) ?>',
-                'zip_code'  : '<?php echo addslashes( $data['sender_zip_code'] ) ?>',
-                'city'      : '<?php echo addslashes( $data['sender_city'] ) ?>',
-                'country'   : '<?php echo addslashes( $data['sender_country'] ) ?>',
-                'phone'     : '<?php echo addslashes( $data['sender_phone'] ) ?>'
-            },
-            'to'                 : {
-                'company'   : '<?php echo addslashes( $data['recipient_company'] ) ?>',
-                'first_name': '<?php echo addslashes( $data['recipient_first_name'] ) ?>',
-                'last_name' : '<?php echo addslashes( $data['recipient_last_name'] ) ?>',
-                'street'    : '<?php echo addslashes( $data['recipient_street'] ) ?>',
-                'street_no' : '<?php echo addslashes( $data['recipient_street_no'] ) ?>',
-                'zip_code'  : '<?php echo addslashes( $data['recipient_zip_code'] ) ?>',
-                'city'      : '<?php echo addslashes( $data['recipient_city'] ) ?>',
-                'country'   : '<?php echo addslashes( $data['recipient_country'] ) ?>',
-                'phone'     : '<?php echo addslashes( $data['recipient_phone'] ) ?>'
-            },
-            'carrier_tracking_no': '<?php echo addslashes( $data['carrier_tracking_no'] ) ?>',
-            // TODO out of domain field
-            'shipment_status'    : '<?php echo addslashes( $shipment_status ) ?>',
-            'price': '<?php echo addslashes( $data[ 'price' ] ) ?>'
-        })
-    );
-
-    new shipcloud.LabelView('#shipment-<?php echo $data['id']; ?>');
-</script>

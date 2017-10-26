@@ -57,7 +57,33 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
 });
 
 shipcloud.ShipmentCollection = Backbone.Collection.extend({
-    model: shipcloud.ShipmentModel
+    model: shipcloud.ShipmentModel,
+
+    parse: function (data) {
+        // Assert that everything is a shipcloud.ShipmentModel
+        for (var pos in data) {
+            if (!data.hasOwnProperty(pos)) {
+                continue;
+            }
+
+            if (false === data[pos] instanceof shipcloud.ShipmentModel) {
+                data[pos] = new shipcloud.ShipmentModel(data[pos]);
+            }
+
+            this.push(data[pos]);
+        }
+    }
+});
+
+shipcloud.ShipmentView = wp.Backbone.View.extend({
+    tagName  : 'div',
+    className: 'label widget',
+    template : wp.template('shipcloud-shipment'),
+
+    initialize: function() {
+        this.listenTo(this.model, 'change', this.render);
+        this.render();
+    }
 });
 
 shipcloud.shipments = new shipcloud.ShipmentCollection();
