@@ -75,6 +75,11 @@ shipcloud.ShipmentCollection = Backbone.Collection.extend({
     }
 });
 
+shipcloud.ShipmentsView = wp.Backbone.View.extend({
+    tagName  : 'div',
+    className: 'label widget'
+});
+
 shipcloud.ShipmentView = wp.Backbone.View.extend({
     tagName  : 'div',
     className: 'label widget',

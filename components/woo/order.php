@@ -758,12 +758,16 @@ class WC_Shipcloud_Order
 							<?php echo json_encode( $json_data, JSON_PRETTY_PRINT ); ?>
                         );
 
-                        shipcloud.shipments.each(function (model) {
-                            var view = new shipcloud.ShipmentView({model: model, el:'#shipment-labels'});
-                            
-                            console.log(view.$el);
+                        shipcloud.shipmentsList = new shipcloud.ShipmentsView({
+                            model: shipcloud.shipments,
+                            el   : '#shipment-labels'
                         });
 
+                        shipcloud.shipments.each(function (shipmentData) {
+                            shipcloud.shipmentsList.views.add(
+                                new shipcloud.ShipmentView({model: shipmentData})
+                            );
+                        });
                     });
                 </script>
                 <script type="template/html" id="tmpl-shipcloud-shipment">
