@@ -12,6 +12,36 @@ shipcloud.AddressModel = Backbone.Model.extend({
         'city'      : null,
         'country'   : null,
         'phone'     : null
+    },
+
+    getFullName: function () {
+        return (this.get('first_name') + ' ' + ' ' + this.get('last_name')).trim();
+    },
+
+    getTitle: function () {
+        return _.filter([
+            this.get('company'),
+            this.getFullName()
+        ]).join(', ');
+    }
+});
+
+shipcloud.PackageModel = Backbone.Model.extend({
+    defaults: {
+        'weight': null,
+        'length': null,
+        'width' : null,
+        'height': null,
+        'type'  : 'parcel'
+    },
+
+    getTitle: function () {
+        return this.get('width')
+            + 'x' + this.get('height')
+            + 'x' + this.get('length')
+            + 'cm'
+            + ' ' + this.get('weight')
+            + 'kg';
     }
 });
 
@@ -21,7 +51,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'to'                        : new shipcloud.AddressModel(),
         'from'                      : new shipcloud.AddressModel(),
         'created_at'                : null,
-        'package'                   : {},
+        'package'                   : new shipcloud.PackageModel(),
         'carrier'                   : null,
         'service'                   : null,
         'reference_number'          : null,
@@ -41,6 +71,10 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         if (false === this.get('to') instanceof shipcloud.AddressModel) {
             this.set('to', new shipcloud.AddressModel(this.get('to')));
         }
+
+        if (false === this.get('package') instanceof shipcloud.AddressModel) {
+            this.set('package', new shipcloud.PackageModel(this.get('package')));
+        }
     },
 
     parse: function (data, xhr) {
@@ -53,6 +87,10 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         }
 
         return data;
+    },
+
+    getTitle: function () {
+        return _.filter([this.get('carrier'), this.get('package').getTitle()]).join(' ');
     }
 });
 
@@ -85,7 +123,7 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     className: 'label widget',
     template : wp.template('shipcloud-shipment'),
 
-    initialize: function() {
+    initialize: function () {
         this.listenTo(this.model, 'change', this.render);
         this.render();
     }

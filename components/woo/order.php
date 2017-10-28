@@ -742,6 +742,13 @@ class WC_Shipcloud_Order
 									'country'    => $data['recipient_country'],
 									'phone'      => $data['recipient_phone'],
 								),
+                                'package' => array(
+                                    'width'  => wc_format_decimal( $data[ 'width' ] ),
+                                    'height' => wc_format_decimal( $data[ 'height' ] ),
+                                    'length' => wc_format_decimal( $data[ 'length' ] ),
+                                    'weight' => wc_format_decimal( $data[ 'weight' ] ),
+                                    //'type' => $_POST['package']['type'],
+                                ),
                                 'carrier_tracking_no' => $data['carrier_tracking_no'],
                                 'shipment_status' => wcsc_get_shipment_status_string(
 									get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', true )
@@ -764,6 +771,7 @@ class WC_Shipcloud_Order
                         });
 
                         shipcloud.shipments.each(function (shipmentData) {
+//                            console.log(shipmentData);
                             shipcloud.shipmentsList.views.add(
                                 new shipcloud.ShipmentView({model: shipmentData})
                             );
