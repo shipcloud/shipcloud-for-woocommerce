@@ -9,13 +9,24 @@ shipcloud.AddressModel = Backbone.Model.extend({
         'street'    : null,
         'street_no' : null,
         'zip_code'  : null,
+        'state'     : null,
         'city'      : null,
         'country'   : null,
-        'phone'     : null
+        'phone'     : null,
+        'care_of'   : null
+    },
+
+
+    getFullCity: function () {
+        return (this.get('zip_code') + ' ' + this.get('city')).trim();
     },
 
     getFullName: function () {
-        return (this.get('first_name') + ' ' + ' ' + this.get('last_name')).trim();
+        return (this.get('first_name') + ' ' + this.get('last_name')).trim();
+    },
+
+    getFullStreet: function () {
+        return (this.get('street') + ' ' + this.get('street_no')).trim();
     },
 
     getTitle: function () {
