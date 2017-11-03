@@ -88,6 +88,10 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         }
     },
 
+    destroy: function () {
+        this.trigger('destroy');
+    },
+
     parse: function (data, xhr) {
         if (false === data.from instanceof shipcloud.AddressModel) {
             data.from = new shipcloud.AddressModel(data.from);
@@ -137,17 +141,44 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     initialize: function () {
         this.listenTo(this.model, 'change', this.render);
+        this.listenTo(this.model, 'destroy', this.remove);
         this.render();
-
-        var $ = jQuery;
     },
 
     events: {
         'click .shipcloud_delete_shipment': 'deleteAction'
     },
 
+    remove: function () {
+        var self = this;
+        this.$el.fadeOut(500, function () {
+            wp.Backbone.View.prototype.remove.call(self);
+        });
+    },
+
     deleteAction: function () {
-        this.$el.fadeOut();
+        var self = this;
+
+        jQuery('#ask-delete-shipment').dialog({
+            'dialogClass': 'wcsc-dialog wp-dialog',
+            'modal'      : true,
+            'buttons'    : {
+                'yes': {
+                    text : wcsc_translate.yes,
+                    click: function () {
+                        //shipcloud_delete_shipment(this.model.get('order_id'), this.model.get('shipment_id'));
+                        jQuery(this).dialog('close');
+                        self.model.destroy();
+                    }
+                },
+                'no' : {
+                    text : wcsc_translate.no,
+                    click: function () {
+                        jQuery(this).dialog('close');
+                    }
+                }
+            }
+        });
     }
 });
 
