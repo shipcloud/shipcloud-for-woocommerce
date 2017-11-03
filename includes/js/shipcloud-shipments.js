@@ -89,10 +89,31 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
     },
 
     destroy: function () {
-        this.trigger('destroy');
+        var self = this;
+
+        jQuery.post(
+            ajaxurl,
+            {
+                'action'     : 'shipcloud_delete_shipment',
+                'order_id'   : this.get('reference_number'),
+                'shipment_id': this.get('id')
+            },
+            function (response) {
+                var result = JSON.parse(response);
+
+                if (result.status === 'ERROR') {
+                    print_errors(result.errors);
+
+                    return;
+                }
+
+                Backbone.Model.prototype.destroy.call(this);
+            }
+        );
+
     },
 
-    parse: function (data, xhr) {
+    parse: function (data) {
         if (false === data.from instanceof shipcloud.AddressModel) {
             data.from = new shipcloud.AddressModel(data.from);
         }

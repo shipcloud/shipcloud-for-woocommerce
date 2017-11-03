@@ -1154,9 +1154,14 @@ class WC_Shipcloud_Order
 	 * @since 1.0.0
 	 */
 	public function ajax_delete_shipment() {
-		$order_id    = $_POST['order_id'];
 		$shipment_id = $_POST['shipment_id'];
-		$order = wc_get_order( $order_id );
+
+		/** @var \Shipcloud\Repository\ShipmentRepository $shipment_repository */
+		$shipment_repository = _wcsc_container()->get( '\Shipcloud\Repository\ShipmentRepository' );
+
+		$order = $shipment_repository->findOrderByShipmentId( $shipment_id );
+		$order_id = $order->ID;
+
 		$request       = $this->get_shipcloud_api()->delete_shipment( $shipment_id );
 
 		if ( is_wp_error( $request ) ) {
