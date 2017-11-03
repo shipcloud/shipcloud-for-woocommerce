@@ -130,13 +130,24 @@ shipcloud.ShipmentsView = wp.Backbone.View.extend({
 });
 
 shipcloud.ShipmentView = wp.Backbone.View.extend({
-    tagName  : 'div',
-    className: 'label widget',
-    template : wp.template('shipcloud-shipment'),
+    tagName   : 'div',
+    className : 'label widget',
+    template  : wp.template('shipcloud-shipment'),
+    controller: null,
 
     initialize: function () {
         this.listenTo(this.model, 'change', this.render);
         this.render();
+
+        var $ = jQuery;
+    },
+
+    events: {
+        'click .shipcloud_delete_shipment': 'deleteAction'
+    },
+
+    deleteAction: function () {
+        this.$el.fadeOut();
     }
 });
 
