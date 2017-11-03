@@ -95,7 +95,6 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
             ajaxurl,
             {
                 'action'     : 'shipcloud_delete_shipment',
-                'order_id'   : this.get('reference_number'),
                 'shipment_id': this.get('id')
             },
             function (response) {
@@ -107,7 +106,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                     return;
                 }
 
-                Backbone.Model.prototype.destroy.call(this);
+                self.trigger('destroy');
             }
         );
 
