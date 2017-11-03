@@ -100,10 +100,6 @@ shipcloud.LabelView = function (wrapper, model, collection) {
         self.$wrapper.find('[role="switch"] > *').toggle();
     };
 
-    this.deleteAction = function () {
-        self.
-    };
-
     self.$wrapper.find('button.wcsc-edit-shipment').on('click', self.editAction);
     self.$wrapper.find('button.wcsc-save-shipment').on('click', self.saveAction);
 
