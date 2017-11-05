@@ -829,6 +829,10 @@ class Woocommerce_Shipcloud_API
 		$action  = 'shipments/' . $shipment_id;
 		$request = $this->send_request( $action, $params, 'DELETE' );
 
+		if ( is_wp_error( $request ) ) {
+			return $request;
+		}
+
 		$request_status = (int) $request[ 'header' ][ 'status' ];
 
 		if ( 204 === $request_status )

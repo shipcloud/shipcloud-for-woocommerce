@@ -178,15 +178,28 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     },
 
     // Render and open widget / keep open.
-    redraw: function () {
-        this.render();
+    open: function () {
         this.$el.find('.widget-inside').show();
+    },
+
+    $loader: function () {
+        return jQuery(this.$el.find('.loading-overlay'));
     },
 
     // Create label for shipment.
     createAction: function () {
+        this.$loader().show();
         this.model.set('label_url', 'example.org');
-        this.redraw();
+    },
+
+    // Extending render so that open widgets are kept open on redrawing.
+    render: function () {
+        var wasVisible = this.$el.find('.widget-inside').is(':visible');
+        wp.Backbone.View.prototype.render.call(this);
+
+        if (wasVisible) {
+            this.open();
+        }
     },
 
     deleteAction: function () {
@@ -199,9 +212,13 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
                 'yes': {
                     text : wcsc_translate.yes,
                     click: function () {
+                        self.$loader().show();
+
                         //shipcloud_delete_shipment(this.model.get('order_id'), this.model.get('shipment_id'));
                         jQuery(this).dialog('close');
                         self.model.destroy();
+
+                        self.$loader().hide();
                     }
                 },
                 'no' : {
