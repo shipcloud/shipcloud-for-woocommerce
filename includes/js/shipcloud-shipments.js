@@ -251,17 +251,24 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     template: wp.template('shipcloud-shipment-edit'),
     parent  : null,
 
-    initialize : function(args) {
+    initialize: function (args) {
         this.parent = args.parent;
     },
 
     events: {
-        'click .wcsc-edit-abort'   : 'abortAction'
+        'click .wcsc-edit-abort': 'abortAction'
     },
 
     abortAction: function () {
         console.log(this.parent);
         this.parent.render();
+
+        if (this.parent.$el.offset().top < window.scrollY) {
+            // Out of viewport so we scroll up again.
+            jQuery('html, body').animate({
+                scrollTop: this.parent.$el.offset().top - 50
+            }, 700);
+        }
     }
 });
 

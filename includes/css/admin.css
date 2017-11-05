@@ -265,13 +265,17 @@
     margin: 10px 20px 20px 20px;
 }
 
-#shipcloud-io .shipment-labels .address{
-    width: 33%;
-    margin-bottom: 20px;
+#shipcloud-io .shipment-labels .address,
+fieldset .shipment-labels .address {
+    width: 31%;
+    display: inline-block;
+    margin: 0 1%;
 }
 
 #shipcloud-io .label-shipment-actions{
     text-align: right;
+    width: 29%;
+    display: inline-block;
 }
 
 #shipcloud-io .label-shipment-actions a,
@@ -280,6 +284,7 @@
 {
     min-width: 240px;
     text-align: center;
+    margin: 0.5em 0;
 }
 
 #shipcloud-io .label-shipment-status table th {
