@@ -194,15 +194,13 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     },
 
     editAction: function () {
-        if (false === this.views.hasOwnProperty('edit')) {
-            this.views['edit'] = new shipcloud.ShipmentEditView({
-                model : this.model,
-                el    : this.$el.find('.widget-content'),
-                parent: this
-            });
-        }
+        this.views['edit'] = new shipcloud.ShipmentEditView({
+            model : this.model,
+            el    : this.$el.find('.widget-content'),
+            parent: this
+        });
 
-        this.views['edit'].render();
+        this.views['edit'].render({el: this.$el});
     },
 
     // Extending render so that open widgets are kept open on redrawing.
