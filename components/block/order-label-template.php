@@ -50,30 +50,32 @@
                     <button class="shipcloud_create_label button-primary" type="button">
 						<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
                     </button>
-                    <# } #>
+                <# } #>
 
-                        <# if ( data.model.get('tracking_url') ) { #>
-                            <a href="{{ data.model.get('tracking_url') }}" target="_blank" class="button">
-								<?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?>
-                            </a>
-                            <# } #>
+                <# if ( data.model.get('tracking_url') ) { #>
+                <a href="{{ data.model.get('tracking_url') }}" target="_blank" class="button">
+                    <?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?>
+                </a>
+                <# } #>
 
-                                <button class="button wcsc-save-shipment button-primary" role="switch" type="button"
-                                        style="display: none;">
-									<?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-                                </button>
-                                <button class="button wcsc-edit-shipment" role="switch" type="button">
-									<?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-                                </button>
+                <button class="button wcsc-save-shipment button-primary" role="switch" type="button"
+                        style="display: none;">
+                    <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+                </button>
 
-                                <button type="button" class="shipcloud_delete_shipment button">
-									<?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>
-                                </button>
+                <# if ( ! data.model.get('tracking_url') ) { #>
+                <button class="button wcsc-edit-shipment" role="switch" type="button">
+                    <?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+                </button>
+                <# } #>
 
-                                <input type="hidden" name="carrier" value="{{ data.model.get('carrier') }}"/>
-                                <input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}"/>
-                                <input type="hidden" name="shipment_order_id" value="<?php echo get_the_ID(); ?>"/>
+                <button type="button" class="shipcloud_delete_shipment button">
+                    <?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>
+                </button>
 
+                <input type="hidden" name="carrier" value="{{ data.model.get('carrier') }}"/>
+                <input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}"/>
+                <input type="hidden" name="shipment_order_id" value="<?php echo get_the_ID(); ?>"/>
         </div>
 
         <table class="label-shipment-status">
