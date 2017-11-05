@@ -781,7 +781,10 @@ class WC_Shipcloud_Order
                 <script type="template/html" id="tmpl-shipcloud-shipment">
                     <?php require WCSC_COMPONENTFOLDER . '/block/order-label-template.php'; ?>
                 </script>
-				<div style="clear: both"></div>
+                <script type="template/html" id="tmpl-shipcloud-shipment-edit">
+					<?php require WCSC_COMPONENTFOLDER . '/block/order-shipment-edit.php'; ?>
+                </script>
+                <div style="clear: both"></div>
 			</div>
 		</div>
 		<div id="ask-create-label"><?php _e( 'Depending on the carrier, there will be a fee for creating the label. Do you really want to create a label?', 'shipcloud-for-woocommerce' ); ?></div>

@@ -8,12 +8,12 @@ shipcloud.AddressModel = Backbone.Model.extend({
         'last_name' : null,
         'street'    : null,
         'street_no' : null,
+        'care_of'   : null,
         'zip_code'  : null,
-        'state'     : null,
         'city'      : null,
+        'state'     : null,
         'country'   : null,
-        'phone'     : null,
-        'care_of'   : null
+        'phone'     : null
     },
 
     getFullCity: function () {
@@ -167,6 +167,7 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     events: {
         'click .shipcloud_create_label'   : 'createAction',
+        'click .wcsc-edit-shipment'       : 'editAction',
         'click .shipcloud_delete_shipment': 'deleteAction'
     },
 
@@ -192,6 +193,17 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
         this.model.set('label_url', 'example.org');
     },
 
+    editAction: function () {
+        if (false === this.views.hasOwnProperty('edit')) {
+            this.views['edit'] = new shipcloud.ShipmentEditView({
+                model: this.model,
+                el   : this.$el.find('.widget-content')
+            });
+        }
+
+        this.views['edit'].render();
+    },
+
     // Extending render so that open widgets are kept open on redrawing.
     render: function () {
         var wasVisible = this.$el.find('.widget-inside').is(':visible');
@@ -201,6 +213,7 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
             this.open();
         }
     },
+
 
     deleteAction: function () {
         var self = this;
@@ -230,6 +243,11 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
             }
         });
     }
+});
+
+shipcloud.ShipmentEditView = wp.Backbone.View.extend({
+    tagName : 'div',
+    template: wp.template('shipcloud-shipment-edit')
 });
 
 shipcloud.shipments = new shipcloud.ShipmentCollection();
