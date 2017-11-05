@@ -16,7 +16,6 @@ shipcloud.AddressModel = Backbone.Model.extend({
         'care_of'   : null
     },
 
-
     getFullCity: function () {
         return (this.get('zip_code') + ' ' + this.get('city')).trim();
     },
@@ -109,7 +108,6 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                 self.trigger('destroy');
             }
         );
-
     },
 
     parse: function (data) {
@@ -149,13 +147,15 @@ shipcloud.ShipmentCollection = Backbone.Collection.extend({
 });
 
 shipcloud.ShipmentsView = wp.Backbone.View.extend({
-    tagName  : 'div',
-    className: 'label widget'
+    tagName: 'div'
 });
 
 shipcloud.ShipmentView = wp.Backbone.View.extend({
     tagName   : 'div',
     className : 'label widget',
+    id        : function () {
+        return 'shipment-' + this.model.get('id');
+    },
     template  : wp.template('shipcloud-shipment'),
     controller: null,
 
@@ -166,6 +166,7 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     },
 
     events: {
+        'click .shipcloud_create_label'   : 'createAction',
         'click .shipcloud_delete_shipment': 'deleteAction'
     },
 
@@ -174,6 +175,18 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
         this.$el.fadeOut(500, function () {
             wp.Backbone.View.prototype.remove.call(self);
         });
+    },
+
+    // Render and open widget / keep open.
+    redraw: function () {
+        this.render();
+        this.$el.find('.widget-inside').show();
+    },
+
+    // Create label for shipment.
+    createAction: function () {
+        this.model.set('label_url', 'example.org');
+        this.redraw();
     },
 
     deleteAction: function () {
