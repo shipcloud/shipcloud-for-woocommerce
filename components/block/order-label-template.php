@@ -63,7 +63,7 @@
                     <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
                 </button>
 
-                <# if ( ! data.model.get('tracking_url') ) { #>
+                <# if ( ! data.model.get('label_url') ) { #>
                 <button class="button wcsc-edit-shipment" role="switch" type="button">
                     <?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
                 </button>
