@@ -146,7 +146,7 @@
     <button class="button wcsc-save-shipment button-primary" type="button">
 		<?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
     </button>
-    <button class="button wcsc-edit-shipment" type="button">
+    <button class="button wcsc-edit-abort" type="button">
 		<?php _ex( 'Abort', 'Order: Backend button to abort edit', 'wcsc' ) ?>
     </button>
 </div>

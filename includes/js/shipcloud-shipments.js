@@ -196,8 +196,9 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     editAction: function () {
         if (false === this.views.hasOwnProperty('edit')) {
             this.views['edit'] = new shipcloud.ShipmentEditView({
-                model: this.model,
-                el   : this.$el.find('.widget-content')
+                model : this.model,
+                el    : this.$el.find('.widget-content'),
+                parent: this
             });
         }
 
@@ -247,7 +248,21 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
 shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     tagName : 'div',
-    template: wp.template('shipcloud-shipment-edit')
+    template: wp.template('shipcloud-shipment-edit'),
+    parent  : null,
+
+    initialize : function(args) {
+        this.parent = args.parent;
+    },
+
+    events: {
+        'click .wcsc-edit-abort'   : 'abortAction'
+    },
+
+    abortAction: function () {
+        console.log(this.parent);
+        this.parent.render();
+    }
 });
 
 shipcloud.shipments = new shipcloud.ShipmentCollection();
