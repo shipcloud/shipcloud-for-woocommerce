@@ -1,3 +1,5 @@
+<input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}">
+
 <fieldset class="label-shipment-sender address">
     <legend>
 		<?php esc_html_e( 'Sender', 'shipcloud-for-woocommerce' ) ?>

@@ -254,20 +254,49 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     },
 
     events: {
-        'click .wcsc-edit-abort': 'abortAction'
+        'click .wcsc-edit-abort'   : 'abortAction',
+        'click .wcsc-save-shipment': 'saveAction'
     },
 
-    abortAction: function () {
-        console.log(this.parent);
+    backToParent: function () {
         this.parent.render();
 
         if (this.parent.$el.offset().top < window.scrollY) {
-            // Out of viewport so we scroll up again.
+            // Out of viewport so we scroll up a bit.
             jQuery('html, body').animate({
                 scrollTop: this.parent.$el.offset().top - 50
             }, 700);
         }
+    },
+
+    abortAction: function () {
+        this.backToParent();
+    },
+
+    errorAction: function (response) {
+        alert(_(response.responseJSON.data).pluck('message').join('\n'));
+        this.parent.$loader().hide();
+    },
+
+    saveAction: function () {
+        this.parent.$loader().show();
+
+        wp.ajax.send(
+            'shipcloud_label_update',
+            {
+                'data'   : this.$el.find('input').serializeObject(),
+                'success': this.successAction.bind(this),
+                'error'  : this.errorAction.bind(this)
+            }
+        );
+    },
+
+    successAction: function (response) {
+        this.parent.$loader().hide();
+        this.model.set(this.model.parse(response));
+        this.backToParent();
     }
-});
+})
+;
 
 shipcloud.shipments = new shipcloud.ShipmentCollection();
