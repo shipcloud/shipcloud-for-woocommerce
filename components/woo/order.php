@@ -1250,29 +1250,43 @@ class WC_Shipcloud_Order
 	}
 
 	/**
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	protected function prefix_data( $data, $prefix ) {
+		if ( ! $prefix ) {
+			return $data;
+		}
+
+		foreach ( $data as $key => $value ) {
+			if ( 0 === strpos( $key, $prefix ) ) {
+				// Has already the prefix.
+				continue;
+			}
+
+			$data[ $prefix . $key ] = $data[ $key ];
+			unset( $data[ $key ] );
+		}
+
+		return $data;
+	}
+
+	/**
 	 * @param $options
 	 *
 	 * @return array|mixed
 	 */
 	public function get_sender($prefix = '') {
-		$options = $this->get_options();
-		
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
 
 		if ( $sender && $prefix ) {
-			foreach ( $sender as $key => $value ) {
-				if ( 0 === strpos( $key, $prefix ) ) {
-					// Has already the prefix.
-					continue;
-				}
-
-				$sender[ $prefix . $key ] = $sender[ $key ];
-				unset( $sender[ $key ] );
-			}
+			$sender = $this->prefix_data( $sender, $prefix );
 		}
 
 		// Use default data if nothing was saved before
 		if ( '' == $sender || 0 == count( $sender ) ) {
+		    $options = $this->get_options();
 
 			$sender = array(
 				$prefix . 'first_name' => $options['sender_first_name'],
@@ -1300,29 +1314,19 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * @param $options
+	 * @param string $prefix Mostly "recipient_".
 	 *
 	 * @return array|mixed
+	 * @internal param $options
+	 *
 	 */
 	public function get_recipient( $prefix = '' ) {
 		$options = $this->get_options();
 
 		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
 
-		if ( $recipient && $prefix ) {
-			foreach ( $recipient as $key => $value ) {
-				if ( 0 === strpos( $key, $prefix ) ) {
-					// Has already the prefix.
-					continue;
-				}
-
-				$recipient[ $prefix . $key ] = $recipient[ $key ];
-				unset( $recipient[ $key ] );
-			}
-		}
-
 		// Use default data if nothing was saved before
-		if ( '' == $recipient || 0 == count( $recipient ) ) {
+		if ( '' === $recipient || 0 == count( $recipient ) ) {
 			$order = $this->get_wc_order();
 
 			$recipient_street_name = $order->shipping_address_1;
@@ -1343,22 +1347,22 @@ class WC_Shipcloud_Order
 			}
 
 			$recipient = array(
-				$prefix . 'first_name' => $order->shipping_first_name,
-				$prefix . 'last_name'  => $order->shipping_last_name,
-				$prefix . 'company'    => $order->shipping_company,
-				$prefix . 'care_of'    => $this->get_care_of(),
-				$prefix . 'street'     => $recipient_street_name,
-				$prefix . 'street_no'  => $recipient_street_nr,
-				$prefix . 'zip_code'   => $order->shipping_postcode,
-				$prefix . 'postcode'   => $order->shipping_postcode,
-				$prefix . 'city'       => $order->shipping_city,
-				$prefix . 'state'      => $order->shipping_state,
-				$prefix . 'country'    => $order->shipping_country,
-                $prefix . 'phone'      => $this->get_phone(),
+				'first_name' => $order->shipping_first_name,
+				'last_name'  => $order->shipping_last_name,
+				'company'    => $order->shipping_company,
+				'care_of'    => $this->get_care_of(),
+				'street'     => $recipient_street_name,
+				'street_no'  => $recipient_street_nr,
+				'zip_code'   => $order->shipping_postcode,
+				'postcode'   => $order->shipping_postcode,
+				'city'       => $order->shipping_city,
+				'state'      => $order->shipping_state,
+				'country'    => $order->shipping_country,
+                'phone'      => $this->get_phone(),
 			);
 		}
 
-		return $this->sanitize_address( $recipient, $prefix );
+		return $this->sanitize_address( $this->prefix_data( $recipient, $prefix ), $prefix );
 	}
 
 	/**
