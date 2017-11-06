@@ -749,6 +749,9 @@ class WC_Shipcloud_Order
                                     'weight' => wc_format_decimal( $data[ 'weight' ] ),
                                     //'type' => $_POST['package']['type'],
                                 ),
+								'label_url' => $data['label_url'],
+                                'price' => $data['price'],
+                                'carrier' => $data['carrier'],
                                 'carrier_tracking_no' => $data['carrier_tracking_no'],
                                 'shipment_status' => wcsc_get_shipment_status_string(
 									get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', true )
@@ -959,11 +962,22 @@ class WC_Shipcloud_Order
 	 * Ask the API to create a shipment label.
 	 */
 	public function create_shipment_label( $data ) {
-		$order_id = (int) $data['order_id'];
-		$order    = $this->get_wc_order( $order_id );
+	    /** @var \Shipcloud\Repository\ShipmentRepository $shipment_repo */
+		$shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+		$order         = $shipment_repo->findOrderByShipmentId( $data['shipment_id'] );
+		$order_id      = $order->ID;
+		$order         = $this->get_wc_order( $order_id );
 
 		if ( ! $data['isReturn'] ) {
 			$data['to']['email'] = $order->billing_email;
+		}
+
+		if ( ! $data['from']['id'] ) {
+			unset( $data['from']['id'] );
+		}
+
+		if ( ! $data['to']['id'] ) {
+			unset( $data['to']['id'] );
 		}
 
 		/**
@@ -1042,12 +1056,6 @@ class WC_Shipcloud_Order
 			wp_send_json_error( _wcsc_exception_to_wp_error( $e ) );
 			wp_die();
 		}
-
-//		$shipment = $this->get_shipcloud_api()->create_shipment(
-//			$this->get_notification_email( ),
-//			$this->get_carrier_mail(),
-//			$data['other_description']
-//		);
 	}
 
 	/**

@@ -335,6 +335,7 @@ jQuery( function( $ ) {
 
 	var shipcloud_create_label_buttons = function () {
 		$('.shipcloud_create_label').click( function ( e ) {
+			return;
 			$( '#shipment-center .info').empty();
 
 			var ask_create_label = $('#ask-create-label');

@@ -87,6 +87,41 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         }
     },
 
+    getData: function () {
+        var json = _.clone(this.attributes);
+        for (var attr in json) {
+            if (!json.hasOwnProperty(attr)) {
+                continue;
+            }
+            if ((json[attr] instanceof Backbone.Model) || (json[attr] instanceof Backbone.Collection)) {
+                json[attr] = json[attr].toJSON();
+            }
+        }
+        return json;
+    },
+
+    createLabel: function () {
+        // Clone to store shipment_id (BC)
+        var data = _.clone(this);
+        var self = this;
+
+        // BC for deprecated logic in 'shipcloud_create_shipment_label' handler
+        data.set('shipment_id', this.get('id'));
+
+        wp.ajax.send(
+            'shipcloud_create_shipment_label',
+            {
+                'data': data.getData()
+            }
+        );
+        // 'error'  : function (response) {
+        //         //     alert('ohoh');
+        //         // }
+        //     }
+        // );
+    }
+    ,
+
     destroy: function () {
         var self = this;
 
@@ -108,7 +143,8 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                 self.trigger('destroy');
             }
         );
-    },
+    }
+    ,
 
     parse: function (data) {
         if (false === data.from instanceof shipcloud.AddressModel) {
@@ -120,12 +156,14 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         }
 
         return data;
-    },
+    }
+    ,
 
     getTitle: function () {
         return _.filter([this.get('carrier'), this.get('package').getTitle()]).join(' ');
     }
-});
+})
+;
 
 shipcloud.ShipmentCollection = Backbone.Collection.extend({
     model: shipcloud.ShipmentModel,
@@ -190,7 +228,14 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     // Create label for shipment.
     createAction: function () {
         this.$loader().show();
-        this.model.set('label_url', 'example.org');
+        console.log('createAction');
+        this.model.createLabel();
+        this.$loader().hide();
+    },
+
+    createError: function (response) {
+        this.$loader().hide();
+        alert(_(response).pluck('message'));
     },
 
     editAction: function () {
@@ -205,6 +250,7 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     // Extending render so that open widgets are kept open on redrawing.
     render: function () {
+        console.log(this.model.get('action'));
         var wasVisible = this.$el.find('.widget-inside').is(':visible');
         wp.Backbone.View.prototype.render.call(this);
 

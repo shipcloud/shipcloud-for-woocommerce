@@ -110,9 +110,9 @@
                         <td class="price">
                             <# if ( data.model.get('price') ) { #>
                                 {{ data.model.get('price') }}
-                                <# } else { #>
-									<?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
-                                    <# } #>
+                            <# } else { #>
+                                <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
+                            <# } #>
                         </td>
                     </tr>
             </tbody>
