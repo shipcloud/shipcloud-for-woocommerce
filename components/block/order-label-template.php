@@ -87,23 +87,32 @@
                 </tr>
                 <# } #>
 
+                    <# if ( data.model.get('id') ) { #>
                     <tr>
                         <th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
-                        <td>DISPLAY ID!!!</td>
+                        <td>{{ data.model.get('id') }}</td>
                     </tr>
+                    <# } #>
+                    <# if ( data.model.get('label_url') ) { #>
                     <tr>
                         <th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>
                         <td class="tracking-number">
                             <# if ( data.model.get('carrier_tracking_no') ) { #>
                                 {{ data.model.get('carrier_tracking_no') }}
-                                <# } else { #>
-									<?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
-                                    <# } #>
+                            <# } else { #>
+                                <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
+                            <# } #>
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Tracking status:', 'shipcloud-for-woocommerce' ); ?></th>
-                        <td>SHIPMENT STATUS!!!</td>
+                        <td>
+                            <# if ( data.model.get('shipment_status') ) { #>
+                                {{ data.model.get('shipment_status') }}
+                            <# } else { #>
+                                <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
+                            <# } #>
+                        </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Price:', 'shipcloud-for-woocommerce' ); ?></strong></th>
@@ -115,6 +124,7 @@
                             <# } #>
                         </td>
                     </tr>
+                    <# } #>
             </tbody>
         </table>
 
