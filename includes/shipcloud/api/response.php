@@ -129,6 +129,10 @@ class Response {
 	}
 
 	public function isSuccessful() {
-		return ( 200 <= $this->getStatusCode() && 300 > $this->getStatusCode() );
+		return (
+			200 <= $this->getStatusCode()
+			&& 300 > $this->getStatusCode()
+			&& ! isset( $payload['errors'] )
+		);
 	}
 }
