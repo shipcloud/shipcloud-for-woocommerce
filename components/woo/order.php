@@ -838,40 +838,26 @@ class WC_Shipcloud_Order
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function save_settings( $post_id )
-	{
-		// Interrupt on autosave
+	public function save_settings( $post_id ) {
+		// Interrupt on autosave or invalid nonce
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-		     || ! isset( $_POST['save_settings'] )
+			 || ! isset( $_POST['save_settings'] )
+			 || ! wp_verify_nonce( $_POST['save_settings'], plugin_basename( __FILE__ ) )
 		) {
 			return;
 		}
 
-		// Safety first!
-		if ( ! wp_verify_nonce( $_POST[ 'save_settings' ], plugin_basename( __FILE__ ) ) )
-		{
+		// Check permissions to edit products
+		if ( 'shop_order' === $_POST['post_type'] && ! current_user_can( 'edit_product', $post_id ) ) {
 			return;
 		}
 
-		// Check permissions to edit products
-		if ( 'shop_order' === $_POST[ 'post_type' ] && ! current_user_can( 'edit_product', $post_id ) )
-		{
-            return;
+		if ( isset( $_POST['sender_address'] ) ) {
+			update_post_meta( $post_id, 'shipcloud_sender_address', $_POST['sender_address'] );
 		}
 
-		if( isset( $_POST[ 'sender_address' ] ) )
-		{
-			update_post_meta( $post_id, 'shipcloud_sender_address', $_POST[ 'sender_address' ] );
-		}
-
-		if( isset( $_POST[ 'recipient_address' ] ) )
-		{
-			update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST[ 'recipient_address' ] );
-		}
-
-		if( isset( $_POST[ 'shipcloud_other' ] ) )
-		{
-			update_post_meta( $post_id, static::META_OTHER, $_POST[ 'shipcloud_other' ] );
+		if ( isset( $_POST['recipient_address'] ) ) {
+			update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST['recipient_address'] );
 		}
 	}
 
