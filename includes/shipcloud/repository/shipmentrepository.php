@@ -77,6 +77,53 @@ class ShipmentRepository {
 		}
 	}
 
+	public function translate_to_api_data( $old_structured_data, $order_id = null ) {
+		$data = array(
+			'id'                  => $old_structured_data['id'],
+			'from'                => array(
+				'company'    => $old_structured_data['sender_company'],
+				'first_name' => $old_structured_data['sender_first_name'],
+				'last_name'  => $old_structured_data['sender_last_name'],
+				'street'     => $old_structured_data['sender_street'],
+				'street_no'  => $old_structured_data['sender_street_no'],
+				'zip_code'   => $old_structured_data['sender_zip_code'],
+				'city'       => $old_structured_data['sender_city'],
+				'country'    => $old_structured_data['sender_country'],
+				'phone'      => $old_structured_data['sender_phone'],
+			),
+			'to'                  => array(
+				'company'    => $old_structured_data['recipient_company'],
+				'first_name' => $old_structured_data['recipient_first_name'],
+				'last_name'  => $old_structured_data['recipient_last_name'],
+				'street'     => $old_structured_data['recipient_street'],
+				'street_no'  => $old_structured_data['recipient_street_no'],
+				'zip_code'   => $old_structured_data['recipient_zip_code'],
+				'city'       => $old_structured_data['recipient_city'],
+				'country'    => $old_structured_data['recipient_country'],
+				'phone'      => $old_structured_data['recipient_phone'],
+			),
+			'package'             => array(
+				'width'  => wc_format_decimal( $old_structured_data['width'] ),
+				'height' => wc_format_decimal( $old_structured_data['height'] ),
+				'length' => wc_format_decimal( $old_structured_data['length'] ),
+				'weight' => wc_format_decimal( $old_structured_data['weight'] ),
+				//'type' => $_POST['package']['type'],
+			),
+			'label_url'           => $old_structured_data['label_url'],
+			'price'               => $old_structured_data['price'],
+			'carrier'             => $old_structured_data['carrier'],
+			'carrier_tracking_no' => $old_structured_data['carrier_tracking_no'],
+		);
+
+		if ( $order_id ) {
+			$data['shipment_status'] = wcsc_get_shipment_status_string(
+				get_post_meta( $order_id, 'shipment_' . $old_structured_data['id'] . '_status', true )
+			);
+		}
+
+		return $data;
+	}
+
 	public function translate_data( $data ) {
 		$data = array_replace_recursive(
 			array(

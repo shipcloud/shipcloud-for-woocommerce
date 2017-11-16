@@ -699,6 +699,9 @@ class WC_Shipcloud_Order
 
 		$shipment_data = get_post_meta( $this->order_id, 'shipcloud_shipment_data' );
 
+		/** @var \Shipcloud\Repository\ShipmentRepository $shipment_repo */
+		$shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+
 		ob_start();
 		?>
 
@@ -716,47 +719,8 @@ class WC_Shipcloud_Order
 					{
 						$shipment_data = array_reverse( $shipment_data );
 
-						foreach ( $shipment_data AS $data )
-						{
-						    $json_data[] = array(
-						        'id' => $data[ 'id' ],
-                                'from' => array(
-									'company'    => $data['sender_company'],
-									'first_name' => $data['sender_first_name'],
-									'last_name'  => $data['sender_last_name'],
-									'street'     => $data['sender_street'],
-									'street_no'  => $data['sender_street_no'],
-									'zip_code'   => $data['sender_zip_code'],
-									'city'       => $data['sender_city'],
-									'country'    => $data['sender_country'],
-									'phone'      => $data['sender_phone'],
-                                ),
-                                'to' => array(
-									'company'    => $data['recipient_company'],
-									'first_name' => $data['recipient_first_name'],
-									'last_name'  => $data['recipient_last_name'],
-									'street'     => $data['recipient_street'],
-									'street_no'  => $data['recipient_street_no'],
-									'zip_code'   => $data['recipient_zip_code'],
-									'city'       => $data['recipient_city'],
-									'country'    => $data['recipient_country'],
-									'phone'      => $data['recipient_phone'],
-								),
-                                'package' => array(
-                                    'width'  => wc_format_decimal( $data[ 'width' ] ),
-                                    'height' => wc_format_decimal( $data[ 'height' ] ),
-                                    'length' => wc_format_decimal( $data[ 'length' ] ),
-                                    'weight' => wc_format_decimal( $data[ 'weight' ] ),
-                                    //'type' => $_POST['package']['type'],
-                                ),
-								'label_url' => $data['label_url'],
-                                'price' => $data['price'],
-                                'carrier' => $data['carrier'],
-                                'carrier_tracking_no' => $data['carrier_tracking_no'],
-                                'shipment_status' => wcsc_get_shipment_status_string(
-									get_post_meta( $this->order_id, 'shipment_' . $data[ 'id' ] . '_status', true )
-                                ),
-							);
+						foreach ( $shipment_data AS $data ) {
+							$json_data[] = $shipment_repo->translate_to_api_data( $data, $this->order_id );
 						}
 					}
 
@@ -950,9 +914,18 @@ class WC_Shipcloud_Order
 	public function create_shipment_label( $data ) {
 	    /** @var \Shipcloud\Repository\ShipmentRepository $shipment_repo */
 		$shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
-		$order         = $shipment_repo->findOrderByShipmentId( $data['shipment_id'] );
-		$order_id      = $order->ID;
-		$order         = $this->get_wc_order( $order_id );
+
+		$order_id = null;
+		if ( isset( $data['order_id'] ) ) {
+			$order_id = $data['order_id'];
+		}
+
+		if ( ! $order_id ) {
+			$tmp_order = $shipment_repo->findOrderByShipmentId( $data['shipment_id'] );
+			$order_id  = $tmp_order->ID;
+		}
+
+		$order = $this->get_wc_order( $order_id );
 
 		if ( ! $data['isReturn'] ) {
 			$data['to']['email'] = $order->billing_email;
@@ -1024,7 +997,8 @@ class WC_Shipcloud_Order
 				array(
 					'status'      => 'OK',
 					'shipment_id' => $shipment->getId(),
-					'html'        => $this->get_label_html( $shipment_data )
+					'html'        => $this->get_label_html( $shipment_data ),
+                    'data'        => array(),
 				)
 			);
 
