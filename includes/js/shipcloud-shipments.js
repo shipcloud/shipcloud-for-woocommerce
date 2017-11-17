@@ -168,6 +168,20 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
 shipcloud.ShipmentCollection = Backbone.Collection.extend({
     model: shipcloud.ShipmentModel,
 
+    add: function (shipment, options) {
+        if (typeof shipment.get('id') == 'undefined') {
+            console.log('Shipcloud: There is a shipment without and id');
+            return;
+        }
+
+        console.log(shipment.get('id'));
+        if (this.where({id: shipment.get('id')}).length > 0) {
+            return;
+        }
+
+        Backbone.Collection.prototype.add.call(this, shipment, options);
+    },
+
     parse: function (data) {
         // Assert that everything is a shipcloud.ShipmentModel
         for (var pos in data) {
@@ -185,7 +199,16 @@ shipcloud.ShipmentCollection = Backbone.Collection.extend({
 });
 
 shipcloud.ShipmentsView = wp.Backbone.View.extend({
-    tagName: 'div'
+    tagName   : 'div',
+    initialize: function () {
+        this.listenTo(this.model, 'update', this.render);
+
+        this.model.each(function (shipment) {
+            this.views.add(new shipcloud.ShipmentView({model: shipment, id: shipment.get('id')}));
+        }, this);
+
+        this.render();
+    }
 });
 
 shipcloud.ShipmentView = wp.Backbone.View.extend({
@@ -200,7 +223,6 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     initialize: function () {
         this.listenTo(this.model, 'change', this.render);
         this.listenTo(this.model, 'destroy', this.remove);
-        this.render();
     },
 
     events: {
@@ -250,7 +272,6 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     // Extending render so that open widgets are kept open on redrawing.
     render: function () {
-        console.log(this.model.get('action'));
         var wasVisible = this.$el.find('.widget-inside').is(':visible');
         wp.Backbone.View.prototype.render.call(this);
 
