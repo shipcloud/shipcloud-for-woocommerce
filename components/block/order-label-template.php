@@ -1,4 +1,4 @@
-<div class="loading-overlay">
+<div class="loading-overlay" style="display: none;">
     <div class="spin-loader"></div>
 </div>
 

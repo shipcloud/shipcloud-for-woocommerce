@@ -212,7 +212,7 @@ shipcloud.ShipmentsView = wp.Backbone.View.extend({
 
     addShipment: function (shipment) {
         var shipmentView = new shipcloud.ShipmentView({model: shipment, id: shipment.get('id')});
-        console.log(this.views);
+
         this.views.add(shipmentView, {at: 0});
         shipmentView.render();
         this.$el.prepend(shipmentView.$el);
@@ -225,13 +225,15 @@ shipcloud.ShipmentsView = wp.Backbone.View.extend({
 });
 
 shipcloud.ShipmentView = wp.Backbone.View.extend({
-    tagName   : 'div',
-    className : 'label widget',
-    id        : function () {
+    tagName           : 'div',
+    className         : 'label widget',
+    id                : function () {
         return 'shipment-' + this.model.get('id');
     },
-    template  : wp.template('shipcloud-shipment'),
-    controller: null,
+    template          : wp.template('shipcloud-shipment'),
+    controller        : null,
+    colorHighlight    : '#90ee90',
+    colorHeadingNormal: '#fafafa',
 
     initialize: function () {
         this.listenTo(this.model, 'change', this.render);
@@ -246,9 +248,9 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     fadeIn: function () {
         this.open();
-        this.$el.find('.widget-top').css('background-color', '#90ee90');
+        this.$el.find('.widget-top').css('background-color', this.colorHighlight);
         this.$el.fadeIn('slow', function () {
-            jQuery(this).find('.widget-top').animate({backgroundColor: '#fafafa'}, 'slow');
+            jQuery(this).find('.widget-top').animate({backgroundColor: this.colorHeadingNormal}, 'slow');
         });
     },
 
@@ -313,11 +315,8 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
                     click: function () {
                         self.$loader().show();
 
-                        //shipcloud_delete_shipment(this.model.get('order_id'), this.model.get('shipment_id'));
                         jQuery(this).dialog('close');
                         self.model.destroy();
-
-                        self.$loader().hide();
                     }
                 },
                 'no' : {
