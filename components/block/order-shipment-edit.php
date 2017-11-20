@@ -62,7 +62,13 @@
         <label for="shipment[from][country]">
 			<?php esc_html_e( _x( 'Country', 'Backend: Shipment edit field label', 'shipcloud-for-woocommerce' ) ) ?>
         </label>
-        <input type="text" name="shipment[from][country]" value="{{ data.model.get('from').get('country') }}">
+        <select name="shipment[from][country]">
+			<?php foreach ( wc()->countries->get_countries() AS $key => $country ): ?>
+                <option value="<?php esc_attr_e( $key ); ?>">
+					<?php esc_html_e( $country ); ?>
+                </option>
+			<?php endforeach; ?>
+        </select>
     </div>
     <div>
         <label for="shipment[from][phone]">
@@ -134,7 +140,13 @@
         <label for="shipment[to][country]">
 			<?php esc_html_e( _x( 'Country', 'Backend: Shipment edit field label', 'shipcloud-for-woocommerce' ) ) ?>
         </label>
-        <input type="text" name="shipment[to][country]" value="{{ data.model.get('to').get('country') }}">
+        <select name="shipment[to][country]">
+			<?php foreach ( wc()->countries->get_countries() AS $key => $country ): ?>
+                <option value="<?php esc_attr_e( $key ); ?>">
+					<?php esc_html_e( $country ); ?>
+                </option>
+			<?php endforeach; ?>
+        </select>
     </div>
     <div>
         <label for="shipment[to][phone]">

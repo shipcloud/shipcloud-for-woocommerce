@@ -1,4 +1,5 @@
 ;shipcloud = shipcloud || {};
+wcsc_translate = wcsc_translate || {};
 
 shipcloud.AddressModel = Backbone.Model.extend({
     defaults: {
@@ -103,7 +104,6 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
     createLabel: function () {
         // Clone to store shipment_id (BC)
         var data = _.clone(this);
-        var self = this;
 
         // BC for deprecated logic in 'shipcloud_create_shipment_label' handler
         data.set('shipment_id', this.get('id'));
@@ -114,13 +114,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                 'data': data.getData()
             }
         );
-        // 'error'  : function (response) {
-        //         //     alert('ohoh');
-        //         // }
-        //     }
-        // );
-    }
-    ,
+    },
 
     destroy: function () {
         var self = this;
@@ -169,8 +163,8 @@ shipcloud.ShipmentCollection = Backbone.Collection.extend({
     model: shipcloud.ShipmentModel,
 
     add: function (shipment, options) {
-        if (typeof shipment.get('id') == 'undefined') {
-            console.log('Shipcloud: There is a shipment without and id');
+        if (typeof shipment.get('id') === 'undefined') {
+            console.log('Shipcloud: Adding shipments without an ID is not supported.');
             return;
         }
 
@@ -206,20 +200,16 @@ shipcloud.ShipmentsView = wp.Backbone.View.extend({
         this.model.each(function (shipment) {
             this.views.add(new shipcloud.ShipmentView({model: shipment, id: shipment.get('id')}));
         }, this);
-
-        this.render();
     },
 
     addShipment: function (shipment) {
         var shipmentView = new shipcloud.ShipmentView({model: shipment, id: shipment.get('id')});
 
         this.views.add(shipmentView, {at: 0});
-        shipmentView.render();
-        this.$el.prepend(shipmentView.$el);
-
-        // Animate
         shipmentView.$el.hide();
         shipmentView.render();
+
+        this.$el.prepend(shipmentView.$el);
         shipmentView.fadeIn();
     }
 });
@@ -340,11 +330,12 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     },
 
     events: {
-        'click .wcsc-edit-abort'   : 'abortAction',
+        'click .wcsc-edit-abort'   : 'backToParent',
         'click .wcsc-save-shipment': 'saveAction'
     },
 
     backToParent: function () {
+        this.remove();
         this.parent.render();
 
         if (this.parent.$el.offset().top < window.scrollY) {
@@ -364,6 +355,20 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         this.parent.$loader().hide();
     },
 
+    render: function () {
+        wp.Backbone.View.prototype.render.call(this);
+
+        if (this.model.get('from').get('country')) {
+            // Sender country set so we select it.
+            this.$el.find('select[name="shipment[from][country]"]').val(this.model.get('from').get('country'));
+        }
+
+        if (this.model.get('to').get('country')) {
+            // Recipient country set so we select it.
+            this.$el.find('select[name="shipment[to][country]"]').val(this.model.get('to').get('country'));
+        }
+    },
+
     saveAction: function () {
         this.parent.$loader().show();
 
@@ -380,7 +385,7 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     successAction: function (response) {
         this.parent.$loader().hide();
         this.model.set(this.model.parse(response));
-        this.backToParent();
+        this.remove(); // Parent will rerender itself when the model changes.
     }
 })
 ;
