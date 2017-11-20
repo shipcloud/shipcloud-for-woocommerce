@@ -255,11 +255,7 @@ jQuery( function( $ ) {
 				return;
 			}
 
-            $(response.data.html).prependTo('.shipment-labels')
-				.find('.widget-top').effect('highlight', {color: '#46b450'}, 3000);
-
-			shipcloud_create_label_buttons();
-			shipcloud_delete_shipment_buttons();
+            shipcloud.shipments.unshift(new shipcloud.ShipmentModel(response.data.data));
 		});
 	};
 

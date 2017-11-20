@@ -174,8 +174,8 @@ shipcloud.ShipmentCollection = Backbone.Collection.extend({
             return;
         }
 
-        console.log(shipment.get('id'));
         if (this.where({id: shipment.get('id')}).length > 0) {
+            // Shipment exists already and we don't allow duplicates.
             return;
         }
 
@@ -201,13 +201,26 @@ shipcloud.ShipmentCollection = Backbone.Collection.extend({
 shipcloud.ShipmentsView = wp.Backbone.View.extend({
     tagName   : 'div',
     initialize: function () {
-        this.listenTo(this.model, 'update', this.render);
+        this.listenTo(this.model, 'add', this.addShipment);
 
         this.model.each(function (shipment) {
             this.views.add(new shipcloud.ShipmentView({model: shipment, id: shipment.get('id')}));
         }, this);
 
         this.render();
+    },
+
+    addShipment: function (shipment) {
+        var shipmentView = new shipcloud.ShipmentView({model: shipment, id: shipment.get('id')});
+        console.log(this.views);
+        this.views.add(shipmentView, {at: 0});
+        shipmentView.render();
+        this.$el.prepend(shipmentView.$el);
+
+        // Animate
+        shipmentView.$el.hide();
+        shipmentView.render();
+        shipmentView.fadeIn();
     }
 });
 
@@ -231,6 +244,14 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
         'click .shipcloud_delete_shipment': 'deleteAction'
     },
 
+    fadeIn: function () {
+        this.open();
+        this.$el.find('.widget-top').css('background-color', '#90ee90');
+        this.$el.fadeIn('slow', function () {
+            jQuery(this).find('.widget-top').animate({backgroundColor: '#fafafa'}, 'slow');
+        });
+    },
+
     remove: function () {
         var self = this;
         this.$el.fadeOut(500, function () {
@@ -250,7 +271,6 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     // Create label for shipment.
     createAction: function () {
         this.$loader().show();
-        console.log('createAction');
         this.model.createLabel();
         this.$loader().hide();
     },

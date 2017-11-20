@@ -727,7 +727,6 @@ class WC_Shipcloud_Order
 					?>
                 <script type="application/javascript">
                     jQuery(function ($) {
-                        shipcloud.shipments = new shipcloud.ShipmentCollection();
                         shipcloud.shipments.parse(
 							<?php echo json_encode( $json_data, JSON_PRETTY_PRINT ); ?>
                         );
@@ -737,12 +736,7 @@ class WC_Shipcloud_Order
                             el   : '#shipment-labels'
                         });
 
-                        shipcloud.shipments.each(function (shipmentData) {
-//                            console.log(shipmentData);
-                            shipcloud.shipmentsList.views.add(
-                                new shipcloud.ShipmentView({model: shipmentData})
-                            );
-                        });
+                        shipcloud.shipmentsList.render();
                     });
                 </script>
                 <script type="template/html" id="tmpl-shipcloud-shipment">
@@ -998,7 +992,7 @@ class WC_Shipcloud_Order
 					'status'      => 'OK',
 					'shipment_id' => $shipment->getId(),
 					'html'        => $this->get_label_html( $shipment_data ),
-                    'data'        => array(),
+					'data'        => $shipment_repo->translate_to_api_data( $shipment_data, $order_id ),
 				)
 			);
 
