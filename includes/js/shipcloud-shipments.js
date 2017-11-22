@@ -101,8 +101,9 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         return json;
     },
 
-    createLabel: function () {
+    createLabel: function (options) {
         // Clone to store shipment_id (BC)
+        var self = this;
         var data = _.clone(this);
 
         // BC for deprecated logic in 'shipcloud_create_shipment_label' handler
@@ -110,9 +111,15 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
 
         wp.ajax.send(
             'shipcloud_create_shipment_label',
-            {
-                'data': data.getData()
-            }
+            _(
+                {
+                    'data'   : data.getData(),
+                    'success': function (response) {
+                        self.clear({silent: true});
+                        self.set(self.parse(response.data));
+                    }
+                }
+            ).extend(options)
         );
     },
 
@@ -141,15 +148,24 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
     ,
 
     parse: function (data) {
+        if (data instanceof shipcloud.ShipmentModel) {
+            data = data.attributes;
+        }
+
+        // Assert defaults
+        data = jQuery(this.defaults, data);
+
         if (false === data.from instanceof shipcloud.AddressModel) {
-            data.from = new shipcloud.AddressModel(data.from);
+            this.set('from', new shipcloud.AddressModel(data.from));
         }
 
         if (false === data.to instanceof shipcloud.AddressModel) {
-            data.to = new shipcloud.AddressModel(data.to);
+            this.set('to', new shipcloud.AddressModel(data.to));
         }
 
-        return data;
+        if (false === data.package instanceof shipcloud.AddressModel) {
+            this.set('package', new shipcloud.PackageModel(data.package));
+        }
     }
     ,
 
@@ -262,12 +278,15 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     // Create label for shipment.
     createAction: function () {
+        this.open();
+
         this.$loader().show();
-        this.model.createLabel();
+        this.model.createLabel({'error': this.createError.bind(this)});
         this.$loader().hide();
     },
 
     createError: function (response) {
+        console.log(response);
         this.$loader().hide();
         alert(_(response).pluck('message'));
     },
@@ -375,7 +394,7 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         wp.ajax.send(
             'shipcloud_label_update',
             {
-                'data'   : this.$el.find('input').serializeObject(),
+                'data'   : this.$el.find('input,select').serializeObject(),
                 'success': this.successAction.bind(this),
                 'error'  : this.errorAction.bind(this)
             }
@@ -384,7 +403,10 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
 
     successAction: function (response) {
         this.parent.$loader().hide();
-        this.model.set(this.model.parse(response));
+
+        console.log(this.model.parse(response));
+
+        // this.model.set(this.model.parse(response));
         this.remove(); // Parent will rerender itself when the model changes.
     }
 })
