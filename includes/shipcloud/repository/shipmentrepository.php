@@ -88,7 +88,7 @@ class ShipmentRepository {
 				'street_no'  => $old_structured_data['sender_street_no'],
 				'zip_code'   => $old_structured_data['sender_zip_code'],
 				'city'       => $old_structured_data['sender_city'],
-				'country'    => $old_structured_data['sender_country'],
+				'country'    => $old_structured_data['country']?: $old_structured_data['sender_country'],
 				'phone'      => $old_structured_data['sender_phone'],
 			),
 			'to'                  => array(
@@ -164,7 +164,7 @@ class ShipmentRepository {
 			'sender_city'          => $data['from']['city'],
 			'sender_zip_code'      => $data['from']['zip_code'],
 			'sender_state'         => $data['from']['state'],
-			'country'              => $data['country'],
+			'country'              => $data['country']?: $data['from']['country'],
 			// Recipient
 			'recipient_company'    => $data['to']['company'],
 			'recipient_first_name' => $data['to']['first_name'],

@@ -74,20 +74,6 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'tracking_url'              : null
     },
 
-    initialize: function () {
-        if (false === this.get('from') instanceof shipcloud.AddressModel) {
-            this.set('from', new shipcloud.AddressModel(this.get('from')));
-        }
-
-        if (false === this.get('to') instanceof shipcloud.AddressModel) {
-            this.set('to', new shipcloud.AddressModel(this.get('to')));
-        }
-
-        if (false === this.get('package') instanceof shipcloud.AddressModel) {
-            this.set('package', new shipcloud.PackageModel(this.get('package')));
-        }
-    },
-
     getData: function () {
         var json = _.clone(this.attributes);
         for (var attr in json) {
@@ -116,7 +102,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                     'data'   : data.getData(),
                     'success': function (response) {
                         self.clear({silent: true});
-                        self.set(self.parse(response.data));
+                        self.set(response.data, {parse: true});
                     }
                 }
             ).extend(options)
@@ -148,24 +134,19 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
     ,
 
     parse: function (data) {
-        if (data instanceof shipcloud.ShipmentModel) {
-            data = data.attributes;
+        if (data.hasOwnProperty('from')) {
+            data.from = new shipcloud.AddressModel(data.from);
         }
 
-        // Assert defaults
-        data = jQuery(this.defaults, data);
-
-        if (false === data.from instanceof shipcloud.AddressModel) {
-            this.set('from', new shipcloud.AddressModel(data.from));
+        if (data.hasOwnProperty('to')) {
+            data.to = new shipcloud.AddressModel(data.to);
         }
 
-        if (false === data.to instanceof shipcloud.AddressModel) {
-            this.set('to', new shipcloud.AddressModel(data.to));
+        if (data.hasOwnProperty('package')) {
+            data.package = new shipcloud.PackageModel(data.package);
         }
 
-        if (false === data.package instanceof shipcloud.AddressModel) {
-            this.set('package', new shipcloud.PackageModel(data.package));
-        }
+        return data;
     }
     ,
 
@@ -176,36 +157,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
 ;
 
 shipcloud.ShipmentCollection = Backbone.Collection.extend({
-    model: shipcloud.ShipmentModel,
-
-    add: function (shipment, options) {
-        if (typeof shipment.get('id') === 'undefined') {
-            console.log('Shipcloud: Adding shipments without an ID is not supported.');
-            return;
-        }
-
-        if (this.where({id: shipment.get('id')}).length > 0) {
-            // Shipment exists already and we don't allow duplicates.
-            return;
-        }
-
-        Backbone.Collection.prototype.add.call(this, shipment, options);
-    },
-
-    parse: function (data) {
-        // Assert that everything is a shipcloud.ShipmentModel
-        for (var pos in data) {
-            if (!data.hasOwnProperty(pos)) {
-                continue;
-            }
-
-            if (false === data[pos] instanceof shipcloud.ShipmentModel) {
-                data[pos] = new shipcloud.ShipmentModel(data[pos]);
-            }
-
-            this.push(data[pos]);
-        }
-    }
+    model: shipcloud.ShipmentModel
 });
 
 shipcloud.ShipmentsView = wp.Backbone.View.extend({
@@ -286,7 +238,6 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     },
 
     createError: function (response) {
-        console.log(response);
         this.$loader().hide();
         alert(_(response).pluck('message'));
     },
@@ -388,6 +339,14 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         }
     },
 
+    getData: function () {
+        return {
+            'id'  : this.model.get('id'),
+            'to'  : this.$el.find('[to]').serializeObject(),
+            'from': this.$el.find('[from]').serializeObject()
+        };
+    },
+
     saveAction: function () {
         this.parent.$loader().show();
 
@@ -401,12 +360,10 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         );
     },
 
-    successAction: function (response) {
+    successAction: function (data) {
         this.parent.$loader().hide();
 
-        console.log(this.model.parse(response));
-
-        // this.model.set(this.model.parse(response));
+        this.model.set(this.model.parse(data));
         this.remove(); // Parent will rerender itself when the model changes.
     }
 })
