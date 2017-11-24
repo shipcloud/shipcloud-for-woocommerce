@@ -9,6 +9,23 @@
     <div class="widget-title">
         <img class="shipcloud-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
 
+        <div class="widget-quick-actions">
+                <# if ( data.model.get('label_url') ) { #>
+                <a href="{{ data.model.get('label_url') }}" target="_blank" class="button btn-primary">
+                    <span class="dashicons dashicons-external"></span>
+                    <?php _ex( 'Download', 'Download a label', 'shipcloud-for-woocommerce' ); ?>
+                </a>
+                <# } else { #>
+                <button class="shipcloud_create_label btn-primary button" type="button">
+                    <span class="dashicons dashicons-yes"></span>
+                    <?php _e( 'Create', 'shipcloud-for-woocommerce' ); ?>
+                </button>
+                <# } #>
+                <button class="shipcloud_delete_shipment button">
+                    <span class="dashicons dashicons-trash"></span>
+                </button>
+        </div>
+
         <h4>
             {{ data.model.get('from').getTitle() }}
             <span class="dashicons dashicons-arrow-right-alt"></span>

@@ -55,7 +55,7 @@ class Shipment {
 
 	public function update( $shipment_id, $data ) {
 		return \Shipcloud\Domain\Shipment::fromResponse(
-			$this->api->request( 'shipments/' . $shipment_id, $data, 'POST' )
+			$this->api->request( 'shipments/' . $shipment_id, $data, 'PUT' )
 		);
 	}
 }

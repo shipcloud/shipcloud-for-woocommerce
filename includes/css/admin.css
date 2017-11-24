@@ -226,26 +226,29 @@
     padding:20px;
 }
 
-.shipcloud .widget-quick-actions {
+.shipment-labels .widget-quick-actions {
     float: right;
     position: relative;
-    padding: 10px;
+    margin-top: -5px;
 }
 
-.shipcloud .widget-quick-actions .btn-primary {
+.shipment-labels .widget-quick-actions .btn-primary {
     color:#fff;
     background-color:#337ab7;
     border-color:#2e6da4;
 }
 
-.shipcloud .button-delete-shipment .shipcloud_delete_shipment {
+.shipment-labels .shipcloud_delete_shipment,
+.shipment-labels .shipcloud_delete_shipment:hover,
+.shipment-labels .shipcloud_delete_shipment:focus
+{
     color:#fff;
     background-color:#d9534f;
     border-color:#d43f3a;
 }
 
-.shipcloud .widget-quick-actions .dashicons,
-.shipcloud .widget-quick-actions .dashicons-before:before {
+.shipment-labels .widget-quick-actions .dashicons,
+.shipment-labels .widget-quick-actions .dashicons-before:before {
     font-size: 14px;
     width: 14px;
     height: 14px;

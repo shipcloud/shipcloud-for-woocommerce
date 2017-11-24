@@ -100,13 +100,15 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
             _(
                 {
                     'data'   : data.getData(),
-                    'success': function (response) {
-                        self.clear({silent: true});
-                        self.set(self.parse(response.data));
-                    }
+                    'success': self.handleCreateSuccess.bind(self)
                 }
             ).extend(options)
         );
+    },
+
+    handleCreateSuccess: function (response) {
+        this.clear({silent: true});
+        this.set(this.parse(response.data));
     },
 
     destroy: function () {
@@ -230,11 +232,19 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     // Create label for shipment.
     createAction: function () {
+        var self = this;
+
         this.open();
 
         this.$loader().show();
-        this.model.createLabel({'error': this.createError.bind(this)});
-        this.$loader().hide();
+        this.model.createLabel({
+            'error': this.createError.bind(this),
+            'success': function (response) {
+                console.log(response);
+                self.model.handleCreateSuccess(response);
+                self.$loader().hide();
+            }
+        });
     },
 
     createError: function (response) {
@@ -262,11 +272,17 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
         }
     },
 
+    scrollTo: function () {
+        if (this.$el.offset().top < window.scrollY) {
+            // Out of viewport so we scroll up a bit.
+            jQuery('html, body').animate({
+                scrollTop: this.$el.offset().top - 50
+            }, 700);
+        }
+    },
 
     deleteAction: function () {
         var self = this;
-
-        this.open();
 
         jQuery('#ask-delete-shipment').dialog({
             'dialogClass': 'wcsc-dialog wp-dialog',
@@ -308,14 +324,8 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
 
     backToParent: function () {
         this.remove();
+        this.parent.scrollTo();
         this.parent.render();
-
-        if (this.parent.$el.offset().top < window.scrollY) {
-            // Out of viewport so we scroll up a bit.
-            jQuery('html, body').animate({
-                scrollTop: this.parent.$el.offset().top - 50
-            }, 700);
-        }
     },
 
     abortAction: function () {
@@ -366,6 +376,7 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         this.parent.$loader().hide();
 
         this.model.set(this.model.parse(data));
+        this.parent.scrollTo();
         this.remove(); // Parent will rerender itself when the model changes.
     }
 })
