@@ -102,7 +102,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                     'data'   : data.getData(),
                     'success': function (response) {
                         self.clear({silent: true});
-                        self.set(response.data, {parse: true});
+                        self.set(self.parse(response.data));
                     }
                 }
             ).extend(options)
@@ -265,6 +265,8 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
     deleteAction: function () {
         var self = this;
+
+        this.open();
 
         jQuery('#ask-delete-shipment').dialog({
             'dialogClass': 'wcsc-dialog wp-dialog',

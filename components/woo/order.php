@@ -727,14 +727,17 @@ class WC_Shipcloud_Order
 					?>
                 <script type="application/javascript">
                     jQuery(function ($) {
-                        shipcloud.shipments.parse(
-							<?php echo json_encode( $json_data, JSON_PRETTY_PRINT ); ?>
+                        shipcloud.shipments.add(
+							<?php echo json_encode( $json_data, JSON_PRETTY_PRINT ); ?>,
+                            {parse: true}
                         );
 
                         shipcloud.shipmentsList = new shipcloud.ShipmentsView({
                             model: shipcloud.shipments,
                             el   : '#shipment-labels'
                         });
+
+                        $('.shipment-labels .widget-top .widget-quick-actions').find('a,button').unbind();
 
                         shipcloud.shipmentsList.render();
                     });
@@ -914,9 +917,11 @@ class WC_Shipcloud_Order
 			$order_id = $data['order_id'];
 		}
 
+        $shipment_id = $data['shipment_id'];
+
 		if ( ! $order_id ) {
-			$tmp_order = $shipment_repo->findOrderByShipmentId( $data['shipment_id'] );
-			$order_id  = $tmp_order->ID;
+			$tmp_order   = $shipment_repo->findOrderByShipmentId( $shipment_id );
+			$order_id    = $tmp_order->ID;
 		}
 
 		$order = $this->get_wc_order( $order_id );
@@ -981,7 +986,13 @@ class WC_Shipcloud_Order
 		}
 
 		try {
-			$shipment = _wcsc_api()->shipment()->create( $data );
+		    if ($shipment_id) {
+		        // Update
+		        $shipment = _wcsc_api()->shipment()->update( $shipment_id, $data );
+            } else {
+		        // Create
+			    $shipment = _wcsc_api()->shipment()->create( $data );
+            }
 
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $data['carrier'] ) . ')' );
 
