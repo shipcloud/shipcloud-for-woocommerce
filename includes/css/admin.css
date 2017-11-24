@@ -229,7 +229,8 @@
 .shipment-labels .widget-quick-actions {
     float: right;
     position: relative;
-    margin-top: -5px;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 .shipment-labels .widget-quick-actions .btn-primary {
