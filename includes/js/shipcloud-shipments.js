@@ -90,7 +90,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
     createLabel: function (options) {
         // Clone to store shipment_id (BC)
         var self = this;
-        var data = _.clone(this);
+        var data = this.clone();
 
         // BC for deprecated logic in 'shipcloud_create_shipment_label' handler
         data.set('shipment_id', this.get('id'));
@@ -207,10 +207,12 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     },
 
     fadeIn: function () {
+        var self = this;
+
         this.open();
         this.$el.find('.widget-top').css('background-color', this.colorHighlight);
         this.$el.fadeIn('slow', function () {
-            jQuery(this).find('.widget-top').animate({backgroundColor: this.colorHeadingNormal}, 'slow');
+            self.$el.find('.widget-top').animate({backgroundColor: self.colorHeadingNormal}, 'slow');
         });
     },
 
@@ -235,12 +237,11 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
         var self = this;
 
         this.open();
-
         this.$loader().show();
+
         this.model.createLabel({
             'error': this.createError.bind(this),
             'success': function (response) {
-                console.log(response);
                 self.model.handleCreateSuccess(response);
                 self.$loader().hide();
             }

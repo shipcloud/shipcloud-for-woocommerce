@@ -103,9 +103,7 @@ jQuery( function( $ ) {
 				return;
 			}
 
-			$( '.shipment-labels' ).prepend( response.data.html );
-			shipcloud_create_label_buttons();
-			shipcloud_delete_shipment_buttons();
+			shipcloud.shipments.unshift(response.data.data, {parse:true});
 		});
 	});
 
@@ -125,9 +123,7 @@ jQuery( function( $ ) {
                 return;
             }
 
-            $('.shipment-labels').prepend(response.data.html);
-            shipcloud_create_label_buttons();
-            shipcloud_delete_shipment_buttons();
+            shipcloud.shipments.unshift(response.data.data, {parse:true});
         });
 	});
 
@@ -255,7 +251,7 @@ jQuery( function( $ ) {
 				return;
 			}
 
-            shipcloud.shipments.unshift(new shipcloud.ShipmentModel(response.data.data));
+            shipcloud.shipments.unshift(response.data.data, {parse:true});
 		});
 	};
 
