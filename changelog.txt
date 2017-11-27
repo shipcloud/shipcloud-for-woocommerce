@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.6.0 =
+* Enhanced: Add action link so users can jump from plugins page directly to the plugin settings
+
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
 * Enhanced: Show minimum required versions for PHP and WooCommerce.
