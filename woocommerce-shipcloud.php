@@ -196,6 +196,10 @@ class WooCommerce_Shipcloud {
 	public static function activate( $network_wide ) {
 	}
 
+	protected static function delete_transients() {
+		delete_transient( '_wcsc_carriers_get' );
+	}
+
 	/**
 	 * Fired when the plugin is deactivated.
 	 *
@@ -204,6 +208,8 @@ class WooCommerce_Shipcloud {
 	 */
 	public static function deactivate( $network_wide ) {
 		delete_option( 'woocommerce_shipcloud_carriers' );
+
+		static::delete_transients();
 	}
 
 	/**
