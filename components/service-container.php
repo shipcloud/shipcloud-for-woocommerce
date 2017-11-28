@@ -9,6 +9,12 @@ $service_config = array(
 			wcsc_shipping_method()->get_option( 'api_key' ),
 			'plugin.woocommerce.z4NVoYhp'
 		);
+	},
+	'\\Shipcloud\\Controller\\CallbackController'    => function ( \Shipcloud\ServiceContainer $container ) {
+		return new \Shipcloud\Controller\CallbackController(
+			$container->get( '\\Shipcloud\\Api' ),
+			$container->get( '\\Shipcloud\\Repository\\ShipmentRepository' )
+		);
 	}
 );
 

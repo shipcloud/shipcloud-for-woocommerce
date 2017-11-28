@@ -163,9 +163,38 @@ class WC_Shipcloud_Order
             }
 		);
 
+		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
+
 		add_action( 'wp_ajax_shipcloud_delete_shipment', array( $this, 'ajax_delete_shipment' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
+	}
+
+	/**
+     * Register routes that can be used as callbacks
+     *
+	 * @since DEV
+	 */
+	public function rest_api_init() {
+		if ( ! function_exists( 'register_rest_route' ) ) {
+		    // Wrong WP or wp-rest version so we won't do anything here.
+			return;
+		}
+
+		// http://example.com/wp-json/shipcloud-for-woocommerce/v1/callback/shipment
+		register_rest_route(
+			'shipcloud-for-woocommerce/v1',
+			\Shipcloud\Controller\CallbackController::PATH_CALLBACK_SHIPMENT,
+			array(
+				'methods'  => 'GET',
+				'callback' => function () {
+					/** @var \Shipcloud\Controller\CallbackController $controller */
+					$controller = _wcsc_container()->get( '\\Shipcloud\\Controller\\CallbackController' );
+
+					$controller->callback_action();
+				}
+			)
+		);
 	}
 
 	/**
