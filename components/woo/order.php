@@ -699,6 +699,9 @@ class WC_Shipcloud_Order
 
 		$shipment_data = get_post_meta( $this->order_id, 'shipcloud_shipment_data' );
 
+		/** @var \Shipcloud\Repository\ShipmentRepository $shipment_repo */
+		$shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+
 		ob_start();
 		?>
 
@@ -707,22 +710,45 @@ class WC_Shipcloud_Order
 		<div id="create_label">
 
 			<div class="shipping-data">
-				<div class="shipment-labels">
+				<div class="shipment-labels" id="shipment-labels"></div>
 					<?php
+
+                    $json_data = array();
 
 					if ( '' != $shipment_data && is_array( $shipment_data ) )
 					{
 						$shipment_data = array_reverse( $shipment_data );
 
-						foreach ( $shipment_data AS $data )
-						{
-							echo $this->get_label_html( $data );
+						foreach ( $shipment_data AS $data ) {
+							$json_data[] = $shipment_repo->translate_to_api_data( $data, $this->order_id );
 						}
 					}
 
 					?>
-				</div>
-				<div style="clear: both"></div>
+                <script type="application/javascript">
+                    jQuery(function ($) {
+                        shipcloud.shipments.add(
+							<?php echo json_encode( $json_data, JSON_PRETTY_PRINT ); ?>,
+                            {parse: true}
+                        );
+
+                        shipcloud.shipmentsList = new shipcloud.ShipmentsView({
+                            model: shipcloud.shipments,
+                            el   : '#shipment-labels'
+                        });
+
+                        $('.shipment-labels .widget-top .widget-quick-actions').find('a,button').unbind();
+
+                        shipcloud.shipmentsList.render();
+                    });
+                </script>
+                <script type="template/html" id="tmpl-shipcloud-shipment">
+                    <?php require WCSC_COMPONENTFOLDER . '/block/order-label-template.php'; ?>
+                </script>
+                <script type="template/html" id="tmpl-shipcloud-shipment-edit">
+					<?php require WCSC_COMPONENTFOLDER . '/block/order-shipment-edit.php'; ?>
+                </script>
+                <div style="clear: both"></div>
 			</div>
 		</div>
 		<div id="ask-create-label"><?php _e( 'Depending on the carrier, there will be a fee for creating the label. Do you really want to create a label?', 'shipcloud-for-woocommerce' ); ?></div>
@@ -773,40 +799,26 @@ class WC_Shipcloud_Order
 	 * @return void
 	 * @since 1.0.0
 	 */
-	public function save_settings( $post_id )
-	{
-		// Interrupt on autosave
+	public function save_settings( $post_id ) {
+		// Interrupt on autosave or invalid nonce
 		if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-		     || ! isset( $_POST['save_settings'] )
+			 || ! isset( $_POST['save_settings'] )
+			 || ! wp_verify_nonce( $_POST['save_settings'], plugin_basename( __FILE__ ) )
 		) {
 			return;
 		}
 
-		// Safety first!
-		if ( ! wp_verify_nonce( $_POST[ 'save_settings' ], plugin_basename( __FILE__ ) ) )
-		{
+		// Check permissions to edit products
+		if ( 'shop_order' === $_POST['post_type'] && ! current_user_can( 'edit_product', $post_id ) ) {
 			return;
 		}
 
-		// Check permissions to edit products
-		if ( 'shop_order' === $_POST[ 'post_type' ] && ! current_user_can( 'edit_product', $post_id ) )
-		{
-            return;
+		if ( isset( $_POST['sender_address'] ) ) {
+			update_post_meta( $post_id, 'shipcloud_sender_address', $_POST['sender_address'] );
 		}
 
-		if( isset( $_POST[ 'sender_address' ] ) )
-		{
-			update_post_meta( $post_id, 'shipcloud_sender_address', $_POST[ 'sender_address' ] );
-		}
-
-		if( isset( $_POST[ 'recipient_address' ] ) )
-		{
-			update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST[ 'recipient_address' ] );
-		}
-
-		if( isset( $_POST[ 'shipcloud_other' ] ) )
-		{
-			update_post_meta( $post_id, static::META_OTHER, $_POST[ 'shipcloud_other' ] );
+		if ( isset( $_POST['recipient_address'] ) ) {
+			update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST['recipient_address'] );
 		}
 	}
 
@@ -897,11 +909,33 @@ class WC_Shipcloud_Order
 	 * Ask the API to create a shipment label.
 	 */
 	public function create_shipment_label( $data ) {
-		$order_id = (int) $data['order_id'];
-		$order    = $this->get_wc_order( $order_id );
+	    /** @var \Shipcloud\Repository\ShipmentRepository $shipment_repo */
+		$shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+
+		$order_id = null;
+		if ( isset( $data['order_id'] ) ) {
+			$order_id = $data['order_id'];
+		}
+
+        $shipment_id = $data['shipment_id'];
+
+		if ( ! $order_id ) {
+			$tmp_order   = $shipment_repo->findOrderByShipmentId( $shipment_id );
+			$order_id    = $tmp_order->ID;
+		}
+
+		$order = $this->get_wc_order( $order_id );
 
 		if ( ! $data['isReturn'] ) {
 			$data['to']['email'] = $order->billing_email;
+		}
+
+		if ( ! $data['from']['id'] ) {
+			unset( $data['from']['id'] );
+		}
+
+		if ( ! $data['to']['id'] ) {
+			unset( $data['to']['id'] );
 		}
 
 		/**
@@ -952,7 +986,13 @@ class WC_Shipcloud_Order
 		}
 
 		try {
-			$shipment = _wcsc_api()->shipment()->create( $data );
+		    if ($shipment_id) {
+		        // Update
+		        $shipment = _wcsc_api()->shipment()->update( $shipment_id, $data );
+            } else {
+		        // Create
+			    $shipment = _wcsc_api()->shipment()->create( $data );
+            }
 
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $data['carrier'] ) . ')' );
 
@@ -962,7 +1002,8 @@ class WC_Shipcloud_Order
 				array(
 					'status'      => 'OK',
 					'shipment_id' => $shipment->getId(),
-					'html'        => $this->get_label_html( $shipment_data )
+					'html'        => $this->get_label_html( $shipment_data ),
+					'data'        => $shipment_repo->translate_to_api_data( $shipment_data, $order_id ),
 				)
 			);
 
@@ -980,12 +1021,6 @@ class WC_Shipcloud_Order
 			wp_send_json_error( _wcsc_exception_to_wp_error( $e ) );
 			wp_die();
 		}
-
-//		$shipment = $this->get_shipcloud_api()->create_shipment(
-//			$this->get_notification_email( ),
-//			$this->get_carrier_mail(),
-//			$data['other_description']
-//		);
 	}
 
 	/**
@@ -1095,9 +1130,14 @@ class WC_Shipcloud_Order
 	 * @since 1.0.0
 	 */
 	public function ajax_delete_shipment() {
-		$order_id    = $_POST['order_id'];
 		$shipment_id = $_POST['shipment_id'];
-		$order = wc_get_order( $order_id );
+
+		/** @var \Shipcloud\Repository\ShipmentRepository $shipment_repository */
+		$shipment_repository = _wcsc_container()->get( '\Shipcloud\Repository\ShipmentRepository' );
+
+		$order = $shipment_repository->findOrderByShipmentId( $shipment_id );
+		$order_id = $order->ID;
+
 		$request       = $this->get_shipcloud_api()->delete_shipment( $shipment_id );
 
 		if ( is_wp_error( $request ) ) {
@@ -1167,6 +1207,7 @@ class WC_Shipcloud_Order
 		wp_enqueue_script( 'shipcloud-label' );
 		wp_enqueue_script( 'shipcloud-label-form' );
 		wp_enqueue_script( 'shipcloud-filler' );
+		wp_enqueue_script( 'shipcloud-shipments' );
 
 		// CSS
 		wp_enqueue_style( 'wp-jquery-ui-dialog' );
@@ -1188,29 +1229,43 @@ class WC_Shipcloud_Order
 	}
 
 	/**
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	protected function prefix_data( $data, $prefix ) {
+		if ( ! $prefix ) {
+			return $data;
+		}
+
+		foreach ( $data as $key => $value ) {
+			if ( 0 === strpos( $key, $prefix ) ) {
+				// Has already the prefix.
+				continue;
+			}
+
+			$data[ $prefix . $key ] = $data[ $key ];
+			unset( $data[ $key ] );
+		}
+
+		return $data;
+	}
+
+	/**
 	 * @param $options
 	 *
 	 * @return array|mixed
 	 */
 	public function get_sender($prefix = '') {
-		$options = $this->get_options();
-		
 		$sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
 
 		if ( $sender && $prefix ) {
-			foreach ( $sender as $key => $value ) {
-				if ( 0 === strpos( $key, $prefix ) ) {
-					// Has already the prefix.
-					continue;
-				}
-
-				$sender[ $prefix . $key ] = $sender[ $key ];
-				unset( $sender[ $key ] );
-			}
+			$sender = $this->prefix_data( $sender, $prefix );
 		}
 
 		// Use default data if nothing was saved before
 		if ( '' == $sender || 0 == count( $sender ) ) {
+		    $options = $this->get_options();
 
 			$sender = array(
 				$prefix . 'first_name' => $options['sender_first_name'],
@@ -1238,29 +1293,19 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-	 * @param $options
+	 * @param string $prefix Mostly "recipient_".
 	 *
 	 * @return array|mixed
+	 * @internal param $options
+	 *
 	 */
 	public function get_recipient( $prefix = '' ) {
 		$options = $this->get_options();
 
 		$recipient = get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
 
-		if ( $recipient && $prefix ) {
-			foreach ( $recipient as $key => $value ) {
-				if ( 0 === strpos( $key, $prefix ) ) {
-					// Has already the prefix.
-					continue;
-				}
-
-				$recipient[ $prefix . $key ] = $recipient[ $key ];
-				unset( $recipient[ $key ] );
-			}
-		}
-
 		// Use default data if nothing was saved before
-		if ( '' == $recipient || 0 == count( $recipient ) ) {
+		if ( '' === $recipient || 0 == count( $recipient ) ) {
 			$order = $this->get_wc_order();
 
 			$recipient_street_name = $order->shipping_address_1;
@@ -1281,22 +1326,22 @@ class WC_Shipcloud_Order
 			}
 
 			$recipient = array(
-				$prefix . 'first_name' => $order->shipping_first_name,
-				$prefix . 'last_name'  => $order->shipping_last_name,
-				$prefix . 'company'    => $order->shipping_company,
-				$prefix . 'care_of'    => $this->get_care_of(),
-				$prefix . 'street'     => $recipient_street_name,
-				$prefix . 'street_no'  => $recipient_street_nr,
-				$prefix . 'zip_code'   => $order->shipping_postcode,
-				$prefix . 'postcode'   => $order->shipping_postcode,
-				$prefix . 'city'       => $order->shipping_city,
-				$prefix . 'state'      => $order->shipping_state,
-				$prefix . 'country'    => $order->shipping_country,
-                $prefix . 'phone'      => $this->get_phone(),
+				'first_name' => $order->shipping_first_name,
+				'last_name'  => $order->shipping_last_name,
+				'company'    => $order->shipping_company,
+				'care_of'    => $this->get_care_of(),
+				'street'     => $recipient_street_name,
+				'street_no'  => $recipient_street_nr,
+				'zip_code'   => $order->shipping_postcode,
+				'postcode'   => $order->shipping_postcode,
+				'city'       => $order->shipping_city,
+				'state'      => $order->shipping_state,
+				'country'    => $order->shipping_country,
+                'phone'      => $this->get_phone(),
 			);
 		}
 
-		return $this->sanitize_address( $recipient, $prefix );
+		return $this->sanitize_address( $this->prefix_data( $recipient, $prefix ), $prefix );
 	}
 
 	/**

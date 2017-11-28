@@ -1,6 +1,7 @@
 == Changelog ==
 
 = 1.6.0 =
+* Enhanced: Shipment interface to prepare/create labels for an order.
 * Enhanced: Add action link so users can jump from plugins page directly to the plugin settings
 
 = 1.5.1 =

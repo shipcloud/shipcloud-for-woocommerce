@@ -21,7 +21,8 @@ class LabelController {
 	/**
 	 * Label_Controller constructor.
 	 *
-	 * @param Api $api
+	 * @param Api                $api
+	 * @param ShipmentRepository $shipment_repository
 	 */
 	public function __construct( Api $api, ShipmentRepository $shipment_repository ) {
 		$this->api                 = $api;
@@ -35,17 +36,27 @@ class LabelController {
 			return;
 		}
 
-		$data = $this->parse_request( $_REQUEST );
+		if ( ! isset( $_REQUEST['shipment'] ) ) {
+			$this->error( 400, __( 'Bad request' ) );
+
+			return;
+		}
+
+		$data = $this->sanitize_request( $_REQUEST );
 
 		try {
-			$this->shipment_repository->update( $_REQUEST['shipment_order_id'], $_REQUEST['shipment_id'], $data );
+			$this->shipment_repository->update(
+				$this->shipment_repository->findOrderByShipmentId( $data['id'] ),
+				$data['id'],
+				$data['shipment']
+			);
 		} catch ( \Exception $e ) {
 			$this->error( 400, $e->getMessage() );
 
 			return;
 		}
 
-		wp_send_json_success( $data );
+		wp_send_json_success( $data['shipment'] );
 	}
 
 	protected function is_authenticated() {
@@ -59,13 +70,11 @@ class LabelController {
 	}
 
 	/**
+	 * @param array $data In case of null the current $_REQUEST will be used.
+	 *
 	 * @return mixed
 	 */
-	protected function parse_request( $data = null ) {
-		if ( null === $data ) {
-			$data = $_REQUEST;
-		}
-
+	protected function sanitize_request( $data ) {
 		$data['id'] = $data['shipment_id'];
 
 		unset( $data['action'] );
@@ -73,9 +82,5 @@ class LabelController {
 		unset( $data['shipment_order_id'] );
 
 		return $data;
-	}
-
-	protected function store_order_meta( $order_id, $data ) {
-		get_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
 	}
 }

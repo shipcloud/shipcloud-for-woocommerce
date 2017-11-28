@@ -355,6 +355,3 @@
 	</div>
 </div>
 
-<script type="application/javascript">
-    new shipcloud.LabelView('#shipment-<?php echo $data['id']; ?>');
-</script>

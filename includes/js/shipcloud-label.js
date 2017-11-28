@@ -1,10 +1,17 @@
 ;shipcloud = shipcloud || {};
 
-shipcloud.LabelView = function (wrapper) {
+/**
+ * @deprecated 2.0.0
+ *
+ * @param wrapper
+ * @constructor
+ */
+shipcloud.LabelView = function (wrapper, model, collection) {
     var self = this;
     var $ = jQuery;
 
     self.$wrapper = $(wrapper);
+
     self.$toggleButtons = $('.wcsc-edit-shipment', wrapper);
 
     self.$toggleButtons.length > 0 || console.log('WCSC: Problem - no edit link found for ' + wrapper);
@@ -95,13 +102,17 @@ shipcloud.LabelView = function (wrapper) {
 
     self.$wrapper.find('button.wcsc-edit-shipment').on('click', self.editAction);
     self.$wrapper.find('button.wcsc-save-shipment').on('click', self.saveAction);
+
+    self.$wrapper.find('.shipcloud_delete_shipment').on('click', self.deleteAction);
 };
+
+shipcloud.ShipmentController = shipcloud.LabelView;
 
 // Extend jQuery if present just by delegating.
 if (window.jQuery) {
     (function ($) {
         $.fn.shipcloudLabelView = function () {
-            this.shipcloudLabelView = new shipcloud.LabelView(this);
+            this.shipcloudLabelView = new shipcloud.ShipmentController(this);
             return this.shipcloudLabelView;
         };
     })(jQuery);

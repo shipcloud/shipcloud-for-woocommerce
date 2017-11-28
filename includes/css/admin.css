@@ -226,6 +226,36 @@
     padding:20px;
 }
 
+.shipment-labels .widget-quick-actions {
+    float: right;
+    position: relative;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.shipment-labels .widget-quick-actions .btn-primary {
+    color:#fff;
+    background-color:#337ab7;
+    border-color:#2e6da4;
+}
+
+.shipment-labels .shipcloud_delete_shipment,
+.shipment-labels .shipcloud_delete_shipment:hover,
+.shipment-labels .shipcloud_delete_shipment:focus
+{
+    color:#fff;
+    background-color:#d9534f;
+    border-color:#d43f3a;
+}
+
+.shipment-labels .widget-quick-actions .dashicons,
+.shipment-labels .widget-quick-actions .dashicons-before:before {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 24px;
+}
+
 #shipcloud-io .shipment-labels .label {
     margin: 10px 20px;
     padding: 0;
@@ -239,14 +269,17 @@
     margin: 10px 20px 20px 20px;
 }
 
-#shipcloud-io .shipment-labels .address{
-    float:left;
-    width: 33%;
-    margin-bottom: 20px;
+#shipcloud-io .shipment-labels .address,
+fieldset .shipment-labels .address {
+    width: 31%;
+    display: inline-block;
+    margin: 0 1%;
 }
 
 #shipcloud-io .label-shipment-actions{
     text-align: right;
+    width: 29%;
+    display: inline-block;
 }
 
 #shipcloud-io .label-shipment-actions a,
@@ -255,6 +288,7 @@
 {
     min-width: 240px;
     text-align: center;
+    margin: 0.5em 0;
 }
 
 #shipcloud-io .label-shipment-status table th {

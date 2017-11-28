@@ -113,10 +113,10 @@ class Package {
 	 * @return bool
 	 */
 	public function isValid() {
-		return is_numeric( $this->length ) && 0 < $this->length
-			   && is_numeric( $this->width ) && 0 < $this->width
-			   && is_numeric( $this->height ) && 0 < $this->height
-			   && is_numeric( $this->weight ) && 0 < $this->weight
+		return 0.0 < (float) $this->length
+			   && 0.0 < (float) $this->width
+			   && 0.0 < (float) $this->height
+			   && 0.0 < (float) $this->weight
 			   && ( null === $this->declared_value || $this->declared_value instanceof DeclaredValue );
 	}
 }

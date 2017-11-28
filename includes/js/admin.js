@@ -103,9 +103,7 @@ jQuery( function( $ ) {
 				return;
 			}
 
-			$( '.shipment-labels' ).prepend( response.data.html );
-			shipcloud_create_label_buttons();
-			shipcloud_delete_shipment_buttons();
+			shipcloud.shipments.unshift(response.data.data, {parse:true});
 		});
 	});
 
@@ -125,9 +123,7 @@ jQuery( function( $ ) {
                 return;
             }
 
-            $('.shipment-labels').prepend(response.data.html);
-            shipcloud_create_label_buttons();
-            shipcloud_delete_shipment_buttons();
+            shipcloud.shipments.unshift(response.data.data, {parse:true});
         });
 	});
 
@@ -255,11 +251,7 @@ jQuery( function( $ ) {
 				return;
 			}
 
-            $(response.data.html).prependTo('.shipment-labels')
-				.find('.widget-top').effect('highlight', {color: '#46b450'}, 3000);
-
-			shipcloud_create_label_buttons();
-			shipcloud_delete_shipment_buttons();
+            shipcloud.shipments.unshift(response.data.data, {parse:true});
 		});
 	};
 
@@ -335,6 +327,7 @@ jQuery( function( $ ) {
 
 	var shipcloud_create_label_buttons = function () {
 		$('.shipcloud_create_label').click( function ( e ) {
+			return;
 			$( '#shipment-center .info').empty();
 
 			var ask_create_label = $('#ask-create-label');

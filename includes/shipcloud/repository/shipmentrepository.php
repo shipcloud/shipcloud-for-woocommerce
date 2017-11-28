@@ -4,6 +4,55 @@ namespace Shipcloud\Repository;
 
 
 class ShipmentRepository {
+	/**
+	 * @param $shipment_id
+	 *
+	 * @return null|\WC_Order
+	 */
+	public function findOrderByShipmentId( $shipment_id ) {
+		$orders = get_posts(
+			array(
+				'post_type'    => ['order', 'shop_order'],
+				'post_status'  => 'any',
+				'meta_key'     => 'shipcloud_shipment_data',
+				'meta_value'   => $shipment_id,
+				'meta_compare' => 'LIKE',
+			)
+		);
+
+		if ( ! $orders || is_wp_error( $orders ) ) {
+			return null;
+		}
+
+		// Iterate matching orders and check for the exact match.
+		foreach ( $orders as $order ) {
+			if ( $this->findByShipmentId( $order->ID, $shipment_id ) ) {
+				// This order has the shipment we are searching for.
+				return wc_get_order( $order );
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param $order_id
+	 * @param $shipment_id
+	 *
+	 * @return array
+	 */
+	public function findByShipmentId( $order_id, $shipment_id ) {
+		foreach ( get_post_meta( $order_id, 'shipcloud_shipment_data' ) as $shipment ) {
+			if ( $shipment['id'] === $shipment_id ) {
+				$converter = new \Shipcloud\ShipmentAdapter( $shipment );
+
+				return $converter->toArray();
+			}
+		}
+
+		return array();
+	}
+
 	public function update( $order_id, $shipment_id, $data ) {
 		$order = \WooCommerce::instance()->order_factory->get_order( $order_id );
 
@@ -26,6 +75,53 @@ class ShipmentRepository {
 
 			break;
 		}
+	}
+
+	public function translate_to_api_data( $old_structured_data, $order_id = null ) {
+		$data = array(
+			'id'                  => $old_structured_data['id'],
+			'from'                => array(
+				'company'    => $old_structured_data['sender_company'],
+				'first_name' => $old_structured_data['sender_first_name'],
+				'last_name'  => $old_structured_data['sender_last_name'],
+				'street'     => $old_structured_data['sender_street'],
+				'street_no'  => $old_structured_data['sender_street_no'],
+				'zip_code'   => $old_structured_data['sender_zip_code'],
+				'city'       => $old_structured_data['sender_city'],
+				'country'    => $old_structured_data['country']?: $old_structured_data['sender_country'],
+				'phone'      => $old_structured_data['sender_phone'],
+			),
+			'to'                  => array(
+				'company'    => $old_structured_data['recipient_company'],
+				'first_name' => $old_structured_data['recipient_first_name'],
+				'last_name'  => $old_structured_data['recipient_last_name'],
+				'street'     => $old_structured_data['recipient_street'],
+				'street_no'  => $old_structured_data['recipient_street_no'],
+				'zip_code'   => $old_structured_data['recipient_zip_code'],
+				'city'       => $old_structured_data['recipient_city'],
+				'country'    => $old_structured_data['recipient_country'],
+				'phone'      => $old_structured_data['recipient_phone'],
+			),
+			'package'             => array(
+				'width'  => wc_format_decimal( $old_structured_data['width'] ),
+				'height' => wc_format_decimal( $old_structured_data['height'] ),
+				'length' => wc_format_decimal( $old_structured_data['length'] ),
+				'weight' => wc_format_decimal( $old_structured_data['weight'] ),
+				//'type' => $_POST['package']['type'],
+			),
+			'label_url'           => $old_structured_data['label_url'],
+			'price'               => $old_structured_data['price'],
+			'carrier'             => $old_structured_data['carrier'],
+			'carrier_tracking_no' => $old_structured_data['carrier_tracking_no'],
+		);
+
+		if ( $order_id ) {
+			$data['shipment_status'] = wcsc_get_shipment_status_string(
+				get_post_meta( $order_id, 'shipment_' . $old_structured_data['id'] . '_status', true )
+			);
+		}
+
+		return $data;
 	}
 
 	public function translate_data( $data ) {
@@ -68,7 +164,7 @@ class ShipmentRepository {
 			'sender_city'          => $data['from']['city'],
 			'sender_zip_code'      => $data['from']['zip_code'],
 			'sender_state'         => $data['from']['state'],
-			'country'              => $data['country'],
+			'country'              => $data['country']?: $data['from']['country'],
 			// Recipient
 			'recipient_company'    => $data['to']['company'],
 			'recipient_first_name' => $data['to']['first_name'],
@@ -81,24 +177,6 @@ class ShipmentRepository {
 			'recipient_state'      => $data['to']['state'],
 			'recipient_country'    => $data['to']['country'],
 		);
-	}
-
-	/**
-	 * @param $order_id
-	 * @param $shipment_id
-	 *
-	 * @return array
-	 */
-	public function findByShipmentId( $order_id, $shipment_id ) {
-		foreach ( get_post_meta( $order_id, 'shipcloud_shipment_data' ) as $shipment ) {
-			if ($shipment['id'] === $shipment_id) {
-				$converter = new \Shipcloud\ShipmentAdapter($shipment);
-
-				return $converter->toArray();
-			}
-		}
-
-		return array();
 	}
 
 }

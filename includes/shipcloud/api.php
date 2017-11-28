@@ -176,10 +176,10 @@ class Api {
 		}
 
 		$payload = $response->getPayload();
-		if ( ! $response->isSuccessful() && ! empty( $payload['errors'] ) ) {
+		if ( ! $response->isSuccessful() ) {
 			// Something was not right, so we throw an exception.
 			$currentException = null;
-			foreach ( $payload['errors'] as $error ) {
+			foreach ( (array) $payload['errors'] as $error ) {
 				$currentException = new \UnexpectedValueException(
 					$error,
 					$response->getStatusCode(),

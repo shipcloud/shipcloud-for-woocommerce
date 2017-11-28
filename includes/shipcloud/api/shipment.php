@@ -49,7 +49,13 @@ class Shipment {
 	 */
 	public function create( $data ) {
 		return \Shipcloud\Domain\Shipment::fromResponse(
-			$this->api->request('shipments', $data, 'POST')
+			$this->api->request( 'shipments', $data, 'POST' )
+		);
+	}
+
+	public function update( $shipment_id, $data ) {
+		return \Shipcloud\Domain\Shipment::fromResponse(
+			$this->api->request( 'shipments/' . $shipment_id, $data, 'PUT' )
 		);
 	}
 }
