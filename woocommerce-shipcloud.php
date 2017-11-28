@@ -527,3 +527,19 @@ function woocommerce_shipcloud_init() {
 }
 
 add_action( 'plugins_loaded', 'woocommerce_shipcloud_init' );
+
+/**
+ * handle plugin action links
+ *
+ * @since 1.6.0
+ *
+ * @return string
+ */
+function wcsc_action_links( $links ) {
+	$action_links = array(
+		'settings' => '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=shipping&section=shipcloud' ) . '" aria-label="' . esc_attr__( 'Settings', 'shipcloud-for-woocommerce' ) . '">' . esc_html__( 'Settings', 'shipcloud-for-woocommerce' ) . '</a>',
+	);
+	return array_merge( $links, $action_links );
+}
+
+add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'wcsc_action_links' );
