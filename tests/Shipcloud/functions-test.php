@@ -35,6 +35,7 @@ class Functions_Test extends ShipcloudTestCase {
 			['Straße des 17. Juni 152-153', 'Straße des 17. Juni', '152-153'],
 			['Straße des 17. Juni 152a - 153b', 'Straße des 17. Juni', '152a - 153b'],
 			['Mittelweg 162/164', 'Mittelweg', '162/164'],
+			['Mittelstr. 162/164', 'Mittelstr.', '162/164'],
 			['Bundesstr. 5', 'Bundesstr.', '5'],
 		];
 	}

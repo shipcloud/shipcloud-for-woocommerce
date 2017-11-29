@@ -103,7 +103,7 @@ function wcsc_explode_street( $street ) {
 
 	while ( $part = array_pop( $chunks ) ) {
 		// Has digit or other allowed char so we count it as number.
-		if ( ! preg_match( '@[\d\.\-\s]+@', $part ) ) {
+		if ( ! preg_match( '@^[\d\.\-\s]+@', $part ) ) {
 			// Does not seem like the house number so we add it again and consider the rest to be the street.
 			$chunks[] = $part;
 			break;
