@@ -98,41 +98,25 @@ function wcsc_get_shipment_status_string( $status ) {
  * @return mixed $matches
  */
 function wcsc_explode_street( $street ) {
-	$matches = array();
+	$number = '';
+	$chunks = explode( ' ', $street );
 
-	if ( ! preg_match( '/\d/', $street ) ) {
-		// No number, just a street.
-		return array(
-			'address' => trim( $street ),
-			'number'  => null,
-		);
+	while ( $part = array_pop( $chunks ) ) {
+		// Has digit or other allowed char so we count it as number.
+		if ( ! preg_match( '@[\d\.\-\s]+@', $part ) ) {
+			// Does not seem like the house number so we add it again and consider the rest to be the street.
+			$chunks[] = $part;
+			break;
+		}
+
+		// Prepend valid street number as we are going in reverse order.
+		$number = $part . ' ' . $number;
 	}
 
-	if ( preg_match( '/(?P<address>.*)\s+(?P<number>[\d]+\s*[\w]*)/u', $street, $matches ) ) {
-		// Named match.
-		return array(
-			'address' => $matches['address'],
-			'number'  => $matches['number']
-		);
-	}
-
-	if ( preg_match( '/([^\d]+)\s+(.+)/i', $street, $matches ) ) {
-		// Classical match (as above but without names).
-		return array(
-			'address' => $matches[1],
-			'number'  => $matches[2]
-		);
-	}
-
-	// Last try via explode.
-	$parts  = explode( ' ', $street );
-	$number = array_pop( $parts );
-	$street = array(
-		'address' => implode( ' ', $parts ),
-		'number'  => $number
+	return array(
+		'address' => trim( implode( ' ', $chunks ) ),
+		'number'  => trim( $number ),
 	);
-
-	return $street;
 }
 
 /**
@@ -534,7 +518,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 	);
 
 	// Fallback until v2.0.0
-	if (isset($data['from']['street_nr'])) {
+	if ( isset( $data['from']['street_nr'] ) ) {
 		$shipment_data['recipient_street_no'] = $data['from']['street_nr'];
 	}
 
@@ -552,7 +536,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		$shipment_data['country']           = $data['from']['country'];
 
 		// Fallback until v2.0.0
-		if (isset($data['to']['street_nr'])) {
+		if ( isset( $data['to']['street_nr'] ) ) {
 			$shipment_data['sender_street_no'] = $data['to']['street_nr'];
 		}
 	}
@@ -576,7 +560,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
  * @return WP_Error
  */
 function _wcsc_exception_to_wp_error( $exception ) {
-	$wp_error         = new \WP_Error( $exception->getCode()?: 1, $exception->getMessage() );
+	$wp_error         = new \WP_Error( $exception->getCode() ?: 1, $exception->getMessage() );
 	$currentException = $exception->getPrevious();
 	$maxDepth         = 20;
 
@@ -597,7 +581,7 @@ function _wcsc_exception_to_wp_error( $exception ) {
  * This either fetched a cached version of all carriers
  * or tries fetching the data again.
  *
- * @since 1.4.0
+ * @since      1.4.0
  * @deprecated 2.0.0 This will be replaced by some other caching.
  *
  * @return \Shipcloud\Domain\Carrier[]
