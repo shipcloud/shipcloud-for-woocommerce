@@ -514,6 +514,14 @@ spl_autoload_register( '\\WooCommerce_Shipcloud::load_vendor' );
 spl_autoload_register( '\\WooCommerce_Shipcloud::load_shipcloud' );
 
 require_once __DIR__ . '/components/service-container.php';
+
+/**
+ * @return \Shipcloud\ServiceContainer
+ */
+function _wcsc_container() {
+	return \Shipcloud\container();
+}
+
 require_once __DIR__ . '/components/compatibility.php';
 
 
