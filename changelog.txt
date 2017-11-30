@@ -6,6 +6,8 @@
 * Enhanced: API connections optimized/centralized.
 * Fixed: Flush carriers on plugin (de-)activation to manually invalidate the cache.
 * Fixed: Streets with a ranged number (like "Middlestreet 162 - 164") are now parsed correctly.
+* Fixed: Prepared shipments can be modified again.
+* Fixed: Prepared shipments can be deleted.
 
 
 = 1.5.1 =

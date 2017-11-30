@@ -2,8 +2,8 @@
 Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
-Tested up to: 4.8.2
-Stable tag: 1.5.1
+Tested up to: 4.9.1
+Stable tag: 1.6.0
 Requires PHP: 5.4
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
@@ -117,10 +117,13 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.6.0 =
+* Enhanced: Shipment interface to prepare/create labels for an order.
 * Enhanced: Add action link so users can jump from plugins page directly to the plugin settings
 * Enhanced: API connections optimized/centralized.
 * Fixed: Flush carriers on plugin (de-)activation to manually invalidate the cache.
 * Fixed: Streets with a ranged number (like "Middlestreet 162 - 164") are now parsed correctly.
+* Fixed: Prepared shipments can be modified again.
+* Fixed: Prepared shipments can be deleted.
 
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
