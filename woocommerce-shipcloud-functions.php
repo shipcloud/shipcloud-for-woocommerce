@@ -427,17 +427,7 @@ add_filter( 'woocommerce_shipping_fields', 'wcsc_sender_phone_frontend' );
  * @return Woocommerce_Shipcloud_API
  */
 function wcsc_api() {
-	static $api;
-
-	if ( ! $api ) {
-		if ( wcsc_shipping_method() ) {
-			$api_key = wcsc_shipping_method()->get_option( 'api_key' );
-		}
-
-		$api = new Woocommerce_Shipcloud_API( $api_key );
-	}
-
-	return $api;
+	return _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
 }
 
 $_wcsc_api = null;

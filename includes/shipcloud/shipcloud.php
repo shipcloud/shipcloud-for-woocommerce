@@ -66,19 +66,7 @@ class Woocommerce_Shipcloud_API
 	public function __construct( $api_key = null )
 	{
 		$this->settings = get_option( 'woocommerce_shipcloud_settings' );
-
-		if ( null !== $api_key )
-		{
-			$this->api_key = $api_key;
-		}
-
-		if ( empty( $this->settings[ 'api_key' ] ) )
-		{
-			// No API key anywhere - stop here.
-			return;
-		}
-
-		$this->api_key = $this->settings[ 'api_key' ];
+		$this->api_key = $api_key;
 
 		$this->api_url = 'https://api.shipcloud.io/v1';
 

@@ -123,18 +123,18 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 * Initialize Shipcloud API
 	 *
 	 * @since 1.1.0
+	 *
+	 * @param null $api_key DEPRECATED since 1.6.0 as API gets fully injected by service container.
+	 *
+	 * @return bool|WP_Error
 	 */
 	private function init_shipcloud_api( $api_key = null ){
 		if( is_object( $this->shipcloud_api ) ) {
 			return true;
 		}
 
-		if( empty( $api_key ) ) {
-			$api_key = $this->get_option( 'api_key' );
-		}
-
 		// Initializing
-		$this->shipcloud_api = new Woocommerce_Shipcloud_API( $api_key );
+		$this->shipcloud_api = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
 
 		if( ! $this->shipcloud_api->is_valid() ) {
 		    $error = new WP_Error(
