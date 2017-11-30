@@ -25,7 +25,17 @@ if ( is_admin() && get_current_user() ) {
 			},
 			'\\Shipcloud\\Repository\\ShipmentRepository' => function () {
 				return new \Shipcloud\Repository\ShipmentRepository();
-			}
+			},
+			'\\Woocommerce_Shipcloud_API' => function () {
+				$options = get_option( 'woocommerce_shipcloud_settings' );
+
+				$api_key = null;
+				if ( isset( $options['api_key'] ) ) {
+					$api_key = $options['api_key'];
+				}
+
+				return new Woocommerce_Shipcloud_API( $api_key );
+			},
 		)
 	);
 }

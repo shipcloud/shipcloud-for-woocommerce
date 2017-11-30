@@ -116,6 +116,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.6.0 =
+* Enhanced: API connections optimized/centralized.
+
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
 * Enhanced: Show minimum required versions for PHP and WooCommerce.
