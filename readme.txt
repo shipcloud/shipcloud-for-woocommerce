@@ -119,6 +119,7 @@ https://youtu.be/HE3jow15x8c
 = 1.6.0 =
 * Enhanced: Add action link so users can jump from plugins page directly to the plugin settings
 * Fixed: Flush carriers on plugin (de-)activation to manually invalidate the cache.
+* Fixed: Streets with a ranged number (like "Middlestreet 162 - 164") are now parsed correctly.
 
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium
