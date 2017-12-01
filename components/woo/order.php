@@ -1551,47 +1551,45 @@ class WC_Shipcloud_Order
 	 * @return array
 	 */
 	protected function build_parcel_templates( $data ) {
-		if ( is_array( $data ) ) {
-			$data = new ArrayObject( $data );
+		if( $data instanceof WP_Post ) {
+			$carrier = $data->carrier;
+			if ( ! is_array( $data->carrier ) ) {
+				$tmp                = explode( '_', $carrier, 2 );
+				$carrier = array();
+				$carrier['carrier'] = $tmp[0];
+				$carrier['service'] = $tmp[1];
+				$carrier['package'] = null;
+			}
+    
+			$option = $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
+					   . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
+					   . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
+					   . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
+					   . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier );
+    
+			if ( $carrier['package'] ) {
+				$option .= ' - ' . WC_Shipcloud_Order::instance()->get_package_label( $carrier['package'] );
+	        }
+    
+			return array(
+				/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
+				'value'  => $data->width . ';'
+							. $data->height . ';'
+							. $data->length . ';'
+							. $data->weight . ';'
+							. $data->carrier['carrier'] . ';',
+				'option' => $option,
+				'data'   => array(
+					'parcel_width'      => $data->width,
+					'parcel_height'     => $data->height,
+					'parcel_length'     => $data->length,
+					'parcel_weight'     => $data->weight,
+					'shipcloud_carrier' => $carrier['carrier'],
+					'shipcloud_carrier_service' => $carrier['service'],
+					'shipcloud_carrier_package' => $carrier['package'],
+				)
+			);
 		}
-
-		$carrier = $data->carrier;
-		if ( ! is_array( $data->carrier ) ) {
-			$tmp                = explode( '_', $carrier, 2 );
-			$carrier = array();
-			$carrier['carrier'] = $tmp[0];
-			$carrier['service'] = $tmp[1];
-			$carrier['package'] = null;
-		}
-
-		$option = $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-				   . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-				   . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
-				   . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
-				   . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier );
-
-		if ( $carrier['package'] ) {
-			$option .= ' - ' . WC_Shipcloud_Order::instance()->get_package_label( $carrier['package'] );
-        }
-
-		return array(
-			/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
-			'value'  => $data->width . ';'
-						. $data->height . ';'
-						. $data->length . ';'
-						. $data->weight . ';'
-						. $data->carrier['carrier'] . ';',
-			'option' => $option,
-			'data'   => array(
-				'parcel_width'      => $data->width,
-				'parcel_height'     => $data->height,
-				'parcel_length'     => $data->length,
-				'parcel_weight'     => $data->weight,
-				'shipcloud_carrier' => $carrier['carrier'],
-				'shipcloud_carrier_service' => $carrier['service'],
-				'shipcloud_carrier_package' => $carrier['package'],
-			)
-		);
 	}
 
 	/**
