@@ -1409,7 +1409,21 @@ class WC_Shipcloud_Order
 	 * @return array
 	 */
 	protected function sanitize_address( $data, $prefix = '' ) {
-
+		$build_data = array(
+			'company'    => '',
+			'first_name' => '',
+			'last_name'  => '',
+			'care_of'    => '',
+			'street'     => '',
+			'street_no'  => '',
+			'zip_code'   => '',
+			'postcode'   => '',
+			'city'       => '',
+			'country'    => '',
+			'phone'      => '',
+		);
+		$data = array_merge($build_data, $data);
+		
 		if ( isset( $data[ $prefix . 'street_nr' ] ) ) {
 			// Backward compatibility.
 			$data[ $prefix . 'street_no' ] = $data[ $prefix . 'street_nr' ];
