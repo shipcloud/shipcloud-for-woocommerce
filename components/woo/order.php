@@ -1273,7 +1273,6 @@ class WC_Shipcloud_Order
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
 				$prefix . 'street_no'  => $options['sender_street_nr'] ?: $options['sender_street_no'],
-				$prefix . 'care_of'    => $options['sender_care_of'],
 				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
@@ -1337,7 +1336,7 @@ class WC_Shipcloud_Order
 				'city'       => $order->shipping_city,
 				'state'      => $order->shipping_state,
 				'country'    => $order->shipping_country,
-                'phone'      => $this->get_phone(),
+				'phone'      => $this->get_phone(),
 			);
 		}
 
