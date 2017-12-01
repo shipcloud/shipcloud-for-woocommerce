@@ -1307,35 +1307,36 @@ class WC_Shipcloud_Order
 		if ( '' === $recipient || 0 == count( $recipient ) ) {
 			$order = $this->get_wc_order();
 
-			$recipient_street_name = $order->shipping_address_1;
+			$recipient_street_name = method_exists( $order, 'get_shipping_address_1' ) ? $order->get_shipping_address_1() : $order->shipping_address_1;
 			$recipient_street_nr   = '';
 
 			if ( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
-				$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
+				$recipient_street = wcsc_explode_street( $recipient_street_name );
 
 				if ( is_array( $recipient_street ) ) {
 					$recipient_street_name = $recipient_street['address'];
 					$recipient_street_nr   = $recipient_street['number'];
 				}
 
-				if ( ! $recipient_street_nr && $order->shipping_address_2 ) {
+				$shipping_address_2 = method_exists( $order, 'get_shipping_address_2' ) ? $order->get_shipping_address_2() : $order->shipping_address_2;
+				if ( ! $recipient_street_nr && $shipping_address_2 ) {
 					// No house number given but we got secondary information to use for that.
-					$recipient_street_nr = $order->shipping_address_2;
+					$recipient_street_nr = $shipping_address_2;
 				}
 			}
 
 			$recipient = array(
-				'first_name' => $order->shipping_first_name,
-				'last_name'  => $order->shipping_last_name,
-				'company'    => $order->shipping_company,
+				'first_name' => method_exists( $order, 'get_shipping_first_name' ) ? $order->get_shipping_first_name() : $order->shipping_first_name,
+				'last_name'  => method_exists( $order, 'get_shipping_last_name' ) ? $order->get_shipping_last_name() : $order->shipping_last_name,
+				'company'    => method_exists( $order, 'get_shipping_company' ) ? $order->get_shipping_company() : $order->shipping_company,
 				'care_of'    => $this->get_care_of(),
-				'street'     => $recipient_street_name,
-				'street_no'  => $recipient_street_nr,
-				'zip_code'   => $order->shipping_postcode,
-				'postcode'   => $order->shipping_postcode,
-				'city'       => $order->shipping_city,
-				'state'      => $order->shipping_state,
-				'country'    => $order->shipping_country,
+				'street'     => method_exists( $order, 'get_recipient_street_name' ) ? $order->get_recipient_street_name() : $recipient_street_name,
+				'street_no'  => method_exists( $order, 'get_recipient_street_nr' ) ? $order->get_recipient_street_nr() : $recipient_street_nr,
+				'zip_code'   => method_exists( $order, 'get_shipping_postcode' ) ? $order->get_shipping_postcode() : $order->shipping_postcode,
+				'postcode'   => method_exists( $order, 'get_shipping_postcode' ) ? $order->get_shipping_postcode() : $order->shipping_postcode,
+				'city'       => method_exists( $order, 'get_shipping_city' ) ? $order->get_shipping_city() : $order->shipping_city,
+				'state'      => method_exists( $order, 'get_shipping_state' ) ? $order->get_shipping_state() : $order->shipping_state,
+				'country'    => method_exists( $order, 'get_shipping_country' ) ? $order->get_shipping_country() : $order->shipping_country,
 				'phone'      => $this->get_phone(),
 			);
 		}
@@ -1386,17 +1387,18 @@ class WC_Shipcloud_Order
 			return (string) $care_of;
 		}
 
-		if ( $order->shipping_address_2 ) {
+		$shipping_address_2 = method_exists( $order, 'get_shipping_address_2' ) ? $order->get_shipping_address_2() : $order->shipping_address_2;
+		if ( $shipping_address_2 ) {
 			// Shipping address overrides billing address.
-			return (string) $order->shipping_address_2;
+			return (string) $shipping_address_2;
 		}
 
 		// check to see if WooCommerce germanized was used for supplying a post number
-		if ( $order->shipping_parcelshop_post_number) {
+		if( method_exists( $order, 'get_shipping_parcelshop_post_number' ) ) {
+			return (string) $order->get_shipping_parcelshop_post_number();
+		} else if( method_exists( $order, 'shipping_parcelshop_post_number' ) ) {
 			return (string) $order->shipping_parcelshop_post_number;
 		}
-
-		return (string) $order->billing_address_2;
 	}
 
 	/**
