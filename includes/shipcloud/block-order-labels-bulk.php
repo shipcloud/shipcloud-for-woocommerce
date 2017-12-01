@@ -144,7 +144,7 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 							. $data->height . ';'
 							. $data->length . ';'
 							. $data->weight . ';'
-							. $data->carrier . ';',
+							. $data->carrier['carrier'] . ';',
 				'option' => $data->width . esc_attr__( 'x', 'shipcloud-for-woocommerce' )
 							. $data->height . esc_attr__( 'x', 'shipcloud-for-woocommerce' )
 							. $data->length . esc_attr__( 'cm', 'shipcloud-for-woocommerce' )
