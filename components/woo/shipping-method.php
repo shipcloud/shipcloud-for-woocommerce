@@ -1554,14 +1554,15 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	public static function log( $message )
 	{
 		$settings = get_option( 'woocommerce_shipcloud_settings' );
+		if( $settings ) {
+			if( ! array_key_exists( 'debug', $settings ) ) {
+				return;
+			}
 
-		if( ! array_key_exists( 'debug', $settings ) ) {
-			return;
+			if( 'no' === $settings[ 'debug' ] ) {
+				return;
+			}
 		}
-
-		if( 'no' === $settings[ 'debug' ] ) {
-			return;
-	    }
 
 		if ( ! is_object( self::$logger ) )
 		{
