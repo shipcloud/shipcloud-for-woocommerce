@@ -116,6 +116,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.6.2 =
+* Fixed: (Re)Added an input field for providing a value to book a higher insurance with the carrier
+
 = 1.6.1 =
 * Fixed: Problems with shop guests and cart usage fixed.
 
