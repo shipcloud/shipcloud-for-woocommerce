@@ -116,6 +116,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.6.2 =
+* Enhanced: Added more countries and their respective languages to the I18n Mapping.
+
 = 1.6.1 =
 * Fixed: Problems with shop guests and cart usage fixed.
 
