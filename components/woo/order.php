@@ -1434,7 +1434,7 @@ class WC_Shipcloud_Order
 			$data[ $prefix . 'street_no' ] = $data[ $prefix . 'street_nr' ];
 		}
 
-		if ( isset( $data[ $prefix . 'postcode' ] ) ) {
+		if ( isset( $data[ $prefix . 'postcode' ] ) && !empty($data[ $prefix . 'postcode' ]) ) {
 			// Backward compatibility.
 			$data[ $prefix . 'zip_code' ] = $data[ $prefix . 'postcode' ];
 		}
