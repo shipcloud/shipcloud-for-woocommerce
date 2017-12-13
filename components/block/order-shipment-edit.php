@@ -34,12 +34,7 @@
         </label>
         <input type="text" name="shipment[from][street_no]" value="{{ data.model.get('from').get('street_no') }}">
     </div>
-    <div>
-        <label for="shipment[from][Care of]">
-			<?php esc_html_e( _x( 'Care of', 'Backend: Shipment edit field label', 'shipcloud-for-woocommerce' ) ) ?>
-        </label>
-        <input type="text" name="shipment[from][care_of]" value="{{ data.model.get('from').get('care_of') }}">
-    </div>
+    <div class="shipment_from_care_of_spacer"></div>
     <div>
         <label for="shipment[from][zip_code]">
 			<?php esc_html_e( _x( 'ZIP code', 'Backend: Shipment edit field label', 'shipcloud-for-woocommerce' ) ) ?>
@@ -170,4 +165,3 @@
 		<?php _ex( 'Abort', 'Order: Backend button to abort edit', 'wcsc' ) ?>
     </button>
 </div>
-

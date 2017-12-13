@@ -95,6 +95,7 @@ class ShipmentRepository {
 				'company'    => isset($old_structured_data['recipient_company']) ? $old_structured_data['recipient_company'] : '',
 				'first_name' => isset($old_structured_data['recipient_first_name']) ? $old_structured_data['recipient_first_name'] : '',
 				'last_name'  => isset($old_structured_data['recipient_last_name']) ? $old_structured_data['recipient_last_name'] : '',
+        'care_of'    => isset($old_structured_data['recipient_care_of']) ? $old_structured_data['recipient_care_of'] : '',
 				'street'     => isset($old_structured_data['recipient_street']) ? $old_structured_data['recipient_street'] : '',
 				'street_no'  => isset($old_structured_data['recipient_street_no']) ? $old_structured_data['recipient_street_no'] : '',
 				'zip_code'   => isset($old_structured_data['recipient_zip_code']) ? $old_structured_data['recipient_zip_code'] : '',
