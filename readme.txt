@@ -41,7 +41,6 @@ receive their order from
 * FedEx
 * TNT
 * GO! (General Overnight)
-* Liefery
 
 = Additional services* =
 
@@ -118,6 +117,7 @@ https://youtu.be/HE3jow15x8c
 
 = 1.6.2 =
 * Enhanced: Added more countries and their respective languages to the I18n Mapping.
+* Fixed: Error message when ISO language code couldn't be determined
 
 = 1.6.1 =
 * Fixed: Problems with shop guests and cart usage fixed.
