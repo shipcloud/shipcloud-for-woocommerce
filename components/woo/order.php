@@ -282,6 +282,10 @@ class WC_Shipcloud_Order
 		$package_data['height'] = wc_format_decimal( $package_data['height'] );
 		$package_data['length'] = wc_format_decimal( $package_data['length'] );
 		$package_data['weight'] = wc_format_decimal( $package_data['weight'] );
+		
+		if( array_key_exists('declared_value', $package_data) ) {
+			$package_data['declared_value']['amount'] = wc_format_decimal( $package_data['declared_value']['amount'] );
+		}
 
 		return $package_data;
 	}
@@ -1273,7 +1277,6 @@ class WC_Shipcloud_Order
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
 				$prefix . 'street_no'  => $options['sender_street_nr'] ?: $options['sender_street_no'],
-				$prefix . 'care_of'    => $options['sender_care_of'],
 				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
@@ -1308,36 +1311,37 @@ class WC_Shipcloud_Order
 		if ( '' === $recipient || 0 == count( $recipient ) ) {
 			$order = $this->get_wc_order();
 
-			$recipient_street_name = $order->shipping_address_1;
+			$recipient_street_name = method_exists( $order, 'get_shipping_address_1' ) ? $order->get_shipping_address_1() : $order->shipping_address_1;
 			$recipient_street_nr   = '';
 
 			if ( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
-				$recipient_street = wcsc_explode_street( $order->shipping_address_1 );
+				$recipient_street = wcsc_explode_street( $recipient_street_name );
 
 				if ( is_array( $recipient_street ) ) {
 					$recipient_street_name = $recipient_street['address'];
 					$recipient_street_nr   = $recipient_street['number'];
 				}
 
-				if ( ! $recipient_street_nr && $order->shipping_address_2 ) {
+				$shipping_address_2 = method_exists( $order, 'get_shipping_address_2' ) ? $order->get_shipping_address_2() : $order->shipping_address_2;
+				if ( ! $recipient_street_nr && $shipping_address_2 ) {
 					// No house number given but we got secondary information to use for that.
-					$recipient_street_nr = $order->shipping_address_2;
+					$recipient_street_nr = $shipping_address_2;
 				}
 			}
 
 			$recipient = array(
-				'first_name' => $order->shipping_first_name,
-				'last_name'  => $order->shipping_last_name,
-				'company'    => $order->shipping_company,
+				'first_name' => method_exists( $order, 'get_shipping_first_name' ) ? $order->get_shipping_first_name() : $order->shipping_first_name,
+				'last_name'  => method_exists( $order, 'get_shipping_last_name' ) ? $order->get_shipping_last_name() : $order->shipping_last_name,
+				'company'    => method_exists( $order, 'get_shipping_company' ) ? $order->get_shipping_company() : $order->shipping_company,
 				'care_of'    => $this->get_care_of(),
-				'street'     => $recipient_street_name,
-				'street_no'  => $recipient_street_nr,
-				'zip_code'   => $order->shipping_postcode,
-				'postcode'   => $order->shipping_postcode,
-				'city'       => $order->shipping_city,
-				'state'      => $order->shipping_state,
-				'country'    => $order->shipping_country,
-                'phone'      => $this->get_phone(),
+				'street'     => method_exists( $order, 'get_recipient_street_name' ) ? $order->get_recipient_street_name() : $recipient_street_name,
+				'street_no'  => method_exists( $order, 'get_recipient_street_nr' ) ? $order->get_recipient_street_nr() : $recipient_street_nr,
+				'zip_code'   => method_exists( $order, 'get_shipping_postcode' ) ? $order->get_shipping_postcode() : $order->shipping_postcode,
+				'postcode'   => method_exists( $order, 'get_shipping_postcode' ) ? $order->get_shipping_postcode() : $order->shipping_postcode,
+				'city'       => method_exists( $order, 'get_shipping_city' ) ? $order->get_shipping_city() : $order->shipping_city,
+				'state'      => method_exists( $order, 'get_shipping_state' ) ? $order->get_shipping_state() : $order->shipping_state,
+				'country'    => method_exists( $order, 'get_shipping_country' ) ? $order->get_shipping_country() : $order->shipping_country,
+				'phone'      => $this->get_phone(),
 			);
 		}
 
@@ -1387,17 +1391,18 @@ class WC_Shipcloud_Order
 			return (string) $care_of;
 		}
 
-		if ( $order->shipping_address_2 ) {
+		$shipping_address_2 = method_exists( $order, 'get_shipping_address_2' ) ? $order->get_shipping_address_2() : $order->shipping_address_2;
+		if ( $shipping_address_2 ) {
 			// Shipping address overrides billing address.
-			return (string) $order->shipping_address_2;
+			return (string) $shipping_address_2;
 		}
 
 		// check to see if WooCommerce germanized was used for supplying a post number
-		if ( $order->shipping_parcelshop_post_number) {
+		if( method_exists( $order, 'get_shipping_parcelshop_post_number' ) ) {
+			return (string) $order->get_shipping_parcelshop_post_number();
+		} else if( method_exists( $order, 'shipping_parcelshop_post_number' ) ) {
 			return (string) $order->shipping_parcelshop_post_number;
 		}
-
-		return (string) $order->billing_address_2;
 	}
 
 	/**
@@ -1409,7 +1414,21 @@ class WC_Shipcloud_Order
 	 * @return array
 	 */
 	protected function sanitize_address( $data, $prefix = '' ) {
-
+		$build_data = array(
+			'company'    => '',
+			'first_name' => '',
+			'last_name'  => '',
+			'care_of'    => '',
+			'street'     => '',
+			'street_no'  => '',
+			'zip_code'   => '',
+			'postcode'   => '',
+			'city'       => '',
+			'country'    => '',
+			'phone'      => '',
+		);
+		$data = array_merge($build_data, $data);
+		
 		if ( isset( $data[ $prefix . 'street_nr' ] ) ) {
 			// Backward compatibility.
 			$data[ $prefix . 'street_no' ] = $data[ $prefix . 'street_nr' ];
@@ -1551,47 +1570,45 @@ class WC_Shipcloud_Order
 	 * @return array
 	 */
 	protected function build_parcel_templates( $data ) {
-		if ( is_array( $data ) ) {
-			$data = new ArrayObject( $data );
+		if( $data instanceof WP_Post ) {
+			$carrier = $data->carrier;
+			if ( ! is_array( $data->carrier ) ) {
+				$tmp                = explode( '_', $carrier, 2 );
+				$carrier = array();
+				$carrier['carrier'] = $tmp[0];
+				$carrier['service'] = $tmp[1];
+				$carrier['package'] = null;
+			}
+    
+			$option = $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
+					   . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
+					   . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
+					   . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
+					   . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier );
+    
+			if ( $carrier['package'] ) {
+				$option .= ' - ' . WC_Shipcloud_Order::instance()->get_package_label( $carrier['package'] );
+	        }
+    
+			return array(
+				/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
+				'value'  => $data->width . ';'
+							. $data->height . ';'
+							. $data->length . ';'
+							. $data->weight . ';'
+							. $data->carrier['carrier'] . ';',
+				'option' => $option,
+				'data'   => array(
+					'parcel_width'      => $data->width,
+					'parcel_height'     => $data->height,
+					'parcel_length'     => $data->length,
+					'parcel_weight'     => $data->weight,
+					'shipcloud_carrier' => $carrier['carrier'],
+					'shipcloud_carrier_service' => $carrier['service'],
+					'shipcloud_carrier_package' => $carrier['package'],
+				)
+			);
 		}
-
-		$carrier = $data->carrier;
-		if ( ! is_array( $data->carrier ) ) {
-			$tmp                = explode( '_', $carrier, 2 );
-			$carrier = array();
-			$carrier['carrier'] = $tmp[0];
-			$carrier['service'] = $tmp[1];
-			$carrier['package'] = null;
-		}
-
-		$option = $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-				   . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
-				   . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
-				   . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
-				   . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier );
-
-		if ( $carrier['package'] ) {
-			$option .= ' - ' . WC_Shipcloud_Order::instance()->get_package_label( $carrier['package'] );
-        }
-
-		return array(
-			/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
-			'value'  => $data->width . ';'
-						. $data->height . ';'
-						. $data->length . ';'
-						. $data->weight . ';'
-						. $data->carrier['carrier'] . ';',
-			'option' => $option,
-			'data'   => array(
-				'parcel_width'      => $data->width,
-				'parcel_height'     => $data->height,
-				'parcel_length'     => $data->length,
-				'parcel_weight'     => $data->weight,
-				'shipcloud_carrier' => $carrier['carrier'],
-				'shipcloud_carrier_service' => $carrier['service'],
-				'shipcloud_carrier_package' => $carrier['package'],
-			)
-		);
 	}
 
 	/**
@@ -1682,14 +1699,24 @@ class WC_Shipcloud_Order
 				$data['additional_services'] = array();
 			}
 
+			if ( ! isset( $data['to']['country'] ) ) {
+			    // Might not be set in return labels.
+				$data['to']['country'] = '';
+			}
+
 			// Append advance notice service.
-			$data['additional_services'][] = array(
-				'name'       => 'advance_notice',
-				'properties' => array(
-					'email'    => $carrier_email,
-					'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) )
-				)
-			);
+			$advance_notice_language =
+				i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) );
+
+			if( $advance_notice_language ) {
+				$data['additional_services'][] = array(
+					'name'       => 'advance_notice',
+					'properties' => array(
+						'email'    => $carrier_email,
+						'language' => $advance_notice_language
+					)
+				);
+			}
 
 			if ( isset( $data['notification_email'] ) ) {
 				// No need for notification mail after advance_notice has been added.
