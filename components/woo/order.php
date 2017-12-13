@@ -282,6 +282,10 @@ class WC_Shipcloud_Order
 		$package_data['height'] = wc_format_decimal( $package_data['height'] );
 		$package_data['length'] = wc_format_decimal( $package_data['length'] );
 		$package_data['weight'] = wc_format_decimal( $package_data['weight'] );
+		
+		if( array_key_exists('declared_value', $package_data) ) {
+			$package_data['declared_value']['amount'] = wc_format_decimal( $package_data['declared_value']['amount'] );
+		}
 
 		return $package_data;
 	}
