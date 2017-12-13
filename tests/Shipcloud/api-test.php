@@ -25,7 +25,7 @@ use Shipcloud\Api;
  */
 class Api_Test extends \WP_UnitTestCase {
 	public function assertApi() {
-		$subject = new \Woocommerce_Shipcloud_API();
+		$subject = \Shipcloud\container()->get('\\Woocommerce_Shipcloud_API');
 
 		$this->assertTrue( $subject->test() );
 	}
