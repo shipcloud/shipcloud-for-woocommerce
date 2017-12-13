@@ -30,6 +30,16 @@
         </td>
     </tr>
     <tr>
+        <th>
+          <?php _e( 'Higher insurance', 'shipcloud-for-woocommerce' ); ?>
+          <?php echo wc_help_tip( __( 'Use this to book additional insurance or expand the liability for a shipment. Caution: Please keep in mind that additional fees are charged by the carrier', 'shipcloud-for-woocommerce' ) ); ?>
+        </th>
+        <td>
+          <input type="text" name="declared_value"
+            class="lengths"/> <?php _e( 'EUR', 'shipcloud-for-woocommerce' ); ?>
+        </td>
+    </tr>
+    <tr>
         <th><?php _e( 'Shipping method', 'shipcloud-for-woocommerce' ); ?></th>
         <td>
 			<?php if ( count( $this->get_allowed_carriers() ) > 0 ): ?>

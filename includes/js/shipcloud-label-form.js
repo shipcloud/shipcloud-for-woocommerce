@@ -42,14 +42,22 @@ shipcloud.LabelForm = function (wrapperSelector) {
     };
 
     this.getPackage = function () {
-        return {
-            'width'      : $('input[name="parcel_width"]', self.$wrapper).val(),
-            'height'     : $('input[name="parcel_height"]', self.$wrapper).val(),
-            'length'     : $('input[name="parcel_length"]', self.$wrapper).val(),
-            'weight'     : $('input[name="parcel_weight"]', self.$wrapper).val(),
-            'description': $('input[name="parcel_description"]', self.$wrapper).val(),
-            'type'       : $('select[name="shipcloud_carrier_package"]', self.$wrapper).val()
-        }
+      var package_hash = {
+        'width'      : $('input[name="parcel_width"]', self.$wrapper).val(),
+        'height'     : $('input[name="parcel_height"]', self.$wrapper).val(),
+        'length'     : $('input[name="parcel_length"]', self.$wrapper).val(),
+        'weight'     : $('input[name="parcel_weight"]', self.$wrapper).val(),
+        'description': $('input[name="parcel_description"]', self.$wrapper).val(),
+        'type'       : $('select[name="shipcloud_carrier_package"]', self.$wrapper).val()
+      };
+
+      if ($('input[name="declared_value"]', self.$wrapper).val()) {
+        package_hash['declared_value'] = {
+          'amount'   : $('input[name="declared_value"]', self.$wrapper).val(),
+          'currency' : 'EUR'
+        };
+      }
+      return package_hash;
     };
 
     self.getCarrier = function () {
