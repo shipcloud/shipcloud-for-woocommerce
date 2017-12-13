@@ -1682,14 +1682,24 @@ class WC_Shipcloud_Order
 				$data['additional_services'] = array();
 			}
 
+			if ( ! isset( $data['to']['country'] ) ) {
+			    // Might not be set in return labels.
+				$data['to']['country'] = '';
+			}
+
 			// Append advance notice service.
-			$data['additional_services'][] = array(
-				'name'       => 'advance_notice',
-				'properties' => array(
-					'email'    => $carrier_email,
-					'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) )
-				)
-			);
+			$advance_notice_language =
+				i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) );
+
+			if( $advance_notice_language ) {
+				$data['additional_services'][] = array(
+					'name'       => 'advance_notice',
+					'properties' => array(
+						'email'    => $carrier_email,
+						'language' => $advance_notice_language
+					)
+				);
+			}
 
 			if ( isset( $data['notification_email'] ) ) {
 				// No need for notification mail after advance_notice has been added.
