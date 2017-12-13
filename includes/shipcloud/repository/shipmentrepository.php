@@ -95,6 +95,7 @@ class ShipmentRepository {
 				'company'    => $old_structured_data['recipient_company'],
 				'first_name' => $old_structured_data['recipient_first_name'],
 				'last_name'  => $old_structured_data['recipient_last_name'],
+				'care_of'    => $old_structured_data['recipient_care_of'],
 				'street'     => $old_structured_data['recipient_street'],
 				'street_no'  => $old_structured_data['recipient_street_no'],
 				'zip_code'   => $old_structured_data['recipient_zip_code'],

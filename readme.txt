@@ -116,6 +116,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.6.2 =
+* Fixed: care_of not shown when editing prepared shipments
+
 = 1.6.1 =
 * Fixed: Problems with shop guests and cart usage fixed.
 

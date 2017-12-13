@@ -214,6 +214,10 @@
     width: 100%;
 }
 
+#shipcloud-io .shipment-labels .shipment_from_care_of_spacer {
+  height: 45px;
+}
+
 #shipcloud-io .shipment-labels .widget-title{
     padding:15px;
 }
