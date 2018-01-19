@@ -42,11 +42,18 @@ shipcloud.LabelForm = function (wrapperSelector) {
     };
 
     this.getPackage = function () {
+      var use_calculated_weight = $('input[name="shipcloud_use_calculated_weight"]', self.$wrapper);
+      if (use_calculated_weight.prop('checked')) {
+        var weight = $('#shipment-center .section.parcels').data('calculated-weight');
+      } else {
+        var weight = $('input[name="parcel_weight"]', self.$wrapper).val();
+      }
+      
       var package_hash = {
         'width'      : $('input[name="parcel_width"]', self.$wrapper).val(),
         'height'     : $('input[name="parcel_height"]', self.$wrapper).val(),
         'length'     : $('input[name="parcel_length"]', self.$wrapper).val(),
-        'weight'     : $('input[name="parcel_weight"]', self.$wrapper).val(),
+        'weight'     : weight,
         'description': $('input[name="parcel_description"]', self.$wrapper).val(),
         'type'       : $('select[name="shipcloud_carrier_package"]', self.$wrapper).val()
       };

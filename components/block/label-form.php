@@ -26,7 +26,17 @@
         <th><?php _e( 'Weight', 'shipcloud-for-woocommerce' ); ?></th>
         <td>
             <input type="text" name="parcel_weight"
-                   class="lengths"/> <?php _e( 'kg', 'shipcloud-for-woocommerce' ); ?>
+                   class="lengths" />
+                   <?php _e( 'kg', 'shipcloud-for-woocommerce' ); ?>
+            <input type="checkbox" name="shipcloud_use_calculated_weight" value="use_calculated_weight" />
+            <?php
+              $wc_order = $this->get_order()->get_wc_order();
+              if( method_exists( $wc_order, 'get_order_number' ) ){
+                _e( sprintf('use calculated weight (%s)', $this->get_calculated_weight()), 'shipcloud-for-woocommerce' );
+              } else {
+                _e( sprintf('use calculated weight', 'shipcloud-for-woocommerce' ));
+              }
+            ?>
         </td>
     </tr>
     <tr>

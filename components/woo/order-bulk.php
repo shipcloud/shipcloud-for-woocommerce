@@ -350,18 +350,22 @@ class WC_Shipcloud_Order_Bulk {
 			$order->get_wc_order()->get_order_number()
 		);
 
-		$addresses = $this->handle_return_shipments($order, $request);
-		
+		$use_calculated_weight = $request['shipcloud_use_calculated_weight'];
+		if ( $use_calculated_weight == 'use_calculated_weight' ) {
+			$request['parcel_weight'] = $order->get_calculated_weight();
+		}
+		$package = new \Shipcloud\Domain\Package(
+			wc_format_decimal( $request['parcel_length'] ),
+			wc_format_decimal( $request['parcel_width'] ),
+			wc_format_decimal( $request['parcel_height'] ),
+			wc_format_decimal( $request['parcel_weight'] ),
+			$request['shipcloud_carrier_package']
+		);
+
 		$data = array(
-			'from'                  => $addresses['from'],
-			'to'                    => $addresses['to'],
-			'package'               => new \Shipcloud\Domain\Package(
-				wc_format_decimal( $request['parcel_length'] ),
-				wc_format_decimal( $request['parcel_width'] ),
-				wc_format_decimal( $request['parcel_height'] ),
-				wc_format_decimal( $request['parcel_weight'] ),
-				$request['shipcloud_carrier_package']
-			),
+			'to'                    => $order->get_recipient(),
+			'from'                  => $order->get_sender(),
+			'package'               => $package,
 			'carrier'               => $request['shipcloud_carrier'],
 			'service'               => $request['shipcloud_carrier_service'],
 			'reference_number'      => $reference_number,
