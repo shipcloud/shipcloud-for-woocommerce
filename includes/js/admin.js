@@ -107,26 +107,6 @@ jQuery( function( $ ) {
 		});
 	});
 
-	$( '#shipcloud_create_shipment_return' ).click( function()
-	{
-		$( '#shipment-center .info').empty();
-		var data = get_shipment_form_data( 'shipcloud_create_shipment', true );
-
-		var button = $( '#shipcloud_create_shipment_return' );
-		button.addClass( 'button-loading' );
-
-		$.post( ajaxurl, data, function (response) {
-            button.removeClass('button-loading');
-
-            if (!response.success) {
-                print_errors(_(response.data).pluck('message'));
-                return;
-            }
-
-            shipcloud.shipments.unshift(response.data.data, {parse:true});
-        });
-	});
-
 	$( '#shipcloud_create_shipment_label' ).click( function(){
 		$( '#shipment-center .info').empty();
 		var data = get_shipment_form_data( 'shipcloud_create_shipment_label', false );
@@ -144,42 +124,6 @@ jQuery( function( $ ) {
 			'buttons': [{
 				text: wcsc_translate.yes,
 				click: function () {
-					shipcloud_create_shipment_label(data, self);
-
-					$(this).dialog("close");
-				}
-			},
-				{
-					text: wcsc_translate.no,
-					click: function () {
-						$(this).dialog("close");
-					}
-				},
-			],
-
-		});
-
-		ask_create_label.dialog("open");
-	});
-
-	$( '#shipcloud_create_shipment_return_label' ).click( function(){
-		$( '#shipment-center .info').empty();
-		var data = get_shipment_form_data( 'shipcloud_create_shipment_label', true );
-
-		var ask_create_label = $('#ask-create-label');
-
-		var self = this;
-
-		ask_create_label.dialog({
-			'dialogClass': 'wcsc-dialog wp-dialog',
-			'modal': true,
-			'autoOpen': false,
-			'closeOnEscape': true,
-			'minHeight': 80,
-			'buttons': [{
-				text: wcsc_translate.yes,
-				click: function () {
-
 					shipcloud_create_shipment_label(data, self);
 
 					$(this).dialog("close");

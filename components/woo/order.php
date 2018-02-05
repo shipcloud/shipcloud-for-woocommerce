@@ -528,9 +528,6 @@ class WC_Shipcloud_Order
 					<button id="shipcloud_create_shipment" type="button" value="<?php _e( 'Prepare label', 'shipcloud-for-woocommerce' ); ?>" class="button">
 						<?php _e( 'Prepare label', 'shipcloud-for-woocommerce' ); ?>
 					</button>
-					<button id="shipcloud_create_shipment_return" type="button" value="<?php _e( 'Prepare return label', 'shipcloud-for-woocommerce' ); ?>" class="button">
-						<?php _e( 'Prepare return label', 'shipcloud-for-woocommerce' ); ?>
-					</button>
 					<button id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate price', 'shipcloud-for-woocommerce' ); ?>" class="button">
 						<?php _e( 'Calculate price', 'shipcloud-for-woocommerce' ); ?>
 					</button>
@@ -538,9 +535,6 @@ class WC_Shipcloud_Order
 				<p>
 					<button id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="button-primary">
 						<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
-					</button>
-					<button id="shipcloud_create_shipment_return_label" type="button" value="<?php _e( 'Create return label', 'shipcloud-for-woocommerce' ); ?>" class="button-primary">
-						<?php _e( 'Create return label', 'shipcloud-for-woocommerce' ); ?>
 					</button>
 				</p>
 			</div>

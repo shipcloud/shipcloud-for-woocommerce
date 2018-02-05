@@ -116,6 +116,7 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.6.3 =
+* Enhanced: Removed buttons for creating/preparing return shipments, because you can select returns as a service
 * Fixed: empty destination zip_code in checkout
 
 = 1.6.2 =
