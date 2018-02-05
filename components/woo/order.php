@@ -1403,6 +1403,9 @@ class WC_Shipcloud_Order
 		} else if( method_exists( $order, 'shipping_parcelshop_post_number' ) ) {
 			return (string) $order->shipping_parcelshop_post_number;
 		}
+		
+		// if all fails, return an empty string
+		return '';
 	}
 
 	/**
