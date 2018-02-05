@@ -115,6 +115,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.6.3 =
+* Fixed: empty destination zip_code in checkout
+
 = 1.6.2 =
 * Enhanced: Added more countries and their respective languages to the I18n Mapping.
 * Fixed: missing zip_code in sender input field

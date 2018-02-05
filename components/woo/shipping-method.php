@@ -1043,7 +1043,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		return array(
 			'street'    => $recipient_street_name,
 			'street_no' => $recipient_street_nr,
-			'zip_code'  => $package[ 'destination' ][ 'zip_code' ]?: $package[ 'destination' ][ 'postcode' ],
+			'zip_code'  => isset($package[ 'destination' ][ 'zip_code' ]) ? $package[ 'destination' ][ 'zip_code' ] : $package[ 'destination' ][ 'postcode' ],
 			'city'      => $package[ 'destination' ][ 'city' ],
 			'state'     => $package[ 'destination' ][ 'state' ],
 			'country'   => $package[ 'destination' ][ 'country' ]
