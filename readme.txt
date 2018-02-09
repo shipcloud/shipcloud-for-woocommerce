@@ -117,6 +117,7 @@ https://youtu.be/HE3jow15x8c
 
 = 1.6.3 =
 * Enhanced: Removed buttons for creating/preparing return shipments, because you can select returns as a service
+* Enhanced: Make it possible to supply a reference_number before creating a shipment
 * Fixed: empty destination zip_code in checkout
 
 = 1.6.2 =

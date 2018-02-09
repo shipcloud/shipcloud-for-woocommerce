@@ -104,6 +104,12 @@
                 </tr>
                 <# } #>
 
+                    <# if ( data.model.get('reference_number') ) { #>
+                    <tr>
+                        <th><?php _e( 'Reference number:', 'shipcloud-for-woocommerce' ); ?></th>
+                        <td>{{ data.model.get('reference_number') }}</td>
+                    </tr>
+                    <# } #>
                     <# if ( data.model.get('id') ) { #>
                     <tr>
                         <th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
