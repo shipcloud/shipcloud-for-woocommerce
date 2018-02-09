@@ -118,6 +118,7 @@ https://youtu.be/HE3jow15x8c
 = 1.6.3 =
 * Enhanced: Removed buttons for creating/preparing return shipments, because you can select returns as a service
 * Fixed: empty destination zip_code in checkout
+* Fixed: missing tracking url link
 
 = 1.6.2 =
 * Enhanced: Added more countries and their respective languages to the I18n Mapping.

@@ -111,6 +111,7 @@ class ShipmentRepository {
 				//'type' => $_POST['package']['type'],
 			),
 			'label_url'           => isset($old_structured_data['label_url']) ? $old_structured_data['label_url'] : '',
+			'tracking_url'        => isset($old_structured_data['tracking_url']) ? $old_structured_data['tracking_url'] : '',
 			'price'               => isset($old_structured_data['price']) ? $old_structured_data['price'] : '',
 			'carrier'             => isset($old_structured_data['carrier']) ? $old_structured_data['carrier'] : '',
 			'carrier_tracking_no' => isset($old_structured_data['carrier_tracking_no']) ? $old_structured_data['carrier_tracking_no'] : '',

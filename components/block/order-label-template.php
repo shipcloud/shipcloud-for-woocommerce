@@ -70,7 +70,7 @@
                 <# } #>
 
                 <# if ( data.model.get('tracking_url') ) { #>
-                <a href="{{ data.model.get('tracking_url') }}" target="_blank" class="button">
+                <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank" class="button">
                     <?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?>
                 </a>
                 <# } #>
@@ -107,7 +107,11 @@
                     <# if ( data.model.get('id') ) { #>
                     <tr>
                         <th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
-                        <td>{{ data.model.get('id') }}</td>
+                        <td>
+                          <a href="{{ data.model.get('tracking_url') }}" target="_blank">
+                            {{ data.model.get('id') }}
+                          </a>
+                        </td>
                     </tr>
                     <# } #>
                     <# if ( data.model.get('label_url') ) { #>
@@ -115,7 +119,9 @@
                         <th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>
                         <td class="tracking-number">
                             <# if ( data.model.get('carrier_tracking_no') ) { #>
-                                {{ data.model.get('carrier_tracking_no') }}
+                                <a href="{{ data.model.get('carrier_tracking_url') }}" target="_blank">
+                                  {{ data.model.get('carrier_tracking_no') }}
+                                </a>
                             <# } else { #>
                                 <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
                             <# } #>

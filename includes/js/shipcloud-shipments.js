@@ -71,7 +71,8 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'notification_email'        : null,
         'price'                     : null,
         'shipper_notification_email': null,
-        'tracking_url'              : null
+        'tracking_url'              : null,
+        'carrier_tracking_url'      : null
     },
 
     getData: function () {
@@ -154,6 +155,41 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
 
     getTitle: function () {
         return _.filter([this.get('carrier'), this.get('package').getTitle()]).join(' ');
+    },
+
+    getCarrierTrackingUrl: function () {
+      var carrierTrackingUrl;
+      switch (this.get('carrier')) {
+        case 'dhl':
+          carrierTrackingUrl = 'https://nolp.dhl.de/nextt-online-public/set_identcodes.do?idc=' + this.get('carrier_tracking_no') + '&rfn=&extendedSearch=true';
+          break;
+        case 'dpd':
+          carrierTrackingUrl = 'https://tracking.dpd.de/parcelstatus?query=' + this.get('carrier_tracking_no') + '&locale=de_DE';
+          break;
+        case 'fedex':
+          carrierTrackingUrl = 'https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=' + this.get('carrier_tracking_no');
+          break;
+        case 'gls':
+          carrierTrackingUrl = 'https://gls-group.eu/DE/de/paketverfolgung?match=' + this.get('carrier_tracking_no');
+          break;
+        case 'go':
+          carrierTrackingUrl = 'https://order.general-overnight.com/ax4/control/customer_service?shId=' + this.get('carrier_tracking_no') + '&hash=JMJyKOfE1v&lang=de&ActionCollectInformation=GO%21';
+          break;
+        case 'hermes':
+          carrierTrackingUrl = 'https://tracking.hermesworld.com/?TrackID=' + this.get('carrier_tracking_no');
+          break;
+        case 'iloxx':
+          carrierTrackingUrl = 'http://www.iloxx.de/net/einzelversand/tracking.aspx?ix=' + this.get('carrier_tracking_no');
+          break;
+        case 'tnt':
+          carrierTrackingUrl = 'https://www.tnt.com/express/de_de/site/home/applications/tracking.html?cons=' + this.get('carrier_tracking_no') + '&searchType=CON';
+          break;
+        case 'ups':
+          carrierTrackingUrl = 'http://wwwapps.ups.com/WebTracking/processInputRequest?sort_by=status&' + this.get('carrier_tracking_no') + '=1&TypeOfInquiryNumber=T&loc=de_DE&InquiryNumber1=' + this.get('carrier_tracking_no') + '&track.x=' + this.get('carrier_tracking_no') + '&track.y=0';
+          break;
+      }
+      this.set('carrier_tracking_url', carrierTrackingUrl);
+      return carrierTrackingUrl;
     }
 })
 ;
