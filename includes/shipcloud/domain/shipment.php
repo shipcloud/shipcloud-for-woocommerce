@@ -18,6 +18,8 @@ class Shipment {
 	private $price;
 
 	private $tracking_url;
+	
+	private $reference_number;
 
 	/**
 	 * Shipment constructor.
@@ -35,6 +37,7 @@ class Shipment {
 		$this->label_url           = $label_url;
 		$this->price               = $price;
 		$this->carrier_tracking_no = $carrier_tracking_no;
+		$this->reference_number    = $reference_number;
 	}
 
 	/**
@@ -52,7 +55,8 @@ class Shipment {
 			$shipment['tracking_url'],
 			$shipment['label_url'],
 			$shipment['price'],
-			$shipment['carrier_tracking_no']
+			$shipment['carrier_tracking_no'],
+			$shipment['reference_number']
 		);
 	}
 
@@ -89,5 +93,12 @@ class Shipment {
 	 */
 	public function getTrackingUrl() {
 		return $this->tracking_url;
+	}
+	
+		/**
+		 * @return string
+		 */
+	public function getReferenceNumber() {
+		return $this->reference_number;
 	}
 }

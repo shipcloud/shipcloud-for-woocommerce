@@ -115,6 +115,7 @@ class ShipmentRepository {
 			'price'               => isset($old_structured_data['price']) ? $old_structured_data['price'] : '',
 			'carrier'             => isset($old_structured_data['carrier']) ? $old_structured_data['carrier'] : '',
 			'carrier_tracking_no' => isset($old_structured_data['carrier_tracking_no']) ? $old_structured_data['carrier_tracking_no'] : '',
+			'reference_number'    => isset($old_structured_data['reference_number']) ? $old_structured_data['reference_number'] : '',
 		);
 
 		if ( $order_id ) {

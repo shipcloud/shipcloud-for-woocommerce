@@ -616,10 +616,10 @@ class Woocommerce_Shipcloud_API
 	 * @return string|\WP_Error
 	 */
 	public function create_shipment_by_order( WC_Shipcloud_Order $order, $carrier, $package ) {
-		$reference_number = sprintf(
-			__( 'Order %s', 'shipcloud-for-woocommerce' ),
-			$order->get_wc_order()->get_order_number()
-		);
+		// $reference_number = sprintf(
+		// 	__( 'Order %s', 'shipcloud-for-woocommerce' ),
+		// 	$order->get_wc_order()->get_order_number()
+		// );
 
 		/**
 		 * Filtering reference number
@@ -631,12 +631,12 @@ class Woocommerce_Shipcloud_API
 		 * @return string $reference_number The filtered order number
 		 * @since 1.1.0
 		 */
-		$reference_number = apply_filters(
-			'wcsc_reference_number',
-			$reference_number,
-			$order->get_wc_order()->get_order_number(),
-			$order->get_wc_order()->id
-		);
+		// $reference_number = apply_filters(
+		// 	'wcsc_reference_number',
+		// 	$reference_number,
+		// 	$order->get_wc_order()->get_order_number(),
+		// 	$order->get_wc_order()->id
+		// );
 
 		return $this->create_shipment(
 			$carrier,
@@ -645,8 +645,7 @@ class Woocommerce_Shipcloud_API
 			$package,
 			true,
 			$order->get_notification_email(),
-			$order->get_carrier_mail(),
-			$reference_number
+			$order->get_carrier_mail()
 		);
 	}
 

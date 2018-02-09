@@ -947,23 +947,6 @@ class WC_Shipcloud_Order
 		 */
 		$data['create_shipping_label'] = ( 'shipcloud_create_shipment_label' === $data['action'] );
 
-		/**
-		 * Filtering reference number
-		 *
-		 * @param string $reference_number The Reference Number
-		 * @param string $order_number     The WooCommerce order number
-		 * @param string $order_id         The WooCommerce order id
-		 *
-		 * @return string $reference_number The filtered order number
-		 * @since 1.1.0
-		 */
-		$data['reference_number'] = apply_filters(
-			'wcsc_reference_number',
-			sprintf( __( 'Order %s', 'shipcloud-for-woocommerce' ), $order->get_order_number() ),
-			$order->get_order_number(),
-			$order_id
-		);
-
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
@@ -1109,6 +1092,7 @@ class WC_Shipcloud_Order
 				$shipments[ $key ][ 'label_url' ]                  = $request[ 'body' ][ 'label_url' ];
 				$shipments[ $key ][ 'price' ]                      = $request[ 'body' ][ 'price' ];
 				$shipments[ $key ][ 'carrier_tracking_no' ]        = $request[ 'body' ][ 'carrier_tracking_no' ];
+				$shipments[ $key ][ 'reference_number' ]           = $request[ 'body' ][ 'reference_number' ];
 				break;
 			}
 		}
@@ -1121,7 +1105,8 @@ class WC_Shipcloud_Order
 			'tracking_url'               => $request[ 'body' ][ 'tracking_url' ],
 			'label_url'                  => $request[ 'body' ][ 'label_url' ],
 			'price'                      => wc_price( $request[ 'body' ][ 'price' ], array( 'currency' => 'EUR' ) ),
-			'carrier_tracking_no'        => $request[ 'body' ][ 'carrier_tracking_no' ]
+			'carrier_tracking_no'        => $request[ 'body' ][ 'carrier_tracking_no' ],
+			'reference_number'           => $request[ 'body' ][ 'reference_number' ]
 		);
 	}
 

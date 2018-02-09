@@ -72,6 +72,10 @@ shipcloud.LabelForm = function (wrapperSelector) {
         return $('input[name="other_description"]', self.$wrapper).val();
     };
 
+    self.getReferenceNumber = function () {
+        return $('input[name="reference_number"]', self.$wrapper).val();
+    };
+
     this.getLabelData = function () {
         return {
             'order_id'         : $("#post_ID").val(),
@@ -83,6 +87,7 @@ shipcloud.LabelForm = function (wrapperSelector) {
             // @todo No API data - swap to WP logic.
             'parcel_id'        : $('select[name="parcel_id"]', self.$wrapper).val(),
             'other_description': self.getDescription(),
+            'reference_number' : self.getReferenceNumber(),
             isReturn           : false
         };
     };

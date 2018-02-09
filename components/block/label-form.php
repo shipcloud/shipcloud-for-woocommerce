@@ -79,5 +79,13 @@
             </td>
         </tr>
 	<?php endif; ?>
+    <tr>
+      <th><?php _e( 'Reference number', 'shipcloud-for-woocommerce' ); ?></th>
+      <td>
+        <input type="text"
+               name="reference_number"
+               value="<?php echo sprintf( __( 'Order: %s', 'shipcloud-for-woocommerce' ), $this->get_order()->get_wc_order()->get_order_number() ); ?>"/>
+      </td>
+    </tr>
     </tbody>
 </table>
