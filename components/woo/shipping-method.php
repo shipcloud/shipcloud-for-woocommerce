@@ -322,6 +322,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'title'       => __( 'Notification email', 'shipcloud-for-woocommerce' ),
 				'type'        => 'checkbox',
 				'label'       => __( 'Send notification emails from shipcloud to recipients on status changes of shipment.', 'shipcloud-for-woocommerce' ),
+				'description' => __( 'When the options notification email and carrier email are active, customers will only be notified by DHL/DPD instead of shipcloud. This avoids customers getting notified twice.', 'shipcloud-for-woocommerce' ),
+				'desc_tip'    => true,
 				'default'     => 'yes'
 			),
 			'carrier_email'                => array(
