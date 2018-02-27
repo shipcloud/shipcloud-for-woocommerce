@@ -83,9 +83,9 @@ wcsc.OrderBulkLabels = function (submitButton) {
     this.setBulk = function () {
         self.populateTitles();
 
-        $('td', self.bulkScreen).attr('colspan', $('th:visible, td:visible', '.widefat:first thead').length);
+        $('> td', self.bulkScreen).attr('colspan', $('th:visible, td:visible', '.widefat:first thead').length);
         // Insert the editor at the top of the table with an empty row above to maintain zebra striping.
-        $('table.widefat tbody').prepend($(self.bulkScreen)).prepend('<tr class="hidden"></tr>');
+        $('table.wp-list-table.widefat > tbody').prepend($(self.bulkScreen)).prepend('<tr class="hidden"></tr>');
         $(self.bulkScreen).show();
         $('.shipcloud-carrier-select', self.bulkScreen).shipcloudMultiSelect(wcsc_carrier);
 

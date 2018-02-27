@@ -18,8 +18,6 @@ class Shipment {
 	private $price;
 
 	private $tracking_url;
-	
-	private $reference_number;
 
 	/**
 	 * Shipment constructor.
@@ -30,6 +28,7 @@ class Shipment {
 	 * @param string $label_url           URL where you can download the label in PDF format.
 	 * @param double $price               Price that we're going to charge you (exl. VAT).
 	 * @param string $carrier_tracking_no The original tracking number that can be used on the carriers website.
+	 * @param string $reference_number    A reference number provided by the admin
 	 */
 	public function __construct( $id, $tracking_url, $label_url, $price, $carrier_tracking_no = null ) {
 		$this->id                  = $id;
@@ -37,7 +36,6 @@ class Shipment {
 		$this->label_url           = $label_url;
 		$this->price               = $price;
 		$this->carrier_tracking_no = $carrier_tracking_no;
-		$this->reference_number    = $reference_number;
 	}
 
 	/**
@@ -52,11 +50,10 @@ class Shipment {
 
 		return new static(
 			$shipment['id'],
-			$shipment['tracking_url'],
-			$shipment['label_url'],
-			$shipment['price'],
-			$shipment['carrier_tracking_no'],
-			$shipment['reference_number']
+			$shipment['tracking_url'] ?: null,
+			$shipment['label_url'] ?: null,
+			$shipment['price'] ?: null,
+			$shipment['carrier_tracking_no'] ?: null
 		);
 	}
 
@@ -93,12 +90,5 @@ class Shipment {
 	 */
 	public function getTrackingUrl() {
 		return $this->tracking_url;
-	}
-	
-		/**
-		 * @return string
-		 */
-	public function getReferenceNumber() {
-		return $this->reference_number;
 	}
 }

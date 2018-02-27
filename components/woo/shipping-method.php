@@ -161,7 +161,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->init_settings_fields();
 
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
-        add_filter( 'woocommerce_shipping_chosen_method', array( $this, 'set_standard_carrier' ) );
 	}
 
 	/**
@@ -267,25 +266,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
 		}
 
-		if ( count( $this->available_carriers ) > 0 )
-		{
-			$standard_carrier_settings = array(
-				'title'       => __( 'Standard shipping method', 'shipcloud-for-woocommerce' ),
-				'type'        => 'select',
-				'description' => __( 'This carrier will be preselected if the shop owner selects the carrier or will be preselected as carrier if customer can select the carrier.', 'shipcloud-for-woocommerce' ),
-				'options'     => $this->available_carriers,
-				'desc_tip'    => true
-			);
-		}
-		else
-		{
-			$standard_carrier_settings = array(
-				'title'       => __( 'Standard shipping method', 'shipcloud-for-woocommerce' ),
-				'type'        => 'text_only',
-				'description' => __( 'You have to select at least one carrier above to select a standard carrier.', 'shipcloud-for-woocommerce' ),
-			);
-		}
-
 		$this->form_fields = array(
 			'enabled'                           => array(
 				'title'   => __( 'Enable', 'shipcloud-for-woocommerce' ),
@@ -317,7 +297,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 					'customer'  => __( 'Customer', 'shipcloud-for-woocommerce' ),
 				)
 			),
-			'standard_carrier'                  => $standard_carrier_settings,
 			'notification_email'                => array(
 				'title'       => __( 'Notification email', 'shipcloud-for-woocommerce' ),
 				'type'        => 'checkbox',
@@ -579,7 +558,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 					'customer'  => __( 'Customer', 'shipcloud-for-woocommerce' ),
 				)
 			),
-			'standard_carrier'                  => $standard_carrier_settings,
 			'calculation'                       => array(
 				'title'       => __( 'Automatic price calculation', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
@@ -1060,19 +1038,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	private function get_carriers()
 	{
-		/**
-		 * Getting carriers which have to be calculated
-		 */
-		if ( 'shopowner' === $this->get_option( 'carrier_selection' ) )
-		{
-			$carriers = array( $this->get_option( 'standard_carrier' ) => wcsc_get_carrier_display_name( $this->get_option( 'standard_carrier' ) ) );
+		if ( 'shopowner' === $this->get_option( 'carrier_selection' ) ) {
+			return [];
+		} else {
+			return $this->get_allowed_carriers( true );
 		}
-		else
-		{
-			$carriers = $this->get_allowed_carriers( true );
-		}
-
-		return $carriers;
+			
 	}
 
 	/**
@@ -1318,10 +1289,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->init_shipcloud_api();
 
 		$package = array(
-			'width'  => wc_format_decimal( $parcel[ 'width' ] ),
-			'height' => wc_format_decimal( $parcel[ 'height' ] ),
-			'length' => wc_format_decimal( $parcel[ 'length' ] ),
-			'weight' => wc_format_decimal( $parcel[ 'weight' ] ),
+			'width'  => wc_format_decimal( array_key_exists( 'width', $parcel ) ? $parcel[ 'width' ] : '' ),
+			'height'  => wc_format_decimal( array_key_exists( 'height', $parcel ) ? $parcel[ 'height' ] : '' ),
+			'length'  => wc_format_decimal( array_key_exists( 'length', $parcel ) ? $parcel[ 'length' ] : '' ),
+			'weight'  => wc_format_decimal( array_key_exists( 'weight', $parcel ) ? $parcel[ 'weight' ] : '' )
 		);
 
 		$price = $this->shipcloud_api->get_price( $carrier_name, $this->sender, $this->recipient, $package );
@@ -1513,18 +1484,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		return $carriers;
 	}
-
-    /**
-     * Setting standard carrier if no was selected
-     *
-     * @param $method string Old shipping method
-     * @return string New shipping method
-     *
-     * @since 1.1.2
-     */
-	public function set_standard_carrier( $method ) {
-        return $this->get_option( 'standard_carrier' );
-    }
 
 	/**
 	 * Getting option (overwrite instance values if there option of instance is empty

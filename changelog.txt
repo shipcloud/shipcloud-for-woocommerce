@@ -1,5 +1,13 @@
 == Changelog ==
 
+= 1.6.4 =
+* Enhanced: Rework handling of WP_Error when deleting a shipment
+* Enhanced: Added method to shipment model so we can output error messages to the UI
+* Fixed: Standard carrier caused problems in checkout when buyer was selecting the shipping carrier.
+* Fixed: Added handling of undefined parcel, sender and shipment data
+* Fixed: Added backwards compatibility for getting the payment method (to check for cash on delivery)
+* Removed: Standard carrier from settings.
+
 = 1.6.3 =
 * Enhanced: Removed buttons for creating/preparing return shipments, because you can select returns as a service
 * Enhanced: Make it possible to supply a reference_number before creating a shipment

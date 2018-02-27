@@ -59,7 +59,7 @@ class ShipmentAdapter {
 			'company'    => $this->shipmentData['sender_company'],
 			'street'     => $this->shipmentData['sender_street'],
 			'street_no'  => $this->shipmentData['sender_street_no'] ?: $this->shipmentData['sender_street_nr'],
-			'care_of'    => $this->shipmentData['sender_care_of'],
+			'care_of'    => array_key_exists( 'sender_care_of', $this->shipmentData ) ? $this->shipmentData['sender_care_of'] : '',
 			'zip_code'   => $this->shipmentData['sender_zip_code'],
 			'city'       => $this->shipmentData['sender_city'],
 			'state'      => $this->shipmentData['sender_state'],

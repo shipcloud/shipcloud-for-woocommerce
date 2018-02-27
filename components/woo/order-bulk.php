@@ -47,6 +47,22 @@ class WC_Shipcloud_Order_Bulk {
 	}
 
 	/**
+     * Backward compatibility to WC2.
+     *
+	 * The current WC3 has almost anything covered by getter methods
+	 * while the old WC2 used simple fields for that.
+	 * This layer allows using the old syntax
+	 * and makes it compatible with the new one.
+     *
+	 * @param $name
+	 *
+	 * @return bool
+	 */
+	public function __isset( $name ) {
+		return property_exists( '\\WC_Order', $name ) || method_exists( $this->get_wc_order(), 'get_' . $name );
+	}
+	
+	/**
 	 * Initializing hooks and filters
 	 *
 	 * @since   1.2.1
@@ -351,10 +367,10 @@ class WC_Shipcloud_Order_Bulk {
 			'create_shipping_label' => true,
 		);
 
-		if ( $order->get_wc_order() && wcsc_get_cod_id() === $order->get_wc_order()->get_payment_method() ) {
+		if ( $order->get_wc_order() && wcsc_get_cod_id() === $order->__get('payment_method') ) {
 			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
 				$order->get_wc_order()->get_total(),
-				$order->get_wc_order()->get_currency(),
+				$order->__get('currency'),
 				$order->get_bank_information(),
 				sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
 			);
@@ -374,7 +390,7 @@ class WC_Shipcloud_Order_Bulk {
 
 			$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
-			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['carrier'] ) . ')' );
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['shipcloud_carrier'] ) . ')' );
 
 			$parcel_title = wcsc_get_carrier_display_name( $request['shipcloud_carrier'] )
 							. ' - '

@@ -125,7 +125,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                 var result = JSON.parse(response);
 
                 if (result.status === 'ERROR') {
-                    print_errors(result.errors);
+                    self.printErrors(result.errors);
 
                     return;
                 }
@@ -133,8 +133,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
                 self.trigger('destroy');
             }
         );
-    }
-    ,
+    },
 
     parse: function (data) {
         if (data.hasOwnProperty('from')) {
@@ -150,8 +149,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         }
 
         return data;
-    }
-    ,
+    },
 
     getTitle: function () {
         return _.filter([this.get('carrier'), this.get('package').getTitle()]).join(' ');
@@ -190,6 +188,21 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
       }
       this.set('carrier_tracking_url', carrierTrackingUrl);
       return carrierTrackingUrl;
+    },
+
+    printErrors: function (errors) {
+      if (typeof errors === 'string') {
+        // Received single error message, so we convert it to the expected format.
+        errors = [errors];
+      }
+
+      var html = '<div class="error"><ul class="errors">';
+      errors.forEach(function (entry) {
+        html += '<li>' + entry + '</li>';
+      });
+      html += '</ul></div>';
+
+      jQuery('#shipment-center').find('.info').fadeIn().html(html);
     }
 })
 ;
