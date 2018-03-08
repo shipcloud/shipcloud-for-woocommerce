@@ -388,3 +388,10 @@ fieldset .shipment-labels .address {
 #wscs_order_bulk_pdf {
     margin-right: 0.5em;
 }
+
+/**
+ * Bulk
+ */
+#shipcloud_bulk .parcel-form-table th {
+  width: 25%;
+}

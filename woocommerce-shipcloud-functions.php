@@ -513,18 +513,19 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		$shipment_data['recipient_street_no'] = $data['from']['street_nr'];
 	}
 
-	if ( isset( $data['from'] ) ) {
-		$shipment_data['sender_first_name'] = $data['from']['first_name'];
-		$shipment_data['sender_last_name']  = $data['from']['last_name'];
-		$shipment_data['sender_company']    = $data['from']['company'];
-		$shipment_data['sender_care_of']    = $data['from']['care_of'];
-		$shipment_data['sender_street']     = $data['from']['street'];
-		$shipment_data['sender_street_no']  = $data['from']['street_no'];
-		$shipment_data['sender_zip_code']   = $data['from']['zip_code'];
-		$shipment_data['sender_city']       = $data['from']['city'];
-		$shipment_data['sender_state']      = $data['from']['state'];
-		$shipment_data['sender_phone']      = $data['from']['phone'];
-		$shipment_data['country']           = $data['from']['country'];
+	$from = $data['from'];
+	if ( isset( $from ) ) {
+		$shipment_data['sender_first_name'] = $from['first_name'];
+		$shipment_data['sender_last_name']  = $from['last_name'];
+		$shipment_data['sender_company']    = array_key_exists('company', $from) ? $from['company'] : '';
+		$shipment_data['sender_care_of']    = array_key_exists('care_of', $from) ? $from['care_of'] : '';
+		$shipment_data['sender_street']     = $from['street'] ?: '';
+		$shipment_data['sender_street_no']  = $from['street_no'] ?: '';
+		$shipment_data['sender_zip_code']   = $from['zip_code'] ?: '';
+		$shipment_data['sender_city']       = $from['city'] ?: '';
+		$shipment_data['sender_state']      = array_key_exists('state', $from) ? $from['state'] : '';
+		$shipment_data['sender_phone']      = array_key_exists('phone', $from) ? $from['phone'] : '';
+		$shipment_data['country']           = $from['country'] ?: '';
 
 		// Fallback until v2.0.0
 		if ( isset( $data['to']['street_nr'] ) ) {

@@ -445,7 +445,16 @@ class WC_Shipcloud_Order
 					</p>
 
 					<p class="twentyfive">
-						<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient[ 'street_no' ]?: $recipient[ 'street_nr' ]; ?>" disabled>
+						<?php
+							if (array_key_exists('street_no', $recipient)) {
+								$recipient_address_street_nr = $recipient[ 'street_no' ];
+							} else if (array_key_exists('street_nr', $recipient)) {
+								$recipient_address_street_nr = $recipient[ 'street_nr' ];
+							} else {
+								$recipient_address_street_nr = '';
+							}
+						?>
+						<input type="text" name="recipient_address[street_nr]" value="<?php echo $recipient_address_street_nr; ?>" disabled>
 						<label for="recipient_address[street_nr]"><?php _e( 'Number', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
@@ -921,24 +930,26 @@ class WC_Shipcloud_Order
 			$order_id = $data['order_id'];
 		}
 
-        $shipment_id = $data['shipment_id'];
+		if ( isset( $data['shipment_id'] ) ) {
+    	$shipment_id = $data['shipment_id'];
+		}
 
-		if ( ! $order_id ) {
+		if ( ! $order_id && $shipment_id ) {
 			$tmp_order   = $shipment_repo->findOrderByShipmentId( $shipment_id );
 			$order_id    = $tmp_order->ID;
 		}
 
 		$order = $this->get_wc_order( $order_id );
 
-		if ( ! $data['isReturn'] ) {
-			$data['to']['email'] = $order->billing_email;
+		if ( ! isset($data['isReturn']) ) {
+			$data['to']['email'] = $this->__get('billing_email');
 		}
 
-		if ( ! $data['from']['id'] ) {
+		if ( ! isset($data['from']['id']) ) {
 			unset( $data['from']['id'] );
 		}
 
-		if ( ! $data['to']['id'] ) {
+		if ( ! isset($data['to']['id']) ) {
 			unset( $data['to']['id'] );
 		}
 
@@ -950,10 +961,10 @@ class WC_Shipcloud_Order
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
-		if ( wcsc_get_cod_id() === $order->get_payment_method() ) {
+		if ( wcsc_get_cod_id() === $this->__get('payment_method') ) {
 		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
                 $order->get_total(),
-                $order->get_currency(),
+                $this->__get('currency'),
                 $this->get_bank_information(),
                 sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
             );
@@ -973,13 +984,13 @@ class WC_Shipcloud_Order
 		}
 
 		try {
-		    if ($shipment_id) {
-		        // Update
-		        $shipment = _wcsc_api()->shipment()->update( $shipment_id, $data );
-            } else {
-		        // Create
-			    $shipment = _wcsc_api()->shipment()->create( $data );
-            }
+			if ( isset($shipment_id) ) {
+				// Update
+				$shipment = _wcsc_api()->shipment()->update( $shipment_id, $data );
+			} else {
+				// Create
+				$shipment = _wcsc_api()->shipment()->create( $data );
+			}
 
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $data['carrier'] ) . ')' );
 
@@ -1092,7 +1103,6 @@ class WC_Shipcloud_Order
 				$shipments[ $key ][ 'label_url' ]                  = $request[ 'body' ][ 'label_url' ];
 				$shipments[ $key ][ 'price' ]                      = $request[ 'body' ][ 'price' ];
 				$shipments[ $key ][ 'carrier_tracking_no' ]        = $request[ 'body' ][ 'carrier_tracking_no' ];
-				$shipments[ $key ][ 'reference_number' ]           = $request[ 'body' ][ 'reference_number' ];
 				break;
 			}
 		}
@@ -1105,8 +1115,7 @@ class WC_Shipcloud_Order
 			'tracking_url'               => $request[ 'body' ][ 'tracking_url' ],
 			'label_url'                  => $request[ 'body' ][ 'label_url' ],
 			'price'                      => wc_price( $request[ 'body' ][ 'price' ], array( 'currency' => 'EUR' ) ),
-			'carrier_tracking_no'        => $request[ 'body' ][ 'carrier_tracking_no' ],
-			'reference_number'           => $request[ 'body' ][ 'reference_number' ]
+			'carrier_tracking_no'        => $request[ 'body' ][ 'carrier_tracking_no' ]
 		);
 	}
 
@@ -1122,29 +1131,32 @@ class WC_Shipcloud_Order
 		$shipment_repository = _wcsc_container()->get( '\Shipcloud\Repository\ShipmentRepository' );
 
 		$order = $shipment_repository->findOrderByShipmentId( $shipment_id );
-		$order_id = $order->ID;
+		$order_id = $order->get_order_number();
 
 		$request       = $this->get_shipcloud_api()->delete_shipment( $shipment_id );
 
 		if ( is_wp_error( $request ) ) {
 			// Do nothing if shipment was not found
-            /** @var \WP_Error $request */
-			if ( 'shipcloud_api_error_not_found' !== $request->get_error_code() ) {
-				WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Could not delete shipment (' . $shipment_id . ')' );
-
-				$errors[] = nl2br( $request->get_error_message() );
-				$result   = array(
-					'status' => 'ERROR',
-					'errors' => $errors
-				);
-
-				echo json_encode( $result );
-				exit;
+			/** @var \WP_Error $request */
+			$error_message_shipment_not_found = sprintf( __( 'Order #%s - Could not delete shipment (%s)', 'shipcloud-for-woocommerce' ), $order_id, $shipment_id );
+			
+			if ( 'shipcloud_api_error_not_found' == $request->get_error_code() ) {
+				WC_Shipcloud_Shipping::log( $error_message_shipment_not_found . ' ' . __( 'because it wasn\'t found at shipcloud', 'shipcloud-for-woocommerce' ) );
+			} else {
+				WC_Shipcloud_Shipping::log( $error_message_shipment_not_found );
 			}
+
+			$errors[] = nl2br( $request->get_error_message() );
+			$result   = array(
+				'status' => 'ERROR',
+				'errors' => $errors
+			);
+
+			echo json_encode( $result );
+			exit;
 		}
 
-
-		WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Deleted shipment successfully (' . $shipment_id . ')' );
+		WC_Shipcloud_Shipping::log( 'Order #' . $order_id . ' - Deleted shipment successfully (' . $shipment_id . ')' );
 
 		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 
@@ -1434,9 +1446,7 @@ class WC_Shipcloud_Order
 			return '';
 		}
 
-		$order = $this->get_wc_order();
-
-		return apply_filters( 'wcsc_notification_email', (string) $order->billing_email, $order );
+		return apply_filters( 'wcsc_notification_email', (string) $this->__get('billing_email'), $this->get_wc_order() );
 	}
 
 	/**
@@ -1493,9 +1503,7 @@ class WC_Shipcloud_Order
 			return '';
 		}
 
-		$order = $this->get_wc_order();
-
-		return apply_filters( 'wcsc_carrier_email', (string) $order->billing_email, $order );
+		return apply_filters( 'wcsc_carrier_email', (string) $this->__get('billing_email'), $this->get_wc_order() );
 	}
 
 	/**

@@ -325,10 +325,10 @@ class WC_Shipcloud_Shippig_Classes
 	 */
 	public function shipping_class_edit_form_fields_save( $term_id )
 	{
-		$parcel_length = $_POST[ 'shipcloud_parcel_length' ];
-		$parcel_width  = $_POST[ 'shipcloud_parcel_width' ];
-		$parcel_height = $_POST[ 'shipcloud_parcel_height' ];
-		$parcel_weight = $_POST[ 'shipcloud_parcel_weight' ];
+		$parcel_length = $_POST[ 'shipcloud_parcel_length' ] ?: '';
+		$parcel_width  = $_POST[ 'shipcloud_parcel_width' ] ?: '';
+		$parcel_height = $_POST[ 'shipcloud_parcel_height' ] ?: '';
+		$parcel_weight = $_POST[ 'shipcloud_parcel_weight' ] ?: '';
 
 		update_option( 'shipping_class_' . $term_id . '_shipcloud_length', $parcel_length );
 		update_option( 'shipping_class_' . $term_id . '_shipcloud_width', $parcel_width );
