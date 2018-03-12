@@ -1,5 +1,7 @@
 == Changelog ==
 
+
+
 = 1.6.4 =
 * Enhanced: Rework handling of WP_Error when deleting a shipment
 * Enhanced: Added method to shipment model so we can output error messages to the UI

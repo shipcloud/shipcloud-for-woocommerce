@@ -945,11 +945,11 @@ class WC_Shipcloud_Order
 			$data['to']['email'] = $this->__get('billing_email');
 		}
 
-		if ( ! isset($data['from']['id']) ) {
+		if (! isset($data['from']['id']) || '' === $data['from']['id']) {
 			unset( $data['from']['id'] );
 		}
 
-		if ( ! isset($data['to']['id']) ) {
+		if ( ! isset($data['to']['id']) || '' === $data['to']['id'] ) {
 			unset( $data['to']['id'] );
 		}
 
