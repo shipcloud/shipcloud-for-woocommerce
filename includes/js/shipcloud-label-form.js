@@ -87,22 +87,8 @@ shipcloud.LabelForm = function (wrapperSelector) {
             // @todo No API data - swap to WP logic.
             'parcel_id'        : $('select[name="parcel_id"]', self.$wrapper).val(),
             'other_description': self.getDescription(),
-            'reference_number' : self.getReferenceNumber(),
-            isReturn           : false
+            'reference_number' : self.getReferenceNumber()
         };
-    };
-
-    this.getReturnLabelData = function () {
-        var data = self.getLabelData();
-
-        // Flip sender and recipient.
-        var tmp = data.to;
-        data.to = data.from;
-        data.from = tmp;
-        data.isReturn = true;
-        data.service = 'returns';
-
-        return data;
     };
 
     self.main();

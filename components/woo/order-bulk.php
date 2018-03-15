@@ -350,9 +350,11 @@ class WC_Shipcloud_Order_Bulk {
 			$order->get_wc_order()->get_order_number()
 		);
 
+		$addresses = $this->handle_return_shipments($order, $request);
+		
 		$data = array(
-			'to'                    => $order->get_recipient(),
-			'from'                  => $order->get_sender(),
+			'from'                  => $addresses['from'],
+			'to'                    => $addresses['to'],
 			'package'               => new \Shipcloud\Domain\Package(
 				wc_format_decimal( $request['parcel_length'] ),
 				wc_format_decimal( $request['parcel_width'] ),
@@ -367,7 +369,7 @@ class WC_Shipcloud_Order_Bulk {
 			'create_shipping_label' => true,
 		);
 
-		if ( $order->get_wc_order() && wcsc_get_cod_id() === $order->__get('payment_method') ) {
+		if ( 'returns' !== $request['shipcloud_carrier_service'] && $order->get_wc_order() && wcsc_get_cod_id() === $order->__get('payment_method') ) {
 			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
 				$order->get_wc_order()->get_total(),
 				$order->__get('currency'),
@@ -535,6 +537,28 @@ class WC_Shipcloud_Order_Bulk {
 		}
 
 		return $wp_filesystem;
+	}
+
+	/*
+	 * Check to see if it's a return shipment
+	 *
+	 * @return array
+	 */
+	 protected function handle_return_shipments( $order, $data ) {
+		if ( 'returns' == $data['shipcloud_carrier_service'] ) {
+			$from = $order->get_recipient();
+			$to = $order->get_sender();
+		} else {
+			$to = $order->get_recipient();
+			$from = $order->get_sender();
+		}
+
+		$adresses = array(
+			'from' => $from,
+			'to' => $to,
+		);
+		
+		return array_filter( $adresses );
 	}
 }
 

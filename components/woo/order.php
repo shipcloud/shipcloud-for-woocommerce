@@ -216,6 +216,22 @@ class WC_Shipcloud_Order
 		), 'shop_order' );
 	}
 
+	/*
+	 * Check to see if it's a return shipment
+	 *
+	 * @return array
+	 */
+	 protected function handle_return_shipments( $data ) {
+		 if ( 'returns' == $data['service'] ) {
+			 $to = $data['to'];
+			 $from = $data['from'];
+			 $data['from'] = $to;
+			 $data['to'] = $from;
+		 }
+
+		 return array_filter( $data );
+	 }
+
 	/**
      * Sanitize shop owner data.
      *
@@ -225,9 +241,9 @@ class WC_Shipcloud_Order
 	 */
 	protected function sanitize_shop_owner_data( $data ) {
 		$shopOwner = 'from';
-		if ( 'false' !== $data['isReturn'] ) {
-			// It is a return so we switch addresses.
-			$shopOwner    = 'to';
+
+		if ( 'returns' == $data['service'] ) {
+			$shopOwner = 'to';
 		}
 
 		$from = array_filter( $data[ $shopOwner ] );
@@ -941,10 +957,6 @@ class WC_Shipcloud_Order
 
 		$order = $this->get_wc_order( $order_id );
 
-		if ( ! isset($data['isReturn']) ) {
-			$data['to']['email'] = $this->__get('billing_email');
-		}
-
 		if (! isset($data['from']['id']) || '' === $data['from']['id']) {
 			unset( $data['from']['id'] );
 		}
@@ -958,10 +970,11 @@ class WC_Shipcloud_Order
 		 */
 		$data['create_shipping_label'] = ( 'shipcloud_create_shipment_label' === $data['action'] );
 
+		$data = $this->handle_return_shipments( $data );
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
-		if ( wcsc_get_cod_id() === $this->__get('payment_method') ) {
+		if ( 'returns' !== $data['service'] && wcsc_get_cod_id() === $this->__get('payment_method') ) {
 		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
                 $order->get_total(),
                 $this->__get('currency'),
@@ -1586,7 +1599,7 @@ class WC_Shipcloud_Order
 							. $data->height . ';'
 							. $data->length . ';'
 							. $data->weight . ';'
-							. $data->carrier['carrier'] . ';',
+							. $carrier['carrier'] . ';',
 				'option' => $option,
 				'data'   => array(
 					'parcel_width'      => $data->width,
