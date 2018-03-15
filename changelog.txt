@@ -1,6 +1,10 @@
 == Changelog ==
 
+= 1.6.6 =
+* Fixed: Creating return shipping labels.
 
+= 1.6.5 =
+* Fixed: Creating shipping labels from prepared shipments not working because of address id.
 
 = 1.6.4 =
 * Enhanced: Rework handling of WP_Error when deleting a shipment
