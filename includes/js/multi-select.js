@@ -62,9 +62,15 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
                 return;
             }
 
-            selectNode.append(
+            if(index == 0) {
+              selectNode.append(
+                '<option value="' + value + '" selected="selected">' + self.options.label[type][value] + '</option>'
+              );
+            } else {
+              selectNode.append(
                 '<option value="' + value + '">' + self.options.label[type][value] + '</option>'
-            );
+              );
+            }
         });
 
         selectNode.prop('disabled', null);
