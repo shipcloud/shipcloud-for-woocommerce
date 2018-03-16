@@ -266,7 +266,7 @@ class WooCommerce_Shipcloud {
 		static::assert_session();
 
 		$_SESSION['wcsc']['notices'][ md5( $type . ':' . $message ) ] = array(
-			'message' => '<b>ShipCloud for WooCommerce</b>: ' . $message,
+			'message' => '<b>shipcloud for WooCommerce</b>: ' . $message,
 			'type'    => $type
 		);
 	}
