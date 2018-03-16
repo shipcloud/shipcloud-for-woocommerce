@@ -919,19 +919,19 @@ class WC_Shipcloud_Order
 	}
 
 	/**
-     * Get bank information for shop owner.
-     *
-     * @since 1.5.0
-     *
+	 * Get bank information for shop owner.
+	 *
+	 * @since 1.5.0
+	 *
 	 * @return \Shipcloud\Domain\ValueObject\BankInformation
 	 */
 	public function get_bank_information() {
-        return new \Shipcloud\Domain\ValueObject\BankInformation(
-            $this->get_options('bank_name'),
-            $this->get_options('bank_code'),
-            $this->get_options('bank_account_holder'),
-            $this->get_options('bank_account_number')
-        );
+		return new \Shipcloud\Domain\ValueObject\BankInformation(
+			$this->get_options('bank_name'),
+			$this->get_options('bank_code'),
+			$this->get_options('bank_account_holder'),
+			$this->get_options('bank_account_number')
+		);
 	}
 
 	/**
@@ -975,12 +975,13 @@ class WC_Shipcloud_Order
 		$data = $this->handle_email_notification( $data );
 
 		if ( 'returns' !== $data['service'] && wcsc_get_cod_id() === $this->__get('payment_method') ) {
-		    $cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
-                $order->get_total(),
-                $this->__get('currency'),
-                $this->get_bank_information(),
-                sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
-            );
+			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
+				$data['carrier'],
+				$order->get_total(),
+				$this->__get('currency'),
+				$this->get_bank_information(),
+				sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
+			);
 
 		    if (!isset($data['additional_services'])) {
 		        $data['additional_services'] = array();

@@ -115,6 +115,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.7.0 =
+- Enhanced: Carrier specific handling of cash on delivery attributes when using GLS or UPS as carrier
+
 = 1.6.6 =
 * Fixed: Creating return shipping labels.
 
