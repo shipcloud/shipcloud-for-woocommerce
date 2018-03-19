@@ -558,7 +558,7 @@ class WC_Shipcloud_Order
 					</button>
 				</p>
 				<p>
-					<button id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="button-primary">
+					<button id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="button-primary" data-ask-create-label-check="<?php echo esc_attr($this->get_options( 'ask_create_label_check' )); ?>">
 						<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
 					</button>
 				</p>

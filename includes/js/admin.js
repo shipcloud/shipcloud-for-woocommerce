@@ -111,35 +111,41 @@ jQuery( function( $ ) {
 		$( '#shipment-center .info').empty();
 		var data = get_shipment_form_data( 'shipcloud_create_shipment_label', false );
 
-		var ask_create_label = $('#ask-create-label');
-
 		var self = this;
+		
+		var should_ask = $(this).data('ask-create-label-check');
+		
+		if( 'yes' == should_ask) {
+			var ask_create_label = $('#ask-create-label');
 
-		ask_create_label.dialog({
-			'dialogClass': 'wcsc-dialog wp-dialog',
-			'modal': true,
-			'autoOpen': false,
-			'closeOnEscape': true,
-			'minHeight': 80,
-			'buttons': [{
-				text: wcsc_translate.yes,
-				click: function () {
-					shipcloud_create_shipment_label(data, self);
-
-					$(this).dialog("close");
-				}
-			},
-				{
-					text: wcsc_translate.no,
+			ask_create_label.dialog({
+				'dialogClass': 'wcsc-dialog wp-dialog',
+				'modal': true,
+				'autoOpen': false,
+				'closeOnEscape': true,
+				'minHeight': 80,
+				'buttons': [{
+					text: wcsc_translate.yes,
 					click: function () {
+						shipcloud_create_shipment_label(data, self);
+
 						$(this).dialog("close");
 					}
 				},
-			],
+					{
+						text: wcsc_translate.no,
+						click: function () {
+							$(this).dialog("close");
+						}
+					},
+				],
 
-		});
+			});
 
-		ask_create_label.dialog("open");
+			ask_create_label.dialog("open");
+		} else {
+			shipcloud_create_shipment_label(data, self);
+		}
 	});
 
 	function shipcloud_delete_shipment_buttons() {
