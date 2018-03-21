@@ -155,6 +155,8 @@ class WC_Shipcloud_Order
 		add_action( 'wp_ajax_shipcloud_create_shipment', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_shipment_label', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( $this, 'ajax_create_label' ) );
+		add_action( 'wp_ajax_shipcloud_get_pakadoo_point', array( $this, 'ajax_get_pakadoo_point' ) );
+		add_action( 'wp_ajax_nopriv_shipcloud_get_pakadoo_point', array( $this, 'ajax_get_pakadoo_point' ) );
 
 		add_action(
 			\Shipcloud\Controller\LabelController::AJAX_UPDATE,
@@ -1068,6 +1070,20 @@ class WC_Shipcloud_Order
 		}
 
 		echo json_encode( $result );
+		exit;
+	}
+
+	public function ajax_get_pakadoo_point() {
+		$pakadoo_id = $_POST['pakadoo_id'];
+		error_log('pakadoo id: '.$pakadoo_id);
+		$response = $this->get_api()->create_address_by_pakadoo_id( $pakadoo_id );
+
+		if ( is_wp_error( $response ) ) {
+			error_log('errror: '.print_r($response,true));
+			wp_send_json_error( $response );
+		}
+
+		wp_send_json_success( $response );
 		exit;
 	}
 

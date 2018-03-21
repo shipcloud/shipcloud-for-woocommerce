@@ -871,6 +871,23 @@ class Woocommerce_Shipcloud_API
 		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}
 
+	public function create_address_by_pakadoo_id( $pakadoo_id ) {
+		$action  = 'addresses';
+		$params = array('pakadoo_id' => $pakadoo_id);
+		$request = $this->send_request( $action, $params, 'POST' );
+
+		$status_code = (int) $request[ 'header' ][ 'status' ];
+		
+		if ( 200 !== $status_code ) {
+			$error = $this->get_error( $request );
+
+			return new WP_Error( $status_code, $error[ 'description' ] );
+		}
+		error_log('status = 200');
+
+		return $request[ 'body' ];
+	}
+
 	/**
 	 * Connection testing
 	 *
