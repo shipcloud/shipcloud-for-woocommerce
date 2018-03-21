@@ -119,6 +119,7 @@ https://youtu.be/HE3jow15x8c
 * Added: Buyers can now use their pakadoo id to determine the shipping address
 * Added: Total order weight can now be used when creating shipments by selecting a checkbox
 * Added: WooCommerce version check headers
+* Enhanced: Added more logging (when debug log is enabled) to make support cases can be answered easier.
 * Enhanced: Carrier specific handling of cash on delivery attributes when using GLS or UPS as carrier
 * Enhanced: Service and package type are now preselected in dropdowns when selecting a new carrier
 
