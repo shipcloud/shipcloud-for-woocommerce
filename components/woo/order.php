@@ -540,7 +540,7 @@ class WC_Shipcloud_Order
 	{
 		ob_start();
 		?>
-		<div class="section parcels">
+		<div class="section parcels" data-calculated-weight="<?php echo( $this->get_calculated_weight() ); ?>" />
 			<h3><?php _e( 'Create shipment', 'shipcloud-for-woocommerce' ); ?></h3>
 
 			<?php echo $this->parcel_form(); ?>
@@ -1729,6 +1729,16 @@ class WC_Shipcloud_Order
 		}
 
 		return $data;
+	}
+	
+	public function get_calculated_weight() {
+		$order_items = $this->get_wc_order()->get_items();
+
+		$calculated_weight = 0;
+		foreach ( $order_items as $order_item ) {
+			$calculated_weight += $order_item->get_product()->get_weight();
+		}
+		return $calculated_weight;
 	}
 }
 

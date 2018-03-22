@@ -105,6 +105,15 @@ class WooCommerce_Shipcloud_Block_Labels_Form {
 	public function dispatch() {
 		require $this->get_template_file();
 	}
+	
+	public function get_calculated_weight() {
+		$order_items = $this->get_order()->get_wc_order()->get_items();
+		$calculated_weight = 0;
+		foreach ( $order_items as $order_item ) {
+			$calculated_weight += $order_item->get_product()->get_weight();
+		}
+		return $calculated_weight;
+	}
 
 	/**
 	 * @return mixed
