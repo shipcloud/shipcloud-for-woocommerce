@@ -389,6 +389,22 @@ function wcsc_care_of_frontend( $data ) {
 
 add_filter( 'woocommerce_shipping_fields', 'wcsc_care_of_frontend' );
 
+
+function shipcloud_pakadoo_id_checkout_fields( $data ) {
+	$final                     = array_slice( $data, 0, 0 );
+	$final['shipping_pakadoo_id'] = array(
+		'label'       => __( 'pakadoo id', 'shipcloud-for-woocommerce' ),
+		'description' => __( 'Enter your pakadoo id to ship directly to a pakadoo point', 'shipcloud-for-woocommerce' ),
+		'class'       => array( 'form-row-wide' ),
+		'clear'       => true,
+	);
+
+	$data = $final + array_slice( $data, 0 );
+
+	return $data;
+}
+add_filter( 'woocommerce_shipping_fields', 'shipcloud_pakadoo_id_checkout_fields' );
+
 /**
  * Add "phone" field to shipping address.
  *

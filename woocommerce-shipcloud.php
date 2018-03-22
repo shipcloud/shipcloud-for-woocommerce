@@ -100,6 +100,7 @@ class WooCommerce_Shipcloud {
 		} else {
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
+			add_action( 'wp_footer', array( $this, 'shipcloud_inline_js' ) );
 		}
 	}
 
@@ -480,9 +481,14 @@ class WooCommerce_Shipcloud {
 		if ( ! wcsc_is_frontend_screen() ) {
 			return;
 		}
-		wp_enqueue_script( 'wcsc-plugin-script', WCSC_URLPATH . '/includes/js/display.js' );
+		wp_enqueue_script( 'wcsc-plugin-script', WCSC_URLPATH . '/includes/js/display.js', array( 'wp-util' ), static::VERSION );
 	}
 
+	public function shipcloud_inline_js() {
+		echo '<script>';
+		echo 'ajax_url = "'.admin_url('admin-ajax.php').'";';
+		echo '</script>';
+	}
 	/**
 	 * Show Notices in Admin
 	 *

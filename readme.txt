@@ -116,8 +116,9 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.7.0 =
-* Added: WooCommerce version check headers
+* Added: Buyers can now use their pakadoo id to determine the shipping address
 * Added: Total order weight can now be used when creating shipments by selecting a checkbox
+* Added: WooCommerce version check headers
 * Enhanced: Carrier specific handling of cash on delivery attributes when using GLS or UPS as carrier
 * Enhanced: Service and package type are now preselected in dropdowns when selecting a new carrier
 
