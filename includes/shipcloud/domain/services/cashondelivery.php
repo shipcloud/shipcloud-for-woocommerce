@@ -45,7 +45,7 @@ class CashOnDelivery {
 	 * @throws \InvalidArgumentException For invalid currencies
 	 * @throws \OutOfRangeException When the amount is out of allowed range.
 	 */
-	public function __construct( $amount, $currency, BankInformation $bankInformation, $reference = '' ) {
+	public function __construct( $carrier, $amount, $currency, BankInformation $bankInformation = null, $reference = null ) {
 		if ( $amount < 0.01 || $amount > 3500.00 ) {
 			throw new \OutOfRangeException( 'Invalid amount. Supported range is 0.01 - 3500.00' );
 		}
@@ -58,8 +58,12 @@ class CashOnDelivery {
 
 		$this->currency = $currency;
 
-		$this->bankInformation = $bankInformation;
-		$this->reference       = $reference;
+		if( $carrier !== 'ups' && $carrier !== 'gls' ) {
+			$this->reference = $reference;
+			$this->bankInformation = $bankInformation;
+		} elseif( $carrier === 'gls' ) {
+			$this->reference = $reference;
+		}
 	}
 
 	/**
@@ -91,14 +95,18 @@ class CashOnDelivery {
 	}
 
 	public function toArray() {
-		return array(
+		$cod_data = array(
 			'amount'              => $this->getAmount(),
 			'currency'            => $this->getCurrency(),
-			'bank_account_holder' => $this->getBankInformation()->getAccountHolder(),
-			'bank_name'           => $this->getBankInformation()->getBankName(),
-			'bank_account_number' => $this->getBankInformation()->getIban(),
-			'bank_code'           => $this->getBankInformation()->getBankSwift(),
 			'reference1'          => $this->getReference()
 		);
+		if(null !== $this->getBankInformation()) {
+			$cod_data['bank_account_holder'] = $this->getBankInformation()->getAccountHolder();
+			$cod_data['bank_name']           = $this->getBankInformation()->getBankName();
+			$cod_data['bank_account_number'] = $this->getBankInformation()->getIban();
+			$cod_data['bank_code']           = $this->getBankInformation()->getBankSwift();
+		}
+
+		return array_filter($cod_data);
 	}
 }
