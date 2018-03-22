@@ -118,6 +118,7 @@ https://youtu.be/HE3jow15x8c
 = 1.7.0 =
 * Added: WooCommerce version check headers
 * Enhanced: Carrier specific handling of cash on delivery attributes when using GLS or UPS as carrier
+* Enhanced: Service and package type are now preselected in dropdowns when selecting a new carrier
 
 = 1.6.6 =
 * Fixed: Creating return shipping labels.
