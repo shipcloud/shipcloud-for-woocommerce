@@ -193,6 +193,7 @@ class WC_Shipcloud_Order_Bulk {
 		        . DIRECTORY_SEPARATOR . md5( $url ) . '.pdf';
 
 		if ( file_exists( $path ) ) {
+			WC_Shipcloud_Shipping::log('pdf file already exists');
 			// Might be already downloaded, so we won't overwrite it.
 			return $path;
 		}
@@ -200,11 +201,13 @@ class WC_Shipcloud_Order_Bulk {
 		$pdf_content = wp_remote_retrieve_body( wp_remote_get( $url ) );
 
 		if ( ! $pdf_content ) {
+			WC_Shipcloud_Shipping::log('Couldn\'t download pdf');
 			// No content, so we refuse to continue.
 			throw new \RuntimeException( 'Could not download PDF - no content delivered.' );
 		}
 
 		if ( ! $this->get_filesystem()->put_contents( $path, $pdf_content ) ) {
+			WC_Shipcloud_Shipping::log('Couldn\'t store downloaded PDF contents.');
 			throw new \RuntimeException( 'Could not store downloaded PDF contents.' );
 		}
 
@@ -295,24 +298,34 @@ class WC_Shipcloud_Order_Bulk {
 
 			if ( ! $current || ! $current->getLabelUrl() ) {
 				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
+				WC_Shipcloud_Shipping::log($error_message);
+				WC_Shipcloud_Shipping::log('current: '.$current);
+				WC_Shipcloud_Shipping::log('labelUrl: '.$current->getLabelUrl());
 
 				continue;
 			}
 
 			try {
 				// Storing label.
+				WC_Shipcloud_Shipping::log('Trying to store the label');
 				$path_to_pdf = $this->save_label( $order_id, $current->getLabelUrl() );
 				$m->addFromFile( $path_to_pdf );
 				$pdf_count++;
 			} catch ( \RuntimeException $e ) {
 				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
+				WC_Shipcloud_Shipping::log('RuntimeException: '.print_r($e, true));
 			}
 		}
 
 		$content = '';
 		if (0 !== $pdf_count) {
-		    $content = $m->merge();
-        }
+			try {
+				$content = $m->merge();
+			} catch (\Exception $e) {
+				WC_Shipcloud_Shipping::log('Couldn\'t merge pdf files.');
+				WC_Shipcloud_Shipping::log(print_r($e, true));
+			}
+		}
 
 		if ( ! $content ) {
 			WooCommerce_Shipcloud::admin_notice( 'Could not compose labels into one PDF.', 'error' );
@@ -393,6 +406,7 @@ class WC_Shipcloud_Order_Bulk {
 		}
 
 		try {
+			WC_Shipcloud_Shipping::log('calling shipcloud api to create label with the following data: '.json_encode($data));
 			$shipment = _wcsc_api()->shipment()->create( array_filter( $data ) );
 
 			$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
@@ -440,6 +454,7 @@ class WC_Shipcloud_Order_Bulk {
 			);
 
 			WC_Shipcloud_Shipping::log( $error_message );
+			WC_Shipcloud_Shipping::log(print_r($e, true));
 			WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 
 			return array();
@@ -513,8 +528,9 @@ class WC_Shipcloud_Order_Bulk {
 
 		// Directory not present - we try to create it.
 		if ( ! wp_mkdir_p( $path ) ) {
+			WC_Shipcloud_Shipping::log('Couldn\'t create sub-directories for shipcloud storage.');
 			throw new \RuntimeException(
-				'Could no create sub-directories for shipcloud storage.'
+				'Couldn\'t create sub-directories for shipcloud storage.'
 			);
 		}
 
@@ -536,8 +552,9 @@ class WC_Shipcloud_Order_Bulk {
 		}
 
 		if ( ! WP_Filesystem() ) {
+			WC_Shipcloud_Shipping::log('Can\'t access file system to download created shipping labels.');
 			throw new \RuntimeException(
-				'Can not access file system to download created shipping labels.'
+				'Can\'t access file system to download created shipping labels.'
 			);
 		}
 
@@ -551,6 +568,7 @@ class WC_Shipcloud_Order_Bulk {
 	 */
 	 protected function handle_return_shipments( $order, $data ) {
 		if ( 'returns' == $data['shipcloud_carrier_service'] ) {
+			WC_Shipcloud_Shipping::log('Detected returns shipment. Switching from and to entries.');
 			$from = $order->get_recipient();
 			$to = $order->get_sender();
 		} else {

@@ -186,6 +186,7 @@ class Woocommerce_Shipcloud_API
 			$shipment_carriers = $this->update_carriers();
 
 			if( is_wp_error( $shipment_carriers ) ){
+				WC_Shipcloud_Shipping::log('Couldn\'t get carriers. '.$shipment_carriers->get_error_message());
 				return $shipment_carriers;
 			}
 			WooCommerce_Shipcloud::admin_notice( __( 'Carriers have been updated!', 'shipcloud-for-woocommerce' ) );
@@ -257,6 +258,7 @@ class Woocommerce_Shipcloud_API
 		try {
 			return $api->carriers()->get();
 		} catch (\Exception $e) {
+			WC_Shipcloud_Shipping::log(print_r($e, true));
 			return new \WP_Error( 'shipcloud_api_error_' . $e->getCode(), $e->getMessage() );
 		}
 	}
@@ -293,6 +295,8 @@ class Woocommerce_Shipcloud_API
 		$response = wp_remote_request( $this->get_endpoint( $action ), $args );
 
 		if ( is_wp_error( $response ) ) {
+			WC_Shipcloud_Shipping::log('WP_Error while sending request to shipcloud api');
+			WC_Shipcloud_Shipping::log('Error message: '.$response->get_error_message());
 			return $response;
 		}
 
@@ -592,6 +596,8 @@ class Woocommerce_Shipcloud_API
 			'package' => $package
 		);
 
+		WC_Shipcloud_Shipping::log('ShipmentsQuote request with params:');
+		WC_Shipcloud_Shipping::log(json_encode($params));
 		$request = $this->send_request( $action, $params, 'POST' );
 
 		if ( false !== $request && 200 === (int) $request[ 'header' ][ 'status' ] )
@@ -601,7 +607,8 @@ class Woocommerce_Shipcloud_API
 		else
 		{
 			$error = $this->get_error( $request );
-
+			WC_Shipcloud_Shipping::log('Error while getting ShipmentQuote.');
+			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 	}
@@ -678,17 +685,23 @@ class Woocommerce_Shipcloud_API
 			$description
 		);
 
+		WC_Shipcloud_Shipping::log('Shipments request with params:');
+		WC_Shipcloud_Shipping::log(json_encode($params));
+
 		$request = $this->send_request( 'shipments', $params, 'POST' );
 
 		if ( is_wp_error( $request ) )
 		{
+			WC_Shipcloud_Shipping::log('WP_Error while creating a shipment.');
+			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
 			return $request;
 		}
 
 		if ( false === $request || 2 !== (int) ( $request['header']['status'] / 100 ) )
 		{
 			$error = $this->get_error( $request );
-
+			WC_Shipcloud_Shipping::log('Error while creating a shipment.');
+			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
 			return new \WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 
@@ -797,6 +810,8 @@ class Woocommerce_Shipcloud_API
 		}
 
 		$error = $this->get_error( $request );
+		WC_Shipcloud_Shipping::log('Error while creating a shipping label.');
+		WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
 
 		return new WP_Error( 'shipcloud_api_error_' . $error['name'], $error['description'] );
 	}
@@ -817,6 +832,8 @@ class Woocommerce_Shipcloud_API
 		$request = $this->send_request( $action, $params, 'DELETE' );
 
 		if ( is_wp_error( $request ) ) {
+			WC_Shipcloud_Shipping::log('WP_Error while deleting a shipment.');
+			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
 			return $request;
 		}
 
@@ -828,6 +845,8 @@ class Woocommerce_Shipcloud_API
 		}
 
 		$error = $this->get_error( $request );
+		WC_Shipcloud_Shipping::log('Error while deleting a shipment.');
+		WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
 
 		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}
@@ -867,6 +886,8 @@ class Woocommerce_Shipcloud_API
 		}
 
 		$error = $this->get_error( $request );
+		WC_Shipcloud_Shipping::log('Error while creating a PickupRequest.');
+		WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
 
 		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}

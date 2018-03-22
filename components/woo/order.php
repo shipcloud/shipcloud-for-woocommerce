@@ -225,6 +225,7 @@ class WC_Shipcloud_Order
 	 */
 	 protected function handle_return_shipments( $data ) {
 		 if ( 'returns' == $data['service'] ) {
+			 WC_Shipcloud_Shipping::log('Detected returns shipment. Switching from and to entries.');
 			 $to = $data['to'];
 			 $from = $data['from'];
 			 $data['from'] = $to;
@@ -607,6 +608,7 @@ class WC_Shipcloud_Order
 
 		if( function_exists( 'wc_get_shipping_zone' ) )
 		{
+			WC_Shipcloud_Shipping::log('Shipping zones exist');
 			$shipping_zone = wc_get_shipping_zone( $this->get_package() );
 			$shipping_methods = $shipping_zone->get_shipping_methods( true );
 
@@ -625,6 +627,7 @@ class WC_Shipcloud_Order
 			// Fallback to general settings if there was no shipcloud in shipping zone
 			if( 0 === count( $carriers ) && wcsc_shipping_method() )
 			{
+				WC_Shipcloud_Shipping::log('shipcloud not in shipping zone');
 				$carriers = wcsc_shipping_method()->get_allowed_carriers();
 			}
 		}
@@ -1002,9 +1005,13 @@ class WC_Shipcloud_Order
 		try {
 			if ( isset($shipment_id) ) {
 				// Update
+				WC_Shipcloud_Shipping::log('Updating shipment with shipment_id: '.$shipment_id);
+				WC_Shipcloud_Shipping::log('Data: '.print_r($data, true));
 				$shipment = _wcsc_api()->shipment()->update( $shipment_id, $data );
 			} else {
 				// Create
+				WC_Shipcloud_Shipping::log('Creating new shipment');
+				WC_Shipcloud_Shipping::log('Data: '.json_encode($data));
 				$shipment = _wcsc_api()->shipment()->create( $data );
 			}
 
@@ -1330,12 +1337,14 @@ class WC_Shipcloud_Order
 
 		// Use default data if nothing was saved before
 		if ( '' === $recipient || 0 == count( $recipient ) ) {
+			WC_Shipcloud_Shipping::log('Use default data for recipient since nothing was saved before');
 			$order = $this->get_wc_order();
 
 			$recipient_street_name = method_exists( $order, 'get_shipping_address_1' ) ? $order->get_shipping_address_1() : $order->shipping_address_1;
 			$recipient_street_nr   = '';
 
 			if ( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
+				WC_Shipcloud_Shipping::log('street detection is active');
 				$recipient_street = wcsc_explode_street( $recipient_street_name );
 
 				if ( is_array( $recipient_street ) ) {
@@ -1345,6 +1354,7 @@ class WC_Shipcloud_Order
 
 				$shipping_address_2 = method_exists( $order, 'get_shipping_address_2' ) ? $order->get_shipping_address_2() : $order->shipping_address_2;
 				if ( ! $recipient_street_nr && $shipping_address_2 ) {
+					WC_Shipcloud_Shipping::log('using shipping_address_2 as street no');
 					// No house number given but we got secondary information to use for that.
 					$recipient_street_nr = $shipping_address_2;
 				}
@@ -1409,19 +1419,25 @@ class WC_Shipcloud_Order
 		}
 
 		if ( method_exists( $order, 'get_meta' ) && $care_of = $order->get_meta( '_shipping_care_of' ) ) {
+			WC_Shipcloud_Shipping::log('Use care of from _shipping_care_of');
 			return (string) $care_of;
 		}
 
 		$shipping_address_2 = method_exists( $order, 'get_shipping_address_2' ) ? $order->get_shipping_address_2() : $order->shipping_address_2;
 		if ( $shipping_address_2 ) {
 			// Shipping address overrides billing address.
+			WC_Shipcloud_Shipping::log('Use shipping_address_2 as care of');
 			return (string) $shipping_address_2;
 		}
 
 		// check to see if WooCommerce germanized was used for supplying a post number
 		if( method_exists( $order, 'get_shipping_parcelshop_post_number' ) ) {
+			WC_Shipcloud_Shipping::log('WooCommerce germanized detected');
+			WC_Shipcloud_Shipping::log('Use parcelshop_post_number as care of');
 			return (string) $order->get_shipping_parcelshop_post_number();
 		} else if( method_exists( $order, 'shipping_parcelshop_post_number' ) ) {
+			WC_Shipcloud_Shipping::log('WooCommerce germanized detected');
+			WC_Shipcloud_Shipping::log('Use parcelshop_post_number as care of');
 			return (string) $order->shipping_parcelshop_post_number;
 		}
 		
