@@ -537,6 +537,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'label'   => __( 'Automatic split street from street number (in some countries this do not work correct because of different street number schemes).', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
+			'ask_create_label_check' => array(
+				'title'   => __( 'Ask before creating a shipping label', 'shipcloud-for-woocommerce' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Safety check that adds a dialog to ask you if you really want to create a shipping label', 'shipcloud-for-woocommerce' ),
+				'default' => 'yes'
+			),
 		);
 
 		$this->instance_form_fields = array(
