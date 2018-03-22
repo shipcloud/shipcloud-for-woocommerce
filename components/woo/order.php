@@ -1736,7 +1736,9 @@ class WC_Shipcloud_Order
 
 		$calculated_weight = 0;
 		foreach ( $order_items as $order_item ) {
-			$calculated_weight += $order_item->get_product()->get_weight();
+			$quantity = $order_item->get_quantity();
+			$weight = $order_item->get_product()->get_weight();
+			$calculated_weight += $quantity * $weight;
 		}
 		return $calculated_weight;
 	}
