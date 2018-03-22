@@ -311,6 +311,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'label'       => __( 'Send notification emails from carriers (supported by DHL and DPD) to recipients on status changes of shipment.', 'shipcloud-for-woocommerce' ),
 				'default'     => 'yes'
 			),
+			'ask_create_label_check' => array(
+				'title'   => __( 'Ask before creating a shipping label', 'shipcloud-for-woocommerce' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Safety check that adds a dialog to ask you if you really want to create a shipping label', 'shipcloud-for-woocommerce' ),
+				'default' => 'yes'
+			),
 			'callback_url'                      => array(
 				'title'       => __( 'Webhook url', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text_only',
@@ -535,12 +541,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'title'   => __( 'Street detection', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Automatic split street from street number (in some countries this do not work correct because of different street number schemes).', 'shipcloud-for-woocommerce' ),
-				'default' => 'yes'
-			),
-			'ask_create_label_check' => array(
-				'title'   => __( 'Ask before creating a shipping label', 'shipcloud-for-woocommerce' ),
-				'type'    => 'checkbox',
-				'label'   => __( 'Safety check that adds a dialog to ask you if you really want to create a shipping label', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
 		);
