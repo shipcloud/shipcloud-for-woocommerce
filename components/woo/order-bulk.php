@@ -371,6 +371,7 @@ class WC_Shipcloud_Order_Bulk {
 
 		if ( 'returns' !== $request['shipcloud_carrier_service'] && $order->get_wc_order() && wcsc_get_cod_id() === $order->__get('payment_method') ) {
 			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
+				$request['shipcloud_carrier'],
 				$order->get_wc_order()->get_total(),
 				$order->__get('currency'),
 				$order->get_bank_information(),
