@@ -608,7 +608,7 @@ class Woocommerce_Shipcloud_API
 		{
 			$error = $this->get_error( $request );
 			WC_Shipcloud_Shipping::log('Error while getting ShipmentQuote.');
-			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
+			WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
 			return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 	}
@@ -693,7 +693,7 @@ class Woocommerce_Shipcloud_API
 		if ( is_wp_error( $request ) )
 		{
 			WC_Shipcloud_Shipping::log('WP_Error while creating a shipment.');
-			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
+			WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
 			return $request;
 		}
 
@@ -701,7 +701,7 @@ class Woocommerce_Shipcloud_API
 		{
 			$error = $this->get_error( $request );
 			WC_Shipcloud_Shipping::log('Error while creating a shipment.');
-			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
+			WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
 			return new \WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 		}
 
@@ -811,7 +811,7 @@ class Woocommerce_Shipcloud_API
 
 		$error = $this->get_error( $request );
 		WC_Shipcloud_Shipping::log('Error while creating a shipping label.');
-		WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
+		WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
 
 		return new WP_Error( 'shipcloud_api_error_' . $error['name'], $error['description'] );
 	}
@@ -833,7 +833,7 @@ class Woocommerce_Shipcloud_API
 
 		if ( is_wp_error( $request ) ) {
 			WC_Shipcloud_Shipping::log('WP_Error while deleting a shipment.');
-			WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
+			WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
 			return $request;
 		}
 
@@ -846,7 +846,7 @@ class Woocommerce_Shipcloud_API
 
 		$error = $this->get_error( $request );
 		WC_Shipcloud_Shipping::log('Error while deleting a shipment.');
-		WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
+		WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
 
 		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}
@@ -887,7 +887,7 @@ class Woocommerce_Shipcloud_API
 
 		$error = $this->get_error( $request );
 		WC_Shipcloud_Shipping::log('Error while creating a PickupRequest.');
-		WC_Shipcloud_Shipping::log('Error message: '.$request->get_error_message());
+		WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
 
 		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}
