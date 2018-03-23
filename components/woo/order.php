@@ -1082,11 +1082,9 @@ class WC_Shipcloud_Order
 
 	public function ajax_get_pakadoo_point() {
 		$pakadoo_id = $_POST['pakadoo_id'];
-		error_log('pakadoo id: '.$pakadoo_id);
 		$response = $this->get_api()->create_address_by_pakadoo_id( $pakadoo_id );
 
 		if ( is_wp_error( $response ) ) {
-			error_log('errror: '.print_r($response,true));
 			wp_send_json_error( $response );
 		}
 

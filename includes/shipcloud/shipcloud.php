@@ -904,7 +904,6 @@ class Woocommerce_Shipcloud_API
 
 			return new WP_Error( $status_code, $error[ 'description' ] );
 		}
-		error_log('status = 200');
 
 		return $request[ 'body' ];
 	}
