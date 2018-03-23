@@ -115,7 +115,9 @@ jQuery( function( $ ) {
 		
 		var should_ask = $(this).data('ask-create-label-check');
 		
-		if( 'yes' == should_ask) {
+		if( 'no' == should_ask) {
+			shipcloud_create_shipment_label(data, self);
+		} else {
 			var ask_create_label = $('#ask-create-label');
 
 			ask_create_label.dialog({
@@ -143,8 +145,6 @@ jQuery( function( $ ) {
 			});
 
 			ask_create_label.dialog("open");
-		} else {
-			shipcloud_create_shipment_label(data, self);
 		}
 	});
 
