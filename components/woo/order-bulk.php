@@ -360,7 +360,7 @@ class WC_Shipcloud_Order_Bulk {
 			$order->get_wc_order()->get_order_number()
 		);
 
-		$use_calculated_weight = $request['shipcloud_use_calculated_weight'];
+		$use_calculated_weight = isset($request['shipcloud_use_calculated_weight']) ? $request['shipcloud_use_calculated_weight'] : '';
 		if ( $use_calculated_weight == 'use_calculated_weight' ) {
 			$request['parcel_weight'] = $order->get_calculated_weight();
 		}
@@ -383,11 +383,17 @@ class WC_Shipcloud_Order_Bulk {
 			'create_shipping_label' => true,
 		);
 
-		if ( 'returns' !== $request['shipcloud_carrier_service'] && $order->get_wc_order() && wcsc_get_cod_id() === $order->__get('payment_method') ) {
+		if ( 'returns' !== $request['shipcloud_carrier_service'] && $order->get_wc_order() && wcsc_get_cod_id() === $order->get_wc_order()->__get('payment_method') ) {
+			if (method_exists($order, 'get_currency')) {
+				$currency = $order->get_currency();
+			} else {
+				$currency = $order->get_wc_order()->get_order_currency();
+			}
+
 			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
 				$request['shipcloud_carrier'],
 				$order->get_wc_order()->get_total(),
-				$order->__get('currency'),
+				$currency,
 				$order->get_bank_information(),
 				sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
 			);

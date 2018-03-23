@@ -979,11 +979,16 @@ class WC_Shipcloud_Order
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
-		if ( 'returns' !== $data['service'] && wcsc_get_cod_id() === $this->__get('payment_method') ) {
+		if ( 'returns' !== $data['service'] && wcsc_get_cod_id() === $order->__get('payment_method') ) {
+			if (method_exists($order, 'get_currency')) {
+				$currency = $order->get_currency();
+			} else {
+				$currency = $order->get_order_currency();
+			}
 			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
 				$data['carrier'],
 				$order->get_total(),
-				$this->__get('currency'),
+				$currency,
 				$this->get_bank_information(),
 				sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
 			);
@@ -996,7 +1001,11 @@ class WC_Shipcloud_Order
 		        'name' => \Shipcloud\Domain\Services\CashOnDelivery::NAME,
                 'properties' => $cash_on_delivery->toArray()
             );
-        }
+        } else {
+					error_log('no cod');
+					error_log('data service: '.$data['service']);
+					error_log('payment method: '.$this->__get('payment_method'));
+				}
 
 		if ( array_key_exists( 'package', $data ) ) {
 			$data['package'] = $this->sanitize_package( $data['package'] );
