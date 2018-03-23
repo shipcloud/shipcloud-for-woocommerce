@@ -1766,8 +1766,22 @@ class WC_Shipcloud_Order
 
 		$calculated_weight = 0;
 		foreach ( $order_items as $order_item ) {
-			$quantity = $order_item->get_quantity();
-			$weight = $order_item->get_product()->get_weight();
+			if (method_exists($order_item, 'get_quantity')) {
+				// WooCommerce 3
+				$quantity = $order_item->get_quantity();
+			} else {
+				// WooCommerce 2
+				$quantity = $order_item['qty'];
+			}
+			
+			if (method_exists($order_item, 'get_product')) {
+				// WooCommerce 3
+				$weight = $order_item->get_product()->get_weight();
+			} else {
+				// WooCommerce 2
+				$product = $this->get_wc_order()->get_product_from_item($order_item);
+				$weight = get_post_meta( $product->id, '_weight', true );
+			}
 			$calculated_weight += $quantity * $weight;
 		}
 		return $calculated_weight;
