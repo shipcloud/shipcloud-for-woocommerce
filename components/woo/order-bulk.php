@@ -299,9 +299,6 @@ class WC_Shipcloud_Order_Bulk {
 			if ( ! $current || ! $current->getLabelUrl() ) {
 				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 				WC_Shipcloud_Shipping::log($error_message);
-				WC_Shipcloud_Shipping::log('current: '.$current);
-				WC_Shipcloud_Shipping::log('labelUrl: '.$current->getLabelUrl());
-
 				continue;
 			}
 
