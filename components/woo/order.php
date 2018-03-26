@@ -979,7 +979,13 @@ class WC_Shipcloud_Order
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
 
-		if ( 'returns' !== $data['service'] && wcsc_get_cod_id() === $order->__get('payment_method') ) {
+		if (method_exists($order, 'get_payment_method')) {
+			$payment_method = $order->get_payment_method();
+		} else {
+			$payment_method = $order->payment_method;
+		}
+
+		if ( 'returns' !== $data['service'] && wcsc_get_cod_id() === $payment_method ) {
 			if (method_exists($order, 'get_currency')) {
 				$currency = $order->get_currency();
 			} else {

@@ -383,7 +383,13 @@ class WC_Shipcloud_Order_Bulk {
 			'create_shipping_label' => true,
 		);
 
-		if ( 'returns' !== $request['shipcloud_carrier_service'] && $order->get_wc_order() && wcsc_get_cod_id() === $order->get_wc_order()->__get('payment_method') ) {
+		if (method_exists($order->get_wc_order(), 'get_payment_method')) {
+			$payment_method = $order->get_wc_order()->get_payment_method();
+		} else {
+			$payment_method = $order->get_wc_order()->payment_method;
+		}
+
+		if ( 'returns' !== $request['shipcloud_carrier_service'] && $order->get_wc_order() && wcsc_get_cod_id() === $payment_method ) {
 			if (method_exists($order, 'get_currency')) {
 				$currency = $order->get_currency();
 			} else {
