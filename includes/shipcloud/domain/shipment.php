@@ -50,10 +50,10 @@ class Shipment {
 
 		return new static(
 			$shipment['id'],
-			$shipment['tracking_url'] ?: null,
-			$shipment['label_url'] ?: null,
-			$shipment['price'] ?: null,
-			$shipment['carrier_tracking_no'] ?: null
+			isset($shipment['tracking_url']) ? $shipment['tracking_url'] : null,
+			isset($shipment['label_url']) ? $shipment['label_url'] : null,
+			isset($shipment['price']) ? $shipment['price'] : null,
+			isset($shipment['carrier_tracking_no']) ? $shipment['carrier_tracking_no'] : null
 		);
 	}
 
