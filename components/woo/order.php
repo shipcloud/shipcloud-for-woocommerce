@@ -1405,8 +1405,10 @@ class WC_Shipcloud_Order
             return '';
 		}
 
-		if ( method_exists( $order, 'get_meta' ) && $phone = $order->get_meta( '_shipping_phone' ) ) {
-			return (string) $phone;
+		if ( method_exists( $order, 'get_meta' ) ) {
+			return (string) $order->get_meta( '_shipping_phone' );
+		} else if (method_exists( $order, 'get_meta_data' )) {
+			return (string) $order->get_meta_data( '_shipping_phone' );
 		}
 
 		return (string) $order->billing_phone;
