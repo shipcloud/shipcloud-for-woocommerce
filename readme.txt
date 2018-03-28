@@ -118,6 +118,7 @@ https://youtu.be/HE3jow15x8c
 * Enhanced: Added info about where the debug log can be found
 * Enhanced: Added setting to always use the calculated weight from order
 * Enhanced: PHP 5.5 is now the minimum requirement
+* Enhanced: Show order status tracking in user account
 * Fixed: Error when trying to create the first parcel template
 * Fixed: Handling of billing address for notifications when using WooCommerce 2
 

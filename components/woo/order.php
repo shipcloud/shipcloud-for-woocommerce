@@ -168,6 +168,8 @@ class WC_Shipcloud_Order
 		add_action( 'wp_ajax_shipcloud_delete_shipment', array( $this, 'ajax_delete_shipment' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
+
+		add_action( 'woocommerce_order_details_before_order_table', array( $this, 'my_account_show_tracking' ), 10, 1 );
 	}
 
 	/**
@@ -645,9 +647,15 @@ class WC_Shipcloud_Order
 		$package = array();
 		$package['destination']['country']   = $recipient['country'];
 		$package['destination']['zip_code']  = $recipient['zip_code'];
+		$package['destination']['postcode']  = $recipient['zip_code'];
 		$package['destination']['state']     = $recipient['state'];
 		$package['destination']['city']      = $recipient['city'];
-		$package['destination']['address']   = $recipient['street'] . ' ' . $recipient['street_nr'];
+		$package['destination']['address']   = $recipient['street'];
+		if (array_key_exists( 'street_nr', $recipient )) {
+			$package['destination']['address'] .= ' ' . $recipient['street_nr'];
+		} elseif (array_key_exists( 'street_no', $recipient )) {
+			$package['destination']['address'] .= ' ' . $recipient['street_no'];
+		}
 
 		return $package;
 	}
@@ -1868,6 +1876,103 @@ class WC_Shipcloud_Order
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public function my_account_show_tracking( $order ) {
+		$show_tracking_in_my_account = $this->get_options('show_tracking_in_my_account');
+		if ( $show_tracking_in_my_account === 'yes' ) {
+			$this->order_id = $order->get_id();
+			$shipment_ids = get_post_meta( $order->get_id(), 'shipcloud_shipment_ids' );
+			$shipments_data = $shipment_data = get_post_meta( $order->get_id(), 'shipcloud_shipment_data' );
+
+			ob_start();
+			?>
+            <h2>
+                <?php _e( 'Tracking & Tracing', 'shipcloud-for-woocommerce' ); ?>
+            </h2>
+
+			<?php
+			foreach ( $shipment_ids AS $shipment_id ) {
+				$tracking_events = get_post_meta( $order->get_id(), 'shipment_' . $shipment_id . '_trackingevent' );
+				$carrier_tracking_number = '';
+				foreach ( $shipments_data AS $shipment_data ) {
+					if ($shipment_data['id'] === $shipment_id) {
+						$carrier_tracking_number = $shipment_data['carrier_tracking_no'];
+						// check to see if label url is present because GLS doesn't create a tracking number right away
+						if (isset($shipment_data['label_url'])) {
+			?>
+                            <p>
+                                <strong>
+                                    <?php _e( 'Carrier', 'shipcloud-for-woocommerce' ); ?>:
+                                </strong>
+                                <?php echo wcsc_get_carrier_display_name($shipment_data['carrier']); ?>,
+                                <strong>
+                                    <?php _e( 'Trackingnumber', 'shipcloud-for-woocommerce' ); ?>:
+                                </strong>
+                                <a href="<?php echo wcsc_get_carrier_tracking_url($shipment_data['carrier'], $carrier_tracking_number); ?>" target="_blank">
+                                    <?php echo $carrier_tracking_number; ?>
+                                </a>
+                            </p>
+
+							<?php
+								if (count($tracking_events) > 0 ) {
+							?>
+								<table class="woocommerce-table woocommerce-table--order-details shop_table order_details shipcloud__tracking">
+									<thead>
+										<tr>
+											<th><?php _e( 'Status', 'shipcloud-for-woocommerce' ); ?></th>
+											<th></th>
+											<th><?php _e( 'Details', 'shipcloud-for-woocommerce' ); ?></th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<?php
+												$tracking_events = array_reverse($tracking_events);
+												foreach ( $tracking_events AS $tracking_event ) {
+													$occured_at_timestamp = strtotime($tracking_event['occured_at']);
+										?>
+										<tr>
+											<td>
+												<div class="shipcloud__tracking--date">
+													<?php
+														echo strftime('%d.%m.%Y', $occured_at_timestamp);
+													?>
+												</div>
+												<div class="shipcloud__tracking--time">
+													<?php
+														echo strftime('%H:%M', $occured_at_timestamp);
+													?>
+												</div>
+												<div class="shipcloud__tracking--status">
+													<?php echo wcsc_get_shipment_status_string($tracking_event['type']); ?>
+												</div>
+											</td>
+											<td>
+												<?php echo wcsc_get_shipment_status_icon($tracking_event['status']); ?>
+											</td>
+											<td>
+												<?php echo $tracking_event['details'] ?>
+												<div class="shipcloud__tracking--location">
+													<?php echo $tracking_event['location'] ?>
+												</div>
+											</td>
+										</tr>
+										<?php
+											}
+										?>
+									</tbody>
+								</table>
+			<?php
+							}
+						}
+					}
+				}
+			}
+			?>
+			<?php
+			echo ob_get_clean();
 		}
 	}
 }

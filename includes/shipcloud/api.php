@@ -5,6 +5,7 @@ namespace Shipcloud;
 use Shipcloud\Api\Carriers;
 use Shipcloud\Api\Response;
 use Shipcloud\Api\Shipment;
+use Shipcloud\Api\Webhook;
 
 /**
  * shipcloud for WooCommerce API
@@ -71,6 +72,14 @@ class Api {
 	 * @var string
 	 */
 	private $url;
+
+    /**
+    * Access to shipment API.
+    *
+    * @var Webhook
+    */
+    protected $webhook;
+
 
 	/**
 	 * Api constructor.
@@ -268,4 +277,17 @@ class Api {
 
 		return $this->shipment = new Shipment( $this );
 	}
+
+    /**
+    * Handle webhooks.
+    *
+    * @return Webhook
+    */
+    public function webhook() {
+        if ( $this->webhook ) {
+            return $this->webhook;
+        }
+
+        return $this->webhook = new Webhook( $this );
+    }
 }

@@ -898,7 +898,7 @@ class Woocommerce_Shipcloud_API
 		$request = $this->send_request( $action, $params, 'POST' );
 
 		$status_code = (int) $request[ 'header' ][ 'status' ];
-		
+
 		if ( 200 !== $status_code ) {
 			$error = $this->get_error( $request );
 
@@ -908,6 +908,54 @@ class Woocommerce_Shipcloud_API
 		return $request[ 'body' ];
 	}
 
+	public function read_shipment( $shipment_id ) {
+		$api = new Shipcloud\Api( $this->api_key, 'plugin.woocommerce.z4NVoYhp', $this->api_url );
+
+		try {
+			return $api->shipment()->get($shipment_id);
+		} catch (\Exception $e) {
+			WC_Shipcloud_Shipping::log(print_r($e, true));
+			return new \WP_Error( 'shipcloud_api_error_' . $e->getCode(), $e->getMessage() );
+		}
+	}
+
+    public function create_webhook() {
+        $api = new Shipcloud\Api( $this->api_key, 'plugin.woocommerce.z4NVoYhp', $this->api_url );
+
+        try {
+            return $api->webhook()->create();
+        } catch (\Exception $e) {
+            self::log(print_r($e, true));
+            return new \WP_Error( 'shipcloud_api_error_' . $e->getCode(), $e->getMessage() );
+        }
+    }
+
+
+    public function delete_webhook($webhook_id) {
+        $params = array();
+
+        $action  = 'webhooks/'.$webhook_id;
+        $request = $this->send_request( $action, $params, 'DELETE' );
+
+        if ( is_wp_error( $request ) ) {
+            WC_Shipcloud_Shipping::log('WP_Error while deleting a webhook.');
+            WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
+            return $request;
+        }
+
+        $request_status = (int) $request[ 'header' ][ 'status' ];
+
+        if ( 204 === $request_status ) {
+            delete_option('woocommerce_shipcloud_catch_all_webhook_id');
+            return true;
+        }
+
+        $error = $this->get_error( $request );
+        WC_Shipcloud_Shipping::log('Error while deleting a webhook.');
+        WC_Shipcloud_Shipping::log('Error message: '.$error[ 'description' ]);
+
+        return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
+    }
 	/**
 	 * Connection testing
 	 *

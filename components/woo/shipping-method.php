@@ -196,6 +196,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			return false;
 		}
 
+        $this->check_for_active_webhook();
+
 		return true;
 	}
 
@@ -321,6 +323,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'title'       => __( 'Carrier email', 'shipcloud-for-woocommerce' ),
 				'type'        => 'checkbox',
 				'label'       => __( 'Send notification emails from carriers (supported by DHL and DPD) to recipients on status changes of shipment.', 'shipcloud-for-woocommerce' ),
+				'default'     => 'yes'
+			),
+			'show_tracking_in_my_account' => array(
+				'title'       => __( 'Show tracking in my account', 'shipcloud-for-woocommerce' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Lets the buyer see detailed tracking information when viewing their order in the my account area.', 'shipcloud-for-woocommerce' ),
 				'default'     => 'yes'
 			),
 			'auto_weight_calculation' => array(
@@ -554,18 +562,19 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'There are some cases where automatic detection doesn\'t work, due to different naming schemes. Always check the recipients\' address before creating a shipping label!', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
+            'webhook_active' => array(
+				'title'   => __( 'Shipment status notification', 'shipcloud-for-woocommerce' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Enable webhooks to get notified about status changes in your shipments.', 'shipcloud-for-woocommerce' ),
+				'description' => sprintf( __( 'If you want to make changes, you can find the settings in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), 'https://app.shipcloud.io/de/webhooks' ),
+				'default' => 'no'
+			),
 			'debug' => array(
 				'title'   => __( 'Debug', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable logging if you experience problems.', 'shipcloud-for-woocommerce' ),
 				'description' => sprintf( __( 'You can find the logfile at <code>%s</code>' ), $logfile_path ),
 				'default' => 'yes'
-			),
-			'callback_url' => array(
-				'title'       => __( 'Webhook url', 'shipcloud-for-woocommerce' ),
-				'type'        => 'text_only',
-				'description' => sprintf( __( '%s<br /><br />You want to get noticed about the shipment status? Copy the webhook url and enter it in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
-				'disabled'    => false
 			),
 		);
 
@@ -678,7 +687,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	}
 
 	/**
-	 * Listening to Shipcloud Webhooks
+	 * Listening to shipcloud webhooks
 	 *
 	 * @since 1.0.0
 	 */
@@ -728,29 +737,46 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		update_post_meta( $order_id, 'shipment_' . $shipment_id . '_status', $shipment->type );
 
-		/**
-		 * Hooks in for further functions after status changes
-		 */
-		do_action( 'shipcloud_shipment_tracking_change', $order_id, $shipment_id, $shipment->type );
+		$api = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
+
+		$shipcloud_shipment = $api->read_shipment( $shipment_id );
+
+        if ( !is_wp_error( $shipcloud_shipment ) ) {
+            $tracking_event = $shipcloud_shipment->getTrackingEventByTimestamp($shipment->occured_at);
+
+            if ($tracking_event !== null) {
+    			$event = array(
+    				'occured_at' => $shipment->occured_at,
+    				'type' => $shipment->type
+    			);
+    			$event = array_merge($event, $tracking_event);
+    			add_post_meta( $order_id, 'shipment_' . $shipment_id . '_trackingevent', $event );
+    		}
+
+    		/**
+    		 * Hooks in for further functions after status changes
+    		 */
+    		do_action( 'shipcloud_shipment_tracking_change', $order_id, $shipment_id, $shipment->type );
 
 
-		/**
-		 * shipcloud_shipment_tracking_default action
-         *
-         * @param int $order_id ID of the order.
-		 * @param int $shipment_id ID of the shipment.
-		 */
-		do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
+    		/**
+    		 * shipcloud_shipment_tracking_default action
+             *
+             * @param int $order_id ID of the order.
+    		 * @param int $shipment_id ID of the shipment.
+    		 */
+    		do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
 
-		$shipment_action = 'shipcloud_' . str_replace( $shipment->type, '.', '_' );
+    		$shipment_action = 'shipcloud_' . str_replace( $shipment->type, '.', '_' );
 
-		/**
-		 * shipcloud_shipment_{{ shipment type }} action
-         *
-		 * @param int $order_id ID of the order.
-		 * @param int $shipment_id ID of the shipment.
-		 */
-		do_action( $shipment_action, $order_id, $shipment_id );
+    		/**
+    		 * shipcloud_shipment_{{ shipment type }} action
+             *
+    		 * @param int $order_id ID of the order.
+    		 * @param int $shipment_id ID of the shipment.
+    		 */
+    		do_action( $shipment_action, $order_id, $shipment_id );
+        }
 
 		exit;
 	}
@@ -1068,7 +1094,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		} else {
 			return $this->get_allowed_carriers( true );
 		}
-			
+
 	}
 
 	/**
@@ -1682,4 +1708,26 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		return true;
 	}
+
+    /*
+     * Check if webhook option in settings got (de)activated and
+     * either create or delete catch all webhook afterwards
+     */
+    private function check_for_active_webhook() {
+        $webhook_id = get_option( 'woocommerce_shipcloud_catch_all_webhook_id' );
+        $api = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
+
+        if (isset($_POST['woocommerce_shipcloud_webhook_active']) && !$webhook_id) {
+            // create catch all webhook at shipcloud
+            $webhook = $api->create_webhook();
+            WC_Shipcloud_Shipping::log('Created webhook with id: '.$webhook['id']);
+        } elseif ($webhook_id) {
+            // delete webhook at shipcloud
+            WC_Shipcloud_Shipping::log('Deleting webhook with id: '.$webhook_id);
+            if (isset($webhook_id)) {
+                $api->delete_webhook($webhook_id);
+            }
+        }
+
+    }
 }
