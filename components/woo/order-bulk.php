@@ -291,7 +291,7 @@ class WC_Shipcloud_Order_Bulk {
 		WooCommerce_Shipcloud::load_fpdf();
 
 		$pdf_count = 0;
-		$m = new \iio\libmergepdf\Merger();
+		$merger = new \iio\libmergepdf\Merger();
 		foreach ( $request['post'] as $order_id ) {
 			$current       = $this->create_label_for_order( $order_id, $request );
 			$error_message = sprintf( 'Problem generating label for order #%d', $order_id );
@@ -306,7 +306,7 @@ class WC_Shipcloud_Order_Bulk {
 				// Storing label.
 				WC_Shipcloud_Shipping::log('Trying to store the label');
 				$path_to_pdf = $this->save_label( $order_id, $current->getLabelUrl() );
-				$m->addFromFile( $path_to_pdf );
+				$merger->addFile( $path_to_pdf );
 				$pdf_count++;
 			} catch ( \RuntimeException $e ) {
 				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );

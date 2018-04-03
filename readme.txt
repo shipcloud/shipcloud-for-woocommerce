@@ -115,6 +115,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.7.1 =
+* Enhanced: Update libraries for creating PDF files
+
 = 1.7.0 =
 * Added: Buyers can now use their pakadoo id to determine the shipping address
 * Added: Total order weight can now be used when creating shipments by selecting a checkbox

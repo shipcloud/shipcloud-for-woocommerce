@@ -178,14 +178,14 @@ class WooCommerce_Shipcloud {
 	public static function load_fpdf() {
 		require_once WCSC_FOLDER . '/vendor/setasign/fpdf/fpdf.php';
 
-		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/filters/FilterASCII85.php';
-		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/filters/FilterASCIIHexDecode.php';
-		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/filters/FilterLZW.php';
-		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/fpdi.php';
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/PdfParser/Filter/Ascii85.php';
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/PdfParser/Filter/AsciiHex.php';
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/PdfParser/Filter/Lzw.php';
+		require_once WCSC_FOLDER . '/vendor/setasign/fpdi/Fpdi.php';
 
-		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/src/Exception.php';
-		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/src/Merger.php';
-		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/src/Pages.php';
+		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/Exception.php';
+		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/Merger.php';
+		require_once WCSC_FOLDER . '/vendor/iio/libmergepdf/Pages.php';
 	}
 
 	/**
