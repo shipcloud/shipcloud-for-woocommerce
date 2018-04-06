@@ -4,7 +4,7 @@ Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
 Tested up to: 4.9.1
 Stable tag: 1.7.0
-Requires PHP: 5.4
+Requires PHP: 5.5
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
@@ -53,15 +53,8 @@ receive their order from
 * DHL Packstation
 * DHL Postfiliale
 * Higher insurance
-
-= shipcloud WooCommerce customers =
-
-A multitude of WooCommerce customers succussfully use shipcloud as their shipping service provider.
-Here are a few of them:
-
-* [einhorn.my](https://www.shipcloud.io/de/company/press/references/mit-shipcloud-koennen-wir-reibungsverluste-reduzieren?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
-* [grillido.de](https://www.shipcloud.io/de/company/press/references/wenn-s-um-die-wurst-geht-shipcloud?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
-* [bertrand.bio](https://www.shipcloud.io/de/company/press/references/unsere-erfahrungen-waren-durchweg-positiv-sonst-waeren-wir-kein-treuer-kunde?utm_source=wordpress&utm_medium=woocommerce&utm_campaign=pluginbeschreibung)
+* UPS Adult Signature
+* GLS Guaranteed24Service
 
 = One-stop national and international shipping =
 
@@ -116,8 +109,15 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.8.0 =
+* Added: Saturday delivery
+* Added: Age based delivery (DHL visual age check, UPS adult signature)
+* Added: DHL premium international
+* Added: DHL preferred time
+* Added: Drop authorization
+* Added: GLS Guaranteed24Service
 * Enhanced: Added info about where the debug log can be found
 * Enhanced: Added setting to always use the calculated weight from order
+* Enhanced: PHP 5.5 is now the minimum requirement
 * Fixed: Error when trying to create the first parcel template
 
 = 1.7.0 =

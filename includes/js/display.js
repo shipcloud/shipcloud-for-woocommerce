@@ -12,7 +12,6 @@ jQuery(function($) {
         url: ajax_url,
         success: function (response) {
           if (response.success) {
-            console.log(response);
             var data = response.data;
             $('#shipping_company').val(data.company);
             $('#shipping_country').val(data.country.toUpperCase());

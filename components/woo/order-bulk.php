@@ -61,7 +61,7 @@ class WC_Shipcloud_Order_Bulk {
 	public function __isset( $name ) {
 		return property_exists( '\\WC_Order', $name ) || method_exists( $this->get_wc_order(), 'get_' . $name );
 	}
-	
+
 	/**
 	 * Initializing hooks and filters
 	 *
@@ -355,11 +355,6 @@ class WC_Shipcloud_Order_Bulk {
 	protected function create_label_for_order( $order_id, $request ) {
 		$order = WC_Shipcloud_Order::create_order( $order_id );
 
-		$reference_number = sprintf(
-			__( 'Order %s', 'shipcloud-for-woocommerce' ),
-			$order->get_wc_order()->get_order_number()
-		);
-
 		$use_calculated_weight = isset($request['shipcloud_use_calculated_weight']) ? $request['shipcloud_use_calculated_weight'] : '';
 		if ( $use_calculated_weight == 'use_calculated_weight' ) {
 			$request['parcel_weight'] = $order->get_calculated_weight();
@@ -372,6 +367,40 @@ class WC_Shipcloud_Order_Bulk {
 			$request['shipcloud_carrier_package']
 		);
 
+        $shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+
+        if (!empty($request['shipment']['additional_services']['cash_on_delivery']['currency'])) {
+            $currency = $request['shipment']['additional_services']['cash_on_delivery']['currency'];
+        } elseif (method_exists($order, 'get_currency')) {
+            $currency = $order->get_currency();
+        } elseif (method_exists($order->get_wc_order(), 'get_currency')) {
+            $currency = $order->get_wc_order()->get_currency();
+        } else {
+            $currency = $order->get_wc_order()->get_order_currency();
+        }
+
+        if (!empty($request['shipment']['additional_services']['cash_on_delivery']['reference1'])) {
+            $reference_number = $request['shipment']['additional_services']['cash_on_delivery']['reference1'];
+        } else {
+            $reference_number = sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id );
+        }
+
+        $bank_information = new \Shipcloud\Domain\ValueObject\BankInformation(
+            $request['shipment']['additional_services']['cash_on_delivery']['bank_name'],
+            $request['shipment']['additional_services']['cash_on_delivery']['bank_code'],
+            $request['shipment']['additional_services']['cash_on_delivery']['bank_account_holder'],
+            $request['shipment']['additional_services']['cash_on_delivery']['bank_account_number']
+        );
+
+        $additional_services = $shipment_repo->additional_services_from_request(
+            $request['shipment']['additional_services'],
+            $order->get_wc_order()->get_total(),
+            $currency,
+            $bank_information,
+            $reference_number,
+            $request['shipcloud_carrier']
+        );
+
 		$data = array(
 			'to'                    => $order->get_recipient(),
 			'from'                  => $order->get_sender(),
@@ -379,40 +408,10 @@ class WC_Shipcloud_Order_Bulk {
 			'carrier'               => $request['shipcloud_carrier'],
 			'service'               => $request['shipcloud_carrier_service'],
 			'reference_number'      => $reference_number,
-			'notification_email'     => $order->get_notification_email(),
+			'notification_email'    => $order->get_notification_email(),
+			'additional_services'   => $additional_services,
 			'create_shipping_label' => true,
 		);
-
-		if (method_exists($order->get_wc_order(), 'get_payment_method')) {
-			$payment_method = $order->get_wc_order()->get_payment_method();
-		} else {
-			$payment_method = $order->get_wc_order()->payment_method;
-		}
-
-		if ( 'returns' !== $request['shipcloud_carrier_service'] && $order->get_wc_order() && wcsc_get_cod_id() === $payment_method ) {
-			if (method_exists($order, 'get_currency')) {
-				$currency = $order->get_currency();
-			} else {
-				$currency = $order->get_wc_order()->get_order_currency();
-			}
-
-			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
-				$request['shipcloud_carrier'],
-				$order->get_wc_order()->get_total(),
-				$currency,
-				$order->get_bank_information(),
-				sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
-			);
-
-			if (!isset($data['additional_services'])) {
-				$data['additional_services'] = array();
-			}
-
-			$data['additional_services'][] = array(
-				'name' => \Shipcloud\Domain\Services\CashOnDelivery::NAME,
-				'properties' => $cash_on_delivery->toArray()
-			);
-		}
 
 		try {
 			WC_Shipcloud_Shipping::log('calling shipcloud api to create label with the following data: '.json_encode($data));
@@ -447,6 +446,7 @@ class WC_Shipcloud_Order_Bulk {
 				'height'              => wc_format_decimal( $request['parcel_height'] ),
 				'length'              => wc_format_decimal( $request['parcel_length'] ),
 				'weight'              => wc_format_decimal( $request['parcel_weight'] ),
+				'additional_services' => $additional_services,
 				'date_created'        => time(),
 			);
 
@@ -589,7 +589,7 @@ class WC_Shipcloud_Order_Bulk {
 			'from' => $from,
 			'to' => $to,
 		);
-		
+
 		return array_filter( $adresses );
 	}
 }

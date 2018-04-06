@@ -5,7 +5,7 @@
     <tr id="wcsc-order-bulk-labels"
         class="inline-edit-row inline-edit-row-page inline-edit-shop_order bulk-edit-row bulk-edit-row-page bulk-edit-shop_order"
         style="display: none">
-        <td colspan="10" class="colspanchange">
+        <td colspan="10" class="colspanchange" id="shipcloud-io">
 
             <fieldset class="inline-edit-col-left">
                 <legend class="inline-edit-legend">
@@ -19,32 +19,43 @@
             </fieldset>
 
             <fieldset class="inline-edit-col-right">
-                <div class="inline-edit-col">
-                    <div class="inline-edit-group wp-clearfix" id="shipcloud_bulk">
-                            <span style="display: inline-block; width: 9em; line-height: 1.3em; font-size: 14px; padding: 8px 0 42px 10px">
-                                <?php esc_html_e( 'Template', 'shipcloud-for-woocommerce' ) ?>
-                            </span>
-							<?php if ( count( $this->get_parcel_templates() ) > 0 ) : ?>
-                                <select name="parcel_list">
-                                    <option value="none"><?php _e( '[ Select a parcel ]', 'shipcloud-for-woocommerce' ); ?></option>
+              <div class="create-label fifty">
+                <?php echo $this->parcel_templates(); ?>
+                <?php echo $this->parcel_form(); ?>
+              </div>
 
-									<?php foreach ( $this->get_parcel_templates() AS $parcel_template ): ?>
-                                        <option value="<?php echo $parcel_template['value']; ?>"
-											<?php foreach ( $parcel_template['data'] as $field => $value ): ?>
-                                                data-<?php echo $field ?>="<?php esc_attr_e( $value ) ?>"
-											<?php endforeach; ?>
-                                        >
-											<?php echo $parcel_template['option']; ?>
-                                        </option>
-									<?php endforeach; ?>
-                                </select>
-							<?php else: ?>
-                                <p><?php echo sprintf( __( 'Please <a href="%s">add parcel templates</a> if you want to use.', 'shipcloud-for-woocommerce' ), admin_url( 'edit.php?post_type=sc_parcel_template' ) ); ?></p>
-							<?php endif; ?>
+              <div class="additional_services fifty">
+                <script type="template/html" id="tmpl-shipcloud-shipment-additional-services">
+                  <?php require WCSC_COMPONENTFOLDER . '/block/additional-services-edit-form.php'; ?>
+                </script>
+                <script type="application/javascript">
+                  jQuery(function ($) {
+                    shipcloud.additionalServices = new shipcloud.ShipmentAdditionalServicesView({
+                      model: new shipcloud.ShipmentModel(),
+                      el   : '#wcsc-order-bulk-labels .additional_services'
+                    });
+                    shipcloud.additionalServices.render();
 
-							<?php echo $this->label_form->render() ?>
-                    </div>
-                </div>
+                <?php
+                    $cod_data = array(
+                        'currency'            => 'EUR',
+                        'bank_account_holder' => $this->get_options('bank_account_holder'),
+                        'bank_name'           => $this->get_options('bank_name'),
+                        'bank_account_number' => $this->get_options('bank_account_number'),
+                        'bank_code'           => $this->get_options('bank_code')
+                    );
+                ?>
+                    // allways add cash_on_delivery data to the form since customer
+                    // might still like to use this feature although the customer didn't
+                    // select it in the checkout process
+                    shipcloud.additionalServices.addAdditionalService({
+                        'cash_on_delivery': <?php echo(json_encode($cod_data)); ?>
+                    });
+                  });
+                </script>
+              </div>
+
+              <div class="clear"></div>
             </fieldset>
 
             <p class="submit inline-edit-save">

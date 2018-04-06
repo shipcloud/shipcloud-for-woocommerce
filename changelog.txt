@@ -1,8 +1,15 @@
 == Changelog ==
 
 = 1.8.0 =
+* Added: Saturday delivery
+* Added: Age based delivery (DHL visual age check, UPS adult signature)
+* Added: DHL premium international
+* Added: DHL preferred time
+* Added: Drop authorization
+* Added: GLS Guaranteed24Service
 * Enhanced: Added info about where the debug log can be found
 * Enhanced: Added setting to always use the calculated weight from order
+* Enhanced: PHP 5.5 is now the minimum requirement
 * Fixed: Error when trying to create the first parcel template
 
 = 1.7.0 =

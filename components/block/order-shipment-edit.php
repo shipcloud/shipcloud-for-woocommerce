@@ -1,4 +1,6 @@
-<input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}">
+<input type="hidden" name="shipment[id]" value="{{ data.model.get('id') }}">
+<input type="hidden" name="shipment[carrier]" value="{{ data.model.get('carrier') }}">
+<input type="hidden" name="shipment[service]" value="{{ data.model.get('service') }}">
 
 <fieldset class="label-shipment-sender address">
     <legend>
@@ -149,6 +151,12 @@
         </label>
         <input type="text" name="shipment[to][phone]" value="{{ data.model.get('to').get('phone') }}">
     </div>
+</fieldset>
+
+<fieldset class="label-shipment-additional-services additional_services">
+  <?php
+    require WCSC_COMPONENTFOLDER . '/block/additional-services-edit-form.php';
+   ?>
 </fieldset>
 
 <input type="hidden" name="shipment[package][weight]" value="{{ data.model.get('package').get('width') }}" />

@@ -39,6 +39,7 @@
 <div class="widget-inside">
     <div class="widget-content">
         <div class="label-shipment-sender address" role="switch">
+          <strong><?php _e( 'Sender address', 'shipcloud-for-woocommerce' ); ?></strong>
             <div>{{ data.model.get('from').get('company') }}</div>
             <div>{{ data.model.get('from').getFullName() }}</div>
             <div>{{ data.model.get('from').getFullStreet() }}</div>
@@ -48,6 +49,7 @@
             <div>{{ data.model.get('from').get('country') }}</div>
         </div>
         <div class="label-shipment-recipient address" role="switch">
+          <strong><?php _e( 'Recipient address', 'shipcloud-for-woocommerce' ); ?></strong>
             <div>{{ data.model.get('to').get('company') }}</div>
             <div>{{ data.model.get('to').getFullName() }}</div>
             <div>{{ data.model.get('to').getFullStreet() }}</div>
@@ -56,43 +58,94 @@
             <div>{{ data.model.get('to').get('state') }}</div>
             <div>{{ data.model.get('to').get('country') }}</div>
         </div>
-
-        <div class="label-shipment-actions">
-
-            <# if ( data.model.get('label_url') ) { #>
-                <a href="{{ data.model.get('label_url') }}" target="_blank" class="button">
-					<?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?>
-                </a>
-                <# } else { #>
-                    <button class="shipcloud_create_label button-primary" type="button">
-						<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
-                    </button>
-                <# } #>
-
-                <# if ( data.model.get('tracking_url') ) { #>
-                <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank" class="button">
-                    <?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?>
-                </a>
-                <# } #>
-
-                <button class="button wcsc-save-shipment button-primary" role="switch" type="button"
-                        style="display: none;">
-                    <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-                </button>
-
-                <# if ( ! data.model.get('label_url') ) { #>
-                <button class="button wcsc-edit-shipment" role="switch" type="button">
-                    <?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-                </button>
-                <# } #>
-
-                <button type="button" class="shipcloud_delete_shipment button">
-                    <?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>
-                </button>
-
-                <input type="hidden" name="carrier" value="{{ data.model.get('carrier') }}"/>
-                <input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}"/>
-                <input type="hidden" name="shipment_order_id" value="<?php echo get_the_ID(); ?>"/>
+        <div class="label-shipment-additional-services" role="switch">
+          <strong><?php _e( 'Additional services', 'shipcloud-for-woocommerce' ); ?></strong>
+          <# if ( data.model.get('additional_services').length === 0 ) { #>
+            <p>
+              <?php _e( 'No additional service has been booked for this shipment', 'shipcloud-for-woocommerce' ); ?>
+            </p>
+          <# } else { #>
+            <ul>
+            <# _.each(data.model.get('additional_services'), function(additional_service) { #>
+              <# if ( additional_service.name === 'saturday_delivery' ) { #>
+                <li>
+                  <?php _e( 'Saturday delivery', 'shipcloud-for-woocommerce' ); ?>
+                </li>
+              <# } #>
+              <# if ( additional_service.name === 'visual_age_check' ) { #>
+                <li>
+                  <?php _e( 'DHL visual age check', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                      <?php _e( 'Minimum age', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.minimum_age }}
+                  </div>
+                </li>
+              <# } #>
+              <# if ( additional_service.name === 'ups_adult_signature' ) { #>
+                <li>
+                  <?php _e( 'UPS adult signature', 'shipcloud-for-woocommerce' ); ?>
+                </li>
+              <# } #>
+              <# if ( additional_service.name === 'premium_international' ) { #>
+                <li>
+                  <?php _e( 'DHL premium international', 'shipcloud-for-woocommerce' ); ?>
+                </li>
+              <# } #>
+              <# if ( additional_service.name === 'delivery_time' ) { #>
+                <li>
+                  <?php _e( 'DHL preferred time', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                      <?php _e( 'Earliest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_earliest }}
+                      <br />
+                      <?php _e( 'Latest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_latest }}
+                  </div>
+                </li>
+              <# } #>
+              <# if ( additional_service.name === 'drop_authorization' ) { #>
+                <li>
+                  <?php _e( 'Drop authorization', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                      <?php _e( 'Message', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.message }}
+                  </div>
+                </li>
+              <# } #>
+              <# if ( additional_service.name === 'cash_on_delivery' ) { #>
+                <li>
+                  <?php _e( 'Cash on delivery', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                      <?php _e( 'Amount', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.amount }}
+                      <br />
+                      <?php _e( 'Currency', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.currency }}
+                      <# if ( additional_service.properties.reference1 ) { #>
+                          <br />
+                          <?php _e( 'Reference', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.reference1 }}
+                      <# } #>
+                      <# if ( additional_service.properties.bank_account_holder ) { #>
+                          <br />
+                          <?php _e( 'Bank account holder', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_account_holder }}
+                      <# } #>
+                      <# if ( additional_service.properties.bank_name ) { #>
+                          <br />
+                          <?php _e( 'Bank name', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_name }}
+                      <# } #>
+                      <# if ( additional_service.properties.bank_account_number ) { #>
+                          <br />
+                          <?php _e( 'Bank account number (IBAN)', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_account_number }}
+                      <# } #>
+                      <# if ( additional_service.properties.bank_code ) { #>
+                          <br />
+                          <?php _e( 'Bank code (SWIFT)', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_code }}
+                      <# } #>
+                  </div>
+                </li>
+              <# } #>
+              <# if ( additional_service.name === 'gls_guaranteed24service' ) { #>
+                <li>
+                  <?php _e( 'GLS Guaranteed24Service', 'shipcloud-for-woocommerce' ); ?>
+                </li>
+              <# } #>
+            <# }); #>
+            </ul>
+          <# } #>
         </div>
 
         <table class="label-shipment-status">
@@ -156,6 +209,44 @@
                     <# } #>
             </tbody>
         </table>
+
+        <div class="label-shipment-actions">
+            <# if ( data.model.get('label_url') ) { #>
+                <a href="{{ data.model.get('label_url') }}" target="_blank" class="button">
+					<?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?>
+                </a>
+                <# } else { #>
+                    <button class="shipcloud_create_label button-primary" type="button">
+						<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
+                    </button>
+                <# } #>
+
+                <# if ( data.model.get('tracking_url') ) { #>
+                <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank" class="button">
+                    <?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?>
+                </a>
+                <# } #>
+
+                <button class="button wcsc-save-shipment button-primary" role="switch" type="button"
+                        style="display: none;">
+                    <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+                </button>
+
+                <# if ( ! data.model.get('label_url') ) { #>
+                <button class="button wcsc-edit-shipment" role="switch" type="button">
+                    <?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+                </button>
+                <# } #>
+
+                <button type="button" class="shipcloud_delete_shipment button">
+                    <?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>
+                </button>
+
+                <input type="hidden" name="carrier" value="{{ data.model.get('carrier') }}"/>
+                <input type="hidden" name="service" value="{{ data.model.get('service') }}"/>
+                <input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}"/>
+                <input type="hidden" name="shipment_order_id" value="<?php echo get_the_ID(); ?>"/>
+        </div>
 
     </div>
 </div>

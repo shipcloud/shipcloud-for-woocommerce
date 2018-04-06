@@ -277,6 +277,7 @@ class WC_Shipcloud_Order
 				'service'               => null,
 				'create_shipping_label' => null,
 				'to'                    => null,
+				'additional_services'   => null,
 			)
 		);
 
@@ -301,7 +302,7 @@ class WC_Shipcloud_Order
 		$package_data['height'] = wc_format_decimal( $package_data['height'] );
 		$package_data['length'] = wc_format_decimal( $package_data['length'] );
 		$package_data['weight'] = wc_format_decimal( $package_data['weight'] );
-		
+
 		if( array_key_exists('declared_value', $package_data) ) {
 			$package_data['declared_value']['amount'] = wc_format_decimal( $package_data['declared_value']['amount'] );
 		}
@@ -541,13 +542,68 @@ class WC_Shipcloud_Order
 	 */
 	private function parcel()
 	{
+		$order = $this->get_wc_order();
 		ob_start();
 		?>
 		<div class="section parcels" data-calculated-weight="<?php echo( $this->get_calculated_weight() ); ?>" />
 			<h3><?php _e( 'Create shipment', 'shipcloud-for-woocommerce' ); ?></h3>
 
-			<?php echo $this->parcel_form(); ?>
-			<?php echo $this->parcel_templates(); ?>
+			<div class="create-label fifty">
+				<?php echo $this->parcel_templates(); ?>
+				<?php echo $this->parcel_form(); ?>
+			</div>
+
+			<div class="additional_services fifty">
+				<script type="template/html" id="tmpl-shipcloud-shipment-additional-services">
+					<?php require WCSC_COMPONENTFOLDER . '/block/additional-services-edit-form.php'; ?>
+				</script>
+				<script type="application/javascript">
+						jQuery(function ($) {
+							shipcloud.additionalServices = new shipcloud.ShipmentAdditionalServicesView({
+									model: new shipcloud.ShipmentModel(),
+									el   : '.section.parcels .additional_services'
+							});
+
+							shipcloud.additionalServices.render();
+
+							<?php
+                                if (method_exists($order, 'get_payment_method')) {
+                                    $payment_method = $order->get_payment_method();
+                                } else {
+                                    $payment_method = $order->payment_method;
+                                }
+
+                                if ( wcsc_get_cod_id() === $payment_method ) {
+                                    ?>
+                                    shipcloud.additionalServices.activateAdditionalService('cash_on_delivery');
+                                    <?php
+                                }
+
+                                if (method_exists($order, 'get_currency')) {
+                                    $currency = $order->get_currency();
+                                } else {
+                                    $currency = $order->get_order_currency();
+                                }
+
+								$cod_data = array(
+									'amount'              => $order->get_total(),
+									'currency'            => $currency,
+									'reference1'          => sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $this->order_id ),
+									'bank_account_holder' => $this->get_options('bank_account_holder'),
+									'bank_name'           => $this->get_options('bank_name'),
+									'bank_account_number' => $this->get_options('bank_account_number'),
+									'bank_code'           => $this->get_options('bank_code')
+								);
+							?>
+								// allways add cash_on_delivery data to the form since customer
+								// might still like to use this feature although the customer didn't
+								// select it in the checkout process
+								shipcloud.additionalServices.addAdditionalService({
+									'cash_on_delivery': <?php echo(json_encode($cod_data)); ?>
+								});
+						});
+				</script>
+			</div>
 
 			<div class="clear"></div>
 
@@ -645,27 +701,22 @@ class WC_Shipcloud_Order
 	 * @return string
 	 * @since 1.0.0
 	 */
-	private function parcel_form()
-	{
+	public function parcel_form() {
 		$order = new WC_Order( $this->order_id );
 
 		$carriers = _wcsc_carriers_get();
 
 		ob_start();
 		?>
-		<div class="create-label fifty">
-
 			<?php echo $this->get_label_form($order, $carriers); ?>
 
-            <script type="application/javascript">
-                jQuery(function ($) {
-                    $('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
-                    $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
-                });
-            </script>
+			<script type="application/javascript">
+				jQuery(function ($) {
+					$('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
+					$('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
+				});
+			</script>
 
-            <div class="clear"></div>
-		</div>
 		<?php
 		return ob_get_clean();
 	}
@@ -693,8 +744,7 @@ class WC_Shipcloud_Order
 	 * @return string
 	 * @since 1.0.0
 	 */
-	private function parcel_templates()
-	{
+	public function parcel_templates() {
 		$posts = get_posts(
 			array(
 				'post_type'   => 'sc_parcel_template',
@@ -951,13 +1001,15 @@ class WC_Shipcloud_Order
 			$order_id = $data['order_id'];
 		}
 
-		if ( isset( $data['shipment_id'] ) ) {
-    	$shipment_id = $data['shipment_id'];
+		if ( isset( $data['id'] ) ) {
+			$shipment_id = $data['id'];
+		} else if ( isset( $data['shipment_id'] ) ) {
+			$shipment_id = $data['shipment_id'];
 		}
 
 		if ( ! $order_id && $shipment_id ) {
 			$tmp_order   = $shipment_repo->findOrderByShipmentId( $shipment_id );
-			$order_id    = $tmp_order->ID;
+			$order_id    = $tmp_order->get_order_number();
 		}
 
 		$order = $this->get_wc_order( $order_id );
@@ -970,6 +1022,10 @@ class WC_Shipcloud_Order
 			unset( $data['to']['id'] );
 		}
 
+		if (!isset($data['additional_services'])) {
+			$data['additional_services'] = array();
+		}
+
 		/**
 		 * TODO boolean switch inside of method indicated different strategies. Separate them in different methods.
 		 */
@@ -978,40 +1034,7 @@ class WC_Shipcloud_Order
 		$data = $this->handle_return_shipments( $data );
 		$data = $this->sanitize_shop_owner_data( $data );
 		$data = $this->handle_email_notification( $data );
-
-		if (method_exists($order, 'get_payment_method')) {
-			$payment_method = $order->get_payment_method();
-		} else {
-			$payment_method = $order->payment_method;
-		}
-
-		if ( 'returns' !== $data['service'] && wcsc_get_cod_id() === $payment_method ) {
-			if (method_exists($order, 'get_currency')) {
-				$currency = $order->get_currency();
-			} else {
-				$currency = $order->get_order_currency();
-			}
-			$cash_on_delivery = new \Shipcloud\Domain\Services\CashOnDelivery(
-				$data['carrier'],
-				$order->get_total(),
-				$currency,
-				$this->get_bank_information(),
-				sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id )
-			);
-
-		    if (!isset($data['additional_services'])) {
-		        $data['additional_services'] = array();
-            }
-
-		    $data['additional_services'][] = array(
-		        'name' => \Shipcloud\Domain\Services\CashOnDelivery::NAME,
-                'properties' => $cash_on_delivery->toArray()
-            );
-        } else {
-					error_log('no cod');
-					error_log('data service: '.$data['service']);
-					error_log('payment method: '.$this->__get('payment_method'));
-				}
+        $data['additional_services'] = $this->handle_additional_services( $data['additional_services'], $data['carrier'] );
 
 		if ( array_key_exists( 'package', $data ) ) {
 			$data['package'] = $this->sanitize_package( $data['package'] );
@@ -1067,7 +1090,7 @@ class WC_Shipcloud_Order
 	 */
 	public function ajax_create_shipment()
 	{
-        $this->create_shipment_label( $_POST );
+				$this->create_shipment_label( $_POST );
 	}
 
 	/**
@@ -1189,7 +1212,7 @@ class WC_Shipcloud_Order
 			// Do nothing if shipment was not found
 			/** @var \WP_Error $request */
 			$error_message_shipment_not_found = sprintf( __( 'Order #%s - Could not delete shipment (%s)', 'shipcloud-for-woocommerce' ), $order_id, $shipment_id );
-			
+
 			if ( 'shipcloud_api_error_not_found' == $request->get_error_code() ) {
 				WC_Shipcloud_Shipping::log( $error_message_shipment_not_found . ' ' . __( 'because it wasn\'t found at shipcloud', 'shipcloud-for-woocommerce' ) );
 			} else {
@@ -1455,7 +1478,7 @@ class WC_Shipcloud_Order
 			WC_Shipcloud_Shipping::log('Use parcelshop_post_number as care of');
 			return (string) $order->shipping_parcelshop_post_number;
 		}
-		
+
 		// if all fails, return an empty string
 		return '';
 	}
@@ -1483,7 +1506,7 @@ class WC_Shipcloud_Order
 			'phone'      => '',
 		);
 		$data = array_merge($build_data, $data);
-		
+
 		if ( isset( $data[ $prefix . 'street_nr' ] ) ) {
 			// Backward compatibility.
 			$data[ $prefix . 'street_no' ] = $data[ $prefix . 'street_nr' ];
@@ -1540,7 +1563,7 @@ class WC_Shipcloud_Order
 	 *
 	 * @return array|null
 	 */
-	private function get_options( $field = null ) {
+	public function get_options( $field = null ) {
 		$options = get_option( 'woocommerce_shipcloud_settings' );
 
 		if ( null === $field ) {
@@ -1630,17 +1653,17 @@ class WC_Shipcloud_Order
 				$carrier['service'] = $tmp[1];
 				$carrier['package'] = null;
 			}
-    
+
 			$option = $data->width . esc_attr( 'x', 'shipcloud-for-woocommerce' )
 					   . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
 					   . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
 					   . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
 					   . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier );
-    
+
 			if ( $carrier['package'] ) {
 				$option .= ' - ' . WC_Shipcloud_Order::instance()->get_package_label( $carrier['package'] );
 	        }
-    
+
 			return array(
 				/** @deprecated 2.0.0 Value is not atomic enough so it will be removed. */
 				'value'  => $data->width . ';'
@@ -1724,7 +1747,29 @@ class WC_Shipcloud_Order
 		);
 	}
 
-	/**
+	private function handle_additional_services( $additional_services, $carrier ) {
+        $allowed_additional_services = array();
+
+        $shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+        $additional_services_for_carrier = $shipment_repo->additionalServicesForCarrier($carrier);
+
+        foreach ( $additional_services as $additional_service ) {
+            $service_included = array_search($additional_service['name'], array_column($additional_services_for_carrier, 'name'));
+
+            if ($service_included !== false) {
+                array_push($allowed_additional_services, $additional_service);
+            }
+        }
+
+        return $allowed_additional_services;
+    }
+    private function handle_additional_service_for_carrier( $additional_service, $carrier ) {
+        $shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+        $additional_services_for_carrier = $shipment_repo->additionalServicesForCarrier($carrier);
+
+    }
+
+    /**
 	 * @param array $data
 	 *
 	 * @return mixed
@@ -1746,10 +1791,6 @@ class WC_Shipcloud_Order
 		}
 
 		if ( ! empty ( $carrier_email ) ) {
-			if ( ! isset( $data['additional_services'] ) ) {
-				$data['additional_services'] = array();
-			}
-
 			if ( ! isset( $data['to']['country'] ) ) {
 			    // Might not be set in return labels.
 				$data['to']['country'] = '';
@@ -1777,7 +1818,7 @@ class WC_Shipcloud_Order
 
 		return $data;
 	}
-	
+
 	public function get_calculated_weight() {
 		$order_items = $this->get_wc_order()->get_items();
 
@@ -1790,7 +1831,7 @@ class WC_Shipcloud_Order
 				// WooCommerce 2
 				$quantity = $order_item['qty'];
 			}
-			
+
 			if (method_exists($order_item, 'get_product')) {
 				// WooCommerce 3
 				$weight = $order_item->get_product()->get_weight();
