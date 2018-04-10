@@ -116,6 +116,7 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.8.0 =
+* Enhanced: Added info about where the debug log can be found
 * Fixed: Error when trying to create the first parcel template
 
 = 1.7.0 =

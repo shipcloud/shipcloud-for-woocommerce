@@ -266,6 +266,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
 		}
 
+		$handler = new WC_Log_Handler_File();
+		$logfile_path = $handler->get_log_file_path( 'shipcloud' );
+
+
 		$this->form_fields = array(
 			'enabled'                           => array(
 				'title'   => __( 'Enable', 'shipcloud-for-woocommerce' ),
@@ -322,12 +326,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'type'        => 'text_only',
 				'description' => sprintf( __( '%s<br /><br />You want to get noticed about the shipment status? Copy the webhook url and enter it in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
 				'disabled'    => false
-			),
-			'debug'                             => array(
-				'title'   => __( 'Debug', 'shipcloud-for-woocommerce' ),
-				'type'    => 'checkbox',
-				'label'   => __( 'Enable logging if you experience problems.', 'shipcloud-for-woocommerce' ),
-				'default' => 'yes'
 			),
 			'calculation'                       => array(
 				'title'       => __( 'Automatic price calculation', 'shipcloud-for-woocommerce' ),
@@ -543,6 +541,22 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'label'   => __( 'Automatic split street from street number (in some countries this do not work correct because of different street number schemes).', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
+			'standard_price_shipment_classes'   => array(
+				'title'       => __( 'Fallback price', 'shipcloud-for-woocommerce' ),
+				'type'        => 'price',
+				'description' => __( 'Will be used if no sizes or weight is given to a shipping class or for fallback (have to be entered in EUR).', 'shipcloud-for-woocommerce' ),
+			),
+			'advanced_settings' => array(
+				'title'       => __( 'Advanced settings', 'shipcloud-for-woocommerce' ),
+				'type'        => 'title'
+			),
+			'debug' => array(
+				'title'   => __( 'Debug', 'shipcloud-for-woocommerce' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Enable logging if you experience problems.', 'shipcloud-for-woocommerce' ),
+				'description' => sprintf( __( 'You can find the logfile at <code>%s</code>' ), $logfile_path ),
+				'default' => 'yes'
+			),
 		);
 
 		$this->instance_form_fields = array(
@@ -620,11 +634,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 					'class' => __( 'Per class: charge shipping with fallback price for each class', 'shipcloud-for-woocommerce' ),
 					'order' => __( 'Per order: charge shipping with fallback price for one class', 'shipcloud-for-woocommerce' ),
 				)
-			),
-			'standard_price_shipment_classes'   => array(
-				'title'       => __( 'Fallback price', 'shipcloud-for-woocommerce' ),
-				'type'        => 'price',
-				'description' => __( 'Will be used if no sizes or weight is given to a shipping class or for fallback (have to be entered in EUR).', 'shipcloud-for-woocommerce' ),
 			)
 		);
 	}
