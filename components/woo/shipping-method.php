@@ -321,12 +321,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'label'   => __( 'Safety check that adds a dialog to ask you if you really want to create a shipping label', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
-			'callback_url'                      => array(
-				'title'       => __( 'Webhook url', 'shipcloud-for-woocommerce' ),
-				'type'        => 'text_only',
-				'description' => sprintf( __( '%s<br /><br />You want to get noticed about the shipment status? Copy the webhook url and enter it in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
-				'disabled'    => false
-			),
 			'calculation'                       => array(
 				'title'       => __( 'Automatic price calculation', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title',
@@ -556,6 +550,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'label'   => __( 'Enable logging if you experience problems.', 'shipcloud-for-woocommerce' ),
 				'description' => sprintf( __( 'You can find the logfile at <code>%s</code>' ), $logfile_path ),
 				'default' => 'yes'
+			),
+			'callback_url'                      => array(
+				'title'       => __( 'Webhook url', 'shipcloud-for-woocommerce' ),
+				'type'        => 'text_only',
+				'description' => sprintf( __( '%s<br /><br />You want to get noticed about the shipment status? Copy the webhook url and enter it in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
+				'disabled'    => false
 			),
 		);
 
