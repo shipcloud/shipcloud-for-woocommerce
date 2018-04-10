@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.8.0 =
+* Fixed: Error when trying to create the first parcel template
+
 = 1.7.0 =
 * Added: Buyers can now use their pakadoo id to determine the shipping address
 * Added: Total order weight can now be used when creating shipments by selecting a checkbox
@@ -46,7 +49,6 @@
 * Fixed: Streets with a ranged number (like "Middlestreet 162 - 164") are now parsed correctly.
 * Fixed: Prepared shipments can be modified again.
 * Fixed: Prepared shipments can be deleted.
-
 
 = 1.5.1 =
 * Enhanced: added Belgium ISO country codes so users can send shipments via DPD to Belgium

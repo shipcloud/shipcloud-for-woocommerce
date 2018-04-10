@@ -191,12 +191,12 @@ class WCSC_Parceltemplate_Posttype
 		$selected_carrier = get_post_meta( $post->ID, 'carrier', true );
 
 		/** @deprecated 2.0.0 Post-Type shall store carrier information properly. */
-		if ( ! is_array( $selected_carrier ) ) {
-			$tmp              = explode( '_', $selected_carrier, 2 );
+		if ( $selected_carrier !== '' && !is_array( $selected_carrier ) ) {
+			$tmp = explode( '_', $selected_carrier, 2 );
 			$selected_carrier = array(
 				'carrier' => $tmp[0],
 				'service' => $tmp[1],
-                'package' => null,
+				'package' => null,
 			);
 		}
 
