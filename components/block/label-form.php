@@ -28,7 +28,14 @@
             <input type="text" name="parcel_weight"
                    class="lengths" />
                    <?php _e( 'kg', 'shipcloud-for-woocommerce' ); ?>
-            <input type="checkbox" name="shipcloud_use_calculated_weight" value="use_calculated_weight" />
+            <?php
+              if ( $this->get_order()->is_auto_weight_calculation_on() ) {
+                $auto_weight_calculation_checkbox = 'checked="checked"';
+              } else {
+                $auto_weight_calculation_checkbox = '';
+              }
+             ?>
+            <input type="checkbox" name="shipcloud_use_calculated_weight" value="use_calculated_weight" <?php echo $auto_weight_calculation_checkbox ?> />
             <?php
               $wc_order = $this->get_order()->get_wc_order();
               if( method_exists( $wc_order, 'get_order_number' ) ){

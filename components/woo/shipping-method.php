@@ -315,6 +315,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'label'       => __( 'Send notification emails from carriers (supported by DHL and DPD) to recipients on status changes of shipment.', 'shipcloud-for-woocommerce' ),
 				'default'     => 'yes'
 			),
+			'auto_weight_calculation' => array(
+				'title'   => __( 'Always use calculated weight from order', 'shipcloud-for-woocommerce' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'When creating shipping labels the checkbox to use the calculated weight is always active', 'shipcloud-for-woocommerce' ),
+				'default' => 'no'
+			),
 			'ask_create_label_check' => array(
 				'title'   => __( 'Ask before creating a shipping label', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',

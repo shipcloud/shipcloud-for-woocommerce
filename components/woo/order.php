@@ -1803,6 +1803,22 @@ class WC_Shipcloud_Order
 		}
 		return $calculated_weight;
 	}
+
+	/**
+	 * Determine if the config value 'auto_weight_calculation' is active
+	 *
+	 * @return boolean
+	 * @since 1.8.0
+	 */
+	public function is_auto_weight_calculation_on() {
+		$auto_weight_calculation = $this->get_options( 'auto_weight_calculation' );
+
+		if ( $auto_weight_calculation === 'yes' ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 WC_Shipcloud_Order::instance();
