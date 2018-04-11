@@ -530,17 +530,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				),
 				'desc_tip'    => true,
 			),
-			'recipient_information'              => array(
-				'title'       => __( 'Recipient information', 'shipcloud-for-woocommerce' ),
-				'type'        => 'title',
-				'description' => sprintf( __( 'Setup information for the recipient.', 'shipcloud-for-woocommerce' ) ),
-			),
-			'street_detection'               => array(
-				'title'   => __( 'Street detection', 'shipcloud-for-woocommerce' ),
-				'type'    => 'checkbox',
-				'label'   => __( 'Automatic split street from street number (in some countries this do not work correct because of different street number schemes).', 'shipcloud-for-woocommerce' ),
-				'default' => 'yes'
-			),
 			'standard_price_shipment_classes'   => array(
 				'title'       => __( 'Fallback price', 'shipcloud-for-woocommerce' ),
 				'type'        => 'price',
@@ -550,6 +539,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'title'       => __( 'Advanced settings', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title'
 			),
+			'street_detection' => array(
+				'title'   => __( 'Street detection', 'shipcloud-for-woocommerce' ),
+				'type'    => 'checkbox',
+				'label'   => __( 'Automaticly detect street name and number', 'shipcloud-for-woocommerce' ),
+				'description' => __( 'There are some cases where automatic detection doesn\'t work, due to different naming schemes. Always check the recipients\' address before creating a shipping label!', 'shipcloud-for-woocommerce' ),
+				'default' => 'yes'
+			),
 			'debug' => array(
 				'title'   => __( 'Debug', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
@@ -557,7 +553,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => sprintf( __( 'You can find the logfile at <code>%s</code>' ), $logfile_path ),
 				'default' => 'yes'
 			),
-			'callback_url'                      => array(
+			'callback_url' => array(
 				'title'       => __( 'Webhook url', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text_only',
 				'description' => sprintf( __( '%s<br /><br />You want to get noticed about the shipment status? Copy the webhook url and enter it in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), '<code>' . $this->callback_url . '</code>', 'https://app.shipcloud.io/de/webhooks' ),
