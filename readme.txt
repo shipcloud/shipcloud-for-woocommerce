@@ -119,6 +119,7 @@ https://youtu.be/HE3jow15x8c
 * Enhanced: Added info about where the debug log can be found
 * Enhanced: Added setting to always use the calculated weight from order
 * Fixed: Error when trying to create the first parcel template
+* Fixed: Handling of billing address for notifications when using WooCommerce 2
 
 = 1.7.0 =
 * Added: Buyers can now use their pakadoo id to determine the shipping address
