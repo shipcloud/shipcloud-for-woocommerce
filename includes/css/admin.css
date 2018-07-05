@@ -11,6 +11,10 @@
     color: #777;
 }
 
+#shipcloud-io select{
+  font-size:13px;
+}
+
 #shipcloud-io .inside h3,
 #shipcloud-io .inside h4,
 #shipcloud-io .inside p,
@@ -79,6 +83,15 @@
 /**
  * Parcels
  */
+
+ #shipcloud-io .cod-table th{
+   font-weight: normal;
+   padding-top: 8px;
+   text-align: right;
+   vertical-align: top;
+   width: max-content;
+ }
+
 #shipcloud-io .parcels {
     background: #f8f8f8 none repeat scroll 0 0;
 }
@@ -89,7 +102,6 @@
 }
 
 #shipcloud-io .parcel-form-table select{
-    font-size:13px;
     max-width:70%;
 }
 
@@ -105,9 +117,11 @@
     font-weight: normal;
     vertical-align: top;
     padding-top: 8px;
+    width: max-content;
 }
 #shipcloud-io .parcel-form-table td{
     vertical-align: top;
+    width: max-content;
 }
 #shipcloud-io .parcel-form-table input[type=text]{
     width:100%;
@@ -214,6 +228,10 @@
     width: 100%;
 }
 
+#shipcloud-io .shipment-labels input[type="checkbox"] {
+    width: 16px;
+}
+
 #shipcloud-io .shipment-labels .shipment_from_care_of_spacer {
   height: 45px;
 }
@@ -274,10 +292,16 @@
 }
 
 #shipcloud-io .shipment-labels .address,
+#shipcloud-io .shipment-labels .label-shipment-additional-services,
 fieldset .shipment-labels .address {
     width: 31%;
     display: inline-block;
     margin: 0 1%;
+    vertical-align: top;
+}
+
+#shipcloud-io .shipment-labels .label-shipment-additional-services ul {
+  list-style-type: circle;
 }
 
 #shipcloud-io .label-shipment-actions{
@@ -310,6 +334,38 @@ fieldset .shipment-labels .address {
 #shipcloud-io .parcel-templates select{
     max-width:60%;
 }
+
+#shipcloud-io .additional_services .additional_services__infobox {
+  margin-bottom: 1em;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__checkbox,
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__text {
+  float: left;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__checkbox {
+  margin: 0 1em 0.75em 1em;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__text {
+  margin-bottom: 0.75em;
+  width: 80%;
+}
+
+#shipcloud-io .shipcloud_additional_service--hidden {
+  display: none;
+}
+
+#shipcloud-io .shipcloud_drop_authorization textarea {
+  width: 50%;
+}
+
+#shipcloud-io .additional-services-details {
+  color: #999;
+  font-size: 10px;
+}
+
 /**
  * Post type Page
  */
@@ -376,6 +432,30 @@ fieldset .shipment-labels .address {
     content: '';
 }
 
+/**
+ * Additional services
+ */
+#shipcloud-io .shipcloud_additional_service input[type="text"] {
+  width: 100%;
+}
+
+#shipcloud-io .shipcloud_additional_service label {
+  font-size: 10px;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_cash_on_delivery {
+  margin-top: 10px;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_cash_on_delivery .shipcloud_cash_on_delivery--left {
+  width: 98%;
+  padding-right: 2%;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_cash_on_delivery .shipcloud_cash_on_delivery--right {
+  width: 98%;
+  padding-left: 2%;
+}
 /**
  * Conflicts
  */

@@ -43,11 +43,28 @@ class LabelController {
 		}
 
 		$data = $this->sanitize_request( $_REQUEST );
+        $bank_information = new \Shipcloud\Domain\ValueObject\BankInformation(
+            $data['shipment']['additional_services']['cash_on_delivery']['bank_name'],
+            $data['shipment']['additional_services']['cash_on_delivery']['bank_code'],
+            $data['shipment']['additional_services']['cash_on_delivery']['bank_account_holder'],
+            $data['shipment']['additional_services']['cash_on_delivery']['bank_account_number']
+        );
+
+        $data['shipment']['additional_services'] =
+            $this->shipment_repository->additional_services_from_request(
+                $data['shipment']['additional_services'],
+                $data['shipment']['additional_services']['cash_on_delivery']['amount'],
+                $data['shipment']['additional_services']['cash_on_delivery']['currency'],
+                $bank_information,
+                $data['shipment']['additional_services']['cash_on_delivery']['reference1'],
+                $data['shipment']['carrier']
+            );
 
 		try {
+            $order = $this->shipment_repository->findOrderByShipmentId( $data['shipment']['id'] );
+
 			$this->shipment_repository->update(
-				$this->shipment_repository->findOrderByShipmentId( $data['id'] ),
-				$data['id'],
+				$order,
 				$data['shipment']
 			);
 		} catch ( \Exception $e ) {
@@ -75,11 +92,17 @@ class LabelController {
 	 * @return mixed
 	 */
 	protected function sanitize_request( $data ) {
-		$data['id'] = $data['shipment_id'];
-
 		unset( $data['action'] );
-		unset( $data['shipment_id'] );
 		unset( $data['shipment_order_id'] );
+
+		// unset some unwanted input from additional services form
+		// if (!isset($data['shipment']['additional_services']['delivery_time']['checked'])) {
+		// 	unset($data['shipment']['additional_services']['delivery_time']['timeframe']);
+		// }
+		// if (!isset($data['shipment']['additional_services']['age_based_delivery']['checked'])) {
+		// 	unset($data['shipment']['additional_services']['visual_age_check']['minimum_age']);
+		// }
+		// unset($data['shipment']['additional_services']['age_based_delivery']);
 
 		return $data;
 	}

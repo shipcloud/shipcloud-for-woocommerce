@@ -22,6 +22,7 @@
  */
 class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 	protected $allowed_carriers;
+	protected $order;
 
 	/**
 	 * @var Woocommerce_Shipcloud_API
@@ -42,6 +43,7 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 		$this->template_file = $template_file;
 		$this->allowed_carriers = $allowed_carriers;
 		$this->shipcloud_api = $shipcloud_api;
+		$this->order = $order;
 
 		$this->label_form = new WooCommerce_Shipcloud_Block_Labels_Form(
 			WCSC_FOLDER . '/components/block/label-form.php',
@@ -163,5 +165,21 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 		}
 
 		return $parcel_templates;
+	}
+
+	public function parcel_templates() {
+		return $this->order->parcel_templates();
+	}
+
+	public function parcel_form() {
+		return $this->order->parcel_form();
+	}
+
+	public function additional_services_form() {
+		return $this->order->additional_services_form();
+	}
+
+    public function get_options($field = null) {
+		return $this->order->get_options($field);
 	}
 }

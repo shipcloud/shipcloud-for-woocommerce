@@ -112,9 +112,9 @@ jQuery( function( $ ) {
 		var data = get_shipment_form_data( 'shipcloud_create_shipment_label', false );
 
 		var self = this;
-		
+
 		var should_ask = $(this).data('ask-create-label-check');
-		
+
 		if( 'no' == should_ask) {
 			shipcloud_create_shipment_label(data, self);
 		} else {
@@ -335,27 +335,4 @@ jQuery( function( $ ) {
 		$( '#shipment-center').find('.info' ).fadeIn().html( text );
 	}
 
-	/**
-	 * Hiding parcel template adding button if value in form has changed
-	 */
-	$( "input[name='parcel[width]'],  input[name='parcel[height]'],  input[name='parcel[length]'],  input[name='parcel[weight]']" ).focusin(function(){
-		$( '.parcel .info' ).fadeOut();
-		$( '#shipcloud_add_parcel_template').fadeOut();
-	});
-
-	$( "select[name='parcel[carrier]']" ).change(function(){
-		$( '.parcel .info' ).fadeOut();
-		$( '#shipcloud_add_parcel_template').fadeOut();
-	});
-
-	$( "select[name='parcel_template']" ).change(function(){
-		$( '#parcel_templates .info' ).fadeOut();
-	});
-
-	/**
-	 * Function to switch to parcel templates
-	 */
-    $('.shipcloud-switchto-parcel-tamplates').click( function () {
-        $( '.shipcloud-tabs' ).tabs( "option", "active", 1 );
-    });
 });

@@ -72,7 +72,48 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'price'                     : null,
         'shipper_notification_email': null,
         'tracking_url'              : null,
-        'carrier_tracking_url'      : null
+        'carrier_tracking_url'      : null,
+        'additional_services'       : null,
+    },
+
+  allowedAdditionalServices: function () {
+    return {
+      'dhl': [
+        'visual_age_check',
+        'premium_international',
+        'delivery_time',
+        'cash_on_delivery',
+        'advance_notice'
+      ],
+      'dhl_express': [
+        'saturday_delivery'
+      ],
+      'dpd': [
+        'drop_authorization',
+        'saturday_delivery',
+        'advance_notice'
+      ],
+      'gls': [
+        'cash_on_delivery',
+        'gls_guaranteed24service',
+        'advance_notice'
+      ],
+      'ups': [
+        'cash_on_delivery',
+        'ups_adult_signature'
+      ]
+    };
+  },
+
+    getAdditionalServiceData: function (additional_service) {
+      if ( !this.hasAdditionalService(additional_service) ) {
+        return;
+      }
+      var data = _.findWhere(this.get('additional_services'), {name: additional_service});
+      if ( !data ) {
+        return
+      }
+      return data.properties;
     },
 
     getData: function () {
@@ -110,6 +151,11 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
     handleCreateSuccess: function (response) {
         this.clear({silent: true});
         this.set(this.parse(response.data));
+    },
+
+    hasAdditionalService: function (name) {
+      var additional_services = _.map(this.get('additional_services'), function(additional_service){ return additional_service.name; });
+      return _.contains(additional_services, name);
     },
 
     destroy: function () {
@@ -363,14 +409,270 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     }
 });
 
+shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
+  tagName: 'div',
+  template: wp.template('shipcloud-shipment-additional-services'),
+  controller: null,
+  attributes: {
+    activated_additional_services: []
+  },
+
+  render: function (shipmentId = false) {
+    wp.Backbone.View.prototype.render.call(this);
+    this.addHandlers(shipmentId);
+    jQuery( document.body ).trigger( 'init_tooltips' );
+  },
+
+  addAdditionalService: function (data) {
+    for (var entry in data) {
+      switch (entry) {
+        case 'cash_on_delivery':
+          var codData = data.cash_on_delivery;
+          jQuery("input[name='shipment[additional_services][cash_on_delivery][amount]']").val(codData.amount);
+          jQuery("input[name='shipment[additional_services][cash_on_delivery][currency]']").val(codData.currency);
+          jQuery("input[name='shipment[additional_services][cash_on_delivery][reference1]']").val(codData.reference1);
+          jQuery("input[name='shipment[additional_services][cash_on_delivery][bank_account_holder]']").val(codData.bank_account_holder);
+          jQuery("input[name='shipment[additional_services][cash_on_delivery][bank_name]']").val(codData.bank_name);
+          jQuery("input[name='shipment[additional_services][cash_on_delivery][bank_account_number]']").val(codData.bank_account_number);
+          jQuery("input[name='shipment[additional_services][cash_on_delivery][bank_code]']").val(codData.bank_code);
+          break;
+      }
+    }
+  },
+
+  addAdditionalServicesFromModel: function (additionalServices) {
+    var view = this;
+    var model = view.model;
+
+    _.each(additionalServices, function (additionalService) {
+      var json = {};
+      var propName = additionalService.name;
+      json[propName] = model.getAdditionalServiceData(propName);
+      view.addAdditionalService(json);
+      view.activateAdditionalService(propName);
+    });
+  },
+
+  addHandlers: function (shipmentId = false) {
+    var $ = jQuery;
+    var view = this;
+
+    var prefix = '';
+    if (shipmentId) {
+      prefix = '#' + shipmentId + ' ';
+    }
+
+    /**
+     * add handlers for displaying context blocks when selecting an additional service
+     */
+    $(function ($) {
+      var carrier = $(prefix + "select[name='shipcloud_carrier']").val() || $(prefix + "input[name='shipment[carrier]']").val();
+      view.handleAdditionalServices(carrier);
+    });
+
+    $("select[name='shipcloud_carrier']").change(function () {
+      view.handleAdditionalServices($(this).val());
+    });
+
+    $(prefix + "input[name='shipment[additional_services][age_based_delivery][checked]']").change(function () {
+      if ($(this).prop('checked')) {
+        var carrier = $(prefix + "select[name='shipcloud_carrier']").val() || $(prefix + "input[name='shipment[carrier]']").val();
+
+        switch (carrier) {
+          case 'dhl':
+            $(prefix + '.shipcloud_visual_age_check').fadeIn();
+            break;
+          case 'ups':
+            $(prefix + '.shipcloud_ups_adult_signature').fadeIn();
+            break;
+        }
+      } else {
+        $(prefix + '.shipcloud_visual_age_check').fadeOut();
+        $(prefix + '.shipcloud_ups_adult_signature').fadeOut();
+      }
+    });
+
+    $(prefix + "input[name='shipment[additional_services][delivery_time][checked]']").change(function () {
+      if ($(this).prop('checked')) {
+        $(prefix + '.shipcloud_delivery_time').fadeIn();
+      } else {
+        $(prefix + '.shipcloud_delivery_time').fadeOut();
+      }
+    });
+
+    $(prefix + "input[name='shipment[additional_services][drop_authorization][checked]']").change(function () {
+      if ($(this).prop('checked')) {
+        $(prefix + '.shipcloud_drop_authorization').fadeIn();
+      } else {
+        $(prefix + '.shipcloud_drop_authorization').fadeOut();
+      }
+    });
+
+    $(prefix + "input[name='shipment[additional_services][cash_on_delivery][checked]']").change(function () {
+      if ($(this).prop('checked')) {
+        view.activateAdditionalService('cash_on_delivery');
+        if (!$('#wcsc-order-bulk-labels').length) {
+          $(prefix + '.shipcloud_cash_on_delivery').fadeIn();
+        }
+      } else {
+        view.deactivateAdditionalService('cash_on_delivery');
+        $(prefix + '.shipcloud_cash_on_delivery').fadeOut();
+      }
+    });
+  },
+
+  activateAdditionalService: function (additional_service) {
+    this.attributes.activated_additional_services.push(additional_service);
+  },
+
+  deactivateAdditionalService: function (additional_service) {
+    this.attributes.activated_additional_services.pop(additional_service);
+  },
+
+  handleAdditionalServices: function (carrier, shipmentId = false) {
+    var $ = jQuery;
+    var prefix = '';
+    if (shipmentId) {
+      prefix = '#' + shipmentId;
+    }
+
+    switch (carrier) {
+      case 'dhl':
+        $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
+        this.handleAgeBasedDelivery(carrier, prefix);
+        $(prefix + '.shipcloud_additional_service__premium_international').show();
+        $(prefix + '.shipcloud_additional_service__delivery_time').show();
+        $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
+        $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
+        $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
+        break;
+      case 'dhl_express':
+        $(prefix + '.shipcloud_additional_service__saturday_delivery').show();
+        $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
+        $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
+        $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
+        $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
+        break;
+      case 'dpd':
+        $(prefix + '.shipcloud_additional_service__saturday_delivery').show();
+        $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
+        $(prefix + '.shipcloud_additional_service__drop_authorization').show();
+        $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
+        $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
+        break;
+      case 'gls':
+        $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
+        $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
+        $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').show();
+        $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
+        break;
+      case 'ups':
+        $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
+        this.handleAgeBasedDelivery(carrier, prefix);
+        $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
+        $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
+        $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
+        $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
+        break;
+      default:
+        $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
+        $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
+        $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
+        $(prefix + '.shipcloud_additional_service__no_additional_services').show();
+    }
+    this.handleCashOnDelivery(carrier, shipmentId);
+  },
+
+  handleAgeBasedDelivery: function (carrier, prefix) {
+    var $ = jQuery;
+
+    $(prefix + '.shipcloud_additional_service__age_based_delivery').show();
+
+    var ageBasedDeliveryCheckbox = $(prefix + "input[name='shipment[additional_services][age_based_delivery][checked]']");
+    if (ageBasedDeliveryCheckbox.prop('checked')) {
+      switch (carrier) {
+        case 'dhl':
+          $(prefix + '.shipcloud_visual_age_check').show();
+          $(prefix + '.shipcloud_ups_adult_signature').hide();
+          break;
+        case 'ups':
+          $(prefix + '.shipcloud_visual_age_check').hide();
+          $(prefix + '.shipcloud_ups_adult_signature').show();
+          break;
+      }
+    }
+  },
+
+  handleCashOnDelivery: function (carrier, shipmentId = false) {
+    var $ = jQuery;
+    var prefix = '';
+    if (shipmentId) {
+      prefix = '#' + shipmentId + ' .shipcloud_cash_on_delivery';
+    } else {
+      prefix = '.shipcloud_cash_on_delivery';
+    }
+
+    if (_.contains(this.model.allowedAdditionalServices()[carrier], 'cash_on_delivery')) {
+      $('.shipcloud_additional_service__cash_on_delivery').show();
+      switch (carrier) {
+        case 'dhl':
+          $(prefix + '--reference1').show();
+          $(prefix + '--right').show();
+          this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
+          break;
+        case 'gls':
+          $(prefix + '--reference1').show();
+          // don't show bank information
+          $(prefix + '--right').hide();
+          this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
+          break;
+        case 'ups':
+          // don't show reference number
+          $(prefix + '--reference1').hide();
+          // don't show bank information
+          $(prefix + '--right').hide();
+          this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
+          break;
+      }
+    }
+  },
+
+  showAdditionalServiceIfActive: function (additionalService, prefix, shipmentId) {
+    if (_.contains(this.attributes.activated_additional_services, additionalService)) {
+      jQuery((shipmentId) ? prefix : '.parcels ' + " input[name='shipment[additional_services][" + additionalService + "][checked]']").prop('checked', true);
+
+      // only show if not in batch process
+      if (!jQuery('#wcsc-order-bulk-labels').length) {
+        jQuery(prefix).show();
+      }
+
+      jQuery('.shipcloud_additional_service__' + additionalService).show();
+    }
+  }
+});
+
 shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     tagName : 'div',
     template: wp.template('shipcloud-shipment-edit'),
     parent  : null,
 
-    initialize: function (args) {
-        this.parent = args.parent;
-    },
+  initialize: function (args) {
+    this.parent = args.parent;
+  },
 
     events: {
         'click .wcsc-edit-abort'   : 'backToParent',
@@ -404,6 +706,16 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
             // Recipient country set so we select it.
             this.$el.find('select[name="shipment[to][country]"]').val(this.model.get('to').get('country'));
         }
+
+        shipcloud.additionalServices = new shipcloud.ShipmentAdditionalServicesView({
+          model : this.model,
+          el   : '#' + this.model.id + '.label-shipment-additional-services.additional_services'
+        });
+
+        shipcloud.additionalServices.addAdditionalServicesFromModel(this.model.get('additional_services'));
+        shipcloud.additionalServices.render(this.model.id);
+
+        shipcloud.additionalServices.handleAdditionalServices(this.model.get('carrier'), this.model.id);
     },
 
     getData: function () {
@@ -417,10 +729,12 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     saveAction: function () {
         this.parent.$loader().show();
 
+        this.$el.find('input[name="shipment[additional_services][cash_on_delivery][currency]"]').removeAttr( 'disabled' )
+
         wp.ajax.send(
             'shipcloud_label_update',
             {
-                'data'   : this.$el.find('input,select').serializeObject(),
+                'data'   : this.$el.find('input,select,textarea').serializeObject(),
                 'success': this.successAction.bind(this),
                 'error'  : this.errorAction.bind(this)
             }

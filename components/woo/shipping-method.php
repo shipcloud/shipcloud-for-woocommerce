@@ -266,9 +266,17 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			$carriers_options[ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
 		}
 
-		$handler = new WC_Log_Handler_File();
-		$logfile_path = $handler->get_log_file_path( 'shipcloud' );
-
+		if (class_exists('WC_Log_Handler_File')) {
+			$handler = new WC_Log_Handler_File();
+			$logfile_path = $handler->get_log_file_path( 'shipcloud' );
+		} else {
+			// fallback for WooCommerce 2
+			if ( function_exists( 'wp_hash' ) ) {
+				$logfile_path = trailingslashit( WC_LOG_DIR ) . sanitize_file_name( 'shipcloud-' . wp_hash( 'shipcloud' ) . '.log' );
+			} else {
+				$logfile_path = "/wp-content/uploads/wc-logs/";
+			}
+		}
 
 		$this->form_fields = array(
 			'enabled'                           => array(

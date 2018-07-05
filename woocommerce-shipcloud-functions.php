@@ -504,6 +504,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'parcel_id'            => $shipment->getId(),
 		'parcel_title'         => $parcel_title,
 		'carrier'              => $data['carrier'],
+		'service'              => $data['service'],
 		'width'                => $data['package']['width'],
 		'height'               => $data['package']['height'],
 		'length'               => $data['package']['length'],
@@ -521,6 +522,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'recipient_country'    => $data['to']['country'],
 		'recipient_phone'      => $data['to']['phone'],
 		'reference_number'     => $data['reference_number'],
+		'additional_services'  => $data['additional_services'],
 		'date_created'         => time()
 	);
 
