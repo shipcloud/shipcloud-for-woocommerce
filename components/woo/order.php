@@ -1530,7 +1530,12 @@ class WC_Shipcloud_Order
 			return '';
 		}
 
-		return apply_filters( 'wcsc_notification_email', (string) $this->__get('billing_email'), $this->get_wc_order() );
+		$order = $this->get_wc_order();
+		if (method_exists($order, 'get_billing_email')) {
+			return $order->get_billing_email();
+		} else {
+			return $order->billing_email;
+		}
 	}
 
 	/**
@@ -1587,7 +1592,12 @@ class WC_Shipcloud_Order
 			return '';
 		}
 
-		return apply_filters( 'wcsc_carrier_email', (string) $this->__get('billing_email'), $this->get_wc_order() );
+		$order = $this->get_wc_order();
+		if (method_exists($order, 'get_billing_email')) {
+			return $order->get_billing_email();
+		} else {
+			return $order->billing_email;
+		}
 	}
 
 	/**
