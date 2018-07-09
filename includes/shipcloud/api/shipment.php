@@ -58,4 +58,9 @@ class Shipment {
 			$this->api->request( 'shipments/' . $shipment_id, $data, 'PUT' )
 		);
 	}
+
+	public function get( $shipment_id ) {
+		$response = $this->api->request( 'shipments/' . $shipment_id, null, 'GET' );
+		return \Shipcloud\Domain\Shipment::fromResponse($response);
+	}
 }

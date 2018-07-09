@@ -482,6 +482,7 @@ class WooCommerce_Shipcloud {
 			return;
 		}
 		wp_enqueue_script( 'wcsc-plugin-script', WCSC_URLPATH . '/includes/js/display.js', array( 'wp-util' ), static::VERSION );
+		wp_enqueue_script( 'wcsc-font-awesome', WCSC_URLPATH . 'vendor/fontawesome/js/fontawesome-all.js', array( ), static::VERSION );
 	}
 
 	public function shipcloud_inline_js() {

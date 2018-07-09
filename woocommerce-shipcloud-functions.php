@@ -72,6 +72,7 @@ function wcsc_get_shipment_status_string( $status ) {
 	$message = __( 'Not available yet', 'shipcloud-for-woocommerce' );
 
 	$status_mapping = array(
+		'shipment.tracking.label_created'             => __( 'Label created', 'shipcloud-for-woocommerce' ),
 		'shipment.tracking.picked_up'                 => __( 'Picked up', 'shipcloud-for-woocommerce' ),
 		'shipment.tracking.transit'                   => __( 'In transit', 'shipcloud-for-woocommerce' ),
 		'shipment.tracking.out_for_delivery'          => __( 'Out for delivery', 'shipcloud-for-woocommerce' ),
@@ -80,7 +81,8 @@ function wcsc_get_shipment_status_string( $status ) {
 		'shipment.tracking.delayed'                   => __( 'Delayed', 'shipcloud-for-woocommerce' ),
 		'shipment.tracking.not_delivered'             => __( 'Not delivered', 'shipcloud-for-woocommerce' ),
 		'shipment.tracking.notification'              => __( 'Carrier internal notification. Tracking events within the shipment will carry more elaborate information.', 'shipcloud-for-woocommerce' ),
-		'shipment.tracking.unknown'                   => __( 'Status unknown', 'shipcloud-for-woocommerce' )
+		'shipment.tracking.unknown'                   => __( 'Status unknown', 'shipcloud-for-woocommerce' ),
+		'shipment.tracking.exception'                 => __( 'Exception', 'shipcloud-for-woocommerce' ),
 	);
 
 	if ( isset( $status_mapping[ $status ] ) ) {
@@ -322,7 +324,7 @@ function wcsc_is_admin_screen() {
  * @since 1.0.0
  */
 function wcsc_is_frontend_screen() {
-	if ( is_cart() || is_checkout() || is_checkout_pay_page() ) {
+	if ( is_cart() || is_checkout() || is_checkout_pay_page() || is_view_order_page() ) {
 		return true;
 	}
 
@@ -626,4 +628,89 @@ function wcsc_get_cod_id() {
 	}
 
 	return $cod_id;
+}
+
+/**
+ * Getting the carrier tracking URL by specifying the carrier name and tracking number
+ *
+ * @param string $carrier
+ * @param string $carrier_tracking_no
+ *
+ * @return string URL of the carrier tracking page
+ *
+ * @since 1.8.0
+ */
+function wcsc_get_carrier_tracking_url( $carrier, $carrier_tracking_no ) {
+	switch ($carrier) {
+		case 'dhl':
+			return 'https://nolp.dhl.de/nextt-online-public/set_identcodes.do?idc='.
+				$carrier_tracking_no.'&rfn=&extendedSearch=true';
+		case 'dpd':
+			return 'https://tracking.dpd.de/parcelstatus?query='.$carrier_tracking_no.
+				'&locale=de_DE';
+		case 'fedex':
+			return 'https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber='.
+				$carrier_tracking_no;
+		case 'gls':
+			return 'https://gls-group.eu/DE/de/paketverfolgung?match='.$carrier_tracking_no;
+		case 'go':
+			return 'https://order.general-overnight.com/ax4/control/customer_service?shId='.
+				$carrier_tracking_no.'&hash=JMJyKOfE1v&lang=de&ActionCollectInformation=GO%21';
+		case 'hermes':
+			return 'https://tracking.hermesworld.com/?TrackID='.$carrier_tracking_no;
+		case 'iloxx':
+			return 'http://www.iloxx.de/net/einzelversand/tracking.aspx?ix='.$carrier_tracking_no;
+		case 'tnt':
+			return 'https://www.tnt.com/express/de_de/site/home/applications/tracking.html?cons='.
+				$carrier_tracking_no.'&searchType=CON';
+		case 'ups':
+			return 'http://wwwapps.ups.com/WebTracking/processInputRequest?sort_by=status&'.
+				$carrier_tracking_no.'=1&TypeOfInquiryNumber=T&loc=de_DE&InquiryNumber1='.
+				$carrier_tracking_no.'&track.x='.$carrier_tracking_no.'&track.y=0';
+	}
+}
+
+function wcsc_get_shipment_status_icon( $status ) {
+	$icon = 'fa-angle-down';
+	
+	switch( $status ) {
+		case 'awaits_pickup_by_receiver':
+			$icon = 'fa-building';
+			break;
+		case 'delayed':
+			$icon = 'fa-clock';
+			break;
+		case 'delivered':
+			$icon = 'fa-box-open';
+			break;
+		case 'exception':
+			$icon = 'fa-exclamation';
+			break;
+		case 'label_created':
+			$icon = 'fa-barcode';
+			break;
+		case 'not_delivered':
+			$icon = 'fa-times-circle';
+			break;
+		case 'notification':
+			$icon = 'fa-envelope';
+			break;
+		case 'out_for_delivery':
+			$icon = 'fa-shipping-fast';
+			break;
+		case 'picked_up':
+			$icon = 'fa-truck-loading';
+			break;
+		case 'transit':
+			$icon = 'fa-road';
+			break;
+		case 'unknown':
+			$icon = 'fa-question';
+			break;
+	}
+
+	$html = '<div class="shipcloud_tracking__timeline shipcloud_tracking__timeline--'.$status.'">';
+	$html .= '<i class="fas fa-fw '.$icon.'"></i>';
+	$html .= '</div>';
+	echo $html;
 }

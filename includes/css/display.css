@@ -14,3 +14,55 @@
 {
     display:block;
 }
+
+.shipcloud__tracking--status,
+.shipcloud__tracking--location {
+  color: #a5aaad;
+  font-size: 0.8em;
+}
+
+.shipcloud_tracking__timeline {
+  border-radius: 24px;
+  color: white;
+  height: 48px;
+  position: relative;
+  width: 48px;
+}
+
+.shipcloud_tracking__timeline svg {
+  position: absolute;
+  left: 15px;
+  top: 16px;
+}
+
+.shipcloud_tracking__timeline--awaits_pickup_by_receiver {
+  background-color: #eda827;
+}
+
+.shipcloud_tracking__timeline--delayed {
+  background-color: #d95836;
+}
+
+.shipcloud_tracking__timeline--delivered {
+  background-color: #5fa734;
+}
+
+.shipcloud_tracking__timeline--label_created {
+  background-color: #c80051;
+}
+
+.shipcloud_tracking__timeline--not_delivered {
+  background-color: #a2094f;
+}
+
+.shipcloud_tracking__timeline--out_for_delivery {
+  background-color: #0092d1;
+}
+
+.shipcloud_tracking__timeline--picked_up {
+  background-color: grey;
+}
+
+.shipcloud_tracking__timeline--transit {
+  background-color: #1c5891;
+}
