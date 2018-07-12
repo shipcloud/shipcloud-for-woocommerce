@@ -42,6 +42,8 @@ class WCSC_Woo extends WCSC_Component
 	}
 
 	public function woocommerce_settings_saved() {
+        $this->check_for_active_webhook();
+
 		$options = get_option( 'woocommerce_shipcloud_settings', array() );
 
 		$allowed_carriers = $options['allowed_carriers'];
@@ -70,6 +72,39 @@ class WCSC_Woo extends WCSC_Component
 
 		return $methods;
 	}
+
+    /*
+     * Check if webhook option in settings got (de)activated and
+     * either create or delete catch all webhook afterwards
+     */
+    private function check_for_active_webhook() {
+        $plugin_settings = get_option( 'woocommerce_shipcloud_settings' );
+        $webhook_id = get_option( 'woocommerce_shipcloud_catch_all_webhook_id' );
+        $api = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
+
+        if (isset($_POST['woocommerce_shipcloud_webhook_active']) && !$webhook_id) {
+            // create catch all webhook at shipcloud
+            $webhook = $api->create_webhook();
+            if ( is_wp_error( $webhook ) ) {
+                $plugin_settings['webhook_active'] = 'no';
+                update_option('woocommerce_shipcloud_settings', $plugin_settings);
+                error_log( 'shipcloud-for-woocommerce: Could not create webhook. Message: ' . $webhook->get_error_message() );
+                WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not create webhook: %s', 'shipcloud-for-woocommerce' ), $webhook->get_error_message() ), 'error' );
+            } else {
+                error_log( 'shipcloud-for-woocommerce: Created webhook with id: '.$webhook['id']);
+            }
+        } elseif (!isset($_POST['woocommerce_shipcloud_webhook_active']) && $webhook_id) {
+            // delete webhook at shipcloud
+            if (isset($webhook_id)) {
+                error_log( 'shipcloud-for-woocommerce: Deleting webhook with id: '.$webhook_id);
+                $response = $api->delete_webhook($webhook_id);
+                if ( is_wp_error( $response ) ) {
+                    error_log( 'shipcloud-for-woocommerce: Could not delete webhook. Message: ' . $webhook->get_error_message() );
+                    WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not delete webhook: %s', 'shipcloud-for-woocommerce' ), $webhook->get_error_message() ), 'error' );
+                }
+            }
+        }
+    }
 
 	/**
 	 * Including Files

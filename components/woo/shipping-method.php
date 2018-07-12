@@ -196,8 +196,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			return false;
 		}
 
-        $this->check_for_active_webhook();
-
 		return true;
 	}
 
@@ -1708,26 +1706,4 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		return true;
 	}
-
-    /*
-     * Check if webhook option in settings got (de)activated and
-     * either create or delete catch all webhook afterwards
-     */
-    private function check_for_active_webhook() {
-        $webhook_id = get_option( 'woocommerce_shipcloud_catch_all_webhook_id' );
-        $api = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
-
-        if (isset($_POST['woocommerce_shipcloud_webhook_active']) && !$webhook_id) {
-            // create catch all webhook at shipcloud
-            $webhook = $api->create_webhook();
-            WC_Shipcloud_Shipping::log('Created webhook with id: '.$webhook['id']);
-        } elseif ($webhook_id) {
-            // delete webhook at shipcloud
-            WC_Shipcloud_Shipping::log('Deleting webhook with id: '.$webhook_id);
-            if (isset($webhook_id)) {
-                $api->delete_webhook($webhook_id);
-            }
-        }
-
-    }
 }

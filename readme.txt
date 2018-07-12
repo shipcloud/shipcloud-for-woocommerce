@@ -108,6 +108,10 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.8.1 =
+* Fixed: Unnecessary multiple calls to create/delete a webhook
+* Fixed: Error when trying to log an error while creating a webhook
+
 = 1.8.0 =
 * Added: Saturday delivery
 * Added: Age based delivery (DHL visual age check, UPS adult signature)

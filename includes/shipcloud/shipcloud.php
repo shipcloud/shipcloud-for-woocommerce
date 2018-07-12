@@ -925,7 +925,7 @@ class Woocommerce_Shipcloud_API
         try {
             return $api->webhook()->create();
         } catch (\Exception $e) {
-            self::log(print_r($e, true));
+            WC_Shipcloud_Shipping::log(print_r($e, true));
             return new \WP_Error( 'shipcloud_api_error_' . $e->getCode(), $e->getMessage() );
         }
     }
