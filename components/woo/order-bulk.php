@@ -90,11 +90,13 @@ class WC_Shipcloud_Order_Bulk {
 
 		$request = $_GET; // XSS: OK.
 
-		if ( ! isset( $request['action'] )
-		     || self::FORM_BULK !== $request['action']
-		) {
-			return;
-		}
+		if (
+            (isset( $request['action']) && self::FORM_BULK !== $request['action']) &&
+            (isset( $request['action2']) && self::FORM_BULK !== $request['action2']) ||
+            (!isset( $request['action']) && !isset($request['action2']))
+        ) {
+            return;
+        }
 
 		if ( isset( $request[ self::BUTTON_PDF ] ) ) {
 			$this->create_pdf( $request );

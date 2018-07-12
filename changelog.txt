@@ -1,6 +1,7 @@
 == Changelog ==
 
 = 1.8.1 =
+* Fixed: Labels weren't merged when using the bulk action from 2nd dropdown on shop orders page
 * Fixed: Unnecessary multiple calls to create/delete a webhook
 * Fixed: Error when trying to log an error while creating a webhook
 
