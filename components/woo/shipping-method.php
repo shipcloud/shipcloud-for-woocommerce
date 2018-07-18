@@ -159,6 +159,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
 		$this->init();
 		$this->init_settings_fields();
+        $this->check_webhook_prerequisites();
 
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 	}
@@ -684,100 +685,117 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		WC()->customer->set_shipping_address( $_POST[ 'calc_shipping_address' ] );
 	}
 
-	/**
-	 * Listening to shipcloud webhooks
-	 *
-	 * @since 1.0.0
-	 */
-	public static function shipment_listener()
-	{
-		global $wpdb;
+    /**
+    * Listening to shipcloud webhooks
+    *
+    * @since 1.0.0
+    */
+    public static function shipment_listener() {
+        global $wpdb;
 
-		$post     = file_get_contents( 'php://input' );
-		$shipment = json_decode( $post );
+        $post     = file_get_contents( 'php://input' );
+        $webhook_id = get_option( 'woocommerce_shipcloud_catch_all_webhook_id' );
+        $shipment = json_decode( $post );
+        $woocommerce_api_enabled = get_option( 'woocommerce_api_enabled' );
 
-		if ( ( json_last_error() !== JSON_ERROR_NONE ) )
-		{
-			self::log( sprintf( 'Shipment Listener: JSON error (%s).', json_last_error_msg() ) );
-			exit;
-		}
+        if( !$woocommerce_api_enabled || $woocommerce_api_enabled === 'no') {
+            echo sprintf(
+                __(
+                    'You have to activate the REST-API option in your <a href="%s">WooCommerce api settings</a>.',
+                    'shipcloud-for-woocommerce'
+                ),
+                admin_url( 'admin.php?page=wc-settings&tab=api' )
+            );
+        } elseif( !$webhook_id ) {
+            echo sprintf(
+                __(
+                    'You haven\'t activated the option for shipment status notification in your <a href="%s">shipcloud for woocommerce settings</a>.',
+                    'shipcloud-for-woocommerce'
+                ),
+                admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' )
+            );
+        } elseif( !$shipment ) {
+            echo __(
+                'WooCommerce ready to handle shipcloud webhooks',
+                'shipcloud-for-woocommerce'
+            );
+        } else {
+            if ( ( json_last_error() !== JSON_ERROR_NONE ) ) {
+                self::log( sprintf( 'Shipment Listener: JSON error (%s).', json_last_error_msg() ) );
+                exit;
+            }
 
-		if ( ! property_exists( $shipment, 'data' ) || ! property_exists( $shipment->data, 'id' ) )
-		{
-			self::log( 'Shipment Listener: Wrong data format.' );
-			exit;
-		}
+            if ( ! property_exists( $shipment, 'data' ) || ! property_exists( $shipment->data, 'id' ) ) {
+                self::log( 'Shipment Listener: Wrong data format.' );
+                exit;
+            }
 
-		$shipment_id = $shipment->data->id;
+            $shipment_id = $shipment->data->id;
 
-		if ( empty( $shipment_id ) )
-		{
-			self::log( 'Shipment Listener: Shipment ID not given.' );
-			exit;
-		}
+            if ( empty( $shipment_id ) ) {
+                self::log( 'Shipment Listener: Shipment ID not given.' );
+                exit;
+            }
 
-		$sql = $wpdb->prepare( "SELECT p.ID FROM {$wpdb->posts} AS p, {$wpdb->postmeta} AS pm WHERE p.ID = pm.post_ID AND pm.meta_key=%s AND pm.meta_value=%s", 'shipcloud_shipment_ids', $shipment_id );
+            $sql = $wpdb->prepare( "SELECT p.ID FROM {$wpdb->posts} AS p, {$wpdb->postmeta} AS pm WHERE p.ID = pm.post_ID AND pm.meta_key=%s AND pm.meta_value=%s", 'shipcloud_shipment_ids', $shipment_id );
 
-		$order_id = $wpdb->get_var( $sql );
+            $order_id = $wpdb->get_var( $sql );
 
-		if ( null == $order_id )
-		{
-			self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID #%s not found', $shipment_id ) );
-			exit;
-		}
-		else
-		{
-			self::log( sprintf( 'Shipment Listener: Changed status to "%s" for Shipment ID %s (Order ID %s) ', $shipment->type, $shipment_id, $order_id ) );
-		}
+            if ( null == $order_id ) {
+                self::log( sprintf( 'Shipment Listener: Order ID for Shipment ID #%s not found', $shipment_id ) );
+                exit;
+            } else {
+                self::log( sprintf( 'Shipment Listener: Changed status to "%s" for Shipment ID %s (Order ID %s) ', $shipment->type, $shipment_id, $order_id ) );
+            }
 
-		$order = wc_get_order( $order_id );
-		$order->add_order_note( sprintf( __( 'Shipment status changed to: %s', 'shipcloud-for-woocommerce' ), wcsc_get_shipment_status_string( $shipment->type ) ) );
+            $order = wc_get_order( $order_id );
+            $order->add_order_note( sprintf( __( 'Shipment status changed to: %s', 'shipcloud-for-woocommerce' ), wcsc_get_shipment_status_string( $shipment->type ) ) );
 
-		update_post_meta( $order_id, 'shipment_' . $shipment_id . '_status', $shipment->type );
+            update_post_meta( $order_id, 'shipment_' . $shipment_id . '_status', $shipment->type );
 
-		$api = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
+            $api = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' );
 
-		$shipcloud_shipment = $api->read_shipment( $shipment_id );
+            $shipcloud_shipment = $api->read_shipment( $shipment_id );
 
-        if ( !is_wp_error( $shipcloud_shipment ) ) {
-            $tracking_event = $shipcloud_shipment->getTrackingEventByTimestamp($shipment->occured_at);
+            if ( !is_wp_error( $shipcloud_shipment ) ) {
+                $tracking_event = $shipcloud_shipment->getTrackingEventByTimestamp($shipment->occured_at);
 
-            if ($tracking_event !== null) {
-    			$event = array(
-    				'occured_at' => $shipment->occured_at,
-    				'type' => $shipment->type
-    			);
-    			$event = array_merge($event, $tracking_event);
-    			add_post_meta( $order_id, 'shipment_' . $shipment_id . '_trackingevent', $event );
-    		}
+                if ($tracking_event !== null) {
+                    $event = array(
+                        'occured_at' => $shipment->occured_at,
+                        'type' => $shipment->type
+                    );
+                    $event = array_merge($event, $tracking_event);
+                    add_post_meta( $order_id, 'shipment_' . $shipment_id . '_trackingevent', $event );
+                }
 
-    		/**
-    		 * Hooks in for further functions after status changes
-    		 */
-    		do_action( 'shipcloud_shipment_tracking_change', $order_id, $shipment_id, $shipment->type );
+                /**
+                * Hooks in for further functions after status changes
+                */
+                do_action( 'shipcloud_shipment_tracking_change', $order_id, $shipment_id, $shipment->type );
 
 
-    		/**
-    		 * shipcloud_shipment_tracking_default action
-             *
-             * @param int $order_id ID of the order.
-    		 * @param int $shipment_id ID of the shipment.
-    		 */
-    		do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
+                /**
+                * shipcloud_shipment_tracking_default action
+                *
+                * @param int $order_id ID of the order.
+                * @param int $shipment_id ID of the shipment.
+                */
+                do_action( 'shipcloud_shipment_tracking_default', $order_id, $shipment_id );
 
-    		$shipment_action = 'shipcloud_' . str_replace( $shipment->type, '.', '_' );
+                $shipment_action = 'shipcloud_' . str_replace( $shipment->type, '.', '_' );
 
-    		/**
-    		 * shipcloud_shipment_{{ shipment type }} action
-             *
-    		 * @param int $order_id ID of the order.
-    		 * @param int $shipment_id ID of the shipment.
-    		 */
-    		do_action( $shipment_action, $order_id, $shipment_id );
+                /**
+                * shipcloud_shipment_{{ shipment type }} action
+                *
+                * @param int $order_id ID of the order.
+                * @param int $shipment_id ID of the shipment.
+                */
+                do_action( $shipment_action, $order_id, $shipment_id );
+            }
         }
-
-		exit;
-	}
+        exit;
+    }
 
 	/**
 	 * Own processes on saving settings
@@ -1706,4 +1724,46 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		return true;
 	}
+
+    /*
+     * Check if webhook woocommerce api is enabled when shipcloud webhook should be used
+     *
+     * @since 1.8.2
+     */
+    private function check_webhook_prerequisites() {
+        if ( wcsc_is_settings_screen() ) {
+            $webhook_id = get_option( 'woocommerce_shipcloud_catch_all_webhook_id' );
+            $woocommerce_api_enabled = get_option( 'woocommerce_api_enabled' );
+            $plugin_settings = get_option( 'woocommerce_shipcloud_settings' );
+
+            if ((!$woocommerce_api_enabled || $woocommerce_api_enabled === 'no') &&
+                (
+                    $webhook_id &&
+                    $plugin_settings['webhook_active'] === 'yes' &&
+                    !isset($_POST['woocommerce_shipcloud_webhook_active'])
+                ) ||
+                (
+                    !$webhook_id &&
+                    $plugin_settings['webhook_active'] === 'no' &&
+                    isset($_POST['woocommerce_shipcloud_webhook_active'])
+                )
+            ) {
+                WooCommerce_Shipcloud::admin_notice(
+                    sprintf(
+                        __(
+                            'You have to activate the REST-API option in your <a href="%s">WooCommerce api settings</a>.',
+                            'shipcloud-for-woocommerce'
+                        ),
+                        admin_url( 'admin.php?page=wc-settings&tab=api' )
+                    ), 'error'
+                );
+            }
+
+            // make sure the checkbox for active webhook is deactivated when no webhook id is present
+            if (!$webhook_id && $plugin_settings['webhook_active'] === 'yes') {
+                $plugin_settings['webhook_active'] = 'no';
+                update_option('woocommerce_shipcloud_settings', $plugin_settings);
+            }
+        }
+    }
 }

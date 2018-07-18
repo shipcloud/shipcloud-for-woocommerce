@@ -95,7 +95,7 @@ class WooCommerce_Shipcloud {
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
 			// Assert session early before headers are sent.
 			add_action( 'admin_init', array( $this, 'assert_session' ) );
-			add_action( 'admin_notices', array( $this, 'show_admin_notices' ) );
+			add_action( 'admin_footer', array( $this, 'show_admin_notices' ) );
 			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
 		} else {
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
@@ -274,14 +274,14 @@ class WooCommerce_Shipcloud {
 		);
 	}
 
-	/**
+    /**
 	 * Assert that a session has been started.
 	 *
 	 * @since 1.2.0
 	 * @since 1.3.2 For usage in frontend: Only start session when no headers are sent.
 	 */
 	public static function assert_session() {
-		if ( ! headers_sent() && ! session_id() ) {
+		if ( ! headers_sent() && ! session_id() && ! isset( $_SESSION['wcsc'] )) {
 	    	// Only start new session when no headers are send and no session started so far.
 			session_start();
 		}
@@ -289,14 +289,6 @@ class WooCommerce_Shipcloud {
 		if ( ! isset( $_SESSION['wcsc'] ) || ! $_SESSION['wcsc'] ) {
 			$_SESSION['wcsc'] = array();
 		}
-
-		$_SESSION['wcsc'] = array_merge(
-			array(
-				'notices'   => array(),
-				'downloads' => array(),
-			),
-			$_SESSION['wcsc']
-        );
 	}
 
 	/**
@@ -496,7 +488,8 @@ class WooCommerce_Shipcloud {
 	 * @since 1.0.0
 	 * @since 1.2.0 Uses session as collection of notices.
 	 */
-	public function show_admin_notices() {
+	public static function show_admin_notices() {
+        error_log('show_admin_notices ...');
 		static::assert_session();
 
 		foreach ( (array) $_SESSION['wcsc']['notices'] as $notice ) {
@@ -508,7 +501,8 @@ class WooCommerce_Shipcloud {
 	/**
 	 * Reset all notices.
 	 */
-	public function clear_admin_notices() {
+	public static function clear_admin_notices() {
+        error_log('clear_admin_notices ...');
 		static::assert_session();
 
 		$_SESSION['wcsc']['notices'] = array();

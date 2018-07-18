@@ -225,23 +225,44 @@ function wcsc_is_enabled() {
  * @since 1.0.0
  */
 function wcsc_is_settings_screen() {
-	$page = '';
+    $page = '';
 
-	if ( array_key_exists( 'page', $_GET ) ) {
-		$page = $_GET['page'];
-	}
+    if ( array_key_exists( 'page', $_GET ) ) {
+        $page = $_GET['page'];
+    }
 
-	$tab = '';
-	if ( array_key_exists( 'tab', $_GET ) ) {
-		$tab = $_GET['tab'];
-	}
+    $tab = '';
+    if ( array_key_exists( 'tab', $_GET ) ) {
+        $tab = $_GET['tab'];
+    }
 
-	// If page should noz show a message, interrupt the check and gibe back true
-	if ( 'wc-settings' === $page && 'shipping' === $tab && 'wc_shipcloud_shipping' === wcsc_get_section() ) {
-		return true;
-	}
+    // If page should noz show a message, interrupt the check and gibe back true
+    if ( 'wc-settings' === $page && 'shipping' === $tab && 'shipcloud' === wcsc_get_section() ) {
+        return true;
+    }
 
-	return true;
+    return false;
+}
+
+/**
+ * Checking if we are on order overview page
+ *
+ * @return bool
+ *
+ * @since 1.8.2
+ */
+function shipcloud_admin_is_on_order_overview_page() {
+    $post_type = '';
+    if ( array_key_exists( 'post_type', $_GET ) ) {
+        $post_type = $_GET['post_type'];
+    }
+
+    // If page should noz show a message, interrupt the check and gibe back true
+    if ( 'shop_order' === $post_type ) {
+        return true;
+    }
+
+    return false;
 }
 
 wcsc_is_enabled();
@@ -672,7 +693,7 @@ function wcsc_get_carrier_tracking_url( $carrier, $carrier_tracking_no ) {
 
 function wcsc_get_shipment_status_icon( $status ) {
 	$icon = 'fa-angle-down';
-	
+
 	switch( $status ) {
 		case 'awaits_pickup_by_receiver':
 			$icon = 'fa-building';

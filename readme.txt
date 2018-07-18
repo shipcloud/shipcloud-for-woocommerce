@@ -108,6 +108,11 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.8.2 =
+* Enhanced: Show info at api url page if called via get-request
+* Enhanced: Show error when shipcloud webhooks are enabled but WooCommerce api isn't
+* Fixed: Check to see if on shipcloud settings page before saving settings
+
 = 1.8.1 =
 * Fixed: Labels weren't merged when using the bulk action from 2nd dropdown on shop orders page
 * Fixed: Unnecessary multiple calls to create/delete a webhook
