@@ -286,6 +286,25 @@ class WC_Shipcloud_Order
 		return array_filter( $data );
 	}
 
+    /**
+     * Replace shipcloud shortcodes in reference_number
+     *
+     * @since 1.9.0
+     * @param array $data
+     * @return array
+     */
+    public function sanitize_reference_number($data) {
+        if (array_key_exists('reference_number', $data)) {
+            $reference_number = $data['reference_number'];
+
+            if ( has_shortcode( $reference_number, 'shipcloud_orderid' ) ) {
+                $data['reference_number'] = str_replace('[shipcloud_orderid]', $this->ID, $reference_number);
+            }
+        }
+
+        return $data;
+    }
+
 	/**
      * Sanitize package data.
      *
@@ -1041,6 +1060,7 @@ class WC_Shipcloud_Order
 
 		$data = $this->handle_return_shipments( $data );
 		$data = $this->sanitize_shop_owner_data( $data );
+        $data = $this->sanitize_reference_number( $data );
 		$data = $this->handle_email_notification( $data );
         $data['additional_services'] = $this->handle_additional_services( $data['additional_services'], $data['carrier'] );
 
