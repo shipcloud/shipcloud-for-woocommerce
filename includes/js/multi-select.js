@@ -39,7 +39,22 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
         self.renderChildren();
 
         self.$carrier.on('change', self.renderChildren);
+
+        $('.shipcloud__pickup_date_and_time').hide();
+        self.$carrier.on('change', self.renderCarrierSpecificInputs);
     };
+
+  this.renderCarrierSpecificInputs = function () {
+    switch (self.$carrier.val()) {
+      case 'dhl_express':
+      case 'go':
+      case 'tnt':
+        $('.shipcloud__pickup_date_and_time').show();
+        break;
+      default:
+        $('.shipcloud__pickup_date_and_time').hide();
+    }
+  };
 
     this.renderChildren = function () {
         self.renderChild(self.$service, 'services');

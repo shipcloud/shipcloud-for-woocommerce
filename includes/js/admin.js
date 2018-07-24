@@ -53,7 +53,11 @@ jQuery( function( $ ) {
         	return labelForm.getReturnLabelData();
 		}
 
-        return labelForm.getLabelData();
+        var labelData = labelForm.getLabelData()
+        labelData['pickup_earliest'] = labelForm.handlePickup('earliest');
+        labelData['pickup_latest'] = labelForm.handlePickup('latest');
+
+        return labelData;
 	};
 
 	$( '#shipcloud_calculate_price' ).click( function(){

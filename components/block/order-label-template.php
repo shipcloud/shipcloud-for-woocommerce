@@ -178,7 +178,7 @@
                         <th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>
                         <td class="tracking-number">
                             <# if ( data.model.get('carrier_tracking_no') ) { #>
-                                <a href="{{ data.model.get('carrier_tracking_url') }}" target="_blank">
+                                <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank">
                                   {{ data.model.get('carrier_tracking_no') }}
                                 </a>
                             <# } else { #>
@@ -210,42 +210,65 @@
             </tbody>
         </table>
 
+        <div class="label-shipment-pickup-request">
+            <# if ( data.model.get('pickup_request') ) { #>
+                <strong><?php _e( 'Pickup timeframe', 'shipcloud-for-woocommerce' ); ?></strong>
+                <div>
+                    {{ data.model.get('pickup_request').getPickupTimeAsRange() }}
+                </div>
+                <# if ( data.model.get('pickup_request').get('pickup_address') ) { #>
+                    <br />
+                    <strong><?php _e( 'Pickup address', 'shipcloud-for-woocommerce' ); ?></strong>
+                    <div>{{ data.model.get('pickup_request').get('pickup_address').get('company') }}</div>
+                    <div>{{ data.model.get('pickup_request').get('pickup_address').getFullName() }}</div>
+                    <div>{{ data.model.get('pickup_request').get('pickup_address').getFullStreet() }}</div>
+                    <div>{{ data.model.get('pickup_request').get('pickup_address').get('care_of') }}</div>
+                    <div>{{ data.model.get('pickup_request').get('pickup_address').getFullCity() }}</div>
+                    <div>{{ data.model.get('pickup_request').get('pickup_address').get('state') }}</div>
+                    <div>{{ data.model.get('pickup_request').get('pickup_address').get('country') }}</div>
+                <# } #>
+            <# } #>
+        </div>
+
         <div class="label-shipment-actions">
+            <button type="button" class="shipcloud_delete_shipment button">
+                <?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>
+            </button>
+
             <# if ( data.model.get('label_url') ) { #>
                 <a href="{{ data.model.get('label_url') }}" target="_blank" class="button">
-					<?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?>
+                    <?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?>
                 </a>
-                <# } else { #>
-                    <button class="shipcloud_create_label button-primary" type="button">
-						<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
+
+        <?php
+            // only applicable for WooCommerce 3
+            if (class_exists('WC_DateTime')) :
+        ?>
+                <# if ( !data.model.get('pickup_request') ) { #>
+                    <button class="button button-primary shipcloud-open-pickup-request-form" role="switch" type="button">
+                        <?php _e( 'Create pickup request', 'shipcloud-for-woocommerce' ) ?>
                     </button>
                 <# } #>
-
-                <# if ( data.model.get('tracking_url') ) { #>
-                <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank" class="button">
-                    <?php _e( 'Tracking link', 'shipcloud-for-woocommerce' ); ?>
-                </a>
-                <# } #>
-
-                <button class="button wcsc-save-shipment button-primary" role="switch" type="button"
-                        style="display: none;">
-                    <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
-                </button>
-
-                <# if ( ! data.model.get('label_url') ) { #>
+        <?php endif; ?>
+            <# } else { #>
                 <button class="button wcsc-edit-shipment" role="switch" type="button">
                     <?php _ex( 'Edit shipment', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
                 </button>
-                <# } #>
 
-                <button type="button" class="shipcloud_delete_shipment button">
-                    <?php _e( 'Delete shipment', 'shipcloud-for-woocommerce' ); ?>
+                <button class="shipcloud_create_label button-primary" type="button">
+                    <?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
                 </button>
+            <# } #>
 
-                <input type="hidden" name="carrier" value="{{ data.model.get('carrier') }}"/>
-                <input type="hidden" name="service" value="{{ data.model.get('service') }}"/>
-                <input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}"/>
-                <input type="hidden" name="shipment_order_id" value="<?php echo get_the_ID(); ?>"/>
+            <button class="button wcsc-save-shipment button-primary" role="switch" type="button"
+                    style="display: none;">
+                <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+            </button>
+
+            <input type="hidden" name="carrier" value="{{ data.model.get('carrier') }}"/>
+            <input type="hidden" name="service" value="{{ data.model.get('service') }}"/>
+            <input type="hidden" name="shipment_id" value="{{ data.model.get('id') }}"/>
+            <input type="hidden" name="shipment_order_id" value="<?php echo get_the_ID(); ?>"/>
         </div>
 
     </div>

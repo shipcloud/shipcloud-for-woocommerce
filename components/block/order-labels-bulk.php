@@ -13,7 +13,7 @@
                 </legend>
                 <div class="inline-edit-col">
                     <div class="bulk-title-div">
-                        <div class="bulk-titles"></div>
+                        <div class="order-id-list"></div>
                     </div>
                 </div>
             </fieldset>
@@ -81,11 +81,4 @@
         $('#shipcloud_bulk').find('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
         $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
     });
-</script>
-
-<script type="template/html" id="tmpl-wcsc-order-labels-bulk-items">
-    <div data-id="{{ data.id }}"
-         class="bulk-title">
-        {{ data.title }}
-    </div>
 </script>

@@ -896,6 +896,28 @@ class Woocommerce_Shipcloud_API
 		return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
 	}
 
+    /**
+     * Create a pickup request
+     *
+     * @param array $params
+     *
+     * @return array|WP_Error
+     *
+     * @since 1.9.0
+     */
+    public function create_pickup_request( $params ) {
+        $response = $this->send_request( 'pickup_requests', $params, 'POST' );
+
+        $status_code = (int) $response[ 'header' ][ 'status' ];
+
+        if ( 200 !== $status_code ) {
+            $error = $this->get_error( $response );
+            return new WP_Error( $status_code, $error[ 'description' ] );
+        }
+
+        return $response[ 'body' ];
+    }
+
 	public function create_address_by_pakadoo_id( $pakadoo_id ) {
 		$action  = 'addresses';
 		$params = array('pakadoo_id' => $pakadoo_id);
@@ -933,7 +955,6 @@ class Woocommerce_Shipcloud_API
             return new \WP_Error( 'shipcloud_api_error_' . $e->getCode(), $e->getMessage() );
         }
     }
-
 
     public function delete_webhook($webhook_id) {
         $params = array();

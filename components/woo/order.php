@@ -155,6 +155,7 @@ class WC_Shipcloud_Order
 		add_action( 'wp_ajax_shipcloud_create_shipment', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_shipment_label', array( $this, 'ajax_create_shipment' ) );
 		add_action( 'wp_ajax_shipcloud_create_label', array( $this, 'ajax_create_label' ) );
+		add_action( 'wp_ajax_shipcloud_create_pickup_request', array( $this, 'ajax_create_pickup_request' ) );
 		add_action( 'wp_ajax_shipcloud_get_pakadoo_point', array( $this, 'ajax_get_pakadoo_point' ) );
 		add_action( 'wp_ajax_nopriv_shipcloud_get_pakadoo_point', array( $this, 'ajax_get_pakadoo_point' ) );
 
@@ -220,6 +221,103 @@ class WC_Shipcloud_Order
 		), 'shop_order' );
 	}
 
+    /*
+     * Create pickup request at shipcloud
+     *
+     * @since 1.9.0
+     *
+     * @param $request
+     */
+    protected function create_pickup_request($data) {
+        $shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
+        $tmp_order = $shipment_repo->findOrderByShipmentId( $data['id'] );
+        $order_id = $tmp_order->get_order_number();
+
+        $pickup_time = self::handle_pickup_request($data);
+        $pickup_time = array_shift($pickup_time);
+        $pickup_request_params = array();
+
+        $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+
+        $shipment_ids = array();
+        foreach ( $shipments as $shipment ) {
+            array_push($shipment_ids, $shipment['id']);
+        }
+
+        if ( !in_array($data['id'], $shipment_ids) ) {
+            WC_Shipcloud_Shipping::log( __( 'Submitted shipment id not found in this order.', 'shipcloud-for-woocommerce' ) );
+            wp_send_json_error( __( 'Submitted shipment id not found in this order.', 'shipcloud-for-woocommerce' ) );
+        }
+
+        if ( !array_key_exists('pickup_request', $shipment) ) {
+            $pickupRequestData = array(
+                'carrier' => $shipment['carrier'],
+                'pickup_time' => $pickup_time,
+                'shipments' => array(
+                    array('id' => $data['id'])
+                ),
+            );
+
+            $pickup_address = array_filter($data['pickup_address']);
+            // check to see if there was anything more send than the country code
+            if ( count($pickup_address) > 1 ) {
+                $pickupRequestData['pickup_address'] = $pickup_address;
+            }
+
+            $pickup_request = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' )->create_pickup_request($pickupRequestData);
+            if ( is_wp_error( $pickup_request ) ) {
+                WC_Shipcloud_Shipping::log( sprintf( __( 'Error while creating the pickup request: %s', 'shipcloud-for-woocommerce' ), $pickup_request->get_error_message() ) );
+                wp_send_json_error(
+                    array(
+                        'status' => 'BAD_REQUEST',
+                        'data' => sprintf( __( 'Error while creating the pickup request: %s', 'shipcloud-for-woocommerce' ), $pickup_request->get_error_message() )
+                    )
+                );
+            } else {
+                WC_Shipcloud_Shipping::log( sprintf( __( 'Pickup request created with id %s', 'shipcloud-for-woocommerce' ), $pickup_request['id']) );
+
+                // remove shipments element from pickup_request
+                unset($pickup_request['shipments']);
+
+                foreach ( $shipments as $shipment ) {
+                    if ( $data['id'] === $shipment['id']) {
+                        $new_data = array_merge(
+                            $shipment,
+                            array(
+                                'pickup_request' => $pickup_request
+                            )
+                        );
+                        update_post_meta( $order_id, 'shipcloud_shipment_data', $new_data, $shipment );
+
+                        wp_send_json_success(
+                            array(
+                                'status'      => 'OK',
+                                'data'        => $shipment_repo->translate_to_api_data( $new_data, $order_id ),
+                            )
+                        );
+                        break;
+                    }
+                }
+                WC_Shipcloud_Shipping::log( sprintf( __( 'Couldn\'t find the shipment id in this order', 'shipcloud-for-woocommerce' ), $shipment_id ) );
+                wp_send_json_error(
+                    array(
+                        'status' => 'BAD_REQUEST',
+                        'data' => sprintf( __( 'Couldn\'t find the shipment id in this order', 'shipcloud-for-woocommerce' ), $shipment_id )
+                    )
+                );
+            }
+        } else {
+            WC_Shipcloud_Shipping::log( sprintf( __( 'No pickup request for shipment with id %s created, because there was already one', 'shipcloud-for-woocommerce' ), $shipment_id ) );
+            wp_send_json_error(
+                array(
+                    'status' => 'BAD_REQUEST',
+                    'data' => sprintf( __( 'No pickup request for shipment with id %s created, because there was already one', 'shipcloud-for-woocommerce' ), $shipment_id )
+                )
+            );
+
+        }
+    }
+
 	/*
 	 * Check to see if it's a return shipment
 	 *
@@ -236,6 +334,44 @@ class WC_Shipcloud_Order
 
 		 return array_filter( $data );
 	 }
+
+    /**
+    * Create a single pickup request
+    *
+    * @since 1.9.0
+    */
+    public static function handle_pickup_request( $data ) {
+        $pickup = array();
+        if (array_key_exists('pickup_earliest', $data) && array_key_exists('pickup_latest', $data)) {
+            $pickup_earliest = $data['pickup_earliest'];
+            $pickup_latest = $data['pickup_latest'];
+        } elseif (array_key_exists('pickup_request', $data)) {
+            $pickup_earliest = $data['pickup_request']['pickup_earliest'];
+            $pickup_latest = $data['pickup_request']['pickup_latest'];
+        } else {
+            $pickup_earliest_date = isset($data['pickup_earliest_date']) ? $data['pickup_earliest_date'] : '';
+            $pickup_earliest_time_hour = isset($data['pickup_earliest_time_hour']) ? $data['pickup_earliest_time_hour'] : '';
+            $pickup_earliest_time_minute = isset($data['pickup_earliest_time_minute']) ? $data['pickup_earliest_time_minute'] : '';
+            $pickup_latest_date = isset($data['pickup_latest_date']) ? $data['pickup_latest_date'] : '';
+            $pickup_latest_time_hour = isset($data['pickup_latest_time_hour']) ? $data['pickup_latest_time_hour'] : '';
+            $pickup_latest_time_minute = isset($data['pickup_latest_time_minute']) ? $data['pickup_latest_time_minute'] : '';
+
+            $pickup_earliest = $pickup_earliest_date.' '.$pickup_earliest_time_hour.':'.$pickup_earliest_time_minute;
+            $pickup_latest = $pickup_latest_date.' '.$pickup_latest_time_hour.':'.$pickup_latest_time_minute;
+        }
+
+        try {
+            $pickup_earliest = new WC_DateTime( $pickup_earliest, new DateTimeZone( 'Europe/Berlin' ) );
+            $pickup_latest = new WC_DateTime( $pickup_latest, new DateTimeZone( 'Europe/Berlin' ) );
+
+            $pickup['pickup_time']['earliest'] = $pickup_earliest->format(DateTime::ATOM);
+            $pickup['pickup_time']['latest'] = $pickup_latest->format(DateTime::ATOM);
+        } catch (Exception $e) {
+            WC_Shipcloud_Shipping::log(sprintf( __( 'Couldn\'t prepare pickup: %s', 'shipcloud-for-woocommerce' ), $e->getMessage() ));
+        }
+
+        return $pickup;
+    }
 
 	/**
      * Sanitize shop owner data.
@@ -265,23 +401,6 @@ class WC_Shipcloud_Order
 		if ( array_key_exists( 'other_description', $data ) ) {
 			$data['description'] = $data['other_description'];
 		}
-
-		// Only use API fields.
-		$data = array_intersect_key(
-			$data,
-			array(
-				'carrier'               => null,
-				'from'                  => null,
-				'notification_email'    => null,
-				'description'           => null,
-				'package'               => null,
-				'reference_number'      => null,
-				'service'               => null,
-				'create_shipping_label' => null,
-				'to'                    => null,
-				'additional_services'   => null,
-			)
-		);
 
 		return array_filter( $data );
 	}
@@ -537,17 +656,6 @@ class WC_Shipcloud_Order
                     </p>
 				</div>
 			</div>
-
-      <div class="address full">
-        <h3><?php _e('Other information', 'shipcloud-for-woocommerce') ?></h3>
-
-        <p class="fullsize">
-          <input type="text" name="other_description" value="<?php echo esc_attr($this->get_description()); ?>">
-          <label for="other_description">
-            <?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>
-          </label>
-        </p>
-      </div>
 			<div style="clear: both"></div>
 		</div>
 		<?php
@@ -859,6 +967,9 @@ class WC_Shipcloud_Order
                 <script type="template/html" id="tmpl-shipcloud-shipment">
                     <?php require WCSC_COMPONENTFOLDER . '/block/order-label-template.php'; ?>
                 </script>
+                <script type="template/html" id="tmpl-shipcloud-shipment-pickup-request">
+                    <?php require WCSC_COMPONENTFOLDER . '/block/pickup-request-form-basic.php'; ?>
+                </script>
                 <script type="template/html" id="tmpl-shipcloud-shipment-edit">
 					<?php require WCSC_COMPONENTFOLDER . '/block/order-shipment-edit.php'; ?>
                 </script>
@@ -1049,10 +1160,6 @@ class WC_Shipcloud_Order
 			unset( $data['to']['id'] );
 		}
 
-		if (!isset($data['additional_services'])) {
-			$data['additional_services'] = array();
-		}
-
 		/**
 		 * TODO boolean switch inside of method indicated different strategies. Separate them in different methods.
 		 */
@@ -1062,17 +1169,45 @@ class WC_Shipcloud_Order
 		$data = $this->sanitize_shop_owner_data( $data );
         $data = $this->sanitize_reference_number( $data );
 		$data = $this->handle_email_notification( $data );
-        $data['additional_services'] = $this->handle_additional_services( $data['additional_services'], $data['carrier'] );
+
+        $pickup = self::handle_pickup_request( $data );
+        unset( $data['pickup_earliest'] );
+        unset( $data['pickup_latest'] );
+        if (!empty($pickup)) {
+            $data['pickup'] = $pickup;
+        }
+
+        if ( array_key_exists( 'additional_services', $data ) && !empty($data['additional_services']) ) {
+            $data['additional_services'] = $this->handle_additional_services( $data['additional_services'], $data['carrier'] );
+        }
 
 		if ( array_key_exists( 'package', $data ) ) {
 			$data['package'] = $this->sanitize_package( $data['package'] );
 		}
 
+        // Only use API fields.
+        $data = array_intersect_key(
+            $data,
+            array(
+                'carrier'               => null,
+                'from'                  => null,
+                'notification_email'    => null,
+                'description'           => null,
+                'package'               => null,
+                'reference_number'      => null,
+                'service'               => null,
+                'create_shipping_label' => null,
+                'to'                    => null,
+                'additional_services'   => null,
+                'pickup'                => null,
+            )
+        );
+
 		try {
 			if ( isset($shipment_id) ) {
 				// Update
 				WC_Shipcloud_Shipping::log('Updating shipment with shipment_id: '.$shipment_id);
-				WC_Shipcloud_Shipping::log('Data: '.print_r($data, true));
+				WC_Shipcloud_Shipping::log('Data: '.json_encode($data));
 				$shipment = _wcsc_api()->shipment()->update( $shipment_id, $data );
 			} else {
 				// Create
@@ -1120,6 +1255,18 @@ class WC_Shipcloud_Order
 	{
 				$this->create_shipment_label( $_POST );
 	}
+
+    /**
+    * Create a pickup request for a given shipment
+    * @since 1.9.0
+    */
+    public function ajax_create_pickup_request() {
+        if ( !$_POST['id'] ) {
+            return;
+        }
+
+        $this->create_pickup_request($_POST);
+    }
 
 	/**
 	 * Calulating shipping after sublitting calculation
@@ -1267,6 +1414,7 @@ class WC_Shipcloud_Order
 		foreach ( $shipments AS $key => $shipment ) {
 			if ( $shipment['id'] == $shipment_id ) {
 				delete_post_meta( $order_id, 'shipcloud_shipment_data', $shipment );
+                delete_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_id );
 
 				echo json_encode(
 					array(
@@ -1801,11 +1949,6 @@ class WC_Shipcloud_Order
 
         return $allowed_additional_services;
     }
-    private function handle_additional_service_for_carrier( $additional_service, $carrier ) {
-        $shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
-        $additional_services_for_carrier = $shipment_repo->additionalServicesForCarrier($carrier);
-
-    }
 
     /**
 	 * @param array $data
@@ -1839,7 +1982,7 @@ class WC_Shipcloud_Order
             $advance_notice_language =
                 $converter->language_from_country_code($data['to']['country']);
 
-			if( $advance_notice_language ) {
+            if( $advance_notice_language ) {
 				$data['additional_services'][] = array(
 					'name'       => 'advance_notice',
 					'properties' => array(
