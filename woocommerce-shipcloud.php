@@ -332,6 +332,8 @@ class WooCommerce_Shipcloud {
 						str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php'
 					);
 
+        $filename = str_replace('_', '-', $filename);
+
 		if ( file_exists( $filename ) ) {
 			require_once $filename;
 		}

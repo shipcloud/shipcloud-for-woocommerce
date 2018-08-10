@@ -4,6 +4,7 @@
 * Enhanced: Added configuration for displaying the pakadoo id within checkout (billing address)
 * Enhanced: Added configuration for displaying a care of field within checkout (billing & shipping address)
 * Enhanced: Added configuration for displaying a phone field within checkout (billing address)
+* Fixed: Use official language for shipments with advance notice
 
 = 1.8.2 =
 * Enhanced: Show info at api url page if called via get-request

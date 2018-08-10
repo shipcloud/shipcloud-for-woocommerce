@@ -1815,8 +1815,9 @@ class WC_Shipcloud_Order
 			}
 
 			// Append advance notice service.
-			$advance_notice_language =
-				i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $data['to']['country'] ) );
+            $converter = new \Shipcloud\I18n\Cldr_Converter();
+            $advance_notice_language =
+                $converter->language_from_country_code($data['to']['country']);
 
 			if( $advance_notice_language ) {
 				$data['additional_services'][] = array(
