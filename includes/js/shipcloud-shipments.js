@@ -56,6 +56,58 @@ shipcloud.PackageModel = Backbone.Model.extend({
     }
 });
 
+shipcloud.PickupRequestModel = Backbone.Model.extend({
+  defaults: {
+    'id': null,
+    'carrier': null,
+    'pickup_time': null,
+    'pickup_address': null
+  },
+
+  getPickupTimeAsRange: function () {
+    if (this.get('pickup_time')) {
+      var options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZone: 'Europe/Berlin'
+      };
+
+      var earliest = new Date(this.get('pickup_time').earliest);
+      var latest = new Date(this.get('pickup_time').latest);
+
+      return new Intl.DateTimeFormat('de-DE', options).format(earliest) +
+        ' - ' +
+        new Intl.DateTimeFormat('de-DE', options).format(latest);
+    }
+    return null;
+  },
+
+  getPickupTimeAsHash: function (key) {
+    var pickupTime;
+
+    if (key === 'earliest') {
+      pickupTime = new Date(this.get('pickup_time').earliest);
+    } else {
+      pickupTime = new Date(this.get('pickup_time').latest);
+    }
+
+    var year = pickupTime.getFullYear();
+    var month = pickupTime.getMonth() + 1;
+    var day = pickupTime.getDate();
+    var hours = pickupTime.getHours();
+    var minutes = pickupTime.getMinutes();
+
+    return {
+      date: year + '-' + ((month < 10) ? '0' + month : month) + '-' + ((day < 10) ? '0' + day : day),
+      hours: ((hours < 10) ? '0' + hours : hours),
+      minutes: ((minutes < 10) ? '0' + minutes : minutes)
+    };
+  }
+});
+
 shipcloud.ShipmentModel = Backbone.Model.extend({
     defaults: {
         'id'                        : null,
@@ -74,6 +126,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'tracking_url'              : null,
         'carrier_tracking_url'      : null,
         'additional_services'       : null,
+        'pickup_request'            : null,
     },
 
   allowedAdditionalServices: function () {
@@ -194,6 +247,16 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
             data.package = new shipcloud.PackageModel(data.package);
         }
 
+        if (data.hasOwnProperty('pickup_request')) {
+            data.pickup_request = new shipcloud.PickupRequestModel(data.pickup_request);
+            data.pickup_request.set({
+              pickup_address: new shipcloud.AddressModel(data.pickup_request.get('pickup_address'))
+            });
+        } else if (data.hasOwnProperty('pickup')) {
+          data.pickup_request = new shipcloud.PickupRequestModel(data.pickup);
+          delete data.pickup;
+        }
+
         return data;
     },
 
@@ -205,6 +268,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
       var carrierTrackingUrl;
       switch (this.get('carrier')) {
         case 'dhl':
+        case 'dhl_express':
           carrierTrackingUrl = 'https://nolp.dhl.de/nextt-online-public/set_identcodes.do?idc=' + this.get('carrier_tracking_no') + '&rfn=&extendedSearch=true';
           break;
         case 'dpd':
@@ -298,7 +362,8 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
     events: {
         'click .shipcloud_create_label'   : 'createAction',
         'click .wcsc-edit-shipment'       : 'editAction',
-        'click .shipcloud_delete_shipment': 'deleteAction'
+        'click .shipcloud_delete_shipment': 'deleteAction',
+        'click .shipcloud-open-pickup-request-form': 'showPickupRequestForm'
     },
 
     fadeIn: function () {
@@ -357,6 +422,16 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
 
         this.views['edit'].render({el: this.$el});
     },
+
+  showPickupRequestForm: function () {
+    this.views['pickup-request'] = new shipcloud.ShipmentPickupRequestView({
+      model: this.model,
+      el: this.$el.find('.widget-content'),
+      parent: this
+    });
+
+    this.views['pickup-request'].render({el: this.$el});
+  },
 
     // Extending render so that open widgets are kept open on redrawing.
     render: function () {
@@ -748,6 +823,67 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         this.parent.scrollTo();
         this.remove(); // Parent will rerender itself when the model changes.
     }
+})
+
+shipcloud.ShipmentPickupRequestView = wp.Backbone.View.extend({
+  tagName: 'div',
+  template: wp.template('shipcloud-shipment-pickup-request'),
+  parent: null,
+
+  events: {
+    'click .shipcloud-pickup-request-abort': 'closePickupForm',
+    'click .shipcloud-create-pickup-request': 'createPickupRequest',
+    'click .shipcloud-use-different-pickup-address': 'togglePickupAddress'
+  },
+
+  closePickupForm: function () {
+    this.remove();
+    this.parent.scrollTo();
+    this.parent.render();
+  },
+
+  createPickupRequest: function () {
+    this.parent.$loader().show();
+
+    var data = this.$el.find('input,select,textarea').serializeObject();
+    data['id'] = this.model.get('id');
+
+    wp.ajax.send(
+      'shipcloud_create_pickup_request',
+      {
+        'data': data,
+        'success': this.successAction.bind(this),
+        'error': this.errorAction.bind(this)
+      }
+    );
+  },
+
+  errorAction: function (response) {
+    alert(response.data);
+    this.parent.$loader().hide();
+  },
+
+  initialize: function (args) {
+    this.parent = args.parent;
+  },
+
+  render: function () {
+    wp.Backbone.View.prototype.render.call(this);
+
+    this.$el.find('.shipcloud-pickup-request-table').show();
+  },
+
+  successAction: function (response) {
+    this.parent.$loader().hide();
+
+    this.model.set(this.model.parse(response.data));
+    this.parent.scrollTo();
+    this.remove(); // Parent will rerender itself when the model changes.
+  },
+
+  togglePickupAddress: function () {
+    this.$el.find('.shipcloud-different-pickup-address').toggle();
+  }
 })
 ;
 

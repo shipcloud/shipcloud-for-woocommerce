@@ -35,7 +35,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Shipcloud_Order_Bulk {
 
 	const FORM_BULK = 'wcsc_order_bulk_label';
+    const FORM_PICKUP_REQUEST = 'shipcloud_create_pickup_request';
 	const BUTTON_PDF = 'wscs_order_bulk_pdf';
+    const BUTTON_PICKUP_REQUEST = 'shipcloud_order_bulk_pickup_request';
 
 	/**
 	 * WC_Shipcloud_Order_Bulk constructor.
@@ -90,10 +92,15 @@ class WC_Shipcloud_Order_Bulk {
 
 		$request = $_GET; // XSS: OK.
 
-		if (
-            (isset( $request['action']) && self::FORM_BULK !== $request['action']) &&
-            (isset( $request['action2']) && self::FORM_BULK !== $request['action2']) ||
-            (!isset( $request['action']) && !isset($request['action2']))
+        if (isset( $request['action'])) {
+            $action = $request['action'];
+        } elseif (isset( $request['action2'])) {
+            $action = $request['action2'];
+        }
+
+        if (
+            !isset($action) ||
+            ($action !== self::FORM_BULK && $action !== self::FORM_PICKUP_REQUEST)
         ) {
             return;
         }
@@ -102,7 +109,10 @@ class WC_Shipcloud_Order_Bulk {
 			$this->create_pdf( $request );
 
 			return;
-		}
+		} elseif ( isset( $request[ self::BUTTON_PICKUP_REQUEST ] ) ) {
+            $this->create_pickup_request( $request );
+            return;
+        }
 
 		$this->create_label( $request );
 	}
@@ -118,6 +128,11 @@ class WC_Shipcloud_Order_Bulk {
 	 */
 	public function add_bulk_actions( $actions ) {
 		$actions['wcsc_order_bulk_label'] = __( 'Create shipping labels', 'shipcloud-for-woocommerce' );
+
+        // only applicable for WooCommerce 3
+        if (class_exists('WC_DateTime')) {
+            $actions['shipcloud_create_pickup_request'] = __( 'Create pickup request', 'shipcloud-for-woocommerce' );
+        }
 
 		return $actions;
 	}
@@ -147,6 +162,9 @@ class WC_Shipcloud_Order_Bulk {
 		);
 
 		$block->dispatch();
+
+        require WCSC_COMPONENTFOLDER . '/block/pickup-request-form.php';
+        require WCSC_COMPONENTFOLDER . '/block/bulk-action-template.php';
 	}
 
 	/**
@@ -155,13 +173,12 @@ class WC_Shipcloud_Order_Bulk {
 	 * @since   1.2.1
 	 */
 	public function load_edit() {
-		wp_register_script(
-			'wcsc_bulk_order_label',
-			WCSC_URLPATH . '/includes/js/bulk-order-label.js',
-			array( 'jquery', 'wcsc-multi-select' )
-		);
-
-		wp_enqueue_script( 'wcsc_bulk_order_label', false, array(), false, true );
+        wp_register_script(
+            'shipcloud_bulk_actions',
+            WCSC_URLPATH . '/includes/js/bulk-actions.js',
+            array( 'jquery', 'wcsc-multi-select' )
+        );
+        wp_enqueue_script( 'shipcloud_bulk_actions', false, array(), false, true );
 	}
 
 	/**
@@ -329,7 +346,7 @@ class WC_Shipcloud_Order_Bulk {
 		}
 
 		if ( ! $content ) {
-			WooCommerce_Shipcloud::admin_notice( 'Could not compose labels into one PDF.', 'error' );
+			WooCommerce_Shipcloud::admin_notice( __( 'Could not compose labels into one PDF.', 'shipcloud-for-woocommerce' ), 'error' );
 
 			return;
 		}
@@ -414,10 +431,16 @@ class WC_Shipcloud_Order_Bulk {
 			'carrier'               => $request['shipcloud_carrier'],
 			'service'               => $request['shipcloud_carrier_service'],
 			'reference_number'      => $reference_number,
+			'description'           => $request['other_description'],
 			'notification_email'    => $order->get_notification_email(),
 			'additional_services'   => $additional_services,
 			'create_shipping_label' => true,
 		);
+
+        $pickup = WC_Shipcloud_Order::handle_pickup_request($request);
+        if (!empty($pickup)) {
+            $data['pickup'] = $pickup;
+        }
 
 		try {
 			WC_Shipcloud_Shipping::log('calling shipcloud api to create label with the following data: '.json_encode($data));
@@ -456,6 +479,10 @@ class WC_Shipcloud_Order_Bulk {
 				'date_created'        => time(),
 			);
 
+            if (!empty($pickup)) {
+                $label_for_order['pickup'] = $pickup;
+            }
+
 			$label_for_order = array_merge( $label_for_order, $order->get_sender( 'sender_' ) );
 			$label_for_order = array_merge( $label_for_order, $order->get_recipient( 'recipient_' ) );
 
@@ -477,6 +504,88 @@ class WC_Shipcloud_Order_Bulk {
 
 		return $shipment;
 	}
+
+    /*
+     * Create pickup request at shipcloud
+     *
+     * @since 1.9.0
+     *
+     * @param $request
+     */
+    protected function create_pickup_request($request) {
+        $pickup_time = WC_Shipcloud_Order::handle_pickup_request($request);
+        $pickup_time = array_shift($pickup_time);
+        $pickup_request_params = array();
+
+        foreach ( $request['post'] as $order_id ) {
+            $order = WC_Shipcloud_Order::create_order( $order_id );
+            $shipments = get_post_meta( $order->ID, 'shipcloud_shipment_data' );
+            foreach ( $shipments as $shipment ) {
+                $shipment_id = $shipment['id'];
+                $carrier = $shipment['carrier'];
+
+                if ( !array_key_exists('pickup_request', $shipment) ) {
+                    if ( !array_key_exists($carrier, $pickup_request_params) ) {
+                        $pickup_request_params[$carrier] = array();
+                    }
+                    array_push($pickup_request_params[$carrier], $shipment_id);
+                } else {
+                    WooCommerce_Shipcloud::admin_notice( sprintf( __( 'No pickup request for shipment with id %s created, because there was already one', 'shipcloud-for-woocommerce' ), $shipment_id ), 'error' );
+                }
+            }
+        }
+
+        foreach ( $pickup_request_params as $carrier => $shipment_ids) {
+            $shipment_id_hashes = array();
+            foreach ( $shipment_ids as $shipment_id ) {
+                array_push($shipment_id_hashes, array(
+                    'id' => $shipment_id
+                ));
+            }
+
+            $data = array(
+                'carrier' => $carrier,
+                'pickup_time' => $pickup_time,
+                'shipments' => $shipment_id_hashes,
+            );
+
+            $pickup_address = array_filter($request['pickup_address']);
+            // check to see if there was anything more send than the country code
+            if ( count($pickup_address) > 1 ) {
+                $data['pickup_address'] = $pickup_address;
+            }
+
+            $pickup_request = _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' )->create_pickup_request($data);
+            if ( is_wp_error( $pickup_request ) ) {
+                WC_Shipcloud_Shipping::log( sprintf( __( 'Error while creating the pickup request: %s', 'shipcloud-for-woocommerce' ), $pickup_request->get_error_message() ) );
+                WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Error while creating the pickup request: %s', 'shipcloud-for-woocommerce' ), $pickup_request->get_error_message() ), 'error' );
+            } else {
+                WC_Shipcloud_Shipping::log( sprintf( __( 'Pickup request created with id %s', 'shipcloud-for-woocommerce' ), $pickup_request['id']) );
+                WooCommerce_Shipcloud::admin_notice( __( 'Pickup requests created', 'shipcloud-for-woocommerce') );
+
+                // let's update the shipment_data with the pickup requests
+                foreach ( $request['post'] as $order_id ) {
+                    $order = WC_Shipcloud_Order::create_order( $order_id );
+                    $shipments = get_post_meta( $order->ID, 'shipcloud_shipment_data' );
+
+                    // remove shipments element from pickup_request
+                    unset($pickup_request['shipments']);
+
+                    foreach ( $shipments as $shipment ) {
+                        if (in_array($shipment['id'], $shipment_ids)) {
+                            $new_data = array_merge(
+                                $shipment,
+                                array(
+                                    'pickup_request' => $pickup_request
+                                )
+                            );
+                            update_post_meta( $order->ID, 'shipcloud_shipment_data', $new_data, $shipment );
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 	/**
 	 * Sanitize package data.

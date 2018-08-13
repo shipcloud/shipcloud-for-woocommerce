@@ -194,6 +194,17 @@ shipcloud.LabelForm = function (wrapperSelector) {
       return additional_services_array;
     };
 
+  this.handlePickup = function (pointInTime) {
+    var pickupTime =
+      $('input[name="pickup_' + pointInTime + '_date"]').val() +
+      ' ' +
+      $('input[name="pickup_' + pointInTime + '_time_hour"]').val() +
+      ':' +
+      $('input[name="pickup_' + pointInTime + '_time_minute"]').val();
+
+    return pickupTime;
+  };
+
     self.main();
 };
 

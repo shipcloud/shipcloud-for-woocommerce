@@ -60,6 +60,11 @@ class LabelController {
                 $data['shipment']['carrier']
             );
 
+        $pickup = \WC_Shipcloud_Order::handle_pickup_request($data);
+        if (!empty($pickup)) {
+            $data['shipment']['pickup'] = $pickup;
+        }
+
 		try {
             $order = $this->shipment_repository->findOrderByShipmentId( $data['shipment']['id'] );
 

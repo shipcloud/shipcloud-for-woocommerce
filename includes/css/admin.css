@@ -117,7 +117,7 @@
     font-weight: normal;
     vertical-align: top;
     padding-top: 8px;
-    width: max-content;
+    width: 30%;
 }
 #shipcloud-io .parcel-form-table td{
     vertical-align: top;
@@ -128,6 +128,25 @@
 }
 #shipcloud-io .parcel-form-table input[type=text].lengths{
     width:50px;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest,
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--latest {
+  display: inline-block;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest {
+  margin-right: 15px;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest label,
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--latest label {
+  width: 100%;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time .pickup_date,
+#shipcloud-io .label-shipment-pickup-request .shipcloud__pickup_time .pickup_date {
+  width: 100px;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time .pickup_time,
+#shipcloud-io .label-shipment-pickup-request .shipcloud__pickup_time .pickup_time {
+  width: 50px;
 }
 #shipcloud-io .parcel-template-field{
     margin-bottom:10px;
@@ -293,10 +312,12 @@
 
 #shipcloud-io .shipment-labels .address,
 #shipcloud-io .shipment-labels .label-shipment-additional-services,
+#shipcloud-io .shipment-labels .label-shipment-pickup-request,
+#shipcloud-io .shipment-labels .label-shipment-status,
 fieldset .shipment-labels .address {
     width: 31%;
     display: inline-block;
-    margin: 0 1%;
+    margin: 20px 1%;
     vertical-align: top;
 }
 
@@ -306,7 +327,7 @@ fieldset .shipment-labels .address {
 
 #shipcloud-io .label-shipment-actions{
     text-align: right;
-    width: 29%;
+    width: 100%;
     display: inline-block;
 }
 
@@ -474,4 +495,31 @@ fieldset .shipment-labels .address {
  */
 #shipcloud_bulk .parcel-form-table th {
   width: 25%;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address {
+  display: none;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field {
+  float: left;
+  clear: left;
+  width: 48%;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_last_name_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_number_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_city_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_state_field {
+  float: right;
+  clear: right;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_company_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .pickup_address_phone_field {
+  width: 100%;
+  clear: both
+}
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field .select2-container {
+  width: 100%!important;
 }

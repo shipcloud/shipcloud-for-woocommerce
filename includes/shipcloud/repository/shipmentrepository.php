@@ -173,7 +173,7 @@ class ShipmentRepository {
 				'company'    => isset($old_structured_data['recipient_company']) ? $old_structured_data['recipient_company'] : '',
 				'first_name' => isset($old_structured_data['recipient_first_name']) ? $old_structured_data['recipient_first_name'] : '',
 				'last_name'  => isset($old_structured_data['recipient_last_name']) ? $old_structured_data['recipient_last_name'] : '',
-        'care_of'    => isset($old_structured_data['recipient_care_of']) ? $old_structured_data['recipient_care_of'] : '',
+                'care_of'    => isset($old_structured_data['recipient_care_of']) ? $old_structured_data['recipient_care_of'] : '',
 				'street'     => isset($old_structured_data['recipient_street']) ? $old_structured_data['recipient_street'] : '',
 				'street_no'  => isset($old_structured_data['recipient_street_no']) ? $old_structured_data['recipient_street_no'] : '',
 				'zip_code'   => isset($old_structured_data['recipient_zip_code']) ? $old_structured_data['recipient_zip_code'] : '',
@@ -192,7 +192,7 @@ class ShipmentRepository {
 			'tracking_url'        => isset($old_structured_data['tracking_url']) ? $old_structured_data['tracking_url'] : '',
 			'price'               => isset($old_structured_data['price']) ? $old_structured_data['price'] : '',
 			'carrier'             => isset($old_structured_data['carrier']) ? $old_structured_data['carrier'] : '',
-      'service'             => isset($old_structured_data['service']) ? $old_structured_data['service'] : '',
+            'service'             => isset($old_structured_data['service']) ? $old_structured_data['service'] : '',
 			'carrier_tracking_no' => isset($old_structured_data['carrier_tracking_no']) ? $old_structured_data['carrier_tracking_no'] : '',
 			'reference_number'    => isset($old_structured_data['reference_number']) ? $old_structured_data['reference_number'] : '',
 			'additional_services' => isset($old_structured_data['additional_services']) ? $this->handleAdditionalServices( $old_structured_data ) : '',
@@ -203,6 +203,12 @@ class ShipmentRepository {
 				get_post_meta( $order_id, 'shipment_' . $old_structured_data['id'] . '_status', true )
 			);
 		}
+
+        if (isset($old_structured_data['pickup_request'])) {
+            $data['pickup_request'] = $old_structured_data['pickup_request'];
+        } elseif (isset($old_structured_data['pickup'])) {
+            $data['pickup'] = $old_structured_data['pickup'];
+        }
 
 		return $data;
 	}

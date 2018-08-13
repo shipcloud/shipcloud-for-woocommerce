@@ -559,9 +559,16 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'recipient_country'    => $data['to']['country'],
 		'recipient_phone'      => $data['to']['phone'],
 		'reference_number'     => (isset($data['reference_number'])) ? $data['reference_number'] : null,
-		'additional_services'  => $data['additional_services'],
 		'date_created'         => time()
 	);
+
+    if ( array_key_exists( 'additional_services', $data ) && !empty($data['additional_services']) ) {
+        $shipment_data['additional_services'] = $data['additional_services'];
+    }
+
+    if ( array_key_exists( 'pickup', $data ) && !empty($data['pickup']) ) {
+        $shipment_data['pickup'] = $data['pickup'];
+    }
 
 	// Fallback until v2.0.0
 	if ( isset( $data['from']['street_nr'] ) ) {
@@ -678,6 +685,7 @@ function wcsc_get_cod_id() {
 function wcsc_get_carrier_tracking_url( $carrier, $carrier_tracking_no ) {
 	switch ($carrier) {
 		case 'dhl':
+		case 'dhl_express':
 			return 'https://nolp.dhl.de/nextt-online-public/set_identcodes.do?idc='.
 				$carrier_tracking_no.'&rfn=&extendedSearch=true';
 		case 'dpd':

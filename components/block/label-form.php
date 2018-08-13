@@ -57,7 +57,13 @@
         </td>
     </tr>
     <tr>
-        <th><?php _e( 'Shipping method', 'shipcloud-for-woocommerce' ); ?></th>
+        <th>
+            <?php _e( 'Shipping method', 'shipcloud-for-woocommerce' ); ?>
+            <?php if ( $this->get_shipping_method_name() ): ?>
+                <br />
+                <small><?php echo sprintf( __( 'Ordered: %s', 'shipcloud-for-woocommerce' ), $this->get_shipping_method_name() ); ?></small>
+            <?php endif; ?>
+        </th>
         <td>
 			<?php if ( count( $this->get_allowed_carriers() ) > 0 ): ?>
                 <div id="shipcloud_csp_wrapper" class="shipcloud-carrier-select">
@@ -77,12 +83,12 @@
 					admin_url( 'admin.php?page=wc-settings&tab=shipping&section=wc_shipcloud_shipping' )
 				); ?>
 			<?php endif; ?>
-
-			<?php if ( $this->get_shipping_method_name() ): ?>
-                <br/>
-                <small><?php echo sprintf( __( 'Ordered: %s', 'shipcloud-for-woocommerce' ), $this->get_shipping_method_name() ); ?></small>
-			<?php endif; ?>
-
+        </td>
+    </tr>
+    <tr>
+        <th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?></th>
+        <td>
+            <input type="text" name="other_description" value="<?php echo esc_attr($this->get_order()->get_description()); ?>">
         </td>
     </tr>
     <?php
@@ -120,9 +126,15 @@
                 <input type="text"
                        name="parcel_description"
                        value="<?php echo esc_attr( wcsc_order_get_parcel_description( $this->get_order()->get_wc_order() ) ) ?>"/>
-                <small><?php echo sprintf( __( 'Required for carriers: %s', 'shipcloud-for-woocommerce' ), 'DPD' ); ?></small>
             </td>
         </tr>
-	<?php endif; ?>
+    <?php
+        endif;
+
+        // only applicable for WooCommerce 3
+        if (class_exists('WC_DateTime')) {
+            require WCSC_COMPONENTFOLDER . '/block/pickup-date-and-time.php';
+        }
+    ?>
     </tbody>
 </table>
