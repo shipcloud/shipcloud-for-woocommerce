@@ -550,6 +550,49 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'type'        => 'price',
 				'description' => __( 'Will be used if no sizes or weight is given to a shipping class or for fallback (have to be entered in EUR).', 'shipcloud-for-woocommerce' ),
 			),
+			'checkout_settings' => array(
+				'title' => __( 'Checkout settings', 'shipcloud-for-woocommerce' ),
+				'type' => 'title'
+			),
+            'carrier_selection'                 => array(
+				'title'       => __( 'Shipment selection', 'shipcloud-for-woocommerce' ),
+				'type'        => 'select',
+				'description' => __( 'Who selects the shipping method?', 'shipcloud-for-woocommerce' ),
+				'class'       => 'select',
+				'desc_tip'    => true,
+				'options'     => array(
+					'shopowner' => __( 'Shop owner', 'shipcloud-for-woocommerce' ),
+					'customer'  => __( 'Customer', 'shipcloud-for-woocommerce' ),
+				)
+			),
+            'show_pakadoo' => array(
+                'title'       => __( 'Show input for pakadoo id', 'shipcloud-for-woocommerce' ),
+                'type'        => 'checkbox',
+                'description' => sprintf( __( 'When using the <a href="%s" target="_blank">pakadoo</a> service your customers can receive private parcels at work.', 'shipcloud-for-woocommerce' ), 'https://www.pakadoo.de/en/'),
+                'label'       => __( 'Show input field to specify pakadoo id within shipping address', 'shipcloud-for-woocommerce' ),
+                'default' => 'yes'
+            ),
+            'show_recipient_care_of' => array(
+                'title'       => __( 'Show input for recipient care of', 'shipcloud-for-woocommerce' ),
+                'type'        => 'select',
+                'class'       => 'select',
+                'description' => __( 'Add an input that lets the buyer specify a care of.', 'shipcloud-for-woocommerce' ),
+                'desc_tip'    => true,
+                'options'     => array(
+                    'in_billing' => __( 'In billing address', 'shipcloud-for-woocommerce' ),
+                    'in_shipping' => __( 'In shipping address', 'shipcloud-for-woocommerce' ),
+                    'both' => __( 'In billing and shipping address', 'shipcloud-for-woocommerce' ),
+                    'none' => __( 'Don\'t show', 'shipcloud-for-woocommerce' ),
+                ),
+                'default' => 'none'
+            ),
+            'show_recipient_phone' => array(
+                'title'   => __( 'Show input for recipient phone number', 'shipcloud-for-woocommerce' ),
+                'type'        => 'checkbox',
+                'description' => __( 'Some carriers need a phone number of the recipient so they can contact her/him to make the delivery.', 'shipcloud-for-woocommerce' ),
+                'label'       => __( 'Add an input that lets the buyer specify a phone number, when using a shipping address', 'shipcloud-for-woocommerce' ),
+                'default' => 'yes'
+            ),
 			'advanced_settings' => array(
 				'title'       => __( 'Advanced settings', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title'
