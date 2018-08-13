@@ -108,6 +108,11 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.9.0 =
+* Enhanced: Added configuration for displaying the pakadoo id within checkout (billing address)
+* Enhanced: Added configuration for displaying a care of field within checkout (billing & shipping address)
+* Enhanced: Added configuration for displaying a phone field within checkout (billing address)
+
 = 1.8.2 =
 * Enhanced: Show info at api url page if called via get-request
 * Enhanced: Show error when shipcloud webhooks are enabled but WooCommerce api isn't

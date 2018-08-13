@@ -382,81 +382,79 @@ function wcsc_order_get_parcel_description( $order ) {
 	return '';
 }
 
-/**
- * Add "care of" field to recipient address.
- *
- * During checkout WooCommerce allows to fill some fields for the delivery address.
- * Shipcloud is capable of "care of" fields,
- * which allows packages to be delivered in some storage or other persons.
- * Therefor an additional field will be shown during checkout.
- *
- * @param $data
- *
- * @return array
- */
-function wcsc_care_of_frontend( $data ) {
-	$pos = array_search( 'shipping_company', array_keys( $data ) );
 
-	$final                     = array_slice( $data, 0, $pos );
-	$final['shipping_care_of'] = array(
-		'label'       => __( 'Care of', 'wcsc' ),
-		'description' => '',
-		'class'       => array( 'form-row-wide' ),
-		'clear'       => true,
-	);
-
-	$data = $final + array_slice( $data, $pos );
-
-	return $data;
+function shipcloud_care_of_as_billing_field( $data ) {
+ return show_care_of($data, 'billing');
 }
 
-add_filter( 'woocommerce_shipping_fields', 'wcsc_care_of_frontend' );
+function shipcloud_care_of_as_shipping_field( $data ) {
+ return show_care_of($data, 'shipping');
+}
 
+function show_care_of($data, $category) {
+    $options = get_option( 'woocommerce_shipcloud_settings' );
+    if ( array_key_exists( 'show_recipient_care_of', $options ) ) {
+        if ( 'in_'.$category === $options['show_recipient_care_of'] ||
+             'both' === $options['show_recipient_care_of']) {
+            $pos = array_search( $category.'_country', array_keys( $data ) );
+
+            $final = array_slice( $data, 0, $pos );
+            $final[$category.'_care_of'] = array(
+                'label'       => __( 'Care of', 'shipcloud-for-woocommerce' ),
+                'description' => '',
+                'class'       => array( 'form-row-wide' ),
+                'clear'       => true,
+            );
+
+            $data = $final + array_slice( $data, $pos );
+        }
+    }
+
+    return $data;
+}
+
+add_filter( 'woocommerce_billing_fields', 'shipcloud_care_of_as_billing_field' );
+add_filter( 'woocommerce_shipping_fields', 'shipcloud_care_of_as_shipping_field' );
 
 function shipcloud_pakadoo_id_checkout_fields( $data ) {
-	$final                     = array_slice( $data, 0, 0 );
-	$final['shipping_pakadoo_id'] = array(
-		'label'       => __( 'pakadoo id', 'shipcloud-for-woocommerce' ),
-		'description' => __( 'Enter your pakadoo id to ship directly to a pakadoo point', 'shipcloud-for-woocommerce' ),
-		'class'       => array( 'form-row-wide' ),
-		'clear'       => true,
-	);
+    $options = get_option( 'woocommerce_shipcloud_settings' );
+    if ( !array_key_exists( 'show_pakadoo', $options ) || 'yes' === $options['show_pakadoo'] ) {
+        $pakadoo_entry = array(
+            'shipping_pakadoo_id' => array(
+                'label'       => __( 'pakadoo id', 'shipcloud-for-woocommerce' ),
+                'description' => __( 'Enter your pakadoo id to ship directly to a pakadoo point', 'shipcloud-for-woocommerce' ),
+                'class'       => array( 'form-row-wide' ),
+                'clear'       => true,
+            )
+        );
+        $data = array_merge($pakadoo_entry, $data);
+    }
 
-	$data = $final + array_slice( $data, 0 );
-
-	return $data;
+    return $data;
 }
+
 add_filter( 'woocommerce_shipping_fields', 'shipcloud_pakadoo_id_checkout_fields' );
 
-/**
- * Add "phone" field to shipping address.
- *
- * During checkout WooCommerce allows to fill some fields for the delivery address.
- * Shipcloud is capable of "phone" fields,
- * which allows the carrier to call a customer before the delivery.
- * Therefor an additional field will be shown during checkout.
- *
- * @param $data
- *
- * @return array
- */
-function wcsc_sender_phone_frontend( $data ) {
-	// Place it after the shipping city.
-	$pos = array_search( 'shipping_city', array_keys( $data ), true ) + 2;
+function shipcloud_sender_phone_as_shipping_field( $data ) {
+    $options = get_option( 'woocommerce_shipcloud_settings' );
+    if ( !array_key_exists( 'show_recipient_phone', $options ) || 'yes' === $options['show_recipient_phone'] ) {
+        $pos = array_search( 'shipping_city', array_keys( $data ), true ) + 2;
 
-	$final                   = array_slice( $data, 0, $pos );
-	$final['shipping_phone'] = array(
-		'label'       => _x( 'Phone', 'Frontend label for entering the phone number', 'wcsc' ),
-		'placeholder' => _x( 'To be updated about the package.', 'phone input placeholder', 'woocommerce' ),
-		'description' => '',
-		'class'       => array( 'form-row-wide' ),
-		'clear'       => true,
-	);
+        $final = array_slice( $data, 0, $pos );
+        $final['shipping_phone'] = array(
+            'label'       => _x( 'Phone', 'Frontend label for entering the phone number', 'shipcloud-for-woocommerce' ),
+            'description' => '',
+            'class'       => array( 'form-row-wide' ),
+            'clear'       => true,
+        );
 
-	return $final + array_slice( $data, $pos );
+        $data = $final + array_slice( $data, $pos );
+    }
+
+    return $data;
 }
 
-add_filter( 'woocommerce_shipping_fields', 'wcsc_sender_phone_frontend' );
+add_filter( 'woocommerce_shipping_fields', 'shipcloud_sender_phone_as_shipping_field' );
 
 /**
  * Reusable connection to the API.
