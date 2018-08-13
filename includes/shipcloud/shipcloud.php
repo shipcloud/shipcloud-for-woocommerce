@@ -747,12 +747,16 @@ class Woocommerce_Shipcloud_API
 				$params['additional_services'] = array();
 
 				if ( ! empty ( $carrier_email ) ) {
+                    $converter = new \Shipcloud\I18n\Cldr_Converter();
+                    $notification_language =
+                        $converter->language_from_country_code($to['country']);
+
 					$params['additional_services'] = array(
 						array(
 							'name'       => 'advance_notice',
 							'properties' => array(
 								'email'    => $carrier_email,
-								'language' => i18n_iso_convert( '3166-1-alpha-2', '639-1', strtoupper( $to['country'] ) )
+								'language' => $notification_language
 							)
 						)
 					);
