@@ -109,6 +109,7 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.9.0 =
+* Enhanced: Make it possible to define a global key to be used as reference number. Introduced shortcodes to make the key customizable
 * Enhanced: Added configuration for displaying the pakadoo id within checkout (billing address)
 * Enhanced: Added configuration for displaying a care of field within checkout (billing & shipping address)
 * Enhanced: Added configuration for displaying a phone field within checkout (billing address)

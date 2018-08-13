@@ -597,6 +597,11 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'title'       => __( 'Advanced settings', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title'
 			),
+			'global_reference_number' => array(
+				'title'       => __( 'Global reference number', 'shipcloud-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'Always use this value as reference number. You can use one of the following shortcodes for making the value dynamic: [shipcloud_orderid]', 'shipcloud-for-woocommerce' )
+			),
 			'street_detection' => array(
 				'title'   => __( 'Street detection', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',

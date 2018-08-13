@@ -358,6 +358,7 @@ class WC_Shipcloud_Order_Bulk {
 	 */
 	protected function create_label_for_order( $order_id, $request ) {
 		$order = WC_Shipcloud_Order::create_order( $order_id );
+        $request = $order->sanitize_reference_number($request);
 
 		$use_calculated_weight = isset($request['shipcloud_use_calculated_weight']) ? $request['shipcloud_use_calculated_weight'] : '';
 		if ( $use_calculated_weight == 'use_calculated_weight' ) {
@@ -383,10 +384,11 @@ class WC_Shipcloud_Order_Bulk {
             $currency = $order->get_wc_order()->get_order_currency();
         }
 
+        $reference_number = '';
         if (!empty($request['shipment']['additional_services']['cash_on_delivery']['reference1'])) {
             $reference_number = $request['shipment']['additional_services']['cash_on_delivery']['reference1'];
-        } else {
-            $reference_number = sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $order_id );
+        } elseif (!empty($request['reference_number'])) {
+            $reference_number = $request['reference_number'];
         }
 
         $bank_information = new \Shipcloud\Domain\ValueObject\BankInformation(

@@ -245,7 +245,7 @@ function wcsc_is_settings_screen() {
 }
 
 /**
- * Checking if we are on order overview page
+ * Checking if admin is on order overview page
  *
  * @return bool
  *
@@ -259,6 +259,22 @@ function shipcloud_admin_is_on_order_overview_page() {
 
     // If page should noz show a message, interrupt the check and gibe back true
     if ( 'shop_order' === $post_type ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Checking if admin is on a single order page
+ *
+ * @return bool
+ *
+ * @since 1.9.0
+ */
+function shipcloud_admin_is_on_single_order_page() {
+    $post_id = '';
+    if ( array_key_exists( 'post', $_GET ) ) {
         return true;
     }
 
@@ -542,7 +558,7 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 		'recipient_state'      => $data['to']['state'],
 		'recipient_country'    => $data['to']['country'],
 		'recipient_phone'      => $data['to']['phone'],
-		'reference_number'     => $data['reference_number'],
+		'reference_number'     => (isset($data['reference_number'])) ? $data['reference_number'] : null,
 		'additional_services'  => $data['additional_services'],
 		'date_created'         => time()
 	);
@@ -733,3 +749,11 @@ function wcsc_get_shipment_status_icon( $status ) {
 	$html .= '</div>';
 	echo $html;
 }
+
+/*
+ * adding plugin specific shortcodes
+ */
+function shipcloud_orderid_func( $atts ) {
+    return '';
+}
+add_shortcode( 'shipcloud_orderid', 'shipcloud_orderid_func' );

@@ -18,7 +18,7 @@ class Shipment {
 	private $price;
 
 	private $tracking_url;
-	
+
 	private $packages;
 
 	/**
@@ -50,6 +50,9 @@ class Shipment {
 	 */
 	public static function fromResponse( $response ) {
 		$shipment = $response->getPayload();
+        if (!array_key_exists('packages', $shipment)) {
+            $shipment['packages'] = array();
+        }
 
 		return new static(
 			$shipment['id'],
@@ -99,7 +102,7 @@ class Shipment {
 	public function getPackages() {
 		return $this->packages;
 	}
-	
+
 	public function getPackage() {
 		return $this->packages[0];
 	}

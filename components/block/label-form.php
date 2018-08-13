@@ -85,7 +85,35 @@
 
         </td>
     </tr>
-	<?php if ( $this->get_order() && $this->get_order()->get_wc_order() ): ?>
+    <?php
+        $global_reference_number = wcsc_shipping_method()->get_option( 'global_reference_number' );
+        if (shipcloud_admin_is_on_single_order_page()) {
+            if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
+                $order_id = $this->get_order()->ID;
+
+                if (!$order_id) {
+                    // Fallback for WooCommerce 2
+                    $order_id = $this->order->id;
+                }
+
+                $global_reference_number = str_replace('[shipcloud_orderid]', $order_id, $global_reference_number);
+            }
+        }
+    ?>
+    <tr>
+      <th>
+          <?php _e( 'Reference number', 'shipcloud-for-woocommerce' ); ?>
+          <?php echo wc_help_tip( __( 'You can use one of the following shortcodes for making the value dynamic: [shipcloud_orderid]', 'shipcloud-for-woocommerce' ) ); ?>
+      </th>
+      <td>
+        <input type="text"
+               name="reference_number"
+               value="<?php echo $global_reference_number; ?>"/>
+      </td>
+    </tr>
+	<?php
+        if ( $this->get_order() && $this->get_order()->get_wc_order() ):
+    ?>
         <tr>
             <th><?php _e( 'Package description', 'shipcloud-for-woocommerce' ); ?></th>
             <td>
@@ -94,14 +122,6 @@
                        value="<?php echo esc_attr( wcsc_order_get_parcel_description( $this->get_order()->get_wc_order() ) ) ?>"/>
                 <small><?php echo sprintf( __( 'Required for carriers: %s', 'shipcloud-for-woocommerce' ), 'DPD' ); ?></small>
             </td>
-        </tr>
-        <tr>
-          <th><?php _e( 'Reference number', 'shipcloud-for-woocommerce' ); ?></th>
-          <td>
-            <input type="text"
-                   name="reference_number"
-                   value="<?php echo sprintf( __( 'Order: %s', 'shipcloud-for-woocommerce' ), $this->get_order()->get_wc_order()->get_order_number() ); ?>"/>
-          </td>
         </tr>
 	<?php endif; ?>
     </tbody>
