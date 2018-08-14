@@ -2,7 +2,7 @@
 Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
-Tested up to: 4.9.6
+Tested up to: 4.9.8
 Stable tag: 1.8.2
 Requires PHP: 5.5
 
@@ -44,17 +44,21 @@ receive their order from
 
 = Additional services* =
 
-* Bulky items
-* Saturday delivery
-* Cash on delivery
 * Advance notice
-* Visual age check
-* Drop authorization
+* Bulky items
+* Cash on delivery
+* DHL Delivery Time
 * DHL Packstation
 * DHL Postfiliale
-* Higher insurance
-* UPS Adult Signature
+* DHL Premium International
+* DHL Visual Age Check
+* Drop authorization
 * GLS Guaranteed24Service
+* GLS FlexDeliveryService
+* Higher insurance
+* Saturday delivery
+* UPS Adult Signature
+* Visual age check
 
 = One-stop national and international shipping =
 
@@ -110,6 +114,7 @@ https://youtu.be/HE3jow15x8c
 
 = 1.9.0 =
 * Enhanced: Added possibility to create pickup requests (only in WooCommerce 3)
+* Enhanced: Added new services UPS Express 12:00 and Deutsche Post Warenpost
 * Enhanced: Make it possible to define a global key to be used as reference number. Introduced shortcodes to make the key customizable
 * Enhanced: Added configuration for displaying the pakadoo id within checkout (billing address)
 * Enhanced: Added configuration for displaying a care of field within checkout (billing & shipping address)
