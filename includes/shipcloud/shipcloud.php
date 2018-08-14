@@ -95,7 +95,17 @@ class Woocommerce_Shipcloud_API
 				'name'             => __( 'Returns', 'shipcloud-for-woocommerce' ),
 				'description'      => __( 'Shipments that are being send back to the shop', 'shipcloud-for-woocommerce' ),
 				'customer_service' => false
-			)
+			),
+			'ups_express_1200' => array(
+				'name' => __( 'Express 12:00', 'shipcloud-for-woocommerce' ),
+				'description'      => __( 'Delivery by noon of the next business day throughout the country.', 'shipcloud-for-woocommerce' ),
+				'customer_service' => false
+			),
+			'dpag_warenpost' => array(
+				'name' => __( 'Warenpost', 'shipcloud-for-woocommerce' ),
+				'description'      => __( 'Small trackable letter delivery', 'shipcloud-for-woocommerce' ),
+				'customer_service' => false
+			),
 		);
 	}
 

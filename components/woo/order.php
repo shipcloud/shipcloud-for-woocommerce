@@ -1170,9 +1170,13 @@ class WC_Shipcloud_Order
         $data = $this->sanitize_reference_number( $data );
 		$data = $this->handle_email_notification( $data );
 
-        $pickup = self::handle_pickup_request( $data );
-        unset( $data['pickup_earliest'] );
-        unset( $data['pickup_latest'] );
+		// only applicable for WooCommerce 3
+		if (class_exists('WC_DateTime')) {
+            $pickup = self::handle_pickup_request( $data );
+			unset( $data['pickup_earliest'] );
+			unset( $data['pickup_latest'] );
+        }
+
         if (!empty($pickup)) {
             $data['pickup'] = $pickup;
         }
