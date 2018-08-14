@@ -183,6 +183,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			if ( ! $this->init_settings_screen() ) {
 				return false;
 			}
+
+			add_action( 'admin_notices', array( $this, 'shipcloud_drop_wc2_support_notice' ) );
 		}
 
 		if ( ! $this->init_allowed_carriers() ) {
@@ -199,6 +201,22 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 
 		return true;
 	}
+
+    function shipcloud_drop_wc2_support_notice() {
+    ?>
+        <div class="shipcloud-panel">
+            <div class="shipcloud-panel-content">
+                <h2><?php _e( 'WooCommerce 2 support end of life', 'shipcloud-for-woocommerce'); ?></h2>
+                <p>
+                    <?php _e( 'We will be dropping the WooCommerce 2 support with the upcoming', 'shipcloud-for-woocommerce'); ?>
+                    <strong>
+                        <?php _e( 'release 2.0.0', 'shipcloud-for-woocommerce'); ?>
+                    </strong>
+                </p>
+            </div>
+        </div>
+    <?php
+    }
 
 	private function check_api_key() {
 		$api_key = $this->get_option( 'api_key' );

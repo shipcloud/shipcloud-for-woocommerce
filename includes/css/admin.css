@@ -3,6 +3,16 @@
 /**
  * 	General
  */
+.shipcloud-panel {
+  padding: 1.5em 1.5em 0 0;
+}
+
+.shipcloud-panel-content {
+  background-color: #ECECEC;
+  border: 1px solid #CFCFCF;
+  padding: 1em;
+}
+
 #shipcloud-io .inside {
     padding: 0;
 }
