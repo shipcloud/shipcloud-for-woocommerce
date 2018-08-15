@@ -244,7 +244,7 @@
             // only applicable for WooCommerce 3
             if (class_exists('WC_DateTime')) :
         ?>
-                <# if ( !data.model.get('pickup_request') ) { #>
+                <# if ( !data.model.get('pickup_request') && !_.contains(['dhl', 'dhl_express', 'go', 'tnt'], data.model.get('carrier'))) { #>
                     <button class="button button-primary shipcloud-open-pickup-request-form" role="switch" type="button">
                         <?php _e( 'Create pickup request', 'shipcloud-for-woocommerce' ) ?>
                     </button>
