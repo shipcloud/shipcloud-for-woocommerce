@@ -1213,16 +1213,28 @@ class WC_Shipcloud_Order
 				WC_Shipcloud_Shipping::log('Updating shipment with shipment_id: '.$shipment_id);
 				WC_Shipcloud_Shipping::log('Data: '.json_encode($data));
 				$shipment = _wcsc_api()->shipment()->update( $shipment_id, $data );
+
+                $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+                foreach ( $shipments as $old_shipment ) {
+                    if ( $shipment_id === $old_shipment['id']) {
+                        $shipment_data = _shipcloud_shipment_data_to_postmeta( $order_id, $shipment, $data );
+
+                        update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data, $old_shipment );
+
+                        break;
+                    }
+                }
 			} else {
 				// Create
 				WC_Shipcloud_Shipping::log('Creating new shipment');
 				WC_Shipcloud_Shipping::log('Data: '.json_encode($data));
 				$shipment = _wcsc_api()->shipment()->create( $data );
+                $shipment_data = _shipcloud_shipment_data_to_postmeta( $order_id, $shipment, $data );
+                add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_data['id'] );
+                add_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
 			}
 
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $data['carrier'] ) . ')' );
-
-			$shipment_data = _wcsc_add_order_shipment( $order_id, $shipment, $data );
 
 			wp_send_json_success(
 				array(

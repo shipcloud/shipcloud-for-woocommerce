@@ -519,6 +519,7 @@ function _wcsc_api() {
  * @param array                      $data
  * @param string                     $parcel_title
  *
+ * @deprecated 1.9.0 use _shipcloud_shipment_data_to_postmeta instead
  * @return array
  */
 function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = '' ) {
@@ -597,6 +598,96 @@ function _wcsc_add_order_shipment( $order_id, $shipment, $data, $parcel_title = 
 
 	add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_data['id'] );
 	add_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
+
+	$order = wc_get_order( $order_id );
+	$order->add_order_note( __( 'shipcloud label has been prepared.', 'shipcloud-for-woocommerce' ) );
+
+	return $shipment_data;
+}
+
+/**
+ * Add shipment data as postmeta to order.
+ *
+ * @param int $order_id
+ * @param \Shipcloud\Domain\Shipment $shipment
+ * @param array $data
+ * @param string $parcel_title
+ * @since 1.9.0
+ * @return array
+ */
+function _shipcloud_shipment_data_to_postmeta( $order_id, $shipment, $data, $parcel_title = '' ) {
+	if ( ! $parcel_title ) {
+		$parcel_title = wcsc_get_carrier_display_name( $data['carrier'] )
+						. ' - ' . $data['package']['width']
+						. __( 'x', 'shipcloud-for-woocommerce' ) . $data['package']['height']
+						. __( 'x', 'shipcloud-for-woocommerce' ) . $data['package']['length']
+						. __( 'cm', 'shipcloud-for-woocommerce' )
+						. ' ' . $data['package']['weight']
+						. __( 'kg', 'shipcloud-for-woocommerce' );
+	}
+
+	$shipment_data = array(
+		'id'                   => $shipment->getId(),
+		'carrier_tracking_no'  => $shipment->getCarrierTrackingNo(),
+		'tracking_url'         => $shipment->getTrackingUrl(),
+		'label_url'            => $shipment->getLabelUrl(),
+		'price'                => $shipment->getPrice(),
+		'parcel_id'            => $shipment->getId(),
+		'parcel_title'         => $parcel_title,
+		'carrier'              => $data['carrier'],
+		'service'              => $data['service'],
+		'width'                => $data['package']['width'],
+		'height'               => $data['package']['height'],
+		'length'               => $data['package']['length'],
+		'weight'               => $data['package']['weight'],
+		'description'          => $data['package']['description'],
+		'recipient_first_name' => $data['to']['first_name'],
+		'recipient_last_name'  => $data['to']['last_name'],
+		'recipient_company'    => $data['to']['company'],
+		'recipient_care_of'    => $data['to']['care_of'],
+		'recipient_street'     => $data['to']['street'],
+		'recipient_street_no'  => $data['to']['street_no'],
+		'recipient_zip_code'   => $data['to']['zip_code'],
+		'recipient_city'       => $data['to']['city'],
+		'recipient_state'      => $data['to']['state'],
+		'recipient_country'    => $data['to']['country'],
+		'recipient_phone'      => $data['to']['phone'],
+		'reference_number'     => (isset($data['reference_number'])) ? $data['reference_number'] : null,
+		'date_created'         => time()
+	);
+
+    if ( array_key_exists( 'additional_services', $data ) && !empty($data['additional_services']) ) {
+        $shipment_data['additional_services'] = $data['additional_services'];
+    }
+
+    if ( array_key_exists( 'pickup', $data ) && !empty($data['pickup']) ) {
+        $shipment_data['pickup'] = $data['pickup'];
+    }
+
+	// Fallback until v2.0.0
+	if ( isset( $data['from']['street_nr'] ) ) {
+		$shipment_data['recipient_street_no'] = $data['from']['street_nr'];
+	}
+
+	$from = $data['from'];
+	if ( isset( $from ) ) {
+		$shipment_data['sender_first_name'] = $from['first_name'];
+		$shipment_data['sender_last_name']  = $from['last_name'];
+		$shipment_data['sender_company']    = array_key_exists('company', $from) ? $from['company'] : '';
+		$shipment_data['sender_care_of']    = array_key_exists('care_of', $from) ? $from['care_of'] : '';
+		$shipment_data['sender_street']     = $from['street'] ?: '';
+		$shipment_data['sender_street_no']  = $from['street_no'] ?: '';
+		$shipment_data['sender_zip_code']   = $from['zip_code'] ?: '';
+		$shipment_data['sender_city']       = $from['city'] ?: '';
+		$shipment_data['sender_state']      = array_key_exists('state', $from) ? $from['state'] : '';
+		$shipment_data['sender_phone']      = array_key_exists('phone', $from) ? $from['phone'] : '';
+		$shipment_data['country']           = $from['country'] ?: '';
+
+		// Fallback until v2.0.0
+		if ( isset( $data['to']['street_nr'] ) ) {
+			$shipment_data['sender_street_no'] = $data['to']['street_nr'];
+		}
+	}
 
 	$order = wc_get_order( $order_id );
 	$order->add_order_note( __( 'shipcloud label has been prepared.', 'shipcloud-for-woocommerce' ) );
