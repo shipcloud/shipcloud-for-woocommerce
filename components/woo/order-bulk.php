@@ -105,16 +105,16 @@ class WC_Shipcloud_Order_Bulk {
             return;
         }
 
-		if ( isset( $request[ self::BUTTON_PDF ] ) ) {
-			$this->create_pdf( $request );
-
-			return;
-		} elseif ( isset( $request[ self::BUTTON_PICKUP_REQUEST ] ) ) {
+        if ( isset( $request[ self::BUTTON_PDF ] ) || self::FORM_BULK == $request['action'] ) {
+            $this->create_pdf( $request );
+            $this->create_label( $request );
+            return;
+        } elseif ( isset( $request[ self::BUTTON_PICKUP_REQUEST ] ) || self::FORM_PICKUP_REQUEST == $request['action'] ) {
             $this->create_pickup_request( $request );
             return;
         }
 
-		$this->create_label( $request );
+        WC_Shipcloud_Shipping::log(sprintf( __( 'Unknown bulk action called. Request: %s', 'shipcloud-for-woocommerce' ), $request ));
 	}
 
 	/**
@@ -131,7 +131,7 @@ class WC_Shipcloud_Order_Bulk {
 
         // only applicable for WooCommerce 3
         if (class_exists('WC_DateTime')) {
-            $actions['shipcloud_create_pickup_request'] = __( 'Create pickup request', 'shipcloud-for-woocommerce' );
+            $actions[self::FORM_PICKUP_REQUEST] = __( 'Create pickup request', 'shipcloud-for-woocommerce' );
         }
 
 		return $actions;
