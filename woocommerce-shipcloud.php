@@ -97,6 +97,11 @@ class WooCommerce_Shipcloud {
 			add_action( 'admin_init', array( $this, 'assert_session' ) );
 			add_action( 'admin_footer', array( $this, 'show_admin_notices' ) );
 			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
+
+            if ( wcsc_is_settings_screen() ) {
+                add_action( 'admin_notices', array( $this, 'shipcloud_drop_wc2_support_notice') );
+            }
+
 		} else {
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_styles' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'register_plugin_scripts' ) );
@@ -495,7 +500,6 @@ class WooCommerce_Shipcloud {
 	 * @since 1.2.0 Uses session as collection of notices.
 	 */
 	public static function show_admin_notices() {
-        error_log('show_admin_notices ...');
 		static::assert_session();
 
 		foreach ( (array) $_SESSION['wcsc']['notices'] as $notice ) {
@@ -508,12 +512,29 @@ class WooCommerce_Shipcloud {
 	 * Reset all notices.
 	 */
 	public static function clear_admin_notices() {
-        error_log('clear_admin_notices ...');
 		static::assert_session();
 
 		$_SESSION['wcsc']['notices'] = array();
 	}
 
+    function shipcloud_drop_wc2_support_notice() {
+    ?>
+        <div class="shipcloud-panel">
+            <div class="shipcloud-panel-content shipcloud-panel--alert">
+                <h2>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <?php _e( 'WooCommerce 2 support end of life', 'shipcloud-for-woocommerce'); ?>
+                </h2>
+                <p>
+                    <?php _e( 'We will be dropping the WooCommerce 2 support with the upcoming', 'shipcloud-for-woocommerce'); ?>
+                    <strong>
+                        <?php _e( 'release 2.0.0', 'shipcloud-for-woocommerce'); ?>
+                    </strong>
+                </p>
+            </div>
+        </div>
+    <?php
+    }
 }
 
 register_activation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'activate' ) );
