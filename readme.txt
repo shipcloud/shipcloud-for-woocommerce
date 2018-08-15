@@ -122,6 +122,7 @@ https://youtu.be/HE3jow15x8c
 * Enhanced: Added configuration for displaying a phone field within checkout (billing address)
 * Fixed: Use official language for shipments with advance notice
 * Fixed: Link carrier tracking number to carrier tracking page
+* Fixed: Bug when updating a shipment that would cause the shipment to lose its label_url
 
 = 1.8.2 =
 * Enhanced: Show info at api url page if called via get-request
