@@ -453,6 +453,8 @@ class WooCommerce_Shipcloud {
 
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
 		wp_enqueue_script( 'wcsc-admin-script' );
+
+		wp_enqueue_script( 'wcsc-font-awesome', WCSC_URLPATH . 'vendor/fontawesome/js/fontawesome-all.js', array( ), static::VERSION );
 	}
 
 	/**

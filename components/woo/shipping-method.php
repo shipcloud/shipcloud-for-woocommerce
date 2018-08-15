@@ -205,8 +205,11 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
     function shipcloud_drop_wc2_support_notice() {
     ?>
         <div class="shipcloud-panel">
-            <div class="shipcloud-panel-content">
-                <h2><?php _e( 'WooCommerce 2 support end of life', 'shipcloud-for-woocommerce'); ?></h2>
+            <div class="shipcloud-panel-content shipcloud-panel--alert">
+                <h2>
+					<i class="fas fa-exclamation-triangle"></i>
+					<?php _e( 'WooCommerce 2 support end of life', 'shipcloud-for-woocommerce'); ?>
+				</h2>
                 <p>
                     <?php _e( 'We will be dropping the WooCommerce 2 support with the upcoming', 'shipcloud-for-woocommerce'); ?>
                     <strong>

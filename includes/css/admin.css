@@ -13,6 +13,14 @@
   padding: 1em;
 }
 
+.shipcloud-panel--alert {
+  border: 1px solid red;
+}
+
+.shipcloud-panel--alert svg {
+  color: red;
+}
+
 #shipcloud-io .inside {
     padding: 0;
 }
