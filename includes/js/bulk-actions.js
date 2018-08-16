@@ -19,6 +19,13 @@ wcsc.OrderBulkActions = function (submitButton) {
   };
 
   this.handleSubmit = function (e) {
+    var n = $(this).attr('id').substr(2);
+    var entryname = $('select[name="' + n + '"]').val();
+
+    if (!_.contains([self.bulkId, self.pickupRequestId], entryname)) {
+      return;
+    }
+
     e.preventDefault();
 
     if (!self.hasOrdersSelected()) {
@@ -27,9 +34,6 @@ wcsc.OrderBulkActions = function (submitButton) {
 
     self.hideBulkActionTemplates();
 
-    var n = $(this).attr('id').substr(2);
-
-    var entryname = $('select[name="' + n + '"]').val();
     switch (entryname) {
       case self.bulkId:
         self.setBulk();
@@ -37,6 +41,8 @@ wcsc.OrderBulkActions = function (submitButton) {
       case self.pickupRequestId:
         self.showPickupForm();
         break;
+      default:
+        return;
     }
 
     return false;

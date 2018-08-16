@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.9.1 =
+* Fixed: Bug on order overview that would cause actions to not fire
+
 = 1.9.0 =
 * Enhanced: Added notice in settings about WooCommerce 2 support EOL
 * Enhanced: Added possibility to create pickup requests (only in WooCommerce 3)

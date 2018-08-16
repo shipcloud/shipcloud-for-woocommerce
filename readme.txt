@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
 Tested up to: 4.9.8
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 Requires PHP: 5.5
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
@@ -111,6 +111,9 @@ https://youtu.be/HE3jow15x8c
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.9.1 =
+* Fixed: Bug on order overview that would cause actions to not fire
 
 = 1.9.0 =
 * Enhanced: Added notice in settings about WooCommerce 2 support EOL
