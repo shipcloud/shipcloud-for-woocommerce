@@ -113,6 +113,7 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.9.2 =
+* Fixed: Reworked class loading because of issues with autoloader
 * Fixed: Make sure webhook_active setting is present
 
 = 1.9.1 =

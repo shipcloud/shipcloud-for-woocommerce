@@ -75,6 +75,12 @@ class WooCommerce_Shipcloud {
 	 */
 	private function __construct() {
 		$this->load_plugin();
+
+		if ( function_exists( '__autoload' ) ) {
+			spl_autoload_register( '__autoload' );
+		}
+		spl_autoload_register( array( $this, 'autoload' ) );
+
 	}
 
 	/**
@@ -159,6 +165,7 @@ class WooCommerce_Shipcloud {
 		require_once( WCSC_FOLDER . '/includes/shipcloud/i18n-iso-convert-class.php' );
 		require_once( WCSC_FOLDER . '/includes/shipcloud/shipcloud.php' );
 		require_once( WCSC_FOLDER . '/includes/shipcloud/block-labels-form.php' );
+		require_once( WCSC_FOLDER . '/includes/shipcloud/controller/labelcontroller.php' );
 	}
 
 	/**
@@ -311,36 +318,26 @@ class WooCommerce_Shipcloud {
 		require_once( WCSC_FOLDER . '/components/woo/woo.php' );
 	}
 
-	public static function load_vendor( $class ) {
-		$filename = WCSC_FOLDER
-					. DIRECTORY_SEPARATOR . 'vendor'
-					. DIRECTORY_SEPARATOR . str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php';
+	/**
+	 * Auto-load shipcloud classes on demand to reduce memory consumption.
+	 *
+	 * @param string $class Class name.
+	 */
+	public function autoload( $class ) {
+		$class = strtolower( $class );
 
-		if ( file_exists( $filename ) ) {
-			require_once $filename;
+		if ( 0 !== strpos( $class, 'shipcloud' ) ) {
+			return;
 		}
 
-		return class_exists( $class, false );
-	}
+		$file = WCSC_FOLDER
+					. 'includes'
+					. DIRECTORY_SEPARATOR
+                    . str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class )
+                    . '.php';
 
-	/**
-	 * @param $class
-	 *
-	 * @deprecated 2.0.0 Use ::load_vendor() instead and make file names upper camelCase.
-	 *
-	 * @return bool
-	 */
-	public static function load_shipcloud( $class ) {
-		$filename = WCSC_FOLDER
-					. DIRECTORY_SEPARATOR . 'includes'
-					. DIRECTORY_SEPARATOR . strtolower(
-						str_replace( array( '\\' ), array( DIRECTORY_SEPARATOR ), $class ) . '.php'
-					);
-
-        $filename = str_replace('_', '-', $filename);
-
-		if ( file_exists( $filename ) ) {
-			require_once $filename;
+		if ( file_exists( $file ) ) {
+			require_once $file;
 		}
 
 		return class_exists( $class, false );
@@ -542,12 +539,6 @@ register_deactivation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'deactivat
 register_uninstall_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'uninstall' ) );
 
 define( 'WCSC_FOLDER', plugin_dir_path( __FILE__ ) );
-
-/**
- * Early add autoloader.
- */
-spl_autoload_register( '\\WooCommerce_Shipcloud::load_vendor' );
-spl_autoload_register( '\\WooCommerce_Shipcloud::load_shipcloud' );
 
 require_once __DIR__ . '/components/service-container.php';
 
