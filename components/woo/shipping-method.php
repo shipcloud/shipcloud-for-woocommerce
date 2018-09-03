@@ -1787,11 +1787,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
             if ((!$woocommerce_api_enabled || $woocommerce_api_enabled === 'no') &&
                 (
                     $webhook_id &&
+                    array_key_exists( 'webhook_active', $plugin_settings ) &&
                     $plugin_settings['webhook_active'] === 'yes' &&
                     !isset($_POST['woocommerce_shipcloud_webhook_active'])
                 ) ||
                 (
                     !$webhook_id &&
+                    array_key_exists( 'webhook_active', $plugin_settings ) &&
                     $plugin_settings['webhook_active'] === 'no' &&
                     isset($_POST['woocommerce_shipcloud_webhook_active'])
                 )
@@ -1808,7 +1810,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
             }
 
             // make sure the checkbox for active webhook is deactivated when no webhook id is present
-            if (!$webhook_id && $plugin_settings['webhook_active'] === 'yes') {
+            if (!$webhook_id && array_key_exists( 'webhook_active', $plugin_settings ) && $plugin_settings['webhook_active'] === 'yes') {
                 $plugin_settings['webhook_active'] = 'no';
                 update_option('woocommerce_shipcloud_settings', $plugin_settings);
             }

@@ -112,6 +112,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.9.2 =
+* Fixed: Make sure webhook_active setting is present
+
 = 1.9.1 =
 * Fixed: Bug on order overview that would cause actions to not fire
 
