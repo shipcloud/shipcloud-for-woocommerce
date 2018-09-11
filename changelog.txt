@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.9.3 =
+* Fixed: Duplicate calls to create shipments when using bulk action
+
 = 1.9.2 =
 * Fixed: Reworked class loading because of issues with autoloader
 * Fixed: Make sure webhook_active setting is present
