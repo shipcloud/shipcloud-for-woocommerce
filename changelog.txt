@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.9.4 =
+* Fixed: Class loading of files with underscores
+
 = 1.9.3 =
 * Fixed: Duplicate calls to create shipments when using bulk action
 
