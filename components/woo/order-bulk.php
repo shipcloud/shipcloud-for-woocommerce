@@ -107,7 +107,6 @@ class WC_Shipcloud_Order_Bulk {
 
         if ( isset( $request[ self::BUTTON_PDF ] ) || self::FORM_BULK == $request['action'] ) {
             $this->create_pdf( $request );
-            $this->create_label( $request );
             return;
         } elseif ( isset( $request[ self::BUTTON_PICKUP_REQUEST ] ) || self::FORM_PICKUP_REQUEST == $request['action'] ) {
             $this->create_pickup_request( $request );
