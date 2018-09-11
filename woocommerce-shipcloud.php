@@ -325,6 +325,7 @@ class WooCommerce_Shipcloud {
 	 */
 	public function autoload( $class ) {
 		$class = strtolower( $class );
+        $class = str_replace( '_', '-', $class );
 
 		if ( 0 !== strpos( $class, 'shipcloud' ) ) {
 			return;
