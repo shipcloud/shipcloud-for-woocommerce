@@ -116,7 +116,21 @@ class Woocommerce_Shipcloud_API
                 'description' => __( 'For sending less urgent shipments to destinations outside of Europe', 'shipcloud-for-woocommerce' ),
                 'customer_service' => false
             ),
+            'cargo_international_express' => array(
+              'name' => __( 'Express', 'shipcloud-for-woocommerce' ),
+              'description' => __( 'Express delivery for Cargo International shipments', 'shipcloud-for-woocommerce' ),
+              'customer_service' => false
+            ),
 		);
+        $this->package_types = array(
+            'letter' => _x( 'Letter', 'package type: letter', 'shipcloud-for-woocommerce' ),
+            'parcel_letter' => _x( 'Parcel letter', 'package type: parcel letter', 'shipcloud-for-woocommerce' ),
+            'books' => _x( 'Books', 'package type: books', 'shipcloud-for-woocommerce' ),
+            'parcel' => _x( 'Parcel', 'package type: parcel', 'shipcloud-for-woocommerce' ),
+            'bulk' => _x( 'Bulk', 'package type: bulk', 'shipcloud-for-woocommerce' ),
+            'disposable_pallet' => _x( 'Disposable pallet', 'package type: disposable pallet', 'shipcloud-for-woocommerce' ),
+            'euro_pallet' => _x( 'Euro pallet', 'package type: euro pallet', 'shipcloud-for-woocommerce' ),
+        );
 	}
 
 	public function is_valid() {
@@ -124,6 +138,15 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
+	 * Retrieve all package types.
+	 *
+	 * @return array
+	 */
+	public function get_package_types() {
+		return $this->package_types;
+	}
+
+    /**
 	 * Retrieve all services.
 	 *
 	 * @return array
