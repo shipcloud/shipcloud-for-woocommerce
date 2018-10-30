@@ -335,7 +335,7 @@ class WCSC_Parceltemplate_Posttype
 
 
 		$post_title = wcsc_get_carrier_display_name( $request['shipcloud_carrier'] )
-					  . ' ' . wcsc_api()->get_service_label( $request['shipcloud_carrier_service'] )
+					  . ' ' . wcsc_api()->get_service_name( $request['shipcloud_carrier_service'] )
 					  . ' (' . WC_Shipcloud_Order::instance()->get_package_label( $request['shipcloud_carrier_package'] ) . ')'
 					  . ' - ' . $width
 					  . ' x ' . $height
