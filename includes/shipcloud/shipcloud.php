@@ -122,6 +122,7 @@ class Woocommerce_Shipcloud_API
               'customer_service' => false
             ),
 		);
+
         $this->package_types = array(
             'letter' => _x( 'Letter', 'package type: letter', 'shipcloud-for-woocommerce' ),
             'parcel_letter' => _x( 'Parcel letter', 'package type: parcel letter', 'shipcloud-for-woocommerce' ),
@@ -130,12 +131,31 @@ class Woocommerce_Shipcloud_API
             'bulk' => _x( 'Bulk', 'package type: bulk', 'shipcloud-for-woocommerce' ),
             'disposable_pallet' => _x( 'Disposable pallet', 'package type: disposable pallet', 'shipcloud-for-woocommerce' ),
             'euro_pallet' => _x( 'Euro pallet', 'package type: euro pallet', 'shipcloud-for-woocommerce' ),
+            'cargo_international_large_parcel' => _x( 'Large Parcel', 'package type: cargo international large parcel', 'shipcloud-for-woocommerce' ),
+        );
+
+        $this->customs_declaration_contents_types = array(
+            'commercial_goods' => __( 'Commercial goods', 'shipcloud-for-woocommerce' ),
+            'commercial_sample' => __( 'Commercial sample', 'shipcloud-for-woocommerce' ),
+            'documents' => __( 'Documents', 'shipcloud-for-woocommerce' ),
+            'gift' => __( 'Gift', 'shipcloud-for-woocommerce' ),
+            'returned_goods' => __( 'Returned goods', 'shipcloud-for-woocommerce' ),
         );
 	}
 
 	public function is_valid() {
 		return '' !== (string) $this->api_key;
 	}
+
+    /**
+     * Retrieve all contents_types available for customs declaration
+     *
+     * @since 1.10.0
+     * @return array
+     */
+    public function get_customs_declaration_contents_types() {
+        return $this->customs_declaration_contents_types;
+    }
 
 	/**
 	 * Retrieve all package types.
@@ -1007,6 +1027,25 @@ class Woocommerce_Shipcloud_API
 
         return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
     }
+
+	public function get_global_reference_number( $order ) {
+        $global_reference_number = wcsc_shipping_method()->get_option( 'global_reference_number' );
+        if (shipcloud_admin_is_on_single_order_page()) {
+            if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
+                $order_id = $order->ID;
+
+                if (!$order_id) {
+                    // Fallback for WooCommerce 2
+                    $order_id = $order->order->id;
+                }
+
+                $global_reference_number = str_replace('[shipcloud_orderid]', $order_id, $global_reference_number);
+            }
+        }
+
+        return $global_reference_number;
+	}
+
 	/**
 	 * Connection testing
 	 *

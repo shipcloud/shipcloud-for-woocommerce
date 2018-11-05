@@ -68,6 +68,13 @@ class LabelController {
 		try {
             $order = $this->shipment_repository->findOrderByShipmentId( $data['shipment']['id'] );
 
+            if (array_key_exists('customs_declaration', $data)) {
+                $sc_order = \WC_Shipcloud_Order::create_order( $order->get_id() );
+                $data['shipment']['customs_declaration'] = $this->handle_customs_declaration( $data['customs_declaration'] );
+                unset($data['customs_declaration']);
+                error_log('data after handle_customs_declaration: '.print_r($data, true));
+            }
+
 			$this->shipment_repository->update(
 				$order,
 				$data['shipment']
@@ -111,4 +118,21 @@ class LabelController {
 
 		return $data;
 	}
+
+    private function handle_customs_declaration( $data ) {
+        if ('false' === $data['shown']) {
+            return null;
+        } else {
+            $line_items = $data['items'];
+
+            $items = array();
+            foreach ( $line_items as $line_item_key => $line_item_data ) {
+                $line_item_data['id'] = $line_item_key;
+                array_push($items, $line_item_data);
+            }
+
+            $data['items'] = $items;
+            return $data;
+        }
+    }
 }

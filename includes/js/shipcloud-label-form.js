@@ -84,7 +84,7 @@ shipcloud.LabelForm = function (wrapperSelector) {
     };
 
     this.getLabelData = function () {
-        return {
+        var labelJSON = {
             'order_id'         : $("#post_ID").val(),
             'from'             : self.getSender(),
             'to'               : self.getRecipient(),
@@ -97,6 +97,17 @@ shipcloud.LabelForm = function (wrapperSelector) {
             'reference_number' : self.getReferenceNumber(),
             'additional_services': self.getAdditionalServices()
         };
+
+        // if customs declaration form is hidden
+        if ($('.customs-declaration').is(':visible')) {
+          $('input[name="customs_declaration[currency]"]').prop('disabled', false);
+          var customsDeclaration = $('[name^="customs_declaration"]').serializeJSON();
+          $('input[name="customs_declaration[currency]"]').prop('disabled', true);
+        } else {
+          delete labelJSON['customs_declaration'];
+        }
+
+        return $.extend(labelJSON, customsDeclaration);
     };
 
     this.getAdditionalServices = function () {
@@ -205,7 +216,17 @@ shipcloud.LabelForm = function (wrapperSelector) {
     return pickupTime;
   };
 
-    self.main();
+  this.traverseFlatArray = function (elementNameArray) {
+    var json = {};
+    var elem = elementNameArray.shift();
+    // console.log('elem: ' + elem);
+    if (elementNameArray.length > 1) {
+      json[elem] = self.traverseFlatArray(elementNameArray);
+    }
+    return json;
+  };
+
+  self.main();
 };
 
 // Extend jQuery if present just by delegating.

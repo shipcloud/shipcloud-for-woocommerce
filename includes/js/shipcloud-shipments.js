@@ -127,6 +127,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'carrier_tracking_url'      : null,
         'additional_services'       : null,
         'pickup_request'            : null,
+        'customs_declaration'       : null,
     },
 
   allowedAdditionalServices: function () {
@@ -167,6 +168,10 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         return
       }
       return data.properties;
+    },
+
+    getCustomsDeclarationContentsTypeName: function(contents_type_name) {
+      return shipcloud_customs_declaration_contents_types[contents_type_name];
     },
 
     getData: function () {
@@ -740,6 +745,18 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
   }
 });
 
+shipcloud.ShipmentCustomsDeclarationView = wp.Backbone.View.extend({
+  tagName: 'div',
+  template: wp.template('shipcloud-customs-declaration-form'),
+  controller: null,
+
+  render: function (shipmentId = false) {
+    wp.Backbone.View.prototype.render.call(this);
+    // this.addHandlers(shipmentId);
+    jQuery( document.body ).trigger( 'init_tooltips' );
+  }
+});
+
 shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     tagName : 'div',
     template: wp.template('shipcloud-shipment-edit'),
@@ -751,7 +768,8 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
 
     events: {
         'click .wcsc-edit-abort'   : 'backToParent',
-        'click .wcsc-save-shipment': 'saveAction'
+        'click .wcsc-save-shipment': 'saveAction',
+        'click .shipcloud-show-customs-declaration': 'showCustomsDeclaration'
     },
 
     backToParent: function () {
@@ -791,6 +809,20 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         shipcloud.additionalServices.render(this.model.id);
 
         shipcloud.additionalServices.handleAdditionalServices(this.model.get('carrier'), this.model.id);
+
+        if (this.model.get('customs_declaration').contents_type) {
+            var contents_type_key = this.model.get('customs_declaration').contents_type;
+            jQuery('#' + this.model.get('id') + ' select[name="customs_declaration[contents_type]"] option[value="' + contents_type_key + '"]').prop('selected', true);
+        }
+        if (this.model.get('customs_declaration').items) {
+          var modelId = this.model.get('id');
+          _.each(this.model.get('customs_declaration').items, function(item) {
+            jQuery('#' + modelId + ' select[name="customs_declaration[items][' + item.id + '][origin_country]"] option[value="' + item.origin_country + '"]').prop('selected', true);
+          });
+        }
+        if (this.model.get('customs_declaration')) {
+          jQuery('#' + this.model.get('id') + ' input[name="customs_declaration[shown]"]').val('true');
+        }
     },
 
     getData: function () {
@@ -805,6 +837,7 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         this.parent.$loader().show();
 
         this.$el.find('input[name="shipment[additional_services][cash_on_delivery][currency]"]').removeAttr( 'disabled' )
+        this.$el.find('input[name="customs_declaration[currency]"]').removeAttr( 'disabled' )
 
         wp.ajax.send(
             'shipcloud_label_update',
@@ -814,6 +847,15 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
                 'error'  : this.errorAction.bind(this)
             }
         );
+    },
+
+    showCustomsDeclaration: function () {
+      this.$el.find('.label-shipment-customs-declaration').toggle();
+      if (this.$el.find('.label-shipment-customs-declaration').is(':visible')) {
+        this.$el.find('input[name="customs_declaration[shown]"]').val('true');
+      } else {
+        this.$el.find('input[name="customs_declaration[shown]"]').val('false');
+      }
     },
 
     successAction: function (data) {

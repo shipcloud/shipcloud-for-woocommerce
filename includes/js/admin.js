@@ -89,6 +89,15 @@ jQuery( function( $ ) {
 
 	});
 
+  $('#shipcloud_add_customs_declaration').click(function () {
+    shipcloud.customsDeclaration = new shipcloud.ShipmentCustomsDeclarationView({
+      model: new shipcloud.ShipmentModel(),
+      el: '.section.parcels .customs-declaration-form'
+    });
+    shipcloud.customsDeclaration.render();
+    $('.customs-declaration').toggle();
+  });
+
 	$( '#shipcloud_create_shipment' ).click( function()
 	{
 		$( '#shipment-center .info').empty();
@@ -204,6 +213,10 @@ jQuery( function( $ ) {
                 print_errors(_(response.data).pluck('message'));
 				return;
 			}
+
+      if (response.data.message !== '') {
+        print_notice(response.data.message);
+      }
 
             shipcloud.shipments.unshift(response.data.data, {parse:true});
 		});
@@ -336,7 +349,11 @@ jQuery( function( $ ) {
 
 	function print_notice( text )
 	{
-		$( '#shipment-center').find('.info' ).fadeIn().html( text );
+    var html = '<div class="notice notice-info"><p>';
+    html += text;
+    html += '</p></div>';
+
+    $( '#shipment-center').find('.info' ).fadeIn().html( html );
 	}
 
 });

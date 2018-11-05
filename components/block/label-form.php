@@ -91,21 +91,6 @@
             <input type="text" name="other_description" value="<?php echo esc_attr($this->get_order()->get_description()); ?>">
         </td>
     </tr>
-    <?php
-        $global_reference_number = wcsc_shipping_method()->get_option( 'global_reference_number' );
-        if (shipcloud_admin_is_on_single_order_page()) {
-            if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
-                $order_id = $this->get_order()->ID;
-
-                if (!$order_id) {
-                    // Fallback for WooCommerce 2
-                    $order_id = $this->order->id;
-                }
-
-                $global_reference_number = str_replace('[shipcloud_orderid]', $order_id, $global_reference_number);
-            }
-        }
-    ?>
     <tr>
       <th>
           <?php _e( 'Reference number', 'shipcloud-for-woocommerce' ); ?>
@@ -114,7 +99,7 @@
       <td>
         <input type="text"
                name="reference_number"
-               value="<?php echo $global_reference_number; ?>"/>
+               value="<?php echo _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' )->get_global_reference_number($this->get_order()); ?>"/>
       </td>
     </tr>
 	<?php

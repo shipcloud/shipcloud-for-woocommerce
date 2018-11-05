@@ -7,21 +7,120 @@
         style="display: none">
         <td colspan="10" class="colspanchange" id="shipcloud-io">
 
-            <fieldset class="inline-edit-col-left">
-                <legend class="inline-edit-legend">
-					<?php esc_html_e( 'Create shipping labels', 'shipcloud-for-woocommerce' ) ?>
-                </legend>
-                <div class="inline-edit-col">
-                    <div class="bulk-title-div">
-                        <div class="order-id-list"></div>
-                    </div>
+            <h2>
+                <?php esc_html_e( 'Create shipping labels', 'shipcloud-for-woocommerce' ) ?>
+            </h2>
+            <div class="inline-edit-col">
+                <div class="bulk-title-div">
+                    <div class="order-id-list"></div>
                 </div>
-            </fieldset>
+            </div>
 
             <fieldset class="inline-edit-col-right">
               <div class="create-label fifty">
                 <?php echo $this->parcel_templates(); ?>
                 <?php echo $this->parcel_form(); ?>
+                <div class="customs_declaration_button">
+                    <button id="shipcloud_add_customs_declaration_bulk" type="button" value="<?php _e( 'Add customs declaration', 'shipcloud-for-woocommerce' ); ?>" class="button">
+                        <?php _e( 'Add customs declaration', 'shipcloud-for-woocommerce' ); ?>
+                    </button>
+                </div>
+
+                <?php
+                    global $woocommerce;
+                 ?>
+                <div class="customs-declaration--definition" style="display: none">
+                    <input type="hidden" name="customs_declaration[shown]" value="false" />
+                    <div class="customs-declaration__infotext">
+                        <?php _e( 'For detailed information about shipping to dutiable countries, please refer to this <a href="https://marketing-files.shipcloud.io/de/support/zolldeklaration-in-shipcloud.pdf" target="_blank" rel="noopener noreferrer">documentation</a>', 'shipcloud-for-woocommerce' ); ?>
+                    </div>
+                    <table class="parcel-form-table">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Contents type', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>
+                                    <select name="customs_declaration[contents_type]">
+                                        <option value="none"><?php _e( '[ Select a contents type ]', 'shipcloud-for-woocommerce' ); ?></option>
+                                        <?php
+                                            $contents_types = wcsc_api()->get_customs_declaration_contents_types();
+                                            foreach ( $contents_types as $key => $display_name ) {
+                                                echo '<option value="'.$key.'">'.$display_name.'</option>';
+                                            }
+                                        ?>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Contents explanation', 'shipcloud-for-woocommerce' ); ?>
+                                    <?php echo wc_help_tip( __( 'Description of contents. Mandatory if contents_type is \'commercial_goods\'. Max 256 characters, when using DHL as your carrier', 'shipcloud-for-woocommerce' ) ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[contents_explanation]" maxlength="256" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Currency', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[currency]" value="EUR" disabled />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Additional fees', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[additional_fees]" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Drop off location', 'shipcloud-for-woocommerce' ); ?>
+                                    <?php echo wc_help_tip( __( 'Location where the package will be dropped of with the carrier', 'shipcloud-for-woocommerce' ) ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[drop_off_location]" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Exporter reference', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[exporter_reference]" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Importer reference', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[importer_reference]" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Posting date', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[posting_date]" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Invoice number', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>
+                                    <input type="text" name="customs_declaration[invoice_number]" value="<?php echo _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' )->get_global_reference_number($this); ?>" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
               </div>
 
               <div class="additional_services fifty">

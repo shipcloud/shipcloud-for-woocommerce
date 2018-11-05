@@ -112,8 +112,12 @@
 
 #shipcloud-io .parcels {
     background: #f8f8f8 none repeat scroll 0 0;
+    padding-bottom: 0;
 }
-
+#shipcloud-io .parcels legend {
+  font-weight: 700;
+  padding: 0;
+}
 #shipcloud-io .parcel-form-table {
     width: 100%;
     text-align: left;
@@ -179,11 +183,14 @@
 /**
  * 	Action Buttons
  */
-#button-actions .button {
+#shipcloud-io #button-actions {
+  margin: 15px 0 25px;
+}
+#shipcloud-io #button-actions .button {
   float: left;
   margin-right: .25em;
 }
-#button-actions .button-primary {
+#shipcloud-io #button-actions .button-primary {
   float: none;
   margin-right: 0;
 }
@@ -230,6 +237,9 @@
     color: #264409;
     margin: 20px 0;
     padding: 12px;
+}
+#shipcloud-io .notice.notice-info p {
+  margin: .5em 0;
 }
 
 #shipcloud-io .shipment-labels .loading-overlay .spin-loader {
@@ -330,10 +340,12 @@
 
 #shipcloud-io .shipment-labels .address,
 #shipcloud-io .shipment-labels .label-shipment-additional-services,
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-basic-data,
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-item-data,
 #shipcloud-io .shipment-labels .label-shipment-pickup-request,
 #shipcloud-io .shipment-labels .label-shipment-status,
 fieldset .shipment-labels .address {
-    width: 31%;
+    width: 29%;
     display: inline-block;
     margin: 20px 1%;
     vertical-align: top;
@@ -511,6 +523,18 @@ fieldset .shipment-labels .address {
 /**
  * Bulk
  */
+#shipcloud-io .order-id-list .bulkid {
+  display: inline-block;
+}
+
+#shipcloud-io .customs_declaration_button {
+  padding: .5em;
+}
+
+#shipcloud-io .customs-declaration__infotext {
+  padding: 1em 0 0 1em;
+}
+
 #shipcloud_bulk .parcel-form-table th {
   width: 25%;
 }
@@ -540,4 +564,31 @@ fieldset .shipment-labels .address {
 }
 .shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field .select2-container {
   width: 100%!important;
+}
+
+/**
+ * Customs declaration
+ */
+/* #shipcloud-io .customs-declaration--definition, */
+#shipcloud-io .customs-declaration {
+  display: none;
+}
+#shipcloud-io .customs-declaration--items_content {
+  padding-left: 10px;
+}
+
+#shipcloud-io .customs-declaration--items fieldset {
+  border: 1px solid;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-data th {
+  font-size: 10px;
+  font-weight: normal;
+  text-align: left;
+}
+
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-data td {
+  padding-left: 10px;
 }

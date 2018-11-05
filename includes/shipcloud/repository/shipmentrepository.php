@@ -114,46 +114,51 @@ class ShipmentRepository {
 	}
 
 	public function update( $order_id, $shipment ) {
-		$order = \WooCommerce::instance()->order_factory->get_order( $order_id );
+        $order = \WooCommerce::instance()->order_factory->get_order( $order_id );
+        $translated_data = $this->translate_data( $shipment, $order_id );
 
-    if (method_exists($order, 'get_meta_data')) {
-      foreach ( $order->get_meta_data() as $meta_value ) {
-  			if ( 'shipcloud_shipment_data' !== $meta_value->key ) {
-  				continue;
-  			}
+        //  update shipment at shipcloud
+        _wcsc_api()->shipment()->update( $shipment['id'], $shipment );
 
-  			if ( $meta_value->value['id'] !== $shipment['id'] ) {
-  				continue;
-  			}
+        // update shipment meta data
+        if (method_exists($order, 'get_meta_data')) {
+            foreach ( $order->get_meta_data() as $meta_value ) {
+                if ( 'shipcloud_shipment_data' !== $meta_value->key ) {
+                    continue;
+                }
 
-  			$order->update_meta_data(
-  				'shipcloud_shipment_data',
-  				array_merge( $meta_value->value, $this->translate_data( $shipment, $order_id ) ),
-  				$meta_value->id
-  			);
+                if ( $meta_value->value['id'] !== $shipment['id'] ) {
+                    continue;
+                }
 
-  			$order->save_meta_data();
+                $order->update_meta_data(
+                    'shipcloud_shipment_data',
+                    array_merge( $meta_value->value, $translated_data ),
+                    $meta_value->id
+                );
 
-  			break;
-  		}
-    } else {
-      $shipment_meta_data_entries = get_post_meta( $order->id, 'shipcloud_shipment_data' );
-      foreach ( $shipment_meta_data_entries as $meta_key => $meta_value) {
-        if ( $meta_value['id'] !== $shipment['id'] ) {
-          continue;
+                $order->save_meta_data();
+
+                break;
+            }
+        } else {
+            $shipment_meta_data_entries = get_post_meta( $order->id, 'shipcloud_shipment_data' );
+            foreach ( $shipment_meta_data_entries as $meta_key => $meta_value) {
+                if ( $meta_value['id'] !== $shipment['id'] ) {
+                    continue;
+                }
+
+                update_post_meta(
+                    $order->id,
+                    'shipcloud_shipment_data',
+                    array_merge( $meta_value, $translated_data ),
+                    $meta_value
+                );
+
+                break;
+            }
         }
-
-        update_post_meta(
-          $order->id,
-          'shipcloud_shipment_data',
-          array_merge( $meta_value, $this->translate_data( $shipment, $order_id ) ),
-          $meta_value
-        );
-
-        break;
-      }
     }
-	}
 
 	public function translate_to_api_data( $old_structured_data, $order_id = null ) {
 		$data = array(
@@ -196,6 +201,7 @@ class ShipmentRepository {
 			'carrier_tracking_no' => isset($old_structured_data['carrier_tracking_no']) ? $old_structured_data['carrier_tracking_no'] : '',
 			'reference_number'    => isset($old_structured_data['reference_number']) ? $old_structured_data['reference_number'] : '',
 			'additional_services' => isset($old_structured_data['additional_services']) ? $this->handleAdditionalServices( $old_structured_data ) : '',
+            'customs_declaration' => isset($old_structured_data['customs_declaration']) ? $old_structured_data['customs_declaration'] : '',
 		);
 
 		if ( $order_id ) {
@@ -240,6 +246,7 @@ class ShipmentRepository {
 					'country'    => '',
 				),
 				'additional_services' => '',
+                'customs_declaration' => '',
 			),
 			$data
 		);
@@ -267,7 +274,8 @@ class ShipmentRepository {
 			'recipient_zip_code'   => $data['to']['zip_code'],
 			'recipient_state'      => $data['to']['state'],
 			'recipient_country'    => $data['to']['country'],
-			'additional_services'  => $data['additional_services']
+			'additional_services'  => $data['additional_services'],
+            'customs_declaration' => $data['customs_declaration']
 		);
 	}
 

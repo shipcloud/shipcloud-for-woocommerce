@@ -167,17 +167,36 @@
     </fieldset>
 <# } #>
 
+<div class="clear"></div>
+
+<# if ( data.model.get('customs_declaration') ) { #>
+    <fieldset class="label-shipment-customs-declaration">
+<# } else { #>
+    <fieldset class="label-shipment-customs-declaration" style="display: none;">
+<# } #>
+        <legend>
+            <?php _e( 'Customs declaration', 'shipcloud-for-woocommerce' ) ?>
+        </legend>
+        <?php
+          require WCSC_COMPONENTFOLDER . '/block/customs-declaration-edit-form.php';
+         ?>
+    </fieldset>
+
 <input type="hidden" name="shipment[package][weight]" value="{{ data.model.get('package').get('width') }}" />
 <input type="hidden" name="shipment[package][length]" value="{{ data.model.get('package').get('length') }}" />
 <input type="hidden" name="shipment[package][width]" value="{{ data.model.get('package').get('width') }}" />
 <input type="hidden" name="shipment[package][height]" value="{{ data.model.get('package').get('height') }}" />
 <input type="hidden" name="shipment[package][type]" value="{{ data.model.get('package').get('type') }}" />
+<input type="hidden" name="customs_declaration[shown]" value="false" />
 
 <div class="label-shipment-actions">
-    <button class="button wcsc-save-shipment button-primary" type="button">
-		<?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
+    <button class="button shipcloud-show-customs-declaration" type="button">
+        <?php _e( 'Add customs declaration', 'shipcloud-for-woocommerce' ) ?>
     </button>
     <button class="button wcsc-edit-abort" type="button">
-		<?php _ex( 'Abort', 'Order: Backend button to abort edit', 'wcsc' ) ?>
+        <?php _ex( 'Abort', 'Order: Backend button to abort edit', 'wcsc' ) ?>
+    </button>
+    <button class="button wcsc-save-shipment button-primary" type="button">
+        <?php _ex( 'Save', 'Order: Backend button to edit prepared labels', 'wcsc' ) ?>
     </button>
 </div>

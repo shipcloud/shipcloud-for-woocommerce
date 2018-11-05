@@ -4,19 +4,26 @@
 
     <div class="widget-quick-actions">
         <# if ( data.model.get('label_url') ) { #>
+            <# if ( data.model.get('customs_declaration').carrier_declaration_document_url ) { #>
+                <a href="{{ data.model.get('customs_declaration').carrier_declaration_document_url }}" target="_blank" class="button btn-primary">
+                    <i class="fas fa-file-contract"></i>
+                    <?php _e( 'Download customs document', 'shipcloud-for-woocommerce' ); ?>
+                </a>
+            <# } #>
+
             <a href="{{ data.model.get('label_url') }}" target="_blank" class="button btn-primary">
-                <span class="dashicons dashicons-external"></span>
-				<?php _ex( 'Download', 'Download a label', 'shipcloud-for-woocommerce' ); ?>
+                <i class="fas fa-file-alt"></i>
+                <?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?>
             </a>
-            <# } else { #>
-                <button class="shipcloud_create_label btn-primary button" type="button">
-                    <span class="dashicons dashicons-yes"></span>
-					<?php _e( 'Create', 'shipcloud-for-woocommerce' ); ?>
-                </button>
-                <# } #>
-                    <button class="shipcloud_delete_shipment button" type="button">
-                        <span class="dashicons dashicons-trash"></span>
-                    </button>
+        <# } else { #>
+            <button class="shipcloud_create_label btn-primary button" type="button">
+                <i class="fas fa-plus-square"></i>
+                <?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
+            </button>
+        <# } #>
+        <button class="shipcloud_delete_shipment button" type="button">
+            <i class="fas fa-trash-alt"></i>
+        </button>
     </div>
 <div class="widget-top">
     <div class="widget-title-action">
@@ -24,8 +31,6 @@
     </div>
     <div class="widget-title">
         <img class="shipcloud-widget-icon" src="<?php echo WCSC_URLPATH; ?>assets/icons/truck-32x32.png"/>
-
-
         <h4>
             {{ data.model.get('from').getTitle() }}
             <span class="dashicons dashicons-arrow-right-alt"></span>
@@ -148,6 +153,127 @@
           <# } #>
         </div>
 
+        <# if ( data.model.get('customs_declaration') ) { #>
+            <div class="label-shipment-customs-declaration" role="switch">
+                <div class="customs-declaration-basic-data">
+                    <h3>
+                        <?php _e( 'Customs declaration', 'shipcloud-for-woocommerce' ); ?>
+                    </h3>
+                    <table class="customs-declaration-data">
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Contents type', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.getCustomsDeclarationContentsTypeName(data.model.get('customs_declaration').contents_type) }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Contents explanation', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').contents_explanation }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Currency', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').currency }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Additional fees', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').additional_fees }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Drop off location', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').drop_off_location }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Exporter reference', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').exporter_reference }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Importer reference', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').importer_reference }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Posting date', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').posting_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Invoice number', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').invoice_number }}</td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <?php _e( 'Total value amount', 'shipcloud-for-woocommerce' ); ?>
+                                </th>
+                                <td>{{ data.model.get('customs_declaration').total_value_amount }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="customs-declaration-item-data">
+                    <h4>
+                        <?php _e( 'Items', 'shipcloud-for-woocommerce' ); ?>
+                    </h4>
+                    <# _.each(data.model.get('customs_declaration').items, function(item) { #>
+                        <table class="customs-declaration-data">
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        <?php _e( 'Description', 'shipcloud-for-woocommerce' ); ?>
+                                    </th>
+                                    <td>{{ item.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <?php _e( 'Origin country', 'shipcloud-for-woocommerce' ); ?>
+                                    </th>
+                                    <td>{{ item.origin_country }}</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <?php _e( 'Quantity', 'shipcloud-for-woocommerce' ); ?>
+                                    </th>
+                                    <td>{{ item.quantity }}</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <?php _e( 'Value amount', 'shipcloud-for-woocommerce' ); ?>
+                                    </th>
+                                    <td>{{ item.value_amount }}</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <?php _e( 'Net weight', 'shipcloud-for-woocommerce' ); ?>
+                                    </th>
+                                    <td>{{ item.net_weight }}</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <?php _e( 'HS tariff number', 'shipcloud-for-woocommerce' ); ?>
+                                    </th>
+                                    <td>{{ item.hs_tariff_number }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <# }); #>
+                </div>
+            </div>
+        <# } #>
+
         <table class="label-shipment-status">
             <tbody>
             <# if ( data.model.get('description') ) { #>
@@ -236,6 +362,12 @@
             </button>
 
             <# if ( data.model.get('label_url') ) { #>
+                <# if ( data.model.get('customs_declaration').carrier_declaration_document_url ) { #>
+                    <a href="{{ data.model.get('customs_declaration').carrier_declaration_document_url }}" target="_blank" class="button">
+                        <?php _e( 'Download customs document', 'shipcloud-for-woocommerce' ); ?>
+                    </a>
+                <# } #>
+
                 <a href="{{ data.model.get('label_url') }}" target="_blank" class="button">
                     <?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?>
                 </a>

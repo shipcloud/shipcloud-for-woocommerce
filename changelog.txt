@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 1.11.0 =
+* Added: Supply customs declaration data to be able to receive a CP 71 / CN23 form in return
+* Added: New package type (Large Parcel) for Cargo International
+
 = 1.10.0 =
 * Added: New service (Europaket) for DHL
 * Added: New service (Expedited) for UPS

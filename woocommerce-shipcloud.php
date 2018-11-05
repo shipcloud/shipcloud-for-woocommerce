@@ -10,7 +10,7 @@
  * Developer URI: http://sven-wagener.com
  * Text Domain: shipcloud-for-woocommerce
  * WC requires at least: 2.6.4
- * WC tested up to: 3.4.4
+ * WC tested up to: 3.5.1
  * License:
  * Copyright 2017 (support@awesome.ug)
  * This program is free software; you can redistribute it and/or modify
@@ -460,9 +460,12 @@ class WooCommerce_Shipcloud {
 		);
 
 		wp_localize_script( 'wcsc-admin-script', 'wcsc_translate', $translation_array );
+		wp_localize_script( 'wcsc-admin-script', 'shipcloud_customs_declaration_contents_types', wcsc_api()->get_customs_declaration_contents_types() );
 		wp_enqueue_script( 'wcsc-admin-script' );
 
-		wp_enqueue_script( 'wcsc-font-awesome', WCSC_URLPATH . 'vendor/fontawesome/js/fontawesome-all.js', array( ), static::VERSION );
+		wp_enqueue_script( 'wcsc-font-awesome', WCSC_URLPATH . 'vendor/fontawesome/js/all.js', array( ), static::VERSION );
+		wp_enqueue_script( 'shipcloud-jquery-serialize-json', WCSC_URLPATH . 'vendor/jquery.serializeJSON-2.9.0/jquery.serializejson.min.js', array( ), static::VERSION );
+
 	}
 
 	/**
