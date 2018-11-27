@@ -395,7 +395,20 @@ class WooCommerce_Shipcloud {
 		);
 
 		// Inject translations and data for carrier selection.
-		wp_localize_script(
+		$services = array(
+            'placeholder' => _x( 'Select service', 'backend: Selecting a carrier service option for label creation', 'wcsc' )
+        );
+        $services = array_merge(
+            $services,
+            array_map(
+                function($service) {
+                    return $service['name'];
+                },
+                wcsc_api()->get_services()
+            )
+        );
+
+        wp_localize_script(
 			'wcsc-multi-select',
 			'wcsc_carrier',
 			array(
@@ -411,16 +424,7 @@ class WooCommerce_Shipcloud {
 						'parcel' => _x( 'Parcel', 'pacakge type: parcel', 'wcsc' ),
 						'bulk' => _x( 'Bulk', 'pacakge type: bulk', 'wcsc' ),
 					),
-					'services' => array(
-						'placeholder' => _x( 'Select service', 'backend: Selecting a carrier service option for label creation', 'wcsc' ),
-						'standard' => wcsc_api()->get_service_label('standard'),
-						'one_day' => wcsc_api()->get_service_label('one_day'),
-						'one_day_early' => wcsc_api()->get_service_label('one_day_early'),
-						'same_day' => wcsc_api()->get_service_label('same_day'),
-						'returns' => wcsc_api()->get_service_label('returns'),
-                        'ups_express_1200' => wcsc_api()->get_service_label('ups_express_1200'),
-                        'dpag_warenpost' => wcsc_api()->get_service_label('dpag_warenpost'),
-					),
+					'services' => $services
 				),
 				'data'    => _wcsc_carriers_get(),
 			)
