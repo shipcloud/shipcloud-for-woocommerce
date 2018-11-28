@@ -113,9 +113,9 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.10.0 =
-* Enhanced: Added new service (Europaket) for DHL
-* Enhanced: Added new service (Expedited) for UPS
-* Enhanced: Added new package types (Disposable pallet and Euro pallet) for Cargo International
+* Added: New service (Europaket) for DHL
+* Added: New service (Expedited) for UPS
+* Added: New package types (Disposable pallet and Euro pallet) for Cargo International
 * Enhanced: Package types are now centrally defined for easier access / adjustments
 
 = 1.9.4 =
