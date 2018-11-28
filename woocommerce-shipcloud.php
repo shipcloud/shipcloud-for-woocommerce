@@ -394,6 +394,14 @@ class WooCommerce_Shipcloud {
 			static::VERSION
 		);
 
+        $package_types = array(
+            'placeholder' => _x( 'Select type', 'backend: Selecting a package type option for label creation', 'wcsc' ),
+        );
+        $package_types = array_merge(
+            $package_types,
+            wcsc_api()->get_package_types()
+        );
+
 		// Inject translations and data for carrier selection.
 		$services = array(
             'placeholder' => _x( 'Select service', 'backend: Selecting a carrier service option for label creation', 'wcsc' )
@@ -416,14 +424,7 @@ class WooCommerce_Shipcloud {
 					'carrier' => array(
 						'placeholder' => _x( 'Select carrier', 'backend: Selecting a carrier option for label creation', 'wcsc' ),
 					),
-					'package_types' => array(
-						'placeholder' => _x( 'Select type', 'backend: Selecting a package type option for label creation', 'wcsc' ),
-						'letter' => _x( 'Letter', 'package type: letter', 'wcsc' ),
-						'parcel_letter' => _x( 'Parcel letter', 'package type: parcel letter', 'wcsc' ),
-						'books' => _x( 'Books', 'package type: books', 'wcsc' ),
-						'parcel' => _x( 'Parcel', 'pacakge type: parcel', 'wcsc' ),
-						'bulk' => _x( 'Bulk', 'pacakge type: bulk', 'wcsc' ),
-					),
+					'package_types' => $package_types,
 					'services' => $services
 				),
 				'data'    => _wcsc_carriers_get(),

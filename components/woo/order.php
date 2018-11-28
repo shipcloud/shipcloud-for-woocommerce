@@ -1860,7 +1860,8 @@ class WC_Shipcloud_Order
 					   . $data->height . esc_attr( 'x', 'shipcloud-for-woocommerce' )
 					   . $data->length . esc_attr( 'cm', 'shipcloud-for-woocommerce' )
 					   . ' - ' . $data->weight . esc_attr( 'kg', 'shipcloud-for-woocommerce' )
-					   . ' - ' . $this->get_shipcloud_api()->get_carrier_display_name_short( $data->carrier );
+					   . ' - ' . wcsc_get_carrier_display_name($carrier['carrier'])
+                       . ' - ' . $this->get_shipcloud_api()->get_service_name( $carrier['service'] );
 
 			if ( $carrier['package'] ) {
 				$option .= ' - ' . WC_Shipcloud_Order::instance()->get_package_label( $carrier['package'] );
@@ -1914,13 +1915,7 @@ class WC_Shipcloud_Order
      * @deprecated 2.0.0 This is duplicate to \WCSC_Parceltemplate_Posttype::get_package_label and needs to be injected.
 	 */
 	public function get_package_label( $slug ) {
-		$labels = array(
-			'books'         => _x( 'Books', 'label while creating shipping label', 'shipcloud-woocommerce' ),
-			'bulk'          => _x( 'Bulk', 'label for oversize packages', 'shipcloud-woocommerce' ),
-			'letter'        => _x( 'Letter', 'label for simple letters', 'shipcloud-woocommerce' ),
-			'parcel'        => _x( 'Parcel', 'label for simple packages', 'shipcloud-woocommerce' ),
-			'parcel_letter' => _x( 'Parcel letter', 'letter for goods', 'shipcloud-woocommerce' ),
-		);
+		$labels = wcsc_api()->get_package_types();
 
 		if ( ! isset( $labels[ $slug ] ) ) {
 			return $slug;

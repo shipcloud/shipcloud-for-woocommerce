@@ -271,13 +271,7 @@ class WCSC_Parceltemplate_Posttype
      * @deprecated 2.0.0 This is duplicate to \WC_Shipcloud_Order::get_package_label and needs to be injected.
 	 */
 	protected static function get_package_label( $slug ) {
-		$labels = array(
-			'books'         => _x( 'Books', 'label while creating shipping label', 'shipcloud-woocommerce' ),
-			'bulk'          => _x( 'Bulk', 'label for oversize packages', 'shipcloud-woocommerce' ),
-			'letter'        => _x( 'Letter', 'label for simple letters', 'shipcloud-woocommerce' ),
-			'parcel'        => _x( 'Parcel', 'label for simple packages', 'shipcloud-woocommerce' ),
-			'parcel_letter' => _x( 'Parcel letter', 'letter for goods', 'shipcloud-woocommerce' ),
-		);
+		$labels = wcsc_api()->get_package_types();
 
 		if ( ! isset( $labels[ $slug ] ) ) {
 			return $slug;

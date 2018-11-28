@@ -96,6 +96,8 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
             self.$carrier.val(map['carrier']);
         }
 
+        self.renderChildren();
+
         if (map.hasOwnProperty('service') && map['service']) {
             self.$service.val(map['service']);
         }
