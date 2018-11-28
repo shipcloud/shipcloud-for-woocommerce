@@ -117,6 +117,7 @@ https://youtu.be/HE3jow15x8c
 * Added: New service (Expedited) for UPS
 * Added: New package types (Disposable pallet and Euro pallet) for Cargo International
 * Enhanced: Package types are now centrally defined for easier access / adjustments
+* Fixed: Dropdowns will now be preselected with correct values when editing parcel templates
 
 = 1.9.4 =
 * Fixed: Class loading of files with underscores
