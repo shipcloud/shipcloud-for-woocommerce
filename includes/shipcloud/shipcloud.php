@@ -106,7 +106,31 @@ class Woocommerce_Shipcloud_API
 				'description'      => __( 'Small trackable letter delivery', 'shipcloud-for-woocommerce' ),
 				'customer_service' => false
 			),
+            'dhl_europaket' => array(
+                'name' => __( 'Europaket', 'shipcloud-for-woocommerce' ),
+                'description' => __( 'B2B parcel shipments delivered mostly within 48 hours', 'shipcloud-for-woocommerce' ),
+                'customer_service' => false
+            ),
+            'ups_expedited' => array(
+                'name' => __( 'Expedited', 'shipcloud-for-woocommerce' ),
+                'description' => __( 'For sending less urgent shipments to destinations outside of Europe', 'shipcloud-for-woocommerce' ),
+                'customer_service' => false
+            ),
+            'cargo_international_express' => array(
+              'name' => __( 'Express', 'shipcloud-for-woocommerce' ),
+              'description' => __( 'Express delivery for Cargo International shipments', 'shipcloud-for-woocommerce' ),
+              'customer_service' => false
+            ),
 		);
+        $this->package_types = array(
+            'letter' => _x( 'Letter', 'package type: letter', 'shipcloud-for-woocommerce' ),
+            'parcel_letter' => _x( 'Parcel letter', 'package type: parcel letter', 'shipcloud-for-woocommerce' ),
+            'books' => _x( 'Books', 'package type: books', 'shipcloud-for-woocommerce' ),
+            'parcel' => _x( 'Parcel', 'package type: parcel', 'shipcloud-for-woocommerce' ),
+            'bulk' => _x( 'Bulk', 'package type: bulk', 'shipcloud-for-woocommerce' ),
+            'disposable_pallet' => _x( 'Disposable pallet', 'package type: disposable pallet', 'shipcloud-for-woocommerce' ),
+            'euro_pallet' => _x( 'Euro pallet', 'package type: euro pallet', 'shipcloud-for-woocommerce' ),
+        );
 	}
 
 	public function is_valid() {
@@ -114,29 +138,21 @@ class Woocommerce_Shipcloud_API
 	}
 
 	/**
+	 * Retrieve all package types.
+	 *
+	 * @return array
+	 */
+	public function get_package_types() {
+		return $this->package_types;
+	}
+
+    /**
 	 * Retrieve all services.
 	 *
 	 * @return array
 	 */
 	public function get_services() {
 		return $this->services;
-	}
-
-	/**
-	 * Turn service into label.
-	 *
-	 * @param $service_name
-	 *
-	 * @return string Label of the service (the name if non was found).
-	 */
-	public function get_service_label( $service_name ) {
-		if ( ! isset( $this->services[ $service_name ] )
-			 || ! isset( $this->services[ $service_name ]['name'] )
-		) {
-			return $service_name;
-		}
-
-		return $this->services[ $service_name ]['name'];
 	}
 
 	/**
@@ -506,12 +522,12 @@ class Woocommerce_Shipcloud_API
 	 * @return string
 	 * @since 1.0.0
 	 */
-	public function get_service_name( $service_id ) {
-		if ( ! array_key_exists( $service_id, $this->services ) ) {
-			return false;
+	public function get_service_name( $service_name ) {
+		if (array_key_exists($service_name, $this->services)) {
+			return $this->services[ $service_name ]['name'];
+		} else {
+			return $service_name;
 		}
-
-		return $this->services[ $service_id ]['name'];
 	}
 
 	/**

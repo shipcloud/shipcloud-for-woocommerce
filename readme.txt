@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
 Tested up to: 4.9.8
-Stable tag: 1.9.4
+Stable tag: 1.10.0
 Requires PHP: 5.5
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
@@ -111,6 +111,12 @@ https://youtu.be/HE3jow15x8c
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.10.0 =
+* Enhanced: Added new service (Europaket) for DHL
+* Enhanced: Added new service (Expedited) for UPS
+* Enhanced: Added new package types (Disposable pallet and Euro pallet) for Cargo International
+* Enhanced: Package types are now centrally defined for easier access / adjustments
 
 = 1.9.4 =
 * Fixed: Class loading of files with underscores
