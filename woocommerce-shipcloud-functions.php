@@ -653,6 +653,7 @@ function _shipcloud_shipment_data_to_postmeta( $order_id, $shipment, $data, $par
 		'recipient_country'    => $data['to']['country'],
 		'recipient_phone'      => $data['to']['phone'],
 		'reference_number'     => (isset($data['reference_number'])) ? $data['reference_number'] : null,
+		'customs_declaration'  => $shipment->getCustomsDeclaration(),
 		'date_created'         => time()
 	);
 
@@ -856,3 +857,52 @@ function shipcloud_orderid_func( $atts ) {
     return '';
 }
 add_shortcode( 'shipcloud_orderid', 'shipcloud_orderid_func' );
+
+/**
+ * Add shipcloud specific custom fields to products
+ *
+ * @since 1.10.0
+ */
+function shipcloud_adjust_woocommerce_shipping_settings() {
+    woocommerce_wp_text_input(
+        array(
+            'id' => 'shipcloud_hs_tariff_number',
+            'label' => __( 'HS tariff number', 'shipcloud-for-woocommerce' ),
+            'desc_tip' => true,
+            'description' => __( 'Harmonized System Tariff Number', 'shipcloud-for-woocommerce' ),
+        )
+    );
+
+    woocommerce_wp_select(
+        array(
+            'id'      => 'shipcloud_origin_country',
+            'label'   => __( 'Origin country', 'shipcloud-for-woocommerce' ),
+            'options' => array_merge(
+                array(
+                    '' => ''
+                ),
+                WC()->countries->countries
+            ),
+        )
+    );
+};
+add_action( 'woocommerce_product_options_shipping', 'shipcloud_adjust_woocommerce_shipping_settings' );
+
+/**
+ * Save custom product data
+ *
+ * @param string $post_id
+ *
+ * @since 1.10.0
+ */
+function shipcloud_save_custom_product_fields( $post_id ) {
+    $product = wc_get_product( $post_id );
+
+    $hs_tariff_number = isset( $_POST['shipcloud_hs_tariff_number'] ) ? $_POST['shipcloud_hs_tariff_number'] : '';
+    $origin_country = isset( $_POST['shipcloud_origin_country'] ) ? $_POST['shipcloud_origin_country'] : '';
+
+    $product->update_meta_data( 'shipcloud_hs_tariff_number', sanitize_text_field( $hs_tariff_number ) );
+    $product->update_meta_data( 'shipcloud_origin_country', sanitize_text_field( $origin_country ) );
+    $product->save();
+}
+add_action( 'woocommerce_process_product_meta', 'shipcloud_save_custom_product_fields' );

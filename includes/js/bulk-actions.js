@@ -16,6 +16,7 @@ wcsc.OrderBulkActions = function (submitButton) {
   this.main = function () {
     self.$submitButton.click(self.handleSubmit);
     $('#wcsc_template').change(self.handleTemplateSwitch);
+    $('#shipcloud_add_customs_declaration_bulk').click(self.showCustomsDeclarationForm);
   };
 
   this.handleSubmit = function (e) {
@@ -150,6 +151,16 @@ wcsc.OrderBulkActions = function (submitButton) {
     $('select[name="pickup_address[country]"]').select2();
     $('.shipcloud__pickup_date_and_time').show();
     $(self.pickupRequestTemplateId).show();
+  };
+
+  this.showCustomsDeclarationForm = function () {
+    var $form = $('.customs-declaration--definition');
+    if ($form.is(':visible')) {
+      $('input[name="customs_declaration[shown]"]').val('false');
+    } else {
+      $('input[name="customs_declaration[shown]"]').val('true');
+    }
+    $form.toggle();
   };
 
   this.hide = function () {

@@ -1,4 +1,7 @@
-<h4><?php _e( 'Additional services', 'shipcloud-for-woocommerce' ); ?></h4>
+<legend>
+    <?php _e( 'Additional services', 'shipcloud-for-woocommerce' ); ?>
+</legend>
+
 <div class="additional_services__infobox">
   <?php _e( 'You can book so called "additional services" to get a better service for a certain use case of your shipment. Unfortunately these aren\'t available for all carriers.', 'shipcloud-for-woocommerce' ); ?>
   <br />

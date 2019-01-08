@@ -737,20 +737,33 @@ class WC_Shipcloud_Order
 			<div class="clear"></div>
 
 			<div id="button-actions">
-				<p>
-					<button id="shipcloud_create_shipment" type="button" value="<?php _e( 'Prepare label', 'shipcloud-for-woocommerce' ); ?>" class="button">
-						<?php _e( 'Prepare label', 'shipcloud-for-woocommerce' ); ?>
-					</button>
-					<button id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate price', 'shipcloud-for-woocommerce' ); ?>" class="button">
-						<?php _e( 'Calculate price', 'shipcloud-for-woocommerce' ); ?>
-					</button>
-				</p>
-				<p>
-					<button id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="button-primary" data-ask-create-label-check="<?php echo esc_attr($this->get_options( 'ask_create_label_check' )); ?>">
-						<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
-					</button>
+				<button id="shipcloud_create_shipment" type="button" value="<?php _e( 'Prepare label', 'shipcloud-for-woocommerce' ); ?>" class="button">
+					<?php _e( 'Prepare label', 'shipcloud-for-woocommerce' ); ?>
+				</button>
+				<button id="shipcloud_calculate_price" type="button" value="<?php _e( 'Calculate price', 'shipcloud-for-woocommerce' ); ?>" class="button">
+					<?php _e( 'Calculate price', 'shipcloud-for-woocommerce' ); ?>
+				</button>
+				<button id="shipcloud_add_customs_declaration" type="button" value="<?php _e( 'Add customs declaration', 'shipcloud-for-woocommerce' ); ?>" class="button">
+					<?php _e( 'Add customs declaration', 'shipcloud-for-woocommerce' ); ?>
+				</button>
+				<button id="shipcloud_create_shipment_label" type="button" value="<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>" class="button-primary" data-ask-create-label-check="<?php echo esc_attr($this->get_options( 'ask_create_label_check' )); ?>">
+					<?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
+				</button>
 				</p>
 			</div>
+
+            <div class="customs-declaration">
+                <h3>
+                    <?php _e( 'Customs declaration', 'shipcloud-for-woocommerce' ) ?>
+                </h3>
+                <div class="customs-declaration-form"></div>
+                <script type="template/html" id="tmpl-shipcloud-customs-declaration-form">
+                    <?php
+                        require WCSC_COMPONENTFOLDER . '/block/customs-declaration-edit-form.php';
+                    ?>
+                </script>
+            </div>
+            <div style="clear: both"></div>
 
 		</div>
 		<?php
@@ -1168,6 +1181,9 @@ class WC_Shipcloud_Order
 		$data = $this->handle_return_shipments( $data );
 		$data = $this->sanitize_shop_owner_data( $data );
         $data = $this->sanitize_reference_number( $data );
+        if (array_key_exists('customs_declaration', $data)) {
+            $data['customs_declaration'] = $this->handle_customs_declaration( $data['customs_declaration'] );
+        }
 		$data = $this->handle_email_notification( $data );
 
 		// only applicable for WooCommerce 3
@@ -1204,8 +1220,11 @@ class WC_Shipcloud_Order
                 'to'                    => null,
                 'additional_services'   => null,
                 'pickup'                => null,
+                'customs_declaration'   => null,
             )
         );
+
+        $message = '';
 
 		try {
 			if ( isset($shipment_id) ) {
@@ -1221,6 +1240,13 @@ class WC_Shipcloud_Order
 
                         update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data, $old_shipment );
 
+                        if (
+                            array_key_exists('customs_declaration', $old_shipment) &&
+                            !array_key_exists('customs_declaration', $shipment)
+                        ) {
+                            $message = __( 'Customs declaration documents not necessary. Therefore they were ignored.', 'shipcloud-for-woocommerce' );
+                        }
+
                         break;
                     }
                 }
@@ -1232,6 +1258,13 @@ class WC_Shipcloud_Order
                 $shipment_data = _shipcloud_shipment_data_to_postmeta( $order_id, $shipment, $data );
                 add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_data['id'] );
                 add_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data );
+
+                if (
+                    array_key_exists('customs_declaration', $data) &&
+                    empty($shipment->getCustomsDeclaration())
+                ) {
+                    $message = __( 'Customs declaration documents not necessary. Therefore they were ignored.', 'shipcloud-for-woocommerce' );
+                }
 			}
 
 			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $data['carrier'] ) . ')' );
@@ -1242,6 +1275,7 @@ class WC_Shipcloud_Order
 					'shipment_id' => $shipment->getId(),
 					'html'        => $this->get_label_html( $shipment_data ),
 					'data'        => $shipment_repo->translate_to_api_data( $shipment_data, $order_id ),
+                    'message' => $message,
 				)
 			);
 
@@ -2011,6 +2045,18 @@ class WC_Shipcloud_Order
 
 		return $data;
 	}
+
+    private function handle_customs_declaration( $data ) {
+        $line_items = $data['items'];
+
+        $items = array();
+        foreach ( $line_items as $line_item ) {
+            array_push($items, $line_item);
+        }
+
+        $data['items'] = $items;
+        return $data;
+    }
 
 	public function get_calculated_weight() {
 		$order_items = $this->get_wc_order()->get_items();

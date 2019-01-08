@@ -21,6 +21,8 @@ class Shipment {
 
 	private $packages;
 
+    private $customs_declaration;
+
 	/**
 	 * Shipment constructor.
 	 *
@@ -32,13 +34,14 @@ class Shipment {
 	 * @param string $carrier_tracking_no The original tracking number that can be used on the carriers website.
 	 * @param string $reference_number    A reference number provided by the admin
 	 */
-	public function __construct( $id, $tracking_url, $label_url, $price, $carrier_tracking_no = null, $packages ) {
+	public function __construct( $id, $tracking_url, $label_url, $price, $carrier_tracking_no = null, $packages, $customs_declaration = null ) {
 		$this->id                  = $id;
 		$this->tracking_url        = $tracking_url;
 		$this->label_url           = $label_url;
 		$this->price               = $price;
 		$this->carrier_tracking_no = $carrier_tracking_no;
 		$this->packages = $packages;
+        $this->customs_declaration = $customs_declaration;
 	}
 
 	/**
@@ -60,7 +63,8 @@ class Shipment {
 			isset($shipment['label_url']) ? $shipment['label_url'] : null,
 			isset($shipment['price']) ? $shipment['price'] : null,
 			isset($shipment['carrier_tracking_no']) ? $shipment['carrier_tracking_no'] : null,
-			$shipment['packages']
+			$shipment['packages'],
+            isset($shipment['customs_declaration']) ? $shipment['customs_declaration'] : null
 		);
 	}
 
@@ -70,6 +74,28 @@ class Shipment {
 	public function getCarrierTrackingNo() {
 		return $this->carrier_tracking_no;
 	}
+
+    /*
+     * Get customs declaration information
+     *
+     * @since 1.10.0
+     */
+    public function getCustomsDeclaration() {
+        return $this->customs_declaration;
+    }
+
+    /*
+     * Get customs declaration information
+     *
+     * @since 1.10.0
+     */
+    public function getCustomsDeclarationDocumentUrl() {
+        if (!empty($this->customs_declaration) &&
+                array_key_exists('carrier_declaration_document_url', $this->customs_declaration)) {
+            return $this->customs_declaration['carrier_declaration_document_url'];
+        }
+        return null;
+    }
 
 	/**
 	 * @return string
