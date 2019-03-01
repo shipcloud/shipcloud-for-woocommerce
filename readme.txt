@@ -112,6 +112,9 @@ https://youtu.be/HE3jow15x8c
 
 == Changelog ==
 
+= 1.11.1 =
+* Enhanced: Confirmed support for Wordpress 5 and WooCommerce 3.5.5
+
 = 1.11.0 =
 * Added: Supply customs declaration data to be able to receive a CP 71 / CN23 form in return
 * Added: New package type (Large Parcel) for Cargo International
