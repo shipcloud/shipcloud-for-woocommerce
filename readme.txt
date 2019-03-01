@@ -2,8 +2,8 @@
 Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
-Tested up to: 4.9.8
-Stable tag: 1.11.0
+Tested up to: 5.1
+Stable tag: 1.11.1
 Requires PHP: 5.5
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
