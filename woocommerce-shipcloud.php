@@ -427,7 +427,7 @@ class WooCommerce_Shipcloud {
 					'package_types' => $package_types,
 					'services' => $services
 				),
-				'data'    => _wcsc_carriers_get(),
+				'data' => wcsc_shipping_method()->get_allowed_carrier_classes(),
 			)
 		);
 

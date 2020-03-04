@@ -1600,6 +1600,47 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		return $carriers;
 	}
 
+	public function get_allowed_carrier_classes() {
+		$this->init_shipcloud_api();
+
+		$allowed_carriers = $this->get_option( 'allowed_carriers' );
+		$shipcloud_carriers = _wcsc_api()->carriers()->get();
+
+		if ( is_wp_error( $shipcloud_carriers ) )
+		{
+			self::log( $shipcloud_carriers->get_error_message() );
+			return $shipcloud_carriers;
+		}
+
+		$carriers = array();
+		if ( is_array( $allowed_carriers ) ) {
+			foreach ( $shipcloud_carriers AS $shipcloud_carrier ) {
+				$carrier_is_allowed = false;
+
+				$carrier_services = array();
+				foreach ( $shipcloud_carrier['services'] AS $carrier_service ) {
+					$carrier_service_combination = $shipcloud_carrier[ 'name' ]."_".$carrier_service;
+
+					if ( in_array( $carrier_service_combination, $allowed_carriers ) ) {
+						$carrier_is_allowed = true;
+						array_push($carrier_services, $carrier_service);
+					}
+				}
+
+				if ( $carrier_is_allowed ) {
+					$carriers[] = new \Shipcloud\Domain\Carrier(
+						$shipcloud_carrier['name'],
+						$shipcloud_carrier['display_name'],
+						$carrier_services,
+						$shipcloud_carrier['package_types']
+					);
+				}
+			}
+		}
+
+		return $carriers;
+	}
+
 	/**
 	 * Getting option (overwrite instance values if there option of instance is empty
 	 *
