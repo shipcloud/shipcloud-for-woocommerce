@@ -7,7 +7,7 @@
  * Author: shipcloud GmbH
  * Author URI: https://shipcloud.io
  * Developer: shipcloud GmbH
- * Developer URI: https://shipcloud.io
+ * Developer URI: https://developers.shipcloud.io
  * Text Domain: shipcloud-for-woocommerce
  * WC requires at least: 2.6.4
  * WC tested up to: 3.9.2
