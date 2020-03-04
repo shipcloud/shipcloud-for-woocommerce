@@ -10,7 +10,7 @@
  * Developer URI: http://sven-wagener.com
  * Text Domain: shipcloud-for-woocommerce
  * WC requires at least: 2.6.4
- * WC tested up to: 3.5.5
+ * WC tested up to: 3.9.2
  * License:
  * Copyright 2017 (support@awesome.ug)
  * This program is free software; you can redistribute it and/or modify
