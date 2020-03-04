@@ -120,7 +120,37 @@ class Woocommerce_Shipcloud_API
               'name' => __( 'Express', 'shipcloud-for-woocommerce' ),
               'description' => __( 'Express delivery for Cargo International shipments', 'shipcloud-for-woocommerce' ),
               'customer_service' => false
-            ),
+      ),
+      'gls_express_0800' => array(
+        'name' => __( 'Express 08:00', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'Express delivery for GLS shipments that should be delivered by 8am', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
+      'gls_express_0900' => array(
+        'name' => __( 'Express 09:00', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'Express delivery for GLS shipments that should be delivered by 9am', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
+      'gls_express_1000' => array(
+        'name' => __( 'Express 10:00', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'Express delivery for GLS shipments that should be delivered by 10am', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
+      'gls_express_1200' => array(
+        'name' => __( 'Express 12:00', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'Express delivery for GLS shipments that should be delivered by 12am', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
+      'gls_pick_and_ship' => array(
+        'name' => __( 'Pick&ShipService', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'Using the Pick&ShipService you can request GLS to pick up a parcel at the address of your choice and deliver it directly to the recipient.', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
+      'dpag_warenpost_untracked' => array(
+        'name' => __( 'Warenpost (untracked)', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'Small untracked letter delivery', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
 		);
 
         $this->package_types = array(

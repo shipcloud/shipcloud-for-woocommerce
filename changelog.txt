@@ -1,6 +1,8 @@
 == Changelog ==
 
 = 1.12.0 =
+* Added: GLS services (Express 08:00, Express 09:00, Express 10:00, Express 12:00, Pick&ShipService)
+* Added: Deutsche Post service Warenpost (untracked)
 * Enhanced: Confirmed support for Wordpress 5.3.2 and WooCommerce 3.9.2
 * Enhanced: Only show configured carriers for creating shipments in admin panel
 * Fixed: detection of street number and zip code entries
