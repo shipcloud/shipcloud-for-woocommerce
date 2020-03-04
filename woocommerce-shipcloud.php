@@ -4,10 +4,10 @@
  * Plugin URI: https://www.wordpress.org/plugins/shipcloud-for-woocommerce/
  * Description: Integrates shipcloud shipment services to your WooCommerce shop.
  * Version: 1.11.1
- * Author: Awesome UG
- * Author URI: http://awesome.ug
- * Developer: Awesome UG
- * Developer URI: http://sven-wagener.com
+ * Author: shipcloud GmbH
+ * Author URI: https://shipcloud.io
+ * Developer: shipcloud GmbH
+ * Developer URI: https://shipcloud.io
  * Text Domain: shipcloud-for-woocommerce
  * WC requires at least: 2.6.4
  * WC tested up to: 3.9.2
@@ -29,7 +29,7 @@
  * shipcloud for WooCommerce initializing class
  * This class initializes the Plugin.
  *
- * @author  Awesome UG, Author <support@awesome.ug>
+ * @author  shipcloud GmbH, Author <developers@shipcloud.io>
  * @package shipcloudForWooCommerce
  * @since   1.0.0
  * @license GPL 2
