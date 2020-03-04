@@ -1559,15 +1559,17 @@ class WC_Shipcloud_Order
 
 		// Use default data if nothing was saved before
 		if ( '' == $sender || 0 == count( $sender ) ) {
-		    $options = $this->get_options();
+			$options = $this->get_options();
+			$street_no = $options['sender_street_nr'] ?: (isset($options['sender_street_no']) ? $options['sender_street_no'] : '');
+			$zip_code = $options['sender_postcode'] ?: (isset($options['sender_zip_code']) ? $options['sender_zip_code'] : '');
 
 			$sender = array(
 				$prefix . 'first_name' => $options['sender_first_name'],
 				$prefix . 'last_name'  => $options['sender_last_name'],
 				$prefix . 'company'    => $options['sender_company'],
 				$prefix . 'street'     => $options['sender_street'],
-				$prefix . 'street_no'  => $options['sender_street_nr'] ?: $options['sender_street_no'],
-				$prefix . 'zip_code'   => $options['sender_postcode'] ?: $options['sender_zip_code'],
+				$prefix . 'street_no'  => $street_no,
+				$prefix . 'zip_code'   => $zip_code,
 				$prefix . 'city'       => $options['sender_city'],
 				$prefix . 'state'      => $options['sender_state'],
 				$prefix . 'country'    => $options['sender_country'],
