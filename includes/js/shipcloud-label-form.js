@@ -149,6 +149,14 @@ shipcloud.LabelForm = function (wrapperSelector) {
               'name': 'premium_international'
             });
             break;
+          case 'delivery_note':
+            additional_services_array.push({
+              'name': 'delivery_note',
+              'properties': {
+                'message': $('textarea[name="shipment[additional_services][delivery_note][message]"]').val()
+              }
+            });
+            break;
           case 'delivery_time':
             var selected_option = $('select[name="shipment[additional_services][delivery_time][timeframe]"]').val();
             var time_of_day_earliest = selected_option.substring(0, 2) + ':00';

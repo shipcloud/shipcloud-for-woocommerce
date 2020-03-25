@@ -152,6 +152,9 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'gls_guaranteed24service',
         'advance_notice'
       ],
+      'go': [
+        'delivery_note'
+      ],
       'ups': [
         'cash_on_delivery',
         'ups_adult_signature'
@@ -572,6 +575,14 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
       }
     });
 
+    $(prefix + "input[name='shipment[additional_services][delivery_note][checked]']").change(function () {
+      if ($(this).prop('checked')) {
+        $(prefix + '.shipcloud_delivery_note').fadeIn();
+      } else {
+        $(prefix + '.shipcloud_delivery_note').fadeOut();
+      }
+    });
+
     $(prefix + "input[name='shipment[additional_services][delivery_time][checked]']").change(function () {
       if ($(this).prop('checked')) {
         $(prefix + '.shipcloud_delivery_time').fadeIn();
@@ -621,6 +632,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         this.handleAgeBasedDelivery(carrier, prefix);
         $(prefix + '.shipcloud_additional_service__premium_international').show();
+        $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').show();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
         $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
@@ -630,6 +642,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').show();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
         $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();
@@ -640,6 +653,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').show();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').show();
         $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();
@@ -650,15 +664,28 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
         $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').show();
+        $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
+        break;
+      case 'go':
+        $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_note').show();
+        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
+        $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
+        $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();
+        $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
         $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
         break;
       case 'ups':
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         this.handleAgeBasedDelivery(carrier, prefix);
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
         $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
@@ -668,6 +695,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
         $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();

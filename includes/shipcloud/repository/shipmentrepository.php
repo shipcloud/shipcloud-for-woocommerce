@@ -49,7 +49,12 @@ class ShipmentRepository {
                     'name' => 'advance_notice'
                 )
             ),
-            'ups' => array(
+            'go' => array(
+              array(
+                'name' => 'delivery_note'
+              )
+          ),
+          'ups' => array(
                 array(
                     'name' => 'cash_on_delivery'
                 ),

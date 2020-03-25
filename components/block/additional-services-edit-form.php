@@ -93,6 +93,32 @@
   <div class="clear"></div>
 </div>
 
+<div class="shipcloud_additional_service shipcloud_additional_service__delivery_note">
+  <div class="shipcloud_additional_service__checkbox">
+    <# if ( data.model.hasAdditionalService('delivery_note') ) { #>
+      <input type="checkbox" name="shipment[additional_services][delivery_note][checked]" value="delivery_note" checked="checked" />
+    <# } else { #>
+      <input type="checkbox" name="shipment[additional_services][delivery_note][checked]" value="delivery_note" />
+    <# } #>
+  </div>
+  <div class="shipcloud_additional_service__text">
+    <?php _e( 'Delivery note', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'Give the carrier specific instructions for delivering the shipment', 'shipcloud-for-woocommerce' ) ); ?>
+    <#
+      if ( data.model.hasAdditionalService('delivery_note') ) {
+    #>
+    <div class="shipcloud_delivery_note">
+    <# } else { #>
+    <div class="shipcloud_additional_service--hidden shipcloud_delivery_note">
+    <# } #>
+      <textarea type="text"
+                name="shipment[additional_services][delivery_note][message]"
+                placeholder="<?php _e( 'Description where the carrier should drop off the shipment', 'shipcloud-for-woocommerce' ); ?>"><# if ( data.model.hasAdditionalService('delivery_note') ) { #>{{ data.model.getAdditionalServiceData('delivery_note').message }}<# } #></textarea>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
+
 <div class="shipcloud_additional_service shipcloud_additional_service__delivery_time">
   <div class="shipcloud_additional_service__checkbox">
     <# if ( data.model.hasAdditionalService('delivery_time') ) { #>
