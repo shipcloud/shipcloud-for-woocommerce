@@ -13,9 +13,6 @@ class ShipmentRepository {
                     'name' => 'premium_international'
                 ),
                 array(
-                    'name' => 'delivery_time'
-                ),
-                array(
                     'name' => 'cash_on_delivery'
                 ),
                 array(

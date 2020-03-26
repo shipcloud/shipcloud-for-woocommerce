@@ -166,15 +166,9 @@ shipcloud.LabelForm = function (wrapperSelector) {
             });
             break;
           case 'delivery_time':
-            var selected_option = $('select[name="shipment[additional_services][delivery_time][timeframe]"]').val();
-            if ( selected_option != undefined ) {
-              var time_of_day_earliest = selected_option.substring(0, 2) + ':00';
-              var time_of_day_latest = selected_option.substring(2, 4) + ':00';
-            } else {
-              var labelForm = $('#shipcloud-io').shipcloudLabelForm();
-              var time_of_day_earliest = labelForm.handleDeliveryTimeParts('earliest');
-              var time_of_day_latest = labelForm.handleDeliveryTimeParts('latest');
-            }
+            var labelForm = $('#shipcloud-io').shipcloudLabelForm();
+            var time_of_day_earliest = labelForm.handleDeliveryTimeParts('earliest');
+            var time_of_day_latest = labelForm.handleDeliveryTimeParts('latest');
 
             additional_services_array.push({
               'name': 'delivery_time',

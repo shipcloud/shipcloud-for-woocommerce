@@ -135,7 +135,6 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
       'dhl': [
         'visual_age_check',
         'premium_international',
-        'delivery_time',
         'cash_on_delivery',
         'advance_notice'
       ],
@@ -649,7 +648,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__premium_international').show();
         $(prefix + '.shipcloud_additional_service__delivery_date').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').hide();
-        $(prefix + '.shipcloud_additional_service__delivery_time').show();
+        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
         $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();
         $(prefix + '.shipcloud_additional_service__no_additional_services').hide();
