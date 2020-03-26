@@ -149,6 +149,14 @@ shipcloud.LabelForm = function (wrapperSelector) {
               'name': 'premium_international'
             });
             break;
+          case 'delivery_date':
+            additional_services_array.push({
+              'name': 'delivery_date',
+              'properties': {
+                'date': $('input[name="shipment[additional_services][delivery_date][date]"]').val()
+              }
+            });
+            break;
           case 'delivery_note':
             additional_services_array.push({
               'name': 'delivery_note',

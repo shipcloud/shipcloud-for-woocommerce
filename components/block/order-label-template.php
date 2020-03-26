@@ -95,6 +95,14 @@
                   <?php _e( 'DHL premium international', 'shipcloud-for-woocommerce' ); ?>
                 </li>
               <# } #>
+              <# if ( additional_service.name === 'delivery_date' ) { #>
+                <li>
+                  <?php _e( 'Delivery date', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                      <?php _e( 'Date', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.date }}
+                  </div>
+                </li>
+              <# } #>
               <# if ( additional_service.name === 'delivery_note' ) { #>
                 <li>
                   <?php _e( 'Delivery note', 'shipcloud-for-woocommerce' ); ?>

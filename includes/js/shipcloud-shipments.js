@@ -153,6 +153,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'advance_notice'
       ],
       'go': [
+        'delivery_date',
         'delivery_note',
         'delivery_time'
       ],
@@ -576,6 +577,19 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
       }
     });
 
+    $(prefix + "input[name='shipment[additional_services][delivery_date][checked]']").change(function () {
+      if ($(this).prop('checked')) {
+        $(prefix + '.shipcloud_delivery_date').fadeIn();
+        $("input[name='shipment[additional_services][delivery_date][date]']").datepicker({
+          dateFormat : 'yyyy-mm-dd',
+          defaultDate: +1,
+          showButtonPanel: true
+        });
+      } else {
+        $(prefix + '.shipcloud_delivery_date').fadeOut();
+      }
+    });
+
     $(prefix + "input[name='shipment[additional_services][delivery_note][checked]']").change(function () {
       if ($(this).prop('checked')) {
         $(prefix + '.shipcloud_delivery_note').fadeIn();
@@ -633,6 +647,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         this.handleAgeBasedDelivery(carrier, prefix);
         $(prefix + '.shipcloud_additional_service__premium_international').show();
+        $(prefix + '.shipcloud_additional_service__delivery_date').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').show();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
@@ -643,6 +658,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').show();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_date').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
@@ -654,6 +670,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').show();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_date').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').show();
@@ -665,6 +682,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_date').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
@@ -675,6 +693,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_date').show();
         $(prefix + '.shipcloud_additional_service__delivery_note').show();
         $(prefix + '.shipcloud_additional_service__delivery_time').show();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
@@ -686,6 +705,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         this.handleAgeBasedDelivery(carrier, prefix);
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_date').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
@@ -696,6 +716,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__saturday_delivery').hide();
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_date').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').hide();
         $(prefix + '.shipcloud_additional_service__delivery_time').hide();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();

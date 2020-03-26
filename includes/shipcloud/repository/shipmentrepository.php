@@ -51,6 +51,9 @@ class ShipmentRepository {
             ),
             'go' => array(
               array(
+                'name' => 'delivery_date'
+              ),
+              array(
                 'name' => 'delivery_note'
               ),
               array(
@@ -415,7 +418,15 @@ class ShipmentRepository {
 						'name' => 'premium_international'
 					);
 					break;
-				case 'delivery_time':
+        case 'delivery_date':
+          $additional_services[] = array(
+            'name' => 'delivery_date',
+            'properties' => array(
+              'date' => $additional_service_value['date']
+            )
+          );
+          break;
+        case 'delivery_time':
 					if (array_key_exists( 'checked', $additional_service_value ) &&
 						array_key_exists( 'timeframe', $additional_service_value )
 					) {

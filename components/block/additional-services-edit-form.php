@@ -93,6 +93,34 @@
   <div class="clear"></div>
 </div>
 
+<div class="shipcloud_additional_service shipcloud_additional_service__delivery_date">
+  <div class="shipcloud_additional_service__checkbox">
+    <# if ( data.model.hasAdditionalService('delivery_date') ) { #>
+      <input type="checkbox" name="shipment[additional_services][delivery_date][checked]" value="delivery_date" checked="checked" />
+    <# } else { #>
+      <input type="checkbox" name="shipment[additional_services][delivery_date][checked]" value="delivery_date" />
+    <# } #>
+  </div>
+  <div class="shipcloud_additional_service__text">
+    <?php _e( 'Delivery date', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'Tell the carrier on which date the delivery should be made', 'shipcloud-for-woocommerce' ) ); ?>
+    <#
+      if ( data.model.hasAdditionalService('delivery_date') ) {
+    #>
+    <div class="shipcloud_delivery_date">
+    <# } else { #>
+    <div class="shipcloud_additional_service--hidden shipcloud_delivery_date">
+    <# } #>
+      <?php
+        $date = new DateTime('NOW');
+        $date->modify('+1 day');
+      ?>
+      <input type="text" class="date-picker delivery_date" name="shipment[additional_services][delivery_date][date]" maxlength="10" pattern="<?php echo esc_attr( apply_filters( 'woocommerce_date_input_html_pattern', '[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])' ) ); ?>" value="<# if ( data.model.hasAdditionalService('delivery_date') && data.model.getAdditionalServiceData('delivery_date').date != undefined ) { #>{{ data.model.getAdditionalServiceData('delivery_date').date }}<# } else { #><?php echo $date->format('Y-m-d'); ?><# } #>" />
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
+
 <div class="shipcloud_additional_service shipcloud_additional_service__delivery_note">
   <div class="shipcloud_additional_service__checkbox">
     <# if ( data.model.hasAdditionalService('delivery_note') ) { #>
