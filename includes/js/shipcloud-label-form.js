@@ -159,8 +159,14 @@ shipcloud.LabelForm = function (wrapperSelector) {
             break;
           case 'delivery_time':
             var selected_option = $('select[name="shipment[additional_services][delivery_time][timeframe]"]').val();
-            var time_of_day_earliest = selected_option.substring(0, 2) + ':00';
-            var time_of_day_latest = selected_option.substring(2, 4) + ':00';
+            if ( selected_option != undefined ) {
+              var time_of_day_earliest = selected_option.substring(0, 2) + ':00';
+              var time_of_day_latest = selected_option.substring(2, 4) + ':00';
+            } else {
+              var labelForm = $('#shipcloud-io').shipcloudLabelForm();
+              var time_of_day_earliest = labelForm.handleDeliveryTimeParts('earliest');
+              var time_of_day_latest = labelForm.handleDeliveryTimeParts('latest');
+            }
 
             additional_services_array.push({
               'name': 'delivery_time',
@@ -222,6 +228,15 @@ shipcloud.LabelForm = function (wrapperSelector) {
       $('input[name="pickup_' + pointInTime + '_time_minute"]').val();
 
     return pickupTime;
+  };
+
+  this.handleDeliveryTimeParts = function (pointInTime) {
+    var deliveryTime =
+      $('input[name="delivery_time_' + pointInTime + '_time_hour"]').val() +
+      ':' +
+      $('input[name="delivery_time_' + pointInTime + '_time_minute"]').val();
+
+    return deliveryTime;
   };
 
   this.traverseFlatArray = function (elementNameArray) {

@@ -153,7 +153,8 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'advance_notice'
       ],
       'go': [
-        'delivery_note'
+        'delivery_note',
+        'delivery_time'
       ],
       'ups': [
         'cash_on_delivery',
@@ -675,7 +676,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
         $(prefix + '.shipcloud_additional_service__age_based_delivery').hide();
         $(prefix + '.shipcloud_additional_service__premium_international').hide();
         $(prefix + '.shipcloud_additional_service__delivery_note').show();
-        $(prefix + '.shipcloud_additional_service__delivery_time').hide();
+        $(prefix + '.shipcloud_additional_service__delivery_time').show();
         $(prefix + '.shipcloud_additional_service__drop_authorization').hide();
         $(prefix + '.shipcloud_additional_service__cash_on_delivery').hide();
         $(prefix + '.shipcloud_additional_service__gls_guaranteed24service').hide();

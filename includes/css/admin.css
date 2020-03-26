@@ -159,8 +159,14 @@
   margin-right: 15px;
 }
 #shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest label,
-#shipcloud-io .parcel-form-table .shipcloud__pickup_time--latest label {
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--latest label,
+#shipcloud-io .additional_services .shipcloud__delivery_time--earliest label,
+#shipcloud-io .additional_services .shipcloud__delivery_time--latest label {
   width: 100%;
+}
+#shipcloud-io .additional_services .shipcloud__delivery_time--earliest label,
+#shipcloud-io .additional_services .shipcloud__delivery_time--latest label {
+  display: block;
 }
 #shipcloud-io .parcel-form-table .shipcloud__pickup_time .pickup_date,
 #shipcloud-io .label-shipment-pickup-request .shipcloud__pickup_time .pickup_date {

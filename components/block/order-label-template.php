@@ -105,7 +105,11 @@
               <# } #>
               <# if ( additional_service.name === 'delivery_time' ) { #>
                 <li>
-                  <?php _e( 'DHL preferred time', 'shipcloud-for-woocommerce' ); ?>
+                  <# if ( data.model.get('carrier') === 'dhl' ) { #>
+                    <?php _e( 'DHL preferred time', 'shipcloud-for-woocommerce' ); ?>
+                  <# } else { #>
+                    <?php _e( 'Delivery time', 'shipcloud-for-woocommerce' ); ?>
+                  <# } #>
                   <div class="additional-services-details">
                       <?php _e( 'Earliest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_earliest }}
                       <br />

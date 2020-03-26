@@ -128,8 +128,13 @@
     <# } #>
   </div>
   <div class="shipcloud_additional_service__text">
-    <?php _e( 'DHL preferred time', 'shipcloud-for-woocommerce' ); ?>
-    <?php echo wc_help_tip( __( 'Schedule a timeframe when the delivery should be made by DHL.', 'shipcloud-for-woocommerce' ) ); ?>
+    <# if ( data.model.get('carrier') === 'dhl' ) { #>
+      <?php _e( 'DHL preferred time', 'shipcloud-for-woocommerce' ); ?>
+      <?php echo wc_help_tip( __( 'Schedule a timeframe when the delivery should be made by DHL.', 'shipcloud-for-woocommerce' ) ); ?>
+    <# } else { #>
+      <?php _e( 'Delivery time', 'shipcloud-for-woocommerce' ); ?>
+    <# } #>
+
     <#
       if ( data.model.hasAdditionalService('delivery_time') ) {
         var time_of_day_earliest = data.model.getAdditionalServiceData('delivery_time').time_of_day_earliest;
@@ -140,17 +145,34 @@
     <# } else { #>
     <div class="shipcloud_additional_service--hidden shipcloud_delivery_time">
     <# } #>
-      <select name="shipment[additional_services][delivery_time][timeframe]">
-        <option value="">
-          <?php _e( '[ Please select a delivery timeframe ]', 'shipcloud-for-woocommerce' ); ?>
-        </option>
-        <option value="1012" <# if ( timeframe === '1012' ) {#>selected="selected"<# } #>>10:00 - 12:00</option>
-        <option value="1214" <# if ( timeframe === '1214' ) {#>selected="selected"<# } #>>12:00 - 14:00</option>
-        <option value="1416" <# if ( timeframe === '1416' ) {#>selected="selected"<# } #>>14:00 - 16:00</option>
-        <option value="1618" <# if ( timeframe === '1618' ) {#>selected="selected"<# } #>>16:00 - 18:00</option>
-        <option value="1820" <# if ( timeframe === '1820' ) {#>selected="selected"<# } #>>18:00 - 20:00</option>
-        <option value="1921" <# if ( timeframe === '1921' ) {#>selected="selected"<# } #>>19:00 - 21:00</option>
-      </select>
+      <# if ( data.model.get('carrier') === 'dhl' ) { #>
+        <select name="shipment[additional_services][delivery_time][timeframe]">
+          <option value="">
+            <?php _e( '[ Please select a delivery timeframe ]', 'shipcloud-for-woocommerce' ); ?>
+          </option>
+          <option value="1012" <# if ( timeframe === '1012' ) {#>selected="selected"<# } #>>10:00 - 12:00</option>
+          <option value="1214" <# if ( timeframe === '1214' ) {#>selected="selected"<# } #>>12:00 - 14:00</option>
+          <option value="1416" <# if ( timeframe === '1416' ) {#>selected="selected"<# } #>>14:00 - 16:00</option>
+          <option value="1618" <# if ( timeframe === '1618' ) {#>selected="selected"<# } #>>16:00 - 18:00</option>
+          <option value="1820" <# if ( timeframe === '1820' ) {#>selected="selected"<# } #>>18:00 - 20:00</option>
+          <option value="1921" <# if ( timeframe === '1921' ) {#>selected="selected"<# } #>>19:00 - 21:00</option>
+        </select>
+      <# } else { #>
+        <div class="shipcloud__delivery_time--earliest">
+          <label>
+            <small><?php _e( 'Earliest delivery time', 'shipcloud-for-woocommerce' ) ?></small>
+          </label>
+          <input type="number" class="delivery_time hour" placeholder="<?php esc_attr_e( 'h', 'woocommerce' ) ?>" name="delivery_time_earliest_time_hour" min="0" max="23" step="1" pattern="([01]?[0-9]{1}|2[0-3]{1})" />:
+          <input type="number" class="delivery_time minute" placeholder="<?php esc_attr_e( 'm', 'woocommerce' ) ?>" name="delivery_time_earliest_time_minute" min="0" max="59" step="1" pattern="[0-5]{1}[0-9]{1}" />
+        </div>
+        <div class="shipcloud__delivery_time--latest">
+          <label>
+            <small><?php _e( 'Latest delivery time', 'shipcloud-for-woocommerce' ) ?></small>
+          </label>
+          <input type="number" class="delivery_time hour" placeholder="<?php esc_attr_e( 'h', 'woocommerce' ) ?>" name="delivery_time_latest_time_hour" min="0" max="23" step="1" pattern="([01]?[0-9]{1}|2[0-3]{1})" />:
+          <input type="number" class="delivery_time minute" placeholder="<?php esc_attr_e( 'm', 'woocommerce' ) ?>" name="delivery_time_latest_time_minute" min="0" max="59" step="1" pattern="[0-5]{1}[0-9]{1}" />
+        </div>
+      <# } #>
     </div>
   </div>
   <div class="clear"></div>

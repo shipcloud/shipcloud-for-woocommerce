@@ -52,7 +52,10 @@ class ShipmentRepository {
             'go' => array(
               array(
                 'name' => 'delivery_note'
-              )
+              ),
+              array(
+                'name' => 'delivery_time'
+            )
           ),
           'ups' => array(
                 array(
