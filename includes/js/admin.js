@@ -87,7 +87,28 @@ jQuery( function( $ ) {
 		});
 
 
-	});
+  });
+
+  $( '#shipcloud_refresh_carriers' ).click( function(){
+    // alert('shipcloud_refresh_carriers called!!!');
+    var button = $( this );
+
+    var data = {
+			'action': 'shipcloud_refresh_carriers'
+		};
+
+		$.post( ajaxurl, data, function( response ) {
+			var result = JSON.parse(response);
+
+			if (result.status == 'ERROR') {
+				print_errors(result.errors);
+			}
+
+			if (result.status == 'OK') {
+				print_notice( "foo" );
+			}
+		});
+  });
 
   $('#shipcloud_add_customs_declaration').click(function () {
     shipcloud.customsDeclaration = new shipcloud.ShipmentCustomsDeclarationView({

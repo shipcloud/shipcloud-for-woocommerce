@@ -81,6 +81,7 @@ class WooCommerce_Shipcloud {
 		}
 		spl_autoload_register( array( $this, 'autoload' ) );
 
+    add_action( 'admin_menu', array( $this, 'create_shipcloud_plugin_settings_page' ) );
 	}
 
 	/**
@@ -541,6 +542,23 @@ class WooCommerce_Shipcloud {
         </div>
     <?php
     }
+
+  public function create_shipcloud_plugin_settings_page() {
+    $page_title = _( 'shipcloud for WooCommerce settings', 'shipcloud-for-woocommerce' );
+    $menu_title = 'shipcloud';
+    $capability = 'manage_options';
+    $slug = 'shipcloud_for_woocommerce';
+    $callback = array( $this, 'plugin_settings_page_content' );
+    $icon = 'none';
+    $position = 100;
+
+    $adminPage = add_menu_page( $page_title, $menu_title, $capability, $slug, $callback, $icon, $position );
+    add_action( 'load-' . $adminPage, 'load_admin_js' );
+  }
+
+  public function plugin_settings_page_content() {
+    require_once __DIR__ . '/components/views/settings_page.php';
+  }
 }
 
 register_activation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'activate' ) );
@@ -587,3 +605,16 @@ function wcsc_action_links( $links ) {
 }
 
 add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'wcsc_action_links' );
+
+function load_admin_js(){
+  add_action( 'admin_enqueue_scripts', 'enqueue_shipcloud_settings_scripts' );
+}
+
+function enqueue_shipcloud_settings_scripts($hook) {
+
+  if ( 'toplevel_page_shipcloud_for_woocommerce' != $hook ) {
+      return;
+  }
+
+  wp_enqueue_script( 'admin.js', WCSC_URLPATH . 'includes/js/admin.js', array( 'wp-util') );
+}
