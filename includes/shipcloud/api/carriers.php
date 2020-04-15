@@ -61,7 +61,8 @@ class Carriers {
 				$carrier['name'],
 				$carrier['display_name'],
 				$carrier['services'],
-				$carrier['package_types']
+        $carrier['package_types'],
+        $carrier['additional_services']
 			);
 		}
 

@@ -36,11 +36,12 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	 * @param array  $services
 	 * @param array  $packageTypes
 	 */
-	public function __construct( $name, $displayName, array $services = array(), array $packageTypes = array() ) {
+	public function __construct( $name, $displayName, array $services = array(), array $packageTypes = array(), array $additional_services = array() ) {
 		$this->name         = $name;
 		$this->displayName  = $displayName;
 		$this->services     = $services;
-		$this->packageTypes = $packageTypes;
+    $this->packageTypes = $packageTypes;
+    $this->additional_services = $additional_services;
 	}
 
 	/**
@@ -63,6 +64,18 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	 */
 	public function getServices() {
 		return $this->services;
+	}
+
+  /**
+	 * Get a list of services.
+	 *
+	 * The unordered array contains the internal names of services which the carrier offers.
+	 *
+	 * @since 1.12.0
+	 * @return array
+	 */
+	public function getAdditionalServices() {
+		return $this->additional_services;
 	}
 
 	/**
@@ -159,10 +172,11 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	 */
 	public function jsonSerialize() {
 		return array(
-			'name'          => $this->getName(),
-			'display_name'  => $this->getDisplayName(),
-			'services'      => $this->getServices(),
-			'package_types' => $this->getPackageTypes(),
+      'name'                => $this->getName(),
+      'display_name'        => $this->getDisplayName(),
+      'services'            => $this->getServices(),
+      'package_types'       => $this->getPackageTypes(),
+      'additional_services' => $this->getAdditionalServices(),
 		);
 	}
 }
