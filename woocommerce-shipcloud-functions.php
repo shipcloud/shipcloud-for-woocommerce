@@ -732,19 +732,18 @@ function _wcsc_exception_to_wp_error( $exception ) {
  *
  * @return \Shipcloud\Domain\Carrier[]
  */
-function _wcsc_carriers_get() {
-	$cached = get_transient( '_wcsc_carriers_get' );
-	if ( $cached ) {
-		return $cached;
-	}
+function _wcsc_carriers_get($force_update = false) {
+  if ( $force_update ) {
+    $data = _wcsc_api()->carriers()->get();
 
-	$data = _wcsc_api()->carriers()->get();
+    if ( $data ) {
+      set_transient( '_wcsc_carriers_get', $data, WEEK_IN_SECONDS );
+    }
 
-	if ( $data ) {
-		set_transient( '_wcsc_carriers_get', $data, WEEK_IN_SECONDS );
-	}
-
-	return $data;
+    return $data;
+  } else {
+    return get_transient( '_wcsc_carriers_get' );
+  }
 }
 
 /**
