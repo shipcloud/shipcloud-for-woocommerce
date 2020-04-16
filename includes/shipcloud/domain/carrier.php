@@ -28,6 +28,11 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	 */
 	private $services;
 
+  /**
+   * @var array
+   */
+  private $additional_services;
+
 	/**
 	 * Create new carrier.
 	 *
@@ -35,12 +40,13 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	 * @param string $displayName
 	 * @param array  $services
 	 * @param array  $packageTypes
+   * @param array  $additional_services
 	 */
 	public function __construct( $name, $displayName, array $services = array(), array $packageTypes = array(), array $additional_services = array() ) {
-		$this->name         = $name;
-		$this->displayName  = $displayName;
-		$this->services     = $services;
-    $this->packageTypes = $packageTypes;
+    $this->name                = $name;
+    $this->displayName         = $displayName;
+    $this->services            = $services;
+    $this->packageTypes        = $packageTypes;
     $this->additional_services = $additional_services;
 	}
 

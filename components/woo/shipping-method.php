@@ -1604,7 +1604,9 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		$this->init_shipcloud_api();
 
 		$allowed_carriers = $this->get_option( 'allowed_carriers' );
-		$shipcloud_carriers = _wcsc_api()->carriers()->get();
+    $shipcloud_carriers = _wcsc_api()->carriers()->get();
+    // error_log("shipcloud_carriers");
+    // error_log(print_r($shipcloud_carriers, true));
 
 		if ( is_wp_error( $shipcloud_carriers ) )
 		{
@@ -1628,16 +1630,20 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				}
 
 				if ( $carrier_is_allowed ) {
+          // error_log("shipcloud_carrier: ".print_r($shipcloud_carrier, true));
+
 					$carriers[] = new \Shipcloud\Domain\Carrier(
-						$shipcloud_carrier['name'],
-						$shipcloud_carrier['display_name'],
+						$shipcloud_carrier->getName(),
+						$shipcloud_carrier->getDisplayName(),
 						$carrier_services,
-						$shipcloud_carrier['package_types']
+            $shipcloud_carrier->getPackageTypes(),
+            $shipcloud_carrier->getAdditionalServices()
 					);
 				}
 			}
-		}
-
+    }
+    // error_log("carriers");
+    // error_log(print_r($carriers, true));
 		return $carriers;
 	}
 

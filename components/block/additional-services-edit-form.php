@@ -9,7 +9,7 @@
 </div>
 
 <div class="shipcloud_additional_service__no_additional_services shipcloud_additional_service--hidden">
-  <?php _e( 'shipcloud does not support additional services for your currently selected carrier.', 'shipcloud-for-woocommerce' ); ?>
+  <?php _e( 'The contract used for your currently selected carrier does not support additional services.', 'shipcloud-for-woocommerce' ); ?>
 </div>
 
 <div class="shipcloud_additional_service shipcloud_additional_service__saturday_delivery">

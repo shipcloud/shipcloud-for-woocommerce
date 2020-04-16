@@ -395,42 +395,52 @@ class WooCommerce_Shipcloud {
 			static::VERSION
 		);
 
-        $package_types = array(
-            'placeholder' => _x( 'Select type', 'backend: Selecting a package type option for label creation', 'wcsc' ),
-        );
-        $package_types = array_merge(
-            $package_types,
-            wcsc_api()->get_package_types()
-        );
+    $package_types = array(
+        'placeholder' => _x( 'Select type', 'backend: Selecting a package type option for label creation', 'wcsc' ),
+    );
+    $package_types = array_merge(
+        $package_types,
+        wcsc_api()->get_package_types()
+    );
+    // $additional_services = wcsc_api()->get_additional_services();
 
-		// Inject translations and data for carrier selection.
-		$services = array(
-            'placeholder' => _x( 'Select service', 'backend: Selecting a carrier service option for label creation', 'wcsc' )
-        );
-        $services = array_merge(
-            $services,
-            array_map(
-                function($service) {
-                    return $service['name'];
-                },
-                wcsc_api()->get_services()
-            )
-        );
+    $carriers_config = wcsc_shipping_method()->get_allowed_carrier_classes();
+    $all_additional_services = array();
+    foreach ( $carriers_config as $carrier ) {
+      array_push($all_additional_services, $carrier->getAdditionalServices());
+    }
+    $all_additional_services = array_merge(...array_values($all_additional_services));
+    $all_additional_services = array_unique($all_additional_services);
 
-        wp_localize_script(
-			'wcsc-multi-select',
-			'wcsc_carrier',
-			array(
-				'label' => array(
-					'carrier' => array(
-						'placeholder' => _x( 'Select carrier', 'backend: Selecting a carrier option for label creation', 'wcsc' ),
-					),
-					'package_types' => $package_types,
-					'services' => $services
-				),
-				'data' => wcsc_shipping_method()->get_allowed_carrier_classes(),
-			)
-		);
+    // Inject translations and data for carrier selection.
+    $services = array(
+      'placeholder' => _x( 'Select service', 'backend: Selecting a carrier service option for label creation', 'wcsc' )
+    );
+    $services = array_merge(
+      $services,
+      array_map(
+        function($service) {
+          return $service['name'];
+        },
+        wcsc_api()->get_services()
+      )
+    );
+
+    wp_localize_script(
+      'wcsc-multi-select',
+      'wcsc_carrier',
+      array(
+        'label' => array(
+          'carrier' => array(
+            'placeholder' => _x( 'Select carrier', 'backend: Selecting a carrier option for label creation', 'wcsc' ),
+          ),
+          'package_types' => $package_types,
+          'services' => $services
+        ),
+        'additional_services' => array_values($all_additional_services),
+        'data' => $carriers_config,
+      )
+    );
 
 		wp_register_script(
 			'shipcloud-label',
