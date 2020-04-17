@@ -72,6 +72,20 @@
           <# } else { #>
             <ul>
             <# _.each(data.model.get('additional_services'), function(additional_service) { #>
+              <# if ( additional_service.name === 'advance_notice' ) { #>
+                <li>
+                  <?php _e( 'Advance notice', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                    <# if (additional_service.properties.email) { #>
+                      <?php _e( 'eMail', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.email }}
+                    <# } if (additional_service.properties.phone) { #>
+                      <?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.phone }}
+                    <# } if (additional_service.properties.sms) { #>
+                      <?php _e( 'SMS', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.sms }}
+                    <# } #>
+                  </div>
+                </li>
+              <# } #>
               <# if ( additional_service.name === 'saturday_delivery' ) { #>
                 <li>
                   <?php _e( 'Saturday delivery', 'shipcloud-for-woocommerce' ); ?>
