@@ -294,3 +294,39 @@
   </div>
   <div class="clear"></div>
 </div>
+
+<div class="shipcloud_additional_service shipcloud_additional_service__advance_notice">
+  <div class="shipcloud_additional_service__checkbox">
+    <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
+      <input type="checkbox" name="shipment[additional_services][advance_notice][checked]" value="advance_notice" checked="checked" />
+    <# } else { #>
+      <input type="checkbox" name="shipment[additional_services][advance_notice][checked]" value="advance_notice" />
+    <# } #>
+  </div>
+  <div class="shipcloud_additional_service__text">
+    <?php _e( 'Advance notice', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'The carrier will notify the recipient about an upcoming delivery', 'shipcloud-for-woocommerce' ) ); ?>
+
+    <div class="shipcloud_additional_service--hidden shipcloud_additional_service__advance_notice--content">
+      <p class="fullsize shipcloud_advance_notice_email">
+        <input type="text" name="shipment[additional_services][advance_notice][email]" class="advance_notice_input" />
+        <label for="shipment[additional_services][advance_notice][email]">
+            <?php _e( 'eMail', 'shipcloud-for-woocommerce' ); ?>
+        </label>
+      </p>
+      <p class="fullsize shipcloud_advance_notice_phone">
+        <input type="text" name="shipment[additional_services][advance_notice][phone]" class="advance_notice_input" />
+        <label for="shipment[additional_services][advance_notice][phone]">
+            <?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?>
+        </label>
+      </p>
+      <p class="fullsize shipcloud_advance_notice_sms">
+        <input type="text" name="shipment[additional_services][advance_notice][sms]" class="advance_notice_input" />
+        <label for="shipment[additional_services][advance_notice][sms]">
+            <?php _e( 'SMS', 'shipcloud-for-woocommerce' ); ?>
+        </label>
+      </p>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>

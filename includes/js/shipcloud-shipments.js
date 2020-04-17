@@ -568,6 +568,26 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
       view.handleAdditionalServices($(this).val());
     });
 
+    // $(prefix + "input[name='shipment[additional_services][advance_notice][checked]']").change(function () {
+    //   if ($(this).prop('checked')) {
+    //     $(prefix + '.shipcloud_additional_service__advance_notice--content').fadeIn();
+    //     var carrier = $(prefix + "select[name='shipcloud_carrier']").val() || $(prefix + "input[name='shipment[carrier]']").val();
+
+    //     switch (carrier) {
+    //       case 'dhl':
+    //         $(prefix + '.shipcloud_advance_notice_email').show();
+    //         $(prefix + '.shipcloud_advance_notice_sms').hide();
+    //         break;
+    //       case 'gls':
+    //         $(prefix + '.shipcloud_advance_notice_email').show();
+    //         $(prefix + '.shipcloud_advance_notice_sms').show();
+    //         break;
+    //     }
+    //   } else {
+    //     $(prefix + '.shipcloud_additional_service__advance_notice--content').fadeOut();
+    //   }
+    // });
+
     $(prefix + "input[name='shipment[additional_services][age_based_delivery][checked]']").change(function () {
       if ($(this).prop('checked')) {
         var carrier = $(prefix + "select[name='shipcloud_carrier']").val() || $(prefix + "input[name='shipment[carrier]']").val();
@@ -646,6 +666,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
 
   handleAdditionalServices: function (carrier, shipmentId = false) {
     var $ = jQuery;
+    var self = this;
     var prefix = '';
     if (shipmentId) {
       prefix = '#' + shipmentId;
@@ -668,8 +689,43 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
       _.each(allowed_additional_services_for_carrier, function (additional_service) {
         var addserv = prefix + '.shipcloud_additional_service__' + additional_service;
         console.log('additional_service: ' + additional_service);
-        console.log('addserv: ' + addserv);
+        // console.log('addserv: ' + addserv);
         $(addserv).show();
+
+        $(prefix + "input[name='shipment[additional_services][" + additional_service + "][checked]']").change(function () {
+          switch(additional_service) {
+            case 'advance_notice':
+              self.handleAdvanceNotice(carrier, prefix);
+              break;
+            case 'cash_on_delivery':
+              self.handleCashOnDelivery(carrier, prefix);
+              break;
+            case 'ups_adult_signature':
+            case 'visual_age_check':
+              self.handleAgeBasedDelivery(carrier, prefix);
+              break;
+            }
+          if ($(this).prop('checked')) {
+            $(prefix + '.shipcloud_additional_service__' + additional_service + '--content').fadeIn();
+          } else {
+            $(prefix + '.shipcloud_additional_service__' + additional_service + '--content').fadeOut();
+          }
+        });
+
+        // handle available additional services with side conditions (based on carrier)
+        switch(additional_service) {
+          case 'advance_notice':
+            self.handleAdvanceNotice(carrier, prefix);
+            break;
+          case 'cash_on_delivery':
+            self.handleCashOnDelivery(carrier, prefix);
+            break;
+          case 'ups_adult_signature':
+          case 'visual_age_check':
+            self.handleAgeBasedDelivery(carrier, prefix);
+            break;
+        }
+
       });
     } else {
       $(prefix + '.shipcloud_additional_service__no_additional_services').show();
@@ -758,6 +814,30 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
     //     $(prefix + '.shipcloud_additional_service__no_additional_services').show();
     // }
     // this.handleCashOnDelivery(carrier, shipmentId);
+  },
+
+  handleAdvanceNotice: function (carrier, prefix) {
+    var $ = jQuery;
+    var advanceNoticeDeliveryCheckbox = $(prefix + "input[name='shipment[additional_services][advance_notice][checked]']");
+    if (advanceNoticeDeliveryCheckbox.prop('checked')) {
+      switch (carrier) {
+        case 'cargo_international':
+          $(prefix + '.shipcloud_advance_notice_email').hide();
+          $(prefix + '.shipcloud_advance_notice_phone').show();
+          $(prefix + '.shipcloud_advance_notice_sms').hide();
+          break;
+        case 'dhl':
+          $(prefix + '.shipcloud_advance_notice_email').show();
+          $(prefix + '.shipcloud_advance_notice_phone').hide();
+          $(prefix + '.shipcloud_advance_notice_sms').hide();
+          break;
+        case 'gls':
+          $(prefix + '.shipcloud_advance_notice_email').show();
+          $(prefix + '.shipcloud_advance_notice_phone').hide();
+          $(prefix + '.shipcloud_advance_notice_sms').show();
+          break;
+      }
+    }
   },
 
   handleAgeBasedDelivery: function (carrier, prefix) {
