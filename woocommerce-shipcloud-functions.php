@@ -45,7 +45,10 @@ endif;
  * @since 1.0.0
  */
 function wcsc_get_carrier_display_name( $name ) {
-	$carriers = _wcsc_carriers_get();
+  $carriers = _wcsc_carriers_get();
+  if ( count($carriers) == 0 ) {
+    $carriers = _wcsc_carriers_get(true);
+  }
 
 	foreach ( $carriers AS $carrier ) {
 		if ( $carrier->getName() === $name ) {
