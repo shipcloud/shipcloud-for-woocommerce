@@ -215,7 +215,17 @@ shipcloud.LabelForm = function (wrapperSelector) {
               'name': 'gls_guaranteed24service'
             });
             break;
-        }
+          case 'advance_notice':
+            additional_services_array.push({
+              'name': 'advance_notice',
+              'properties': {
+                'email': $('input[name="shipment[additional_services][advance_notice][email]"]').val(),
+                'phone': $('input[name="shipment[additional_services][advance_notice][phone]"]').val(),
+                'sms': $('input[name="shipment[additional_services][advance_notice][sms]"]').val()
+              }
+            });
+            break;
+          }
       });
 
       return additional_services_array;

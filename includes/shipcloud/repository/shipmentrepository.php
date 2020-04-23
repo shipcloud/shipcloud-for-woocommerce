@@ -3,76 +3,7 @@
 namespace Shipcloud\Repository;
 
 class ShipmentRepository {
-    public function availableAdditionalServices() {
-        return array (
-            'dhl' => array(
-                array(
-                    'name' => 'visual_age_check'
-                ),
-                array(
-                    'name' => 'premium_international'
-                ),
-                array(
-                    'name' => 'cash_on_delivery'
-                ),
-                array(
-                    'name' => 'advance_notice'
-                )
-            ),
-            'dhl_express' => array(
-                array(
-                    'name' => 'saturday_delivery'
-                )
-            ),
-            'dpd' => array(
-                array(
-                    'name' => 'drop_authorization'
-                ),
-                array(
-                    'name' => 'saturday_delivery'
-                ),
-                array(
-                    'name' => 'advance_notice'
-                )
-            ),
-            'gls' => array(
-                array(
-                    'name' => 'cash_on_delivery'
-                ),
-                array(
-                    'name' => 'gls_guaranteed24service'
-                ),
-                array(
-                    'name' => 'advance_notice'
-                )
-            ),
-            'go' => array(
-              array(
-                'name' => 'delivery_date'
-              ),
-              array(
-                'name' => 'delivery_note'
-              ),
-              array(
-                'name' => 'delivery_time'
-            )
-          ),
-          'ups' => array(
-                array(
-                    'name' => 'cash_on_delivery'
-                ),
-                array(
-                    'name' => 'ups_adult_signature'
-                )
-            ),
-        );
-    }
-
-    public function additionalServicesForCarrier( $carrier ) {
-        return $this->availableAdditionalServices()[$carrier];
-    }
-
-    /**
+  /**
 	 * @param $shipment_id
 	 *
 	 * @return null|\WC_Order
@@ -287,134 +218,144 @@ class ShipmentRepository {
 		);
 	}
 
-	/**
-	 * Handles additional services content in api form and returns the hash
-	 *
-	 * @return string
-	 * @since 1.8.0
-	 */
-	private function handleAdditionalServices( $data ) {
-		$submitted_additional_services = $data['additional_services'];
-		$additional_services = array();
+  /**
+   * Handles additional services content in api form and returns the hash
+   *
+   * @return string
+   * @since 1.8.0
+   */
+  private function handleAdditionalServices( $data ) {
+    $submitted_additional_services = $data['additional_services'];
+    $additional_services = array();
 
-		foreach ( $submitted_additional_services as $additional_service ) {
-			switch ( $additional_service['name'] ) {
-				case 'visual_age_check':
-					if (array_key_exists( 'minimum_age', $additional_service['properties'])) {
-						$additional_services[] = array(
-							'name' => 'visual_age_check',
-							'properties' => array(
-								'minimum_age' => $additional_service['properties']['minimum_age']
-							)
-						);
-					}
-					break;
-				case 'ups_adult_signature':
-					$additional_services[] = array(
-						'name' => 'ups_adult_signature'
-					);
-					break;
-				case 'saturday_delivery':
-					$additional_services[] = array(
-						'name' => 'saturday_delivery'
-					);
-					break;
-				case 'premium_international':
-					$additional_services[] = array(
-						'name' => 'premium_international'
-					);
-					break;
-				case 'delivery_time':
-					$additional_services[] = array(
-						'name' => 'delivery_time',
-						'properties' => array(
-							'time_of_day_earliest' => $additional_service['properties']['time_of_day_earliest'],
-							'time_of_day_latest' => $additional_service['properties']['time_of_day_latest']
-						)
-					);
-					break;
-				case 'drop_authorization':
-					if ( array_key_exists( 'message', $additional_service['properties'] ) ) {
-						$additional_services[] = array(
-							'name' => 'drop_authorization',
-							'properties' => array(
-								'message' => $additional_service['properties']['message']
-							)
-						);
-					}
-					break;
-				case 'cash_on_delivery':
-                    $additional_services[] = array(
-                        'name' => 'cash_on_delivery',
-                        'properties' => array(
-                            'amount' => $additional_service['properties']['amount'],
-                            'currency' => $additional_service['properties']['currency'],
-                            'bank_account_holder' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_account_holder'] : '',
-                            'bank_name' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_name'] : '',
-                            'bank_account_number' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_account_number'] : '',
-                            'bank_code' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_code'] : '',
-                            'reference1' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['reference1'] : ''
-                        )
-                    );
-                    break;
-				case 'gls_guaranteed24service':
-                    $additional_services[] = array(
-                        'name' => 'gls_guaranteed24service'
-                    );
-                    break;
-			}
-		}
+    foreach ( $submitted_additional_services as $additional_service ) {
+      switch ( $additional_service['name'] ) {
+        case 'visual_age_check':
+          if (array_key_exists( 'minimum_age', $additional_service['properties'])) {
+            $additional_services[] = array(
+              'name' => 'visual_age_check',
+              'properties' => array(
+                'minimum_age' => $additional_service['properties']['minimum_age']
+              )
+            );
+          }
+          break;
+        case 'ups_adult_signature':
+          $additional_services[] = array(
+            'name' => 'ups_adult_signature'
+          );
+          break;
+        case 'saturday_delivery':
+          $additional_services[] = array(
+            'name' => 'saturday_delivery'
+          );
+          break;
+        case 'premium_international':
+          $additional_services[] = array(
+            'name' => 'premium_international'
+          );
+          break;
+        case 'delivery_time':
+          $additional_services[] = array(
+            'name' => 'delivery_time',
+            'properties' => array(
+              'time_of_day_earliest' => $additional_service['properties']['time_of_day_earliest'],
+              'time_of_day_latest' => $additional_service['properties']['time_of_day_latest']
+            )
+          );
+          break;
+        case 'drop_authorization':
+          if ( array_key_exists( 'message', $additional_service['properties'] ) ) {
+            $additional_services[] = array(
+              'name' => 'drop_authorization',
+              'properties' => array(
+                'message' => $additional_service['properties']['message']
+              )
+            );
+          }
+          break;
+        case 'cash_on_delivery':
+          $additional_services[] = array(
+              'name' => 'cash_on_delivery',
+              'properties' => array(
+                  'amount' => $additional_service['properties']['amount'],
+                  'currency' => $additional_service['properties']['currency'],
+                  'bank_account_holder' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_account_holder'] : '',
+                  'bank_name' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_name'] : '',
+                  'bank_account_number' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_account_number'] : '',
+                  'bank_code' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['bank_code'] : '',
+                  'reference1' => array_key_exists( 'bank_account_holder', $additional_service['properties'] ) ? $additional_service['properties']['reference1'] : ''
+              )
+          );
+          break;
+        case 'gls_guaranteed24service':
+          $additional_services[] = array(
+              'name' => 'gls_guaranteed24service'
+          );
+          break;
+        case 'advance_notice':
+          $additional_services[] = array(
+            'name' => 'advance_notice',
+            'properties' => array(
+              'email' => array_key_exists( 'email', $additional_service['properties'] ) ? $additional_service['properties']['email'] : '',
+              'phone' => array_key_exists( 'phone', $additional_service['properties'] ) ? $additional_service['properties']['phone'] : '',
+              'sms' => array_key_exists( 'sms', $additional_service['properties'] ) ? $additional_service['properties']['sms'] : ''
+            )
+          );
+          break;
+    }
+    }
 
 		return $additional_services;
 	}
 
-	/**
-	 * Returns parses additional services from request form and returns them in an api hash
-	 *
-	 * @return string
-	 * @since 1.8.0
-	 */
-	public function additional_services_from_request($data, $order_total, $currency, $bank_information, $reference, $carrier) {
-		$additional_services = array();
+  /**
+   * Returns parses additional services from request form and returns them in an api hash
+   *
+   * @return string
+   * @since 1.8.0
+   */
+  public function additional_services_from_request($data, $order_total, $currency, $bank_information, $reference, $carrier) {
+    $additional_services = array();
 
-        foreach ( $data as $additional_service_key => $additional_service_value ) {
-			switch ( $additional_service_key ) {
-				case 'visual_age_check':
-					if (array_key_exists( 'age_based_delivery', $data ) &&
+    foreach ( $data as $additional_service_key => $additional_service_value ) {
+      switch ( $additional_service_key ) {
+        case 'visual_age_check':
+          if (array_key_exists( 'age_based_delivery', $data ) &&
                         array_key_exists( 'checked', $data['age_based_delivery'] ) &&
                         array_key_exists( 'minimum_age', $additional_service_value ) &&
                         !empty($additional_service_value['minimum_age'])
-					) {
-						$additional_services[] = array(
-							'name' => 'visual_age_check',
-							'properties' => array(
-								'minimum_age' => $additional_service_value['minimum_age']
-							)
-						);
-					}
-					break;
-				case 'ups_adult_signature':
-					if (array_key_exists( 'age_based_delivery', $data ) &&
+          ) {
+            $additional_services[] = array(
+              'name' => 'visual_age_check',
+              'properties' => array(
+                'minimum_age' => $additional_service_value['minimum_age']
+              )
+            );
+          }
+          break;
+        case 'ups_adult_signature':
+          if (array_key_exists( 'age_based_delivery', $data ) &&
                         array_key_exists( 'checked', $data['age_based_delivery'] ) &&
-						array_key_exists( 'checked', $additional_service_value )
-					) {
-						$additional_services[] = array(
-							'name' => 'ups_adult_signature'
-						);
-					}
-					break;
-				case 'saturday_delivery':
-					if (array_key_exists( 'checked', $additional_service_value )) {
-						$additional_services[] = array(
-							'name' => 'saturday_delivery'
-						);
-					}
-					break;
-				case 'premium_international':
-					$additional_services[] = array(
-						'name' => 'premium_international'
-					);
-					break;
+            array_key_exists( 'checked', $additional_service_value )
+          ) {
+            $additional_services[] = array(
+              'name' => 'ups_adult_signature'
+            );
+          }
+          break;
+        case 'saturday_delivery':
+          if (array_key_exists( 'checked', $additional_service_value )) {
+            $additional_services[] = array(
+              'name' => 'saturday_delivery'
+            );
+          }
+          break;
+        case 'premium_international':
+          $additional_services[] = array(
+            'name' => 'premium_international'
+          );
+          break;
         case 'delivery_date':
           $additional_services[] = array(
             'name' => 'delivery_date',
@@ -424,71 +365,89 @@ class ShipmentRepository {
           );
           break;
         case 'delivery_time':
-					if (array_key_exists( 'checked', $additional_service_value ) &&
-						array_key_exists( 'timeframe', $additional_service_value )
-					) {
-						$selected_option = $additional_service_value['timeframe'];
-						$time_of_day_earliest = substr($selected_option, 0, 2).':00';
-						$time_of_day_latest = substr($selected_option, 2, 2).':00';
+          if (array_key_exists( 'checked', $additional_service_value ) &&
+            array_key_exists( 'timeframe', $additional_service_value )
+          ) {
+            $selected_option = $additional_service_value['timeframe'];
+            $time_of_day_earliest = substr($selected_option, 0, 2).':00';
+            $time_of_day_latest = substr($selected_option, 2, 2).':00';
 
-						$additional_services[] = array(
-							'name' => 'delivery_time',
-							'properties' => array(
-								'time_of_day_earliest' => $time_of_day_earliest,
-								'time_of_day_latest' => $time_of_day_latest
-							)
-						);
-					}
-					break;
-				case 'drop_authorization':
-					if (array_key_exists( 'checked', $additional_service_value ) &&
-						array_key_exists( 'message', $additional_service_value ) &&
-						isset($additional_service_value['message'])
-					) {
-						$additional_services[] = array(
-							'name' => 'drop_authorization',
-							'properties' => array(
-								'message' => $additional_service_value['message']
-							)
-						);
-					}
-					break;
-				case 'cash_on_delivery':
-                    if (array_key_exists( 'checked', $additional_service_value )) {
-                        $cod_array = array(
-                            'name' => 'cash_on_delivery',
-                            'properties' => array(
-                                'amount' => $order_total,
-                                'currency' => $currency,
-                            )
-                        );
-                        switch($carrier) {
-                            case 'dhl':
-                                $cod_array['properties']['reference1'] = $reference;
-                                $cod_array['properties']['bank_account_holder'] = $bank_information->getAccountHolder();
-                                $cod_array['properties']['bank_name'] = $bank_information->getBankName();
-                                $cod_array['properties']['bank_account_number'] = $bank_information->getIban();
-                                $cod_array['properties']['bank_code'] = $bank_information->getBankSwift();
-                                break;
-                            case 'gls':
-                                $cod_array['properties']['reference1'] = $reference;
-                                break;
-                        }
-                        $additional_services[] = $cod_array;
-                    }
-                    break;
-                case 'gls_guaranteed24service':
-                    if (array_key_exists( 'checked', $data['gls_guaranteed24service'] ) &&
-                        array_key_exists( 'checked', $additional_service_value )
-                    ) {
-                        $additional_services[] = array(
-                            'name' => 'gls_guaranteed24service'
-                        );
-                    }
-                    break;
-			}
-		}
+            $additional_services[] = array(
+              'name' => 'delivery_time',
+              'properties' => array(
+                'time_of_day_earliest' => $time_of_day_earliest,
+                'time_of_day_latest' => $time_of_day_latest
+              )
+            );
+          }
+          break;
+        case 'drop_authorization':
+          if (array_key_exists( 'checked', $additional_service_value ) &&
+            array_key_exists( 'message', $additional_service_value ) &&
+            isset($additional_service_value['message'])
+          ) {
+            $additional_services[] = array(
+              'name' => 'drop_authorization',
+              'properties' => array(
+                'message' => $additional_service_value['message']
+              )
+            );
+          }
+          break;
+        case 'cash_on_delivery':
+          if (array_key_exists( 'checked', $additional_service_value )) {
+              $cod_array = array(
+                  'name' => 'cash_on_delivery',
+                  'properties' => array(
+                      'amount' => $order_total,
+                      'currency' => $currency,
+                  )
+              );
+              switch($carrier) {
+                  case 'dhl':
+                      $cod_array['properties']['reference1'] = $reference;
+                      $cod_array['properties']['bank_account_holder'] = $bank_information->getAccountHolder();
+                      $cod_array['properties']['bank_name'] = $bank_information->getBankName();
+                      $cod_array['properties']['bank_account_number'] = $bank_information->getIban();
+                      $cod_array['properties']['bank_code'] = $bank_information->getBankSwift();
+                      break;
+                  case 'gls':
+                      $cod_array['properties']['reference1'] = $reference;
+                      break;
+              }
+              $additional_services[] = $cod_array;
+          }
+          break;
+        case 'gls_guaranteed24service':
+          if (array_key_exists( 'checked', $data['gls_guaranteed24service'] ) &&
+              array_key_exists( 'checked', $additional_service_value )
+          ) {
+              $additional_services[] = array(
+                  'name' => 'gls_guaranteed24service'
+              );
+          }
+          break;
+        case 'advance_notice':
+          if (array_key_exists( 'advance_notice', $data ) &&
+            (
+              array_key_exists( 'email', $additional_service_value ) ||
+              array_key_exists( 'phone', $additional_service_value ) ||
+              array_key_exists( 'sms', $additional_service_value )
+            )
+          ) {
+            $additional_services[] = array(
+              'name' => 'visual_age_check',
+              'properties' => array(
+                'email' => $additional_service_value['email'],
+                'phone' => $additional_service_value['phone'],
+                'sms' => $additional_service_value['sms']
+              )
+            );
+          }
+          break;
 
-        return $additional_services;
-	}
+        }
+    }
+    return $additional_services;
+  }
 }

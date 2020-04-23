@@ -463,7 +463,13 @@ class WC_Shipcloud_Order
 
 		wp_nonce_field( plugin_basename( __FILE__ ), 'save_settings' );
 
-		$html = '<div id="shipment-center">';
+    $html = '<div id="shipment-center">';
+    $html .= '<input type="hidden" name="wants_carrier_email_notification" value="';
+    if ( $this->wants_carrier_email_notification() ) {
+      $html .= 'true" />';
+    } else {
+      $html .= 'false" />';
+    }
 		$html .= $this->addresses();
 		$html .= $this->parcel();
 		$html .= $this->labels();
@@ -594,10 +600,15 @@ class WC_Shipcloud_Order
 						<label for="recipient_address[last_name]"><?php _e( 'Last name', 'shipcloud-for-woocommerce' ); ?></label>
 					</p>
 
-                    <p class="fullsize">
-                        <input type="text" name="recipient_address[care_of]" value="<?php esc_attr_e( $recipient[ 'care_of' ] ); ?>" disabled>
-                        <label for="recipient_address[care_of]"><?php _e( 'Care of', 'shipcloud-for-woocommerce' ); ?></label>
-                    </p>
+          <p class="fullsize">
+            <input type="text" name="recipient_address[email]" value="<?php esc_attr_e( $recipient[ 'email' ] ); ?>" disabled>
+            <label for="recipient_address[care_of]"><?php _e( 'email', 'shipcloud-for-woocommerce' ); ?></label>
+          </p>
+
+          <p class="fullsize">
+              <input type="text" name="recipient_address[care_of]" value="<?php esc_attr_e( $recipient[ 'care_of' ] ); ?>" disabled>
+              <label for="recipient_address[care_of]"><?php _e( 'Care of', 'shipcloud-for-woocommerce' ); ?></label>
+          </p>
 
 					<p class="seventyfive">
 						<input type="text" name="recipient_address[street]" value="<?php echo $recipient[ 'street' ]; ?>" disabled>
@@ -695,7 +706,20 @@ class WC_Shipcloud_Order
 
 							shipcloud.additionalServices.render();
 
-							<?php
+              <?php
+                if ( $this->wants_carrier_email_notification() ) {
+                  $advance_notice = array(
+                    'email' => $this->get_email_for_notification(),
+                    'phone' => $this->get_phone(),
+                    'sms' => $this->get_phone()
+                  );
+              ?>
+                  shipcloud.additionalServices.addAdditionalService({
+                    'advance_notice': <?php echo(json_encode($advance_notice)); ?>
+                  });
+              <?php
+                }
+
                                 if (method_exists($order, 'get_payment_method')) {
                                     $payment_method = $order->get_payment_method();
                                 } else {
@@ -1178,13 +1202,21 @@ class WC_Shipcloud_Order
 		 */
 		$data['create_shipping_label'] = ( 'shipcloud_create_shipment_label' === $data['action'] );
 
-		$data = $this->handle_return_shipments( $data );
+    $data = $this->handle_return_shipments( $data );
 		$data = $this->sanitize_shop_owner_data( $data );
-        $data = $this->sanitize_reference_number( $data );
-        if (array_key_exists('customs_declaration', $data)) {
-            $data['customs_declaration'] = $this->handle_customs_declaration( $data['customs_declaration'] );
-        }
-		$data = $this->handle_email_notification( $data );
+    $data = $this->sanitize_reference_number( $data );
+    if (array_key_exists('customs_declaration', $data)) {
+        $data['customs_declaration'] = $this->handle_customs_declaration( $data['customs_declaration'] );
+    }
+
+    $email = $this->get_email_for_notification();
+
+    // $data = $this->handle_email_notification( $data );
+    if ( $this->wants_shipcloud_email_notification() ) {
+      $data['notification_email'] = $email;
+    }
+
+    // $data = $this->handle_advance_notice( $data, $email );
 
 		// only applicable for WooCommerce 3
 		if (class_exists('WC_DateTime')) {
@@ -1195,10 +1227,6 @@ class WC_Shipcloud_Order
 
         if (!empty($pickup)) {
             $data['pickup'] = $pickup;
-        }
-
-        if ( array_key_exists( 'additional_services', $data ) && !empty($data['additional_services']) ) {
-            $data['additional_services'] = $this->handle_additional_services( $data['additional_services'], $data['carrier'] );
         }
 
 		if ( array_key_exists( 'package', $data ) ) {
@@ -1629,7 +1657,8 @@ class WC_Shipcloud_Order
 				'last_name'  => method_exists( $order, 'get_shipping_last_name' ) ? $order->get_shipping_last_name() : $order->shipping_last_name,
 				'company'    => method_exists( $order, 'get_shipping_company' ) ? $order->get_shipping_company() : $order->shipping_company,
 				'care_of'    => $this->get_care_of(),
-				'street'     => method_exists( $order, 'get_recipient_street_name' ) ? $order->get_recipient_street_name() : $recipient_street_name,
+        'email'      => $this->get_email_for_notification(),
+        'street'     => method_exists( $order, 'get_recipient_street_name' ) ? $order->get_recipient_street_name() : $recipient_street_name,
 				'street_no'  => method_exists( $order, 'get_recipient_street_nr' ) ? $order->get_recipient_street_nr() : $recipient_street_nr,
 				'zip_code'   => method_exists( $order, 'get_shipping_postcode' ) ? $order->get_shipping_postcode() : $order->shipping_postcode,
 				'postcode'   => method_exists( $order, 'get_shipping_postcode' ) ? $order->get_shipping_postcode() : $order->shipping_postcode,
@@ -1748,23 +1777,43 @@ class WC_Shipcloud_Order
 		return array_filter( $data, array($this, 'filterArrayPreserveEmptyString') );
 	}
 
-	/**
-	 * @return string
-	 */
-	public function get_notification_email() {
-		$notification_email = $this->get_options( 'notification_email' );
+  /**
+   * @return string
+   * @since 1.12.0
+   */
+  public function wants_shipcloud_email_notification() {
+    $notification_email = $this->get_options( 'notification_email' );
 
-		if ( ! $notification_email || 'yes' !== $notification_email ) {
-			return '';
-		}
+    if ( ! $notification_email || 'yes' !== $notification_email ) {
+      return false;
+    }
 
-		$order = $this->get_wc_order();
-		if (method_exists($order, 'get_billing_email')) {
-			return $order->get_billing_email();
-		} else {
-			return $order->billing_email;
-		}
-	}
+    return true;
+  }
+
+  public function wants_carrier_email_notification() {
+    $carrier_email = $this->get_options( 'carrier_email' );
+
+    if ( ! $carrier_email || 'yes' !== $carrier_email ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @return string
+	 * @since 1.12.0
+   */
+  public function get_email_for_notification() {
+    $order = $this->get_wc_order();
+
+    if (method_exists($order, 'get_billing_email')) {
+      return $order->get_billing_email();
+    } else {
+      return $order->billing_email;
+    }
+  }
 
 	/**
 	 * @param $order_id
@@ -1996,57 +2045,6 @@ class WC_Shipcloud_Order
 
         return $allowed_additional_services;
     }
-
-    /**
-	 * @param array $data
-	 *
-	 * @return mixed
-	 */
-	private function handle_email_notification( $data ) {
-		$carrier_email      = $this->get_carrier_mail();
-		$notification_email = $this->get_notification_email();
-
-		if ( ! empty ( $notification_email ) ) {
-			// Set fallback for the notification mail
-			$data['notification_email'] = $this->get_notification_email();
-		}
-
-		if ( ! isset( $data['carrier'] ) ||
-			 ( $data['carrier'] !== 'dpd' && $data['carrier'] !== 'dhl' )
-		) {
-			// Nothing we need to handle, so we early break here.
-			return $data;
-		}
-
-		if ( ! empty ( $carrier_email ) ) {
-			if ( ! isset( $data['to']['country'] ) ) {
-			    // Might not be set in return labels.
-				$data['to']['country'] = '';
-			}
-
-			// Append advance notice service.
-            $converter = new \Shipcloud\I18n\Cldr_Converter();
-            $advance_notice_language =
-                $converter->language_from_country_code($data['to']['country']);
-
-            if( $advance_notice_language ) {
-				$data['additional_services'][] = array(
-					'name'       => 'advance_notice',
-					'properties' => array(
-						'email'    => $carrier_email,
-						'language' => $advance_notice_language
-					)
-				);
-			}
-
-			if ( isset( $data['notification_email'] ) ) {
-				// No need for notification mail after advance_notice has been added.
-				unset( $data['notification_email'] );
-			}
-		}
-
-		return $data;
-	}
 
     private function handle_customs_declaration( $data ) {
         $line_items = $data['items'];
