@@ -721,8 +721,8 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
           break;
       }
 
-      var advanceNoticeDeliveryCheckbox = $(prefix + " input[name='shipment[additional_services][advance_notice][checked]']");
-      if (advanceNoticeDeliveryCheckbox.prop('checked')) {
+      var advanceNoticeCheckbox = $(prefix + " input[name='shipment[additional_services][advance_notice][checked]']");
+      if (advanceNoticeCheckbox.prop('checked')) {
         $(prefix + ' .shipcloud_additional_service__advance_notice--content').fadeIn();
       } else {
         $(prefix + ' .shipcloud_additional_service__advance_notice--content').fadeOut();
