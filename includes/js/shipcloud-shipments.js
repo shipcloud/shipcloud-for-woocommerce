@@ -754,32 +754,42 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
     var $ = jQuery;
     var prefix = '';
     if (shipmentId) {
-      prefix = '#' + shipmentId + ' .shipcloud_cash_on_delivery';
+      prefix = '#' + shipmentId + ' .shipcloud_additional_service__cash_on_delivery';
     } else {
-      prefix = '.shipcloud_cash_on_delivery';
+      prefix = '.shipcloud_additional_service__cash_on_delivery';
     }
 
     if (_.contains(this.model.allowedAdditionalServices()[carrier], 'cash_on_delivery')) {
       $('.shipcloud_additional_service__cash_on_delivery').show();
+
+      var cashOnDeliveryCheckbox = $(prefix + " input[name='shipment[additional_services][cash_on_delivery][checked]']");
+
       switch (carrier) {
         case 'dhl':
           $(prefix + '--reference1').show();
           $(prefix + '--right').show();
-          this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
+          // this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
           break;
         case 'gls':
           $(prefix + '--reference1').show();
           // don't show bank information
           $(prefix + '--right').hide();
-          this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
+          // this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
           break;
         case 'ups':
           // don't show reference number
           $(prefix + '--reference1').hide();
           // don't show bank information
           $(prefix + '--right').hide();
-          this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
+          // this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
           break;
+      }
+      this.showAdditionalServiceIfActive('cash_on_delivery', prefix, shipmentId);
+
+      if (cashOnDeliveryCheckbox.prop('checked')) {
+        $(prefix + ' .shipcloud_cash_on_delivery').fadeIn();
+      } else {
+        $(prefix + ' .shipcloud_cash_on_delivery').fadeOut();
       }
     }
   },
@@ -794,6 +804,9 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
       }
 
       jQuery('.shipcloud_additional_service__' + additionalService).show();
+
+      // deactivate additional service after showing, because we're now handling it in JS
+      this.deactivateAdditionalService(additionalService);
     }
   }
 });
