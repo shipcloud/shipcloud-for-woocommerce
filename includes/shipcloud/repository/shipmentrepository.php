@@ -357,12 +357,14 @@ class ShipmentRepository {
           );
           break;
         case 'delivery_date':
-          $additional_services[] = array(
-            'name' => 'delivery_date',
-            'properties' => array(
-              'date' => $additional_service_value['date']
-            )
-          );
+          if (array_key_exists( 'checked', $additional_service_value )) {
+            $additional_services[] = array(
+              'name' => 'delivery_date',
+              'properties' => array(
+                'date' => $additional_service_value['date']
+              )
+            );
+          }
           break;
         case 'delivery_time':
           if (array_key_exists( 'checked', $additional_service_value ) &&
