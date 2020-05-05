@@ -428,7 +428,7 @@ class ShipmentRepository {
           }
           break;
         case 'advance_notice':
-          if (array_key_exists( 'advance_notice', $data ) &&
+          if (array_key_exists( 'checked', $additional_service_value ) &&
             (
               array_key_exists( 'email', $additional_service_value ) ||
               array_key_exists( 'phone', $additional_service_value ) ||
@@ -436,7 +436,7 @@ class ShipmentRepository {
             )
           ) {
             $additional_services[] = array(
-              'name' => 'visual_age_check',
+              'name' => 'advance_notice',
               'properties' => array(
                 'email' => $additional_service_value['email'],
                 'phone' => $additional_service_value['phone'],
