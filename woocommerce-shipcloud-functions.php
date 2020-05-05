@@ -742,10 +742,14 @@ function _wcsc_carriers_get($force_update = false) {
     if ( $data ) {
       set_transient( '_wcsc_carriers_get', $data, WEEK_IN_SECONDS );
     }
+  } else {
+    $data = get_transient( '_wcsc_carriers_get' );
+  }
 
+  if ( is_array($data) ) {
     return $data;
   } else {
-    return get_transient( '_wcsc_carriers_get' );
+    return [];
   }
 }
 
