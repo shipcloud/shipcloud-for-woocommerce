@@ -559,7 +559,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
             view.handleAdvanceNotice(carrier);
             break;
           case 'cash_on_delivery':
-            view.handleCashOnDelivery(carrier, prefix);
+            view.handleCashOnDelivery(carrier, shipmentId);
             break;
           case 'ups_adult_signature':
           case 'visual_age_check':
@@ -674,7 +674,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
             self.handleAdvanceNotice(carrier);
             break;
           case 'cash_on_delivery':
-            self.handleCashOnDelivery(carrier, prefix);
+            self.handleCashOnDelivery(carrier, shipmentId);
             break;
           case 'ups_adult_signature':
           case 'visual_age_check':
