@@ -216,13 +216,19 @@ shipcloud.LabelForm = function (wrapperSelector) {
             });
             break;
           case 'advance_notice':
+            var props = {};
+            if ($('input[name="shipment[additional_services][advance_notice][email]"]').is(':visible')) {
+              props['email'] = $('input[name="shipment[additional_services][advance_notice][email]"]').val();
+            }
+            if ($('input[name="shipment[additional_services][advance_notice][phone]"]').is(':visible')) {
+              props['phone'] = $('input[name="shipment[additional_services][advance_notice][phone]"]').val();
+            }
+            if ($('input[name="shipment[additional_services][advance_notice][sms]"]').is(':visible')) {
+              props['sms'] = $('input[name="shipment[additional_services][advance_notice][sms]"]').val();
+            }
             additional_services_array.push({
               'name': 'advance_notice',
-              'properties': {
-                'email': $('input[name="shipment[additional_services][advance_notice][email]"]').val(),
-                'phone': $('input[name="shipment[additional_services][advance_notice][phone]"]').val(),
-                'sms': $('input[name="shipment[additional_services][advance_notice][sms]"]').val()
-              }
+              'properties': props
             });
             break;
           }
