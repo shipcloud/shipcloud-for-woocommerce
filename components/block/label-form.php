@@ -121,5 +121,25 @@
             require WCSC_COMPONENTFOLDER . '/block/pickup-date-and-time.php';
         }
     ?>
+        <tr>
+          <th>
+            <?php _e( 'shipcloud notification email', 'shipcloud-for-woocommerce' ); ?>
+            <?php echo wc_help_tip( __( 'Let shipcloud update the customer about the shipping status via email', 'shipcloud-for-woocommerce' ) ); ?>
+          </th>
+          <td style="text-align: right;">
+            <?php
+              if ( $this->get_order()->wants_shipcloud_email_notification() ) {
+                $notification_email_checkbox = 'checked="checked"';
+              } else {
+                $notification_email_checkbox = '';
+              }
+             ?>
+            <input type="checkbox" name="shipcloud_notification_email_checkbox" <?php echo $notification_email_checkbox ?> />
+            <input type="text"
+                   name="shipcloud_notification_email"
+                   value="<?php echo $this->get_order()->get_email_for_notification() ?>"
+                   class="notification_email_input" />
+          </td>
+        </tr>
     </tbody>
 </table>

@@ -138,7 +138,8 @@ class ShipmentRepository {
 			'carrier'             => isset($old_structured_data['carrier']) ? $old_structured_data['carrier'] : '',
             'service'             => isset($old_structured_data['service']) ? $old_structured_data['service'] : '',
 			'carrier_tracking_no' => isset($old_structured_data['carrier_tracking_no']) ? $old_structured_data['carrier_tracking_no'] : '',
-			'reference_number'    => isset($old_structured_data['reference_number']) ? $old_structured_data['reference_number'] : '',
+      'reference_number'    => isset($old_structured_data['reference_number']) ? $old_structured_data['reference_number'] : '',
+      'notification_email'  => isset($old_structured_data['notification_email']) ? $old_structured_data['notification_email'] : '',
 			'additional_services' => isset($old_structured_data['additional_services']) ? $this->handleAdditionalServices( $old_structured_data ) : '',
             'customs_declaration' => isset($old_structured_data['customs_declaration']) ? $old_structured_data['customs_declaration'] : '',
 		);
@@ -158,37 +159,38 @@ class ShipmentRepository {
 		return $data;
 	}
 
-	public function translate_data( $data, $order_id ) {
-        $order = \WC_Shipcloud_Order::create_order( $order_id );
-		$data = array_replace_recursive(
-			array(
-				'to'   => array(
-					'company'    => '',
-					'first_name' => '',
-					'last_name'  => '',
-					'street'     => '',
-					'street_no'  => '',
-					'care_of'    => '',
-					'city'       => '',
-					'zip_code'   => '',
-					'country'    => '',
-				),
-				'from' => array(
-					'company'    => '',
-					'first_name' => '',
-					'last_name'  => '',
-					'street'     => '',
-					'street_no'  => '',
-					'care_of'    => '',
-					'city'       => '',
-					'zip_code'   => '',
-					'country'    => '',
-				),
-				'additional_services' => '',
+  public function translate_data( $data, $order_id ) {
+    $order = \WC_Shipcloud_Order::create_order( $order_id );
+    $data = array_replace_recursive(
+      array(
+        'to'   => array(
+          'company'    => '',
+          'first_name' => '',
+          'last_name'  => '',
+          'street'     => '',
+          'street_no'  => '',
+          'care_of'    => '',
+          'city'       => '',
+          'zip_code'   => '',
+          'country'    => '',
+        ),
+        'from' => array(
+          'company'    => '',
+          'first_name' => '',
+          'last_name'  => '',
+          'street'     => '',
+          'street_no'  => '',
+          'care_of'    => '',
+          'city'       => '',
+          'zip_code'   => '',
+          'country'    => '',
+        ),
+        'notification_email' => '',
+        'additional_services' => '',
                 'customs_declaration' => '',
-			),
-			$data
-		);
+      ),
+      $data
+    );
 
 		return array(
 			// Sender

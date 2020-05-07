@@ -151,6 +151,11 @@
 #shipcloud-io .parcel-form-table input[type=text].lengths{
     width:50px;
 }
+#shipcloud-io .parcel-form-table input[type=text].notification_email_input,
+#shipcloud-io .shipment-labels .shipcloud_misc input[type=text].notification_email_input {
+  width: 90%;
+}
+
 #shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest,
 #shipcloud-io .parcel-form-table .shipcloud__pickup_time--latest {
   display: inline-block;

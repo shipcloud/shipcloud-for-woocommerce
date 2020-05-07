@@ -167,6 +167,26 @@
     </fieldset>
 <# } #>
 
+<fieldset class="label-shipment-misc shipcloud_misc">
+<legend>
+  <?php esc_html_e( 'misc', 'shipcloud-for-woocommerce' ) ?>
+</legend>
+<div>
+  <label for="shipcloud_notification_email">
+    <?php _e( 'shipcloud notification email', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'Let shipcloud update the customer about the shipping status via email', 'shipcloud-for-woocommerce' ) ); ?>
+  </label>
+  <input type="checkbox" name="shipcloud_notification_email_checkbox"
+    <# if ( data.model.get('notification_email') ) { #>
+      checked="checked"
+    <# } #>
+  />
+  <input type="text"
+          name="shipcloud_notification_email"
+          value="{{ data.model.get('notification_email') }}"
+          class="notification_email_input" />
+</fieldset>
+
 <div class="clear"></div>
 
 <# if ( data.model.get('customs_declaration') ) { #>

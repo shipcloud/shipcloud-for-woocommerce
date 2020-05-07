@@ -107,6 +107,10 @@ class LabelController {
 		unset( $data['action'] );
 		unset( $data['shipment_order_id'] );
 
+    // unset notification_email if it was not checked
+    if (!isset($data['shipcloud_notification_email_checkbox'])) {
+      unset( $data['shipcloud_notification_email'] );
+    }
 		// unset some unwanted input from additional services form
 		// if (!isset($data['shipment']['additional_services']['delivery_time']['checked'])) {
 		// 	unset($data['shipment']['additional_services']['delivery_time']['timeframe']);

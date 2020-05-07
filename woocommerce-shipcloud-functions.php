@@ -643,7 +643,8 @@ function _shipcloud_shipment_data_to_postmeta( $order_id, $shipment, $data, $par
 		'height'               => $data['package']['height'],
 		'length'               => $data['package']['length'],
 		'weight'               => $data['package']['weight'],
-		'description'          => $data['package']['description'],
+    'description'          => $data['package']['description'],
+    'notification_email'   => $data['notification_email'],
 		'recipient_first_name' => $data['to']['first_name'],
 		'recipient_last_name'  => $data['to']['last_name'],
 		'recipient_company'    => $data['to']['company'],
@@ -920,8 +921,8 @@ add_action( 'woocommerce_process_product_meta', 'shipcloud_save_custom_product_f
  */
 function ajax_refresh_carriers() {
   $result = _wcsc_carriers_get(true);
-  error_log("carriers:");
-  error_log(print_r($result, true));
+  // error_log("carriers:");
+  // error_log(print_r($result, true));
 
   if ( is_wp_error( $result ) ) {
     $error_message = $result->get_error_message();

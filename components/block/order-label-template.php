@@ -305,65 +305,70 @@
         <# } #>
 
         <table class="label-shipment-status">
-            <tbody>
-            <# if ( data.model.get('description') ) { #>
-                <tr>
-                    <th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>:</th>
-                    <td>{{ data.model.get('description') }}</td>
-                </tr>
-                <# } #>
-
-                    <# if ( data.model.get('reference_number') ) { #>
-                    <tr>
-                        <th><?php _e( 'Reference number:', 'shipcloud-for-woocommerce' ); ?></th>
-                        <td>{{ data.model.get('reference_number') }}</td>
-                    </tr>
+          <tbody>
+          <# if ( data.model.get('description') ) { #>
+            <tr>
+                <th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>:</th>
+                <td>{{ data.model.get('description') }}</td>
+            </tr>
+          <# } #>
+          <# if ( data.model.get('reference_number') ) { #>
+            <tr>
+                <th><?php _e( 'Reference number:', 'shipcloud-for-woocommerce' ); ?></th>
+                <td>{{ data.model.get('reference_number') }}</td>
+            </tr>
+          <# } #>
+          <# if ( data.model.get('notification_email') ) { #>
+            <tr>
+                <th><?php _e( 'shipcloud notification email', 'shipcloud-for-woocommerce' ); ?></th>
+                <td>{{ data.model.get('notification_email') }}</td>
+            </tr>
+          <# } #>
+          <# if ( data.model.get('id') ) { #>
+            <tr>
+                <th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
+                <td>
+                  <a href="{{ data.model.get('tracking_url') }}" target="_blank">
+                    {{ data.model.get('id') }}
+                  </a>
+                </td>
+            </tr>
+          <# } #>
+          <# if ( data.model.get('label_url') ) { #>
+            <tr>
+                <th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>
+                <td class="tracking-number">
+                    <# if ( data.model.get('carrier_tracking_no') ) { #>
+                        <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank">
+                          {{ data.model.get('carrier_tracking_no') }}
+                        </a>
+                    <# } else { #>
+                        <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
                     <# } #>
-                    <# if ( data.model.get('id') ) { #>
-                    <tr>
-                        <th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
-                        <td>
-                          <a href="{{ data.model.get('tracking_url') }}" target="_blank">
-                            {{ data.model.get('id') }}
-                          </a>
-                        </td>
-                    </tr>
+                </td>
+            </tr>
+            <tr>
+                <th><?php _e( 'Tracking status:', 'shipcloud-for-woocommerce' ); ?></th>
+                <td>
+                    <# if ( data.model.get('shipment_status') ) { #>
+                        {{ data.model.get('shipment_status') }}
+                    <# } else { #>
+                        <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
                     <# } #>
-                    <# if ( data.model.get('label_url') ) { #>
-                    <tr>
-                        <th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>
-                        <td class="tracking-number">
-                            <# if ( data.model.get('carrier_tracking_no') ) { #>
-                                <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank">
-                                  {{ data.model.get('carrier_tracking_no') }}
-                                </a>
-                            <# } else { #>
-                                <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
-                            <# } #>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><?php _e( 'Tracking status:', 'shipcloud-for-woocommerce' ); ?></th>
-                        <td>
-                            <# if ( data.model.get('shipment_status') ) { #>
-                                {{ data.model.get('shipment_status') }}
-                            <# } else { #>
-                                <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
-                            <# } #>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><?php _e( 'Price:', 'shipcloud-for-woocommerce' ); ?></strong></th>
-                        <td class="price">
-                            <# if ( data.model.get('price') ) { #>
-                                {{ data.model.get('price') }}
-                            <# } else { #>
-                                <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
-                            <# } #>
-                        </td>
-                    </tr>
+                </td>
+            </tr>
+            <tr>
+                <th><?php _e( 'Price:', 'shipcloud-for-woocommerce' ); ?></strong></th>
+                <td class="price">
+                    <# if ( data.model.get('price') ) { #>
+                        {{ data.model.get('price') }}
+                    <# } else { #>
+                        <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
                     <# } #>
-            </tbody>
+                </td>
+            </tr>
+          <# } #>
+          </tbody>
         </table>
 
         <div class="label-shipment-pickup-request">

@@ -83,7 +83,15 @@ shipcloud.LabelForm = function (wrapperSelector) {
         return $('input[name="reference_number"]', self.$wrapper).val();
     };
 
-    this.getLabelData = function () {
+    self.getNotificationEmail = function () {
+      var notificationEmailCheckbox = $("input[name='shipcloud_notification_email_checkbox']");
+      if ( notificationEmailCheckbox.prop('checked') ) {
+        return $('input[name="shipcloud_notification_email"]', self.$wrapper).val();
+      }
+      return '';
+    };
+
+  this.getLabelData = function () {
         var labelJSON = {
             'order_id'         : $("#post_ID").val(),
             'from'             : self.getSender(),
@@ -95,6 +103,7 @@ shipcloud.LabelForm = function (wrapperSelector) {
             'parcel_id'        : $('select[name="parcel_id"]', self.$wrapper).val(),
             'other_description': self.getDescription(),
             'reference_number' : self.getReferenceNumber(),
+            'notification_email' : self.getNotificationEmail(),
             'additional_services': self.getAdditionalServices()
         };
 
