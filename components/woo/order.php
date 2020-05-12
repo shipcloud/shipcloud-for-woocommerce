@@ -1810,8 +1810,10 @@ class WC_Shipcloud_Order
 
     if (method_exists($order, 'get_billing_email')) {
       return $order->get_billing_email();
-    } else {
+    } else if (method_exists($order, 'billing_email')) {
       return $order->billing_email;
+    } else {
+      return '';
     }
   }
 

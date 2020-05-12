@@ -528,19 +528,28 @@ class WC_Shipcloud_Order_Bulk {
             }
         }
 
-		$data = array(
-			'to'                    => $order->get_recipient(),
-			'from'                  => $order->get_sender(),
-			'package'               => $package,
-			'carrier'               => $request['shipcloud_carrier'],
-			'service'               => $request['shipcloud_carrier_service'],
-			'reference_number'      => $reference_number,
-			'description'           => $request['other_description'],
-			'notification_email'    => $order->get_notification_email(),
-			'additional_services'   => $additional_services,
-            'customs_declaration' => $customs_declaration,
-			'create_shipping_label' => true,
-		);
+        $notification_email = '';
+        if ( isset($request['shipcloud_notification_email_checkbox'] )) {
+          if ( isset($request['shipcloud_notification_email'] ) && '' != $request['shipcloud_notification_email']) {
+            $notification_email = $request['shipcloud_notification_email'];
+          } else {
+            $notification_email = $order->get_email_for_notification();
+          }
+        }
+
+    $data = array(
+      'to'                    => $order->get_recipient(),
+      'from'                  => $order->get_sender(),
+      'package'               => $package,
+      'carrier'               => $request['shipcloud_carrier'],
+      'service'               => $request['shipcloud_carrier_service'],
+      'reference_number'      => $reference_number,
+      'description'           => $request['other_description'],
+      'notification_email'    => $notification_email,
+      'additional_services'   => $additional_services,
+      'customs_declaration'   => $customs_declaration,
+      'create_shipping_label' => true,
+    );
 
         $pickup = WC_Shipcloud_Order::handle_pickup_request($request);
         if (!empty($pickup)) {
