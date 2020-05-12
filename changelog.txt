@@ -1,7 +1,7 @@
 == Changelog ==
 
 = 1.12.0 =
-* Added: Additional service 'advance_notice' can now be (de-)activated while creating a shipping label
+* Added: Additional service 'advance_notice' can now be (de-)activated while creating/editing a shipping label
 * Added: GLS services (Express 08:00, Express 09:00, Express 10:00, Express 12:00, Pick&ShipService)
 * Added: GO! additional services delivery date, delivery note, delivery time
 * Added: Deutsche Post service Warenpost (untracked)
