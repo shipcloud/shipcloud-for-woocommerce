@@ -12,42 +12,32 @@ This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) i
 
 shipcloud is the only shipping service provider you need! With this plugin you can create shipping labels for all popular shipping carriers in Germany right out of the WooCommerce admin panel. Without the need to copy or upload your order data into another external system (no CSV upload necessary). Our direct integration with the shipcloud system not only enables you to create shipping labels, you’re also able to track your shipments for free. This way you’ll always know where your orders are currently at.
 
-Works for WooCommerce 2.6 as well as for WooCommerce 3.0 and above.
+Works for WooCommerce 2.6 as well as for WooCommerce 3.x.
 
 = All the benefits shipcloud offers you =
 
 * manage shipping labels from the WooCommerce admin panel - no need to copy data into or work in another tool
 * save a lot of time when creating shipping labels
 * choose the carrier(s) from the most popular ones that suit you best
-* same day delivery shipping possible - just use Liefery as your shipping carrier
-* let your customers decide right in the checkout, which shipping carrier they’d like to
-receive their order from
+* let your customers decide right in the checkout, which shipping carrier they’d like to receive their order from
 * use your own carrier contracts or utilize shipcloud contracts for better quotes
 * create shipping labels right from a single WooCommerce order or use batch label creation from the orders overview page
-* create return labels and enclose them with each shipment
+* create return labels
 * customized tracking page: shipcloud offers a tracking page for every shipment where your customers can track their shipment. You can customize this tracking page to follow your company design guidelines
 * customized status emails: Always keep your customers in the loop by sending customized shipping status emails that follow your company design guidelines
 
 = Complete list of supported shipping carriers =
 
-* DHL
-* DHL Express
-* Deutsche Post
-* UPS
-* Hermes
-* GLS
-* MyDPD Pro
-* MyDPD Business (formerly iloxx)
-* FedEx
-* TNT
-* GO! (General Overnight)
+Find all the supported carriers at the [shipcloud.io website](https://www.shipcloud.io/en/partner/carriers)
 
 = Additional services* =
 
 * Advance notice
 * Bulky items
 * Cash on delivery
-* DHL Delivery Time
+* Delivery date
+* Delivery time
+* Delivery note
 * DHL Packstation
 * DHL Postfiliale
 * DHL Premium International
@@ -111,6 +101,17 @@ https://youtu.be/HE3jow15x8c
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.12.0 =
+* Added: Additional service 'advance_notice' can now be (de-)activated while creating/editing shipping labels
+* Added: GLS services (Express 08:00, Express 09:00, Express 10:00, Express 12:00, Pick&ShipService)
+* Added: GO! additional services delivery date, delivery note, delivery time
+* Added: Deutsche Post service Warenpost (untracked)
+* Enhanced: Only the additional services returned by shipcloud will be shown.
+* Enhanced: Confirmed support for Wordpress 5.3.2 and WooCommerce 3.9.2
+* Enhanced: Only show configured carriers for creating shipments in admin panel
+* Fixed: detection of street number and zip code entries
+* Removed: DHL no longer supports the additional service delivery_time
 
 = 1.11.1 =
 * Enhanced: Confirmed support for Wordpress 5 and WooCommerce 3.5.5
