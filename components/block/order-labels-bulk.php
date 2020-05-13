@@ -123,6 +123,11 @@
                 </div>
               </div>
 
+              <?php
+                  $carrier_email = $this->get_options( 'carrier_email' );
+              ?>
+              <input type="hidden" name="wants_carrier_email_notification" value="<?php echo ($carrier_email && ('yes' == $carrier_email) ? 'true' : 'false') ?>" />
+
               <div class="additional_services fifty">
                 <script type="template/html" id="tmpl-shipcloud-shipment-additional-services">
                   <?php require WCSC_COMPONENTFOLDER . '/block/additional-services-edit-form.php'; ?>

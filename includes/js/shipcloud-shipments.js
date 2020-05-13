@@ -730,6 +730,11 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
       } else {
         $(prefix + ' .shipcloud_additional_service__advance_notice--content').fadeOut();
       }
+
+      advanceNoticeCheckbox.change(function () {
+        // when user (un)checks advance_notice checkbox set input wants_carrier_email_notification accordingly
+        $("input[name='wants_carrier_email_notification']").val($(this).prop('checked'));
+      });
     }
   },
 
