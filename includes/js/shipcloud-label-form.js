@@ -225,29 +225,55 @@ shipcloud.LabelForm = function (wrapperSelector) {
             });
             break;
           case 'advance_notice':
-            var props = {};
+            var props = {
+              'email': '',
+              'phone': '',
+              'sms': ''
+            };
+            var $advance_notice_email_checkbox =
+              $('input[name="shipment[additional_services][advance_notice][email_checkbox]"]');
+            var $advance_notice_phone_checkbox =
+              $('input[name="shipment[additional_services][advance_notice][phone_checkbox]"]');
+            var $advance_notice_sms_checkbox =
+              $('input[name="shipment[additional_services][advance_notice][sms_checkbox]"]');
+
             if (
-              $('input[name="shipment[additional_services][advance_notice][email]"]').is(':visible') &&
-              $('input[name="shipment[additional_services][advance_notice][email_checkbox]"]:checked').length > 0
+              $('input[name="shipment[additional_services][advance_notice][checked]"]').prop('checked') &&
+              (
+                $advance_notice_email_checkbox.prop('checked') ||
+                $advance_notice_phone_checkbox.prop('checked') ||
+                $advance_notice_sms_checkbox.prop('checked')
+              )
             ) {
-              props['email'] = $('input[name="shipment[additional_services][advance_notice][email]"]').val();
+              if (
+                $('input[name="shipment[additional_services][advance_notice][email]"]').is(':visible') &&
+                $advance_notice_email_checkbox.prop('checked')
+              ) {
+                props['email'] = $('input[name="shipment[additional_services][advance_notice][email]"]').val();
+              }
+              if (
+                $('input[name="shipment[additional_services][advance_notice][phone]"]').is(':visible') &&
+                $advance_notice_phone_checkbox.prop('checked')
+              ) {
+                props['phone'] = $('input[name="shipment[additional_services][advance_notice][phone]"]').val();
+              }
+              if (
+                $('input[name="shipment[additional_services][advance_notice][sms]"]').is(':visible') &&
+                $advance_notice_sms_checkbox.prop('checked')
+              ) {
+                props['sms'] = $('input[name="shipment[additional_services][advance_notice][sms]"]').val();
+              }
+              if(
+                '' != props['email'] ||
+                '' != props['phone'] ||
+                '' != props['sms']
+              ) {
+                additional_services_array.push({
+                  'name': 'advance_notice',
+                  'properties': props
+                });
+              }
             }
-            if (
-              $('input[name="shipment[additional_services][advance_notice][phone]"]').is(':visible') &&
-              $('input[name="shipment[additional_services][advance_notice][phone_checkbox]"]:checked').length > 0
-            ) {
-              props['phone'] = $('input[name="shipment[additional_services][advance_notice][phone]"]').val();
-            }
-            if (
-              $('input[name="shipment[additional_services][advance_notice][sms]"]').is(':visible') &&
-              $('input[name="shipment[additional_services][advance_notice][sms_checkbox]"]:checked').length > 0
-            ) {
-              props['sms'] = $('input[name="shipment[additional_services][advance_notice][sms]"]').val();
-            }
-            additional_services_array.push({
-              'name': 'advance_notice',
-              'properties': props
-            });
             break;
           }
       });
