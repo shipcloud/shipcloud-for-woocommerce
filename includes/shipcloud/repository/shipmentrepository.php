@@ -317,7 +317,7 @@ class ShipmentRepository {
    * @return string
    * @since 1.8.0
    */
-  public function additional_services_from_request($data, $order_total, $currency, $bank_information, $reference, $carrier) {
+  public function additional_services_from_request($data, $order_total, $currency, $bank_information, $reference, $carrier, $order = null) {
     $additional_services = array();
 
     foreach ( $data as $additional_service_key => $additional_service_value ) {
@@ -432,22 +432,72 @@ class ShipmentRepository {
           }
           break;
         case 'advance_notice':
-          if (array_key_exists( 'checked', $additional_service_value ) &&
-            (
-              array_key_exists( 'email', $additional_service_value ) ||
-              array_key_exists( 'phone', $additional_service_value ) ||
-              array_key_exists( 'sms', $additional_service_value )
-            )
-          ) {
-            $additional_services[] = array(
-              'name' => 'advance_notice',
-              'properties' => array(
-                'email' => $additional_service_value['email'],
-                'phone' => $additional_service_value['phone'],
-                'sms' => $additional_service_value['sms']
-              )
-            );
+          if (array_key_exists( 'checked', $additional_service_value )) {
+            $advance_notice_email = $advance_notice_phone = $advance_notice_sms = '';
+
+            if(
+              array_key_exists( 'email_checkbox', $additional_service_value )
+            ) {
+              if(
+                array_key_exists( 'email', $additional_service_value ) &&
+                '' != $additional_service_value['email']
+              ) {
+                $advance_notice_email = $additional_service_value['email'];
+              } else {
+                $advance_notice_email = $order->get_email_for_notification();
+              }
+            }
+            if(
+              array_key_exists( 'sms_checkbox', $additional_service_value )
+            ) {
+              if(
+                array_key_exists( 'sms', $additional_service_value ) &&
+                '' != $additional_service_value['sms']
+              ) {
+                $advance_notice_sms = $additional_service_value['sms'];
+              } else {
+                $advance_notice_sms = $order->get_phone();
+              }
+            }
+            if(
+              array_key_exists( 'phone_checkbox', $additional_service_value )
+            ) {
+              if(
+                array_key_exists( 'phone', $additional_service_value ) &&
+                '' != $additional_service_value['phone']
+              ) {
+                $advance_notice_phone = $additional_service_value['phone'];
+              } else {
+                $advance_notice_phone = $order->get_phone();
+              }
+            }
           }
+
+          $additional_services[] = array(
+            'name' => 'advance_notice',
+            'properties' => array(
+              'email' => $advance_notice_email,
+              'phone' => $advance_notice_phone,
+              'sms' => $advance_notice_sms
+            )
+          );
+
+          // if (array_key_exists( 'checked', $additional_service_value ) &&
+          //   (
+          //     array_key_exists( 'email', $additional_service_value ) ||
+          //     array_key_exists( 'phone', $additional_service_value ) ||
+          //     array_key_exists( 'sms', $additional_service_value )
+          //   )
+          // ) {
+          //   $additional_services[] = array(
+          //     'name' => 'advance_notice',
+          //     'properties' => array(
+          //       'email' => ($additional_service_value['email'] && $additional_service_value['email_checkbox']) ? $additional_service_value['email'] : '',
+          //       'phone' => ($additional_service_value['phone'] && $additional_service_value['phone_checkbox']) ? $additional_service_value['phone'] : '',
+          //       'sms' => ($additional_service_value['sms'] && $additional_service_value['sms_checkbox']) ? $additional_service_value['sms'] : ''
+          //     )
+          //   );
+          // }
           break;
 
         }

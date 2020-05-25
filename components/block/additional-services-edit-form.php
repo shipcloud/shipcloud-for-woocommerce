@@ -308,28 +308,81 @@
     <?php echo wc_help_tip( __( 'The carrier will notify the recipient about an upcoming delivery', 'shipcloud-for-woocommerce' ) ); ?>
 
     <div class="shipcloud_additional_service--hidden shipcloud_additional_service__advance_notice--content">
-      <p class="fullsize shipcloud_advance_notice_email">
-        <input type="text" name="shipment[additional_services][advance_notice][email]" class="advance_notice_input"
-          <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
-            value="{{ data.model.getAdditionalServiceData('advance_notice').email }}"
-          <# } #>
-        />
-        <label for="shipment[additional_services][advance_notice][email]">
-            <?php _e( 'eMail', 'shipcloud-for-woocommerce' ); ?>
-        </label>
-      </p>
-      <p class="fullsize shipcloud_advance_notice_phone">
-        <input type="text" name="shipment[additional_services][advance_notice][phone]" class="advance_notice_input" <# if ( data.model.hasAdditionalService('advance_notice') ) { #>value="{{ data.model.getAdditionalServiceData('advance_notice').phone }}"<# } #> />
-        <label for="shipment[additional_services][advance_notice][phone]">
-            <?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?>
-        </label>
-      </p>
-      <p class="fullsize shipcloud_advance_notice_sms">
-        <input type="text" name="shipment[additional_services][advance_notice][sms]" class="advance_notice_input" <# if ( data.model.hasAdditionalService('advance_notice') ) { #>value="{{ data.model.getAdditionalServiceData('advance_notice').sms }}"<# } #> />
-        <label for="shipment[additional_services][advance_notice][sms]">
-            <?php _e( 'SMS', 'shipcloud-for-woocommerce' ); ?>
-        </label>
-      </p>
+      <div class="shipcloud_advance_notice_email">
+        <table>
+          <tr>
+            <td>
+              <input type="checkbox" name="shipment[additional_services][advance_notice][email_checkbox]"
+                     value="email_checkbox" checked="checked" />
+            </td>
+            <td>
+              <input type="text" name="shipment[additional_services][advance_notice][email]" class="advance_notice_input"
+                <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
+                  value="{{ data.model.getAdditionalServiceData('advance_notice').email }}"
+                <# } #>
+              placeholder="<?php _e( 'Leave empty to use email address from order', 'shipcloud-for-woocommerce' ); ?>" />
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <label for="shipment[additional_services][advance_notice][email]">
+                <?php _e( 'eMail', 'shipcloud-for-woocommerce' ); ?>
+              </label>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="shipcloud_advance_notice_phone">
+        <table>
+          <tr>
+            <td>
+              <input type="checkbox" name="shipment[additional_services][advance_notice][phone_checkbox]"
+                     value="phone_checkbox" checked="checked" />
+            </td>
+            <td>
+              <input type="text" name="shipment[additional_services][advance_notice][phone]" class="advance_notice_input"
+                <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
+                  value="{{ data.model.getAdditionalServiceData('advance_notice').phone }}"
+                <# } #>
+              placeholder="<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>" />
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <label for="shipment[additional_services][advance_notice][phone]">
+                  <?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?>
+              </label>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="shipcloud_advance_notice_sms">
+        <table>
+          <tr>
+            <td>
+            <input type="checkbox" name="shipment[additional_services][advance_notice][sms_checkbox]"
+                   value="sms_checkbox" checked="checked" />
+            </td>
+            <td>
+              <input type="text" name="shipment[additional_services][advance_notice][sms]" class="advance_notice_input"
+                <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
+                  value="{{ data.model.getAdditionalServiceData('advance_notice').sms }}"
+                <# } #>
+              placeholder="<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>" />
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td>
+              <label for="shipment[additional_services][advance_notice][sms]">
+                  <?php _e( 'SMS', 'shipcloud-for-woocommerce' ); ?>
+              </label>
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
   <div class="clear"></div>

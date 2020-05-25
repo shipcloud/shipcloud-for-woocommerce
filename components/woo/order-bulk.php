@@ -482,7 +482,8 @@ class WC_Shipcloud_Order_Bulk {
             $currency,
             $bank_information,
             $reference_number,
-            $request['shipcloud_carrier']
+            $request['shipcloud_carrier'],
+            $order
         );
 
         $customs_declaration = '';

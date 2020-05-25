@@ -17,6 +17,7 @@ wcsc.OrderBulkActions = function (submitButton) {
     self.$submitButton.click(self.handleSubmit);
     $('#wcsc_template').change(self.handleTemplateSwitch);
     $('#shipcloud_add_customs_declaration_bulk').click(self.showCustomsDeclarationForm);
+    $('#wscs_order_bulk_pdf').click(self.submitBulkForm);
   };
 
   this.handleSubmit = function (e) {
@@ -161,6 +162,30 @@ wcsc.OrderBulkActions = function (submitButton) {
       $('input[name="customs_declaration[shown]"]').val('true');
     }
     $form.toggle();
+  };
+
+  this.submitBulkForm = function (event) {
+    event.preventDefault();
+    // console.log('submitBulkForm pressed !!!');
+    if (
+      !$('input[name="shipment[additional_services][advance_notice][email]"]').is(':visible') ||
+      $('input[name="shipment[additional_services][advance_notice][email_checkbox]"]:checked').length == 0
+    ) {
+      $('input[name="shipment[additional_services][advance_notice][email_checkbox]"]').val('');
+    }
+    if (
+      !$('input[name="shipment[additional_services][advance_notice][phone]"]').is(':visible') ||
+      $('input[name="shipment[additional_services][advance_notice][phone_checkbox]"]:checked').length == 0
+    ) {
+      $('input[name="shipment[additional_services][advance_notice][phone_checkbox]"]').val('');
+    }
+    if (
+      !$('input[name="shipment[additional_services][advance_notice][sms]"]').is(':visible') ||
+      $('input[name="shipment[additional_services][advance_notice][sms_checkbox]"]:checked').length == 0
+    ) {
+      $('input[name="shipment[additional_services][advance_notice][sms_checkbox]"]').val('');
+    }
+    this.form.submit();
   };
 
   this.hide = function () {

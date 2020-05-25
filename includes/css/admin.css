@@ -145,9 +145,12 @@
     vertical-align: top;
     width: max-content;
 }
-#shipcloud-io .parcel-form-table input[type=text]{
+#shipcloud-io .parcel-form-table input[type=text],
+#shipcloud-io .additional_services .shipcloud_additional_service__advance_notice table,
+#shipcloud-io .additional_services .shipcloud_additional_service__advance_notice td:nth-of-type(2) {
     width:100%;
 }
+
 #shipcloud-io .parcel-form-table input[type=text].lengths{
     width:50px;
 }
@@ -534,6 +537,12 @@ fieldset .shipment-labels .address {
 /**
  * Bulk
  */
+#wcsc-order-bulk-labels td {
+  padding-top: 4px;
+}
+#wcsc-order-bulk-labels .shipcloud_additional_service__advance_notice td {
+  padding: 4px 0 0 0;
+}
 #shipcloud-io .order-id-list .bulkid {
   display: inline-block;
 }

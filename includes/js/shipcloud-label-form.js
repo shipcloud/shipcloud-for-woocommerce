@@ -226,13 +226,22 @@ shipcloud.LabelForm = function (wrapperSelector) {
             break;
           case 'advance_notice':
             var props = {};
-            if ($('input[name="shipment[additional_services][advance_notice][email]"]').is(':visible')) {
+            if (
+              $('input[name="shipment[additional_services][advance_notice][email]"]').is(':visible') &&
+              $('input[name="shipment[additional_services][advance_notice][email_checkbox]"]:checked').length > 0
+            ) {
               props['email'] = $('input[name="shipment[additional_services][advance_notice][email]"]').val();
             }
-            if ($('input[name="shipment[additional_services][advance_notice][phone]"]').is(':visible')) {
+            if (
+              $('input[name="shipment[additional_services][advance_notice][phone]"]').is(':visible') &&
+              $('input[name="shipment[additional_services][advance_notice][phone_checkbox]"]:checked').length > 0
+            ) {
               props['phone'] = $('input[name="shipment[additional_services][advance_notice][phone]"]').val();
             }
-            if ($('input[name="shipment[additional_services][advance_notice][sms]"]').is(':visible')) {
+            if (
+              $('input[name="shipment[additional_services][advance_notice][sms]"]').is(':visible') &&
+              $('input[name="shipment[additional_services][advance_notice][sms_checkbox]"]:checked').length > 0
+            ) {
               props['sms'] = $('input[name="shipment[additional_services][advance_notice][sms]"]').val();
             }
             additional_services_array.push({
