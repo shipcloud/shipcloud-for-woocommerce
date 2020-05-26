@@ -916,7 +916,7 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         wp.ajax.send(
             'shipcloud_label_update',
             {
-                'data'   : this.$el.find('input,select,textarea, :input:not(:hidden)').serializeObject(),
+                'data'   : this.$el.find('select, textarea, :input:not(:hidden), input[type="hidden"]').serializeObject(),
                 'success': this.successAction.bind(this),
                 'error'  : this.errorAction.bind(this)
             }
