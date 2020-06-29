@@ -43,36 +43,55 @@ class LabelController {
 		}
 
 		$data = $this->sanitize_request( $_REQUEST );
-        $bank_information = new \Shipcloud\Domain\ValueObject\BankInformation(
-            $data['shipment']['additional_services']['cash_on_delivery']['bank_name'],
-            $data['shipment']['additional_services']['cash_on_delivery']['bank_code'],
-            $data['shipment']['additional_services']['cash_on_delivery']['bank_account_holder'],
-            $data['shipment']['additional_services']['cash_on_delivery']['bank_account_number']
-        );
 
-        $data['shipment']['additional_services'] =
-            $this->shipment_repository->additional_services_from_request(
-                $data['shipment']['additional_services'],
-                $data['shipment']['additional_services']['cash_on_delivery']['amount'],
-                $data['shipment']['additional_services']['cash_on_delivery']['currency'],
-                $bank_information,
-                $data['shipment']['additional_services']['cash_on_delivery']['reference1'],
-                $data['shipment']['carrier']
-            );
+    $bank_name = $bank_code = $bank_account_holder = $bank_account_number = '';
+    if (
+      array_key_exists( 'additional_services', $data['shipment'] ) &&
+      array_key_exists( 'cash_on_delivery', $data['shipment']['additional_services'] )
+    ) {
+      if (array_key_exists( 'bank_name', $data['shipment']['additional_services']['cash_on_delivery'] )) {
+        $bank_name = $data['shipment']['additional_services']['cash_on_delivery']['bank_name'];
+      }
+      if (array_key_exists( 'bank_code', $data['shipment']['additional_services']['cash_on_delivery'] )) {
+        $bank_code = $data['shipment']['additional_services']['cash_on_delivery']['bank_code'];
+      }
+      if (array_key_exists( 'bank_account_holder', $data['shipment']['additional_services']['cash_on_delivery'] )) {
+        $bank_account_holder = $data['shipment']['additional_services']['cash_on_delivery']['bank_account_holder'];
+      }
+      if (array_key_exists( 'bank_account_number', $data['shipment']['additional_services']['cash_on_delivery'] )) {
+        $bank_account_number = $data['shipment']['additional_services']['cash_on_delivery']['bank_account_number'];
+      }
+    }
+    $bank_information = new \Shipcloud\Domain\ValueObject\BankInformation(
+      $bank_name,
+      $bank_code,
+      $bank_account_holder,
+      $bank_account_number
+    );
 
         $pickup = \WC_Shipcloud_Order::handle_pickup_request($data);
         if (!empty($pickup)) {
             $data['shipment']['pickup'] = $pickup;
         }
 
-		try {
-            $order = $this->shipment_repository->findOrderByShipmentId( $data['shipment']['id'] );
+    try {
+      $order = $this->shipment_repository->findOrderByShipmentId( $data['shipment']['id'] );
+      $sc_order = \WC_Shipcloud_Order::create_order( $order->get_id() );
+
+      $data['shipment']['additional_services'] =
+        $this->shipment_repository->additional_services_from_request(
+            $data['shipment']['additional_services'],
+            $data['shipment']['additional_services']['cash_on_delivery']['amount'],
+            $data['shipment']['additional_services']['cash_on_delivery']['currency'],
+            $bank_information,
+            $data['shipment']['additional_services']['cash_on_delivery']['reference1'],
+            $data['shipment']['carrier'],
+            $sc_order
+        );
 
             if (array_key_exists('customs_declaration', $data)) {
-                $sc_order = \WC_Shipcloud_Order::create_order( $order->get_id() );
                 $data['shipment']['customs_declaration'] = $this->handle_customs_declaration( $data['customs_declaration'] );
                 unset($data['customs_declaration']);
-                error_log('data after handle_customs_declaration: '.print_r($data, true));
             }
 
 			$this->shipment_repository->update(
