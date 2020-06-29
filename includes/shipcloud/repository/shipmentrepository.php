@@ -435,71 +435,55 @@ class ShipmentRepository {
           if (array_key_exists( 'checked', $additional_service_value )) {
             $advance_notice_email = $advance_notice_phone = $advance_notice_sms = '';
 
+            $props = array();
+
             if(
-              array_key_exists( 'email_checkbox', $additional_service_value )
+              array_key_exists( 'email_checkbox', $additional_service_value ) &&
+              'email_checkbox' == $additional_service_value['email_checkbox']
             ) {
               if(
                 array_key_exists( 'email', $additional_service_value ) &&
                 '' != $additional_service_value['email']
               ) {
-                $advance_notice_email = $additional_service_value['email'];
+                $props['email'] = $additional_service_value['email'];
               } else {
-                $advance_notice_email = $order->get_email_for_notification();
+                $props['email'] = $order->get_email_for_notification();
               }
             }
             if(
-              array_key_exists( 'sms_checkbox', $additional_service_value )
+              array_key_exists( 'sms_checkbox', $additional_service_value ) &&
+              'sms_checkbox' == $additional_service_value['sms_checkbox']
             ) {
               if(
                 array_key_exists( 'sms', $additional_service_value ) &&
                 '' != $additional_service_value['sms']
               ) {
-                $advance_notice_sms = $additional_service_value['sms'];
+                $props['sms'] = $additional_service_value['sms'];
               } else {
-                $advance_notice_sms = $order->get_phone();
+                $props['sms'] = $order->get_phone();
               }
             }
             if(
-              array_key_exists( 'phone_checkbox', $additional_service_value )
+              array_key_exists( 'phone_checkbox', $additional_service_value ) &&
+              'phone_checkbox' == $additional_service_value['phone_checkbox']
             ) {
               if(
                 array_key_exists( 'phone', $additional_service_value ) &&
                 '' != $additional_service_value['phone']
               ) {
-                $advance_notice_phone = $additional_service_value['phone'];
+                $props['phone'] = $additional_service_value['phone'];
               } else {
-                $advance_notice_phone = $order->get_phone();
+                $props['phone'] = $order->get_phone();
               }
             }
+
+            $additional_services[] = array(
+              'name' => 'advance_notice',
+              'properties' => $props
+            );
           }
 
-          $additional_services[] = array(
-            'name' => 'advance_notice',
-            'properties' => array(
-              'email' => $advance_notice_email,
-              'phone' => $advance_notice_phone,
-              'sms' => $advance_notice_sms
-            )
-          );
-
-          // if (array_key_exists( 'checked', $additional_service_value ) &&
-          //   (
-          //     array_key_exists( 'email', $additional_service_value ) ||
-          //     array_key_exists( 'phone', $additional_service_value ) ||
-          //     array_key_exists( 'sms', $additional_service_value )
-          //   )
-          // ) {
-          //   $additional_services[] = array(
-          //     'name' => 'advance_notice',
-          //     'properties' => array(
-          //       'email' => ($additional_service_value['email'] && $additional_service_value['email_checkbox']) ? $additional_service_value['email'] : '',
-          //       'phone' => ($additional_service_value['phone'] && $additional_service_value['phone_checkbox']) ? $additional_service_value['phone'] : '',
-          //       'sms' => ($additional_service_value['sms'] && $additional_service_value['sms_checkbox']) ? $additional_service_value['sms'] : ''
-          //     )
-          //   );
-          // }
           break;
-
         }
     }
     return $additional_services;
