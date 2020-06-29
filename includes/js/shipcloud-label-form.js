@@ -225,11 +225,7 @@ shipcloud.LabelForm = function (wrapperSelector) {
             });
             break;
           case 'advance_notice':
-            var props = {
-              'email': '',
-              'phone': '',
-              'sms': ''
-            };
+            var props = {};
             var $advance_notice_email_checkbox =
               $('input[name="shipment[additional_services][advance_notice][email_checkbox]"]');
             var $advance_notice_phone_checkbox =
