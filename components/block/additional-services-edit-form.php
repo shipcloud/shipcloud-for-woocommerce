@@ -228,7 +228,12 @@
         <div class="fifty">
             <div class="shipcloud_cash_on_delivery--left">
                 <p class="fullsize">
-                    <input type="text" name="shipment[additional_services][cash_on_delivery][amount]" class="cash_on_delivery_input" />
+                    <input type="text" name="shipment[additional_services][cash_on_delivery][amount]"
+                      class="cash_on_delivery_input"
+                      <# if ( data.model.hasAdditionalService('cash_on_delivery') ) { #>
+                        value="{{ data.model.getAdditionalServiceData('cash_on_delivery').amount }}"
+                      <# } #>
+                    />
                     <label for="shipment[additional_services][cash_on_delivery][amount]">
                         <?php _e( 'Amount', 'shipcloud-for-woocommerce' ); ?>
                     </label>
@@ -251,25 +256,25 @@
             <div class="shipcloud_cash_on_delivery--right">
                 <p class="fullsize">
                     <input type="text" name="shipment[additional_services][cash_on_delivery][bank_account_holder]" class="cash_on_delivery_input" />
-                    <label for="">
+                    <label for="shipment[additional_services][cash_on_delivery][bank_account_holder]">
                         <?php _e( 'Bank account holder', 'shipcloud-for-woocommerce' ); ?>
                     </label>
                 </p>
                 <p class="fullsize">
                     <input type="text" name="shipment[additional_services][cash_on_delivery][bank_name]" class="cash_on_delivery_input" />
-                    <label for="">
+                    <label for="shipment[additional_services][cash_on_delivery][bank_name]">
                         <?php _e( 'Bank name', 'shipcloud-for-woocommerce' ); ?>
                     </label>
                 </p>
                 <p class="fullsize">
                     <input type="text" name="shipment[additional_services][cash_on_delivery][bank_account_number]" class="cash_on_delivery_input" />
-                    <label for="">
+                    <label for="shipment[additional_services][cash_on_delivery][bank_account_number]">
                         <?php _e( 'Bank account number (IBAN)', 'shipcloud-for-woocommerce' ); ?>
                     </label>
                 </p>
                 <p class="fullsize">
                     <input type="text" name="shipment[additional_services][cash_on_delivery][bank_code]" class="cash_on_delivery_input" />
-                    <label for="">
+                    <label for="shipment[additional_services][cash_on_delivery][bank_code]">
                         <?php _e( 'Bank code (SWIFT)', 'shipcloud-for-woocommerce' ); ?>
                     </label>
                 </p>
