@@ -325,7 +325,7 @@
                 <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
                   value="{{ data.model.getAdditionalServiceData('advance_notice').email }}"
                 <# } #>
-              placeholder="<?php _e( 'Leave empty to use email address from order', 'shipcloud-for-woocommerce' ); ?>" />
+              />
             </td>
           </tr>
           <tr>
@@ -350,7 +350,7 @@
                 <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
                   value="{{ data.model.getAdditionalServiceData('advance_notice').phone }}"
                 <# } #>
-              placeholder="<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>" />
+              />
             </td>
           </tr>
           <tr>
@@ -375,7 +375,7 @@
                 <# if ( data.model.hasAdditionalService('advance_notice') ) { #>
                   value="{{ data.model.getAdditionalServiceData('advance_notice').sms }}"
                 <# } #>
-              placeholder="<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>" />
+              />
             </td>
           </tr>
           <tr>

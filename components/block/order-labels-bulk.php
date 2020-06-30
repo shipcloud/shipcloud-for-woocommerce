@@ -155,6 +155,18 @@
                     shipcloud.additionalServices.addAdditionalService({
                         'cash_on_delivery': <?php echo(json_encode($cod_data)); ?>
                     });
+
+                    // set placeholders for bulk actions
+                    $("input[name='shipment[additional_services][advance_notice][email]']").prop(
+                      "placeholder", "<?php _e( 'Leave empty to use email address from order', 'shipcloud-for-woocommerce' ); ?>"
+                    );
+                    $("input[name='shipment[additional_services][advance_notice][phone]']").prop(
+                      "placeholder", "<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>"
+                    );
+                    $("input[name='shipment[additional_services][advance_notice][sms]']").prop(
+                      "placeholder", "<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>"
+                    );
+
                   });
                 </script>
               </div>
