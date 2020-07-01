@@ -119,19 +119,16 @@ class WCSC_Woo extends WCSC_Component
 	{
 		require_once( __DIR__ . '/shipping-method.php' );
 
-		if ( wcsc_is_enabled() )
-		{
-			require_once( __DIR__ . '/order.php' );
-			require_once( __DIR__ . '/order-bulk.php' );
-			require_once( __DIR__ . '/shipping-classes.php' );
+    require_once( __DIR__ . '/order.php' );
+    require_once( __DIR__ . '/order-bulk.php' );
+    require_once( __DIR__ . '/shipping-classes.php' );
 
-			// Shipment Listener for WebHook Calls
-			add_action( 'woocommerce_api_shipcloud', array( 'WC_Shipcloud_Shipping', 'shipment_listener' ) );
+    // Shipment Listener for WebHook Calls
+    add_action( 'woocommerce_api_shipcloud', array( 'WC_Shipcloud_Shipping', 'shipment_listener' ) );
 
-			// Additional Shipment calculation Field
-			add_action( 'woocommerce_shipping_calculator_enable_city', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_form_fields' ) );
-			add_action( 'woocommerce_calculated_shipping', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_fields' ) );
-		}
+    // Additional Shipment calculation Field
+    add_action( 'woocommerce_shipping_calculator_enable_city', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_form_fields' ) );
+    add_action( 'woocommerce_calculated_shipping', array( 'WC_Shipcloud_Shipping', 'add_calculate_shipping_fields' ) );
 	}
 }
 

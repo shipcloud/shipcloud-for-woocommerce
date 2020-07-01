@@ -186,41 +186,6 @@ function wcsc_translate_shipcloud_text( $error_text ) {
 }
 
 /**
- * Checking if payment gateway is enabled
- *
- * @return bool
- *
- * @since 1.0.0
- */
-function wcsc_is_enabled() {
-	$settings = get_option( 'woocommerce_shipcloud_settings' );
-
-	// Needed if options are saved in this moment
-	if ( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) ) {
-		return true;
-	}
-
-	// Needed if options are saved in this moment
-	if ( array_key_exists( 'woocommerce_shipcloud_api_key', $_POST ) && ! array_key_exists( 'woocommerce_shipcloud_enabled', $_POST ) ) {
-		return false;
-	}
-
-	if ( '' == $settings ) {
-		return false;
-	}
-
-	if ( ! array_key_exists( 'enabled', $settings ) ) {
-		return false;
-	}
-
-	if ( 'yes' != $settings['enabled'] ) {
-		return false;
-	}
-
-	return true;
-}
-
-/**
  * Checking if we are on shipclud.io settings screen
  *
  * @return bool
@@ -284,7 +249,6 @@ function shipcloud_admin_is_on_single_order_page() {
     return false;
 }
 
-wcsc_is_enabled();
 
 /**
  * Deleting values

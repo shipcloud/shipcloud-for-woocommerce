@@ -173,11 +173,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
 		$this->check_api_key();
 
-		// If Gateway is disabled just return true for passing further error meessages
-		if ( $this->is_disabled() ) {
-			return true;
-		}
-
 		// Testing Connection on Settings Page
 		if ( wcsc_is_settings_screen() ) {
 			if ( ! $this->init_settings_screen() ) {
@@ -280,12 +275,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		}
 
 		$this->form_fields = array(
-			'enabled'                           => array(
-				'title'   => __( 'Enable', 'shipcloud-for-woocommerce' ),
-				'type'    => 'checkbox',
-				'label'   => __( 'Enable shipcloud', 'shipcloud-for-woocommerce' ),
-				'default' => 'no'
-			),
 			'api_key'                           => array(
 				'title'       => __( 'api key', 'shipcloud-for-woocommerce' ),
 				'type'        => 'text',
@@ -1471,17 +1460,6 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		);
 
 		return $virtual_parcel;
-	}
-
-	/**
-	 * @return bool
-	 */
-	public function is_disabled() {
-		return ( 'no' === $this->get_option( 'enabled' ) && ! isset( $_POST['woocommerce_shipcloud_enabled'] ) )
-			   || (
-				   isset( $_POST['woocommerce_shipcloud_api_key'] )
-				   && ! isset( $_POST['woocommerce_shipcloud_enabled'] )
-			   );
 	}
 
 	/**

@@ -54,11 +54,6 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 	{
 		$this->go_wcsc_settings_page();
 
-		if( $this->byId( 'woocommerce_shipcloud_enabled' )->selected() )
-		{
-			$this->byId( 'woocommerce_shipcloud_enabled' )->click();
-		}
-
 		$this->byId( 'woocommerce_shipcloud_api_key' )->clear();
 
 		if( $this->byId( 'woocommerce_shipcloud_debug' )->selected() )
@@ -140,30 +135,5 @@ class WoocommerceShipcloud_Tests extends WooCommerce_Tests
 		$this->assertEquals( $data[ 'city' ], $this->byId( 'woocommerce_shipcloud_sender_city' )->attribute( 'value' ) );
 
 		$this->assertTrue( $this->byId( 'woocommerce_shipcloud_debug' )->selected() );
-	}
-
-	public function enable_wcsc_plugin()
-	{
-		if( !$this->is_wcsc_enabled() )
-		{
-			$this->byId( 'woocommerce_shipcloud_enabled' )->click();
-			$this->save_wcsc_settings();
-			$this->assertTrue( $this->byId( 'woocommerce_shipcloud_enabled' )->selected() );
-		}
-	}
-
-	public function is_wcsc_enabled()
-	{
-		return $this->byId( 'woocommerce_shipcloud_enabled' )->selected();
-	}
-
-	public function disable_wcsc_plugin()
-	{
-		if( $this->is_wcsc_enabled() )
-		{
-			$this->byId( 'woocommerce_shipcloud_enabled' )->click();
-			$this->save_wcsc_settings();
-			$this->assertFalse( $this->byId( 'woocommerce_shipcloud_enabled' )->selected() );
-		}
 	}
 }

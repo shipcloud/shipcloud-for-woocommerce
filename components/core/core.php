@@ -46,11 +46,6 @@ class WCSC_Core extends WCSC_Component
 	 */
 	protected function includes()
 	{
-		if ( ! wcsc_is_enabled() )
-		{
-			return;
-		}
-
 		require_once( __DIR__ . '/core-functions.php' );
 		require_once( __DIR__ . '/parcel-template.php' );
 	}
