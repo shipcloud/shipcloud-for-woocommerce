@@ -2,8 +2,8 @@
 Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
-Tested up to: 5.3.2
-Stable tag: 1.11.1
+Tested up to: 5.4.2
+Stable tag: 1.12.0
 Requires PHP: 7.2.3
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
@@ -109,7 +109,7 @@ https://youtu.be/HE3jow15x8c
 * Added: Deutsche Post service Warenpost (untracked)
 * Enhanced: Additional service 'advance_notice' can now be (de-)activated while creating/editing shipping labels
 * Enhanced: Only the additional services returned by shipcloud will be shown.
-* Enhanced: Confirmed support for Wordpress 5.3.2 and WooCommerce 3.9.2
+* Enhanced: Confirmed support for Wordpress 5.4.2 and WooCommerce 3.9.2
 * Enhanced: Only show configured carriers for creating shipments in admin panel
 * Enhanced: Carriers now get reloaded from shipcloud api when saving the plugin settings
 * Fixed: detection of street number and zip code entries

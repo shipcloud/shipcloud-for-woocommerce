@@ -6,7 +6,7 @@
 * Added: Deutsche Post service Warenpost (untracked)
 * Enhanced: Additional service 'advance_notice' can now be (de-)activated while creating/editing shipping labels
 * Enhanced: Only the additional services returned by shipcloud will be shown.
-* Enhanced: Confirmed support for Wordpress 5.3.2 and WooCommerce 3.9.2
+* Enhanced: Confirmed support for Wordpress 5.4.2 and WooCommerce 3.9.2
 * Enhanced: Only show configured carriers for creating shipments in admin panel
 * Enhanced: Carriers now get reloaded from shipcloud api when saving the plugin settings
 * Fixed: detection of street number and zip code entries
