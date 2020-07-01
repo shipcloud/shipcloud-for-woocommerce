@@ -103,15 +103,17 @@ https://youtu.be/HE3jow15x8c
 == Changelog ==
 
 = 1.12.0 =
-* Added: Additional service 'advance_notice' can now be (de-)activated while creating/editing shipping labels
 * Added: GLS services (Express 08:00, Express 09:00, Express 10:00, Express 12:00, Pick&ShipService)
 * Added: GO! additional services delivery date, delivery note, delivery time
 * Added: Deutsche Post service Warenpost (untracked)
+* Enhanced: Additional service 'advance_notice' can now be (de-)activated while creating/editing shipping labels
 * Enhanced: Only the additional services returned by shipcloud will be shown.
 * Enhanced: Confirmed support for Wordpress 5.3.2 and WooCommerce 3.9.2
 * Enhanced: Only show configured carriers for creating shipments in admin panel
+* Enhanced: Carriers now get reloaded from shipcloud api when saving the plugin settings
 * Fixed: detection of street number and zip code entries
 * Removed: DHL no longer supports the additional service delivery_time
+* Removed: Option to (de-)activate the plugin from settings page
 
 = 1.11.1 =
 * Enhanced: Confirmed support for Wordpress 5 and WooCommerce 3.5.5
