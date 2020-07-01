@@ -37,7 +37,7 @@ Find all the supported carriers at the [shipcloud.io website](https://www.shipcl
 * Cash on delivery
 * Delivery date
 * Delivery time
-* Delivery note
+* Drop authorization
 * DHL Packstation
 * DHL Postfiliale
 * DHL Premium International
@@ -45,6 +45,7 @@ Find all the supported carriers at the [shipcloud.io website](https://www.shipcl
 * Drop authorization
 * GLS Guaranteed24Service
 * GLS FlexDeliveryService
+* GO! Delivery note
 * Higher insurance
 * Saturday delivery
 * UPS Adult Signature
