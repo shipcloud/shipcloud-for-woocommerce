@@ -913,32 +913,3 @@ function shipcloud_save_custom_product_fields( $post_id ) {
     $product->save();
 }
 add_action( 'woocommerce_process_product_meta', 'shipcloud_save_custom_product_fields' );
-
-/**
- * Refresh carriers from api
- *
- * @since 1.12.0
- */
-function ajax_refresh_carriers() {
-  $result = _wcsc_carriers_get(true);
-  // error_log("carriers:");
-  // error_log(print_r($result, true));
-
-  if ( is_wp_error( $result ) ) {
-    $error_message = $result->get_error_message();
-
-    echo json_encode(
-      array(
-      'status' => 'ERROR',
-      'errors' => nl2br( $error_message )
-      )
-    );
-
-    exit;
-  }
-
-  wp_send_json_success( $result );
-  exit;
-}
-
-add_action( 'wp_ajax_shipcloud_refresh_carriers', 'ajax_refresh_carriers' );

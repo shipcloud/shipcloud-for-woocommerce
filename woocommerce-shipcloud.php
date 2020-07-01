@@ -80,8 +80,6 @@ class WooCommerce_Shipcloud {
 			spl_autoload_register( '__autoload' );
 		}
 		spl_autoload_register( array( $this, 'autoload' ) );
-
-    add_action( 'admin_menu', array( $this, 'create_shipcloud_plugin_settings_page' ) );
 	}
 
 	/**
@@ -552,23 +550,6 @@ class WooCommerce_Shipcloud {
         </div>
     <?php
     }
-
-  public function create_shipcloud_plugin_settings_page() {
-    $page_title = _( 'shipcloud for WooCommerce settings', 'shipcloud-for-woocommerce' );
-    $menu_title = 'shipcloud';
-    $capability = 'manage_options';
-    $slug = 'shipcloud_for_woocommerce';
-    $callback = array( $this, 'plugin_settings_page_content' );
-    $icon = 'none';
-    $position = 100;
-
-    $adminPage = add_menu_page( $page_title, $menu_title, $capability, $slug, $callback, $icon, $position );
-    add_action( 'load-' . $adminPage, 'load_admin_js' );
-  }
-
-  public function plugin_settings_page_content() {
-    require_once __DIR__ . '/components/views/settings_page.php';
-  }
 }
 
 register_activation_hook( __FILE__, array( 'WooCommerce_Shipcloud', 'activate' ) );

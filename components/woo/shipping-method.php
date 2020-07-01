@@ -850,6 +850,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 */
 	public function process_admin_options()
 	{
+    $carriers = _wcsc_carriers_get(true);
+    $this->log('updated list of carriers: '.json_encode($carriers));
 		parent::process_admin_options();
 	}
 
