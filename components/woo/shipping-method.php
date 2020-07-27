@@ -1583,8 +1583,14 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	public function get_allowed_carrier_classes() {
 		$this->init_shipcloud_api();
 
-		$allowed_carriers = $this->get_option( 'allowed_carriers' );
-    $shipcloud_carriers = _wcsc_api()->carriers()->get();
+    $allowed_carriers = $this->get_option( 'allowed_carriers' );
+    $shipcloud_carriers = _wcsc_carriers_get();
+
+    if ( count($shipcloud_carriers) == 0 ) {
+      self::log('no carriers found in transient - forcing update');
+      $shipcloud_carriers = _wcsc_carriers_get(true);
+    }
+
     // error_log("shipcloud_carriers");
     // error_log(print_r($shipcloud_carriers, true));
 
