@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
 Tested up to: 5.4.2
-Stable tag: 1.12.0
+Stable tag: 1.12.1
 Requires PHP: 7.2.3
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
@@ -102,6 +102,9 @@ https://youtu.be/HE3jow15x8c
 8. Adjust sender and/or receiver addresses base on your current use case
 
 == Changelog ==
+
+= 1.12.1 =
+* Fixed: Getting carriers from shipcloud API on every order detail page call
 
 = 1.12.0 =
 * Added: GLS services (Express 08:00, Express 09:00, Express 10:00, Express 12:00, Pick&ShipService)

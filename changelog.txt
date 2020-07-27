@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.12.1 =
+* Fixed: Getting carriers from shipcloud API on every order detail page call
+
 = 1.12.0 =
 * Added: GLS services (Express 08:00, Express 09:00, Express 10:00, Express 12:00, Pick&ShipService)
 * Added: GO! additional services delivery date, delivery note, delivery time
