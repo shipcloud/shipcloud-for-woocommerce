@@ -260,9 +260,9 @@ shipcloud.LabelForm = function (wrapperSelector) {
                 props['sms'] = $('input[name="shipment[additional_services][advance_notice][sms]"]').val();
               }
               if(
-                '' != props['email'] ||
-                '' != props['phone'] ||
-                '' != props['sms']
+                '' != props['email'] && undefined != props['email'] ||
+                '' != props['phone'] && undefined != props['phone'] ||
+                '' != props['sms'] && undefined != props['sms']
               ) {
                 additional_services_array.push({
                   'name': 'advance_notice',
