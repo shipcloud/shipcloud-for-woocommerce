@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.12.2 =
+* Fixed: Making sure advance_notice is only transmitted when it's defined
+
 = 1.12.1 =
 * Fixed: Getting carriers from shipcloud API on every order detail page call
 
