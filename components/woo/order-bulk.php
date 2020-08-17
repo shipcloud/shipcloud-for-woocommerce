@@ -437,6 +437,9 @@ class WC_Shipcloud_Order_Bulk {
 	protected function create_label_for_order( $order_id, $request ) {
 		$order = WC_Shipcloud_Order::create_order( $order_id );
         $request = $order->sanitize_reference_number($request);
+    $order = WC_Shipcloud_Order::create_order( $order_id );
+    $request = $order->sanitize_reference_number($request);
+    $carrier = $request['shipcloud_carrier'];
 
 		$use_calculated_weight = isset($request['shipcloud_use_calculated_weight']) ? $request['shipcloud_use_calculated_weight'] : '';
 		if ( $use_calculated_weight == 'use_calculated_weight' ) {
@@ -482,7 +485,7 @@ class WC_Shipcloud_Order_Bulk {
             $currency,
             $bank_information,
             $reference_number,
-            $request['shipcloud_carrier'],
+            $carrier,
             $order
         );
 
@@ -542,7 +545,7 @@ class WC_Shipcloud_Order_Bulk {
       'to'                    => $order->get_recipient(),
       'from'                  => $order->get_sender(),
       'package'               => $package,
-      'carrier'               => $request['shipcloud_carrier'],
+      'carrier'               => $carrier,
       'service'               => $request['shipcloud_carrier_service'],
       'reference_number'      => $reference_number,
       'description'           => $request['other_description'],
@@ -563,9 +566,9 @@ class WC_Shipcloud_Order_Bulk {
 
 			$order->get_wc_order()->add_order_note( __( 'shipcloud.io label was created.', 'woocommerce-shipcloud' ) );
 
-			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $request['shipcloud_carrier'] ) . ')' );
+			WC_Shipcloud_Shipping::log( 'Order #' . $order->get_wc_order()->get_order_number() . ' - Created shipment successful (' . wcsc_get_carrier_display_name( $carrier ) . ')' );
 
-			$parcel_title = wcsc_get_carrier_display_name( $request['shipcloud_carrier'] )
+			$parcel_title = wcsc_get_carrier_display_name( $carrier )
 							. ' - '
 							. $request['parcel_width']
 							. __( 'x', 'woocommerce-shipcloud' )
@@ -585,7 +588,7 @@ class WC_Shipcloud_Order_Bulk {
 				'price'               => $shipment->getPrice(),
 				'parcel_id'           => $shipment->getId(),
 				'parcel_title'        => $parcel_title,
-				'carrier'             => $request['shipcloud_carrier'],
+				'carrier'             => $carrier,
 				'width'               => wc_format_decimal( $request['parcel_width'] ),
 				'height'              => wc_format_decimal( $request['parcel_height'] ),
 				'length'              => wc_format_decimal( $request['parcel_length'] ),
