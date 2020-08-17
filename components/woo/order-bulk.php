@@ -555,10 +555,15 @@ class WC_Shipcloud_Order_Bulk {
       'create_shipping_label' => true,
     );
 
-        $pickup = WC_Shipcloud_Order::handle_pickup_request($request);
-        if (!empty($pickup)) {
-            $data['pickup'] = $pickup;
-        }
+
+    // WC_Shipcloud_Shipping::log('carrier: '.$carrier);
+    $carrier_with_pickup = array("dhl_express", "go", "tnt");
+    if ( in_array($carrier, $carrier_with_pickup) ) {
+      $pickup = WC_Shipcloud_Order::handle_pickup_request($request);
+      if (!empty($pickup)) {
+          $data['pickup'] = $pickup;
+      }
+    }
 
 		try {
 			WC_Shipcloud_Shipping::log('calling shipcloud api to create label with the following data: '.json_encode($data));

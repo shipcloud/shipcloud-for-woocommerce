@@ -356,8 +356,16 @@ class WC_Shipcloud_Order
             $pickup_latest_time_hour = isset($data['pickup_latest_time_hour']) ? $data['pickup_latest_time_hour'] : '';
             $pickup_latest_time_minute = isset($data['pickup_latest_time_minute']) ? $data['pickup_latest_time_minute'] : '';
 
-            $pickup_earliest = $pickup_earliest_date.' '.$pickup_earliest_time_hour.':'.$pickup_earliest_time_minute;
-            $pickup_latest = $pickup_latest_date.' '.$pickup_latest_time_hour.':'.$pickup_latest_time_minute;
+            if(
+              !empty($data['pickup_earliest_time_hour']) && !empty($data['pickup_earliest_time_minute']) &&
+              !empty($data['pickup_latest_time_hour']) && !empty($data['pickup_latest_time_minute'])
+            ) {
+              $pickup_earliest = $pickup_earliest_date.' '.$pickup_earliest_time_hour.':'.$pickup_earliest_time_minute;
+              $pickup_latest = $pickup_latest_date.' '.$pickup_latest_time_hour.':'.$pickup_latest_time_minute;
+            } else {
+              $pickup_earliest = $pickup_earliest_date;
+              $pickup_latest = $pickup_latest_date;
+            }
         }
 
         try {
