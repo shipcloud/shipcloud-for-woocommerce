@@ -151,6 +151,11 @@ class Woocommerce_Shipcloud_API
         'description' => __( 'Small untracked letter delivery', 'shipcloud-for-woocommerce' ),
         'customer_service' => false
       ),
+      'dpag_warenpost_signature' => array(
+        'name' => __( 'Warenpost (with signature)', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'Small trackable letter delivery which the recipient has to sign upon delivery', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
 		);
 
         $this->package_types = array(

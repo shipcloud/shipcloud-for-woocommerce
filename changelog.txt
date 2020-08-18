@@ -1,6 +1,7 @@
 == Changelog ==
 
 = 1.13.0 =
+* Added: DHL service Warenpost (with signature)
 * Enhanced: Submit button for creating labels in bulk is now being disabled upon click to prevent double clicks
 * Fixed: Added handling of unspecified weights for products
 * Fixed: Return an empty array when there are no additional services
