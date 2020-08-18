@@ -3,6 +3,7 @@
 = 1.13.0 =
 * Enhanced: Submit button for creating labels in bulk is now being disabled upon click to prevent double clicks
 * Fixed: Added handling of unspecified weights for products
+* Fixed: Return an empty array when there are no additional services
 
 = 1.12.2 =
 * Fixed: Making sure advance_notice is only transmitted when it's defined

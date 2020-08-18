@@ -73,15 +73,19 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	}
 
   /**
-	 * Get a list of services.
-	 *
-	 * The unordered array contains the internal names of services which the carrier offers.
-	 *
-	 * @since 1.12.0
-	 * @return array
-	 */
-	public function getAdditionalServices() {
-		return $this->additional_services;
+   * Get a list of services.
+   *
+   * The unordered array contains the internal names of services which the carrier offers.
+   *
+   * @since 1.12.0
+   * @return array
+   */
+  public function getAdditionalServices() {
+    if ( is_array($this->additional_services) ) {
+      return $this->additional_services;
+    } else {
+      return array();
+    }
 	}
 
 	/**
