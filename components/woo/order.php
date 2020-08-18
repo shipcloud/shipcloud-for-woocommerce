@@ -2079,15 +2079,45 @@ class WC_Shipcloud_Order
 				$quantity = $order_item['qty'];
 			}
 
-			if (method_exists($order_item, 'get_product')) {
-				// WooCommerce 3
-				$weight = $order_item->get_product()->get_weight();
-			} else {
-				// WooCommerce 2
-				$product = $this->get_wc_order()->get_product_from_item($order_item);
-				$weight = get_post_meta( $product->id, '_weight', true );
-			}
-			$calculated_weight += $quantity * $weight;
+      $weight = 0;
+      if (method_exists($order_item, 'get_product')) {
+        // WooCommerce 3
+        WC_Shipcloud_Shipping::log('WC3: determining weight');
+        $product = $order_item->get_product();
+        if ( $product ) {
+          $weight = $product->get_weight();
+        } else {
+          WC_Shipcloud_Shipping::log('couldn\'t get product from order item:');
+          WC_Shipcloud_Shipping::log(json_encode($order_item));
+          continue;
+        }
+
+        if ( $weight ) {
+          WC_Shipcloud_Shipping::log('weight: '.$weight);
+          $calculated_weight += $quantity * $weight;
+        } else {
+          WC_Shipcloud_Shipping::log('weight for product was empty');
+        }
+     } else {
+        // WooCommerce 2
+        WC_Shipcloud_Shipping::log('WC2: determining weight');
+        $product = $this->get_wc_order()->get_product_from_item($order_item);
+
+        if ( $product ) {
+          $weight = get_post_meta( $product->id, '_weight', true );
+        } else {
+          WC_Shipcloud_Shipping::log('couldn\'t get product from order item:');
+          WC_Shipcloud_Shipping::log(json_encode($order_item));
+          continue;
+        }
+
+        if ( $weight ) {
+          WC_Shipcloud_Shipping::log('weight: '.$weight);
+          $calculated_weight += $quantity * $weight;
+        } else {
+          WC_Shipcloud_Shipping::log('weight for product was empty');
+        }
+      }
 		}
 		return $calculated_weight;
 	}
