@@ -2088,7 +2088,7 @@ class WC_Shipcloud_Order
           $weight = $product->get_weight();
         } else {
           WC_Shipcloud_Shipping::log('couldn\'t get product from order item:');
-          WC_Shipcloud_Shipping::log(json_encode($order_item));
+          WC_Shipcloud_Shipping::log(print_r($order_item, true));
           continue;
         }
 
@@ -2107,7 +2107,7 @@ class WC_Shipcloud_Order
           $weight = get_post_meta( $product->id, '_weight', true );
         } else {
           WC_Shipcloud_Shipping::log('couldn\'t get product from order item:');
-          WC_Shipcloud_Shipping::log(json_encode($order_item));
+          WC_Shipcloud_Shipping::log(print_r($order_item, true));
           continue;
         }
 
