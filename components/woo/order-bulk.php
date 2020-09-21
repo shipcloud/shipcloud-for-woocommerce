@@ -333,11 +333,12 @@ class WC_Shipcloud_Order_Bulk {
 
     foreach ( $request['post'] as $order_id ) {
       $current       = $this->create_label_for_order( $order_id, $request );
-      $error_message = sprintf( 'Problem generating label for order #%d', $order_id );
 
       if ( ! $current || ! $current->getLabelUrl() ) {
-        WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
-        WC_Shipcloud_Shipping::log($error_message);
+        WC_Shipcloud_Shipping::log(
+          sprintf( 'There was an error while trying to create the label for order #%d.', $order_id )
+        );
+
         continue;
       }
 
@@ -351,8 +352,22 @@ class WC_Shipcloud_Order_Bulk {
                 );
         $shipping_label_merger->addFromFile( $path_to_shipping_label );
         $shipping_label_count++;
+      } catch ( \RuntimeException $e ) {
+        $error_message = sprintf(
+          __( 'Couldn’t save label for order #%d to disk: %s' ),
+          $order_id,
+          str_replace( "\n", ', ', $e->getMessage() )
+        );
 
-        if (null !== $current->getCustomsDeclarationDocumentUrl()) {
+        WC_Shipcloud_Shipping::log( json_encode($error_message) );
+        WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
+
+        continue;
+      }
+
+      if (null !== $current->getCustomsDeclarationDocumentUrl()) {
+        // Storing customs declaration.
+        try {
             WC_Shipcloud_Shipping::log('Trying to store customs declaration documents');
             $path_to_customs_declaration = $this->save_pdf_to_storage(
                 $order_id,
@@ -361,10 +376,18 @@ class WC_Shipcloud_Order_Bulk {
             );
             $customs_declaration_merger->addFromFile( $path_to_customs_declaration );
             $customs_declaration_count++;
+        } catch ( \RuntimeException $e ) {
+          $error_message = sprintf(
+            __( 'Couldn’t save customs declaration documents for order #%d to disk: %s' ),
+            $order_id,
+            str_replace( "\n", ', ', $e->getMessage() )
+          );
+
+          WC_Shipcloud_Shipping::log( json_encode($error_message) );
+          WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
+
+          continue;
         }
-      } catch ( \RuntimeException $e ) {
-        WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
-        WC_Shipcloud_Shipping::log('RuntimeException: '.print_r($e, true));
       }
     }
     WC_Shipcloud_Shipping::log('Done looping through order ids and creating labels');
@@ -639,11 +662,7 @@ class WC_Shipcloud_Order_Bulk {
 				str_replace( "\n", ', ', $e->getMessage() )
 			);
 
-      WC_Shipcloud_Shipping::log( '!!! error_message: ' );
       WC_Shipcloud_Shipping::log( json_encode($error_message) );
-      WC_Shipcloud_Shipping::log( '!!! exception: ' );
-      WC_Shipcloud_Shipping::log( json_encode($e) );
-			// WC_Shipcloud_Shipping::log(print_r($e, true));
 			WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 
 			return array();
