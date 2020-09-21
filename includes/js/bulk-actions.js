@@ -189,7 +189,7 @@ wcsc.OrderBulkActions = function (submitButton) {
       $('input[name="shipment[additional_services][advance_notice][sms_checkbox]"]').val('');
     }
 
-    $(this.form).submit();
+    this.form.submit();
   };
 
   this.hide = function () {
