@@ -34,10 +34,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Shipcloud_Order_Bulk {
 
-	const FORM_BULK = 'wcsc_order_bulk_label';
-    const FORM_PICKUP_REQUEST = 'shipcloud_create_pickup_request';
-	const BUTTON_PDF = 'wscs_order_bulk_pdf';
-    const BUTTON_PICKUP_REQUEST = 'shipcloud_order_bulk_pickup_request';
+  const FORM_BULK = 'wcsc_order_bulk_label';
+  const FORM_PICKUP_REQUEST = 'shipcloud_create_pickup_request';
+  const BUTTON_PDF = 'wscs_order_bulk_pdf';
+  const BUTTON_PICKUP_REQUEST = 'shipcloud_order_bulk_pickup_request';
 
 	/**
 	 * WC_Shipcloud_Order_Bulk constructor.
@@ -79,11 +79,13 @@ class WC_Shipcloud_Order_Bulk {
 	}
 
 	/**
-	 * Handling Submit after bulk action
+	 * Handling submit after bulk action
 	 *
 	 * @since   1.2.1
 	 */
 	public function handle_wcsc_order_bulk() {
+    WC_Shipcloud_Shipping::log('handle_wcsc_order_bulk');
+
     if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' !== get_current_screen()->id ) {
       WC_Shipcloud_Shipping::log('We are not on the edit-shop_order page. So leaving now.');
       // None of our business.
