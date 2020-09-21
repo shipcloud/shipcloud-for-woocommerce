@@ -72,11 +72,10 @@ class WC_Shipcloud_Order_Bulk {
 	private function init_hooks() {
 		add_action( 'admin_print_footer_scripts', array( $this, 'admin_print_footer_scripts' ) );
 		add_action( 'admin_print_footer_scripts', array( $this, 'attach_downloads' ) );
-
+    add_action( 'load-edit.php', array( $this, 'handle_wcsc_order_bulk' ) );
 		add_action( 'load-edit.php', array( $this, 'load_edit' ) );
 
 		add_filter( 'bulk_actions-edit-shop_order', array( $this, 'add_bulk_actions' ) );
-		add_action( 'load-edit.php', array( $this, 'handle_wcsc_order_bulk' ) );
 	}
 
 	/**
@@ -85,35 +84,45 @@ class WC_Shipcloud_Order_Bulk {
 	 * @since   1.2.1
 	 */
 	public function handle_wcsc_order_bulk() {
-		if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' !== get_current_screen()->id ) {
-			// None of our business.
+    if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' !== get_current_screen()->id ) {
+      WC_Shipcloud_Shipping::log('We are not on the edit-shop_order page. So leaving now.');
+      // None of our business.
 			return;
-		}
+    }
 
-		$request = $_GET; // XSS: OK.
+    $request = $_GET; // XSS: OK.
+    WC_Shipcloud_Shipping::log('request:');
+    WC_Shipcloud_Shipping::log(json_encode($request));
 
-        if (isset( $request['action'])) {
-            $action = $request['action'];
-        } elseif (isset( $request['action2'])) {
-            $action = $request['action2'];
+    if (isset($request['action']) || isset($request['action2'])) {
+      if ("-1" == $request['action']) {
+        if ("-1" == $request['action2']) {
+          WC_Shipcloud_Shipping::log('action and action2 were -1. Leaving.');
+          return;
+        } else {
+          $action = $request['action2'];
         }
+      } else {
+        $action = $request['action'];
+      }
+    } else {
+      WC_Shipcloud_Shipping::log('Neither action nor action2 were set. Leaving.');
+      return;
+    }
 
-        if (
-            !isset($action) ||
-            ($action !== self::FORM_BULK && $action !== self::FORM_PICKUP_REQUEST)
-        ) {
-            return;
-        }
-
-        if ( isset( $request[ self::BUTTON_PDF ] ) || self::FORM_BULK == $request['action'] ) {
-            $this->create_pdf( $request );
-            return;
-        } elseif ( isset( $request[ self::BUTTON_PICKUP_REQUEST ] ) || self::FORM_PICKUP_REQUEST == $request['action'] ) {
-            $this->create_pickup_request( $request );
-            return;
-        }
-
-        WC_Shipcloud_Shipping::log(sprintf( __( 'Unknown bulk action called. Request: %s', 'shipcloud-for-woocommerce' ), $request ));
+    WC_Shipcloud_Shipping::log('action: '.$action);
+    if ( self::FORM_BULK == $action ) {
+      WC_Shipcloud_Shipping::log('creating labels in bulk');
+      $this->create_pdf( $request );
+      return;
+    } elseif ( self::FORM_PICKUP_REQUEST == $action ) {
+      WC_Shipcloud_Shipping::log('creating a pickup request');
+      $this->create_pickup_request( $request );
+      return;
+    } else {
+      WC_Shipcloud_Shipping::log(sprintf( __( 'Unknown bulk action called. Request: %s', 'shipcloud-for-woocommerce' ), $request ));
+      return;
+    }
 	}
 
 	/**
@@ -298,132 +307,140 @@ class WC_Shipcloud_Order_Bulk {
 	 * @param $request
 	 */
 	protected function create_pdf( $request ) {
-		if ( ! $request['post'] ) {
-			// Nothing selected or no post given, so we don't have anything to do.
-			return;
-		}
+    WC_Shipcloud_Shipping::log('create_pdf called');
 
-		$pdf_basename = sha1( implode( ',', $request['post'] ) ) . '.pdf';
+    if ( ! $request['post'] ) {
+      // Nothing selected or no post given, so we don't have anything to do.
+      return;
+    }
 
-        WooCommerce_Shipcloud::load_fpdf();
+    $pdf_basename = sha1( implode( ',', $request['post'] ) ) . '.pdf';
 
-        /** @var WP_Filesystem_Base $wp_filesystem */
-        global $wp_filesystem;
+    WooCommerce_Shipcloud::load_fpdf();
 
-        if ( ! $wp_filesystem ) {
-            WP_Filesystem();
-        }
+    /** @var WP_Filesystem_Base $wp_filesystem */
+    global $wp_filesystem;
 
-        $shipping_label_count = $customs_declaration_count = 0;
-        $shipping_label_merger = new \iio\libmergepdf\Merger();
-        $customs_declaration_merger = new \iio\libmergepdf\Merger();
+    if ( ! $wp_filesystem ) {
+        WP_Filesystem();
+    }
 
-		foreach ( $request['post'] as $order_id ) {
-			$current       = $this->create_label_for_order( $order_id, $request );
-			$error_message = sprintf( 'Problem generating label for order #%d', $order_id );
+    $shipping_label_count = $customs_declaration_count = 0;
+    $shipping_label_merger = new \iio\libmergepdf\Merger();
+    $customs_declaration_merger = new \iio\libmergepdf\Merger();
 
-			if ( ! $current || ! $current->getLabelUrl() ) {
-				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
-				WC_Shipcloud_Shipping::log($error_message);
-				continue;
-			}
+    foreach ( $request['post'] as $order_id ) {
+      $current       = $this->create_label_for_order( $order_id, $request );
+      $error_message = sprintf( 'Problem generating label for order #%d', $order_id );
 
-			try {
-				// Storing label.
-				WC_Shipcloud_Shipping::log('Trying to store shipping labels');
-				$path_to_shipping_label = $this->save_pdf_to_storage(
+      if ( ! $current || ! $current->getLabelUrl() ) {
+        WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
+        WC_Shipcloud_Shipping::log($error_message);
+        continue;
+      }
+
+      try {
+        // Storing label.
+        WC_Shipcloud_Shipping::log('Trying to store shipping labels');
+        $path_to_shipping_label = $this->save_pdf_to_storage(
                     $order_id,
                     $current->getLabelUrl(),
                     'shipping_label'
                 );
-				$shipping_label_merger->addFromFile( $path_to_shipping_label );
-				$shipping_label_count++;
+        $shipping_label_merger->addFromFile( $path_to_shipping_label );
+        $shipping_label_count++;
 
-                if (null !== $current->getCustomsDeclarationDocumentUrl()) {
-                    WC_Shipcloud_Shipping::log('Trying to store customs declaration documents');
-                    $path_to_customs_declaration = $this->save_pdf_to_storage(
-                        $order_id,
-                        $current->getCustomsDeclarationDocumentUrl(),
-                        'customs_declaration'
-                    );
-                    $customs_declaration_merger->addFromFile( $path_to_customs_declaration );
-                    $customs_declaration_count++;
-                }
-			} catch ( \RuntimeException $e ) {
-				WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
-				WC_Shipcloud_Shipping::log('RuntimeException: '.print_r($e, true));
-			}
-		}
-
-        if (0 !== $shipping_label_count) {
-            $shipping_labels_pdf_content = '';
-            $shipping_labels_pdf_file =
-                $this->get_storage_path( 'labels' ).
-                DIRECTORY_SEPARATOR.
-                'merged_shipping_labels_'.
-                $pdf_basename;
-            $shipping_labels_pdf_url =
-                $this->get_storage_url( 'labels' ).
-                DIRECTORY_SEPARATOR.
-                'merged_shipping_labels_'.
-                $pdf_basename;
-
-            try {
-                $shipping_labels_pdf_content = $shipping_label_merger->merge();
-            } catch (\Exception $e) {
-                WC_Shipcloud_Shipping::log('Couldn\'t merge shipping label pdf files.');
-                WC_Shipcloud_Shipping::log(print_r($e, true));
-            }
-
-            if ( !$shipping_labels_pdf_content ) {
-                WooCommerce_Shipcloud::admin_notice( __( 'Could not compose labels into one PDF.', 'shipcloud-for-woocommerce' ), 'error' );
-                return;
-            }
-
-            $wp_filesystem->put_contents( $shipping_labels_pdf_file, $shipping_labels_pdf_content );
-            static::admin_download( $shipping_labels_pdf_url );
-
-            $download_message = sprintf(
-                'Shipping labels can be downloaded using this URL: %s',
-                '<a href="' . esc_attr( $shipping_labels_pdf_url ) . '" target="_blank">' . esc_html( $shipping_labels_pdf_url ) . '</a>'
+        if (null !== $current->getCustomsDeclarationDocumentUrl()) {
+            WC_Shipcloud_Shipping::log('Trying to store customs declaration documents');
+            $path_to_customs_declaration = $this->save_pdf_to_storage(
+                $order_id,
+                $current->getCustomsDeclarationDocumentUrl(),
+                'customs_declaration'
             );
-            WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
+            $customs_declaration_merger->addFromFile( $path_to_customs_declaration );
+            $customs_declaration_count++;
         }
+      } catch ( \RuntimeException $e ) {
+        WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
+        WC_Shipcloud_Shipping::log('RuntimeException: '.print_r($e, true));
+      }
+    }
+    WC_Shipcloud_Shipping::log('Done looping through order ids and creating labels');
 
-        if ($customs_declaration_count > 0) {
-            $customs_declarations_pdf_content = '';
-            $customs_declarations_pdf_file =
-                $this->get_storage_path( 'labels' ).
-                DIRECTORY_SEPARATOR.
-                'merged_customs_declarations_'.
-                $pdf_basename;
-            $customs_declaration_pdf_url =
-                $this->get_storage_url( 'labels' ).
-                DIRECTORY_SEPARATOR.
-                'merged_customs_declarations_'.
-                $pdf_basename;
+    if (0 !== $shipping_label_count) {
+      WC_Shipcloud_Shipping::log('Merging shipping labels');
 
-            try {
-                $customs_declaration_pdf_content = $customs_declaration_merger->merge();
-            } catch (\Exception $e) {
-                WC_Shipcloud_Shipping::log('Couldn\'t merge customs declaration documents pdf files.');
-                WC_Shipcloud_Shipping::log(print_r($e, true));
-            }
+      $shipping_labels_pdf_content = '';
+      $shipping_labels_pdf_file =
+          $this->get_storage_path( 'labels' ).
+          DIRECTORY_SEPARATOR.
+          'merged_shipping_labels_'.
+          $pdf_basename;
+      $shipping_labels_pdf_url =
+          $this->get_storage_url( 'labels' ).
+          DIRECTORY_SEPARATOR.
+          'merged_shipping_labels_'.
+          $pdf_basename;
 
-            if ( !$customs_declaration_pdf_content ) {
-                WooCommerce_Shipcloud::admin_notice( __( 'Could not compose customs declaration documents into one PDF.', 'shipcloud-for-woocommerce' ), 'error' );
-                return;
-            }
+      try {
+          $shipping_labels_pdf_content = $shipping_label_merger->merge();
+      } catch (\Exception $e) {
+          WC_Shipcloud_Shipping::log('Couldn\'t merge shipping label pdf files.');
+          WC_Shipcloud_Shipping::log(print_r($e, true));
+      }
 
-            $wp_filesystem->put_contents( $customs_declarations_pdf_file, $customs_declaration_pdf_content );
-            static::admin_download( $customs_declaration_pdf_url );
+      if ( !$shipping_labels_pdf_content ) {
+          WooCommerce_Shipcloud::admin_notice( __( 'Could not compose labels into one PDF.', 'shipcloud-for-woocommerce' ), 'error' );
+          return;
+      }
 
-            $download_message = sprintf(
-                'Customs declaration documents can be downloaded using this URL: %s',
-                '<a href="' . esc_attr( $customs_declaration_pdf_url ) . '" target="_blank">' . esc_html( $customs_declaration_pdf_url ) . '</a>'
-            );
-            WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
-        }
+      $wp_filesystem->put_contents( $shipping_labels_pdf_file, $shipping_labels_pdf_content );
+      static::admin_download( $shipping_labels_pdf_url );
+
+      $download_message = sprintf(
+          'Shipping labels can be downloaded using this URL: %s',
+          '<a href="' . esc_attr( $shipping_labels_pdf_url ) . '" target="_blank">' . esc_html( $shipping_labels_pdf_url ) . '</a>'
+      );
+      WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
+    }
+
+    if ($customs_declaration_count > 0) {
+      WC_Shipcloud_Shipping::log('Merging customs declarations');
+
+      $customs_declarations_pdf_content = '';
+      $customs_declarations_pdf_file =
+          $this->get_storage_path( 'labels' ).
+          DIRECTORY_SEPARATOR.
+          'merged_customs_declarations_'.
+          $pdf_basename;
+      $customs_declaration_pdf_url =
+          $this->get_storage_url( 'labels' ).
+          DIRECTORY_SEPARATOR.
+          'merged_customs_declarations_'.
+          $pdf_basename;
+
+      try {
+          $customs_declaration_pdf_content = $customs_declaration_merger->merge();
+      } catch (\Exception $e) {
+          WC_Shipcloud_Shipping::log('Couldn\'t merge customs declaration documents pdf files.');
+          WC_Shipcloud_Shipping::log(print_r($e, true));
+      }
+
+      if ( !$customs_declaration_pdf_content ) {
+          WooCommerce_Shipcloud::admin_notice( __( 'Could not compose customs declaration documents into one PDF.', 'shipcloud-for-woocommerce' ), 'error' );
+          return;
+      }
+
+      $wp_filesystem->put_contents( $customs_declarations_pdf_file, $customs_declaration_pdf_content );
+      static::admin_download( $customs_declaration_pdf_url );
+
+      $download_message = sprintf(
+          'Customs declaration documents can be downloaded using this URL: %s',
+          '<a href="' . esc_attr( $customs_declaration_pdf_url ) . '" target="_blank">' . esc_html( $customs_declaration_pdf_url ) . '</a>'
+      );
+      WC_Shipcloud_Shipping::log('Sending admin notice: '.$download_message);
+      WooCommerce_Shipcloud::admin_notice( $download_message, 'updated' );
+    }
 	}
 
 	/**
@@ -435,8 +452,9 @@ class WC_Shipcloud_Order_Bulk {
 	 * @return array|\Shipcloud\Domain\Shipment
 	 */
 	protected function create_label_for_order( $order_id, $request ) {
-		$order = WC_Shipcloud_Order::create_order( $order_id );
-        $request = $order->sanitize_reference_number($request);
+    WC_Shipcloud_Shipping::log('create_label_for_order called');
+    WC_Shipcloud_Shipping::log('order_id: '.$order_id);
+
     $order = WC_Shipcloud_Order::create_order( $order_id );
     $request = $order->sanitize_reference_number($request);
     $carrier = $request['shipcloud_carrier'];
@@ -619,8 +637,11 @@ class WC_Shipcloud_Order_Bulk {
 				str_replace( "\n", ', ', $e->getMessage() )
 			);
 
-			WC_Shipcloud_Shipping::log( $error_message );
-			WC_Shipcloud_Shipping::log(print_r($e, true));
+      WC_Shipcloud_Shipping::log( '!!! error_message: ' );
+      WC_Shipcloud_Shipping::log( json_encode($error_message) );
+      WC_Shipcloud_Shipping::log( '!!! exception: ' );
+      WC_Shipcloud_Shipping::log( json_encode($e) );
+			// WC_Shipcloud_Shipping::log(print_r($e, true));
 			WooCommerce_Shipcloud::admin_notice( $error_message, 'error' );
 
 			return array();
