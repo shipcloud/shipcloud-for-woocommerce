@@ -405,10 +405,20 @@ class WooCommerce_Shipcloud {
     $carriers_config = wcsc_shipping_method()->get_allowed_carrier_classes();
     $all_additional_services = array();
     foreach ( $carriers_config as $carrier ) {
+      WC_Shipcloud_Shipping::log( 'carrier: '.json_encode($carrier) );
       array_push($all_additional_services, $carrier->getAdditionalServices());
     }
-    $all_additional_services = array_merge(...array_values($all_additional_services));
-    $all_additional_services = array_unique($all_additional_services);
+
+    $all_additional_services_values = array_values($all_additional_services);
+    WC_Shipcloud_Shipping::log( 'count(all_additional_services_values): '.count($all_additional_services_values) );
+    if( count($all_additional_services_values) > 0) {
+      WC_Shipcloud_Shipping::log( 'all_additional_services_values length > 0' );
+      $all_additional_services = array_merge(...$all_additional_services_values);
+      $all_additional_services = array_unique($all_additional_services);
+    } else {
+      WC_Shipcloud_Shipping::log( 'all_additional_services_values length == 0' );
+      WC_Shipcloud_Shipping::log( 'all_additional_services_values: '.json_encode($all_additional_services_values) );
+    }
 
     // Inject translations and data for carrier selection.
     $services = array(
