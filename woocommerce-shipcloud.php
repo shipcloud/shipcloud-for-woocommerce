@@ -292,7 +292,7 @@ class WooCommerce_Shipcloud {
 	 * @since 1.3.2 For usage in frontend: Only start session when no headers are sent.
 	 */
 	public static function assert_session() {
-		if ( ! headers_sent() && ! session_id() && ! isset( $_SESSION['wcsc'] )) {
+		if ( ! headers_sent() && "" == session_id() && ! isset( $_SESSION['wcsc'] )) {
 	    	// Only start new session when no headers are send and no session started so far.
 			session_start();
 		}
@@ -527,9 +527,11 @@ class WooCommerce_Shipcloud {
 	public static function show_admin_notices() {
 		static::assert_session();
 
-		foreach ( (array) $_SESSION['wcsc']['notices'] as $notice ) {
-			echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
-		}
+    if (isset($_SESSION['wcsc']) && array_key_exists('notices', $_SESSION['wcsc'])) {
+      foreach ( (array) $_SESSION['wcsc']['notices'] as $notice ) {
+        echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
+      }
+    }
 
 	}
 
