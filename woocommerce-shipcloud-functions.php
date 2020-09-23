@@ -241,9 +241,10 @@ function shipcloud_admin_is_on_order_overview_page() {
  * @since 1.9.0
  */
 function shipcloud_admin_is_on_single_order_page() {
-    $post_id = '';
-    if ( array_key_exists( 'post', $_GET ) ) {
-        return true;
+    if ('shop_order' === get_current_screen()->id ||
+        'edit-shop_order' === get_current_screen()->id
+    ) {
+      return true;
     }
 
     return false;

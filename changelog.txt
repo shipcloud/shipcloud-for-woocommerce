@@ -3,6 +3,7 @@
 = 1.13.0 =
 * Added: DHL service Warenpost (with signature)
 * Enhanced: Submit button for creating labels in bulk is now being disabled upon click to prevent double clicks
+* Enhanced: Better check to see if we're on an order page
 * Fixed: Added handling of unspecified weights for products
 * Fixed: Return an empty array when there are no additional services
 
