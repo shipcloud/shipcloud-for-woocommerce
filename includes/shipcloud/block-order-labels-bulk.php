@@ -85,6 +85,13 @@ class WooCommerce_Shipcloud_Block_Order_Labels_Bulk {
 		return $this->shipcloud_api;
 	}
 
+  /**
+   * @return WC_Shipcloud_Order
+   */
+  public function get_order() {
+    return $this->order;
+  }
+
 	/**
 	 * Pre-render content.
 	 *

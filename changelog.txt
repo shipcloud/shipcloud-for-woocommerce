@@ -2,6 +2,7 @@
 
 = 1.13.0 =
 * Added: DHL service Warenpost (with signature)
+* Added: Option to not create a shipping label (during bulk processing) when there is already one present
 * Enhanced: Submit button for creating labels in bulk is now being disabled upon click to prevent double clicks
 * Enhanced: Better check to see if we're on an order page
 * Enhanced: Check to see if we have an order when getting the global reference number

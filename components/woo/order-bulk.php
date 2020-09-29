@@ -332,6 +332,18 @@ class WC_Shipcloud_Order_Bulk {
     $customs_declaration_merger = new \iio\libmergepdf\Merger();
 
     foreach ( $request['post'] as $order_id ) {
+      $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+
+      if ( isset($request['shipcloud_bulk_only_one_shipping_label'] )) {
+        // check to see if there's already a shipping label present
+        foreach ( $shipments as $shipment ) {
+          if ( !is_null($shipment['label_url'])) {
+            WC_Shipcloud_Shipping::log(sprintf('found shipment with label_url for order #%d - skipping', $order_id));
+            continue(2);
+          }
+        }
+      }
+
       $current       = $this->create_label_for_order( $order_id, $request );
 
       if ( ! $current || ! $current->getLabelUrl() ) {

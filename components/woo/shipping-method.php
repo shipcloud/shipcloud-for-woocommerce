@@ -582,6 +582,16 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
                 'label'       => __( 'Add an input that lets the buyer specify a phone number, when using a shipping address', 'shipcloud-for-woocommerce' ),
                 'default' => 'yes'
             ),
+      'bulk_processing_settings' => array(
+        'title' => __( 'Bulk processing settings', 'shipcloud-for-woocommerce' ),
+        'type' => 'title'
+      ),
+      'bulk_only_one_shipping_label' => array(
+        'title'       => __( 'Single shipping label creation', 'shipcloud-for-woocommerce' ),
+        'type'        => 'checkbox',
+        'label'       => __( 'Only create shipping labels for orders that don\'t have a shipping label yet.', 'shipcloud-for-woocommerce' ),
+        'default'     => 'no'
+      ),
 			'advanced_settings' => array(
 				'title'       => __( 'Advanced settings', 'shipcloud-for-woocommerce' ),
 				'type'        => 'title'

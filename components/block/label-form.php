@@ -141,5 +141,29 @@
                    class="notification_email_input" />
           </td>
         </tr>
+
+    <?php
+      if ( get_current_screen() && 'edit-shop_order' == get_current_screen()->id ) {
+    ?>
+        <tr>
+          <th>
+            <?php _e( 'Skip when shipping label present', 'shipcloud-for-woocommerce' ); ?>
+            <?php echo wc_help_tip( __( 'Activate, if you want to skip label creation for an order if there is already a shipping label present', 'shipcloud-for-woocommerce' ) ); ?>
+          </th>
+          <td>
+            <?php
+              $bulk_only_one_shipping_label = wcsc_shipping_method()->get_option( 'bulk_only_one_shipping_label' );
+              if ( $bulk_only_one_shipping_label === 'yes' ) {
+                $bulk_only_one_shipping_label_checkbox = 'checked="checked"';
+              } else {
+                $bulk_only_one_shipping_label_checkbox = '';
+              }
+             ?>
+            <input type="checkbox" name="shipcloud_bulk_only_one_shipping_label" <?php echo $bulk_only_one_shipping_label_checkbox ?> />
+          </td>
+        </tr>
+    <?php
+      }
+    ?>
     </tbody>
 </table>
