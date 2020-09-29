@@ -115,7 +115,7 @@
                                     <?php _e( 'Invoice number', 'shipcloud-for-woocommerce' ); ?>
                                 </th>
                                 <td>
-                                    <input type="text" name="customs_declaration[invoice_number]" value="<?php echo _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' )->get_global_reference_number($this); ?>" />
+                                    <input type="text" name="customs_declaration[invoice_number]" value="<?php echo _wcsc_container()->get( '\\Woocommerce_Shipcloud_API' )->get_global_reference_number($this->get_order()); ?>" />
                                 </td>
                             </tr>
                         </tbody>

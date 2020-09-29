@@ -1063,23 +1063,18 @@ class Woocommerce_Shipcloud_API
         return new WP_Error( 'shipcloud_api_error_' . $error[ 'name' ], $error[ 'description' ] );
     }
 
-	public function get_global_reference_number( $order ) {
-        $global_reference_number = wcsc_shipping_method()->get_option( 'global_reference_number' );
-        if (shipcloud_admin_is_on_single_order_page() && !is_null($order)) {
-            if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
-                $order_id = $order->get_wc_order()->get_order_number();
-
-                if (!$order_id) {
-                    // Fallback for WooCommerce 2
-                    $order_id = $order->order->id;
-                }
-
-                $global_reference_number = str_replace('[shipcloud_orderid]', $order_id, $global_reference_number);
-            }
+  public function get_global_reference_number( $order ) {
+    WC_Shipcloud_Shipping::log('get_global_reference_number order: '.print_r($order, true));
+    $global_reference_number = wcsc_shipping_method()->get_option( 'global_reference_number' );
+    $order_id = $order->order_id;
+    if (shipcloud_admin_is_on_single_order_page() && !is_null($order_id)) {
+        if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
+            $global_reference_number = str_replace('[shipcloud_orderid]', $order_id, $global_reference_number);
         }
+    }
 
-        return $global_reference_number;
-	}
+    return $global_reference_number;
+  }
 
 	/**
 	 * Connection testing
