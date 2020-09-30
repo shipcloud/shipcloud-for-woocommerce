@@ -1219,11 +1219,6 @@ class WC_Shipcloud_Order
 
     $email = $this->get_email_for_notification();
 
-    // $data = $this->handle_email_notification( $data );
-    if ( $this->wants_shipcloud_email_notification() ) {
-      $data['notification_email'] = $email;
-    }
-
 		// only applicable for WooCommerce 3
 		if (class_exists('WC_DateTime')) {
             $pickup = self::handle_pickup_request( $data );
