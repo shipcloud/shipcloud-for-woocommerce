@@ -206,9 +206,17 @@
             } else {
         #>
             <?php
-                $order_data = $this->get_wc_order()->get_data();
-                foreach ( $order_data['line_items'] as $line_item_id => $line_item ) {
-                    $product = $line_item->get_product();
+              $order_data = $this->get_wc_order()->get_data();
+              foreach ( $order_data['line_items'] as $line_item_id => $line_item ) {
+                WC_Shipcloud_Shipping::log('customs-declaration-edit-form');
+                WC_Shipcloud_Shipping::log('Trying to get product from line item');
+                WC_Shipcloud_Shipping::log('line_item: '.print_r($line_item, true));
+                $product = $line_item->get_product();
+                WC_Shipcloud_Shipping::log('product: '.print_r($product, true));
+                if (!$product) {
+                  WC_Shipcloud_Shipping::log('no product found so continue with next item');
+                  continue;
+                }
             ?>
             <fieldset>
                 <table class="parcel-form-table">
