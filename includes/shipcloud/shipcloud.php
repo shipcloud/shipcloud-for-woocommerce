@@ -156,6 +156,16 @@ class Woocommerce_Shipcloud_API
         'description' => __( 'Small trackable letter delivery which the recipient has to sign upon delivery', 'shipcloud-for-woocommerce' ),
         'customer_service' => false
       ),
+      'dhl_warenpost' => array(
+        'name' => __( 'DHL Warenpost', 'shipcloud-for-woocommerce' ),
+        'description'      => __( 'Small trackable letter delivery', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
+      'dhl_prio' => array(
+        'name' => __( 'DHL Prio', 'shipcloud-for-woocommerce' ),
+        'description'      => __( 'Priority shipping using DHL', 'shipcloud-for-woocommerce' ),
+        'customer_service' => false
+      ),
 		);
 
         $this->package_types = array(
