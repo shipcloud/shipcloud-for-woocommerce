@@ -1074,7 +1074,6 @@ class Woocommerce_Shipcloud_API
     }
 
   public function get_global_reference_number( $order ) {
-    WC_Shipcloud_Shipping::log('get_global_reference_number order: '.print_r($order, true));
     $global_reference_number = wcsc_shipping_method()->get_option( 'global_reference_number' );
     $order_id = $order->order_id;
     if (shipcloud_admin_is_on_single_order_page() && !is_null($order_id)) {
