@@ -157,12 +157,12 @@ class Woocommerce_Shipcloud_API
         'customer_service' => false
       ),
       'dhl_warenpost' => array(
-        'name' => __( 'DHL Warenpost', 'shipcloud-for-woocommerce' ),
+        'name' => __( 'Warenpost', 'shipcloud-for-woocommerce' ),
         'description'      => __( 'Small trackable letter delivery', 'shipcloud-for-woocommerce' ),
         'customer_service' => false
       ),
       'dhl_prio' => array(
-        'name' => __( 'DHL Prio', 'shipcloud-for-woocommerce' ),
+        'name' => __( 'Prio', 'shipcloud-for-woocommerce' ),
         'description'      => __( 'Priority shipping using DHL', 'shipcloud-for-woocommerce' ),
         'customer_service' => false
       ),
