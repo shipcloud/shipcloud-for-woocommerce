@@ -339,6 +339,9 @@ class WC_Shipcloud_Order_Bulk {
         foreach ( $shipments as $shipment ) {
           if ( !is_null($shipment['label_url'])) {
             WC_Shipcloud_Shipping::log(sprintf('found shipment with label_url for order #%d - skipping', $order_id));
+            WooCommerce_Shipcloud::admin_notice(
+              sprintf('Skipped label creation for order #%d, because there was already a shipping label.', $order_id),
+              'error' );
             continue(2);
           }
         }
