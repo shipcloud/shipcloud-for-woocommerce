@@ -1628,7 +1628,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				if ( $carrier_is_allowed ) {
           // error_log("shipcloud_carrier: ".print_r($shipcloud_carrier, true));
 
-					$carriers[] = new \Shipcloud\Domain\Carrier(
+					$carriers[$shipcloud_carrier->getName()] = new \Shipcloud\Domain\Carrier(
 						$shipcloud_carrier->getName(),
 						$shipcloud_carrier->getDisplayName(),
 						$carrier_services,
@@ -1638,9 +1638,10 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				}
 			}
     }
-    // error_log("carriers");
-    // error_log(print_r($carriers, true));
-		return $carriers;
+
+    asort($carriers);
+
+		return array_values($carriers);
 	}
 
 	/**
