@@ -12,6 +12,7 @@
 * Fixed: Return an empty array when there are no additional services
 * Fixed: Getting the global reference number for bulk processing of shipments
 * Fixed: Notification email checkbox got overwritten by global configuration
+* Fixed: Bug where timestamps couldn't be parsed
 
 = 1.12.2 =
 * Fixed: Making sure advance_notice is only transmitted when it's defined

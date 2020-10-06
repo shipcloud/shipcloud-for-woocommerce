@@ -317,7 +317,7 @@ class ShipmentRepository {
    * @return string
    * @since 1.8.0
    */
-  public function additional_services_from_request($data, $order_total, $currency, $bank_information, $reference, $carrier, $order = null) {
+  public function additional_services_from_request($data, $carrier, $order = null) {
     $additional_services = array();
 
     foreach ( $data as $additional_service_key => $additional_service_value ) {
@@ -400,26 +400,37 @@ class ShipmentRepository {
           break;
         case 'cash_on_delivery':
           if (array_key_exists( 'checked', $additional_service_value )) {
-              $cod_array = array(
-                  'name' => 'cash_on_delivery',
-                  'properties' => array(
-                      'amount' => $order_total,
-                      'currency' => $currency,
-                  )
-              );
-              switch($carrier) {
-                  case 'dhl':
-                      $cod_array['properties']['reference1'] = $reference;
-                      $cod_array['properties']['bank_account_holder'] = $bank_information->getAccountHolder();
-                      $cod_array['properties']['bank_name'] = $bank_information->getBankName();
-                      $cod_array['properties']['bank_account_number'] = $bank_information->getIban();
-                      $cod_array['properties']['bank_code'] = $bank_information->getBankSwift();
-                      break;
-                  case 'gls':
-                      $cod_array['properties']['reference1'] = $reference;
-                      break;
-              }
-              $additional_services[] = $cod_array;
+            $bank_name = array_key_exists( 'bank_name', $additional_service_value ) ? $additional_service_value['bank_name'] : "";
+            $bank_code = array_key_exists( 'bank_code', $additional_service_value ) ? $additional_service_value['bank_code'] : "";
+            $bank_account_holder = array_key_exists( 'bank_account_holder', $additional_service_value ) ? $additional_service_value['bank_account_holder'] : "";
+            $bank_account_number = array_key_exists( 'bank_account_number', $additional_service_value ) ? $additional_service_value['bank_account_number'] : "";
+            $reference = array_key_exists( 'reference1', $additional_service_value ) ? $additional_service_value['reference1'] : "";
+
+            $cod_array = array(
+                'name' => 'cash_on_delivery',
+                'properties' => array(
+                    'amount' => $additional_service_value['amount'],
+                    'currency' => $additional_service_value['currency'],
+                )
+            );
+            switch($carrier) {
+              case 'cargo_international':
+                $cod_array['properties']['bank_account_number'] = $bank_account_number;
+                $cod_array['properties']['bank_code'] = $bank_code;
+                break;
+              case 'dhl':
+                $cod_array['properties']['reference1'] = $reference;
+                $cod_array['properties']['bank_account_holder'] = $bank_account_holder;
+                $cod_array['properties']['bank_name'] = $bank_name;
+                $cod_array['properties']['bank_account_number'] = $bank_account_number;
+                $cod_array['properties']['bank_code'] = $bank_code;
+                break;
+              case 'gls':
+                $cod_array['properties']['reference1'] = $reference;
+                break;
+            }
+
+            $additional_services[] = $cod_array;
           }
           break;
         case 'gls_guaranteed24service':
@@ -486,6 +497,7 @@ class ShipmentRepository {
           break;
         }
     }
+
     return $additional_services;
   }
 }

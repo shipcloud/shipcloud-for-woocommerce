@@ -30,61 +30,32 @@ class LabelController {
 	}
 
 	public function update() {
-		if ( ! $this->is_authenticated() ) {
-			$this->error( 403, __( 'Not authenticated' ) );
-
-			return;
-		}
-
-		if ( ! isset( $_REQUEST['shipment'] ) ) {
-			$this->error( 400, __( 'Bad request' ) );
-
-			return;
-		}
-
-		$data = $this->sanitize_request( $_REQUEST );
-
-    $bank_name = $bank_code = $bank_account_holder = $bank_account_number = '';
-    if (
-      array_key_exists( 'additional_services', $data['shipment'] ) &&
-      array_key_exists( 'cash_on_delivery', $data['shipment']['additional_services'] )
-    ) {
-      if (array_key_exists( 'bank_name', $data['shipment']['additional_services']['cash_on_delivery'] )) {
-        $bank_name = $data['shipment']['additional_services']['cash_on_delivery']['bank_name'];
-      }
-      if (array_key_exists( 'bank_code', $data['shipment']['additional_services']['cash_on_delivery'] )) {
-        $bank_code = $data['shipment']['additional_services']['cash_on_delivery']['bank_code'];
-      }
-      if (array_key_exists( 'bank_account_holder', $data['shipment']['additional_services']['cash_on_delivery'] )) {
-        $bank_account_holder = $data['shipment']['additional_services']['cash_on_delivery']['bank_account_holder'];
-      }
-      if (array_key_exists( 'bank_account_number', $data['shipment']['additional_services']['cash_on_delivery'] )) {
-        $bank_account_number = $data['shipment']['additional_services']['cash_on_delivery']['bank_account_number'];
-      }
+    if ( ! $this->is_authenticated() ) {
+      $this->error( 403, __( 'Not authenticated' ) );
+      return;
     }
-    $bank_information = new \Shipcloud\Domain\ValueObject\BankInformation(
-      $bank_name,
-      $bank_code,
-      $bank_account_holder,
-      $bank_account_number
-    );
 
-        $pickup = \WC_Shipcloud_Order::handle_pickup_request($data);
-        if (!empty($pickup)) {
-            $data['shipment']['pickup'] = $pickup;
-        }
+    if ( ! isset( $_REQUEST['shipment'] ) ) {
+      $this->error( 400, __( 'Bad request' ) );
+      return;
+    }
 
     try {
+      $data = $this->sanitize_request( $_REQUEST );
+      \WC_Shipcloud_Shipping::log( 'data: '.json_encode($data) );
+
+      $pickup = \WC_Shipcloud_Order::handle_pickup_request($data);
+
+      if (!empty($pickup)) {
+          $data['shipment']['pickup'] = $pickup;
+      }
+
       $order = $this->shipment_repository->findOrderByShipmentId( $data['shipment']['id'] );
       $sc_order = \WC_Shipcloud_Order::create_order( $order->get_id() );
 
       $data['shipment']['additional_services'] =
         $this->shipment_repository->additional_services_from_request(
             $data['shipment']['additional_services'],
-            $data['shipment']['additional_services']['cash_on_delivery']['amount'],
-            $data['shipment']['additional_services']['cash_on_delivery']['currency'],
-            $bank_information,
-            $data['shipment']['additional_services']['cash_on_delivery']['reference1'],
             $data['shipment']['carrier'],
             $sc_order
         );
@@ -94,18 +65,15 @@ class LabelController {
                 unset($data['customs_declaration']);
             }
 
-			$this->shipment_repository->update(
-				$order,
-				$data['shipment']
-			);
-		} catch ( \Exception $e ) {
-			$this->error( 400, $e->getMessage() );
+      \WC_Shipcloud_Shipping::log( sprintf('Trying to update shipment %s from order %d', $data['shipment']['id'], $order->get_id()) );
+    } catch ( \Exception $e ) {
+      $this->error( 400, $e->getMessage() );
 
-			return;
-		}
+      return;
+    }
 
-		wp_send_json_success( $data['shipment'] );
-	}
+    wp_send_json_success( $data['shipment'] );
+  }
 
 	protected function is_authenticated() {
 		return is_admin() && is_user_logged_in();

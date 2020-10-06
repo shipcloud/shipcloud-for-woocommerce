@@ -189,6 +189,14 @@ wcsc.OrderBulkActions = function (submitButton) {
       $('input[name="shipment[additional_services][advance_notice][sms_checkbox]"]').val('');
     }
 
+    if ( !$('input[name="pickup[pickup_earliest_date]"]').is(':visible') ) {
+      $('input[name="pickup[pickup_earliest_date]"]').val('');
+    }
+    if ( !$('input[name="pickup[pickup_latest_date]"]').is(':visible') ) {
+      $('input[name="pickup[pickup_latest_date]"]').val('');
+    }
+
+
     this.form.submit();
   };
 

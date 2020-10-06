@@ -104,7 +104,8 @@ shipcloud.LabelForm = function (wrapperSelector) {
             'other_description': self.getDescription(),
             'reference_number' : self.getReferenceNumber(),
             'notification_email' : self.getNotificationEmail(),
-            'additional_services': self.getAdditionalServices()
+            'additional_services': self.getAdditionalServices(),
+            'pickup'           : self.getPickupData()
         };
 
         // if customs declaration form is hidden
@@ -277,6 +278,23 @@ shipcloud.LabelForm = function (wrapperSelector) {
       return additional_services_array;
     };
 
+  this.getPickupData  = function (pointInTime) {
+    // check if pickup form is visible
+    if ($('input[name="pickup[pickup_earliest_date]"]:visible', self.$wrapper).length == 0) {
+      return [];
+    }
+    var pickup_hash = {
+      'pickup_earliest_date': $('input[name="pickup[pickup_earliest_date]"]', self.$wrapper).val(),
+      'pickup_earliest_time_hour': $('input[name="pickup[pickup_earliest_time_hour]"]', self.$wrapper).val(),
+      'pickup_earliest_time_minute': $('input[name="pickup[pickup_earliest_time_minute]"]', self.$wrapper).val(),
+      'pickup_latest_date': $('input[name="pickup[pickup_latest_date]"]', self.$wrapper).val(),
+      'pickup_latest_time_hour': $('input[name="pickup[pickup_latest_time_hour]"]', self.$wrapper).val(),
+      'pickup_latest_time_minute': $('input[name="pickup[pickup_latest_time_minute]"]', self.$wrapper).val()
+    };
+
+    return pickup_hash;
+
+  };
   this.handlePickup = function (pointInTime) {
     var pickupTime =
       $('input[name="pickup_' + pointInTime + '_date"]').val() +
