@@ -1671,7 +1671,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	 *
 	 * @since 1.0.0
 	 */
-	public static function log( $message )
+	public static function log( $message, $options = Array() )
 	{
 		$settings = get_option( 'woocommerce_shipcloud_settings' );
 
@@ -1687,6 +1687,23 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		{
 			self::$logger = new WC_Logger();
 		}
+
+    if ( array_key_exists( 'format', $options ) ) {
+      switch($options['format']) {
+        case 'full':
+          self::$logger->add( 'shipcloud', '**********************' );
+          require ABSPATH . WPINC . '/version.php';
+          self::$logger->add( 'shipcloud', str_pad('* SC-Version: '.WooCommerce_Shipcloud::VERSION , 20, ' ', STR_PAD_RIGHT).' *' );
+          self::$logger->add( 'shipcloud', str_pad('* WP-Version: '.$wp_version , 20, ' ', STR_PAD_RIGHT).' *' );
+          if ( class_exists( 'WooCommerce' ) ) {
+            global $woocommerce;
+            self::$logger->add( 'shipcloud', str_pad('* WC-Version: '.$woocommerce->version, 20, ' ', STR_PAD_RIGHT).' *' );
+          }
+          self::$logger->add( 'shipcloud', '**********************' );
+
+          break;
+      }
+    }
 
 		$message = trim(preg_replace( '/\s+/', ' ', $message ) );
 

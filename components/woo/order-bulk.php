@@ -84,7 +84,7 @@ class WC_Shipcloud_Order_Bulk {
 	 * @since   1.2.1
 	 */
 	public function handle_wcsc_order_bulk() {
-    WC_Shipcloud_Shipping::log('handle_wcsc_order_bulk');
+    WC_Shipcloud_Shipping::log('handle_wcsc_order_bulk', ['format' => 'full']);
 
     if ( ! is_admin() || ! get_current_screen() || 'edit-shop_order' !== get_current_screen()->id ) {
       WC_Shipcloud_Shipping::log('We are not on the edit-shop_order page. So leaving now.');

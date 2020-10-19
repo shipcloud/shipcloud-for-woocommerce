@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.14.0 =
+* Enhanced: Added the option to log versions
+
 = 1.13.0 =
 * Added: DHL services Warenpost and Prio
 * Added: DPAG service Warenpost (with signature)
