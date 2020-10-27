@@ -392,3 +392,18 @@
   </div>
   <div class="clear"></div>
 </div>
+
+<div class="shipcloud_additional_service shipcloud_additional_service__dhl_endorsement">
+  <div class="shipcloud_additional_service__checkbox">
+    <# if ( data.model.hasAdditionalService('dhl_endorsement') ) { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_endorsement][checked]" value="dhl_endorsement" checked="checked" />
+    <# } else { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_endorsement][checked]" value="dhl_endorsement" />
+    <# } #>
+  </div>
+  <div class="shipcloud_additional_service__text">
+    <?php _e( 'Endorsement', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'Prior to sending your international parcel you can specify what should happen to the shipment in case it cannot be delivered in the destination country. By choosing the handling option `abandon`, your parcel will not be returned to you, but rather auctioned off or destroyed by the postal company in the recipients country. You will not be charged with a return fee for this option.', 'shipcloud-for-woocommerce' ) ); ?>
+  </div>
+  <div class="clear"></div>
+</div>

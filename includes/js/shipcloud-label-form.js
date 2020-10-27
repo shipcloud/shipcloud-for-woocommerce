@@ -196,6 +196,14 @@ shipcloud.LabelForm = function (wrapperSelector) {
               }
             });
             break;
+          case 'dhl_endorsement':
+            additional_services_array.push({
+              'name': 'dhl_endorsement',
+              'properties': {
+                'handling': 'abandon'
+              }
+            });
+            break;
           case 'cash_on_delivery':
             var cod_hash = {
               'name': 'cash_on_delivery',

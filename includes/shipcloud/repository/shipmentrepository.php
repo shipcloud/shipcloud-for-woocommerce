@@ -276,6 +276,11 @@ class ShipmentRepository {
             );
           }
           break;
+        case 'dhl_endorsement':
+          $additional_services[] = array(
+            'name' => 'dhl_endorsement'
+          );
+          break;
         case 'cash_on_delivery':
           $additional_services[] = array(
               'name' => 'cash_on_delivery',
@@ -394,6 +399,16 @@ class ShipmentRepository {
               'name' => 'drop_authorization',
               'properties' => array(
                 'message' => $additional_service_value['message']
+              )
+            );
+          }
+          break;
+        case 'dhl_endorsement':
+          if (array_key_exists( 'checked', $additional_service_value )) {
+            $additional_services[] = array(
+              'name' => 'dhl_endorsement',
+              'properties' => array(
+                'handling' => 'abandon'
               )
             );
           }

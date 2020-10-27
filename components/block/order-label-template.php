@@ -143,6 +143,14 @@
                   </div>
                 </li>
               <# } #>
+              <# if ( additional_service.name === 'dhl_endorsement' ) { #>
+                <li>
+                  <?php _e( 'Endorsement', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                      <?php _e( 'Handling', 'shipcloud-for-woocommerce' ); ?>: abandon
+                  </div>
+                </li>
+              <# } #>
               <# if ( additional_service.name === 'cash_on_delivery' ) { #>
                 <li>
                   <?php _e( 'Cash on delivery', 'shipcloud-for-woocommerce' ); ?>
