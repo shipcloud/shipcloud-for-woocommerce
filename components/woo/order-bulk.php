@@ -571,7 +571,7 @@ class WC_Shipcloud_Order_Bulk {
                 $origin_country = get_post_meta( $product->get_id(), 'shipcloud_origin_country', true );
 
                 $item = array(
-                    'description' => $product->get_description(),
+                    'description' => $product->get_title(),
                     'origin_country' => isset($origin_country) ? $origin_country : '',
                     'quantity' => $line_item->get_quantity(),
                     'value_amount' => $line_item->get_total(),

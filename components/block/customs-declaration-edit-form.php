@@ -226,7 +226,7 @@
                                 <?php _e( 'Description', 'shipcloud-for-woocommerce' ); ?>
                             </th>
                             <td>
-                                <input type="text" name="customs_declaration[items][<?php echo $line_item_id; ?>][description]" value="<?php echo $product->get_description(); ?>" />
+                                <input type="text" name="customs_declaration[items][<?php echo $line_item_id; ?>][description]" value="<?php echo $product->get_title(); ?>" />
                             </td>
                         </tr>
                         <tr>
