@@ -407,3 +407,18 @@
   </div>
   <div class="clear"></div>
 </div>
+
+<div class="shipcloud_additional_service shipcloud_additional_service__dhl_named_person_only">
+  <div class="shipcloud_additional_service__checkbox">
+    <# if ( data.model.hasAdditionalService('dhl_named_person_only') ) { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_named_person_only][checked]" value="dhl_named_person_only" checked="checked" />
+    <# } else { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_named_person_only][checked]" value="dhl_named_person_only" />
+    <# } #>
+  </div>
+  <div class="shipcloud_additional_service__text">
+    <?php _e( 'Named person only', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'The named person only service ensures in an uncomplicated and cost-effective way that your parcels are only delivered to the recipient in person or to an authorized person.', 'shipcloud-for-woocommerce' ) ); ?>
+  </div>
+  <div class="clear"></div>
+</div>

@@ -151,6 +151,11 @@
                   </div>
                 </li>
               <# } #>
+              <# if ( additional_service.name === 'dhl_named_person_only' ) { #>
+                <li>
+                  <?php _e( 'Named person only', 'shipcloud-for-woocommerce' ); ?>
+                </li>
+              <# } #>
               <# if ( additional_service.name === 'cash_on_delivery' ) { #>
                 <li>
                   <?php _e( 'Cash on delivery', 'shipcloud-for-woocommerce' ); ?>

@@ -1,7 +1,7 @@
 == Changelog ==
 
 = 1.14.0 =
-* Added: DHL additional service endorsement
+* Added: DHL additional service endorsement, named person only
 * Enhanced: Added the option to log versions
 * Enhanced: Use product title instead of description for customs declarations
 

@@ -281,6 +281,11 @@ class ShipmentRepository {
             'name' => 'dhl_endorsement'
           );
           break;
+        case 'dhl_named_person_only':
+          $additional_services[] = array(
+            'name' => 'dhl_named_person_only'
+          );
+          break;
         case 'cash_on_delivery':
           $additional_services[] = array(
               'name' => 'cash_on_delivery',
@@ -413,6 +418,13 @@ class ShipmentRepository {
             );
           }
           break;
+        case 'dhl_named_person_only':
+            if (array_key_exists( 'checked', $additional_service_value )) {
+              $additional_services[] = array(
+                'name' => 'dhl_named_person_only'
+              );
+            }
+            break;
         case 'cash_on_delivery':
           if (array_key_exists( 'checked', $additional_service_value )) {
             $bank_name = array_key_exists( 'bank_name', $additional_service_value ) ? $additional_service_value['bank_name'] : "";

@@ -204,6 +204,11 @@ shipcloud.LabelForm = function (wrapperSelector) {
               }
             });
             break;
+          case 'dhl_named_person_only':
+            additional_services_array.push({
+              'name': 'dhl_named_person_only'
+            });
+            break;
           case 'cash_on_delivery':
             var cod_hash = {
               'name': 'cash_on_delivery',
