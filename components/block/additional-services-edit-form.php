@@ -422,3 +422,18 @@
   </div>
   <div class="clear"></div>
 </div>
+
+<div class="shipcloud_additional_service shipcloud_additional_service__dhl_parcel_outlet_routing">
+  <div class="shipcloud_additional_service__checkbox">
+    <# if ( data.model.hasAdditionalService('dhl_parcel_outlet_routing') ) { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_parcel_outlet_routing][checked]" value="dhl_parcel_outlet_routing" checked="checked" />
+    <# } else { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_parcel_outlet_routing][checked]" value="dhl_parcel_outlet_routing" />
+    <# } #>
+  </div>
+  <div class="shipcloud_additional_service__text">
+    <?php _e( 'Parcel outlet routing', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'With the DHL additional service retail outlet routing you can tell the carrier to reroute a parcel to the nearest outlet when the recipient can\'t be reached. Otherwise the parcel will be returned immediately.', 'shipcloud-for-woocommerce' ) ); ?>
+  </div>
+  <div class="clear"></div>
+</div>

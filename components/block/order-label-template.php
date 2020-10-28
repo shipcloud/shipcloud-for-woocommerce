@@ -191,6 +191,14 @@
                   <?php _e( 'GLS Guaranteed24Service', 'shipcloud-for-woocommerce' ); ?>
                 </li>
               <# } #>
+              <# if ( additional_service.name === 'dhl_parcel_outlet_routing' ) { #>
+                <li>
+                  <?php _e( 'Parcel outlet routing', 'shipcloud-for-woocommerce' ); ?>
+                  <div class="additional-services-details">
+                    <?php _e( 'email', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.email }}
+                  </div>
+                </li>
+              <# } #>
             <# }); #>
             </ul>
           <# } #>

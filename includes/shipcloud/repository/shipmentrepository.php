@@ -140,7 +140,7 @@ class ShipmentRepository {
 			'carrier_tracking_no' => isset($old_structured_data['carrier_tracking_no']) ? $old_structured_data['carrier_tracking_no'] : '',
       'reference_number'    => isset($old_structured_data['reference_number']) ? $old_structured_data['reference_number'] : '',
       'notification_email'  => isset($old_structured_data['notification_email']) ? $old_structured_data['notification_email'] : '',
-			'additional_services' => isset($old_structured_data['additional_services']) ? $this->handleAdditionalServices( $old_structured_data ) : '',
+			'additional_services' => isset($old_structured_data['additional_services']) ? $this->handleAdditionalServices( $old_structured_data, $order_id ) : '',
             'customs_declaration' => isset($old_structured_data['customs_declaration']) ? $old_structured_data['customs_declaration'] : '',
 		);
 
@@ -226,9 +226,10 @@ class ShipmentRepository {
    * @return string
    * @since 1.8.0
    */
-  private function handleAdditionalServices( $data ) {
+  private function handleAdditionalServices( $data, $order_id = null ) {
     $submitted_additional_services = $data['additional_services'];
     $additional_services = array();
+    $order = \WC_Shipcloud_Order::create_order( $order_id );
 
     foreach ( $submitted_additional_services as $additional_service ) {
       switch ( $additional_service['name'] ) {
@@ -303,6 +304,14 @@ class ShipmentRepository {
         case 'gls_guaranteed24service':
           $additional_services[] = array(
               'name' => 'gls_guaranteed24service'
+          );
+          break;
+        case 'dhl_parcel_outlet_routing':
+          $additional_services[] = array(
+            'name' => 'dhl_parcel_outlet_routing',
+            'properties' => array(
+              'email' => $order->get_email_for_notification()
+            )
           );
           break;
         case 'advance_notice':
@@ -467,6 +476,16 @@ class ShipmentRepository {
               $additional_services[] = array(
                   'name' => 'gls_guaranteed24service'
               );
+          }
+          break;
+        case 'dhl_parcel_outlet_routing':
+          if (array_key_exists( 'checked', $additional_service_value )) {
+            $additional_services[] = array(
+              'name' => 'dhl_parcel_outlet_routing',
+              'properties' => array(
+                'email' => $order->get_email_for_notification()
+              )
+            );
           }
           break;
         case 'advance_notice':

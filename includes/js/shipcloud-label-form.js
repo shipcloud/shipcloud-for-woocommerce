@@ -238,6 +238,11 @@ shipcloud.LabelForm = function (wrapperSelector) {
               'name': 'gls_guaranteed24service'
             });
             break;
+          case 'dhl_parcel_outlet_routing':
+            additional_services_array.push({
+              'name': 'dhl_parcel_outlet_routing'
+            });
+            break;
           case 'advance_notice':
             var props = {};
             var $advance_notice_email_checkbox =
