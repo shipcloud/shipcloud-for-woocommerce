@@ -398,6 +398,11 @@
                 <div>
                     {{ data.model.get('pickup_request').getPickupTimeAsRange() }}
                 </div>
+                <br />
+                <strong><?php _e( 'Pickup id', 'shipcloud-for-woocommerce' ); ?></strong>
+                <div>
+                    {{ data.model.get('pickup_request').id }}
+                </div>
                 <# if ( data.model.get('pickup_request').get('pickup_address') ) { #>
                     <br />
                     <strong><?php _e( 'Pickup address', 'shipcloud-for-woocommerce' ); ?></strong>
@@ -432,7 +437,7 @@
             // only applicable for WooCommerce 3
             if (class_exists('WC_DateTime')) :
         ?>
-                <# if ( !data.model.get('pickup_request') && !_.contains(['dhl', 'dhl_express', 'go', 'tnt'], data.model.get('carrier'))) { #>
+                <# if ( !data.model.get('pickup_request') && _.contains(shipcloud_pickup_carriers.carriers_with_pickup_request, data.model.get('carrier'))) { #>
                     <button class="button button-primary shipcloud-open-pickup-request-form" role="switch" type="button">
                         <?php _e( 'Create pickup request', 'shipcloud-for-woocommerce' ) ?>
                     </button>

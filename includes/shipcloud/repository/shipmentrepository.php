@@ -52,6 +52,16 @@ class ShipmentRepository {
 		return array();
 	}
 
+  public function find_shipment_by_shipment_id( $order_id, $shipment_id ) {
+    foreach ( get_post_meta( $order_id, 'shipcloud_shipment_data' ) as $shipment ) {
+      if ( $shipment['id'] === $shipment_id ) {
+        return $shipment;
+      }
+    }
+
+    return;
+  }
+
 	public function update( $order_id, $shipment ) {
         $order = \WooCommerce::instance()->order_factory->get_order( $order_id );
         $translated_data = $this->translate_data( $shipment, $order_id );

@@ -744,7 +744,7 @@ class WC_Shipcloud_Order_Bulk {
                 WC_Shipcloud_Shipping::log( sprintf( __( 'Error while creating the pickup request: %s', 'shipcloud-for-woocommerce' ), $pickup_request->get_error_message() ) );
                 WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Error while creating the pickup request: %s', 'shipcloud-for-woocommerce' ), $pickup_request->get_error_message() ), 'error' );
             } else {
-                WC_Shipcloud_Shipping::log( sprintf( __( 'Pickup request created with id %s', 'shipcloud-for-woocommerce' ), $pickup_request['id']) );
+                WC_Shipcloud_Shipping::log( sprintf( __( 'Pickup request created with id %s for shipment with id %s', 'shipcloud-for-woocommerce' ), $pickup_request['id'], $shipment['id']) );
                 WooCommerce_Shipcloud::admin_notice( __( 'Pickup requests created', 'shipcloud-for-woocommerce') );
 
                 // let's update the shipment_data with the pickup requests

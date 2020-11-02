@@ -4,6 +4,7 @@
 * Added: DHL additional service endorsement, named person only, parcel outlet routing
 * Enhanced: Added the option to log versions
 * Enhanced: Use product title instead of description for customs declarations
+* Fixed: Pickup request for a single shipment
 
 = 1.13.0 =
 * Added: DHL services Warenpost and Prio

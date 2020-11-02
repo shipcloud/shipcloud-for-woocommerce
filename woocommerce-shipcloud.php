@@ -450,6 +450,15 @@ class WooCommerce_Shipcloud {
       )
     );
 
+    wp_localize_script(
+      'wcsc-multi-select',
+      'shipcloud_pickup_carriers',
+      array(
+        'carriers_with_pickup_object' => WC_Shipcloud_Order::PICKUP_IN_SHIPMENT_CARRIERS,
+        'carriers_with_pickup_request' => WC_Shipcloud_Order::PICKUP_CARRIERS
+      )
+    );
+
 		wp_register_script(
 			'shipcloud-label',
 			WCSC_URLPATH . 'includes/js/shipcloud-label.js',
