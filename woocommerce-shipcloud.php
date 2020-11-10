@@ -98,8 +98,6 @@ class WooCommerce_Shipcloud {
 		if ( is_admin() ) {
 			add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ), 0 );
-			// Assert session early before headers are sent.
-			add_action( 'admin_init', array( $this, 'assert_session' ) );
 			add_action( 'admin_footer', array( $this, 'show_admin_notices' ) );
 			add_action( 'admin_footer', array( $this, 'clear_admin_notices' ) );
 
@@ -277,29 +275,18 @@ class WooCommerce_Shipcloud {
 	 * @since 1.0.0
 	 */
 	public static function admin_notice( $message, $type = 'updated' ) {
-		static::assert_session();
+    $shipcloud_notices = get_transient( 'shipcloud_notices' );
 
-		$_SESSION['wcsc']['notices'][ md5( $type . ':' . $message ) ] = array(
-			'message' => '<b>shipcloud for WooCommerce</b>: ' . $message,
-			'type'    => $type
-		);
-	}
+    if ( !isset($shipcloud_notices) ) {
+      $shipcloud_notices = array();
+    }
 
-    /**
-	 * Assert that a session has been started.
-	 *
-	 * @since 1.2.0
-	 * @since 1.3.2 For usage in frontend: Only start session when no headers are sent.
-	 */
-	public static function assert_session() {
-		if ( ! headers_sent() && "" == session_id() && ! isset( $_SESSION['wcsc'] )) {
-	    	// Only start new session when no headers are send and no session started so far.
-			session_start();
-		}
+    $shipcloud_notices[ md5( $type . ':' . $message ) ] = array(
+      'message' => '<b>shipcloud for WooCommerce</b>: ' . $message,
+      'type'    => $type
+    );
 
-		if ( ! isset( $_SESSION['wcsc'] ) || ! $_SESSION['wcsc'] ) {
-			$_SESSION['wcsc'] = array();
-		}
+    set_transient( 'shipcloud_notices', $shipcloud_notices );
 	}
 
 	/**
@@ -532,25 +519,24 @@ class WooCommerce_Shipcloud {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Uses session as collection of notices.
+   * @since 1.14.0 remove sessions and handle as transient
 	 */
 	public static function show_admin_notices() {
-		static::assert_session();
-
-    if (isset($_SESSION['wcsc']) && array_key_exists('notices', $_SESSION['wcsc'])) {
-      foreach ( (array) $_SESSION['wcsc']['notices'] as $notice ) {
-        echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
-      }
+    $shipcloud_notices = get_transient( 'shipcloud_notices' );
+    if ( !isset($shipcloud_notices) ) {
+      $shipcloud_notices = array();
     }
 
+    foreach ( $shipcloud_notices as $notice ) {
+      echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
+    }
 	}
 
 	/**
 	 * Reset all notices.
 	 */
 	public static function clear_admin_notices() {
-		static::assert_session();
-
-		$_SESSION['wcsc']['notices'] = array();
+    set_transient( 'shipcloud_notices', array() );
 	}
 
     function shipcloud_drop_wc2_support_notice() {

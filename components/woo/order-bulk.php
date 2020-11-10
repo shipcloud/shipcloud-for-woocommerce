@@ -266,41 +266,37 @@ class WC_Shipcloud_Order_Bulk {
 		return $url;
 	}
 
-	/**
-	 * Add a new download for admin.
-	 *
-	 * @param $url
-	 */
-	public static function admin_download( $url ) {
-		WooCommerce_Shipcloud::assert_session();
+  /**
+   * Add a new download for admin.
+   *
+   * @param $url
+   */
+  public static function admin_download( $url ) {
+    $shipcloud_downloads = get_transient( 'shipcloud_downloads' );
+    if ( !isset($shipcloud_downloads) ) {
+      $shipcloud_downloads = array();
+    }
 
-		$_SESSION['wscs']['downloads'][ md5( $url ) ] = $url;
-	}
+    $shipcloud_downloads[ md5( $url ) ] = $url;
+    set_transient( 'shipcloud_downloads', $shipcloud_downloads );
+  }
 
-	/**
-	 * Dispatch downloads to frontend.
-	 */
-	public function attach_downloads() {
-		if (shipcloud_admin_is_on_order_overview_page()) {
-            WooCommerce_Shipcloud::assert_session();
+  /**
+   * Dispatch downloads to frontend.
+   */
+  public function attach_downloads() {
+    if (shipcloud_admin_is_on_order_overview_page()) {
+      $shipcloud_downloads = get_transient( 'shipcloud_downloads' );
 
-    		if ( empty( $_SESSION['wscs'] ) ) {
-    		    // Way to late during runtime.
-                // @todo This seems like a bug where the method is called way to late during shutdown.
-    			return;
-    		}
-
-    		foreach ( (array) $_SESSION['wscs']['downloads'] as $key => $download ) {
-    			?>
-                <script type="application/javascript">
-                    (window.open('<?php echo $download ?>', '_blank')).focus();
-                </script>
-    			<?php
-
-    			// Remove dispatched downloads.
-    			unset( $_SESSION['wscs']['downloads'][ $key ] );
-    		}
-        }
+      foreach ( (array) $shipcloud_downloads as $key => $download ) {
+    ?>
+        <script type="application/javascript">
+          (window.open('<?php echo $download ?>', '_blank')).focus();
+        </script>
+    <?php
+      }
+      set_transient( 'shipcloud_downloads', array() );
+    }
 	}
 
 	/**
