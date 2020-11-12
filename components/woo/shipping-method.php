@@ -1633,7 +1633,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 						$shipcloud_carrier->getDisplayName(),
 						$carrier_services,
             $shipcloud_carrier->getPackageTypes(),
-            $shipcloud_carrier->getAdditionalServices()
+            $shipcloud_carrier->getAdditionalServices(),
+            $shipcloud_carrier->getLabelFormats()
 					);
 				}
 			}

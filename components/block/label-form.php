@@ -86,6 +86,14 @@
         </td>
     </tr>
     <tr>
+        <th><?php _e( 'Label format', 'shipcloud-for-woocommerce' ); ?></th>
+        <td>
+        <select name="shipcloud_label_format"
+                rel="shipcloud_label_format"
+                id="shipcloud_label_format"></select>
+        </td>
+    </tr>
+    <tr>
         <th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?></th>
         <td>
             <input type="text" name="other_description" value="<?php echo esc_attr($this->get_order()->get_description()); ?>">

@@ -9,6 +9,7 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
     this.$carrier = $('[rel="shipcloud_carrier"]', self.$wrapper);
     this.$service = $('[rel="shipcloud_carrier_service"]', self.$wrapper);
     this.$packageType = $('[rel="shipcloud_carrier_package"]', self.$wrapper);
+    this.$labelFormat = $('[rel="shipcloud_label_format"]');
 
     this.main = function () {
         self.render();
@@ -42,6 +43,7 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
 
         $('.shipcloud__pickup_date_and_time').hide();
         self.$carrier.on('change', self.renderCarrierSpecificInputs);
+        self.$service.on('change', self.renderLabelFormats);
     };
 
   this.renderCarrierSpecificInputs = function () {
@@ -59,6 +61,7 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
     this.renderChildren = function () {
         self.renderChild(self.$service, 'services');
         self.renderChild(self.$packageType, 'package_types');
+        self.renderLabelFormats();
     };
 
     this.renderChild = function (selectNode, type) {
@@ -89,6 +92,33 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
         });
 
         selectNode.prop('disabled', null);
+    };
+
+    this.renderLabelFormats = function () {
+      selectNode = $(self.$labelFormat);
+
+      selectNode.prop('disabled', 'disabled');
+      selectNode.html('');
+
+      var carrier = self.getCarrierData(self.$carrier.val());
+
+      $(carrier['label_formats']).each(function (index, value) {
+        var label_formats_for_service = value[self.$service.val()];
+
+        $(label_formats_for_service).each(function (index, value) {
+          if(index == 0) {
+            selectNode.append(
+              '<option value="' + value + '" selected="selected">' + self.options.label['label_formats'][value] + '</option>'
+            );
+          } else {
+            selectNode.append(
+              '<option value="' + value + '">' + self.options.label['label_formats'][value] + '</option>'
+            );
+          }
+        });
+      });
+
+      selectNode.prop('disabled', null);
     };
 
     this.select = function (map) {

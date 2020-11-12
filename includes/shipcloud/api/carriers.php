@@ -62,10 +62,10 @@ class Carriers {
 				$carrier['display_name'],
 				$carrier['services'],
         $carrier['package_types'],
-        $carrier['additional_services']
+        $carrier['additional_services'],
+        $carrier['label_formats']
 			);
 		}
-
 		return $fetched;
 	}
 

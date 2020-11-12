@@ -33,21 +33,35 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
    */
   private $additional_services;
 
-	/**
-	 * Create new carrier.
-	 *
-	 * @param string $name
-	 * @param string $displayName
-	 * @param array  $services
-	 * @param array  $packageTypes
+  /**
+   * @var array
+   */
+  private $label_formats;
+
+  /**
+   * Create new carrier.
+   *
+   * @param string $name
+   * @param string $displayName
+   * @param array  $services
+   * @param array  $packageTypes
    * @param array  $additional_services
-	 */
-	public function __construct( $name, $displayName, array $services = array(), array $packageTypes = array(), array $additional_services = array() ) {
+   * @param array  $label_formats
+   */
+  public function __construct(
+    $name,
+    $displayName,
+    array $services = array(),
+    array $packageTypes = array(),
+    array $additional_services = array(),
+    array $label_formats = array()
+  ) {
     $this->name                = $name;
     $this->displayName         = $displayName;
     $this->services            = $services;
     $this->packageTypes        = $packageTypes;
     $this->additional_services = $additional_services;
+    $this->label_formats       = $label_formats;
 	}
 
 	/**
@@ -73,9 +87,9 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 	}
 
   /**
-   * Get a list of services.
+   * Get a list of additional services.
    *
-   * The unordered array contains the internal names of services which the carrier offers.
+   * The unordered array contains the internal names of additional services which the carrier offers.
    *
    * @since 1.12.0
    * @return array
@@ -87,6 +101,22 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
       return array();
     }
 	}
+
+  /**
+   * Get a list of label formats.
+   *
+   * The unordered array contains the internal names of label formats which the carrier offers.
+   *
+   * @since 1.14.0
+   * @return array
+   */
+  public function getLabelFormats() {
+    if ( is_array($this->label_formats) ) {
+      return $this->label_formats;
+    } else {
+      return array();
+    }
+  }
 
 	/**
 	 * Offset to retrieve
@@ -172,21 +202,22 @@ class Carrier implements \ArrayAccess, \JsonSerializable {
 		// Not provided.
 	}
 
-	/**
-	 * Specify data which should be serialized to JSON.
-	 *
-	 * This is done for using the original snake_case keys instead of the camelCase properties.
-	 *
-	 * @since 1.4.0
-	 * @return array
-	 */
-	public function jsonSerialize() {
-		return array(
+  /**
+   * Specify data which should be serialized to JSON.
+   *
+   * This is done for using the original snake_case keys instead of the camelCase properties.
+   *
+   * @since 1.4.0
+   * @return array
+   */
+  public function jsonSerialize() {
+    return array(
       'name'                => $this->getName(),
       'display_name'        => $this->getDisplayName(),
       'services'            => $this->getServices(),
       'package_types'       => $this->getPackageTypes(),
       'additional_services' => $this->getAdditionalServices(),
-		);
-	}
+      'label_formats'       => $this->getLabelFormats(),
+    );
+  }
 }

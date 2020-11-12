@@ -430,7 +430,8 @@ class WooCommerce_Shipcloud {
             'placeholder' => _x( 'Select carrier', 'backend: Selecting a carrier option for label creation', 'wcsc' ),
           ),
           'package_types' => $package_types,
-          'services' => $services
+          'services' => $services,
+          'label_formats' => wcsc_api()->get_label_format_display_names()
         ),
         'additional_services' => array_values($all_additional_services),
         'data' => $carriers_config,
