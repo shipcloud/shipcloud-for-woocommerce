@@ -86,11 +86,14 @@
         </td>
     </tr>
     <tr>
-        <th><?php _e( 'Label format', 'shipcloud-for-woocommerce' ); ?></th>
+        <th>
+          <?php _e( 'Label format', 'shipcloud-for-woocommerce' ); ?>
+          <?php echo wc_help_tip( __( 'If you don\'t specifiy a label format, the configured label format of your shipcloud account will be used', 'shipcloud-for-woocommerce' ) ); ?>
+        </th>
         <td>
-        <select name="shipcloud_label_format"
-                rel="shipcloud_label_format"
-                id="shipcloud_label_format"></select>
+          <select name="shipcloud_label_format"
+                  rel="shipcloud_label_format"
+                  id="shipcloud_label_format"></select>
         </td>
     </tr>
     <tr>

@@ -188,6 +188,7 @@ class Woocommerce_Shipcloud_API
         );
 
     $this->label_formats = array(
+      'placeholder' =>  '',
       'pdf_a5' => __( 'PDF A5', 'shipcloud-for-woocommerce' ),
       'pdf_a6' => __( 'PDF A6', 'shipcloud-for-woocommerce' ),
       'pdf_a7' => __( 'PDF A7', 'shipcloud-for-woocommerce' ),

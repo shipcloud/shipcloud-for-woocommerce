@@ -91,6 +91,18 @@ shipcloud.LabelForm = function (wrapperSelector) {
       return '';
     };
 
+  this.handleLabelConfigurationData = function (labelJSON) {
+    var label_config = {};
+    var label_format = $('select[name="shipcloud_label_format"]', self.$wrapper).val();
+    if (label_format) {
+      label_config['format'] = $('select[name="shipcloud_label_format"]', self.$wrapper).val();
+    }
+    if (!$.isEmptyObject(label_config)) {
+      labelJSON['label'] = label_config;
+    }
+    return labelJSON;
+  };
+
   this.getLabelData = function () {
         var labelJSON = {
             'order_id'         : $("#post_ID").val(),
@@ -107,6 +119,8 @@ shipcloud.LabelForm = function (wrapperSelector) {
             'additional_services': self.getAdditionalServices(),
             'pickup'           : self.getPickupData()
         };
+
+        labelJSON = self.handleLabelConfigurationData(labelJSON);
 
         // if customs declaration form is hidden
         if ($('.customs-declaration').is(':visible')) {

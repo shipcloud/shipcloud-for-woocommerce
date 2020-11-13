@@ -100,21 +100,17 @@ shipcloud.MultiSelect = function (wrapperSelector, options) {
       selectNode.prop('disabled', 'disabled');
       selectNode.html('');
 
+      selectNode.append('<option value="">' + self.options.label['label_formats'].placeholder + '</option>');
+
       var carrier = self.getCarrierData(self.$carrier.val());
 
       $(carrier['label_formats']).each(function (index, value) {
         var label_formats_for_service = value[self.$service.val()];
 
         $(label_formats_for_service).each(function (index, value) {
-          if(index == 0) {
-            selectNode.append(
-              '<option value="' + value + '" selected="selected">' + self.options.label['label_formats'][value] + '</option>'
-            );
-          } else {
-            selectNode.append(
-              '<option value="' + value + '">' + self.options.label['label_formats'][value] + '</option>'
-            );
-          }
+          selectNode.append(
+            '<option value="' + value + '">' + self.options.label['label_formats'][value] + '</option>'
+          );
         });
       });
 
