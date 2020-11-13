@@ -1202,6 +1202,8 @@ class WC_Shipcloud_Order
 	 * Ask the API to create a shipment label.
 	 */
 	public function create_shipment_label( $data ) {
+    WC_Shipcloud_Shipping::log('order create_shipment_label with data:');
+    WC_Shipcloud_Shipping::log(json_encode($data));
     /** @var \Shipcloud\Repository\ShipmentRepository $shipment_repo */
 		$shipment_repo = _wcsc_container()->get( '\\Shipcloud\\Repository\\ShipmentRepository' );
 
@@ -1234,7 +1236,9 @@ class WC_Shipcloud_Order
 		/**
 		 * TODO boolean switch inside of method indicated different strategies. Separate them in different methods.
 		 */
-		$data['create_shipping_label'] = ( 'shipcloud_create_shipment_label' === $data['action'] );
+    $data['create_shipping_label'] = ( 'shipcloud_create_shipment_label' === $data['action'] );
+    $create_shipping_label = ( 'shipcloud_create_shipment_label' === $data['action'] ) ? "true" : "false";
+    WC_Shipcloud_Shipping::log('create_shipping_label? '.$create_shipping_label);
 
     $data = $this->handle_return_shipments( $data );
 		$data = $this->sanitize_shop_owner_data( $data );

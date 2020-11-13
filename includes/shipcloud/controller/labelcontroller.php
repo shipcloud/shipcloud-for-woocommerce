@@ -30,6 +30,7 @@ class LabelController {
 	}
 
 	public function update() {
+    \WC_Shipcloud_Shipping::log('updating an order');
     if ( ! $this->is_authenticated() ) {
       $this->error( 403, __( 'Not authenticated' ) );
       return;
