@@ -128,6 +128,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         'additional_services'       : null,
         'pickup_request'            : null,
         'customs_declaration'       : null,
+        'label'                     : null,
     },
 
   allowedAdditionalServices: function () {

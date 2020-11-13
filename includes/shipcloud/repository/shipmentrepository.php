@@ -152,6 +152,9 @@ class ShipmentRepository {
       'notification_email'  => isset($old_structured_data['notification_email']) ? $old_structured_data['notification_email'] : '',
 			'additional_services' => isset($old_structured_data['additional_services']) ? $this->handleAdditionalServices( $old_structured_data, $order_id ) : '',
             'customs_declaration' => isset($old_structured_data['customs_declaration']) ? $old_structured_data['customs_declaration'] : '',
+      'label' => array(
+        'format' => isset($old_structured_data['label']['format']) ? $old_structured_data['label']['format'] : '',
+      )
 		);
 
 		if ( $order_id ) {

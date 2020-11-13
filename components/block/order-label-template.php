@@ -355,6 +355,16 @@
                 </td>
             </tr>
           <# } #>
+          <# if ( data.model.get('label') ) { #>
+            <tr>
+                <th><?php _e( 'Label:', 'shipcloud-for-woocommerce' ); ?></th>
+                <td class="label">
+                  <# if ( data.model.get('label').format ) { #>
+                    <strong><?php _e( 'Format:', 'shipcloud-for-woocommerce' ); ?></strong> {{ data.model.get('label').format }}
+                  <# } #>
+                </td>
+            </tr>
+          <# } #>
           <# if ( data.model.get('label_url') ) { #>
             <tr>
                 <th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>

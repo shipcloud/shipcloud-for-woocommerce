@@ -634,6 +634,10 @@ function _shipcloud_shipment_data_to_postmeta( $order_id, $shipment, $data, $par
         $shipment_data['pickup'] = $data['pickup'];
     }
 
+  if ( array_key_exists( 'label', $data ) && !empty($data['label']) ) {
+      $shipment_data['label'] = $data['label'];
+  }
+
 	// Fallback until v2.0.0
 	if ( isset( $data['from']['street_nr'] ) ) {
 		$shipment_data['recipient_street_no'] = $data['from']['street_nr'];

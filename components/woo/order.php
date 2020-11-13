@@ -1273,6 +1273,7 @@ class WC_Shipcloud_Order
                 'additional_services'   => null,
                 'pickup'                => null,
                 'customs_declaration'   => null,
+                'label'                 => null,
             )
         );
 
