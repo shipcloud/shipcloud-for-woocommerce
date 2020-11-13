@@ -6,6 +6,7 @@
 * Enhanced: Use product title instead of description for customs declarations
 * Enhanced: Changed storing downloads and notices from sessions to transients
 * Fixed: Pickup request for a single shipment
+* Fixed: Updating customs declarations
 
 = 1.13.0 =
 * Added: DHL services Warenpost and Prio

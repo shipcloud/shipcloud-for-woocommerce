@@ -899,17 +899,17 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
 
         shipcloud.additionalServices.handleAdditionalServices(this.model.get('carrier'), this.model.id);
 
-        if (this.model.get('customs_declaration').contents_type) {
+        if (this.model.get('customs_declaration')) {
+          if (this.model.get('customs_declaration').contents_type) {
             var contents_type_key = this.model.get('customs_declaration').contents_type;
             jQuery('#' + this.model.get('id') + ' select[name="customs_declaration[contents_type]"] option[value="' + contents_type_key + '"]').prop('selected', true);
-        }
-        if (this.model.get('customs_declaration').items) {
-          var modelId = this.model.get('id');
-          _.each(this.model.get('customs_declaration').items, function(item) {
-            jQuery('#' + modelId + ' select[name="customs_declaration[items][' + item.id + '][origin_country]"] option[value="' + item.origin_country + '"]').prop('selected', true);
-          });
-        }
-        if (this.model.get('customs_declaration')) {
+          }
+          if (this.model.get('customs_declaration').items) {
+            var modelId = this.model.get('id');
+            _.each(this.model.get('customs_declaration').items, function(item) {
+              jQuery('#' + modelId + ' select[name="customs_declaration[items][' + item.id + '][origin_country]"] option[value="' + item.origin_country + '"]').prop('selected', true);
+            });
+          }
           jQuery('#' + this.model.get('id') + ' input[name="customs_declaration[shown]"]').val('true');
         }
 
