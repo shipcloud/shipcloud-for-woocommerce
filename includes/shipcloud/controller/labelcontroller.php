@@ -51,6 +51,8 @@ class LabelController {
           $data['shipment']['pickup'] = $pickup;
       }
 
+      $data = $this->handle_label_format($data);
+
       $order = $this->shipment_repository->findOrderByShipmentId( $data['shipment']['id'] );
       $sc_order = \WC_Shipcloud_Order::create_order( $order->get_id() );
 
@@ -67,6 +69,10 @@ class LabelController {
             }
 
       \WC_Shipcloud_Shipping::log( sprintf('Trying to update shipment %s from order %d', $data['shipment']['id'], $order->get_id()) );
+      $this->shipment_repository->update(
+        $order,
+        $data['shipment']
+      );
     } catch ( \Exception $e ) {
       $this->error( 400, $e->getMessage() );
 
@@ -127,4 +133,16 @@ class LabelController {
             return $data;
         }
     }
+  private function handle_label_format( $data ) {
+    $label_format = $data['shipcloud_label_format'];
+    unset($data['shipcloud_label_format']);
+
+    if ( isset($label_format) ) {
+      $data['shipment']['label'] = array(
+        'format' => $label_format
+      );
+    }
+
+    return $data;
+  }
 }

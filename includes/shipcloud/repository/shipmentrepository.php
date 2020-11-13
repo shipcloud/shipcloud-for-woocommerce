@@ -63,6 +63,9 @@ class ShipmentRepository {
   }
 
 	public function update( $order_id, $shipment ) {
+    \WC_Shipcloud_Shipping::log( 'shipmentrepository update()' );
+    \WC_Shipcloud_Shipping::log( 'order_id: '.$order_id );
+    \WC_Shipcloud_Shipping::log( 'shipment: '.json_encode($shipment) );
         $order = \WooCommerce::instance()->order_factory->get_order( $order_id );
         $translated_data = $this->translate_data( $shipment, $order_id );
 

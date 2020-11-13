@@ -168,23 +168,34 @@
 <# } #>
 
 <fieldset class="label-shipment-misc shipcloud_misc">
-<legend>
-  <?php esc_html_e( 'misc', 'shipcloud-for-woocommerce' ) ?>
-</legend>
-<div>
-  <label for="shipcloud_notification_email">
-    <?php _e( 'shipcloud notification email', 'shipcloud-for-woocommerce' ); ?>
-    <?php echo wc_help_tip( __( 'Let shipcloud update the customer about the shipping status via email', 'shipcloud-for-woocommerce' ) ); ?>
-  </label>
-  <input type="checkbox" name="shipcloud_notification_email_checkbox"
-    <# if ( data.model.get('notification_email') ) { #>
-      checked="checked"
-    <# } #>
-  />
-  <input type="text"
-          name="shipcloud_notification_email"
-          value="{{ data.model.get('notification_email') }}"
-          class="notification_email_input" />
+  <legend>
+    <?php esc_html_e( 'misc', 'shipcloud-for-woocommerce' ) ?>
+  </legend>
+  <div>
+    <label for="shipcloud_notification_email">
+      <?php _e( 'shipcloud notification email', 'shipcloud-for-woocommerce' ); ?>
+      <?php echo wc_help_tip( __( 'Let shipcloud update the customer about the shipping status via email', 'shipcloud-for-woocommerce' ) ); ?>
+    </label>
+    <input type="checkbox" name="shipcloud_notification_email_checkbox"
+      <# if ( data.model.get('notification_email') ) { #>
+        checked="checked"
+      <# } #>
+    />
+    <input type="text"
+            name="shipcloud_notification_email"
+            value="{{ data.model.get('notification_email') }}"
+            class="notification_email_input" />
+  </div>
+  <div>
+    <label for="shipcloud_label_format">
+      <?php _e( 'Label format', 'shipcloud-for-woocommerce' ); ?>
+    </label>
+
+    <select type="text"
+            name="shipcloud_label_format"
+            class="shipcloud_label_format_input" />
+    </select>
+  </div>
 </fieldset>
 
 <div class="clear"></div>

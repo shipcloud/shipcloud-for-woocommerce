@@ -862,6 +862,20 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         this.parent.$loader().hide();
     },
 
+    getCarrierData: function (carrier) {
+      for (var i in wcsc_carrier['data']) {
+        if (!wcsc_carrier['data'].hasOwnProperty(i)) {
+          continue;
+        }
+
+        if (wcsc_carrier['data'][i].name === carrier) {
+          return wcsc_carrier['data'][i];
+        }
+      }
+
+      return {};
+  },
+
     render: function () {
         wp.Backbone.View.prototype.render.call(this);
 
@@ -898,6 +912,38 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
         if (this.model.get('customs_declaration')) {
           jQuery('#' + this.model.get('id') + ' input[name="customs_declaration[shown]"]').val('true');
         }
+
+        if (this.model.get('label').format) {
+          this.renderLabelFormats(jQuery('#' + this.model.get('id') + ' select[name="shipcloud_label_format"]'));
+        }
+    },
+
+    renderLabelFormats: function (el) {
+      var model = this.model;
+      el.prop('disabled', 'disabled');
+      el.html('');
+
+      el.append('<option value="">' + wcsc_carrier.label['label_formats'].placeholder + '</option>');
+
+      var carrier_data = this.getCarrierData(model.get('carrier'));
+
+      jQuery(carrier_data['label_formats']).each(function (index, value) {
+        var label_formats_for_service = value[model.get('service')];
+
+        jQuery(label_formats_for_service).each(function (index, value) {
+          if(value == model.get('label').format) {
+            el.append(
+              '<option value="' + value + '" selected=selected>' + wcsc_carrier.label['label_formats'][value] + '</option>'
+            );
+          } else {
+            el.append(
+              '<option value="' + value + '">' + wcsc_carrier.label['label_formats'][value] + '</option>'
+            );
+          }
+        });
+      });
+
+      el.prop('disabled', null);
     },
 
     getData: function () {
