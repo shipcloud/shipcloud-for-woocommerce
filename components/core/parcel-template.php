@@ -204,8 +204,9 @@ class WCSC_Parceltemplate_Posttype
 		$height           = get_post_meta( $post->ID, 'height', true );
 		$length           = get_post_meta( $post->ID, 'length', true );
 		$weight           = get_post_meta( $post->ID, 'weight', true );
+    $shipcloud_is_standard_parcel_template = get_post_meta( $post->ID, 'shipcloud_is_standard_parcel_template', true );
 
-		?>
+  ?>
 		<div id="shipcloud-parcel-settings">
 			<table class="form-table">
 				<tbody>
@@ -233,6 +234,12 @@ class WCSC_Parceltemplate_Posttype
 						<input type="text" name="weight" value="<?php echo $weight; ?>"/> <?php _e( 'kg', 'shipcloud-for-woocommerce' ); ?>
 					</td>
 				</tr>
+        <tr>
+          <th><label for="test"><?php _e( 'Standard template', 'shipcloud-for-woocommerce' ); ?></label></th>
+          <td>
+            <input type="checkbox" name="shipcloud_is_standard_parcel_template" <?php if ($shipcloud_is_standard_parcel_template) { ?>checked=checked<?php } ?>/>
+          </td>
+        </tr>
 				<tr>
 					<th><label for="carrier"><?php _e( 'Shipping carrier', 'shipcloud-for-woocommerce' ); ?></label></th>
 					<td id="shipcloud_csp_wrapper">
@@ -306,7 +313,8 @@ class WCSC_Parceltemplate_Posttype
 				'weight'                    => null,
 				'shipcloud_carrier'         => null,
 				'shipcloud_carrier_service' => null,
-				'shipcloud_carrier_package' => null,
+        'shipcloud_carrier_package' => null,
+        'shipcloud_is_standard_parcel_template' => null,
 			)
 		);
 
@@ -326,7 +334,7 @@ class WCSC_Parceltemplate_Posttype
 		$height = $request['height'];
 		$length = $request['length'];
 		$weight = $request['weight'];
-
+    $shipcloud_is_standard_parcel_template = $request['shipcloud_is_standard_parcel_template'];
 
 		$post_title = wcsc_get_carrier_display_name( $request['shipcloud_carrier'] )
 					  . ' ' . wcsc_api()->get_service_name( $request['shipcloud_carrier_service'] )
@@ -352,8 +360,22 @@ class WCSC_Parceltemplate_Posttype
 		update_post_meta( $post_id, 'width', wc_format_decimal( $width ) );
 		update_post_meta( $post_id, 'height', wc_format_decimal( $height ) );
 		update_post_meta( $post_id, 'length', wc_format_decimal( $length ) );
-		update_post_meta( $post_id, 'weight', wc_format_decimal( $weight ) );
-	}
+    update_post_meta( $post_id, 'weight', wc_format_decimal( $weight ) );
+
+    if ( $shipcloud_is_standard_parcel_template ) {
+      $parcel_templates = wcsc_get_parceltemplates();
+      if ( count( $parcel_templates ) > 0 ) {
+        foreach ( $parcel_templates AS $parcel_template ) {
+          if ( $parcel_template ['values']['shipcloud_is_standard_parcel_template'] ) {
+            update_post_meta( $parcel_template['ID'], 'shipcloud_is_standard_parcel_template', "" );
+          }
+        }
+      }
+      update_post_meta( $post_id, 'shipcloud_is_standard_parcel_template', $shipcloud_is_standard_parcel_template );
+    } else {
+      update_post_meta( $post_id, 'shipcloud_is_standard_parcel_template', "" );
+    }
+  }
 
 	/**
 	 * Notice Area

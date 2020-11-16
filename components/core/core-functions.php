@@ -125,7 +125,8 @@ function wcsc_get_parceltemplates( $args = array() )
 		$parcel_templates[ $key ][ 'values' ][ 'height' ]  = get_post_meta( $post->ID, 'height', true );
 		$parcel_templates[ $key ][ 'values' ][ 'length' ]  = get_post_meta( $post->ID, 'length', true );
 		$parcel_templates[ $key ][ 'values' ][ 'weight' ]  = get_post_meta( $post->ID, 'weight', true );
-	}
+    $parcel_templates[ $key ][ 'values' ][ 'shipcloud_is_standard_parcel_template' ]  = get_post_meta( $post->ID, 'shipcloud_is_standard_parcel_template', true );
+  }
 
 	return $parcel_templates;
 }

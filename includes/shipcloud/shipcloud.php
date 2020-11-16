@@ -299,6 +299,7 @@ class Woocommerce_Shipcloud_API
 
 		if ( empty( $shipment_carriers ) || true === $force_update )
 		{
+      WC_Shipcloud_Shipping::log('Carriers empty. Updating from shipcloud api');
 			$shipment_carriers = $this->update_carriers();
 
 			if( is_wp_error( $shipment_carriers ) ){
@@ -312,6 +313,8 @@ class Woocommerce_Shipcloud_API
 		{
 			return $shipment_carriers;
 		}
+
+    WC_Shipcloud_Shipping::log('Carriers: '.json_encode($shipment_carriers));
 
 		$carriers = array();
 		foreach ( $shipment_carriers AS $shipment_carrier )
@@ -353,6 +356,7 @@ class Woocommerce_Shipcloud_API
 			return $shipment_carriers;
 		}
 
+    WC_Shipcloud_Shipping::log('Updating woocommerce_shipcloud_carriers');
 		update_option( 'woocommerce_shipcloud_carriers', $shipment_carriers );
 
 		return $shipment_carriers;

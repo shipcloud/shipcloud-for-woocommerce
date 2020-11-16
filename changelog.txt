@@ -2,6 +2,7 @@
 
 = 1.14.0 =
 * Added: DHL additional service endorsement, named person only, parcel outlet routing
+* Added: Option to select a standard parcel template
 * Enhanced: Added the option to log versions
 * Enhanced: Use product title instead of description for customs declarations
 * Enhanced: Changed storing downloads and notices from sessions to transients

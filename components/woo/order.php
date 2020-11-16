@@ -2005,7 +2005,8 @@ class WC_Shipcloud_Order
 					'shipcloud_carrier' => $carrier['carrier'],
 					'shipcloud_carrier_service' => $carrier['service'],
 					'shipcloud_carrier_package' => $carrier['package'],
-				)
+        ),
+        'shipcloud_is_standard_parcel_template' => $data->shipcloud_is_standard_parcel_template
 			);
 		}
 	}

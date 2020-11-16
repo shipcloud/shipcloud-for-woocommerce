@@ -9,6 +9,10 @@ shipcloud.Filler = function (sourceSelect, targetForm) {
 
     this.main = function () {
         self.$source.on('change', self.fillValues);
+        selected_option = $(sourceSelect.selector + " option:selected");
+        if ( "" != selected_option) {
+          self.$source.trigger('change');
+        }
     };
 
     this.fillValues = function () {

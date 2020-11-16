@@ -14,7 +14,10 @@
 								<?php foreach ( $parcel_template['data'] as $field => $value ): ?>
 									data-<?php echo $field ?>="<?php esc_attr_e( $value ) ?>"
 								<?php endforeach; ?>
-									>
+                <?php if ( $parcel_template['shipcloud_is_standard_parcel_template'] ) : ?>
+                  selected=selected
+                <?php endif; ?>
+							>
 								<?php echo $parcel_template['option']; ?>
 							</option>
 						<?php endforeach; ?>
