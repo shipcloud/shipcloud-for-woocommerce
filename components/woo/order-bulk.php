@@ -122,7 +122,7 @@ class WC_Shipcloud_Order_Bulk {
       $this->create_pickup_request( $request );
       return;
     } else {
-      WC_Shipcloud_Shipping::log(sprintf( __( 'Unknown bulk action called. Request: %s', 'shipcloud-for-woocommerce' ), $request ));
+      WC_Shipcloud_Shipping::log(sprintf( __( 'Unknown bulk action called. Request: %s', 'shipcloud-for-woocommerce' ), json_encode($request) ));
       return;
     }
 	}
