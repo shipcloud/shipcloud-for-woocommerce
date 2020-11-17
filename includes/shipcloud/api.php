@@ -238,8 +238,8 @@ class Api {
 
 		$ch = curl_init( $url );
 		curl_setopt( $ch, CURLOPT_HEADER, true );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $ch, CURLOPT_TIMEOUT, 10 );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_TIMEOUT, intval(wcsc_api()->get_api_timeout()) );
 		curl_setopt( $ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC );
 		curl_setopt( $ch, CURLOPT_USERPWD, $this->apiKey );
 		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );

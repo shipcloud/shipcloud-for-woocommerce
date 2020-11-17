@@ -615,6 +615,11 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => sprintf( __( 'If you want to make changes, you can find the settings in your <a href="%s" target="_blank">shipcloud.io webhooks section</a>.', 'shipcloud-for-woocommerce' ), 'https://app.shipcloud.io/de/webhooks' ),
 				'default' => 'no'
 			),
+      'api_timeout' => array(
+        'title'   => __( 'API timeout in seconds', 'shipcloud-for-woocommerce' ),
+        'type'    => 'text',
+        'default' => '10'
+      ),
 			'debug' => array(
 				'title'   => __( 'Debug', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',

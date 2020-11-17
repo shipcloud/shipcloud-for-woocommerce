@@ -38,6 +38,13 @@ class Woocommerce_Shipcloud_API
 	 */
 	private $api_url = null;
 
+  /**
+   * API timeout setting
+   *
+   * @since 1.14.0
+   */
+  private $api_timeout = null;
+
 	/**
 	 * Saved shipcloud settings
 	 *
@@ -69,6 +76,11 @@ class Woocommerce_Shipcloud_API
 		$this->api_key = $api_key;
 
 		$this->api_url = 'https://api.shipcloud.io/v1';
+
+    $this->api_timeout = $this->settings['api_timeout'];
+    if (!isset($this->api_timeout) || "" == $this->api_timeout) {
+      $this->api_timeout = 10;
+    }
 
 		$this->services = array(
 			'standard'      => array(
@@ -245,6 +257,17 @@ class Woocommerce_Shipcloud_API
   public function get_label_format_display_names() {
     return $this->label_formats;
   }
+
+  /**
+   * Return the api_timout value from plugin settings
+   *
+   * @since 1.14.0
+   * @return string
+   */
+  public function get_api_timeout() {
+    return $this->api_timeout;
+  }
+
 	/**
 	 * Is the service a customer Service
 	 *
