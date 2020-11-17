@@ -322,7 +322,11 @@ class Woocommerce_Shipcloud_API
 
 		if ( empty( $shipment_carriers ) || true === $force_update )
 		{
-      WC_Shipcloud_Shipping::log('Carriers empty. Updating from shipcloud api');
+      if ( empty( $shipment_carriers ) ) {
+        WC_Shipcloud_Shipping::log('Carriers empty. Updating from shipcloud api');
+      } elseif (true === $force_update) {
+        WC_Shipcloud_Shipping::log('Forced carriers update');
+      }
 			$shipment_carriers = $this->update_carriers();
 
 			if( is_wp_error( $shipment_carriers ) ){
