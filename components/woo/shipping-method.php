@@ -1562,8 +1562,12 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
 		$this->init_shipcloud_api();
 
-		$allowed_carriers   = $this->get_option( 'allowed_carriers' );
-		$shipcloud_carriers = $this->shipcloud_api->get_carriers();
+    $allowed_carriers   = $this->get_option( 'allowed_carriers' );
+    if ( $this->carriers ) {
+      $shipcloud_carriers = $this->carriers;
+    } else {
+      $shipcloud_carriers = $this->shipcloud_api->get_carriers();
+    }
 
 		if ( is_wp_error( $shipcloud_carriers ) )
 		{
