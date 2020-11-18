@@ -913,9 +913,7 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
           jQuery('#' + this.model.get('id') + ' input[name="customs_declaration[shown]"]').val('true');
         }
 
-        if (this.model.get('label').format) {
-          this.renderLabelFormats(jQuery('#' + this.model.get('id') + ' select[name="shipcloud_label_format"]'));
-        }
+        this.renderLabelFormats(jQuery('#' + this.model.get('id') + ' select[name="shipcloud_label_format"]'));
     },
 
     renderLabelFormats: function (el) {
