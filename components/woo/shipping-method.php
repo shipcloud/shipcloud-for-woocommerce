@@ -616,7 +616,8 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'default' => 'no'
 			),
       'api_timeout' => array(
-        'title'   => __( 'API timeout in seconds', 'shipcloud-for-woocommerce' ),
+        'title'   => __( 'API timeout (in seconds)', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'This defines how long the plugin will wait for an answer of the shipcloud api', 'shipcloud-for-woocommerce' ),
         'type'    => 'text',
         'default' => '10'
       ),
