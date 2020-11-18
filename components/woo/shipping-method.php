@@ -222,7 +222,7 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 			return false;
 		}
 
-		$carriers = $this->shipcloud_api->get_carriers(true);
+    $carriers = $this->shipcloud_api->get_carriers();
 		if ( is_wp_error( $carriers ) ) {
 			self::log( 'Could not update carriers - ' . $carriers->get_error_message() );
 			WooCommerce_Shipcloud::admin_notice( sprintf( __( 'Could not update carriers: %s', 'shipcloud-for-woocommerce' ), $carriers->get_error_message() ), 'error' );
