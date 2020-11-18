@@ -608,7 +608,13 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 				'description' => __( 'There are some cases where automatic detection doesn\'t work, due to different naming schemes. Always check the recipients\' address before creating a shipping label!', 'shipcloud-for-woocommerce' ),
 				'default' => 'yes'
 			),
-            'webhook_active' => array(
+      'dhl_express_regular_pickup' => array(
+        'title'   => __( 'DHL Express regular pickup', 'shipcloud-for-woocommerce' ),
+        'type'    => 'checkbox',
+        'label'   => __( 'DHL Express will pickup my shipments regularly', 'shipcloud-for-woocommerce' ),
+        'description' => __( 'When active you won\'t have to provide pickup data when creating a shipment.', 'shipcloud-for-woocommerce' ),
+      ),
+      'webhook_active' => array(
 				'title'   => __( 'Shipment status notification', 'shipcloud-for-woocommerce' ),
 				'type'    => 'checkbox',
 				'label'   => __( 'Enable webhooks to get notified about status changes in your shipments.', 'shipcloud-for-woocommerce' ),

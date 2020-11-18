@@ -4,6 +4,7 @@
 * Added: DHL additional service endorsement, named person only, parcel outlet routing
 * Added: Option to select a standard parcel template
 * Added: Option to define an api timeout value
+* Added: Option to define if shipments will be picked up by DHL Express regularly
 * Enhanced: Added the option to log versions
 * Enhanced: Use product title instead of description for customs declarations
 * Enhanced: Changed storing downloads and notices from sessions to transients

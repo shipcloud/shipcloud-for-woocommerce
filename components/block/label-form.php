@@ -1,4 +1,7 @@
 <?php /** @var \WooCommerce_Shipcloud_Block_Labels_Form $this */ ?>
+<?php
+  $options = get_option( 'woocommerce_shipcloud_settings' );
+?>
 <table class="parcel-form-table">
     <tbody>
     <tr>
@@ -129,7 +132,9 @@
 
         // only applicable for WooCommerce 3
         if (class_exists('WC_DateTime')) {
+          if ( ! array_key_exists( 'dhl_express_regular_pickup', $options ) || 'no' === $options['dhl_express_regular_pickup'] ) {
             require WCSC_COMPONENTFOLDER . '/block/pickup-date-and-time.php';
+          }
         }
     ?>
         <tr>
