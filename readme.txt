@@ -3,7 +3,7 @@ Contributors: mahype, awesome-ug, andrecedik, screamingdev
 Tags: woocommerce, shipping, tracking, stamps
 Requires at least: 4.2.0
 Tested up to: 5.4.2
-Stable tag: 1.13.0
+Stable tag: 1.14.0
 Requires PHP: 7.2.3
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
@@ -103,19 +103,16 @@ https://youtu.be/HE3jow15x8c
 
 == Latest changelog ==
 
-= 1.13.0 =
-* Added: DHL services Warenpost and Prio
-* Added: DPAG service Warenpost (with signature)
-* Added: Option to not create a shipping label (during bulk processing) when there is already one present
-* Enhanced: Submit button for creating labels in bulk is now being disabled upon click to prevent double clicks
-* Enhanced: Better check to see if we're on an order page
-* Enhanced: Check to see if we have an order when getting the global reference number
-* Enhanced: Skip checking product attributes for customs declarations if product info is missing from order line items
-* Enhanced: Return carrier names in sorted order
-* Fixed: Added handling of unspecified weights for products
-* Fixed: Return an empty array when there are no additional services
-* Fixed: Getting the global reference number for bulk processing of shipments
-* Fixed: Notification email checkbox got overwritten by global configuration
-* Fixed: Bug where timestamps couldn't be parsed
+= 1.14.0 =
+* Added: DHL additional service endorsement, named person only, parcel outlet routing
+* Added: Option to select a standard parcel template
+* Added: Option to define an api timeout value
+* Added: Option to define if shipments will be picked up by DHL Express regularly
+* Enhanced: Added the option to log versions
+* Enhanced: Use product title instead of description for customs declarations
+* Enhanced: Changed storing downloads and notices from sessions to transients
+* Fixed: Pickup request for a single shipment
+* Fixed: Updating customs declarations
+* Fixed: Logging unsupported bulk requests
 
 See the [github releases section](https://github.com/shipcloud/shipcloud-for-woocommerce/releases) for older releases.
