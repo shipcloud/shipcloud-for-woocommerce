@@ -2,6 +2,7 @@
 
 = 1.14.1 =
 * Enhanced: Removed handling of "customer serviced" services
+* Fixed: Shipping method names for carriers whos names are two parts
 
 = 1.14.0 =
 * Added: DHL additional service endorsement, named person only, parcel outlet routing

@@ -63,6 +63,18 @@ class Woocommerce_Shipcloud_API
 	 */
 	private $services = array();
 
+  /**
+   * Carrier names that need special handling
+	 * @since 1.14.1
+   */
+  const CARRIERS_WITH_UNDERSCORE = array(
+    'angel_de',
+    'cargo_international',
+    'db_schenker',
+    'dhl_express',
+    'parcel_one'
+  );
+
 	/**
 	 * Woocommerce_Shipcloud_API constructor.
 	 *
@@ -668,7 +680,7 @@ class Woocommerce_Shipcloud_API
 		}
 
 		$carrier_name_arr = $this->disassemble_carrier_name( $carrier_name );
-		$display_name     = strtoupper( $carrier_name_arr['carrier'] ) . ' - ' . $this->get_service_name( $carrier_name_arr['service'] );
+		$display_name     = wcsc_get_carrier_display_name( $carrier_name_arr['carrier'] ) . ' - ' . $this->get_service_name( $carrier_name_arr['service'] );
 
 		return $display_name;
 	}
@@ -682,13 +694,21 @@ class Woocommerce_Shipcloud_API
 	 * @since 1.0.0
 	 */
 	public function disassemble_carrier_name( $carrier_name ) {
-		$carrier_arr = explode( '_', $carrier_name );
+    $carrier_arr = explode( '_', $carrier_name );
+    $service = '';
 
-		$carrier = $carrier_arr[0];
-		$service = '';
+    $carrier_with_underscore_name = $carrier_arr[0].'_'.$carrier_arr[1];
+    if (in_array($carrier_with_underscore_name, static::CARRIERS_WITH_UNDERSCORE)) {
+      $carrier = $carrier_with_underscore_name;
+      $array_start_index = 2;
+    } else {
+      $carrier = $carrier_arr[0];
+      $array_start_index = 1;
+    }
 
-		for ( $i = 1; $i < count( $carrier_arr ); $i ++ ) {
-			$service .= $i == 1 ? '' : '_';
+
+		for ( $i = $array_start_index; $i < count( $carrier_arr ); $i ++ ) {
+			$service .= $i == $array_start_index ? '' : '_';
 			$service .= $carrier_arr[ $i ];
 		}
 
