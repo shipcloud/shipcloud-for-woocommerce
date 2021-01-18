@@ -1588,14 +1588,14 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 		{
 			foreach ( $shipcloud_carriers AS $shipcloud_carrier )
 			{
-				if ( $only_customer_services )
-				{
-					$carrier_arr = $this->shipcloud_api->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
-					if ( ! $this->shipcloud_api->is_customer_service( $carrier_arr[ 'service' ] ) )
-					{
-						continue;
-					}
-				}
+				// if ( $only_customer_services )
+				// {
+				// 	$carrier_arr = $this->shipcloud_api->disassemble_carrier_name( $shipcloud_carrier[ 'name' ] );
+				// 	if ( ! $this->shipcloud_api->is_customer_service( $carrier_arr[ 'service' ] ) )
+				// 	{
+				// 		continue;
+				// 	}
+				// }
 				if ( in_array( $shipcloud_carrier[ 'name' ], $allowed_carriers ) )
 				{
 					$carriers[ $shipcloud_carrier[ 'name' ] ] = $shipcloud_carrier[ 'display_name' ];

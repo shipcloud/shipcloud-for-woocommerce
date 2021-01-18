@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.14.1 =
+* Enhanced: Removed handling of "customer serviced" services
+
 = 1.14.0 =
 * Added: DHL additional service endorsement, named person only, parcel outlet routing
 * Added: Option to select a standard parcel template
