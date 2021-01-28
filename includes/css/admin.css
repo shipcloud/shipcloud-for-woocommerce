@@ -468,7 +468,8 @@ fieldset .shipment-labels .address {
  * Dialogs
  */
 #ask-create-label,
-#ask-delete-shipment{
+#ask-delete-shipment,
+#ask-force-delete-shipment {
     display: none;
 }
 

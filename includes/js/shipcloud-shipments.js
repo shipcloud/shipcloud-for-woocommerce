@@ -201,27 +201,83 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
       return _.contains(additional_services, name);
     },
 
-    destroy: function () {
+    destroy: function (force_destroy = false) {
         var self = this;
+        var shipment_id = this.get('id');
+        var overlay = jQuery('#' + shipment_id + ' .loading-overlay');
 
-        jQuery.post(
-            ajaxurl,
-            {
-                'action'     : 'shipcloud_delete_shipment',
-                'shipment_id': this.get('id')
-            },
-            function (response) {
-                var result = JSON.parse(response);
+        if ( force_destroy ) {
+          jQuery('#ask-delete-shipment').dialog({
+            'dialogClass': 'wcsc-dialog wp-dialog',
+            'modal'      : true,
+            'buttons'    : {
+                'yes': {
+                  text : wcsc_translate.yes,
+                  click: function () {
+                    jQuery(this).dialog('close');
 
-                if (result.status === 'ERROR') {
-                    self.printErrors(result.errors);
+                    jQuery.post(
+                      ajaxurl,
+                      {
+                        'action'     : 'shipcloud_force_delete_shipment',
+                        'shipment_id': shipment_id
+                      },
+                      function (response) {
+                        var result = JSON.parse(response);
 
-                    return;
+                        if (result.status === 'ERROR') {
+                          self.printErrors(result.errors);
+                        } else {
+                          self.trigger('destroy');
+                        }
+                      }
+                    );
+                  }
+                },
+                'no' : {
+                  text : wcsc_translate.no,
+                  click: function (e) {
+                    jQuery(this).dialog('close');
+
+                    e.stopPropagation();
+                    e.preventDefault();
+                  }
                 }
-
-                self.trigger('destroy');
             }
-        );
+          });
+
+          jQuery('#shipment-center').find('.info .error').remove();
+          overlay.hide();
+        } else {
+          jQuery.post(
+              ajaxurl,
+              {
+                  'action'     : 'shipcloud_delete_shipment',
+                  'shipment_id': this.get('id')
+              },
+              function (response) {
+                  var result = JSON.parse(response);
+
+                  if (result.status === 'ERROR') {
+                      self.printErrors(result.errors);
+
+                      var error_element = jQuery('#shipment-center').find('.info .error');
+                      html = error_element.html();
+                      html += '<a href="#" class="shipcloud_force_delete_shipment">';
+                      html += wcsc_translate.force_delete_dialog;
+                      html += '</a>';
+                      error_element.html(html);
+                      error_element.find('.shipcloud_force_delete_shipment').on('click', function (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        self.destroy(true);
+                      });
+                  } else {
+                    self.trigger('destroy');
+                  }
+              }
+          );
+        }
     },
 
     parse: function (data) {

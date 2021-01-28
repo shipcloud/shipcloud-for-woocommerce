@@ -363,7 +363,8 @@ class WooCommerce_Shipcloud {
 			'kg'                          => __( 'kg', 'shipcloud-for-woocommerce' ),
 			'cm'                          => __( 'cm', 'shipcloud-for-woocommerce' ),
 			'yes'                         => __( 'Yes', 'shipcloud-for-woocommerce' ),
-			'no'                          => __( 'No', 'shipcloud-for-woocommerce' )
+      'no'                          => __( 'No', 'shipcloud-for-woocommerce' ),
+      'force_delete_dialog'         => __( 'Do you want to delete this shipment from the WooCommerce database nonetheless?', 'shipcloud-for-woocommerce' )
 		);
 
 		wp_register_script(

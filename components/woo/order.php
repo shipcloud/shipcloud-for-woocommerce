@@ -168,7 +168,8 @@ class WC_Shipcloud_Order
             }
 		);
 
-		add_action( 'wp_ajax_shipcloud_delete_shipment', array( $this, 'ajax_delete_shipment' ) );
+    add_action( 'wp_ajax_shipcloud_delete_shipment', array( $this, 'ajax_delete_shipment' ) );
+    add_action( 'wp_ajax_shipcloud_force_delete_shipment', array( $this, 'ajax_force_delete_shipment' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ), 1 );
 
@@ -1053,6 +1054,7 @@ class WC_Shipcloud_Order
 		</div>
 		<div id="ask-create-label"><?php _e( 'Depending on the carrier, there will be a fee for creating the label. Do you really want to create a label?', 'shipcloud-for-woocommerce' ); ?></div>
 		<div id="ask-delete-shipment"><?php _e( 'Do you really want to delete this shipment?', 'shipcloud-for-woocommerce' ); ?></div>
+    <div id="ask-force-delete-shipment"><?php _e( 'Do you want to delete this shipment from the WooCommerce database nonetheless?', 'shipcloud-for-woocommerce' ); ?></div>
 		<?php
 
 		return ob_get_clean();
@@ -1517,29 +1519,12 @@ class WC_Shipcloud_Order
 			exit;
 		}
 
-		WC_Shipcloud_Shipping::log( 'Order #' . $order_id . ' - Deleted shipment successfully (' . $shipment_id . ')' );
+		WC_Shipcloud_Shipping::log( 'Order #' . $order_id . ' - Deleted shipment at shipcloud successfully (' . $shipment_id . ')' );
 
-		$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+    $this->delete_shipment_from_db($shipment_id);
 
-		$order->add_order_note( __( 'shipcloud shipment has been deleted.', 'shipcloud-for-woocommerce' ) );
-
-		// Finding shipment key to delete postmeta
-		foreach ( $shipments AS $key => $shipment ) {
-			if ( $shipment['id'] == $shipment_id ) {
-				delete_post_meta( $order_id, 'shipcloud_shipment_data', $shipment );
-                delete_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_id );
-
-				echo json_encode(
-					array(
-						'status'      => 'OK',
-						'shipment_id' => $shipment_id
-					)
-				);
-				exit;
-			}
-		}
-
-		// Went through whole shipments and did't find it.
+    // Went through whole shipments and did't find it.
+    WC_Shipcloud_Shipping::log( 'Could not find shipment with shipment id ' . $shipment_id . ' belonging to order #' . $order_id );
 		echo json_encode(
 			array(
 				'status' => 'ERROR',
@@ -1548,6 +1533,48 @@ class WC_Shipcloud_Order
 		);
 		exit;
 	}
+
+  /**
+   * Force deleting a shipment
+   *
+   * @since 1.14.1
+   */
+  public function ajax_force_delete_shipment() {
+    $shipment_id = $_POST['shipment_id'];
+    $this->delete_shipment_from_db($shipment_id);
+  }
+
+  /**
+   * Deleting a shipment from the database
+   *
+   * @since 1.14.1
+   */
+  public function delete_shipment_from_db($shipment_id) {
+    $shipment_repository = _wcsc_container()->get( '\Shipcloud\Repository\ShipmentRepository' );
+    $order = $shipment_repository->findOrderByShipmentId( $shipment_id );
+    $order_id = $order->get_order_number();
+    $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+
+    // Finding shipment key to delete postmeta
+    foreach ( $shipments AS $key => $shipment ) {
+      if ( $shipment['id'] == $shipment_id ) {
+        delete_post_meta( $order_id, 'shipcloud_shipment_data', $shipment );
+        delete_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment_id );
+
+        echo json_encode(
+          array(
+            'status'      => 'OK',
+            'shipment_id' => $shipment_id
+          )
+        );
+
+        $order->add_order_note( __( 'shipcloud shipment has been deleted.', 'shipcloud-for-woocommerce' ) );
+        WC_Shipcloud_Shipping::log( 'Deleted shipment with shipment id ' . $shipment_id . ' belonging to order #' . $order_id );
+
+        exit;
+      }
+    }
+  }
 
 	/**
 	 * Enqueuing needed Scripts & Styles
