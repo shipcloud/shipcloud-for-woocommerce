@@ -75,7 +75,13 @@ class Woocommerce_Shipcloud_API
     'parcel_one'
   );
 
-	/**
+  /**
+   * Fallback value for api timeout
+  * @since 1.14.2
+   */
+  const API_TIMEOUT_DEFAULT = 10;
+
+  /**
 	 * Woocommerce_Shipcloud_API constructor.
 	 *
 	 * @param string $api_key
@@ -84,14 +90,19 @@ class Woocommerce_Shipcloud_API
 	 */
 	public function __construct( $api_key = null )
 	{
-		$this->settings = get_option( 'woocommerce_shipcloud_settings' );
 		$this->api_key = $api_key;
-
 		$this->api_url = 'https://api.shipcloud.io/v1';
+    $this->api_timeout = static::API_TIMEOUT_DEFAULT;
 
-    $this->api_timeout = $this->settings['api_timeout'];
-    if (!isset($this->api_timeout) || "" == $this->api_timeout) {
-      $this->api_timeout = 10;
+    $this->settings = get_option( 'woocommerce_shipcloud_settings' );
+    if ( is_array($this->settings) ) {
+      if( array_key_exists( 'api_timeout', $this->settings ) ) {
+        $api_timeout = $this->settings['api_timeout'];
+
+        if (!isset($api_timeout) || "" == $api_timeout) {
+          $this->api_timeout = static::API_TIMEOUT_DEFAULT;
+        }
+      }
     }
 
 		$this->services = array(

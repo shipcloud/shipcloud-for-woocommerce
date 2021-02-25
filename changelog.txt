@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 1.14.2 =
+* Fixed: Added check to see if plugin settings are present
+* Fixed: Use static api timeout value of 10 seconds if not defined in plugin settings
+
 = 1.14.1 =
 * Enhanced: Removed handling of "customer serviced" services
 * Fixed: Shipping method names for carriers whos names are two parts

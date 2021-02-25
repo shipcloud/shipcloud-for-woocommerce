@@ -1692,13 +1692,15 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
 	{
 		$settings = get_option( 'woocommerce_shipcloud_settings' );
 
-		if( ! array_key_exists( 'debug', $settings ) ) {
-			return;
-		}
+    if ( is_array($settings) ) {
+      if( ! array_key_exists( 'debug', $settings ) ) {
+        return;
+      }
 
-		if( 'no' === $settings[ 'debug' ] ) {
-			return;
-	    }
+      if( 'no' === $settings[ 'debug' ] ) {
+        return;
+      }
+    }
 
 		if ( ! is_object( self::$logger ) )
 		{
@@ -1862,35 +1864,37 @@ class WC_Shipcloud_Shipping extends WC_Shipping_Method
             $woocommerce_api_enabled = get_option( 'woocommerce_api_enabled' );
             $plugin_settings = get_option( 'woocommerce_shipcloud_settings' );
 
-            if ((!$woocommerce_api_enabled || $woocommerce_api_enabled === 'no') &&
-                (
-                    $webhook_id &&
-                    array_key_exists( 'webhook_active', $plugin_settings ) &&
-                    $plugin_settings['webhook_active'] === 'yes' &&
-                    !isset($_POST['woocommerce_shipcloud_webhook_active'])
-                ) ||
-                (
-                    !$webhook_id &&
-                    array_key_exists( 'webhook_active', $plugin_settings ) &&
-                    $plugin_settings['webhook_active'] === 'no' &&
-                    isset($_POST['woocommerce_shipcloud_webhook_active'])
-                )
-            ) {
-                WooCommerce_Shipcloud::admin_notice(
-                    sprintf(
-                        __(
-                            'You have to activate the REST-API option in your <a href="%s">WooCommerce api settings</a>.',
-                            'shipcloud-for-woocommerce'
-                        ),
-                        admin_url( 'admin.php?page=wc-settings&tab=api' )
-                    ), 'error'
-                );
-            }
+            if ( $plugin_settings ) {
+              if ((!$woocommerce_api_enabled || $woocommerce_api_enabled === 'no') &&
+                  (
+                      $webhook_id &&
+                      array_key_exists( 'webhook_active', $plugin_settings ) &&
+                      $plugin_settings['webhook_active'] === 'yes' &&
+                      !isset($_POST['woocommerce_shipcloud_webhook_active'])
+                  ) ||
+                  (
+                      !$webhook_id &&
+                      array_key_exists( 'webhook_active', $plugin_settings ) &&
+                      $plugin_settings['webhook_active'] === 'no' &&
+                      isset($_POST['woocommerce_shipcloud_webhook_active'])
+                  )
+              ) {
+                  WooCommerce_Shipcloud::admin_notice(
+                      sprintf(
+                          __(
+                              'You have to activate the REST-API option in your <a href="%s">WooCommerce api settings</a>.',
+                              'shipcloud-for-woocommerce'
+                          ),
+                          admin_url( 'admin.php?page=wc-settings&tab=api' )
+                      ), 'error'
+                  );
+              }
 
-            // make sure the checkbox for active webhook is deactivated when no webhook id is present
-            if (!$webhook_id && array_key_exists( 'webhook_active', $plugin_settings ) && $plugin_settings['webhook_active'] === 'yes') {
-                $plugin_settings['webhook_active'] = 'no';
-                update_option('woocommerce_shipcloud_settings', $plugin_settings);
+              // make sure the checkbox for active webhook is deactivated when no webhook id is present
+              if (!$webhook_id && array_key_exists( 'webhook_active', $plugin_settings ) && $plugin_settings['webhook_active'] === 'yes') {
+                  $plugin_settings['webhook_active'] = 'no';
+                  update_option('woocommerce_shipcloud_settings', $plugin_settings);
+              }
             }
         }
     }
