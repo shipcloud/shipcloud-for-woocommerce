@@ -3,6 +3,7 @@
 = 1.14.2 =
 * Fixed: Added check to see if plugin settings are present
 * Fixed: Use static api timeout value of 10 seconds if not defined in plugin settings
+* Fixed: Added an extra check to see of properties for advance notice are empty
 
 = 1.14.1 =
 * Enhanced: Removed handling of "customer serviced" services

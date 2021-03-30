@@ -550,10 +550,12 @@ class ShipmentRepository {
               }
             }
 
-            $additional_services[] = array(
-              'name' => 'advance_notice',
-              'properties' => $props
-            );
+            if (!empty($props)) {
+              $additional_services[] = array(
+                'name' => 'advance_notice',
+                'properties' => $props
+              );
+            }
           }
 
           break;
