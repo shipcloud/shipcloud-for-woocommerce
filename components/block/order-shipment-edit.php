@@ -213,7 +213,7 @@
          ?>
     </fieldset>
 
-<input type="hidden" name="shipment[package][weight]" value="{{ data.model.get('package').get('width') }}" />
+<input type="hidden" name="shipment[package][weight]" value="{{ data.model.get('package').get('weight') }}" />
 <input type="hidden" name="shipment[package][length]" value="{{ data.model.get('package').get('length') }}" />
 <input type="hidden" name="shipment[package][width]" value="{{ data.model.get('package').get('width') }}" />
 <input type="hidden" name="shipment[package][height]" value="{{ data.model.get('package').get('height') }}" />
