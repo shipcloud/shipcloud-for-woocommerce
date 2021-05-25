@@ -10,7 +10,7 @@
  * Developer URI: https://developers.shipcloud.io
  * Text Domain: shipcloud-for-woocommerce
  * WC requires at least: 2.6.4
- * WC tested up to: 3.9.2
+ * WC tested up to: 5.3.0
  * License:
  * Copyright 2017 (support@awesome.ug)
  * This program is free software; you can redistribute it and/or modify

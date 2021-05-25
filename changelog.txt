@@ -1,5 +1,8 @@
 == Changelog ==
 
+= 1.14.3 =
+* Enhanced: Declared support for Wordpress up to 5.7.2 and WooCommerce up to 5.3.0
+
 = 1.14.2 =
 * Fixed: Added check to see if plugin settings are present
 * Fixed: Use static api timeout value of 10 seconds if not defined in plugin settings
