@@ -1,6 +1,7 @@
 == Changelog ==
 
 = 1.14.3 =
+* Enhanced: New plugin description
 * Enhanced: Declared support for Wordpress up to 5.7.2 and WooCommerce up to 5.3.0
 
 = 1.14.2 =
