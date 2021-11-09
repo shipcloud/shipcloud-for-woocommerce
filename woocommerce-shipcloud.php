@@ -521,17 +521,17 @@ class WooCommerce_Shipcloud {
 	 *
 	 * @since 1.0.0
 	 * @since 1.2.0 Uses session as collection of notices.
-   * @since 1.14.0 remove sessions and handle as transient
+	 * @since 1.14.0 remove sessions and handle as transient
 	 */
 	public static function show_admin_notices() {
-    $shipcloud_notices = get_transient( 'shipcloud_notices' );
-    if ( !isset($shipcloud_notices) ) {
-      $shipcloud_notices = array();
-    }
+		$shipcloud_notices = get_transient( 'shipcloud_notices' );
+		if ( !isset($shipcloud_notices) || !is_array($shipcloud_notices) ) {
+			$shipcloud_notices = array();
+		}
 
-    foreach ( $shipcloud_notices as $notice ) {
-      echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
-    }
+		foreach ( $shipcloud_notices as $notice ) {
+			echo '<div class="' . esc_attr( $notice['type'] ) . '"><p>' . $notice['message'] . '</p></div>';
+		}
 	}
 
 	/**
