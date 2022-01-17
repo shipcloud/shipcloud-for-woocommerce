@@ -1,0 +1,6 @@
+https://developer.wordpress.org/plugins/plugin-basics/best-practices/
+
+https://drew.tenderapp.com/kb/tiptip-jquery-plugin/how-to-use-it
+https://drew.tenderapp.com/kb/tiptip-jquery-plugin/options-api
+https://www.semicolonworld.com/jquery/tutorial/multi-select-dropdown-list-with-checkbox-jquery
+https://demo.semicolonworld.com/multiselect-dropdown-with-checkbox-using-jquery/

@@ -4,3 +4,6 @@
 .idea
 apigen-report.xml
 phpunit-selenium/
+phpdoc.xml
+todos.txt
+composer.json

@@ -1,0 +1,445 @@
+[
+	{
+		"name": "angel_de",
+		"display_name": "Angel DE",
+		"services": [
+			"same_day"
+		],
+		"package_types": [
+			"parcel"
+		],
+		"additional_services": [
+			"angel_de_delivery_date_time"
+		],
+		"label_formats": {
+			"same_day": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x6in_300dpi"
+			]
+		}
+	},
+	{
+		"name": "cargo_international",
+		"display_name": "Cargo International",
+		"services": [
+			"standard",
+			"cargo_international_express"
+		],
+		"package_types": [
+			"cargo_international_large_parcel",
+			"disposable_pallet",
+			"euro_pallet"
+		],
+		"additional_services": [
+			"advance_notice",
+			"cash_on_delivery"
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"cargo_international_express": [
+				"pdf_a5",
+				"pdf_a6"
+			]
+		}
+	},
+	{
+		"name": "dhl",
+		"display_name": "DHL",
+		"services": [
+			"standard",
+			"dhl_europaket",
+			"returns",
+			"dhl_prio",
+			"dhl_warenpost"
+		],
+		"package_types": [
+			"parcel",
+			"bulk"
+		],
+		"additional_services": [
+			"advance_notice",
+			"cash_on_delivery",
+			"delivery_date",
+			"dhl_endorsement",
+			"dhl_gogreen",
+			"dhl_ident_check",
+			"dhl_named_person_only",
+			"dhl_no_neighbor_delivery",
+			"dhl_parcel_outlet_routing",
+			"dhl_preferred_neighbor",
+			"drop_authorization",
+			"premium_international",
+			"visual_age_check"
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6",
+				"pdf_103x199mm",
+				"zpl2_103x199mm_203dpi"
+			],
+			"dhl_europaket": [
+				"pdf_a5",
+				"pdf_a6",
+				"pdf_103x199mm",
+				"zpl2_103x199mm_203dpi"
+			],
+			"returns": [
+				"pdf_a5"
+			],
+			"dhl_prio": [
+				"pdf_a5",
+				"pdf_103x199mm",
+				"zpl2_103x199mm_203dpi"
+			],
+			"dhl_warenpost": [
+				"pdf_a5",
+				"pdf_a7",
+				"pdf_100x70mm",
+				"pdf_103x199mm",
+				"zpl2_103x199mm_203dpi",
+				"zpl2_100x70mm_203dpi"
+			]
+		}
+	},
+	{
+		"name": "dhl_express",
+		"display_name": "DHL Express",
+		"services": [
+			"one_day",
+			"one_day_early",
+			"dhl_express_economy_select"
+		],
+		"package_types": [
+			"parcel"
+		],
+		"additional_services": [
+			"saturday_delivery"
+		],
+		"label_formats": {
+			"one_day": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"one_day_early": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"dhl_express_economy_select": [
+				"pdf_a5",
+				"pdf_a6"
+			]
+		}
+	},
+	{
+		"name": "dpag",
+		"display_name": "Deutsche Post",
+		"services": [
+			"standard",
+			"dpag_warenpost",
+			"dpag_warenpost_untracked",
+			"dpag_warenpost_signature"
+		],
+		"package_types": [
+			"letter",
+			"parcel_letter",
+			"books"
+		],
+		"additional_services": [
+
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x6in_203dpi_td"
+			],
+			"dpag_warenpost": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_a6_203dpi"
+			],
+			"dpag_warenpost_untracked": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_a6_203dpi"
+			],
+			"dpag_warenpost_signature": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_a6_203dpi"
+			]
+		}
+	},
+	{
+		"name": "dpd",
+		"display_name": "DPD",
+		"services": [
+			"standard",
+			"returns",
+			"one_day",
+			"one_day_early"
+		],
+		"package_types": [
+			"parcel",
+			"parcel_letter"
+		],
+		"additional_services": [
+			"advance_notice",
+			"dpd_food",
+			"drop_authorization",
+			"hazardous_goods",
+			"saturday_delivery"
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"returns": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"one_day": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"one_day_early": [
+				"pdf_a5",
+				"pdf_a6"
+			]
+		}
+	},
+	{
+		"name": "fedex",
+		"display_name": "FedEx",
+		"services": [
+			"standard",
+			"one_day_early",
+			"fedex_international_economy",
+			"fedex_international_priority"
+		],
+		"package_types": [
+			"parcel"
+		],
+		"additional_services": [
+
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x6in_203dpi_td"
+			],
+			"one_day_early": [
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x6in_203dpi_td"
+			],
+			"fedex_international_economy": [
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x6in_203dpi_td"
+			],
+			"fedex_international_priority": [
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x6in_203dpi_td"
+			]
+		}
+	},
+	{
+		"name": "gls",
+		"display_name": "GLS",
+		"services": [
+			"standard",
+			"one_day",
+			"one_day_early",
+			"gls_express_0800",
+			"gls_express_0900",
+			"gls_express_1000",
+			"gls_express_1200",
+			"returns",
+			"gls_pick_and_ship"
+		],
+		"package_types": [
+			"parcel"
+		],
+		"additional_services": [
+			"advance_notice",
+			"cash_on_delivery",
+			"drop_authorization",
+			"gls_guaranteed24service",
+			"saturday_delivery"
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"one_day": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"one_day_early": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"gls_express_0800": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"gls_express_0900": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"gls_express_1000": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"gls_express_1200": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"returns": [
+				"pdf_a5",
+				"pdf_a6"
+			],
+			"gls_pick_and_ship": [
+				"pdf_a5",
+				"pdf_a6"
+			]
+		}
+	},
+	{
+		"name": "go",
+		"display_name": "GO!",
+		"services": [
+			"one_day"
+		],
+		"package_types": [
+			"parcel"
+		],
+		"additional_services": [
+			"delivery_date",
+			"delivery_note",
+			"delivery_time"
+		],
+		"label_formats": {
+			"one_day": [
+				"pdf_a5",
+				"pdf_a6"
+			]
+		}
+	},
+	{
+		"name": "iloxx",
+		"display_name": "iloxx (MyDPD Business)",
+		"services": [
+			"standard"
+		],
+		"package_types": [
+			"parcel"
+		],
+		"additional_services": [
+
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6"
+			]
+		}
+	},
+	{
+		"name": "parcel_one",
+		"display_name": "PARCEL.ONE",
+		"services": [
+			"standard"
+		],
+		"package_types": [
+			"parcel",
+			"parcel_letter"
+		],
+		"additional_services": [
+
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6"
+			]
+		}
+	},
+	{
+		"name": "ups",
+		"display_name": "UPS",
+		"services": [
+			"standard",
+			"returns",
+			"one_day",
+			"one_day_early",
+			"ups_express_1200",
+			"ups_expedited"
+		],
+		"package_types": [
+			"parcel"
+		],
+		"additional_services": [
+			"cash_on_delivery",
+			"saturday_delivery",
+			"ups_access_point_notification",
+			"ups_adult_signature",
+			"ups_direct_delivery_only",
+			"ups_signature_required",
+			"ups_endorsement"
+		],
+		"label_formats": {
+			"standard": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x8in_203dpi"
+			],
+			"returns": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x8in_203dpi"
+			],
+			"one_day": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x8in_203dpi"
+			],
+			"one_day_early": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x8in_203dpi"
+			],
+			"ups_express_1200": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x8in_203dpi"
+			],
+			"ups_expedited": [
+				"pdf_a5",
+				"pdf_a6",
+				"zpl2_4x6in_203dpi",
+				"zpl2_4x8in_203dpi"
+			]
+		}
+	}
+]

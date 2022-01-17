@@ -1,0 +1,50 @@
+{
+	"contents": {
+		"c51ce410c124a10e0db5e4b97fc2af39": {
+			"key": "c51ce410c124a10e0db5e4b97fc2af39",
+			"product_id": 13,
+			"variation_id": 0,
+			"variation": [
+
+			],
+			"quantity": 1,
+			"data_hash": "b5c1d5ca8bae6d4896cf1807cdf763f0",
+			"line_tax_data": {
+				"subtotal": [
+
+				],
+				"total": [
+
+				]
+			},
+			"line_subtotal": 10,
+			"line_subtotal_tax": 0,
+			"line_total": 10,
+			"line_tax": 0,
+			"data": {
+				"gzd_product": {
+				}
+			}
+		}
+	},
+	"contents_cost": 10,
+	"applied_coupons": [
+
+	],
+	"user": {
+		"ID": 0
+	},
+	"destination": {
+		"country": "DE",
+		"state": "",
+		"postcode": "41470",
+		"city": "Neuss",
+		"address": "Am Lindbruch 66",
+		"address_1": "Am Lindbruch 66",
+		"address_2": ""
+	},
+	"cart_subtotal": "10",
+	"rates": [
+
+	]
+}

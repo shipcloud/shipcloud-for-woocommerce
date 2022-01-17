@@ -1,0 +1,1 @@
+{"php":"7.3.29-to-be-removed-in-future-macOS","version":"3.2.1","indent":"    ","lineEnding":"\n","rules":{"braces":{"allow_single_line_closure":true,"position_after_functions_and_oop_constructs":"same"},"no_spaces_around_offset":{"positions":["outside"]},"phpdoc_add_missing_param_annotation":true,"phpdoc_order":true},"hashes":{"class-wc-shipping-shipcloud-order.php":12705085}}
