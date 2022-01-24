@@ -456,7 +456,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 				
 				if ( ! empty( $shipment ) ) {
 					
-					$this->log( "Create Shipment: " . json_encode( $shipment->to_array() ) );
+					// $this->log( "Create Shipment: " . json_encode( $shipment->to_array() ) );
 					
 					$response = $api->create_shipment( $shipment );
 					if ( ! empty( $response ) ) {
@@ -667,10 +667,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			
 				$shipment = $this->convert_data_array_to_shipment_api_object( $data );
 				
-				$this->log( "Update Shipment: " . json_encode( $shipment->to_array() ) );
+				// $this->log( "Update Shipment: " . json_encode( $shipment->to_array() ) );
 				
 				$response = $api->update_shipment( $shipment );
-				
 				if ( ! empty( $response ) ) {
 					return array_merge( $data, $response );
 				}

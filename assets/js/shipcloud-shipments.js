@@ -283,7 +283,8 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
 	},
 
     parse: function (data) {
-        if (data.hasOwnProperty('from')) {
+		
+		if (data.hasOwnProperty('from')) {
             data.from = new shipcloud.AddressModel(data.from);
         }
 
@@ -292,9 +293,11 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
         }
 
         if (data.hasOwnProperty('package')) {
-            data.package = new shipcloud.PackageModel(data.package);
+			data.package = new shipcloud.PackageModel(data.package);
+        } else if (data.hasOwnProperty('packages')) {
+			data.package = new shipcloud.PackageModel(data.packages[0]);
         }
-
+		
         if (data.hasOwnProperty('pickup_request')) {
             data.pickup_request = new shipcloud.PickupRequestModel(data.pickup_request);
             data.pickup_request.set({
@@ -309,7 +312,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
     },
 
     getTitle: function () {
-        return _.filter([this.get('carrier'), this.get('package').getTitle()]).join(' ');
+		return _.filter([this.get('carrier'), this.get('package').getTitle()]).join(' ');
     },
 
     getCarrierTrackingUrl: function () {

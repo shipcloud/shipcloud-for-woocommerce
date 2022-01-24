@@ -5,29 +5,28 @@ wcsc.OrderBulkActions = function(submitButton) {
 	// jQuery and self reference as usual.
 	var $ = jQuery;
 	var self = this;
-
+	
 	// Protected fields
-	this.bulkId = 'wcsc_order_bulk_label';
-	this.bulkScreen = '#wcsc-order-bulk-labels';
+	this.labelFormId = 'wcsc_order_bulk_label';
+	this.labelFormTemplateId = '#wcsc-order-bulk-labels';
 	this.bulkActionTemplate = 'shipcloud-bulk-action-items';
 	this.$submitButton = $(submitButton);
 	this.pickupRequestId = 'wcsc_order_bulk_pickup_request';
 	this.pickupRequestTemplateId = '#shipcloud-pickup-request';
-
+	
 	this.main = function() {
 		self.$submitButton.click(self.handleSubmit);
 		$('#wcsc_template').change(self.handleTemplateSwitch);
 		$('#shipcloud_add_customs_declaration_bulk').click(self.showCustomsDeclarationForm);
-		$('#wscs_order_bulk_pdf').click(self.submitBulkForm);
+		$('#wscs_order_bulk_pdf').click(self.submitLabelForm);
+		$('#shipcloud_order_bulk_pickup_request').click(self.submitPickupForm);
 	};
-
+	
 	this.handleSubmit = function(e) {
 		var n = $(this).attr('id').substr(2);
 		var entryname = $('select[name="' + n + '"]').val();
 		
-		console.log(entryname);
-
-		if (!_.contains([self.bulkId, self.pickupRequestId], entryname)) {
+		if (!_.contains([self.labelFormId, self.pickupRequestId], entryname)) {
 			return;
 		}
 
@@ -40,8 +39,8 @@ wcsc.OrderBulkActions = function(submitButton) {
 		self.hideBulkActionTemplates();
 
 		switch (entryname) {
-			case self.bulkId:
-				self.setBulk();
+			case self.labelFormId:
+				self.showLabelForm();
 				break;
 			case self.pickupRequestId:
 				self.showPickupForm();
@@ -52,7 +51,7 @@ wcsc.OrderBulkActions = function(submitButton) {
 
 		return false;
 	};
-
+	
 	this.handleTemplateSwitch = function() {
 		var data = $(':selected', this).data();
 
@@ -64,24 +63,24 @@ wcsc.OrderBulkActions = function(submitButton) {
 			$('select[name=wcsc_carrier]').val(data['carrier']);
 		}
 	};
-
+	
 	this.emptyTitles = function(templateId) {
 		$('.order-id-list', templateId).html('');
 		// switch (action) {
 		//   case 'label-creation':
-		//     $('.order-id-list', self.bulkScreen).html('');
+		//     $('.order-id-list', self.labelFormTemplateId).html('');
 		//     break;
 		//   case 'pickup-request':
 		//     $('.order-id-list', self.pickupRequestTemplateId).html('');
 		//     break;
 		// }
 	};
-
+	
 	this.hideBulkActionTemplates = function() {
-		$(self.bulkScreen).hide();
+		$(self.labelFormTemplateId).hide();
 		$(self.pickupRequestTemplateId).hide();
 	}
-
+	
 	this.populateTitles = function(templateId) {
 		self.emptyTitles(templateId);
 
@@ -97,10 +96,10 @@ wcsc.OrderBulkActions = function(submitButton) {
 				'title': '#' + $(this).val()
 			};
 
-			$('.order-id-list', self.bulkScreen).append(template(data));
+			$('.order-id-list', self.labelFormTemplateId).append(template(data));
 		});
 	};
-
+	
 	this.hasOrdersSelected = function() {
 		var ithasOrdersSelected = false;
 
@@ -112,23 +111,25 @@ wcsc.OrderBulkActions = function(submitButton) {
 
 		return ithasOrdersSelected;
 	};
+	
+	this.showLabelForm = function() {
+		self.populateTitles(self.labelFormTemplateId);
 
-	this.setBulk = function() {
-		self.populateTitles(self.bulkScreen);
-
-		$('> td', self.bulkScreen).attr('colspan', $('th:visible, td:visible', '.widefat:first thead').length);
+		$('> td', self.labelFormTemplateId).attr('colspan', $('th:visible, td:visible', '.widefat:first thead').length);
 		// Insert the editor at the top of the table with an empty row above to maintain zebra striping.
-		$('table.wp-list-table.widefat > tbody').prepend($(self.bulkScreen)).prepend('<tr class="hidden"></tr>');
-		$(self.bulkScreen).show();
-		$('.shipcloud-carrier-select', self.bulkScreen).shipcloudMultiSelect(wcsc_carrier);
+		$('table.wp-list-table.widefat > tbody').prepend($(self.labelFormTemplateId)).prepend('<tr class="hidden"></tr>');
+		$(self.labelFormTemplateId).show();
+		$('.shipcloud-carrier-select', self.labelFormTemplateId).shipcloudMultiSelect(wcsc_carrier);
+		
+		$('#shipcloud_carrier').trigger('change');
 
-		$('button.cancel', self.bulkScreen).click(self.hide);
+		$('button.cancel', self.labelFormTemplateId).click(function(){$(self.labelFormTemplateId).hide();});
 
 		$('html, body').animate({
 			scrollTop: 0
 		}, 'fast');
 	};
-
+	
 	this.showPickupForm = function() {
 		self.populateTitles(self.pickupRequestTemplateId);
 		var template = wp.template(self.bulkActionTemplate);
@@ -157,8 +158,14 @@ wcsc.OrderBulkActions = function(submitButton) {
 		$('select[name="pickup_address[country]"]').select2();
 		$('.shipcloud__pickup_date_and_time').show();
 		$(self.pickupRequestTemplateId).show();
+		
+		$('button.cancel', self.pickupRequestTemplateId).click(function(){$(self.pickupRequestTemplateId).hide();});
+		
+		$('html, body').animate({
+			scrollTop: 0
+		}, 'fast');
 	};
-
+	
 	this.showCustomsDeclarationForm = function() {
 		var $form = $('.customs-declaration--definition');
 		if ($form.is(':visible')) {
@@ -168,8 +175,8 @@ wcsc.OrderBulkActions = function(submitButton) {
 		}
 		$form.toggle();
 	};
-
-	this.submitBulkForm = function(event) {
+	
+	this.submitLabelForm = function(event) {
 		event.preventDefault();
 		$('#wscs_order_bulk_pdf').attr('disabled', 'disabled');
 
@@ -197,15 +204,17 @@ wcsc.OrderBulkActions = function(submitButton) {
 		if (!$('input[name="pickup[pickup_latest_date]"]').is(':visible')) {
 			$('input[name="pickup[pickup_latest_date]"]').val('');
 		}
-
+		
+		this.form.submit();
+	};
+	
+	this.submitPickupForm = function(event) {
+		event.preventDefault();
+		$('#shipcloud_order_bulk_pickup_request').attr('disabled', 'disabled');
 
 		this.form.submit();
 	};
-
-	this.hide = function() {
-		$(self.bulkScreen).hide();
-	};
-
+	
 	this.main();
 };
 

@@ -38,7 +38,7 @@
                     <?php _e( 'Currency', 'shipcloud-for-woocommerce' ); ?>
                 </th>
                 <td>
-                    <input type="text" name="customs_declaration[currency]" value="EUR" disabled />
+                    <input type="text" name="customs_declaration[currency]" value="<?php echo get_woocommerce_currency(); ?>" disabled />
                 </td>
             </tr>
             <tr>

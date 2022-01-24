@@ -337,7 +337,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			   exit();
             }
 
-            $price_html 	= wc_price( $price, array( 'currency' => 'EUR' ) );
+            $price_html 	= wc_price( $price, array( 'currency' => get_woocommerce_currency() ) );
 			$price_notice 	= sprintf( __( 'The calculated price is %s.', 'shipcloud-for-woocommerce'), $price_html );
             $html       	= '<div class="notice">' . $price_notice . '</div>';
 
@@ -571,7 +571,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		    $order_id	 = $tmp_order->get_order_number();
 
             $updated_shipment = $this->create_pickup_request( $order_id, $_POST );
-			if ( is_wp_error( $updated_shipment ) ) {
+			if ( !$updated_shipment || is_wp_error( $updated_shipment ) ) {
 				wp_send_json_error(
 					array(
 						'status' => $updated_shipment->get_error_code(),
@@ -634,6 +634,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          *****************************************************************/
 		
         public function create_shipment( $data ) {
+			
+			// $this->log( "create_shipment: " . json_encode( $data ) ); return;
 			
 			if ( empty( $data ) ) {
 				$data = $_POST;
@@ -727,8 +729,12 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
             	$data['package'] = $this->sanitize_parcel_data( $data );
             }
 			
-			if ( ! empty( $data['pickup'] ) ) {
-				$data['pickup'] = $this->extract_pickup_time( $data, 'create_shipment' );
+			if ( isset( $data['pickup'] ) ) {
+				if ( $pickup = $this->extract_pickup_time( $data, 'create_shipment' ) ) {
+					$data['pickup'] = $pickup;
+				} else {
+					unset( $data['pickup'] );
+				}
 				unset( $data['pickup_earliest'] );
 				unset( $data['pickup_latest'] );
 			}
@@ -773,9 +779,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 					}
 
                     $prev_shipment_data = WC_Shipping_Shipcloud_Utils::get_shipment_for_order( $order_id, $shipment_id );
-                    $shipment_data 		= array_merge( $prev_shipment_data, $shipment );
-
-                    $order->add_order_note( __( 'shipcloud label has been prepared.', 'shipcloud-for-woocommerce' ) );
+					$shipment_data 		= array_merge( $prev_shipment_data, $shipment );
+					$order->add_order_note( __( 'shipcloud label has been prepared.', 'shipcloud-for-woocommerce' ) );
                     update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data, $prev_shipment_data );
 
                     if ( array_key_exists( 'customs_declaration', $prev_shipment_data ) 
@@ -804,7 +809,13 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				if ( isset( $data['carrier'] ) ) {
 					$this->log( 'Order #' . $order->get_order_number() . ' - Created shipment successful (' . WC_Shipping_Shipcloud_Utils::get_carrier_display_name( $data['carrier'] ) . ')' );
 				}
+				
+				// $this->log("Updated shipment: ".json_encode($shipment));
                 
+				if ( isset( $shipment['price'] ) ) {
+					$shipment['price'] = WC_Shipping_Shipcloud_Utils::format_price( $shipment['price'] );
+				}
+				
 				return $shipment;
 				
             } catch ( \Exception $e ) {
@@ -1324,18 +1335,15 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 * @return array $pickup
 		 */
 		private function extract_pickup_time( $data, $method = null ) {
-		    if ( ! empty( $data['pickup']['pickup_earliest_date'] )
-		        && ! empty( $data['pickup']['pickup_latest_date'] )
-		        && (
-		            empty( $data['pickup']['pickup_earliest_time_hour'] )
-		            || empty( $data['pickup']['pickup_earliest_time_minute'] )
-		            || empty( $data['pickup']['pickup_latest_time_hour'] )
-		            || empty( $data['pickup']['pickup_latest_time_minute'] )
-		       )
+		    if ( empty( $data['pickup']['pickup_earliest_date'] ) 
+				|| empty( $data['pickup']['pickup_latest_date'] )
+		        || empty( $data['pickup']['pickup_earliest_time_hour'] )
+		        || empty( $data['pickup']['pickup_earliest_time_minute'] )
+		        || empty( $data['pickup']['pickup_latest_time_hour'] )
+		        || empty( $data['pickup']['pickup_latest_time_minute'] )
 			) {
-		        $error_message = __( 'Please provide a pickup time', 'shipcloud-for-woocommerce' );
-		        $this->log( $error_message, 'error' );
-		        throw new \UnexpectedValueException( $error_message, 400 );
+		        $this->log( 'Unsufficient pickup data', 'warning' );
+		        return false;
 		    }
 
 		    if ( array_key_exists( 'shipment', $data ) && array_key_exists( 'carrier', $data['shipment'] )  ) {
@@ -1451,13 +1459,12 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			try {
 				
 		        $pickup_time = $this->extract_pickup_time( $data );
-				if ( is_wp_error( $pickup_time ) ) {
+				if ( ! $pickup_time || is_wp_error( $pickup_time ) ) {
 					return $pickup_time;
 				}
 				
 				$pickup_time						= array_shift( $pickup_time );
-		        
-				$pickup_request_data 				= [];
+		        $pickup_request_data 				= [];
 				$pickup_request_data['pickup_time'] = $pickup_time;
 				
 				if ( ! empty( $data['carrier'] ) ) {

@@ -70,157 +70,158 @@
             <div>{{ data.model.get('to').get('country') }}</div>
 			<div>{{ data.model.get('to').get('phone') }}</div>
         </div>
-        <div class="label-shipment-additional-services" role="switch">
+        
+		<div class="label-shipment-additional-services" role="switch">
           <strong><?php _e( 'Additional services', 'shipcloud-for-woocommerce' ); ?></strong>
-          <# if ( data.model.get('additional_services').length === 0 ) { #>
-            <p>
-              <?php _e( 'No additional service has been booked for this shipment', 'shipcloud-for-woocommerce' ); ?>
-            </p>
-          <# } else { #>
-            <ul>
-            <# _.each(data.model.get('additional_services'), function(additional_service) { #>
-              <# if ( additional_service.name === 'advance_notice' ) { #>
-                <li>
-                  <?php _e( 'Advance notice', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                    <# if (additional_service.properties.email) { #>
-                      <?php _e( 'eMail', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.email }}
-                    <# } if (additional_service.properties.phone) { #>
-                      <?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.phone }}
-                    <# } if (additional_service.properties.sms) { #>
-                      <?php _e( 'SMS', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.sms }}
-                    <# } #>
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'saturday_delivery' ) { #>
-                <li>
-                  <?php _e( 'Saturday delivery', 'shipcloud-for-woocommerce' ); ?>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'visual_age_check' ) { #>
-                <li>
-                  <?php _e( 'DHL visual age check', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Minimum age', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.minimum_age }}
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'ups_adult_signature' ) { #>
-                <li>
-                  <?php _e( 'UPS adult signature', 'shipcloud-for-woocommerce' ); ?>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'premium_international' ) { #>
-                <li>
-                  <?php _e( 'DHL premium international', 'shipcloud-for-woocommerce' ); ?>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'delivery_date' ) { #>
-                <li>
-                  <?php _e( 'Delivery date', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Date', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.date }}
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'delivery_note' ) { #>
-                <li>
-                  <?php _e( 'Delivery note', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Message', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.message }}
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'angel_de_delivery_date_time' ) { #>
-                <li>
-                  <?php _e( 'MyTime delivery', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Date', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.date }}
-                      <br />
-                      <?php _e( 'Earliest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_earliest }}
-                      <br />
-                      <?php _e( 'Latest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_latest }}
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'delivery_time' ) { #>
-                <li>
-                  <?php _e( 'Delivery time', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Earliest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_earliest }}
-                      <br />
-                      <?php _e( 'Latest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_latest }}
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'drop_authorization' ) { #>
-                <li>
-                  <?php _e( 'Drop authorization', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Message', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.message }}
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'dhl_endorsement' ) { #>
-                <li>
-                  <?php _e( 'Endorsement', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Handling', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.handling }}
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'dhl_named_person_only' ) { #>
-                <li>
-                  <?php _e( 'Named person only', 'shipcloud-for-woocommerce' ); ?>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'cash_on_delivery' ) { #>
-                <li>
-                  <?php _e( 'Cash on delivery', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                      <?php _e( 'Amount', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.amount }}
-                      <br />
-                      <?php _e( 'Currency', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.currency }}
-                      <# if ( additional_service.properties.reference1 ) { #>
-                          <br />
-                          <?php _e( 'Reference', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.reference1 }}
-                      <# } #>
-                      <# if ( additional_service.properties.bank_account_holder ) { #>
-                          <br />
-                          <?php _e( 'Bank account holder', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_account_holder }}
-                      <# } #>
-                      <# if ( additional_service.properties.bank_name ) { #>
-                          <br />
-                          <?php _e( 'Bank name', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_name }}
-                      <# } #>
-                      <# if ( additional_service.properties.bank_account_number ) { #>
-                          <br />
-                          <?php _e( 'Bank account number (IBAN)', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_account_number }}
-                      <# } #>
-                      <# if ( additional_service.properties.bank_code ) { #>
-                          <br />
-                          <?php _e( 'Bank code (SWIFT)', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_code }}
-                      <# } #>
-                  </div>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'gls_guaranteed24service' ) { #>
-                <li>
-                  <?php _e( 'GLS Guaranteed24Service', 'shipcloud-for-woocommerce' ); ?>
-                </li>
-              <# } #>
-              <# if ( additional_service.name === 'dhl_parcel_outlet_routing' ) { #>
-                <li>
-                  <?php _e( 'Parcel outlet routing', 'shipcloud-for-woocommerce' ); ?>
-                  <div class="additional-services-details">
-                    <?php _e( 'email', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.email }}
-                  </div>
-                </li>
-              <# } #>
-            <# }); #>
-            </ul>
-          <# } #>
+		  <# if ( data.model.get('additional_services').length === 0 ) { #>
+		  <p>
+		    <?php _e( 'No additional service has been booked for this shipment', 'shipcloud-for-woocommerce' ); ?>
+		  </p>
+		  <# } else { #>
+		  <ul>
+		  <# _.each(data.model.get('additional_services'), function(additional_service) { #>
+		    <# if ( additional_service.name === 'advance_notice' ) { #>
+		      <li>
+		        <?php _e( 'Advance notice', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		          <# if (additional_service.properties.email) { #>
+		            <?php _e( 'eMail', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.email }}
+		          <# } if (additional_service.properties.phone) { #>
+		            <?php _e( 'Phone', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.phone }}
+		          <# } if (additional_service.properties.sms) { #>
+		            <?php _e( 'SMS', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.sms }}
+		          <# } #>
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'saturday_delivery' ) { #>
+		      <li>
+		        <?php _e( 'Saturday delivery', 'shipcloud-for-woocommerce' ); ?>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'visual_age_check' ) { #>
+		      <li>
+		        <?php _e( 'DHL visual age check', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Minimum age', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.minimum_age }}
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'ups_adult_signature' ) { #>
+		      <li>
+		        <?php _e( 'UPS adult signature', 'shipcloud-for-woocommerce' ); ?>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'premium_international' ) { #>
+		      <li>
+		        <?php _e( 'DHL premium international', 'shipcloud-for-woocommerce' ); ?>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'delivery_date' ) { #>
+		      <li>
+		        <?php _e( 'Delivery date', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Date', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.date }}
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'delivery_note' ) { #>
+		      <li>
+		        <?php _e( 'Delivery note', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Message', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.message }}
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'angel_de_delivery_date_time' ) { #>
+		      <li>
+		        <?php _e( 'MyTime delivery', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Date', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.date }}
+		            <br />
+		            <?php _e( 'Earliest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_earliest }}
+		            <br />
+		            <?php _e( 'Latest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_latest }}
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'delivery_time' ) { #>
+		      <li>
+		        <?php _e( 'Delivery time', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Earliest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_earliest }}
+		            <br />
+		            <?php _e( 'Latest time', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.time_of_day_latest }}
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'drop_authorization' ) { #>
+		      <li>
+		        <?php _e( 'Drop authorization', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Message', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.message }}
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'dhl_endorsement' ) { #>
+		      <li>
+		        <?php _e( 'Endorsement', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Handling', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.handling }}
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'dhl_named_person_only' ) { #>
+		      <li>
+		        <?php _e( 'Named person only', 'shipcloud-for-woocommerce' ); ?>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'cash_on_delivery' ) { #>
+		      <li>
+		        <?php _e( 'Cash on delivery', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		            <?php _e( 'Amount', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.amount }}
+		            <br />
+		            <?php _e( 'Currency', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.currency }}
+		            <# if ( additional_service.properties.reference1 ) { #>
+		                <br />
+		                <?php _e( 'Reference', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.reference1 }}
+		            <# } #>
+		            <# if ( additional_service.properties.bank_account_holder ) { #>
+		                <br />
+		                <?php _e( 'Bank account holder', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_account_holder }}
+		            <# } #>
+		            <# if ( additional_service.properties.bank_name ) { #>
+		                <br />
+		                <?php _e( 'Bank name', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_name }}
+		            <# } #>
+		            <# if ( additional_service.properties.bank_account_number ) { #>
+		                <br />
+		                <?php _e( 'Bank account number (IBAN)', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_account_number }}
+		            <# } #>
+		            <# if ( additional_service.properties.bank_code ) { #>
+		                <br />
+		                <?php _e( 'Bank code (SWIFT)', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.bank_code }}
+		            <# } #>
+		        </div>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'gls_guaranteed24service' ) { #>
+		      <li>
+		        <?php _e( 'GLS Guaranteed24Service', 'shipcloud-for-woocommerce' ); ?>
+		      </li>
+		    <# } #>
+		    <# if ( additional_service.name === 'dhl_parcel_outlet_routing' ) { #>
+		      <li>
+		        <?php _e( 'Parcel outlet routing', 'shipcloud-for-woocommerce' ); ?>
+		        <div class="additional-services-details">
+		          <?php _e( 'email', 'shipcloud-for-woocommerce' ); ?>: {{ additional_service.properties.email }}
+		        </div>
+		      </li>
+		    <# } #>
+		  <# }); #>
+		  </ul>
+		  <# } #>
         </div>
 
         <# if ( data.model.get('customs_declaration') ) { #>

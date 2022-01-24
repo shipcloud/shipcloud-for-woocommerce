@@ -256,9 +256,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		 */
 		public static function get_carrier_display_name_short( $carrier_name ) {
 			$carrier_name_arr = self::disassemble_carrier_name( $carrier_name );
-			$display_name     = self::get_carrier_display_name( $carrier_name_arr['carrier'] ) . ' - ' . self::get_service_name( $carrier_name_arr['service'] );
-
-			return $display_name;
+			if ( ! empty( $carrier_name_arr ) ) {
+				return self::get_carrier_display_name( $carrier_name_arr['carrier'] ) . ' - ' . self::get_service_name( $carrier_name_arr['service'] );
+			}
+			
+			return $carrier_name;
 		}
 		
 		/**
@@ -269,6 +271,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		 */
 		public static function disassemble_carrier_name( $carrier_name ) {
 			
+			if ( empty( $carrier_name ) ) {
+				return false;
+			}
+			
+			$carrier_arr = false;
 			if ( is_string( $carrier_name ) ) {
 				$carrier_arr = explode( '_', $carrier_name );
 			}
@@ -276,22 +283,25 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 				self::log( gettype( $carrier_name ) . ": " . json_encode( $carrier_name ) );
 			}
 			
+			$carrier = $carrier_name;
 			$service = '';
-
-			$carrier_with_underscore_name = $carrier_arr[0].'_'.$carrier_arr[1];
-			if ( in_array( $carrier_with_underscore_name, self::CARRIERS_WITH_UNDERSCORE ) ) {
-				$carrier = $carrier_with_underscore_name;
-				$array_start_index = 2;
-			} else {
-				$carrier = $carrier_arr[0];
-				$array_start_index = 1;
+			
+			if ( is_array( $carrier_arr ) ) {
+				$carrier_with_underscore_name = $carrier_arr[0].'_'.$carrier_arr[1];
+				if ( in_array( $carrier_with_underscore_name, self::CARRIERS_WITH_UNDERSCORE ) ) {
+					$carrier = $carrier_with_underscore_name;
+					$array_start_index = 2;
+				} else {
+					$carrier = $carrier_arr[0];
+					$array_start_index = 1;
+				}
+			
+				for ( $i = $array_start_index; $i < count( $carrier_arr ); $i ++ ) {
+					$service .= $i == $array_start_index ? '' : '_';
+					$service .= $carrier_arr[ $i ];
+				}
 			}
 			
-			for ( $i = $array_start_index; $i < count( $carrier_arr ); $i ++ ) {
-				$service .= $i == $array_start_index ? '' : '_';
-				$service .= $carrier_arr[ $i ];
-			}
-
 			return array(
 				'carrier' => $carrier,
 				'service' => $service
@@ -807,16 +817,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 				'id'		=> isset($shipment['id']) ? $shipment['id'] : '',
 				'from'		=> $shipment['from'],
 				'to'		=> $shipment['to'],
-				'package'	=> array(
-					'width'  => wc_format_decimal( $shipment['package']['width'] ),
-					'height' => wc_format_decimal( $shipment['package']['height'] ),
-					'length' => wc_format_decimal( $shipment['package']['length'] ),
-					'weight' => wc_format_decimal( $shipment['package']['weight'] ),
-					//'type' => $_POST['package']['type'],
-				),
 				'label_url'           => isset($shipment['label_url']) ? $shipment['label_url'] : '',
 				'tracking_url'        => isset($shipment['tracking_url']) ? $shipment['tracking_url'] : '',
-				'price'               => isset($shipment['price']) ? $shipment['price'] : '',
+				'price'               => isset($shipment['price']) ? self::format_price( $shipment['price'] ) : '',
 				'carrier'             => isset($shipment['carrier']) ? $shipment['carrier'] : '',
 	            'service'             => isset($shipment['service']) ? $shipment['service'] : '',
 				'carrier_tracking_no' => isset($shipment['carrier_tracking_no']) ? $shipment['carrier_tracking_no'] : '',
@@ -834,6 +837,18 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 					get_post_meta( $order_id, 'shipment_' . $shipment['id'] . '_status', true )
 				);
 			}
+			
+			if ( isset( $shipment['packages'] ) ) {
+				$shipment['package'] = $shipment['packages'][0];
+			}
+			if ( isset( $shipment['package'] ) ) {
+				$data['package'] = [
+					'width'  => wc_format_decimal( $shipment['package']['width'] ),
+					'height' => wc_format_decimal( $shipment['package']['height'] ),
+					'length' => wc_format_decimal( $shipment['package']['length'] ),
+					'weight' => wc_format_decimal( $shipment['package']['weight'] ),
+				];
+			}
 
 			if ( isset( $shipment['pickup_request'] ) ) {
 				$data['pickup_request'] = $shipment['pickup_request'];
@@ -844,6 +859,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 			return $data;
 		}
 		
+		public static function format_price( $price = 0 ) {
+			return number_format( $price, 2, ',', '.' ) . " " . get_woocommerce_currency();
+		}
+		
 		/**
 		 * Enhances shipment data.
 		 *
@@ -852,10 +871,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		 */
 		public static function enhance_shipment_data( array $shipment ) {
 			
-			// TODO: There may be more than one packages in one shipment!
-			
 			$package = false;
-			if ( ! empty( $shipment['packages'] ) ) {
+			if ( ! empty( $shipment['package'] ) ) {
+				$package = $shipment['package'];
+			}
+			else if ( ! empty( $shipment['packages'] ) ) {
 				$package = $shipment['packages'][0];
 			}
 			

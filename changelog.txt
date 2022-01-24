@@ -1,5 +1,4 @@
-== Changelog ==
+*** Template Shipping ***
 
-= 2.0.0 =
-** Changed
-* Complete code re-engineering
+2021-01-01 - version 2.0.0
+* Complete rewrite using template's new API SDK

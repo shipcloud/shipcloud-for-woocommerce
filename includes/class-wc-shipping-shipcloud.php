@@ -112,6 +112,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 				$instance_options = get_option( "woocommerce_shipcloud_{$instance_id}_settings" );
 				if ( ! empty( $instance_options ) && isset( $instance_options['allowed_carriers'] ) ) {
 					$carriers 		= $instance_options['allowed_carriers'];
+					if ( is_string( $carriers ) ) {
+						$carriers = explode( ',', $carriers );
+					}
 					$carrier_names 	= [];
 					foreach( $carriers as $carrier ) {
 						$carrier_names[] = WC_Shipping_Shipcloud_Utils::get_carrier_display_name_short( $carrier );
