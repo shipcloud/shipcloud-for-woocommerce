@@ -53,6 +53,13 @@ class Pickup extends AbstractApiObject {
 	private $pickup_address;
 	
 	/**
+	 * Array of shipments to be picked up.
+	 * 
+	 * @var shipments
+	 */
+	private $shipments;
+	
+	/**
 	 * Pickup constructor.
 	 * 
 	 * @param string $carrier
@@ -146,6 +153,23 @@ class Pickup extends AbstractApiObject {
 	}
 	
 	/**
+	 * Getter method for shipments.
+	 * @return array The shipments list.
+	 */
+	public function get_shipments() {
+		return $this->shipments;
+	}
+	
+	/**
+	 * Setter method for shipments.
+	 * @param array $shipments The shipments to set.
+	 * @return void
+	 */
+	public function set_shipments( array $shipments ) : void {
+		$this->shipments = $shipments;
+	}
+	
+	/**
 	 * Getter method for parameter array.
 	 * @return array The class object as array.
 	 */
@@ -161,6 +185,9 @@ class Pickup extends AbstractApiObject {
 		}
 		if ( ! empty( $this->get_pickup_address() ) ) {
 			$result['pickup_address'] = $this->get_pickup_address()->to_array();
+		}
+		if ( ! empty( $this->get_shipments() ) ) {
+			$result['shipments'] = $this->get_shipments();
 		}
 		
 		return $result;

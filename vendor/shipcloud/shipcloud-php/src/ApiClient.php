@@ -428,25 +428,11 @@ class ApiClient {
 	 * there are carrier specific field lengths you have to take into account. 
 	 * 
 	 * @param Pickup $pickup The pickup data.
-	 * @param array $shipment_ids A list of shipment IDs to be picked up (optional).
 	 * @return array|bool An array with pickup information if succeeded, false otherwise.
 	 */
-	public function create_pickup_request( Pickup $pickup, array $shipment_ids = [] ) {
+	public function create_pickup_request( Pickup $pickup ) {
 		if ( $this->validate_pickup( $pickup ) ) {
-			$pickup_array = $pickup->to_array();
-			if ( ! empty( $shipment_ids ) ) {
-				$pickup_array['shipments'] = [];
-				foreach( $shipment_ids as $id ) {
-					/*
-					$shipments	 = [
-						"id" => "1522a00df6c394f88c35965b06501251f44eec79"
-					];
-				  	*/
-					$pickup_array['shipments'][] = [ 'id' => $id ];
-				}
-			}
-			// echo json_encode( $pickup_array ) . PHP_EOL;
-			return $this->post( "/pickup_requests", $pickup_array );
+			return $this->post( "/pickup_requests", $pickup->to_array() );
 		}
 		return false;
 	}

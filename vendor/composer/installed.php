@@ -67,7 +67,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../shipcloud/shipcloud-php',
             'aliases' => array(),
-            'reference' => '0d19a6e9fdf84b9ce2ecb91a0b19071908546c3e',
+            'reference' => '24867ee849ee532db5ea6469787de750c8cd4fa3',
             'dev_requirement' => false,
         ),
         'tecnickcom/tcpdf' => array(

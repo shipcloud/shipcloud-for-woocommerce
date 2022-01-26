@@ -574,7 +574,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			if ( is_wp_error( $updated_shipment ) ) {
 				wp_send_json_error(
 					array(
-						'status' => $updated_shipment->get_error_code(),
+						'status' => 400,
 						'data' 	 => sprintf(
 							__( 'Error while creating or updating shipment: %s', 'shipcloud-for-woocommerce' ),
 							$updated_shipment->get_error_message()
@@ -1344,8 +1344,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 * @return array $pickup
 		 */
 		private function extract_pickup_time( $data, $method = null ) {
-		    if ( empty( $data['pickup']['pickup_earliest_date'] ) 
-				|| empty( $data['pickup']['pickup_latest_date'] )
+			
+			if ( empty( $data['pickup']['pickup_earliest_date'] ) 
 		        || empty( $data['pickup']['pickup_earliest_time_hour'] )
 		        || empty( $data['pickup']['pickup_earliest_time_minute'] )
 		        || empty( $data['pickup']['pickup_latest_time_hour'] )
@@ -1381,7 +1381,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				$pickup_earliest_date 		 = isset( $data['pickup']['pickup_earliest_date'] ) ? $data['pickup']['pickup_earliest_date'] : '';
 		        $pickup_earliest_time_hour 	 = isset( $data['pickup']['pickup_earliest_time_hour'] ) ? $data['pickup']['pickup_earliest_time_hour'] : '';
 		        $pickup_earliest_time_minute = isset( $data['pickup']['pickup_earliest_time_minute'] ) ? $data['pickup']['pickup_earliest_time_minute'] : '';
-		        $pickup_latest_date 		 = isset( $data['pickup']['pickup_latest_date'] ) ? $data['pickup']['pickup_latest_date'] : '';
+		        $pickup_latest_date 		 = isset( $data['pickup']['pickup_earliest_date'] ) ? $data['pickup']['pickup_earliest_date'] : '';
 		        $pickup_latest_time_hour 	 = isset( $data['pickup']['pickup_latest_time_hour'] ) ? $data['pickup']['pickup_latest_time_hour'] : '';
 		        $pickup_latest_time_minute 	 = isset( $data['pickup']['pickup_latest_time_minute'] ) ? $data['pickup']['pickup_latest_time_minute'] : '';
 
@@ -1460,7 +1460,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		public function create_pickup_request( $order_id, $data ) {
 			$shipment_id = isset( $data['id'] ) ? $data['id'] : false;
 			
-			if ( empty( $data['carrier'] ) && ! empty( $shipment_id ) && is_int( $order_id ) ) {
+			if ( empty( $data['carrier'] ) && ! empty( $shipment_id ) && ! empty( $order_id ) ) {
 				$shipment 			= WC_Shipping_Shipcloud_Utils::get_shipment_for_order( $order_id, $shipment_id );
 			    $data['carrier']	= $shipment['carrier'];
 			}
@@ -1483,7 +1483,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				if ( isset( $shipment ) ) {
 					$pickup_request_data['carrier'] = $shipment['carrier'];
 					if ( ! array_key_exists( 'pickup_request', $shipment ) ) {
-						$pickup_request_data['shipments'] = [ 'id' => $shipment_id ];
+						$pickup_request_data['shipments'] = [ [ 'id' => $shipment_id ] ];
 					}
 				} 
 				else if ( ! empty( $data['shipments'] ) ) {

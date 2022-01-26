@@ -936,6 +936,11 @@ Search.appendIndex(
             "summary": "Converts\u0020a\u0020shipment\u0020array\u0020to\u0020API\u0020response.",
             "url": "classes/WC-Shipping-Shipcloud-Utils.html#method_convert_to_wc_api_response"
         },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Utils\u003A\u003Aformat_price\u0028\u0029",
+            "name": "format_price",
+            "summary": "",
+            "url": "classes/WC-Shipping-Shipcloud-Utils.html#method_format_price"
+        },                {
             "fqsen": "\\WC_Shipping_Shipcloud_Utils\u003A\u003Aenhance_shipment_data\u0028\u0029",
             "name": "enhance_shipment_data",
             "summary": "Enhances\u0020shipment\u0020data.",

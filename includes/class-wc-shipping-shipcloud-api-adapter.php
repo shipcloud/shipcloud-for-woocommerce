@@ -966,9 +966,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			try {
 			
 				$pickup 	= $this->convert_data_array_to_pickup_api_object( $data );
-				$shipments	= ! empty( $data['shipments'] ) ? $data['shipments'] : false;
-				if ( $pickup && $shipments ) {
-					$response = $api->create_pickup_request( $pickup, $shipments );
+				if ( $pickup ) {
+					
+					$this->log( "create_pickup_request: " . json_encode( $pickup->to_array() ) );
+					
+					$response = $api->create_pickup_request( $pickup );
 					if ( ! empty( $response ) ) {
 						return $response;
 					}
@@ -1545,7 +1547,14 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			}
 			
 			if ( ! empty( $carrier ) && ! empty( $pickup_time ) ) {
-				return new Pickup( $carrier, $pickup_time, $pickup_address );
+				
+				$pickup 	= new Pickup( $carrier, $pickup_time, $pickup_address );
+				$shipments 	= ! empty( $data['shipments'] ) ? $data['shipments'] : false;
+				if ( $shipments ) {
+					$pickup->set_shipments( $shipments );
+				}
+				
+				return $pickup;
 			}
 			
 			return false;
