@@ -571,7 +571,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		    $order_id	 = $tmp_order->get_order_number();
 
             $updated_shipment = $this->create_pickup_request( $order_id, $_POST );
-			if ( !$updated_shipment || is_wp_error( $updated_shipment ) ) {
+			if ( is_wp_error( $updated_shipment ) ) {
 				wp_send_json_error(
 					array(
 						'status' => $updated_shipment->get_error_code(),
@@ -579,6 +579,15 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 							__( 'Error while creating or updating shipment: %s', 'shipcloud-for-woocommerce' ),
 							$updated_shipment->get_error_message()
 						)
+					)
+				);
+				exit();
+			}
+			else if ( ! $updated_shipment ) {
+				wp_send_json_error(
+					array(
+						'status' => 400,
+						'data' 	 => __( 'Error while creating or updating shipment', 'shipcloud-for-woocommerce' )
 					)
 				);
 				exit();

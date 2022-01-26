@@ -437,11 +437,16 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 		            }
 				
 					$pickup_request = $order->create_pickup_request( $order_id, $data );
-					if ( !$pickup_request || is_wp_error( $pickup_request ) ) {
+					if ( is_wp_error( $pickup_request ) ) {
 						$message = sprintf(
 							__( 'Error while creating a pickup request for order: %s', 'shipcloud-for-woocommerce' ),
 							$pickup_request->get_error_message() 
 						);
+						$this->log( $message, 'error' );
+						$this->add_admin_notice( $message, 'error' );
+					}
+					else if ( ! $pickup_request ) {
+						$message = __( 'Error while creating a pickup request for order', 'shipcloud-for-woocommerce' );
 						$this->log( $message, 'error' );
 						$this->add_admin_notice( $message, 'error' );
 					}
