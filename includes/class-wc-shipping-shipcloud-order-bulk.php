@@ -430,7 +430,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 	                    $pickup_request_params[$carrier][] = $shipment_id;
 	                }
 					else {
-	                    $this->admin_notice( 
+	                    $this->add_admin_notice( 
 							sprintf( 
 								__( 'No pickup request for shipment with id %s created, because there was already one', 
 								'shipcloud-for-woocommerce' ), 

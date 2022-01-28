@@ -193,8 +193,18 @@
 </table>
 
 <script type="application/javascript">
-    jQuery(function ($) {
+    jQuery(document).ready(function($){
         $('#shipcloud_bulk').find('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
         $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
-    });
+		
+		$('#doaction,#doaction2').on('click',function(evt){
+			var selector = $('#bulk-action-selector-top');
+			if(undefined != selector){
+				if(selector.val() == 'wcsc_order_bulk_label'){
+					$('select[name="parcel_list"]').trigger('change');
+				}
+			}
+		});
+		
+	});
 </script>
