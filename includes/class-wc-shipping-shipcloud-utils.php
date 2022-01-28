@@ -860,6 +860,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		}
 		
 		public static function format_price( $price = 0 ) {
+			if ( strpos( $price, ' EUR' ) !== false ) {
+				return $price;
+			}
+			
 			return number_format( $price, 2, ',', '.' ) . " " . get_woocommerce_currency();
 		}
 		
@@ -1105,6 +1109,23 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		}
 		
 		/**
+		 * Insert an array at an arbitrary position of another array.
+		 *
+		 * @param   array $array
+		 * @param   int   $position
+		 * @param   array $insert_array
+		 * @return  array
+		 */
+		public static function array_insert( $array, $position, $insert_array ) {
+			if ( $position < 0 && $position >= count( $array ) ) {
+				self::log( 'Position must be greater than or equal to 0 and less than array length.', 'error' );
+				return $array;
+			}
+			$first_array = array_splice( $array, 0, $position );
+			return array_merge( $first_array, $insert_array, $array );
+		}
+		
+		/**
 		 * Splitting Address for getting number of street and street separate
 		 *
 		 * @param string $street
@@ -1113,7 +1134,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		public static function explode_street( $street ) {
 			
 			$number = '';
-			$chunks = explode( ' ', $street );
+			$chunks = explode( ' ', trim( $street ) );
 
 			while ( $part = array_pop( $chunks ) ) {
 				// Has digit or other allowed char so we count it as number.
@@ -1133,6 +1154,39 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 			return array(
 				'address' => $address,
 				'number'  => $number,
+			);
+		}
+		
+		/**
+		 * Splitting name for getting first and last names separate
+		 *
+		 * @param string $name
+		 * @return mixed $matches
+		 */
+		public static function explode_name( $name ) {
+			
+			$first_name = $last_name = '';
+			
+			$chunks = explode( ' ', $name );
+			$count  = count( $chunks );
+			
+			if ( $count === 1 ) {
+				// only one word - use as last name
+				$last_name = $chunks[0];
+			}
+			else if ( $count === 2 ) {
+				$first_name = $chunks[0];
+				$last_name 	= $chunks[1];
+			}
+			else if ( $count > 2 ) {
+				// last element may be last name rest part of first name(s)
+				$last_name 	= array_pop( $chunks );
+				$first_name = implode( ' ', $chunks );
+			}
+			
+			return array(
+				'first_name' => $first_name,
+				'last_name'  => $last_name,
 			);
 		}
 		

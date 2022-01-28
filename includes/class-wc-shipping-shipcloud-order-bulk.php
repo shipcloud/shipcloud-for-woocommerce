@@ -387,6 +387,30 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 				return;
 			}
 			
+			
+			// $this->log( "REQUEST: " . json_encode( $_REQUEST ) );
+			/*
+			"pickup": {
+				"pickup_earliest_date": "2022-01-28",
+				"pickup_earliest_time_hour": "10",
+				"pickup_earliest_time_minute": "00",
+				"pickup_latest_time_hour": "19",
+				"pickup_latest_time_minute": "00"
+			},
+			"pickup_address": {
+				"company": "",
+				"first_name": "",
+				"last_name": "",
+				"street": "",
+				"street_no": "",
+				"zip_code": "",
+				"city": "",
+				"country": "DE",
+				"state": "",
+				"phone": ""
+			},
+			*/
+			
 			$pickup_request_params = $mappings = [];
 			
 			foreach ( $order_ids as $order_id ) {
@@ -415,51 +439,56 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 						);
 	                }
 	            }
-				
-				// create pickup request
-				foreach ( $pickup_request_params as $carrier => $shipment_ids ) {
-					$shipment_id_hashes = [];
-		            foreach ( $shipment_ids as $shipment_id ) {
-		                $shipment_id_hashes[] = [ 'id' => $shipment_id ];
-		            }
-				
-					$data = [
-						'carrier'	=> $carrier,
-		                'pickup'	=> $_REQUEST['pickup'],
-		                'shipments'	=> $shipment_id_hashes,
-		            ];
-				
-					$data['pickup']['pickup_latest_date'] = $data['pickup']['pickup_earliest_date'];
+			}
+			
+			// create pickup requests per carrier
+			foreach ( $pickup_request_params as $carrier => $shipment_ids ) {
+				$shipment_id_hashes = $carrier_order_ids = [];
+	            foreach ( $shipment_ids as $shipment_id ) {
+	                $shipment_id_hashes[] = [ 'id' => $shipment_id ];
+					$carrier_order_ids[]  = $mappings[$shipment_id];
+	            }
+			
+				$data = [
+					'carrier'	=> $carrier,
+	                'pickup'	=> $_REQUEST['pickup'],
+	                'shipments'	=> $shipment_id_hashes,
+	            ];
+			
+				$data['pickup']['pickup_latest_date'] = $data['pickup']['pickup_earliest_date'];
 
-		            $pickup_address = $_REQUEST['pickup_address'];
-		            if ( ! empty( $pickup_address['last_name'] ) ) {
-		                $data['pickup_address'] = $pickup_address;
-		            }
-				
-					$pickup_request = $order->create_pickup_request( $order_id, $data );
-					if ( is_wp_error( $pickup_request ) ) {
-						$message = sprintf(
-							__( 'Error while creating a pickup request for order: %s', 'shipcloud-for-woocommerce' ),
-							$pickup_request->get_error_message() 
-						);
-						$this->log( $message, 'error' );
-						$this->add_admin_notice( $message, 'error' );
-					}
-					else if ( ! $pickup_request ) {
-						$message = __( 'Error while creating a pickup request for order', 'shipcloud-for-woocommerce' );
-						$this->log( $message, 'error' );
-						$this->add_admin_notice( $message, 'error' );
-					}
-					else {
-						$message = sprintf(
-							__( 'Pickup request for order %s successfully created', 'shipcloud-for-woocommerce' ),
-							$order_id 
-						);
-						$this->log( $message );
-						$this->add_admin_notice( $message, 'success' );
-					}
+				$pickup_address = $_REQUEST['pickup_address'];
+				if ( ! empty( $pickup_address['street'] ) && ! empty( $pickup_address['city'] ) ) {
+					$data['pickup_address'] = $pickup_address;
+				}
+			
+				$pickup_request = $order->create_pickup_request( $carrier_order_ids, $data );
+				if ( is_wp_error( $pickup_request ) ) {
+					$message = sprintf(
+						__( 'Error while creating a pickup request for order: %s', 'shipcloud-for-woocommerce' ),
+						$pickup_request->get_error_message() 
+					);
+					$this->log( $message, 'error' );
+					$this->add_admin_notice( $message, 'error' );
+				}
+				else if ( ! $pickup_request ) {
+					$message = sprintf(
+						__( 'Error while creating a pickup request for orders %s', 'shipcloud-for-woocommerce' ),
+						implode( ',', $carrier_order_ids ) 
+					);
+					$this->log( $message, 'error' );
+					$this->add_admin_notice( $message, 'error' );
+				}
+				else {
+					$message = sprintf(
+						__( 'Pickup request for orders %s successfully created', 'shipcloud-for-woocommerce' ),
+						implode( ',', $carrier_order_ids ) 
+					);
+					$this->log( $message );
+					$this->add_admin_notice( $message, 'success' );
 				}
 			}
+			
 		}
 		
 	    /**

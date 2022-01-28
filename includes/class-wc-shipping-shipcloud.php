@@ -173,9 +173,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
             add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
 			// add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'clear_transients' ) );
 			
-			
-			
-		    // Additional Shipment calculation Field
+			// Additional Shipment calculation Field
 		    add_action( 'woocommerce_shipping_calculator_enable_city', 	array( $this, 'add_calculate_shipping_form_fields' ) );
 		    add_action( 'woocommerce_calculated_shipping', 				array( $this, 'add_calculate_shipping_fields' ) );
 			

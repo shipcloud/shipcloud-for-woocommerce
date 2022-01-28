@@ -285,12 +285,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:shipcloud/shipcloud-php.git",
-                "reference": "24867ee849ee532db5ea6469787de750c8cd4fa3"
+                "reference": "42589a2d33da1062126c5534a7c9cf4e8ea62858"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shipcloud/shipcloud-php/zipball/24867ee849ee532db5ea6469787de750c8cd4fa3",
-                "reference": "24867ee849ee532db5ea6469787de750c8cd4fa3",
+                "url": "https://api.github.com/repos/shipcloud/shipcloud-php/zipball/42589a2d33da1062126c5534a7c9cf4e8ea62858",
+                "reference": "42589a2d33da1062126c5534a7c9cf4e8ea62858",
                 "shasum": ""
             },
             "require": {
@@ -300,7 +300,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^9"
             },
-            "time": "2022-01-26T15:30:51+00:00",
+            "time": "2022-01-28T01:06:34+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {

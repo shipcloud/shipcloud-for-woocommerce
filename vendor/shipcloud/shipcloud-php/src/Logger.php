@@ -55,19 +55,15 @@ class Logger {
 	/**
 	 * Init method
 	 * 
-	 * @param string  $name
-	 * @param string  $path
+	 * @param string  $logfile
 	 * @return void
 	 */
-	private static function init( string $name = '', string $path = '' ) {
-		if ( empty( $name ) ) {
-			$name = 'shipcloud';
-		}
-		if ( empty( $path ) ) {
-			$path = __DIR__ . "/../logs/{$name}.log";
+	private static function init( string $name = '', string $logfile = '' ) {
+		if ( empty( $logfile ) ) {
+			$logfile = __DIR__ . "/../logs/{$name}.log";
 		}
 		
-		$streamHandler = new \Monolog\Handler\StreamHandler( $path, \Monolog\Logger::DEBUG );
+		$streamHandler 	= new \Monolog\Handler\StreamHandler( $logfile, \Monolog\Logger::DEBUG );
 		$streamHandler->setFormatter( new \shipcloud\phpclient\SimpleFormatter() );
 		
 		self::$logger = new \Monolog\Logger( $name );
@@ -77,14 +73,13 @@ class Logger {
 	/**
 	 * Get an instance.
 	 * 
-	 * @param string  $name
-	 * @param string  $path
+	 * @param string  $logfile
 	 * @return Logger
 	 */
-	public static function get_instance( string $name = '', string $path = '' ) {
+	public static function get_instance( string $name = '', string $logfile = '' ) {
 		if ( !isset( self::$instance ) ) {
 			self::$instance = new self();
-			self::init( $name, $path );
+			self::init( $name, $logfile );
 		}
 		return self::$instance;
 	}

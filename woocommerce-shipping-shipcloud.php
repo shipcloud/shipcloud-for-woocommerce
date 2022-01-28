@@ -105,6 +105,8 @@ class WooCommerce_Shipping_Shipcloud {
 		
 		add_action( 'woocommerce_shipping_init',								array( $this, 'shipping_method_init' ) );
 		
+		add_filter( 'woocommerce_general_settings', 							array( $this, 'filter_wc_general_settings' ), 999 );
+		
 		/* 
 		 * Add very late to prevent manipulation by other plugins (e.g. Germanized).
 		 * @see https://vendidero.de/tickets/ergaenzung-aller-versandmethoden-mit-germanized-einstellungen
@@ -264,6 +266,48 @@ class WooCommerce_Shipping_Shipcloud {
 		/* Restore natural order. */
 		ksort( $methods );		
 		return $methods;
+	}
+	
+	/**
+	 * Adds some form fields to WC general settings
+	 *
+	 * @param array $settings
+	 * @return array
+	 */
+	public function filter_wc_general_settings( $settings ) {
+		
+		$company = [
+			[
+				'title'    => __( 'Company', 'shipcloud-for-woocommerce' ),
+				'desc'     => __( 'The name of your business.', 'shipcloud-for-woocommerce' ),
+				'id'       => 'woocommerce_store_company',
+				'default'  => '',
+				'type'     => 'text',
+				'desc_tip' => true,
+			]
+		];
+		
+		$settings = WC_Shipping_Shipcloud_Utils::array_insert( $settings, 1, $company );
+		
+		$contact = [
+			[
+				'title'    => __( 'Contact', 'shipcloud-for-woocommerce' ),
+				'desc'     => __( 'The name of the contact person.', 'shipcloud-for-woocommerce' ),
+				'id'       => 'woocommerce_store_manager',
+				'default'  => '',
+				'type'     => 'text',
+				'desc_tip' => true,
+			]
+		];
+		
+		$settings = WC_Shipping_Shipcloud_Utils::array_insert( $settings, 2, $contact );
+		
+		$postcode = [ $settings[7] ];
+		unset( $settings[7] );
+		
+		$settings = WC_Shipping_Shipcloud_Utils::array_insert( $settings, 5, $postcode );
+		
+		return $settings;
 	}
 	
 	/**

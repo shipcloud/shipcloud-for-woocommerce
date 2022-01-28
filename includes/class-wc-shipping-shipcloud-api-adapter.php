@@ -456,7 +456,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 				
 				if ( ! empty( $shipment ) ) {
 					
-					// $this->log( "Create Shipment: " . json_encode( $shipment->to_array() ) );
+					$this->log( "Create Shipment: " . json_encode( $shipment->to_array() ) );
 					
 					$response = $api->create_shipment( $shipment );
 					if ( ! empty( $response ) ) {
@@ -667,10 +667,16 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			
 				$shipment = $this->convert_data_array_to_shipment_api_object( $data );
 				
-				// $this->log( "Update Shipment: " . json_encode( $shipment->to_array() ) );
+				$this->log( "Update Shipment: " . json_encode( $shipment->to_array() ) );
 				
 				$response = $api->update_shipment( $shipment );
+				
+				$this->log( "Response: " . json_encode( $response ) );
+				
 				if ( ! empty( $response ) ) {
+					
+					
+					
 					return array_merge( $data, $response );
 				}
 				else {
@@ -1281,7 +1287,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			}
 			
 			try {
-				$this->api = new ApiClient( $this->api_key, WC_SHIPPING_SHIPCLOUD_AFFILIATE_ID );
+				$logfile   = '';
+				// $logfile   = WC_Shipping_Shipcloud_Utils::get_log_file_path();
+				$this->api = new ApiClient( $this->api_key, $logfile, WC_SHIPPING_SHIPCLOUD_AFFILIATE_ID );
 			} catch ( ApiException $e ) {
 				$error = sprintf( 
 					__( 'Please enter a valid <a href="%s">shipcloud API Key</a>.', 'shipcloud-for-woocommerce' ), 
@@ -1383,7 +1391,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 		 */
 		private function convert_data_array_to_shipment_api_object( $data = [] ) {
 			
-			$this->log( "convert_data_array_to_shipment_api_object: " . json_encode( $data ) );
+			// $this->log( "convert_data_array_to_shipment_api_object: " . json_encode( $data ) );
 			
 			$carrier = $label = $from_address = $to_address = $package = false;
 			
@@ -1443,7 +1451,6 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 					$label = new Label( $format );
 				}
 				else {
-					$this->log("else");
 					$label = new Label();
 				}
 			}
@@ -1507,6 +1514,14 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 							}
 						}
 						$additional_services[] = new AdditionalService( $name, $properties );
+						if ( $name === AdditionalServiceType::VISUAL_AGE_CHECK ) {
+							if ( $label->get_size() === LabelSizeType::SIZE_A6 ) {
+								$label->set_size( LabelSizeType::SIZE_A5 );
+							}
+							if ( $label->get_format() === LabelFormatType::PDF_A6 ) {
+								$label->set_format( LabelFormatType::PDF_A5 );
+							}
+						}
 					}
 					$shipment->set_additional_services( $additional_services );
 				}

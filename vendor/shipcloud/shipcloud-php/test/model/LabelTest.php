@@ -12,12 +12,10 @@ final class LabelTest extends TestCase {
 	
 	public function test_create_instance_without_arguments() : void {
 		
-		$this->expectError();
-        $this->expectErrorMessageMatches('/Too few arguments/');
-
-        // causes ArgumentCountError		
-        $instance = new Label();
+		$instance = new Label();
 		
+		$this->assertNotEmpty( $instance );
+        $this->assertInstanceOf( Label::class, $instance );
 	}
 	
 	public function test_create_instance_with_invalid_arguments() : void {

@@ -95,22 +95,33 @@ class ApiClient {
 	 * @var string
 	 */
 	private $affiliate_id;
+	
+	/**
+	 * Logger.
+	 * 
+	 * @var Logger
+	 */
+	private $logger;
 
 	/**
 	 * ApiClient constructor.
 	 *
 	 * @param string $api_key 		Key to access the API.
+	 * @param string $logfile		Path to logfile.
 	 * @param string $affiliate_id	Affiliate ID (optional).
 	 * @param string $base_url    	URL to the API (optional).
 	 * @return void
 	 */
-	public function __construct( $api_key, $affiliate_id = false, $base_url = '' ) {
+	public function __construct( $api_key, $logfile = '', $affiliate_id = false, $base_url = '' ) {
 		if ( $this->validate_api_key( $api_key ) ) {
 			$this->api_key = $api_key;
 		}
 		$this->affiliate_id	= $affiliate_id;
 		if ( ! empty( $base_url ) ) {
 			$this->base_url = $base_url;
+		}
+		if ( ! empty( $logfile ) ) {
+			$this->logger = Logger::get_instance( 'shipcloud-api-client', $logfile );
 		}
 	}
 	
@@ -951,7 +962,7 @@ class ApiClient {
 			 * There is no message body. You'll get this code when 
 			 * deleting a shipment or webhook was successful. 
 			 */
-			Logger::get_instance()->log( 'Shipment or webhook has been deleted.', 'info' );
+			$this->log( 'Shipment or webhook has been deleted.', 'info' );
 			return [];
 			
 		} else if ( $http_code === 401 ) {
@@ -960,18 +971,18 @@ class ApiClient {
 			 * You didn't authorize with our api. Probably because you 
 			 * forgot to send your api key for authorizing at our api. 
 			 */
+			$this->log( 'Unauthorized request. Check your API key!', 'error' );
 			throw new ApiException( 'Unauthorized request. Check your API key!', $http_code );
 		}
 		
 		if ( $http_code >= 400 && ! empty( $error ) ) {
 			
-			Logger::get_instance()->log( $json_params );
-			
+			$this->log( 'Bad request: ' . $json_params, 'error' );
 			throw new ApiException( $error, $http_code );
 		}
 		
 		if ( ! $response->get_payload() ) {
-			
+			$this->log( 'Could not parse or empty API response.', 'error' );
 			throw new ApiException( 'Could not parse or empty API response.', $http_code );
 		}
 
@@ -984,10 +995,25 @@ class ApiClient {
 				$errors = implode( ' ', $errors );
 				$error  = trim( $error . ' ' . $errors );
 			}
+			$this->log( $error, 'error' );
 			throw new ApiException( $error, $http_code );
 		}
 
 		return $payload;
     }
+	
+	/**
+	 * Output a debug message.
+	 *
+	 * @param string 	$message 	Debug message.
+	 * @param string 	$level   	Debug level.
+     * @param mixed 	$context	The Debug context.
+	 * @return void
+	 */
+	public function log( $message, $level = 'info', $context = [] ) {
+		if ( ! is_null( $this->logger ) ) {
+			$this->logger->log( $message, $level, $context );
+		}
+	}
 	
 }

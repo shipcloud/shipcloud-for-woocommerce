@@ -50,21 +50,18 @@ class Label extends AbstractApiObject {
 	 * @param string $format
 	 * @param string $size
 	 * @return void
-	 * @throws ApiException
 	 */
-	public function __construct( string $format, $size = LabelSizeType::SIZE_A6 ) {
-		
-		if ( ! LabelFormatType::is_valid_value( LabelFormatType::get_class_name(), $format ) ) {
+	public function __construct( $format = '', $size = '' ) {
+		if ( ! empty( $format ) && ! LabelFormatType::is_valid_value( LabelFormatType::get_class_name(), $format ) ) {
 			throw new ApiException( 'Invalid label format type: ' . $format );
 		}
-		if ( ! LabelSizeType::is_valid_value( LabelSizeType::get_class_name(), $size ) ) {
+		$this->format = $format;
+		if ( ! empty( $size ) && ! LabelSizeType::is_valid_value( LabelSizeType::get_class_name(), $size ) ) {
 			throw new ApiException( 'Invalid label size type: ' . $size );
 		}
+		$this->size = $size;
 		
-		$this->format = $format;
-		$this->size   = $size;
-		
-		$this->required = [ "format", "size" ];
+		$this->required = [];
 	}
 	
 	/**
@@ -72,7 +69,7 @@ class Label extends AbstractApiObject {
 	 * @return string The label format.
 	 * @see LabelFormatType
 	 */
-	public function get_format() : string {
+	public function get_format() {
 		return $this->format;
 	}
 	

@@ -886,33 +886,42 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 * @return array|mixed
 		 */
 		private function get_sender( $prefix = '' ) {
-		    $sender = get_post_meta( $this->order_id, 'shipcloud_sender_address', true );
+		    
+			$first_name = $last_name = '';
+			$store_manager = get_option( 'woocommerce_store_manager', '' );
+			if ( ! empty( $store_manager ) ) {
+				$name 		= WC_Shipping_Shipcloud_Utils::explode_name( $store_manager );
+				$first_name = $name['first_name'];
+				$last_name  = $name['last_name'];
+			}
+			
+			$street = $street_no = '';
+			$store_address	 = get_option( 'woocommerce_store_address', '' );
+			$store_address_2 = get_option( 'woocommerce_store_address_2', '' );
+			$store_address  .= ' ' . $store_address_2;
+			if ( ! empty( $store_address ) ) {
+				$address 	= WC_Shipping_Shipcloud_Utils::explode_street( $store_address );
+				$street	 	= $address['address'];
+				$street_no 	= $address['number'];
+			}
 
-		    if ( $sender && $prefix ) {
-		        $sender = $this->prefix_data( $sender, $prefix );
-		    }
-
-		    // Use default data if nothing was saved before
-		    if ( '' == $sender || 0 == count( $sender ) ) {
-		        $options 	= WC_Shipping_Shipcloud_Utils::get_plugin_options();
-		        $street_no 	= $options['sender_street_nr'] ?: ( isset( $options['sender_street_no'] ) ? $options['sender_street_no'] : '' );
-		        $zip_code 	= $options['sender_postcode'] ?: ( isset( $options['sender_zip_code'] ) ? $options['sender_zip_code'] : '' );
-
-		        $sender = array(
-		            $prefix . 'first_name' => $options['sender_first_name'],
-		            $prefix . 'last_name'  => $options['sender_last_name'],
-		            $prefix . 'company'    => $options['sender_company'],
-		            $prefix . 'street'     => $options['sender_street'],
-		            $prefix . 'street_no'  => $street_no,
-		            $prefix . 'zip_code'   => $zip_code,
-		            $prefix . 'city'       => $options['sender_city'],
-		            $prefix . 'state'      => $options['sender_state'],
-		            $prefix . 'country'    => $options['sender_country'],
-		            $prefix . 'phone'      => isset( $options['sender_phone'] ) ? $options['sender_phone'] : '',
-		       );
-		    }
-
-		    $address = $this->sanitize_address( $sender, $prefix );
+			$sender = array(
+	            $prefix . 'company'    => get_option( 'woocommerce_store_company', '' ),
+				$prefix . 'first_name' => $first_name,
+	            $prefix . 'last_name'  => $last_name,
+	            
+	            $prefix . 'street'     => $street,
+	            $prefix . 'street_no'  => $street_no,
+	            
+				$prefix . 'zip_code'   => get_option( 'woocommerce_store_postcode' ),
+	            $prefix . 'city'       => get_option( 'woocommerce_store_city', '' ),
+	            $prefix . 'state'      => '',
+	            $prefix . 'country'    => get_option( 'woocommerce_default_country' ),
+	            
+				$prefix . 'phone'      => '',
+			);
+			
+			$address = $this->sanitize_address( $sender, $prefix );
 
 		    if ( count( $address ) <= 1 ) {
 		        // No sender address entered ( just the country autofill ).
@@ -987,7 +996,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		            'city'       => $order->get_shipping_city(),
 		            'state'      => $order->get_shipping_state(),
 		            'country'    => $order->get_shipping_country(),
-		            'phone'      => $this->get_phone(),
+		            'phone'      => $order->get_shipping_phone(),
 		       );
 		    }
 
@@ -1458,6 +1467,28 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 * @return json
 		 */
 		public function create_pickup_request( $order_id, $data ) {
+			
+			$this->log( "create_pickup_request( ".json_encode($order_id).", ".json_encode($data)." )" );
+			
+			/*
+			{
+				"carrier": "dpd",
+				"pickup": {
+					"pickup_earliest_date": "2022-01-28",
+					"pickup_earliest_time_hour": "10",
+					"pickup_earliest_time_minute": "00",
+					"pickup_latest_time_hour": "19",
+					"pickup_latest_time_minute": "00",
+					"pickup_latest_date": "2022-01-28"
+				},
+				"shipments": [
+					{
+						"id": "7f5c32562516cbf4c7df65c051b49c77b0f1b6c2"
+					}
+				]
+			}
+			*/
+			
 			$shipment_id = isset( $data['id'] ) ? $data['id'] : false;
 			
 			if ( empty( $data['carrier'] ) && ! empty( $shipment_id ) && ! empty( $order_id ) ) {
@@ -1499,42 +1530,77 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				}
 			
 				$pickup_request = $this->api->create_pickup_request( $pickup_request_data );
-				if ( is_wp_error( $pickup_request ) ) {
-					return $pickup_request;
-				} 
-				else if ( ! empty( $shipment_id ) ) {
 				
-					$this->log( sprintf(
-						__( 'Pickup request created with id %s for shipment with id %s', 'shipcloud-for-woocommerce' ),
-						$pickup_request['id'],
-						$shipment_id
-					) );
-
-		            // remove shipments element from pickup_request
-		            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
-		            foreach ( $shipments as $shipment ) {
-						if ( $shipment_id === $shipment['id'] ) {
-							$updated_shipment = array_merge(
-								$shipment,
-								[ 'pickup_request' => $pickup_request ]
-							);
-							update_post_meta( $order_id, 'shipcloud_shipment_data', $updated_shipment, $shipment );
-							return $updated_shipment;
-							break;
+				$this->log( "API responded: " . json_encode( $pickup_request ) );
+				/*
+				{
+					"id": "0b50900d-c181-45dd-8d76-675dc419cfd9",
+					"carrier": "dpd",
+					"carrier_pickup_number": "22087",
+					"shipments": [
+						{
+							"id": "7f5c32562516cbf4c7df65c051b49c77b0f1b6c2"
 						}
+					],
+					"pickup_time": {
+						"earliest": "2022-01-28T10:00:00+01:00",
+						"latest": "2022-01-28T19:00:00+01:00"
+					},
+					"pickup_address": {
+						"company": "PS Media UG",
+						"first_name": "Daniel",
+						"last_name": "Münter",
+						"care_of": null,
+						"street": "Am Lindbruch",
+						"street_no": "66",
+						"zip_code": "41470",
+						"city": "Neuss",
+						"state": null,
+						"country": "DE",
+						"phone": "+491747519352",
+						"email": "info@ps-media.eu",
+						"id": "60b5c98c-4484-4882-80e9-bbcc5d22b079"
 					}
 				}
-				else if ( is_array( $order_id ) ) { // bulk pickup request
+				*/
 				
-					$ids = [];
-					if ( ! empty( $data['shipments'] ) ) {
-						foreach ( $data['shipments'] as $s ) {
-							$ids[] = $s['id'];
+				if ( is_wp_error( $pickup_request ) ) {
+					return $pickup_request;
+				}
+				else if ( ! empty( $pickup_request['carrier_pickup_number'] ) ) {
+					
+					// request successful
+					if ( ! empty( $shipment_id ) ) {
+				
+						$this->log( sprintf(
+							__( 'Pickup request created with id %s for shipment with id %s', 'shipcloud-for-woocommerce' ),
+							$pickup_request['id'],
+							$shipment_id
+						) );
+
+			            // remove shipments element from pickup_request
+			            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+			            foreach ( $shipments as $shipment ) {
+							if ( $shipment_id === $shipment['id'] ) {
+								$updated_shipment = array_merge(
+									$shipment,
+									[ 'pickup_request' => $pickup_request ]
+								);
+								update_post_meta( $order_id, 'shipcloud_shipment_data', $updated_shipment, $shipment );
+								return $updated_shipment;
+								break;
+							}
 						}
 					}
+					else if ( is_int( $order_id ) ) {
+					
+						$ids = [];
+						if ( ! empty( $data['shipments'] ) ) {
+							foreach ( $data['shipments'] as $s ) {
+								$ids[] = $s['id'];
+							}
+						}
 				
-					$order_ids = $order_id;
-					foreach ( $order_ids as $order_id ) {
 			            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 			            foreach ( $shipments as $shipment ) {
 							if ( in_array( $shipment['id'], $ids ) ) {
@@ -1545,9 +1611,35 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 								update_post_meta( $order_id, 'shipcloud_shipment_data', $updated_shipment, $shipment );
 							}
 						}
-					}
 				
-					return $updated_shipment;
+						return $updated_shipment;
+					
+					}
+					else if ( is_array( $order_id ) ) { // bulk pickup request
+				
+						$ids = [];
+						if ( ! empty( $data['shipments'] ) ) {
+							foreach ( $data['shipments'] as $s ) {
+								$ids[] = $s['id'];
+							}
+						}
+				
+						$order_ids = $order_id;
+						foreach ( $order_ids as $order_id ) {
+				            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+				            foreach ( $shipments as $shipment ) {
+								if ( in_array( $shipment['id'], $ids ) ) {
+									$updated_shipment = array_merge(
+										$shipment,
+										[ 'pickup_request' => $pickup_request ]
+									);
+									update_post_meta( $order_id, 'shipcloud_shipment_data', $updated_shipment, $shipment );
+								}
+							}
+						}
+				
+						return $updated_shipment;
+					}
 				}
 				
 		    } catch ( \Exception $e ) {
