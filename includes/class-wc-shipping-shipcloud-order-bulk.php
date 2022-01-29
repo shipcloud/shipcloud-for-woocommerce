@@ -432,10 +432,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 					else {
 	                    $this->add_admin_notice( 
 							sprintf( 
-								__( 'No pickup request for shipment with id %s created, because there was already one', 
+								__( 'Pickup for shipment %s already requested, nothing to do here.', 
 								'shipcloud-for-woocommerce' ), 
 								$shipment_id ), 
-							'error' 
+							'info' 
 						);
 	                }
 	            }
@@ -446,7 +446,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 				$shipment_id_hashes = $carrier_order_ids = [];
 	            foreach ( $shipment_ids as $shipment_id ) {
 	                $shipment_id_hashes[] = [ 'id' => $shipment_id ];
-					$carrier_order_ids[]  = $mappings[$shipment_id];
+					$order_id = $mappings[$shipment_id];
+					if ( ! in_array( $order_id, $carrier_order_ids ) ) {
+						$carrier_order_ids[] = $order_id;
+					}
 	            }
 			
 				$data = [
@@ -465,8 +468,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 				$pickup_request = $order->create_pickup_request( $carrier_order_ids, $data );
 				if ( is_wp_error( $pickup_request ) ) {
 					$message = sprintf(
-						__( 'Error while creating a pickup request for order: %s', 'shipcloud-for-woocommerce' ),
-						$pickup_request->get_error_message() 
+						__( 'Pickup request failed. Carrier %s (Shipment-IDs: %s), Error: %s', 'shipcloud-for-woocommerce' ),
+						$carrier,
+						implode( ', ', $shipment_ids ),
+						$pickup_request->get_error_message()
 					);
 					$this->log( $message, 'error' );
 					$this->add_admin_notice( $message, 'error' );
@@ -475,6 +480,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 					$message = sprintf(
 						__( 'Error while creating a pickup request for orders %s', 'shipcloud-for-woocommerce' ),
 						implode( ',', $carrier_order_ids ) 
+					);
+					$message = sprintf(
+						__( 'Pickup request failed. Carrier %s (Shipment-IDs: %s), please refer to log file.', 'shipcloud-for-woocommerce' ),
+						$carrier,
+						implode( ', ', $shipment_ids )
 					);
 					$this->log( $message, 'error' );
 					$this->add_admin_notice( $message, 'error' );

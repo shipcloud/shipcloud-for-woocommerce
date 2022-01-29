@@ -1361,7 +1361,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		        || empty( $data['pickup']['pickup_latest_time_minute'] )
 			) {
 		        $this->log( 'Unsufficient pickup data', 'warning' );
-		        return false;
+		        return new \WP_Error( 1, __( 'Pickup date and time fields must not be empty!', 'shipcloud-for-woocommerce' ) );
 		    }
 
 		    if ( array_key_exists( 'shipment', $data ) && array_key_exists( 'carrier', $data['shipment'] )  ) {
@@ -1378,6 +1378,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 
 		    $pickup = [];
 			
+			/*
 			$carrier_providing_pickup_service 	= WC_Shipping_Shipcloud_Utils::get_carrier_providing_pickup_service();
 			$carriers_with_pickup_object		= $carrier_providing_pickup_service['carriers_with_pickup_object'];
 			$carriers_with_pickup_request 		= $carrier_providing_pickup_service['carriers_with_pickup_request'];
@@ -1415,6 +1416,28 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		        $this->log( $error_message, 'error' );
 		        throw new \UnexpectedValueException( $error_message, 400 );
 			}
+			*/
+			
+			$pickup_earliest_date 		 = isset( $data['pickup']['pickup_earliest_date'] ) ? $data['pickup']['pickup_earliest_date'] : '';
+	        $pickup_earliest_time_hour 	 = isset( $data['pickup']['pickup_earliest_time_hour'] ) ? $data['pickup']['pickup_earliest_time_hour'] : '';
+	        $pickup_earliest_time_minute = isset( $data['pickup']['pickup_earliest_time_minute'] ) ? $data['pickup']['pickup_earliest_time_minute'] : '';
+	        $pickup_latest_date 		 = isset( $data['pickup']['pickup_earliest_date'] ) ? $data['pickup']['pickup_earliest_date'] : '';
+	        $pickup_latest_time_hour 	 = isset( $data['pickup']['pickup_latest_time_hour'] ) ? $data['pickup']['pickup_latest_time_hour'] : '';
+	        $pickup_latest_time_minute 	 = isset( $data['pickup']['pickup_latest_time_minute'] ) ? $data['pickup']['pickup_latest_time_minute'] : '';
+
+	        $pickup_earliest = $pickup_earliest_date . ' ' . $pickup_earliest_time_hour . ':' . $pickup_earliest_time_minute;
+	        $pickup_latest 	 = $pickup_latest_date . ' ' . $pickup_latest_time_hour . ':' . $pickup_latest_time_minute;
+
+	        try {
+	            $pickup_earliest = new WC_DateTime( $pickup_earliest, new DateTimeZone( 'Europe/Berlin' ) );
+	            $pickup_latest	 = new WC_DateTime( $pickup_latest, new DateTimeZone( 'Europe/Berlin' ) );
+
+	            $pickup['pickup_time']['earliest'] 	= $pickup_earliest->format( DateTime::ATOM );
+	            $pickup['pickup_time']['latest'] 	= $pickup_latest->format( DateTime::ATOM );
+	        } catch ( Exception $e ) {
+	            $this->log( sprintf( __( 'Couldn\'t prepare pickup: %s', 'shipcloud-for-woocommerce' ), $e->getMessage() ), 'error' );
+				return WC_Shipping_Shipcloud_Utils::convert_exception_to_wp_error( $e );
+	        }
 
 		    return $pickup;
 		}
@@ -1531,7 +1554,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			
 				$pickup_request = $this->api->create_pickup_request( $pickup_request_data );
 				
-				$this->log( "API responded: " . json_encode( $pickup_request ) );
+				// $this->log( "API responded: " . json_encode( $pickup_request ) );
 				/*
 				{
 					"id": "0b50900d-c181-45dd-8d76-675dc419cfd9",
