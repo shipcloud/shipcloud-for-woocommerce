@@ -34,7 +34,7 @@ if ( ! empty( $shipment_ids ) ) {
 						<table class="woocommerce-table woocommerce-table--order-details shop_table order_details shipcloud__tracking">
 							<thead>
 								<tr>
-									<th><?php _e( 'Status', 'shipcloud-for-woocommerce' ); ?></th>
+									<th><?php _e( 'Date', 'shipcloud-for-woocommerce' ); ?></th>
 									<th></th>
 									<th><?php _e( 'Details', 'shipcloud-for-woocommerce' ); ?></th>
 								</tr>
@@ -47,24 +47,16 @@ if ( ! empty( $shipment_ids ) ) {
 									?>
 									<tr>
 										<td>
-											<div class="shipcloud__tracking--date">
-												<?php echo strftime( '%d.%m.%Y', $occured_at_timestamp ); ?>
-											</div>
-											<div class="shipcloud__tracking--time">
-												<?php echo strftime( '%H:%M', $occured_at_timestamp ); ?>
-											</div>
-											<div class="shipcloud__tracking--status">
-												<?php echo WC_Shipping_Shipcloud_Utils::get_status_string( $tracking_event['type'] ); ?>
-											</div>
+											<span class="shipcloud__tracking--date"><?php echo strftime( '%d.%m.%Y, %H:%M', $occured_at_timestamp ); ?>&nbsp;Uhr</span><!-- &nbsp;<span class="shipcloud__tracking--status">
+												<?php //echo WC_Shipping_Shipcloud_Utils::get_status_string( $tracking_event['type'] ); ?>
+											</span> -->
 										</td>
 										<td>
 											<?php echo WC_Shipping_Shipcloud_Utils::get_status_icon( $tracking_event['status'] ); ?>
 										</td>
 										<td>
 											<?php echo $tracking_event['details'] ?>
-											<div class="shipcloud__tracking--location">
-												<?php echo $tracking_event['location'] ?>
-											</div>
+											<span class="shipcloud__tracking--location">(<?php echo $tracking_event['location'] ?>)</span>
 										</td>
 									</tr>
 									<?php
