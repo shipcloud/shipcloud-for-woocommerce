@@ -499,45 +499,8 @@
 	  		<input type="hidden" name="shipment[additional_services][advance_notice][sms_checkbox]" value="0" />
 	  		<input type="hidden" name="shipment[additional_services][advance_notice][sms]" value="" />
 	  	</div>
-	   
-	<?php endif; ?>
-</div>
 
-<div class="shipcloud_additional_service shipcloud_additional_service__dhl_endorsement">
-  <div class="shipcloud_additional_service__checkbox">
-    <# if ( data.model.hasAdditionalService('dhl_endorsement') ) { #>
-      <input type="checkbox" name="shipment[additional_services][dhl_endorsement][checked]" value="dhl_endorsement" checked="checked" />
-    <# } else { #>
-      <input type="checkbox" name="shipment[additional_services][dhl_endorsement][checked]" value="dhl_endorsement" />
-    <# } #>
-  </div>
-  <div class="shipcloud_additional_service__text">
-    <?php _e( 'Endorsement', 'shipcloud-for-woocommerce' ); ?>
-    <?php echo wc_help_tip( __( 'Prior to sending your parcel you can specify what should happen to the shipment in case it cannot be delivered in the destination country. By choosing the handling option abandon, your parcel will not be returned to you, but rather auctioned off or destroyed by the recipient countrys\' postal company. You will not be charged with a return fee for this option. When using the option return_immediately, the shipment will be returned to you and you will be charged for returning it.', 'shipcloud-for-woocommerce' ) ); ?>
-	<#
-      if ( data.model.hasAdditionalService('dhl_endorsement') ) {
-        var handling = data.model.getAdditionalServiceData('dhl_endorsement').handling;
-    #>
-    <div class="shipcloud_dhl_endorsement">
-    <# } else { #>
-    <div class="shipcloud_additional_service--hidden shipcloud_dhl_endorsement">
-    <# } #>
-      <span>
-        <select name="shipment[additional_services][dhl_endorsement][handling]">
-          <option value="">
-            <?php _e( 'Select a handling', 'shipcloud-for-woocommerce' ); ?>
-          </option>
-          <option value="abandon" <# if ( handling === 'abandon' ) {#>selected="selected"<# } #>>
-            <?php _e( 'Abandon', 'shipcloud-for-woocommerce' ); ?>
-          </option>
-          <option value="return_immediately" <# if ( handling === 'return_immediately' ) {#>selected="selected"<# } #>>
-            <?php _e( 'Return immediately', 'shipcloud-for-woocommerce' ); ?>
-          </option>
-        </select>
-      </span>
-    </div>
-  </div>
-  <div class="clear"></div>
+	<?php endif; ?>
 </div>
 
 <div class="shipcloud_additional_service shipcloud_additional_service__dhl_named_person_only">
@@ -582,6 +545,43 @@
   	/>
     </div>
 	-->
+  </div>
+  <div class="clear"></div>
+</div>
+
+<div class="shipcloud_additional_service shipcloud_additional_service__dhl_endorsement">
+  <div class="shipcloud_additional_service__checkbox">
+    <# if ( data.model.hasAdditionalService('dhl_endorsement') ) { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_endorsement][checked]" value="dhl_endorsement" checked="checked" />
+    <# } else { #>
+      <input type="checkbox" name="shipment[additional_services][dhl_endorsement][checked]" value="dhl_endorsement" />
+    <# } #>
+  </div>
+  <div class="shipcloud_additional_service__text">
+    <?php _e( 'Endorsement', 'shipcloud-for-woocommerce' ); ?>
+    <?php echo wc_help_tip( __( 'Prior to sending your parcel you can specify what should happen to the shipment in case it cannot be delivered in the destination country. By choosing the handling option abandon, your parcel will not be returned to you, but rather auctioned off or destroyed by the recipient countrys\' postal company. You will not be charged with a return fee for this option. When using the option return_immediately, the shipment will be returned to you and you will be charged for returning it.', 'shipcloud-for-woocommerce' ) ); ?>
+	<#
+      if ( data.model.hasAdditionalService('dhl_endorsement') ) {
+        var handling = data.model.getAdditionalServiceData('dhl_endorsement').handling;
+    #>
+    <div class="shipcloud_dhl_endorsement">
+    <# } else { #>
+    <div class="shipcloud_additional_service--hidden shipcloud_dhl_endorsement">
+    <# } #>
+      <span>
+        <select name="shipment[additional_services][dhl_endorsement][handling]">
+          <option value="">
+            <?php _e( 'Select a handling', 'shipcloud-for-woocommerce' ); ?>
+          </option>
+          <option value="abandon" <# if ( handling === 'abandon' ) {#>selected="selected"<# } #>>
+            <?php _e( 'Abandon', 'shipcloud-for-woocommerce' ); ?>
+          </option>
+          <option value="return_immediately" <# if ( handling === 'return_immediately' ) {#>selected="selected"<# } #>>
+            <?php _e( 'Return immediately', 'shipcloud-for-woocommerce' ); ?>
+          </option>
+        </select>
+      </span>
+    </div>
   </div>
   <div class="clear"></div>
 </div>
