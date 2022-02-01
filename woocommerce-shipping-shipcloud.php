@@ -119,7 +119,7 @@ class WooCommerce_Shipping_Shipcloud {
 			add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 	array( $this, 'plugin_links' ) );
 			add_filter( 'plugin_row_meta', 										array( $this, 'plugin_row_meta' ), 10, 2 );
 			add_action( 'admin_notices', 										array( $this, 'upgrade_notice' ) );
-			add_action( 'admin_enqueue_scripts', 								array( $this, 'enqueue_assets' ) );
+			add_action( 'admin_enqueue_scripts', 								array( $this, 'admin_enqueue_scripts' ) );
 			
 			// Product editor enhancements
 			add_action( 'woocommerce_product_options_shipping', 		array( $this, 'add_product_meta_fields' ) );
@@ -127,7 +127,7 @@ class WooCommerce_Shipping_Shipcloud {
 		}
 		else {
 			// add frontend related code here
-			
+			add_action( 'wp_enqueue_scripts', 							array( $this, 'enqueue_scripts' ) );
 		}
 	}
 	
@@ -440,17 +440,17 @@ class WooCommerce_Shipping_Shipcloud {
 	 *
 	 * @return void
 	 */
-	public function enqueue_assets() {
+	public function admin_enqueue_scripts() {
 		
 		wp_register_style( 'shipcloud-admin', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/shipcloud-admin.css', false );
 		wp_register_style( 'jquery-multiselect', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/jquery.multiselect.css', false );
-		wp_register_script( 'jquery-multiselect', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/jquery.multiselect.js', array( 'jquery' ) );
+		wp_enqueue_style( 'shopcloud-fa', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.min.css', false );
 		
-        wp_register_script( 'shipcloud-label', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-label.js', array( 'jquery' ) );
+		wp_register_script( 'jquery-multiselect', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/jquery.multiselect.js', array( 'jquery' ) );
+		wp_register_script( 'shipcloud-label', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-label.js', array( 'jquery' ) );
         wp_register_script( 'shipcloud-label-form', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-label-form.js', array( 'jquery' ) );
         wp_register_script( 'shipcloud-filler', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-filler.js', array( 'jquery' ) );
         wp_register_script( 'shipcloud-shipments', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-shipments.js', array( 'jquery', 'jquery-serialize-object', 'wp-backbone' ) );
-				
 		wp_register_script( 'shipcloud-admin', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-admin.js', array( 'jquery', 'jquery-ui-sortable' ) );
 		
 		$localized_strings = array(
@@ -472,8 +472,14 @@ class WooCommerce_Shipping_Shipcloud {
 		$contents_types = WC_Shipping_Shipcloud_Utils::get_customs_declaration_contents_types();
 		wp_localize_script( 'shipcloud-admin', 'shipcloud_customs_declaration_contents_types', $contents_types );
 		
-		wp_enqueue_script( 'fontawesome', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.min.js', false );
 		wp_enqueue_script( 'jquery-serialize-json', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/jquery.serializejson.min.js', array( 'jquery' ) );
+		wp_enqueue_script( 'shipcloud-fa', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.min.js', false );
+		
+	}
+	
+	public function enqueue_scripts() {
+		wp_enqueue_style( 'shopcloud-fa', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.min.css', false );
+		wp_enqueue_script( 'shipcloud-fa', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.min.js', false );
 	}
 	
 	/**

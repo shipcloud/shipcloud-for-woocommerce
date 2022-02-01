@@ -82,9 +82,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          */
         private function init() {
             
-			add_action( 'admin_enqueue_scripts', 						array( $this, 'enqueue_scripts' ), 30 );
-			
-            add_action( 'add_meta_boxes', 								array( $this, 'add_metaboxes' ) );
+			add_action( 'admin_enqueue_scripts', 						array( $this, 'admin_enqueue_scripts' ), 30 );
+			add_action( 'add_meta_boxes', 								array( $this, 'add_metaboxes' ) );
             add_action( 'save_post', 									array( $this, 'save_settings' ) );
 			
             add_action( 'woocommerce_order_details_before_order_table', array( $this, 'display_tracking_information' ), 10, 1 );
@@ -149,16 +148,18 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          *
          * @return void
          */
-        public function enqueue_scripts() {
+        public function admin_enqueue_scripts() {
 			
 			$screen       = get_current_screen();
 			$screen_id    = $screen ? $screen->id : '';
 			
 			if ( $screen_id === 'shop_order' ) {
+				
 	            // CSS
 	            wp_enqueue_style( 'wp-jquery-ui-dialog' );
 				wp_enqueue_style( 'shipcloud-admin' );
 				wp_enqueue_style( 'jquery-multiselect' );
+				wp_enqueue_style( 'shipcloud-fa' );
 			
 	            // JS
 	            wp_enqueue_script( 'jquery' );
@@ -173,10 +174,13 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 	            wp_enqueue_script( 'shipcloud-shipments' );
 				wp_enqueue_script( 'jquery-multiselect' );
 				wp_enqueue_script( 'shipcloud-admin' );
+				wp_enqueue_script( 'shipcloud-fa' );
+				
+				include_once( dirname( __FILE__ ) . '/data/data-shipcloud-multiselect-script.php' );
 			}
         }
-
-        /**
+		
+		/**
          * Adding meta boxes
          *
          * @return void
@@ -259,7 +263,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                 $shipment_ids 	= get_post_meta( $order->get_id(), 'shipcloud_shipment_ids' );
                 $shipments_data = $shipment_data = get_post_meta( $order->get_id(), 'shipcloud_shipment_data' );
 				
-                ob_start();
+				ob_start();
 	            
 				include( dirname( __FILE__ ) . '/templates/template-my-account-show-tracking.php' );
 				
