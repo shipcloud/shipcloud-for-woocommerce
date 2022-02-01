@@ -114,7 +114,7 @@
 		    <# } #>
 		    <# if ( additional_service.name === 'premium_international' ) { #>
 		      <li>
-		        <?php _e( 'DHL premium international', 'shipcloud-for-woocommerce' ); ?>
+		        <?php _e( 'Premium international', 'shipcloud-for-woocommerce' ); ?>
 		      </li>
 		    <# } #>
 		    <# if ( additional_service.name === 'delivery_date' ) { #>

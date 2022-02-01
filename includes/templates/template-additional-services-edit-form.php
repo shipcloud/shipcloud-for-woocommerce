@@ -182,7 +182,7 @@
     <# } #>
   </div>
   <div class="shipcloud_additional_service__text">
-    <?php _e( 'DHL premium international', 'shipcloud-for-woocommerce' ); ?>
+    <?php _e( 'Premium international', 'shipcloud-for-woocommerce' ); ?>
     <?php echo wc_help_tip( __( 'When using this option for international shipments they get a preferred routing by DHL', 'shipcloud-for-woocommerce' ) ); ?>
   </div>
   <div class="clear"></div>

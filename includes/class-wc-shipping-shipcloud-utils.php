@@ -157,7 +157,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 				EventType::SHIPMENT_ALL									=> __( 'Shipment all', 'shipcloud-for-woocommerce' ),
 				EventType::SHIPMENT_STATUS_DELETED						=> __( 'Shipment status deleted', 'shipcloud-for-woocommerce' ),
 	    		EventType::SHIPMENT_TRACKING_ALL						=> __( 'Shipment tracking all', 'shipcloud-for-woocommerce' ),
-				EventType::SHIPMENT_TRACKING_LABEL_CREATED				=> __( 'Tracking label created', 'shipcloud-for-woocommerce' ),
+				EventType::SHIPMENT_TRACKING_LABEL_CREATED				=> __( 'Shipping label created', 'shipcloud-for-woocommerce' ),
 				EventType::SHIPMENT_TRACKING_PICKED_UP					=> __( 'Package(s) picked up', 'shipcloud-for-woocommerce' ),
 				EventType::SHIPMENT_TRACKING_TRANSIT					=> __( 'Package(s) in transit', 'shipcloud-for-woocommerce' ),
 				EventType::SHIPMENT_TRACKING_OUT_FOR_DELIVERY 			=> __( 'Package(s) out for delivery', 'shipcloud-for-woocommerce' ),

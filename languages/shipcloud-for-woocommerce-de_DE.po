@@ -6,8 +6,8 @@ msgstr ""
 "release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shipcloud-for-"
 "woocommerce\n"
-"POT-Creation-Date: 2022-02-01 08:07+0100\n"
-"PO-Revision-Date: 2022-02-01 08:15+0100\n"
+"POT-Creation-Date: 2022-02-01 09:09+0100\n"
+"PO-Revision-Date: 2022-02-01 09:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -367,8 +367,8 @@ msgid "Shipment tracking all"
 msgstr "Sendungsverfolgung alle"
 
 #: includes/class-wc-shipping-shipcloud-utils.php:160
-msgid "Tracking label created"
-msgstr "Tracking-Label erstellt"
+msgid "Shipping label created"
+msgstr "Versandmarke erstellt"
 
 #: includes/class-wc-shipping-shipcloud-utils.php:161
 msgid "Package(s) picked up"
@@ -1175,8 +1175,8 @@ msgstr "UPS Adult Signature"
 
 #: includes/templates/template-additional-services-edit-form.php:185
 #: includes/templates/template-order-label.php:117
-msgid "DHL premium international"
-msgstr "DHL Premium International"
+msgid "Premium international"
+msgstr "Premium International"
 
 #: includes/templates/template-additional-services-edit-form.php:186
 msgid ""
@@ -1339,11 +1339,41 @@ msgstr ""
 "Erlaubnis erteilt."
 
 #: includes/templates/template-additional-services-edit-form.php:515
-#: includes/templates/template-order-label.php:168
-msgid "Endorsement"
-msgstr "Vermerk"
+#: includes/templates/template-order-label.php:176
+msgid "Named person only"
+msgstr "Nur namentlich genannte Person"
 
 #: includes/templates/template-additional-services-edit-form.php:516
+msgid ""
+"The named person only service ensures in an uncomplicated and cost-effective "
+"way that your parcels are only delivered to the recipient in person or to an "
+"authorized person."
+msgstr ""
+"Der \"Persönliche Zustellung\"-Service stellt unkompliziert und "
+"kostengünstig sicher, dass Ihre Pakete nur an den Empfänger persönlich oder "
+"an eine bevollmächtigte Person zugestellt werden."
+
+#: includes/templates/template-additional-services-edit-form.php:530
+#: includes/templates/template-order-label.php:216
+msgid "Parcel outlet routing"
+msgstr "Filialrouting"
+
+#: includes/templates/template-additional-services-edit-form.php:531
+msgid ""
+"With the DHL additional service retail outlet routing you can tell the "
+"carrier to reroute a parcel to the nearest outlet when the recipient can't "
+"be reached. Otherwise the parcel will be returned immediately."
+msgstr ""
+"Mit dem DHL Zusatzservice Filialrouting kannst Du den Zusteller anweisen, "
+"ein Paket an die nächstgelegene Filiale umzuleiten, wenn der Empfänger nicht "
+"erreicht werden kann. Andernfalls wird das Paket sofort zurückgeschickt."
+
+#: includes/templates/template-additional-services-edit-form.php:561
+#: includes/templates/template-order-label.php:168
+msgid "Endorsement"
+msgstr "Vorausverfügung"
+
+#: includes/templates/template-additional-services-edit-form.php:562
 msgid ""
 "Prior to sending your parcel you can specify what should happen to the "
 "shipment in case it cannot be delivered in the destination country. By "
@@ -1360,47 +1390,17 @@ msgstr ""
 "Empfängerland versteigert oder vernichtet. Für diese Option wird Ihnen keine "
 "Rücksendegebühr in Rechnung gestellt."
 
-#: includes/templates/template-additional-services-edit-form.php:528
+#: includes/templates/template-additional-services-edit-form.php:574
 msgid "Select a handling"
 msgstr "Handhabung auswählen"
 
-#: includes/templates/template-additional-services-edit-form.php:531
+#: includes/templates/template-additional-services-edit-form.php:577
 msgid "Abandon"
-msgstr "Aufgabe"
+msgstr "Freigabe der Sendung"
 
-#: includes/templates/template-additional-services-edit-form.php:534
+#: includes/templates/template-additional-services-edit-form.php:580
 msgid "Return immediately"
 msgstr "Direkte Retoure"
-
-#: includes/templates/template-additional-services-edit-form.php:552
-#: includes/templates/template-order-label.php:176
-msgid "Named person only"
-msgstr "Nur namentlich genannte Person"
-
-#: includes/templates/template-additional-services-edit-form.php:553
-msgid ""
-"The named person only service ensures in an uncomplicated and cost-effective "
-"way that your parcels are only delivered to the recipient in person or to an "
-"authorized person."
-msgstr ""
-"Der \"Persönliche Zustellung\"-Service stellt unkompliziert und "
-"kostengünstig sicher, dass Ihre Pakete nur an den Empfänger persönlich oder "
-"an eine bevollmächtigte Person zugestellt werden."
-
-#: includes/templates/template-additional-services-edit-form.php:567
-#: includes/templates/template-order-label.php:216
-msgid "Parcel outlet routing"
-msgstr "Paketausgangsrouting"
-
-#: includes/templates/template-additional-services-edit-form.php:568
-msgid ""
-"With the DHL additional service retail outlet routing you can tell the "
-"carrier to reroute a parcel to the nearest outlet when the recipient can't "
-"be reached. Otherwise the parcel will be returned immediately."
-msgstr ""
-"Mit dem DHL Zusatzservice Filialrouting kannst Du den Zusteller anweisen, "
-"ein Paket an die nächstgelegene Filiale umzuleiten, wenn der Empfänger nicht "
-"erreicht werden kann. Andernfalls wird das Paket sofort zurückgeschickt."
 
 #: includes/templates/template-additional-services-edit-form.php:594
 msgid "Pickup"
