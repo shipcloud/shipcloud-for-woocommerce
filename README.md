@@ -1,1 +1,1 @@
-# wp-pugin-shipcloud
+# shipcloud for WooCommerce
