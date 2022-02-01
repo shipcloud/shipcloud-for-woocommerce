@@ -24,7 +24,7 @@ if ( ! empty( $shipment_ids ) ) {
 					if ( ! empty( $tracking_url ) && ! empty( $carrier_tracking_number ) ) {
 						?>
 		                <p>
-		                    <strong><?php _e( 'Carrier', 'shipcloud-for-woocommerce' ); ?>:</strong> <?php echo WC_Shipping_Shipcloud_Utils::get_carrier_display_name( $shipment_data['carrier'] ); ?>, <strong><?php _e( 'Trackingnumber', 'shipcloud-for-woocommerce' ); ?>:</strong> <a href="<?php echo $tracking_url; ?>" target="_blank"><?php echo $carrier_tracking_number; ?></a>
+		                    <strong><?php _e( 'Carrier', 'shipcloud-for-woocommerce' ); ?>:</strong> <?php echo WC_Shipping_Shipcloud_Utils::get_carrier_display_name( $shipment_data['carrier'] ); ?>, <strong><?php _e( 'Trackingnumber', 'shipcloud-for-woocommerce' ); ?>:</strong> <a href="<?php echo $tracking_url . "?utm_source=shipcloud-for-woocommerce_myaccount"; ?>" target="_blank"><?php echo $carrier_tracking_number; ?></a>
 		                </p>
 						<?php
 					}
