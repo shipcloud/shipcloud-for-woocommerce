@@ -150,25 +150,30 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          * @return void
          */
         public function enqueue_scripts() {
-            // CSS
-            wp_enqueue_style( 'wp-jquery-ui-dialog' );
-			wp_enqueue_style( 'shipcloud-admin' );
-			wp_enqueue_style( 'jquery-multiselect' );
 			
-            // JS
-            wp_enqueue_script( 'jquery' );
-            wp_enqueue_script( 'jquery-ui-core' );
-            wp_enqueue_script( 'jquery-effects-core' );
-            wp_enqueue_script( 'jquery-effects-highlight' );
-            wp_enqueue_script( 'jquery-ui-dialog' );
-            wp_enqueue_script( 'admin-widgets' );
-			wp_enqueue_script( 'backbone' );
-            wp_enqueue_script( 'shipcloud-label-form' );
-            wp_enqueue_script( 'shipcloud-filler' );
-            wp_enqueue_script( 'shipcloud-shipments' );
-			wp_enqueue_script( 'jquery-multiselect' );
-			wp_enqueue_script( 'shipcloud-admin' );
+			$screen       = get_current_screen();
+			$screen_id    = $screen ? $screen->id : '';
 			
+			if ( $screen_id === 'shop_order' ) {
+	            // CSS
+	            wp_enqueue_style( 'wp-jquery-ui-dialog' );
+				wp_enqueue_style( 'shipcloud-admin' );
+				wp_enqueue_style( 'jquery-multiselect' );
+			
+	            // JS
+	            wp_enqueue_script( 'jquery' );
+	            wp_enqueue_script( 'jquery-ui-core' );
+	            wp_enqueue_script( 'jquery-effects-core' );
+	            wp_enqueue_script( 'jquery-effects-highlight' );
+	            wp_enqueue_script( 'jquery-ui-dialog' );
+	            wp_enqueue_script( 'admin-widgets' );
+				wp_enqueue_script( 'backbone' );
+	            wp_enqueue_script( 'shipcloud-label-form' );
+	            wp_enqueue_script( 'shipcloud-filler' );
+	            wp_enqueue_script( 'shipcloud-shipments' );
+				wp_enqueue_script( 'jquery-multiselect' );
+				wp_enqueue_script( 'shipcloud-admin' );
+			}
         }
 
         /**

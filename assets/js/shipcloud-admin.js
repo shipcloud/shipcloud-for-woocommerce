@@ -179,6 +179,7 @@ jQuery(function($){
 	                'dialogClass': 'wcsc-dialog wp-dialog',
 	                'modal': true,
 	                'autoOpen': false,
+					'closeText'	 : '',
 	                'closeOnEscape': true,
 	                'minHeight': 80,
 	                'buttons': [{
@@ -219,6 +220,7 @@ jQuery(function($){
                 'dialogClass': 'wcsc-dialog wp-dialog',
                 'modal': true,
                 'autoOpen': false,
+				'closeText': '',
                 'closeOnEscape': true,
                 'minHeight': 80,
                 'buttons': [{

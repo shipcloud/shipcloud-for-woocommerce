@@ -541,17 +541,24 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 		 * @return void
 		 */
 		public function admin_options() {
-			// Check users environment supports this method.
-			$this->environment_check();
 			
-			// Enqueue plugin scripts and styles.
-			wp_enqueue_style( 'shipcloud-admin' );
-			wp_enqueue_style( 'jquery-multiselect' );
-			wp_enqueue_script( 'jquery-multiselect' );
-			wp_enqueue_script( 'shipcloud-admin' );
+			$screen       = get_current_screen();
+			$screen_id    = $screen ? $screen->id : '';
 			
-			// Show settings.
-			parent::admin_options();
+			if ( $screen_id === 'woocommerce_page_wc-settings' ) {
+				
+				// Check users environment supports this method.
+				$this->environment_check();
+			
+				// Enqueue plugin scripts and styles.
+				wp_enqueue_style( 'shipcloud-admin' );
+				wp_enqueue_style( 'jquery-multiselect' );
+				wp_enqueue_script( 'jquery-multiselect' );
+				wp_enqueue_script( 'shipcloud-admin' );
+			
+				// Show settings.
+				parent::admin_options();
+			}
 		}
 		
 		/**

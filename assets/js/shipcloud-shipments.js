@@ -213,6 +213,7 @@ shipcloud.ShipmentModel = Backbone.Model.extend({
 			var dialog = jQuery('#ask-delete-shipment').dialog({
 				'dialogClass': 'wcsc-dialog wp-dialog',
 				'modal'      : true,
+				'closeText'	 : '',
 				'buttons'    : {
 					'yes': {
 						text : wcsc_translate.yes,
@@ -515,6 +516,7 @@ shipcloud.ShipmentView = wp.Backbone.View.extend({
         jQuery('#ask-delete-shipment').dialog({
             'dialogClass': 'wcsc-dialog wp-dialog',
             'modal'      : true,
+			'closeText'	 : '',
             'buttons'    : {
                 'yes': {
                     text : wcsc_translate.yes,

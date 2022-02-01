@@ -560,7 +560,7 @@ fieldset .shipment-labels .address {
 }
 
 /**
- * 	Dialog (becaus WooCommerce adds jQuery UI CSS from google)
+ * 	Dialog (because WooCommerce adds jQuery UI CSS from google)
  */
 .wp-admin .wcsc-dialog {
     border-radius: 0;
