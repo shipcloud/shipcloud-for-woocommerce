@@ -12,3 +12,5 @@ composer.json
 .jpg
 .jpeg
 .png
+tmp
+.txt
