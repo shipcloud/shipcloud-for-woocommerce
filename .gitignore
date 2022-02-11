@@ -9,6 +9,7 @@
 composer.json
 composer.lock
 data
+phpdoc-templates
 .settings
 .project
 tmp

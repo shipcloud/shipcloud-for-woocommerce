@@ -16,8 +16,8 @@
  * Developer: shipcloud GmbH
  * Developer URI: https://developers.shipcloud.io
  * WC requires at least: 5.2
- * WC tested up to: 5.7.1
- * Tested up to: 5.8.1
+ * WC tested up to: 6.2.0
+ * Tested up to: 5.9
  * Text Domain: shipcloud-for-woocommerce
  * Domain Path: /languages/
  * Copyright: © 2021 shipcloud GmbH
@@ -480,6 +480,7 @@ class WooCommerce_Shipping_Shipcloud {
 	public function enqueue_scripts() {
 		wp_enqueue_style( 'shopcloud-fa', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.min.css', false );
 		wp_enqueue_script( 'shipcloud-fa', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.min.js', false );
+		wp_enqueue_script( 'shipcloud-frontend', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-frontend.js', false );
 	}
 	
 	/**

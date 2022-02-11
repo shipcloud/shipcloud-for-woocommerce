@@ -175,6 +175,20 @@
 <dd>WooCommerce Order object</dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_as_billing_input_field">add_care_of_as_billing_input_field()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_as_shipping_input_field">add_care_of_as_shipping_input_field()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_legal_checkboxes">add_legal_checkboxes()</a>
     <span>
                         &nbsp;: void    </span>
@@ -189,11 +203,32 @@
 <dd>Adding meta boxes</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_pakadoo_id_input_field">add_pakadoo_id_input_field()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_sender_phone_input_field">add_sender_phone_input_field()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/WC-Shipping-Shipcloud-Order.html#method_additional_services_from_request">additional_services_from_request()</a>
     <span>
                         &nbsp;: string    </span>
 </dt>
 <dd>Returns parses additional services from request form and returns them in an api hash</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-Order.html#method_admin_enqueue_scripts">admin_enqueue_scripts()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Enqueuing needed Scripts &amp; Styles</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/WC-Shipping-Shipcloud-Order.html#method_ajax_calculate_shipping">ajax_calculate_shipping()</a>
@@ -285,13 +320,6 @@
                         &nbsp;: bool    </span>
 </dt>
 <dd>Getting option email notification enabled by customer</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/WC-Shipping-Shipcloud-Order.html#method_enqueue_scripts">enqueue_scripts()</a>
-    <span>
-                        &nbsp;: void    </span>
-</dt>
-<dd>Enqueuing needed Scripts &amp; Styles</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/WC-Shipping-Shipcloud-Order.html#method_get_allowed_carriers">get_allowed_carriers()</a>
@@ -390,6 +418,13 @@
                         &nbsp;: void    </span>
 </dt>
 <dd>Output an admin notice.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_input_field">add_care_of_input_field()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/WC-Shipping-Shipcloud-Order.html#method_carrier_email_notification_enabled">carrier_email_notification_enabled()</a>
@@ -803,6 +838,94 @@ ull</span></code>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_add_care_of_as_billing_input_field">
+        add_care_of_as_billing_input_field()
+        <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_as_billing_input_field" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">275</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">add_care_of_as_billing_input_field</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_add_care_of_as_shipping_input_field">
+        add_care_of_as_shipping_input_field()
+        <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_as_shipping_input_field" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">279</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">add_care_of_as_shipping_input_field</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_add_legal_checkboxes">
         add_legal_checkboxes()
         <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_legal_checkboxes" class="headerlink"><i class="fas fa-link"></i></a>
@@ -810,7 +933,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">270</span>
+    <span class="phpdocumentor-element-found-in__line">345</span>
 
     </aside>
 
@@ -843,7 +966,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">179</span>
+    <span class="phpdocumentor-element-found-in__line">202</span>
 
     </aside>
 
@@ -869,6 +992,94 @@ ull</span></code>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_add_pakadoo_id_input_field">
+        add_pakadoo_id_input_field()
+        <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_pakadoo_id_input_field" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">305</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">add_pakadoo_id_input_field</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_add_sender_phone_input_field">
+        add_sender_phone_input_field()
+        <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_sender_phone_input_field" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">322</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">add_sender_phone_input_field</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_additional_services_from_request">
         additional_services_from_request()
         <a href="classes/WC-Shipping-Shipcloud-Order.html#method_additional_services_from_request" class="headerlink"><i class="fas fa-link"></i></a>
@@ -876,7 +1087,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1594</span>
+    <span class="phpdocumentor-element-found-in__line">1815</span>
 
     </aside>
 
@@ -926,6 +1137,39 @@ ull</span></code>
             -public
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_admin_enqueue_scripts">
+        admin_enqueue_scripts()
+        <a href="classes/WC-Shipping-Shipcloud-Order.html#method_admin_enqueue_scripts" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">157</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Enqueuing needed Scripts &amp; Styles</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">admin_enqueue_scripts</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_ajax_calculate_shipping">
         ajax_calculate_shipping()
         <a href="classes/WC-Shipping-Shipcloud-Order.html#method_ajax_calculate_shipping" class="headerlink"><i class="fas fa-link"></i></a>
@@ -933,7 +1177,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">311</span>
+    <span class="phpdocumentor-element-found-in__line">415</span>
 
     </aside>
 
@@ -966,7 +1210,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">564</span>
+    <span class="phpdocumentor-element-found-in__line">668</span>
 
     </aside>
 
@@ -999,7 +1243,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">361</span>
+    <span class="phpdocumentor-element-found-in__line">465</span>
 
     </aside>
 
@@ -1042,7 +1286,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">519</span>
+    <span class="phpdocumentor-element-found-in__line">623</span>
 
     </aside>
 
@@ -1075,7 +1319,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">554</span>
+    <span class="phpdocumentor-element-found-in__line">658</span>
 
     </aside>
 
@@ -1108,7 +1352,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">610</span>
+    <span class="phpdocumentor-element-found-in__line">714</span>
 
     </aside>
 
@@ -1141,7 +1385,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">402</span>
+    <span class="phpdocumentor-element-found-in__line">506</span>
 
     </aside>
 
@@ -1174,7 +1418,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">143</span>
+    <span class="phpdocumentor-element-found-in__line">148</span>
 
     </aside>
 
@@ -1219,7 +1463,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1460</span>
+    <span class="phpdocumentor-element-found-in__line">1598</span>
 
     </aside>
 
@@ -1270,7 +1514,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">645</span>
+    <span class="phpdocumentor-element-found-in__line">751</span>
 
     </aside>
 
@@ -1314,7 +1558,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">193</span>
+    <span class="phpdocumentor-element-found-in__line">216</span>
 
     </aside>
 
@@ -1347,7 +1591,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">250</span>
+    <span class="phpdocumentor-element-found-in__line">387</span>
 
     </aside>
 
@@ -1390,7 +1634,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1870</span>
+    <span class="phpdocumentor-element-found-in__line">2091</span>
 
     </aside>
 
@@ -1416,39 +1660,6 @@ ull</span></code>
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_enqueue_scripts">
-        enqueue_scripts()
-        <a href="classes/WC-Shipping-Shipcloud-Order.html#method_enqueue_scripts" class="headerlink"><i class="fas fa-link"></i></a>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">152</span>
-
-    </aside>
-
-        <p class="phpdocumentor-summary">Enqueuing needed Scripts &amp; Styles</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">enqueue_scripts</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    
-    
-    
-
-        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">void</span>
-            &mdash;
-        
-    
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
     <h4 class="phpdocumentor-element__name" id="method_get_allowed_carriers">
         get_allowed_carriers()
         <a href="classes/WC-Shipping-Shipcloud-Order.html#method_get_allowed_carriers" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1456,7 +1667,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1824</span>
+    <span class="phpdocumentor-element-found-in__line">2045</span>
 
     </aside>
 
@@ -1489,7 +1700,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1418</span>
+    <span class="phpdocumentor-element-found-in__line">1556</span>
 
     </aside>
 
@@ -1524,7 +1735,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1881</span>
+    <span class="phpdocumentor-element-found-in__line">2102</span>
 
     </aside>
 
@@ -1557,7 +1768,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1048</span>
+    <span class="phpdocumentor-element-found-in__line">1163</span>
 
     </aside>
 
@@ -1590,7 +1801,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1896</span>
+    <span class="phpdocumentor-element-found-in__line">2117</span>
 
     </aside>
 
@@ -1623,7 +1834,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">129</span>
+    <span class="phpdocumentor-element-found-in__line">134</span>
 
     </aside>
 
@@ -1656,7 +1867,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1125</span>
+    <span class="phpdocumentor-element-found-in__line">1240</span>
 
     </aside>
 
@@ -1689,7 +1900,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1833</span>
+    <span class="phpdocumentor-element-found-in__line">2054</span>
 
     </aside>
 
@@ -1722,7 +1933,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">861</span>
+    <span class="phpdocumentor-element-found-in__line">967</span>
 
     </aside>
 
@@ -1765,7 +1976,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">288</span>
+    <span class="phpdocumentor-element-found-in__line">363</span>
 
     </aside>
 
@@ -1808,7 +2019,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1448</span>
+    <span class="phpdocumentor-element-found-in__line">1586</span>
 
     </aside>
 
@@ -1841,7 +2052,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">221</span>
+    <span class="phpdocumentor-element-found-in__line">244</span>
 
     </aside>
 
@@ -1927,7 +2138,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1927</span>
+    <span class="phpdocumentor-element-found-in__line">2148</span>
 
     </aside>
 
@@ -1983,6 +2194,58 @@ ull</span></code>
             -private
                                                         "
 >
+    <h4 class="phpdocumentor-element__name" id="method_add_care_of_input_field">
+        add_care_of_input_field()
+        <a href="classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_input_field" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">283</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">add_care_of_input_field</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$category</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$category</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
     <h4 class="phpdocumentor-element__name" id="method_carrier_email_notification_enabled">
         carrier_email_notification_enabled()
         <a href="classes/WC-Shipping-Shipcloud-Order.html#method_carrier_email_notification_enabled" class="headerlink"><i class="fas fa-link"></i></a>
@@ -1990,7 +2253,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1846</span>
+    <span class="phpdocumentor-element-found-in__line">2067</span>
 
     </aside>
 
@@ -2023,7 +2286,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1566</span>
+    <span class="phpdocumentor-element-found-in__line">1787</span>
 
     </aside>
 
@@ -2066,7 +2329,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1346</span>
+    <span class="phpdocumentor-element-found-in__line">1461</span>
 
     </aside>
 
@@ -2118,7 +2381,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1154</span>
+    <span class="phpdocumentor-element-found-in__line">1269</span>
 
     </aside>
 
@@ -2161,7 +2424,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">874</span>
+    <span class="phpdocumentor-element-found-in__line">980</span>
 
     </aside>
 
@@ -2196,7 +2459,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1008</span>
+    <span class="phpdocumentor-element-found-in__line">1123</span>
 
     </aside>
 
@@ -2236,7 +2499,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1915</span>
+    <span class="phpdocumentor-element-found-in__line">2136</span>
 
     </aside>
 
@@ -2286,7 +2549,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">851</span>
+    <span class="phpdocumentor-element-found-in__line">957</span>
 
     </aside>
 
@@ -2319,7 +2582,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1065</span>
+    <span class="phpdocumentor-element-found-in__line">1180</span>
 
     </aside>
 
@@ -2352,7 +2615,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">958</span>
+    <span class="phpdocumentor-element-found-in__line">1073</span>
 
     </aside>
 
@@ -2395,7 +2658,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">888</span>
+    <span class="phpdocumentor-element-found-in__line">994</span>
 
     </aside>
 
@@ -2438,7 +2701,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1268</span>
+    <span class="phpdocumentor-element-found-in__line">1383</span>
 
     </aside>
 
@@ -2481,7 +2744,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1203</span>
+    <span class="phpdocumentor-element-found-in__line">1318</span>
 
     </aside>
 
@@ -2557,7 +2820,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1939</span>
+    <span class="phpdocumentor-element-found-in__line">2160</span>
 
     </aside>
 
@@ -2620,7 +2883,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">933</span>
+    <span class="phpdocumentor-element-found-in__line">1048</span>
 
     </aside>
 
@@ -2670,7 +2933,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1089</span>
+    <span class="phpdocumentor-element-found-in__line">1204</span>
 
     </aside>
 
@@ -2720,7 +2983,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1296</span>
+    <span class="phpdocumentor-element-found-in__line">1411</span>
 
     </aside>
 
@@ -2768,7 +3031,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1317</span>
+    <span class="phpdocumentor-element-found-in__line">1432</span>
 
     </aside>
 
@@ -2812,7 +3075,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1254</span>
+    <span class="phpdocumentor-element-found-in__line">1369</span>
 
     </aside>
 
@@ -2855,7 +3118,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1221</span>
+    <span class="phpdocumentor-element-found-in__line">1336</span>
 
     </aside>
 
@@ -2898,7 +3161,7 @@ ull</span></code>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-order.php"><a href="files/includes-class-wc-shipping-shipcloud-order.html"><abbr title="includes/class-wc-shipping-shipcloud-order.php">class-wc-shipping-shipcloud-order.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">1858</span>
+    <span class="phpdocumentor-element-found-in__line">2079</span>
 
     </aside>
 

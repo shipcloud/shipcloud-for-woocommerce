@@ -361,6 +361,16 @@ Search.appendIndex(
             "summary": "Removing\u0020all\u0020messages",
             "url": "classes/WC-Shipping-Shipcloud-Cpt-Parcel-Template.html#method_remove_all_messages"
         },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Cpt_Parcel_Template\u003A\u003Aadd_admin_notice\u0028\u0029",
+            "name": "add_admin_notice",
+            "summary": "Output\u0020an\u0020admin\u0020notice.",
+            "url": "classes/WC-Shipping-Shipcloud-Cpt-Parcel-Template.html#method_add_admin_notice"
+        },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Cpt_Parcel_Template\u003A\u003Alog\u0028\u0029",
+            "name": "log",
+            "summary": "Output\u0020a\u0020debug\u0020message.",
+            "url": "classes/WC-Shipping-Shipcloud-Cpt-Parcel-Template.html#method_log"
+        },                {
             "fqsen": "\\WC_Shipping_Shipcloud_Cpt_Parcel_Template\u003A\u003A\u0024_instance",
             "name": "_instance",
             "summary": "The\u0020Single\u0020instance\u0020of\u0020the\u0020class",
@@ -396,10 +406,10 @@ Search.appendIndex(
             "summary": "Factory\u0020to\u0020create\u0020or\u0020load\u0020an\u0020order.",
             "url": "classes/WC-Shipping-Shipcloud-Order.html#method_create_order"
         },                {
-            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aenqueue_scripts\u0028\u0029",
-            "name": "enqueue_scripts",
+            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadmin_enqueue_scripts\u0028\u0029",
+            "name": "admin_enqueue_scripts",
             "summary": "Enqueuing\u0020needed\u0020Scripts\u0020\u0026\u0020Styles",
-            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_enqueue_scripts"
+            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_admin_enqueue_scripts"
         },                {
             "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadd_metaboxes\u0028\u0029",
             "name": "add_metaboxes",
@@ -416,10 +426,30 @@ Search.appendIndex(
             "summary": "Saving\u0020product\u0020metabox",
             "url": "classes/WC-Shipping-Shipcloud-Order.html#method_save_settings"
         },                {
-            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Adisplay_tracking_information\u0028\u0029",
-            "name": "display_tracking_information",
-            "summary": "Show\u0020tracking\u0020information\u0020at\u0020my\u0020account\u0020page",
-            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_display_tracking_information"
+            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadd_care_of_as_billing_input_field\u0028\u0029",
+            "name": "add_care_of_as_billing_input_field",
+            "summary": "",
+            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_as_billing_input_field"
+        },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadd_care_of_as_shipping_input_field\u0028\u0029",
+            "name": "add_care_of_as_shipping_input_field",
+            "summary": "",
+            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_as_shipping_input_field"
+        },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadd_care_of_input_field\u0028\u0029",
+            "name": "add_care_of_input_field",
+            "summary": "",
+            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_add_care_of_input_field"
+        },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadd_pakadoo_id_input_field\u0028\u0029",
+            "name": "add_pakadoo_id_input_field",
+            "summary": "",
+            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_add_pakadoo_id_input_field"
+        },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadd_sender_phone_input_field\u0028\u0029",
+            "name": "add_sender_phone_input_field",
+            "summary": "",
+            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_add_sender_phone_input_field"
         },                {
             "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aadd_legal_checkboxes\u0028\u0029",
             "name": "add_legal_checkboxes",
@@ -430,6 +460,11 @@ Search.appendIndex(
             "name": "handle_legal_checkboxes_update",
             "summary": "Handle\u0020checkbox\u0020updates",
             "url": "classes/WC-Shipping-Shipcloud-Order.html#method_handle_legal_checkboxes_update"
+        },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Adisplay_tracking_information\u0028\u0029",
+            "name": "display_tracking_information",
+            "summary": "Show\u0020tracking\u0020information\u0020at\u0020my\u0020account\u0020page",
+            "url": "classes/WC-Shipping-Shipcloud-Order.html#method_display_tracking_information"
         },                {
             "fqsen": "\\WC_Shipping_Shipcloud_Order\u003A\u003Aajax_calculate_shipping\u0028\u0029",
             "name": "ajax_calculate_shipping",
@@ -976,10 +1011,20 @@ Search.appendIndex(
             "summary": "Checking\u0020if\u0020admin\u0020is\u0020on\u0020a\u0020single\u0020order\u0020page",
             "url": "classes/WC-Shipping-Shipcloud-Utils.html#method_shipcloud_admin_is_on_single_order_page"
         },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Utils\u003A\u003Aarray_insert\u0028\u0029",
+            "name": "array_insert",
+            "summary": "Insert\u0020an\u0020array\u0020at\u0020an\u0020arbitrary\u0020position\u0020of\u0020another\u0020array.",
+            "url": "classes/WC-Shipping-Shipcloud-Utils.html#method_array_insert"
+        },                {
             "fqsen": "\\WC_Shipping_Shipcloud_Utils\u003A\u003Aexplode_street\u0028\u0029",
             "name": "explode_street",
             "summary": "Splitting\u0020Address\u0020for\u0020getting\u0020number\u0020of\u0020street\u0020and\u0020street\u0020separate",
             "url": "classes/WC-Shipping-Shipcloud-Utils.html#method_explode_street"
+        },                {
+            "fqsen": "\\WC_Shipping_Shipcloud_Utils\u003A\u003Aexplode_name\u0028\u0029",
+            "name": "explode_name",
+            "summary": "Splitting\u0020name\u0020for\u0020getting\u0020first\u0020and\u0020last\u0020names\u0020separate",
+            "url": "classes/WC-Shipping-Shipcloud-Utils.html#method_explode_name"
         },                {
             "fqsen": "\\WC_Shipping_Shipcloud_Utils\u003A\u003Aconvert_exception_to_wp_error\u0028\u0029",
             "name": "convert_exception_to_wp_error",
@@ -1421,6 +1466,11 @@ Search.appendIndex(
             "summary": "Add\u0020shipcloud\u0020shipping\u0020method.",
             "url": "classes/WooCommerce-Shipping-Shipcloud.html#method_add_method"
         },                {
+            "fqsen": "\\WooCommerce_Shipping_Shipcloud\u003A\u003Afilter_wc_general_settings\u0028\u0029",
+            "name": "filter_wc_general_settings",
+            "summary": "Adds\u0020some\u0020form\u0020fields\u0020to\u0020WC\u0020general\u0020settings",
+            "url": "classes/WooCommerce-Shipping-Shipcloud.html#method_filter_wc_general_settings"
+        },                {
             "fqsen": "\\WooCommerce_Shipping_Shipcloud\u003A\u003Aadd_product_meta_fields\u0028\u0029",
             "name": "add_product_meta_fields",
             "summary": "Add\u0020shipcloud\u0020specific\u0020custom\u0020fields\u0020to\u0020products",
@@ -1451,10 +1501,15 @@ Search.appendIndex(
             "summary": "Redirects\u0020to\u0020shipcloud\u0020settings\u0020page.",
             "url": "classes/WooCommerce-Shipping-Shipcloud.html#method_get_settings_page"
         },                {
-            "fqsen": "\\WooCommerce_Shipping_Shipcloud\u003A\u003Aenqueue_assets\u0028\u0029",
-            "name": "enqueue_assets",
+            "fqsen": "\\WooCommerce_Shipping_Shipcloud\u003A\u003Aadmin_enqueue_scripts\u0028\u0029",
+            "name": "admin_enqueue_scripts",
             "summary": "Assets\u0020to\u0020enqueue\u0020in\u0020admin.",
-            "url": "classes/WooCommerce-Shipping-Shipcloud.html#method_enqueue_assets"
+            "url": "classes/WooCommerce-Shipping-Shipcloud.html#method_admin_enqueue_scripts"
+        },                {
+            "fqsen": "\\WooCommerce_Shipping_Shipcloud\u003A\u003Aenqueue_scripts\u0028\u0029",
+            "name": "enqueue_scripts",
+            "summary": "",
+            "url": "classes/WooCommerce-Shipping-Shipcloud.html#method_enqueue_scripts"
         },                {
             "fqsen": "\\WooCommerce_Shipping_Shipcloud\u003A\u003Aplugin_is_active\u0028\u0029",
             "name": "plugin_is_active",

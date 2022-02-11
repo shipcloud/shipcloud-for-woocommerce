@@ -47,7 +47,7 @@
 </div>
 
 <div class="widget-inside">
-    <div class="widget-content">
+    <div class="widget-content label-shipment-info">
         <div class="label-shipment-sender address" role="switch">
           <strong><?php _e( 'Sender address', 'shipcloud-for-woocommerce' ); ?></strong>
             <div>{{ data.model.get('from').get('company') }}</div>
@@ -348,50 +348,49 @@
 		<div class="clearfix"></div>
 
 		<div class="label-shipment-status">
-	        <table class="label-shipment-status-table">
-	          <tbody>
+	        <div class="label-shipment-status-section">
 	          <# if ( data.model.get('description') ) { #>
-	            <tr>
-	                <th><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>:</th>
-	                <td>{{ data.model.get('description') }}</td>
-	            </tr>
+                <div class="shipment-info-item">
+                    <span class="shipment-info-item__label"><?php _e( 'Shipment description', 'shipcloud-for-woocommerce' ); ?>:</span>
+                    <span class="shipment-info-item__value">{{ data.model.get('description') }}</span>
+                </div>
 	          <# } #>
 	          <# if ( data.model.get('reference_number') ) { #>
-	            <tr>
-	                <th><?php _e( 'Reference number:', 'shipcloud-for-woocommerce' ); ?></th>
-	                <td>{{ data.model.get('reference_number') }}</td>
-	            </tr>
+	            <div class="shipment-info-item">
+	                <span class="shipment-info-item__label"><?php _e( 'Reference number:', 'shipcloud-for-woocommerce' ); ?></span>
+	                <span class="shipment-info-item__value">{{ data.model.get('reference_number') }}</span>
+	            </div>
 	          <# } #>
 	          <# if ( data.model.get('notification_email') ) { #>
-	            <tr>
-	                <th><?php _e( 'shipcloud notification email', 'shipcloud-for-woocommerce' ); ?></th>
-	                <td>{{ data.model.get('notification_email') }}</td>
-	            </tr>
+	            <div class="shipment-info-item">
+	                <span class="shipment-info-item__label"><?php _e( 'shipcloud notification email', 'shipcloud-for-woocommerce' ); ?></span>
+	                <span class="shipment-info-item__value">{{ data.model.get('notification_email') }}</span>
+	            </div>
 	          <# } #>
 	          <# if ( data.model.get('id') ) { #>
-	            <tr>
-	                <th><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></th>
-	                <td>
+	            <div class="shipment-info-item">
+	                <span class="shipment-info-item__label"><?php _e( 'Shipment id:', 'shipcloud-for-woocommerce' ); ?></span>
+	                <span class="shipment-info-item__value">
 	                  <a href="{{ data.model.get('tracking_url') }}" target="_blank">
 	                    {{ data.model.get('id') }}
 	                  </a>
-	                </td>
-	            </tr>
+	                </span>
+	            </div>
 	          <# } #>
 	          <# if ( data.model.get('label') ) { #>
-	            <tr>
-	                <th><?php _e( 'Label:', 'shipcloud-for-woocommerce' ); ?></th>
-	                <td>
+	            <div class="shipment-info-item">
+	                <span class="shipment-info-item__label"><?php _e( 'Label:', 'shipcloud-for-woocommerce' ); ?></span>
+	                <span class="shipment-info-item__value">
 	                  <# if ( data.model.get('label').format ) { #>
 	                    <strong><?php _e( 'Format:', 'shipcloud-for-woocommerce' ); ?></strong> {{ data.model.get('label').format }}
 	                  <# } #>
-	                </td>
-	            </tr>
+                    </span>
+	            </div>
 	          <# } #>
 	          <# if ( data.model.get('label_url') ) { #>
-	            <tr>
-	                <th><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></th>
-	                <td class="tracking-number">
+	            <div class="shipment-info-item">
+	                <span class="shipment-info-item__label"><?php _e( 'Tracking number:', 'shipcloud-for-woocommerce' ); ?></span>
+	                <span class="tracking-number shipment-info-item__value">
 	                    <# if ( data.model.get('carrier_tracking_no') ) { #>
 	                        <a href="{{ data.model.getCarrierTrackingUrl() }}" target="_blank">
 	                          {{ data.model.get('carrier_tracking_no') }}
@@ -399,31 +398,30 @@
 	                    <# } else { #>
 	                        <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
 	                    <# } #>
-	                </td>
-	            </tr>
-	            <tr>
-	                <th><?php _e( 'Tracking status:', 'shipcloud-for-woocommerce' ); ?></th>
-	                <td>
+                    </span>
+	            </div>
+	            <div class="shipment-info-item">
+	                <span class="shipment-info-item__label"><?php _e( 'Tracking status:', 'shipcloud-for-woocommerce' ); ?></span>
+	                <span class="shipment-info-item__value">
 	                    <# if ( data.model.get('shipment_status') ) { #>
 	                        {{ data.model.get('shipment_status') }}
 	                    <# } else { #>
 	                        <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
 	                    <# } #>
-	                </td>
-	            </tr>
-	            <tr>
-	                <th><?php _e( 'Price:', 'shipcloud-for-woocommerce' ); ?></strong></th>
-	                <td class="price">
+                    </span>
+	            </div>
+	            <div class="shipment-info-item">
+	                <span class="shipment-info-item__label"><?php _e( 'Price:', 'shipcloud-for-woocommerce' ); ?></strong></span>
+	                <span class="price shipment-info-item__value">
 	                    <# if ( data.model.get('price') ) { #>
 	                        {{ data.model.get('price') }}
 	                    <# } else { #>
 	                        <?php _e( 'Not available yet', 'shipcloud-for-woocommerce' ); ?>
 	                    <# } #>
-	                </td>
-	            </tr>
+                    </span>
+	            </div>
 	          <# } #>
-	          </tbody>
-	        </table>
+            </div>
 		</div>
 		
         <div class="label-shipment-pickup-request">

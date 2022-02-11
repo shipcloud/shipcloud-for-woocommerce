@@ -16,8 +16,9 @@
                 </div>
             </div>
 
-            <fieldset class="inline-edit-col-right">
-              <div class="create-label fifty">
+            <fieldset class="inline-edit-col-right parcels parcels-edit-bulk">
+                <div class="parcels__columns-wrapper">
+              <div class="create-label">
                 <?php echo $this->parcel_templates_html(); ?>
                 <?php echo $this->parcel_form_html(); ?>
                 <div class="customs_declaration_button">
@@ -128,7 +129,7 @@
               ?>
               <input type="hidden" name="wants_carrier_email_notification" value="<?php echo ($carrier_email && ('yes' == $carrier_email) ? 'true' : 'false') ?>" />
 
-              <div class="additional_services fifty">
+              <div class="additional_services">
                 <script type="template/html" id="tmpl-shipcloud-shipment-additional-services">
 					<?php include( dirname( __FILE__ ) . '/template-additional-services-edit-form.php' ); ?>
                 </script>
@@ -171,7 +172,7 @@
                 </script>
               </div>
 
-              <div class="clear"></div>
+                </div>
             </fieldset>
 
             <p class="submit inline-edit-save">
@@ -195,7 +196,7 @@
 <script type="application/javascript">
     jQuery(document).ready(function($){
         $('#shipcloud_bulk').find('#shipcloud_csp_wrapper').shipcloudMultiSelect(wcsc_carrier);
-        $('select[name="parcel_list"]').shipcloudFiller('table.parcel-form-table');
+        $('select[name="parcel_list"]').shipcloudFiller('div.parcel-form-table');
 		
 		$('#doaction,#doaction2').on('click',function(evt){
 			var selector = $('#bulk-action-selector-top');

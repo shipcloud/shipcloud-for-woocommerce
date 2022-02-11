@@ -51,7 +51,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Carrier' ) ) {
 		 * @param array  $carrier
 		 * @return void
 		 */
-		public function __construct( array $carrier = [], $services ) {
+		public function __construct( array $carrier = [], array $services = [] ) {
 			$this->name					= $carrier['name'];
 			$this->display_name			= $carrier['display_name'];
 			$this->package_types		= $carrier['package_types'];
@@ -130,9 +130,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Carrier' ) ) {
 		 * Specify data which should be serialized to JSON.
 		 *
 		 * This is done for using the original snake_case keys instead of the camelCase properties.
-		 *
-		 * @return array
+		 * 
+		 * @return mixed
 		 */
+		#[\ReturnTypeWillChange]
 		public function jsonSerialize() {
 			return array(
 				'name'                => $this->get_name(),

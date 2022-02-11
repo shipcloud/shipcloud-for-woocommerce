@@ -243,7 +243,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			
 			$response = $this->get_addresses( $filter );
 			if ( ! is_wp_error( $response ) && ! empty( $response ) && is_array( $response ) ) {
-				$response = $response[0];
+				
+				$this->log( json_encode( $response ) );
+				
+				$response = $response['addresses'][0];
 			}
 			
 			return $response;

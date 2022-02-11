@@ -103,6 +103,12 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
             add_action( 'wp_ajax_shipcloud_get_pakadoo_point', 			array( $this, 'ajax_get_pakadoo_point' ) );
             add_action( 'wp_ajax_nopriv_shipcloud_get_pakadoo_point', 	array( $this, 'ajax_get_pakadoo_point' ) );
 			
+			add_filter( 'woocommerce_billing_fields', 					array( $this, 'add_care_of_as_billing_input_field' ) );
+			add_filter( 'woocommerce_shipping_fields', 					array( $this, 'add_care_of_as_shipping_input_field' ) );
+			
+			add_filter( 'woocommerce_shipping_fields', 					array( $this, 'add_pakadoo_id_input_field' ) );
+			add_filter( 'woocommerce_shipping_fields', 					array( $this, 'add_sender_phone_input_field' ) );
+			
 			add_action( 'woocommerce_review_order_before_submit', 		array( $this, 'add_legal_checkboxes' ) );
 			add_action( 'woocommerce_checkout_update_order_meta', 		array( $this, 'handle_legal_checkboxes_update' ) );
 			
@@ -180,6 +186,14 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			}
         }
 		
+		
+		/*****************************************************************
+         *
+         *		Order
+         *
+         *****************************************************************/
+		
+		
 		/**
          * Adding meta boxes
          *
@@ -250,26 +264,78 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
             }
         }
 		
-        /**
-         * Show tracking information at my account page
+		
+		/*****************************************************************
          *
-         * @param WC_Order $order
-         * @return void
-         */
-        public function display_tracking_information( $order ) {
-            $show_tracking_in_my_account = $this->get_option( 'show_tracking_in_my_account' );
-            if ( $show_tracking_in_my_account === 'yes' ) {
-                $this->order_id = $order->get_id();
-                $shipment_ids 	= get_post_meta( $order->get_id(), 'shipcloud_shipment_ids' );
-                $shipments_data = $shipment_data = get_post_meta( $order->get_id(), 'shipcloud_shipment_data' );
-				
-				ob_start();
-	            
-				include( dirname( __FILE__ ) . '/templates/template-my-account-show-tracking.php' );
-				
-                echo ob_get_clean();
-            }
-        }
+         *		Checkout
+         *
+         *****************************************************************/
+		
+		
+		public function add_care_of_as_billing_input_field( $data ) {
+			return $this->add_care_of_input_field( $data, 'billing' );
+		}
+
+		public function add_care_of_as_shipping_input_field( $data ) {
+			return $this->add_care_of_input_field( $data, 'shipping' );
+		}
+
+		private function add_care_of_input_field( $data, $category ) {
+			$options = get_option( 'woocommerce_shipcloud_settings' );
+			if ( array_key_exists( 'show_recipient_care_of', $options ) ) {
+		        if ( 'in_'.$category === $options['show_recipient_care_of'] ||
+		             'both' === $options['show_recipient_care_of']) {
+		            $pos = array_search( $category.'_country', array_keys( $data ) );
+
+		            $final = array_slice( $data, 0, $pos );
+		            $final[$category.'_care_of'] = array(
+		                'label'       => __( 'Care of', 'shipcloud-for-woocommerce' ),
+		                'description' => '',
+		                'class'       => array( 'form-row-wide' ),
+		                'clear'       => true,
+		            );
+
+		            $data = $final + array_slice( $data, $pos );
+		        }
+		    }
+
+		    return $data;
+		}
+
+		public function add_pakadoo_id_input_field( $data ) {
+		    $options = get_option( 'woocommerce_shipcloud_settings' );
+		    if ( !array_key_exists( 'show_pakadoo', $options ) || 'yes' === $options['show_pakadoo'] ) {
+		        $pakadoo_entry = array(
+		            'shipping_pakadoo_id' => array(
+		                'label'       => __( 'pakadoo id', 'shipcloud-for-woocommerce' ),
+		                'description' => __( 'Enter your pakadoo id to ship directly to a pakadoo point', 'shipcloud-for-woocommerce' ),
+		                'class'       => array( 'form-row-wide' ),
+		                'clear'       => true,
+		            )
+		        );
+		        $data = array_merge( $pakadoo_entry, $data );
+		    }
+
+		    return $data;
+		}
+
+		public function add_sender_phone_input_field( $data ) {
+		    $options = get_option( 'woocommerce_shipcloud_settings' );
+			if ( !array_key_exists( 'show_recipient_phone', $options ) || 'yes' === $options['show_recipient_phone'] ) {
+		        $pos = array_search( 'shipping_city', array_keys( $data ), true ) + 2;
+				$final = array_slice( $data, 0, $pos );
+		        $final['shipping_phone'] = array(
+		            'label'       => _x( 'Phone', 'Frontend label for entering the phone number', 'shipcloud-for-woocommerce' ),
+		            'description' => '',
+		            'class'       => array( 'form-row-wide' ),
+		            'clear'       => true,
+		        );
+
+		        $data = $final + array_slice( $data, $pos );
+		    }
+
+		    return $data;
+		}
 		
         /**
          * Add legal checkboxes to checkout page
@@ -303,6 +369,35 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				);
 			}
 		}
+		
+		
+		/*****************************************************************
+         *
+         *		My Account
+         *
+         *****************************************************************/
+		
+		
+        /**
+         * Show tracking information at my account page
+         *
+         * @param WC_Order $order
+         * @return void
+         */
+        public function display_tracking_information( $order ) {
+            $show_tracking_in_my_account = $this->get_option( 'show_tracking_in_my_account' );
+            if ( $show_tracking_in_my_account === 'yes' ) {
+                $this->order_id = $order->get_id();
+                $shipment_ids 	= get_post_meta( $order->get_id(), 'shipcloud_shipment_ids' );
+                $shipments_data = $shipment_data = get_post_meta( $order->get_id(), 'shipcloud_shipment_data' );
+				
+				ob_start();
+	            
+				include( dirname( __FILE__ ) . '/templates/template-my-account-show-tracking.php' );
+				
+                echo ob_get_clean();
+            }
+        }
 		
 		
 		/*****************************************************************
@@ -632,6 +727,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                 );
                 exit();
             }
+			
+			$this->log( json_encode( $response ) );
 
             wp_send_json_success(
             	array(
