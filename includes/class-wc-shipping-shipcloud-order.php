@@ -272,14 +272,32 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          *****************************************************************/
 		
 		
+		/**
+		 * Adds care of billing input field
+         * 
+         * @param array $data
+         * @return array
+		 */
 		public function add_care_of_as_billing_input_field( $data ) {
 			return $this->add_care_of_input_field( $data, 'billing' );
 		}
-
+		
+		/**
+		 * Adds care of shipping input field
+         * 
+         * @param array $data
+         * @return array
+		 */
 		public function add_care_of_as_shipping_input_field( $data ) {
 			return $this->add_care_of_input_field( $data, 'shipping' );
 		}
-
+		
+		/**
+		 * Adds care of input field
+         * 
+         * @param array $data
+         * @return array
+		 */
 		private function add_care_of_input_field( $data, $category ) {
 			$options = get_option( 'woocommerce_shipcloud_settings' );
 			if ( array_key_exists( 'show_recipient_care_of', $options ) ) {
@@ -301,11 +319,17 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 
 		    return $data;
 		}
-
+		
+		/**
+		 * Adds pakadoo id shipping input field
+         * 
+         * @param array $data
+         * @return array
+		 */
 		public function add_pakadoo_id_input_field( $data ) {
 		    $options = get_option( 'woocommerce_shipcloud_settings' );
 		    if ( !array_key_exists( 'show_pakadoo', $options ) || 'yes' === $options['show_pakadoo'] ) {
-		        $pakadoo_entry = array(
+		        $shipping_pakadoo_id = array(
 		            'shipping_pakadoo_id' => array(
 		                'label'       => __( 'pakadoo id', 'shipcloud-for-woocommerce' ),
 		                'description' => __( 'Enter your pakadoo id to ship directly to a pakadoo point', 'shipcloud-for-woocommerce' ),
@@ -313,12 +337,25 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		                'clear'       => true,
 		            )
 		        );
-		        $data = array_merge( $pakadoo_entry, $data );
+		        $shipping_pakadoo_address_id = array(
+		            'shipping_pakadoo_address_id' => array(
+		                'type'		=> 'hidden',
+		                'clear'		=> true,
+						'id'		=> 'shipping_pakadoo_address_id',
+		            )
+		        );
+		        $data = array_merge( $shipping_pakadoo_id, $shipping_pakadoo_address_id, $data );
 		    }
 
 		    return $data;
 		}
-
+		
+		/**
+		 * Adds sender phone as shipping input field
+         * 
+         * @param array $data
+         * @return array
+		 */
 		public function add_sender_phone_input_field( $data ) {
 		    $options = get_option( 'woocommerce_shipcloud_settings' );
 			if ( !array_key_exists( 'show_recipient_phone', $options ) || 'yes' === $options['show_recipient_phone'] ) {
@@ -728,9 +765,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                 exit();
             }
 			
-			$this->log( json_encode( $response ) );
-
-            wp_send_json_success(
+			wp_send_json_success(
             	array(
             		'status'      => 'OK',
             		'html'        => '',

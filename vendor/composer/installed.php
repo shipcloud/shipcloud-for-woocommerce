@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
         'type' => 'plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => '1b1b7da015b1390d7365648c7d8df6c8d256503e',
         'name' => 'msltns/shipcloud-for-woocommerce',
         'dev' => true,
     ),
@@ -29,12 +29,12 @@
             'dev_requirement' => false,
         ),
         'msltns/shipcloud-for-woocommerce' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
             'type' => 'plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => '1b1b7da015b1390d7365648c7d8df6c8d256503e',
             'dev_requirement' => false,
         ),
         'psr/log' => array(
@@ -67,7 +67,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../shipcloud/shipcloud-php',
             'aliases' => array(),
-            'reference' => '42589a2d33da1062126c5534a7c9cf4e8ea62858',
+            'reference' => '9d13d2f20a7399db159947dda8cf12ed368a9d45',
             'dev_requirement' => false,
         ),
         'tecnickcom/tcpdf' => array(

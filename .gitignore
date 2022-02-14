@@ -17,4 +17,5 @@ todos.txt
 readme.txt
 -default.php
 .log
+.phpdoc
 phpdoc.xml

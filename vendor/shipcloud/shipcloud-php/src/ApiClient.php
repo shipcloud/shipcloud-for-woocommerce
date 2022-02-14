@@ -132,6 +132,37 @@ class ApiClient {
 	 *****************************************************************/
 	
 	/**
+	 * Create a pakadoo address.
+	 * 
+	 * If the pakadoo user has been identified, shipcloud will return an address object, 
+	 * containing the currently selected delivery address for said pakadoo user:
+	 * <pre>
+	 * {
+	 * 		"id": "71f2522f-be6f-4606-8eda-67997edfe2ac",
+	 * 		"pakadoo_id": "5KQTPH5",
+	 * 		"company": "LGI GmbH",
+	 * 		"street": "Hewlett-Packard-Str.",
+	 * 		"street_no": "1/1",
+	 * 		"zip_code": "71083",
+	 * 		"city": "Herrenberg",
+	 * 		"country": "DE"
+	 * }
+	 * </pre>
+	 * Like with every other address you can then use its unique address id to create a 
+	 * new shipment with it.
+	 * 
+	 * @param string  $pakadoo_id
+	 * @return void
+	 * @see https://developers.shipcloud.io/examples/#create-a-pakadoo-address-and-shipment-using-the-pakadoo_id
+	 */
+	public function create_pakadoo_address( string $pakadoo_id ) {
+		if ( ! empty( $pakadoo_id ) ) {
+			return $this->post( '/addresses', [ 'pakadoo_id' => $pakadoo_id ] );
+		}
+		return false;
+	}
+	
+	/**
 	 * This method is to create an address. It forces a validation against required fields
 	 * before sending the request to API.
 	 * 

@@ -233,23 +233,39 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 		 */
 		public function get_address_by_pakadoo_id( $pakadoo_id = '' ) {
 			
+			$error = "";
+			
 			if ( empty( $pakadoo_id ) ) {
 				$error = "Parameter \$pakadoo_id must not be empty.";
 				$this->log( $error, 'error' );
 				return new WP_Error( 444, $error );
 			}
 			
-			$filter = [ 'pakadoo_id' => $pakadoo_id ];
-			
-			$response = $this->get_addresses( $filter );
-			if ( ! is_wp_error( $response ) && ! empty( $response ) && is_array( $response ) ) {
-				
-				$this->log( json_encode( $response ) );
-				
-				$response = $response['addresses'][0];
+			$api = $this->get_api();
+			if ( is_wp_error( $api ) ) {
+				return $api;
 			}
 			
-			return $response;
+			try {
+				
+				$response = $api->create_pakadoo_address( $pakadoo_id );
+				if ( ! empty( $response ) ) {
+					return $response;
+				}
+				else {
+					$error = "Got empty address response from shipcloud API.";
+				}
+				
+			} catch ( Exception $e ) {
+				return $this->handle_exception( $e );
+			}
+			
+			if ( ! empty ( $error ) ) {
+				$this->log( $error, 'error' );
+				return new WP_Error( 444, $error );
+			}
+			
+			return false;
 		}
 	
 		/**
@@ -1380,6 +1396,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 				
 				if ( ! empty( $data['phone'] ) ) {
 					$address->set_phone( $data['phone'] );
+				}
+				
+				if ( ! empty( $data['care_of'] ) ) {
+					$address->set_care_of( $data['care_of'] );
 				}
 			}
 			

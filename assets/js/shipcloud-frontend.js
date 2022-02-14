@@ -12,7 +12,7 @@ jQuery(function($) {
         url: woocommerce_params.ajax_url,
         success: function (response) {
           if (response.success) {
-            var data = response.data;
+            var data = response.data.data;
 			console.log(JSON.stringify(data));
             $('#shipping_company').val(data.company);
             $('#shipping_country').val(data.country.toUpperCase());
@@ -20,6 +20,8 @@ jQuery(function($) {
             $('#shipping_address_1').val(data.street + ' ' + data.street_no);
             $('#shipping_postcode').val(data.zip_code);
             $('#shipping_city').val(data.city);
+			$('#shipping_pakadoo_address_id').val(data.id);
+			$('#shipping_care_of').val('PAK '+data.pakadoo_id);
           } else {
             $('#shipping_pakadoo_id_field').removeClass('woocommerce-validated');
             $('#shipping_pakadoo_id_field').addClass('woocommerce-invalid');
