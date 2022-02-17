@@ -1458,14 +1458,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			
 			if ( ! empty( $data['label'] ) && is_array( $data['label'] ) ) {
 				
-				$size = ! empty( $data['label']['size'] ) ? $data['label']['size'] : false;
-				// if ( empty( trim( $size ) ) ) {
-				// 	$size = LabelSizeType::SIZE_A6;
-				// }
+				$size 	= ! empty( $data['label']['size'] ) ? $data['label']['size'] : false;
 				$format = ! empty( $data['label']['format'] ) ? $data['label']['format'] : false;
-				// if ( empty( trim( $format ) ) ) {
-				// 	$format = LabelFormatType::PDF_A6;
-				// }
 				
 				if ( ! empty( $size ) && ! empty ( $format ) ) {
 					$label = new Label( $format, $size );
@@ -1474,7 +1468,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 					$label = new Label( $format );
 				}
 				else {
-					$label = new Label();
+					$label = false;
 				}
 			}
 			
