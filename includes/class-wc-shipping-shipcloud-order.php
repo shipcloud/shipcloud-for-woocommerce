@@ -332,7 +332,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		        $shipping_pakadoo_id = array(
 		            'shipping_pakadoo_id' => array(
 		                'label'       => __( 'pakadoo id', 'shipcloud-for-woocommerce' ),
-		                'description' => __( 'Enter your pakadoo id to ship directly to a pakadoo point', 'shipcloud-for-woocommerce' ),
+		                // 'description' => __( 'Enter your pakadoo id to ship directly to a pakadoo point', 'shipcloud-for-woocommerce' ),
 		                'class'       => array( 'form-row-wide' ),
 		                'clear'       => true,
 		            )
