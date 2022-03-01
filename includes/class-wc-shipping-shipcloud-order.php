@@ -1694,40 +1694,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				}
 			
 				$pickup_request = $this->api->create_pickup_request( $pickup_request_data );
-				
-				// $this->log( "API responded: " . json_encode( $pickup_request ) );
-				/*
-				{
-					"id": "0b50900d-c181-45dd-8d76-675dc419cfd9",
-					"carrier": "dpd",
-					"carrier_pickup_number": "22087",
-					"shipments": [
-						{
-							"id": "7f5c32562516cbf4c7df65c051b49c77b0f1b6c2"
-						}
-					],
-					"pickup_time": {
-						"earliest": "2022-01-28T10:00:00+01:00",
-						"latest": "2022-01-28T19:00:00+01:00"
-					},
-					"pickup_address": {
-						"company": "PS Media UG",
-						"first_name": "Daniel",
-						"last_name": "Münter",
-						"care_of": null,
-						"street": "Am Lindbruch",
-						"street_no": "66",
-						"zip_code": "41470",
-						"city": "Neuss",
-						"state": null,
-						"country": "DE",
-						"phone": "+491747519352",
-						"email": "info@ps-media.eu",
-						"id": "60b5c98c-4484-4882-80e9-bbcc5d22b079"
-					}
-				}
-				*/
-				
+
 				if ( is_wp_error( $pickup_request ) ) {
 					return $pickup_request;
 				}
