@@ -6,8 +6,8 @@ msgstr ""
 "release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shipcloud-for-"
 "woocommerce\n"
-"POT-Creation-Date: 2022-03-01T08:18:25+00:00\n"
-"PO-Revision-Date: 2022-03-01 09:20+0100\n"
+"POT-Creation-Date: 2022-03-01T08:31:19+00:00\n"
+"PO-Revision-Date: 2022-03-01 09:31+0100\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -288,11 +288,11 @@ msgstr "Dienstleister fehlt in der Anfrage"
 msgid "Couldn't prepare pickup: %s"
 msgstr "Konnte Abholauftrag nicht erstellen: %s"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1740
+#: includes/class-wc-shipping-shipcloud-order.php:1707
 msgid "Pickup request created with id %s for shipment with id %s"
 msgstr "Abholauftrag mit der ID %s für Sendung mit der ID %s erstellt"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1833
+#: includes/class-wc-shipping-shipcloud-order.php:1800
 #: includes/class-wc-shipping-shipcloud-webhook.php:266
 msgid "shipcloud shipment has been deleted."
 msgstr "shipcloud Sendung wurde gelöscht."
@@ -1818,6 +1818,10 @@ msgstr "Leer lassen, um E-Mail-Adresse der Bestellung zu verwenden"
 #: includes/templates/template-order-labels-bulk.php:168
 msgid "Leave empty to use phone number from order"
 msgstr "Leer lassen, um Telefonnummer der Bestellung zu verwenden"
+
+#: includes/templates/template-order-labels-bulk.php:186
+msgid "Create labels"
+msgstr "Versandmarken erstellen"
 
 #: includes/templates/template-order-parcel-form-table.php:5
 #: includes/templates/template-order-parcel-templates.php:3

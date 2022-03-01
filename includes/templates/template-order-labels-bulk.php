@@ -183,7 +183,7 @@
                        id="wscs_order_bulk_pdf"
                        name="wscs_order_bulk_pdf"
                        class="button button-primary alignright"
-                       value="<?php esc_attr_e( 'Create labels', 'woocommerce-shipcloud' ) ?>">
+                       value="<?php esc_attr_e( 'Create labels', 'shipcloud-for-woocommerce' ) ?>">
                 <input type="hidden" name="screen" value="edit-<?php get_current_screen()->id ?>">
                 <span class="error" style="display:none"></span>
                 <br class="clear">
