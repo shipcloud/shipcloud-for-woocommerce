@@ -12,47 +12,46 @@ WC tested up to: 6.2.1
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
 
 ## Description
-[shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) is your shipping service provider for WooCommerce. Empowering you and your shipping by providing a simple and uniform interface for all relevant eCommerce shipping carriers, right out of the WooCommerce admin panel.
+[shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) is your shipping service provider for WooCommerce. Empower your shipping by providing a simple and uniform interface for all relevant eCommerce shipping carriers out of your WooCommerce admin panel.
 
-**DHL, DHL Express, UPS, Deutsche Post, DPD, Hermes, Post AT, Post CH, GLS, GO!, ANGEL, PARCEL.ONE, FedEx, and more**
+**DHL, DHL Express, UPS, Deutsche Post, DPD, Hermes, Post AT, Post CH, GLS, GO!, ANGEL, Asendia, PARCEL.ONE, FedEx, and many more**
 
-From standard shipping, express delivery, tracking to returns - shipcloud supports your complete shipping process out of Germany.
+From standard shipping, express delivery, tracking to returns, shipcloud supports your complete shipping process from Germany. You can also benefit from the attractive shipcloud business rates for DHL, UPS and DPD.
 
 **Install the shipcloud for WooCommerce plugin, sign up for shipcloud, enter your API key, and get started!**
 
 ### Key Features
 
 #### All carriers in a single plugin
-shipcloud for WooCommerce empowers you to use all relevant eCommerce shipping carriers from a single interface. No need to copy or upload your order data into another external system (no CSV upload necessary). Stay within your WooCommerce admin panel and work from there.
+shipcloud for WooCommerce enables you to use all relevant eCommerce shipping carriers from a single interface. No need to copy or upload your order data into another external system (no CSV upload necessary). Stay within your WooCommerce admin panel and work from there.
 
 #### Select "your" shipping carriers
-Configure only the shipping carriers you would like to use and leave all the clutter behind.
-
-#### Let your customers choose
-We know - everyone has their favorite shipping carrier. And that’s the reason why you should let your customers choose the carrier from within the checkout. Easily add carriers to a shipping zone and define a price you’d like to charge.
-
-#### Bulk Actions
-Do you like to work in bulk? Piece of cake! By using our bulk actions you can create and print shipping labels for multiple orders at the same time as well as requesting pickup by the carrier.
-
-#### International shipping
-eCommerce has become a global phenomenon. shipcloud for WooCommerce enables you to send cross-border shipments without any hassle. Customs declaration documents will be generated for you so you can send shipments to Switzerland, the United Kingdom, and many more (cross-border) destinations.
-
-#### Shipment tracking for you and your customers
-Shipments within shipcloud for WooCommerce get updated once their status has changed at the carrier. This way you always know where your shipments are. And you can let your customers see this too. By displaying the tracking information for their orders you won’t have to send them to a separate tracking page by the carrier. Instead, you keep them within your store.
-
-### Added benefits of using shipcloud
+Configure only the shipping carriers you would like to use and simplify your process.
 
 #### Optimized shipping costs
-Use attractive shipcloud shipping rates for DHL, UPS, and DPD, or integrate your own carrier contracts. This way you can always choose the most economical service and optimize your shipping costs.
+Use attractive shipcloud shipping rates for DHL, UPS, and DPD, or integrate your own carrier contracts. This way you can always choose the best service and optimize your shipping costs.
+
+#### Let your customers choose
+Let your customers choose their favorite carrier and carrier options in the checkout process. Easily add carriers to a shipping zone and define the options such as green labels and price you would like to charge.
+
+#### Bulk Actions
+By using bulk actions, you can create and print shipping labels for multiple orders at the same time as well as requesting pickup by the carrier.
+
+#### International shipping
+shipcloud for WooCommerce enables you to send cross-border shipments without any hassle. Customs declaration documents will be generated for you so you can send shipments to Switzerland, the United Kingdom, and many more (cross-border) destinations.
+
+#### Always know where your shipments are
+Increase customer satisfaction thanks to multi-carrier-tracking, individual tracking pages and automated notification e-mails in your store design.
 
 #### Simplify returns management
-Creating a returns shipping label through shipcloud for WooCommerce is as easy as cake. Just select the service “returns” when creating a shipping label. Or you could send your customers to your individualized returns portal. Both options are possible with shipcloud. You can even decide to provide the returns shipping label either as a PDF file or a QR code.
+Creating a return shipping label through shipcloud for WooCommerce is very easy. Just select the service “returns” when creating a shipping label or offer your customers an individualized return portal. Both options are possible with shipcloud. You can even decide to provide the returns shipping label either as a PDF file or a QR code.
 
 #### Excellent service
 In order to guarantee the highest possible level of convenience, shipcloud takes care of all updates and service enhancements of the carriers you use and thus keeps all integrations up to date.
 
 ### Supported Carriers
 * ANGEL
+* Asendia
 * Cargo International
 * Deutsche Post
 * DHL
