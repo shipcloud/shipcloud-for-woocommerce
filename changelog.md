@@ -10,6 +10,7 @@ This is a complete code rewrite which also incorporates the new shipcloud PHP SD
 ### Enhanced
 - Multiple carrier + service combinations can now be defined for each shipping zone. Each of them
   will be displayed to the buyer within the checkout, based on the address they've entered.
+
 ### Removed
 - Automatic price calculation in checkout
 
