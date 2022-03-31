@@ -91,3 +91,19 @@ In order to guarantee the highest possible level of convenience, shipcloud takes
 6. Batch label creation: Create multiple shipping labels with ease by using parcel templates
 7. Adjust sender and/or receiver addresses base on your current use case
 8. Let your customers see tracking for their order from within their shop account
+
+## Changelog
+
+### 2.0.0
+This is a complete code rewrite which also incorporates the new shipcloud PHP SDK.
+
+#### Added
+- DPD additional service limited quantities
+- Entry to the wordpress main menu for direct access to shipcloud features
+
+#### Enhanced
+- Multiple carrier + service combinations can now be defined for each shipping zone. Each of them
+  will be displayed to the buyer within the checkout, based on the address they've entered.
+
+#### Removed
+- Automatic price calculation in checkout
