@@ -61,7 +61,8 @@
         </label>
         <select name="shipment[from][country]">
 			<?php foreach ( wc()->countries->get_countries() AS $key => $country ): ?>
-                <option value="<?php esc_attr_e( $key ); ?>">
+				<?php $country_code = WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $key ); ?>
+                <option value="<?php esc_attr_e( $country_code ); ?>">
 					<?php esc_html_e( $country ); ?>
                 </option>
 			<?php endforeach; ?>
@@ -139,7 +140,8 @@
         </label>
         <select name="shipment[to][country]">
 			<?php foreach ( wc()->countries->get_countries() AS $key => $country ): ?>
-                <option value="<?php esc_attr_e( $key ); ?>">
+				<?php $country_code = WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $key ); ?>
+                <option value="<?php esc_attr_e( $country_code ); ?>">
 					<?php esc_html_e( $country ); ?>
                 </option>
 			<?php endforeach; ?>

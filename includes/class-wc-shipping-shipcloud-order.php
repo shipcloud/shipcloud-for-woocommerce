@@ -1057,7 +1057,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				$prefix . 'zip_code'   => get_option( 'woocommerce_store_postcode' ),
 	            $prefix . 'city'       => get_option( 'woocommerce_store_city', '' ),
 	            $prefix . 'state'      => '',
-	            $prefix . 'country'    => get_option( 'woocommerce_default_country' ),
+	            $prefix . 'country'    => WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( get_option( 'woocommerce_default_country' ) ),
 	            
 				$prefix . 'phone'      => '',
 			);
@@ -1136,7 +1136,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		            'postcode'   => $order->get_shipping_postcode(),
 		            'city'       => $order->get_shipping_city(),
 		            'state'      => $order->get_shipping_state(),
-		            'country'    => $order->get_shipping_country(),
+		            'country'    => WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $order->get_shipping_country() ),
 		            'phone'      => $order->get_shipping_phone(),
 		       );
 		    }

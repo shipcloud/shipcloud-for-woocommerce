@@ -62,8 +62,9 @@
                     </label>
                     <select name="sender_address[country]" disabled>
 						<?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
-                            <option value="<?php esc_attr_e( $key ); ?>"
-								<?php selected( $key === $sender['country'] ); ?>>
+							<?php $country_code = WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $key ); ?>
+                            <option value="<?php esc_attr_e( $country_code ); ?>"
+								<?php selected( $country_code === $sender['country'] ); ?>>
 								<?php echo $country; ?>
                             </option>
 						<?php endforeach; ?>
@@ -154,8 +155,9 @@
                     </label>
                     <select name="recipient_address[country]" disabled>
 						<?php foreach ( $woocommerce->countries->countries AS $key => $country ): ?>
-                            <option value="<?php esc_attr_e( $key ); ?>"
-								<?php selected( $key === $recipient['country'] ) ?>>
+							<?php $country_code = WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $key ); ?>
+                            <option value="<?php esc_attr_e( $country_code ); ?>"
+								<?php selected( $country_code === $recipient['country'] ) ?>>
 								<?php echo $country; ?>
                             </option>
 						<?php endforeach; ?>

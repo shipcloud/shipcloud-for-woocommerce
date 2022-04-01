@@ -3,7 +3,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 $base_location		= wc_get_base_location();
-$default_country	= $base_location[ 'country' ];
+$default_country	= WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $base_location[ 'country' ] );
 
 $logfile_path 		= WC_Shipping_Shipcloud_Utils::get_log_file_path();
 

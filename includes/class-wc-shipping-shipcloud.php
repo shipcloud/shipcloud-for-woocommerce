@@ -479,7 +479,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 				'zip_code'  => get_option( 'woocommerce_store_postcode' ),
 				'city'      => get_option( 'woocommerce_store_city' ),
 				'state'     => '',
-				'country'   => get_option( 'woocommerce_default_country' ),
+				'country'   => WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( get_option( 'woocommerce_default_country' ) ),
 				'phone'   	=> '',
 			);
 		}

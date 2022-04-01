@@ -58,12 +58,13 @@
                     <select name="pickup_address[country]">
                         <?php
                             $base_country = $woocommerce->countries->get_base_country();
-
+							$base_country = WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $base_country );
                             foreach ( $woocommerce->countries->countries AS $key => $country ) {
-                                if ( $key === $base_country ) {
-                                    echo(sprintf('<option value="%s" selected>%s</option>', $key, $country));
+								$country_code = WC_Shipping_Shipcloud_Utils::maybe_extract_country_code( $key );
+                                if ( $country_code === $base_country ) {
+                                    echo(sprintf('<option value="%s" selected>%s</option>', $country_code, $country));
                                 } else {
-                                    echo(sprintf('<option value="%s">%s</option>', $key, $country));
+                                    echo(sprintf('<option value="%s">%s</option>', $country_code, $country));
                                 }
                             }
                         ?>

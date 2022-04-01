@@ -1191,6 +1191,19 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		}
 		
 		/**
+		 * Extracts country code from string if available
+		 *
+		 * @param string $string
+		 * @return string
+		 */
+		public static function maybe_extract_country_code( $string = '' ) {
+			if ( preg_match( '/([A-Z]+)\:([A-Z\-]+)/', $string, $matches ) ) {
+				return $matches[1];
+			}
+			return $string;
+		}
+		
+		/**
 		 * Turn exceptions into \WP_Error
 		 *
 		 * @param \Exception $exception
