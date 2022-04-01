@@ -880,7 +880,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
             }
 			
 			if ( isset( $data['pickup'] ) ) {
-				$pickup = $this->extract_pickup_time( $data, 'create_shipment' )
+				$pickup = $this->extract_pickup_time( $data, 'create_shipment' );
 				if ( ! is_wp_error( $pickup ) && ! empty( $pickup ) ) {
 					$data['pickup'] = $pickup;
 				} else {
