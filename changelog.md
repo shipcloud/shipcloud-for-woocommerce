@@ -14,6 +14,11 @@ This is a complete code rewrite which also incorporates the new shipcloud PHP SD
 ### Removed
 - Automatic price calculation in checkout
 
+## 1.14.3
+### Enhanced
+  -  New plugin description
+  -  Declared support for WordPress up to 5.7.2 and WooCommerce up to 5.3.0
+
 ## 1.14.2
 ### Fixed
 - Added check to see if plugin settings are present
