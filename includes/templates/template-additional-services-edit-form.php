@@ -396,14 +396,10 @@
 </div>
 
 <div class="shipcloud_additional_service shipcloud_additional_service__advance_notice">
-	<?php if ( $this->email_notification_enabled() ) : ?>
+	<?php if ( $this->carrier_email_notification_enabled() ) : ?>
 
 	<div class="shipcloud_additional_service__checkbox">
-		<# if ( data.model.hasAdditionalService('advance_notice') ) { #>
-			<input type="checkbox" name="shipment[additional_services][advance_notice][checked]" value="advance_notice" checked="checked" />
-		<# } else { #>
-			<input type="checkbox" name="shipment[additional_services][advance_notice][checked]" value="advance_notice" />
-		<# } #>
+    <input type="checkbox" name="shipment[additional_services][advance_notice][checked]" value="advance_notice" checked="checked" />
 	</div>
 	<div class="shipcloud_additional_service__text">
 		<?php _e( 'Advance notice', 'shipcloud-for-woocommerce' ); ?>
