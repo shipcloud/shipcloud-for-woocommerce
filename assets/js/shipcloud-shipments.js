@@ -774,15 +774,6 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
 				// handle available additional services with side conditions (based on carrier)
 				switch(additional_service) {
 				case 'advance_notice':
-					var wantsCarrierEmailNotification = $("input[name='wants_carrier_email_notification']");
-					var advanceNoticeDeliveryCheckbox = $(prefix + " input[name='shipment[additional_services][advance_notice][checked]']");
-					if (false == shipmentId && 'true' == wantsCarrierEmailNotification.val()) {
-						advanceNoticeDeliveryCheckbox.prop('checked', 'checked');
-						advanceNoticeDeliveryCheckbox.trigger("change");
-					} else if ( !model.hasAdditionalService('advance_notice')) {
-						advanceNoticeDeliveryCheckbox.prop('checked', false);
-					}
-
 					self.handleAdvanceNotice(carrier);
 					break;
 				case 'cash_on_delivery':
