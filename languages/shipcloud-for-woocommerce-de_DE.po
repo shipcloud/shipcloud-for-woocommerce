@@ -6,8 +6,8 @@ msgstr ""
 "release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shipcloud-for-"
 "woocommerce\n"
-"POT-Creation-Date: 2022-03-01T08:31:19+00:00\n"
-"PO-Revision-Date: 2022-04-06 08:49+0200\n"
+"POT-Creation-Date: 2022-04-06T07:10:10+00:00\n"
+"PO-Revision-Date: 2022-04-06 09:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -202,7 +202,7 @@ msgid "shipcloud Shipping Center"
 msgstr "shipcloud Versandzentrum"
 
 #: includes/class-wc-shipping-shipcloud-order.php:310
-#: includes/templates/template-order-shipment-center.php:108
+#: includes/templates/template-order-shipment-center.php:109
 msgid "Care of"
 msgstr "per Adresse (c/o)"
 
@@ -266,33 +266,33 @@ msgstr "Fehler bei der Erstellung bzw. Aktualisierung der Sendung"
 msgid "Could not get pakadoo point. Reason: %s"
 msgstr "Konnte keinen pakadoo-Punkt erhalten. Grund: %s"
 
-#: includes/class-wc-shipping-shipcloud-order.php:933
+#: includes/class-wc-shipping-shipcloud-order.php:938
 msgid "shipcloud label has been prepared."
 msgstr "shipcloud Versandmarke wurde vorbereitet."
 
-#: includes/class-wc-shipping-shipcloud-order.php:939
-#: includes/class-wc-shipping-shipcloud-order.php:955
+#: includes/class-wc-shipping-shipcloud-order.php:944
+#: includes/class-wc-shipping-shipcloud-order.php:960
 msgid ""
 "Customs declaration documents not necessary. Therefore they were ignored."
 msgstr "Zolldokumente nicht notwendig. Daher wurden sie ignoriert."
 
-#: includes/class-wc-shipping-shipcloud-order.php:1505
+#: includes/class-wc-shipping-shipcloud-order.php:1510
 msgid "Pickup date and time fields must not be empty!"
 msgstr "Abholzeitpunkt muss ausgefüllt werden!"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1515
+#: includes/class-wc-shipping-shipcloud-order.php:1520
 msgid "Carrier missing in request"
 msgstr "Dienstleister fehlt in der Anfrage"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1579
+#: includes/class-wc-shipping-shipcloud-order.php:1584
 msgid "Couldn't prepare pickup: %s"
 msgstr "Konnte Abholauftrag nicht erstellen: %s"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1707
+#: includes/class-wc-shipping-shipcloud-order.php:1712
 msgid "Pickup request created with id %s for shipment with id %s"
 msgstr "Abholauftrag mit der ID %s für Sendung mit der ID %s erstellt"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1800
+#: includes/class-wc-shipping-shipcloud-order.php:1805
 #: includes/class-wc-shipping-shipcloud-webhook.php:266
 msgid "shipcloud shipment has been deleted."
 msgstr "shipcloud Sendung wurde gelöscht."
@@ -768,6 +768,7 @@ msgstr ""
 "keine Abholdaten angeben."
 
 #: includes/data/data-global-settings-form-fields.php:37
+#: includes/templates/template-label-form.php:101
 msgid "Notification email"
 msgstr "Benachrichtigungs E-Mail"
 
@@ -795,12 +796,12 @@ msgstr "Paketdienst E-Mail"
 
 #: includes/data/data-global-settings-form-fields.php:48
 msgid ""
-"Send notification emails from carriers (supported by DHL and DPD) to "
-"recipients on status changes of shipment."
+"Send notification emails from carriers (supported by DHL, DPD, GLS and "
+"Hermes) to recipients on status changes of shipment."
 msgstr ""
 "Lasse die Versanddienstleister E-Mail-Benachrichtigungen an die "
 "Empfänger*innen versenden, wenn sich der Sendungstatus ändert (unterstützt "
-"von DPD und DHL)."
+"von DHL, DPD, GLS und Hermes)."
 
 #: includes/data/data-global-settings-form-fields.php:53
 msgid "Show tracking in my account"
@@ -844,7 +845,7 @@ msgstr "Preisberechnung"
 
 #: includes/data/data-global-settings-form-fields.php:76
 msgid ""
-"To get a price for the customers order, you have to setup the price "
+"To get a price for the customer's order, you have to set up the price "
 "calculation."
 msgstr ""
 "Um einen Preis für die Bestellung des Kunden zu erhalten, musst Du die "
@@ -856,13 +857,12 @@ msgid "Standard price products"
 msgstr "Produkte zum Standardpreis"
 
 #: includes/data/data-global-settings-form-fields.php:97
-#: includes/data/data-instance-settings-form-fields.php:21
 msgid ""
-"Will be used if no sizes or weight is given to a product or for fallback "
+"Will be used if no size or weight is given to a product or for fallback "
 "(have to be entered in EUR)."
 msgstr ""
-"Wird verwendet wenn für ein Produkt keine Größen oder Gewicht eingegeben "
-"wurde (muss in € eingegeben werden)."
+"Wird verwendet, wenn für ein Produkt keine Größen oder Gewicht eingegeben "
+"wurde (muss in Euro eingegeben werden)."
 
 #: includes/data/data-global-settings-form-fields.php:111
 #: includes/data/data-instance-settings-form-fields.php:25
@@ -870,18 +870,17 @@ msgid "Standard price shipment classes"
 msgstr "Standardpreis-Versandklassen"
 
 #: includes/data/data-global-settings-form-fields.php:113
-#: includes/data/data-instance-settings-form-fields.php:27
 msgid ""
-"Will be used if no sizes or weight is given to a shipping class (have to be "
+"Will be used if no size or weight is given to a shipping class (have to be "
 "entered in EUR)."
 msgstr ""
-"Wird verwendet wenn für eine Versandklasse keine Größen oder Gewicht "
-"eingegeben wurde (muss in € eingegeben werden)."
+"Wird verwendet, wenn für eine Versandklasse keine Größen oder Gewicht "
+"eingegeben wurde (muss in Euro eingegeben werden)."
 
 #: includes/data/data-global-settings-form-fields.php:117
 msgctxt "Backend: Title of the settings section"
 msgid "Banking information"
-msgstr "Konto Informationen"
+msgstr "Kontoinformationen"
 
 #: includes/data/data-global-settings-form-fields.php:123
 msgid "Fill in defaults for cash on delivery."
@@ -1011,16 +1010,16 @@ msgstr ""
 
 #: includes/data/data-global-settings-form-fields.php:239
 msgid "Street detection"
-msgstr "Straßen Erkennung"
+msgstr "Straßen-Erkennung"
 
 #: includes/data/data-global-settings-form-fields.php:241
-msgid "Automaticly detect street name and number"
+msgid "Automatically detect street name and number"
 msgstr "Automatische Trennung von Straßenname und Hausnummer"
 
 #: includes/data/data-global-settings-form-fields.php:242
 msgid ""
 "There are some cases where automatic detection doesn't work, due to "
-"different naming schemes. Always check the recipients' address before "
+"different naming schemes. Always check the recipient's address before "
 "creating a shipping label!"
 msgstr ""
 "Automatisches Teilen von Straße und Hausnummer (In manchen Ländern "
@@ -1033,7 +1032,7 @@ msgid "Shipment status notification"
 msgstr "Sendungsstatus-Benachrichtigung"
 
 #: includes/data/data-global-settings-form-fields.php:249
-msgid "Enable webhooks to get notified about status changes in your shipments."
+msgid "Enable webhooks to get notified about status changes of your shipments."
 msgstr ""
 "Aktiviere Webhooks, um über den Sendungsstatus der Pakete informiert zu "
 "werden."
@@ -1041,10 +1040,10 @@ msgstr ""
 #: includes/data/data-global-settings-form-fields.php:250
 msgid ""
 "If you want to make changes, you can find the settings in your <a href=\"%s"
-"\" target=\"_blank\">shipcloud.io webhooks section</a>."
+"\" target=\"_blank\">shipcloud account</a>."
 msgstr ""
-"Wenn Du Änderungen vornehmen willst, findest Du die Einstellungen <a href="
-"\"%s\" target=\"_blank\">bei shipcloud in den Webhooks-Einstellungen</a>."
+"Wenn Sie Änderungen vornehmen wollen, finden Sie die Einstellungen in Ihrem "
+"<a href=\"%s\" target=\"_blank\">shipcloud Account</a>."
 
 #: includes/data/data-global-settings-form-fields.php:255
 msgid "Debug"
@@ -1062,6 +1061,22 @@ msgstr "Die Logdatei findest du unter <code>%s</code>"
 #: includes/templates/template-meta-box-settings.php:35
 msgid "Shipping carrier"
 msgstr "Versanddienstleister"
+
+#: includes/data/data-instance-settings-form-fields.php:21
+msgid ""
+"Will be used if no sizes or weight is given to a product or for fallback "
+"(have to be entered in EUR)."
+msgstr ""
+"Wird verwendet, wenn für ein Produkt keine Größen oder Gewicht eingegeben "
+"wurde (muss in € eingegeben werden)."
+
+#: includes/data/data-instance-settings-form-fields.php:27
+msgid ""
+"Will be used if no sizes or weight is given to a shipping class (have to be "
+"entered in EUR)."
+msgstr ""
+"Wird verwendet, wenn für eine Versandklasse keine Größen oder Gewicht "
+"eingegeben wurde (muss in € eingegeben werden)."
 
 #: includes/data/data-shipcloud-multiselect-script.php:5
 msgctxt "backend: Selecting a package type option for label creation"
@@ -1310,36 +1325,36 @@ msgstr ""
 "innerhalb Deutschlands zu garantieren. Ist diese nicht möglich, ersetzt GLS "
 "die zusätzlichen Kosten für den Service."
 
-#: includes/templates/template-additional-services-edit-form.php:409
+#: includes/templates/template-additional-services-edit-form.php:405
 #: includes/templates/template-order-label.php:85
 msgid "Advance notice"
 msgstr "Vorankündigung"
 
-#: includes/templates/template-additional-services-edit-form.php:410
+#: includes/templates/template-additional-services-edit-form.php:406
 msgid "The carrier will notify the recipient about an upcoming delivery"
 msgstr ""
 "Der Versanddienstleister informiert den Empfänger über eine anstehende "
 "Zustellung"
 
-#: includes/templates/template-additional-services-edit-form.php:430
+#: includes/templates/template-additional-services-edit-form.php:426
 #: includes/templates/template-order-label.php:88
 msgid "eMail"
 msgstr "E-Mail"
 
-#: includes/templates/template-additional-services-edit-form.php:454
+#: includes/templates/template-additional-services-edit-form.php:450
 #: includes/templates/template-order-label.php:90
-#: includes/templates/template-order-shipment-center.php:74
-#: includes/templates/template-order-shipment-center.php:166
-#: includes/templates/template-pickup-request-form-table.php:77
+#: includes/templates/template-order-shipment-center.php:75
+#: includes/templates/template-order-shipment-center.php:168
+#: includes/templates/template-pickup-request-form-table.php:78
 msgid "Phone"
 msgstr "Telefonnummer"
 
-#: includes/templates/template-additional-services-edit-form.php:478
+#: includes/templates/template-additional-services-edit-form.php:474
 #: includes/templates/template-order-label.php:92
 msgid "SMS"
 msgstr "SMS"
 
-#: includes/templates/template-additional-services-edit-form.php:491
+#: includes/templates/template-additional-services-edit-form.php:487
 msgid ""
 "The contract selected for this shipping service provider does not support "
 "any additional services other than advance notice. However, the customer has "
@@ -1349,12 +1364,12 @@ msgstr ""
 "Zusatzsservices außer der Vorankündigung. Der Kunde hat dafür jedoch keine "
 "Erlaubnis erteilt."
 
-#: includes/templates/template-additional-services-edit-form.php:515
+#: includes/templates/template-additional-services-edit-form.php:511
 #: includes/templates/template-order-label.php:176
 msgid "Named person only"
 msgstr "Nur namentlich genannte Person"
 
-#: includes/templates/template-additional-services-edit-form.php:516
+#: includes/templates/template-additional-services-edit-form.php:512
 msgid ""
 "The named person only service ensures in an uncomplicated and cost-effective "
 "way that your parcels are only delivered to the recipient in person or to an "
@@ -1364,12 +1379,12 @@ msgstr ""
 "kostengünstig sicher, dass Ihre Pakete nur an den Empfänger persönlich oder "
 "an eine bevollmächtigte Person zugestellt werden."
 
-#: includes/templates/template-additional-services-edit-form.php:530
+#: includes/templates/template-additional-services-edit-form.php:526
 #: includes/templates/template-order-label.php:216
 msgid "Parcel outlet routing"
 msgstr "Filialrouting"
 
-#: includes/templates/template-additional-services-edit-form.php:531
+#: includes/templates/template-additional-services-edit-form.php:527
 msgid ""
 "With the DHL additional service retail outlet routing you can tell the "
 "carrier to reroute a parcel to the nearest outlet when the recipient can't "
@@ -1379,12 +1394,12 @@ msgstr ""
 "ein Paket an die nächstgelegene Filiale umzuleiten, wenn der Empfänger nicht "
 "erreicht werden kann. Andernfalls wird das Paket sofort zurückgeschickt."
 
-#: includes/templates/template-additional-services-edit-form.php:561
+#: includes/templates/template-additional-services-edit-form.php:557
 #: includes/templates/template-order-label.php:168
 msgid "Endorsement"
 msgstr "Vorausverfügung"
 
-#: includes/templates/template-additional-services-edit-form.php:562
+#: includes/templates/template-additional-services-edit-form.php:558
 msgid ""
 "Prior to sending your parcel you can specify what should happen to the "
 "shipment in case it cannot be delivered in the destination country. By "
@@ -1401,23 +1416,23 @@ msgstr ""
 "Empfängerland versteigert oder vernichtet. Für diese Option wird Ihnen keine "
 "Rücksendegebühr in Rechnung gestellt."
 
-#: includes/templates/template-additional-services-edit-form.php:574
+#: includes/templates/template-additional-services-edit-form.php:570
 msgid "Select a handling"
 msgstr "Handhabung auswählen"
 
-#: includes/templates/template-additional-services-edit-form.php:577
+#: includes/templates/template-additional-services-edit-form.php:573
 msgid "Abandon"
 msgstr "Freigabe der Sendung"
 
-#: includes/templates/template-additional-services-edit-form.php:580
+#: includes/templates/template-additional-services-edit-form.php:576
 msgid "Return immediately"
 msgstr "Direkte Retoure"
 
-#: includes/templates/template-additional-services-edit-form.php:594
+#: includes/templates/template-additional-services-edit-form.php:590
 msgid "Pickup"
 msgstr "Abholung"
 
-#: includes/templates/template-additional-services-edit-form.php:595
+#: includes/templates/template-additional-services-edit-form.php:591
 msgid ""
 "For some carriers it is mandatory to pass a pickup object when creating a "
 "shipment"
@@ -1586,7 +1601,7 @@ msgid "<a href=\"%s\">Please select a carrier</a>."
 msgstr "<a href=\"%s\">Bitte wähle einen Paketdienst</a>."
 
 #: includes/templates/template-label-form.php:76
-#: includes/templates/template-order-shipment-edit.php:187
+#: includes/templates/template-order-shipment-edit.php:189
 msgid "Label format"
 msgstr "Labelformat"
 
@@ -1619,11 +1634,11 @@ msgstr ""
 msgid "Package description"
 msgstr "Beschreibung (Paketinhalt)"
 
-#: includes/templates/template-label-form.php:106
+#: includes/templates/template-label-form.php:107
 msgid "Skip when shipping label present"
 msgstr "Überspringen, wenn Versandetikett vorhanden"
 
-#: includes/templates/template-label-form.php:107
+#: includes/templates/template-label-form.php:108
 msgid ""
 "Activate, if you want to skip label creation for an order if there is "
 "already a shipping label present"
@@ -1677,8 +1692,8 @@ msgstr "Versandmarke herunterladen"
 
 #: includes/templates/template-order-label.php:21
 #: includes/templates/template-order-label.php:486
-#: includes/templates/template-order-shipment-center.php:272
-#: includes/templates/template-order-shipment-center.php:273
+#: includes/templates/template-order-shipment-center.php:274
+#: includes/templates/template-order-shipment-center.php:275
 msgid "Create label"
 msgstr "Versandmarke erstellen"
 
@@ -1688,7 +1703,7 @@ msgid "Sender address"
 msgstr "Absenderadresse"
 
 #: includes/templates/template-order-label.php:63
-#: includes/templates/template-order-shipment-center.php:83
+#: includes/templates/template-order-shipment-center.php:84
 msgid "Recipient address"
 msgstr "Empfängeradresse"
 
@@ -1724,13 +1739,13 @@ msgid "Handling"
 msgstr "Handling"
 
 #: includes/templates/template-order-label.php:218
-#: includes/templates/template-order-shipment-center.php:103
+#: includes/templates/template-order-shipment-center.php:104
 msgid "email"
 msgstr "E-Mail"
 
 #: includes/templates/template-order-label.php:231
-#: includes/templates/template-order-shipment-center.php:280
-#: includes/templates/template-order-shipment-edit.php:205
+#: includes/templates/template-order-shipment-center.php:282
+#: includes/templates/template-order-shipment-edit.php:207
 msgid "Customs declaration"
 msgstr "Zollinhaltserklärung"
 
@@ -1739,7 +1754,7 @@ msgid "Reference number:"
 msgstr "Referenznummer:"
 
 #: includes/templates/template-order-label.php:366
-#: includes/templates/template-order-shipment-edit.php:172
+#: includes/templates/template-order-shipment-edit.php:174
 msgid "shipcloud notification email"
 msgstr "shipcloud Benachrichtigungs-E-Mail"
 
@@ -1793,9 +1808,9 @@ msgstr "Abholauftrag erstellen"
 
 #: includes/templates/template-order-labels-bulk.php:25
 #: includes/templates/template-order-labels-bulk.php:26
-#: includes/templates/template-order-shipment-center.php:269
-#: includes/templates/template-order-shipment-center.php:270
-#: includes/templates/template-order-shipment-edit.php:219
+#: includes/templates/template-order-shipment-center.php:271
+#: includes/templates/template-order-shipment-center.php:272
+#: includes/templates/template-order-shipment-edit.php:221
 msgid "Add customs declaration"
 msgstr "Zollinhaltserklärung hinzufügen"
 
@@ -1842,77 +1857,77 @@ msgstr ""
 "möchtest."
 
 #: includes/templates/template-order-shipment-center.php:18
-#: includes/templates/template-order-shipment-center.php:88
+#: includes/templates/template-order-shipment-center.php:89
 #: includes/templates/template-pickup-request-form-table.php:29
 #: woocommerce-shipping-shipcloud.php:281
 msgid "Company"
 msgstr "Firma"
 
 #: includes/templates/template-order-shipment-center.php:23
-#: includes/templates/template-order-shipment-center.php:93
+#: includes/templates/template-order-shipment-center.php:94
 #: includes/templates/template-pickup-request-form-table.php:33
 msgid "First name"
 msgstr "Vorname"
 
 #: includes/templates/template-order-shipment-center.php:28
-#: includes/templates/template-order-shipment-center.php:98
+#: includes/templates/template-order-shipment-center.php:99
 #: includes/templates/template-pickup-request-form-table.php:37
 msgid "Last name"
 msgstr "Nachname"
 
 #: includes/templates/template-order-shipment-center.php:34
-#: includes/templates/template-order-shipment-center.php:114
+#: includes/templates/template-order-shipment-center.php:115
 #: includes/templates/template-pickup-request-form-table.php:41
 msgid "Street"
 msgstr "Straße"
 
 #: includes/templates/template-order-shipment-center.php:39
-#: includes/templates/template-order-shipment-center.php:128
+#: includes/templates/template-order-shipment-center.php:129
 msgid "Number"
 msgstr "Nummer"
 
 #: includes/templates/template-order-shipment-center.php:45
-#: includes/templates/template-order-shipment-center.php:134
+#: includes/templates/template-order-shipment-center.php:135
 msgid "Postcode"
 msgstr "PLZ"
 
 #: includes/templates/template-order-shipment-center.php:50
-#: includes/templates/template-order-shipment-center.php:139
+#: includes/templates/template-order-shipment-center.php:140
 #: includes/templates/template-pickup-request-form-table.php:53
 msgid "City"
 msgstr "Ort"
 
 #: includes/templates/template-order-shipment-center.php:55
-#: includes/templates/template-order-shipment-center.php:144
-#: includes/templates/template-pickup-request-form-table.php:73
+#: includes/templates/template-order-shipment-center.php:145
+#: includes/templates/template-pickup-request-form-table.php:74
 msgid "State"
 msgstr "Bundesland"
 
 #: includes/templates/template-order-shipment-center.php:61
-#: includes/templates/template-order-shipment-center.php:153
+#: includes/templates/template-order-shipment-center.php:154
 #: includes/templates/template-pickup-request-form-table.php:57
 msgid "Country"
 msgstr "Land"
 
-#: includes/templates/template-order-shipment-center.php:176
+#: includes/templates/template-order-shipment-center.php:178
 msgid "Create shipment"
 msgstr "Sendung anlegen"
 
-#: includes/templates/template-order-shipment-center.php:243
+#: includes/templates/template-order-shipment-center.php:245
 msgid "WooCommerce OrderID: %s"
 msgstr "WooCommerce Bestellnummer: %s"
 
-#: includes/templates/template-order-shipment-center.php:263
-#: includes/templates/template-order-shipment-center.php:264
+#: includes/templates/template-order-shipment-center.php:265
+#: includes/templates/template-order-shipment-center.php:266
 msgid "Prepare label"
 msgstr "Versandmarke vorbereiten"
 
-#: includes/templates/template-order-shipment-center.php:266
-#: includes/templates/template-order-shipment-center.php:267
+#: includes/templates/template-order-shipment-center.php:268
+#: includes/templates/template-order-shipment-center.php:269
 msgid "Calculate price"
 msgstr "Preis berechnen"
 
-#: includes/templates/template-order-shipment-center.php:342
+#: includes/templates/template-order-shipment-center.php:344
 msgid ""
 "Depending on the carrier, there will be a fee for creating the label. Do you "
 "really want to create a label?"
@@ -1920,11 +1935,11 @@ msgstr ""
 "Abhängig vom Versanddienstleister wird eine Gebühr fällig um die "
 "Versandmarke zu erstellen. Möchtest Du wirklich eine Versandmarke erstellen?"
 
-#: includes/templates/template-order-shipment-center.php:343
+#: includes/templates/template-order-shipment-center.php:345
 msgid "Do you really want to delete this shipment?"
 msgstr "Möchtest Du diese Sendung wirklich löschen?"
 
-#: includes/templates/template-order-shipment-center.php:344
+#: includes/templates/template-order-shipment-center.php:346
 msgid ""
 "Do you want to delete this shipment from the WooCommerce database "
 "nonetheless?"
@@ -1936,79 +1951,79 @@ msgid "Sender"
 msgstr "Versender"
 
 #: includes/templates/template-order-shipment-edit.php:11
-#: includes/templates/template-order-shipment-edit.php:84
+#: includes/templates/template-order-shipment-edit.php:85
 msgctxt "Backend: Shipment edit field label"
 msgid "Company"
 msgstr "Firma"
 
 #: includes/templates/template-order-shipment-edit.php:17
-#: includes/templates/template-order-shipment-edit.php:90
+#: includes/templates/template-order-shipment-edit.php:91
 msgctxt "Backend: Shipment edit field label"
 msgid "First name"
 msgstr "Vorname"
 
 #: includes/templates/template-order-shipment-edit.php:23
-#: includes/templates/template-order-shipment-edit.php:96
+#: includes/templates/template-order-shipment-edit.php:97
 msgctxt "Backend: Shipment edit field label"
 msgid "Last name"
 msgstr "Nachname"
 
 #: includes/templates/template-order-shipment-edit.php:29
-#: includes/templates/template-order-shipment-edit.php:102
+#: includes/templates/template-order-shipment-edit.php:103
 msgctxt "Backend: Shipment edit field label"
 msgid "Street"
 msgstr "Straße"
 
 #: includes/templates/template-order-shipment-edit.php:35
-#: includes/templates/template-order-shipment-edit.php:108
+#: includes/templates/template-order-shipment-edit.php:109
 msgctxt "Backend: Shipment edit field label"
 msgid "Street number"
 msgstr "HS Tariff Nummer"
 
 #: includes/templates/template-order-shipment-edit.php:42
-#: includes/templates/template-order-shipment-edit.php:120
+#: includes/templates/template-order-shipment-edit.php:121
 msgctxt "Backend: Shipment edit field label"
 msgid "ZIP code"
 msgstr "Postleitzahl"
 
 #: includes/templates/template-order-shipment-edit.php:48
-#: includes/templates/template-order-shipment-edit.php:126
+#: includes/templates/template-order-shipment-edit.php:127
 msgctxt "Backend: Shipment edit field label"
 msgid "City"
 msgstr "Ort"
 
 #: includes/templates/template-order-shipment-edit.php:54
-#: includes/templates/template-order-shipment-edit.php:132
+#: includes/templates/template-order-shipment-edit.php:133
 msgctxt "Backend: Shipment edit field label"
 msgid "State"
 msgstr "Bundesland"
 
 #: includes/templates/template-order-shipment-edit.php:60
-#: includes/templates/template-order-shipment-edit.php:138
+#: includes/templates/template-order-shipment-edit.php:139
 msgctxt "Backend: Shipment edit field label"
 msgid "Country"
 msgstr "Land"
 
-#: includes/templates/template-order-shipment-edit.php:72
-#: includes/templates/template-order-shipment-edit.php:150
+#: includes/templates/template-order-shipment-edit.php:73
+#: includes/templates/template-order-shipment-edit.php:152
 msgctxt "Backend: Shipment edit field label"
 msgid "Phone"
 msgstr "Telefonnummer"
 
-#: includes/templates/template-order-shipment-edit.php:80
+#: includes/templates/template-order-shipment-edit.php:81
 msgid "Recipient"
 msgstr "Empfänger"
 
-#: includes/templates/template-order-shipment-edit.php:114
+#: includes/templates/template-order-shipment-edit.php:115
 msgctxt "Backend: Shipment edit field label"
 msgid "Care of"
 msgstr "per Adresse (c/o)"
 
-#: includes/templates/template-order-shipment-edit.php:168
+#: includes/templates/template-order-shipment-edit.php:170
 msgid "misc"
 msgstr "Verschiedenes"
 
-#: includes/templates/template-order-shipment-edit.php:173
+#: includes/templates/template-order-shipment-edit.php:175
 msgid "Let shipcloud update the customer about the shipping status via email"
 msgstr ""
 "shipcloud soll den Käufer über den Sendungsstatus per E-Mail informieren"
