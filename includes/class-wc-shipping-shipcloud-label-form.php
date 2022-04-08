@@ -118,11 +118,19 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Label_Form' ) ) {
 		protected function get_global_reference_number() {
 			return $this->get_order()->get_global_reference_number();
 		}
-		
+
+		protected function carrier_email_notification_enabled() {
+			return $this->get_order()->carrier_email_notification_enabled();
+		}
+
 		protected function email_notification_enabled() {
 			return $this->get_order()->email_notification_enabled();
 		}
-		
+
+		protected function shipcloud_email_notification_enabled() {
+			return $this->get_order()->shipcloud_email_notification_enabled();
+		}
+
 		protected function get_email_for_notification() {
 			return $this->get_order()->get_email_for_notification();
 		}

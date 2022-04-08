@@ -867,7 +867,13 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 					$order
 				);
 			}
-			
+
+      $additional_services_names = array_column($data['additional_services'], 'name');
+      if ( in_array( 'advance_notice', $additional_services_names ) ) {
+        // make sure notification_email doesn't get transmitted when advance notice is being used
+        unset($data['notification_email']);
+      }
+
 			if ( array_key_exists( 'customs_declaration', $data ) ) {
                 $data['customs_declaration'] = $this->handle_customs_declaration( $data['customs_declaration'] );
             }
@@ -2067,7 +2073,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          *
          * @return bool
          */
-		private function carrier_email_notification_enabled() {
+		public function carrier_email_notification_enabled() {
 		    $carrier_email = $this->get_option( 'carrier_email' );
 
 		    return $this->email_notification_enabled() 
@@ -2079,7 +2085,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          *
          * @return bool
 		 */
-		private function shipcloud_email_notification_enabled() {
+		public function shipcloud_email_notification_enabled() {
 		    $notification_email = $this->get_option( 'notification_email' );
 
 		    return $this->email_notification_enabled() 

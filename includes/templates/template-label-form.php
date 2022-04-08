@@ -95,11 +95,12 @@
             <input type="text" name="parcel_description" value="<?php echo esc_attr( WC_Shipping_Shipcloud_Utils::get_parcel_description( $this->get_wc_order() ) ) ?>"/>
         </div>
 	<?php endif; ?>
-    <?php if ( $this->email_notification_enabled() ) : ?>
-        <div>
-            <input type="hidden" name="shipcloud_notification_email_checkbox" value="1" />
-            <input type="hidden" name="shipcloud_notification_email" value="<?php echo $this->get_email_for_notification() ?>" />
-        </div>
+    <?php if ( $this->shipcloud_email_notification_enabled() ) : ?>
+      <div class="parcel-form-section parcel-notification-email">
+        <input type="checkbox" name="shipcloud_notification_email_checkbox" checked="checked" />
+        <label for="shipcloud_notification_email"><?php _e( 'Notification email', 'shipcloud-for-woocommerce' ); ?></label>
+        <input type="text" name="shipcloud_notification_email" value="<?php echo $this->get_email_for_notification() ?>" />
+      </div>
 	<?php endif; ?>
     <?php if ( get_current_screen() && 'edit-shop_order' == get_current_screen()->id ) : ?>
         <div class="parcel-form-section parcel-shipping-label-present">

@@ -124,11 +124,19 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Labels_Bulk' ) ) {
 			// return $this->order->parcel_form();
 			return $this->label_form->render();
 		}
-		
-		protected function email_notification_enabled() {
+
+		protected function carrier_email_notification_enabled() {
+			return $this->get_order()->carrier_email_notification_enabled();
+		}
+
+    protected function email_notification_enabled() {
 			return $this->get_order()->email_notification_enabled();
 		}
-		
+
+		protected function shipcloud_email_notification_enabled() {
+			return $this->get_order()->shipcloud_email_notification_enabled();
+		}
+
 		protected function get_global_reference_number() {
 			return $this->get_order()->get_global_reference_number();
 		}

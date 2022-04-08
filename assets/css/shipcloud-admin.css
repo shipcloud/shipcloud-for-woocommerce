@@ -677,6 +677,7 @@ fieldset .shipment-labels .address {
   float: left;
 }
 
+#shipcloud-io .parcel-form-section .shipcloud_notification_email_checkbox,
 #shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__checkbox {
   /* margin: 0 1em 0.75em 1em; */
   margin-right: 10px;
