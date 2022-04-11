@@ -377,14 +377,12 @@
 	                </span>
 	            </div>
 	          <# } #>
-	          <# if ( data.model.get('label') ) { #>
+	          <# if ( data.model.get('label').format ) { #>
 	            <div class="shipment-info-item">
-	                <span class="shipment-info-item__label"><?php _e( 'Label:', 'shipcloud-for-woocommerce' ); ?></span>
+	                <span class="shipment-info-item__label"><?php _e( 'Label format:', 'shipcloud-for-woocommerce' ); ?></span>
 	                <span class="shipment-info-item__value">
-	                  <# if ( data.model.get('label').format ) { #>
-	                    <strong><?php _e( 'Format:', 'shipcloud-for-woocommerce' ); ?></strong> {{ data.model.get('label').format }}
-	                  <# } #>
-                    </span>
+                    {{ data.model.get('label').format }}
+                  </span>
 	            </div>
 	          <# } #>
 	          <# if ( data.model.get('label_url') ) { #>
