@@ -6,8 +6,8 @@ msgstr ""
 "release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shipcloud-for-"
 "woocommerce\n"
-"POT-Creation-Date: 2022-04-06T07:10:10+00:00\n"
-"PO-Revision-Date: 2022-04-06 09:12+0200\n"
+"POT-Creation-Date: 2022-04-11T10:59:37+00:00\n"
+"PO-Revision-Date: 2022-04-11 13:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch\n"
 "Language: de_DE\n"
@@ -266,33 +266,33 @@ msgstr "Fehler bei der Erstellung bzw. Aktualisierung der Sendung"
 msgid "Could not get pakadoo point. Reason: %s"
 msgstr "Konnte keinen pakadoo-Punkt erhalten. Grund: %s"
 
-#: includes/class-wc-shipping-shipcloud-order.php:938
+#: includes/class-wc-shipping-shipcloud-order.php:940
 msgid "shipcloud label has been prepared."
 msgstr "shipcloud Versandmarke wurde vorbereitet."
 
-#: includes/class-wc-shipping-shipcloud-order.php:944
-#: includes/class-wc-shipping-shipcloud-order.php:960
+#: includes/class-wc-shipping-shipcloud-order.php:946
+#: includes/class-wc-shipping-shipcloud-order.php:962
 msgid ""
 "Customs declaration documents not necessary. Therefore they were ignored."
 msgstr "Zolldokumente nicht notwendig. Daher wurden sie ignoriert."
 
-#: includes/class-wc-shipping-shipcloud-order.php:1510
+#: includes/class-wc-shipping-shipcloud-order.php:1517
 msgid "Pickup date and time fields must not be empty!"
 msgstr "Abholzeitpunkt muss ausgefüllt werden!"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1520
+#: includes/class-wc-shipping-shipcloud-order.php:1527
 msgid "Carrier missing in request"
 msgstr "Dienstleister fehlt in der Anfrage"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1584
+#: includes/class-wc-shipping-shipcloud-order.php:1591
 msgid "Couldn't prepare pickup: %s"
 msgstr "Konnte Abholauftrag nicht erstellen: %s"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1712
+#: includes/class-wc-shipping-shipcloud-order.php:1719
 msgid "Pickup request created with id %s for shipment with id %s"
 msgstr "Abholauftrag mit der ID %s für Sendung mit der ID %s erstellt"
 
-#: includes/class-wc-shipping-shipcloud-order.php:1805
+#: includes/class-wc-shipping-shipcloud-order.php:1812
 #: includes/class-wc-shipping-shipcloud-webhook.php:266
 msgid "shipcloud shipment has been deleted."
 msgstr "shipcloud Sendung wurde gelöscht."
@@ -330,9 +330,9 @@ msgid "shipcloud parcel weight (kg)"
 msgstr "shipcloud Paketgewicht (cm)"
 
 #: includes/class-wc-shipping-shipcloud-utils.php:152
-#: includes/templates/template-order-label.php:399
-#: includes/templates/template-order-label.php:409
-#: includes/templates/template-order-label.php:419
+#: includes/templates/template-order-label.php:397
+#: includes/templates/template-order-label.php:407
+#: includes/templates/template-order-label.php:417
 msgid "Not available yet"
 msgstr "Noch nicht verfügbar"
 
@@ -1681,17 +1681,17 @@ msgid "No shipping found."
 msgstr "Kein Versand gefunden."
 
 #: includes/templates/template-order-label.php:10
-#: includes/templates/template-order-label.php:463
+#: includes/templates/template-order-label.php:461
 msgid "Download customs document"
 msgstr "Zolldokumente herunterladen"
 
 #: includes/templates/template-order-label.php:16
-#: includes/templates/template-order-label.php:468
+#: includes/templates/template-order-label.php:466
 msgid "Download label"
 msgstr "Versandmarke herunterladen"
 
 #: includes/templates/template-order-label.php:21
-#: includes/templates/template-order-label.php:486
+#: includes/templates/template-order-label.php:484
 #: includes/templates/template-order-shipment-center.php:274
 #: includes/templates/template-order-shipment-center.php:275
 msgid "Create label"
@@ -1763,43 +1763,41 @@ msgid "Shipment id:"
 msgstr "Sendungs-ID:"
 
 #: includes/templates/template-order-label.php:382
-msgid "Label:"
-msgstr "Label:"
+#, fuzzy
+#| msgid "Label format"
+msgid "Label format:"
+msgstr "Labelformat"
 
-#: includes/templates/template-order-label.php:385
-msgid "Format:"
-msgstr "Format:"
-
-#: includes/templates/template-order-label.php:392
+#: includes/templates/template-order-label.php:390
 msgid "Tracking number:"
 msgstr "Sendungsnummer:"
 
-#: includes/templates/template-order-label.php:404
+#: includes/templates/template-order-label.php:402
 msgid "Tracking status:"
 msgstr "Sendungsstatus:"
 
-#: includes/templates/template-order-label.php:414
+#: includes/templates/template-order-label.php:412
 msgid "Price:"
 msgstr "Preis:"
 
-#: includes/templates/template-order-label.php:429
+#: includes/templates/template-order-label.php:427
 msgid "Pickup timeframe"
 msgstr "Abholzeitraum"
 
-#: includes/templates/template-order-label.php:434
+#: includes/templates/template-order-label.php:432
 msgid "Pickup id"
 msgstr "Abholnummer"
 
-#: includes/templates/template-order-label.php:440
+#: includes/templates/template-order-label.php:438
 #: includes/templates/template-pickup-request-form-table.php:25
 msgid "Pickup address"
 msgstr "Abholadresse"
 
-#: includes/templates/template-order-label.php:456
+#: includes/templates/template-order-label.php:454
 msgid "Delete shipment"
 msgstr "Sendung löschen"
 
-#: includes/templates/template-order-label.php:475
+#: includes/templates/template-order-label.php:473
 #: includes/templates/template-pickup-request-form-basic.php:7
 #: includes/templates/template-pickup-request-form.php:9
 #: includes/templates/template-pickup-request-form.php:26
@@ -2141,6 +2139,12 @@ msgstr "Alle abwählen"
 #: woocommerce-shipping-shipcloud.php:467
 msgid "None Selected"
 msgstr "Nichts ausgewählt"
+
+#~ msgid "Label:"
+#~ msgstr "Label:"
+
+#~ msgid "Format:"
+#~ msgstr "Format:"
 
 #~ msgid "Status"
 #~ msgstr "Status"

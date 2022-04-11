@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-06T07:10:10+00:00\n"
+"POT-Creation-Date: 2022-04-11T10:59:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: shipcloud-for-woocommerce\n"
@@ -245,32 +245,32 @@ msgstr ""
 msgid "Could not get pakadoo point. Reason: %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:938
+#: includes/class-wc-shipping-shipcloud-order.php:940
 msgid "shipcloud label has been prepared."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:944
-#: includes/class-wc-shipping-shipcloud-order.php:960
+#: includes/class-wc-shipping-shipcloud-order.php:946
+#: includes/class-wc-shipping-shipcloud-order.php:962
 msgid "Customs declaration documents not necessary. Therefore they were ignored."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1510
+#: includes/class-wc-shipping-shipcloud-order.php:1517
 msgid "Pickup date and time fields must not be empty!"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1520
+#: includes/class-wc-shipping-shipcloud-order.php:1527
 msgid "Carrier missing in request"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1584
+#: includes/class-wc-shipping-shipcloud-order.php:1591
 msgid "Couldn't prepare pickup: %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1712
+#: includes/class-wc-shipping-shipcloud-order.php:1719
 msgid "Pickup request created with id %s for shipment with id %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1805
+#: includes/class-wc-shipping-shipcloud-order.php:1812
 #: includes/class-wc-shipping-shipcloud-webhook.php:266
 msgid "shipcloud shipment has been deleted."
 msgstr ""
@@ -300,9 +300,9 @@ msgid "shipcloud parcel weight (kg)"
 msgstr ""
 
 #: includes/class-wc-shipping-shipcloud-utils.php:152
-#: includes/templates/template-order-label.php:399
-#: includes/templates/template-order-label.php:409
-#: includes/templates/template-order-label.php:419
+#: includes/templates/template-order-label.php:397
+#: includes/templates/template-order-label.php:407
+#: includes/templates/template-order-label.php:417
 msgid "Not available yet"
 msgstr ""
 
@@ -1433,17 +1433,17 @@ msgid "No shipping found."
 msgstr ""
 
 #: includes/templates/template-order-label.php:10
-#: includes/templates/template-order-label.php:463
+#: includes/templates/template-order-label.php:461
 msgid "Download customs document"
 msgstr ""
 
 #: includes/templates/template-order-label.php:16
-#: includes/templates/template-order-label.php:468
+#: includes/templates/template-order-label.php:466
 msgid "Download label"
 msgstr ""
 
 #: includes/templates/template-order-label.php:21
-#: includes/templates/template-order-label.php:486
+#: includes/templates/template-order-label.php:484
 #: includes/templates/template-order-shipment-center.php:274
 #: includes/templates/template-order-shipment-center.php:275
 msgid "Create label"
@@ -1515,43 +1515,39 @@ msgid "Shipment id:"
 msgstr ""
 
 #: includes/templates/template-order-label.php:382
-msgid "Label:"
+msgid "Label format:"
 msgstr ""
 
-#: includes/templates/template-order-label.php:385
-msgid "Format:"
-msgstr ""
-
-#: includes/templates/template-order-label.php:392
+#: includes/templates/template-order-label.php:390
 msgid "Tracking number:"
 msgstr ""
 
-#: includes/templates/template-order-label.php:404
+#: includes/templates/template-order-label.php:402
 msgid "Tracking status:"
 msgstr ""
 
-#: includes/templates/template-order-label.php:414
+#: includes/templates/template-order-label.php:412
 msgid "Price:"
 msgstr ""
 
-#: includes/templates/template-order-label.php:429
+#: includes/templates/template-order-label.php:427
 msgid "Pickup timeframe"
 msgstr ""
 
-#: includes/templates/template-order-label.php:434
+#: includes/templates/template-order-label.php:432
 msgid "Pickup id"
 msgstr ""
 
-#: includes/templates/template-order-label.php:440
+#: includes/templates/template-order-label.php:438
 #: includes/templates/template-pickup-request-form-table.php:25
 msgid "Pickup address"
 msgstr ""
 
-#: includes/templates/template-order-label.php:456
+#: includes/templates/template-order-label.php:454
 msgid "Delete shipment"
 msgstr ""
 
-#: includes/templates/template-order-label.php:475
+#: includes/templates/template-order-label.php:473
 #: includes/templates/template-pickup-request-form-basic.php:7
 #: includes/templates/template-pickup-request-form.php:9
 #: includes/templates/template-pickup-request-form.php:26
