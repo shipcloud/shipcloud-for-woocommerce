@@ -1227,6 +1227,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		        return '';
 		    }
 
+        $recipient 	= $this->get_recipient();
+        if ( $recipient['phone'] ) {
+          return ( string ) $recipient['phone'];
+        }
+
 		    if ( method_exists( $order, 'get_meta' ) ) {
 		        return ( string ) $order->get_meta( '_shipping_phone' );
 		    } elseif ( method_exists( $order, 'get_meta_data' ) ) {
