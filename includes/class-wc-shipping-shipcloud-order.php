@@ -1987,7 +1987,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 							$additional_services[] = array(
 								'name' 		 => 'dhl_parcel_outlet_routing',
 								'properties' => array(
-									'email' => $order->get_email_for_notification(),
+									'email' => $this->get_email_for_notification(),
 								)
 							);
 						}
@@ -2007,7 +2007,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 								) {
 									$props['email'] = $additional_service_value['email'];
 								} else {
-									$props['email'] = $order->get_email_for_notification();
+                  $props['email'] = $this->get_email_for_notification();
 								}
 							}
 							
@@ -2020,7 +2020,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 								) {
 									$props['sms'] = $additional_service_value['sms'];
 								} else {
-									$props['sms'] = $order->get_phone();
+                  $props['sms'] = $this->get_phone();
 								}
 							}
 							
