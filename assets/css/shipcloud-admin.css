@@ -815,6 +815,15 @@ fieldset .shipment-labels .address {
 #wcsc-order-bulk-labels .shipcloud_additional_service__advance_notice td {
   padding: 4px 0 0 0;
 }
+
+#wcsc-order-bulk-labels #shipcloud-io .shipcloud_additional_service .advance_notice_input {
+  width: 98%;
+}
+
+#wcsc-order-bulk-labels #shipcloud-io  .parcel-form-section.parcel-notification-email label {
+  display: inline;
+}
+
 #shipcloud-io .order-id-list .bulkid {
   display: inline-block;
 }
