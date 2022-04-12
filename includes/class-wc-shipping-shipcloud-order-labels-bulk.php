@@ -25,6 +25,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Labels_Bulk' ) ) {
 		
 		private $label_form;
 
+    private $bulk_action;
+
 		/**
 		 * Create new bulk view.
 		 *
@@ -38,6 +40,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Labels_Bulk' ) ) {
 			$this->order 			= $order;
 			$this->allowed_carriers = $order->get_allowed_carriers();
 			$this->shipcloud_api 	= null;
+      $this->bulk_action = true;
 			
 			require_once __DIR__ . '/class-wc-shipping-shipcloud-label-form.php';
 
@@ -45,7 +48,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Labels_Bulk' ) ) {
 				dirname( __FILE__ ) . '/templates/template-label-form.php',
 				$order,
 				$this->allowed_carriers,
-				$this->shipcloud_api
+				$this->shipcloud_api,
+        $this->bulk_action
 			);
 
 		}
@@ -81,6 +85,13 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Labels_Bulk' ) ) {
 	  public function get_order() {
 	    return $this->order;
 	  }
+
+    /**
+     * @return boolean
+     */
+    public function is_bulk_action() {
+      return $this->bulk_action;
+    }
 
 		/**
 		 * Pre-render content.

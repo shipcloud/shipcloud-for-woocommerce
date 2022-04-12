@@ -95,7 +95,12 @@
             <input type="text" name="parcel_description" value="<?php echo esc_attr( WC_Shipping_Shipcloud_Utils::get_parcel_description( $this->get_wc_order() ) ) ?>"/>
         </div>
 	<?php endif; ?>
-    <?php if ( $this->shipcloud_email_notification_enabled() ) : ?>
+  <?php 
+    if ( 
+      ( method_exists( $this, 'is_bulk_action' ) && $this->is_bulk_action() && WC_Shipping_Shipcloud_Utils::shipcloud_email_notification_enabled() ) ||
+      ( $this->shipcloud_email_notification_enabled() )
+    ) : 
+  ?>
       <div class="parcel-form-section parcel-notification-email">
         <input type="checkbox" name="shipcloud_notification_email_checkbox" checked="checked" />
         <label for="shipcloud_notification_email"><?php _e( 'Notification email', 'shipcloud-for-woocommerce' ); ?></label>

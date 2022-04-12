@@ -907,6 +907,29 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 			return $shipment;
 		}
 		
+
+    /**
+     * Getting option carrier email notification enabled
+     *
+     * @return bool
+     */
+    public static function carrier_email_notification_enabled() {
+      $carrier_email = self::get_option( 'carrier_email' );
+
+      return in_array( (string) $carrier_email, [ '1', 'on', 'yes', 'true' ] );	
+    }
+
+    /**
+     * Getting option shipcloud email notification enabled
+     *
+     * @return bool
+     */
+    public static function shipcloud_email_notification_enabled() {
+      $notification_email = self::get_option( 'notification_email' );
+
+      return in_array( (string) $notification_email, [ '1', 'on', 'yes', 'true' ] );	
+    }
+
 	    /**
 	     * Extract additional services from shipment
 	     *

@@ -32,6 +32,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Label_Form' ) ) {
 
 		private $template_file;
 
+    private $bulk_action;
 		/**
 		 * Create new bulk view.
 		 *
@@ -39,12 +40,15 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Label_Form' ) ) {
 		 * @param \WC_Shipcloud_Order         $order
 		 * @param \Shipcloud\Domain\Carrier[] $allowed_carriers List of carriers that can be selected.
 		 * @param \Shipcloud\Api              $shipcloud_api    Connection to the API.
+     * @param boolean                     $bulk_action      true, when label form is called in bulk 
+     *                                                      action
 		 */
-		public function __construct( $template_file, $order, $allowed_carriers, $shipcloud_api ) {
+		public function __construct( $template_file, $order, $allowed_carriers, $shipcloud_api, $bulk_action ) {
 			$this->template_file 	= $template_file;
 			$this->order 			= $order;
 			$this->allowed_carriers = $order->get_allowed_carriers();
 			$this->shipcloud_api 	= null;
+      $this->bulk_action = $bulk_action;
 		}
 
 		/**
@@ -68,6 +72,12 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Label_Form' ) ) {
 			return $this->order;
 		}
 
+    /**
+     * @return boolean
+     */
+    public function is_bulk_action() {
+      return $this->bulk_action;
+    }
 		/**
 		 * Pre-render content.
 		 *

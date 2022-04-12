@@ -396,8 +396,14 @@
 </div>
 
 <div class="shipcloud_additional_service shipcloud_additional_service__advance_notice">
-	<?php if ( $this->carrier_email_notification_enabled() ) : ?>
-
+	<?php 
+    if ( 
+      // ( isset($is_bulk_action_page) && WC_Shipping_Shipcloud_Utils::carrier_email_notification_enabled() ) ||
+      // ( $this->carrier_email_notification_enabled() )
+      ( method_exists( $this, 'is_bulk_action' ) && $this->is_bulk_action() && WC_Shipping_Shipcloud_Utils::carrier_email_notification_enabled() ) ||
+      ( $this->carrier_email_notification_enabled() )
+    ) : 
+  ?>
 	<div class="shipcloud_additional_service__checkbox">
     <input type="checkbox" name="shipment[additional_services][advance_notice][checked]" value="advance_notice" checked="checked" />
 	</div>

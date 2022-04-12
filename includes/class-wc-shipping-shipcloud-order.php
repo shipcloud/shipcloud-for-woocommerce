@@ -2079,10 +2079,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          * @return bool
          */
 		public function carrier_email_notification_enabled() {
-		    $carrier_email = $this->get_option( 'carrier_email' );
-
 		    return $this->email_notification_enabled() 
-				&& in_array( (string) $carrier_email, [ '1', 'on', 'yes', 'true' ] );	
+				&& WC_Shipping_Shipcloud_Utils::carrier_email_notification_enabled();
 		}
 		
 		/**
@@ -2091,10 +2089,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          * @return bool
 		 */
 		public function shipcloud_email_notification_enabled() {
-		    $notification_email = $this->get_option( 'notification_email' );
-
 		    return $this->email_notification_enabled() 
-				&& in_array( (string) $notification_email, [ '1', 'on', 'yes', 'true' ] );	
+				&& WC_Shipping_Shipcloud_Utils::shipcloud_email_notification_enabled();
 		}
 		
 		/**
