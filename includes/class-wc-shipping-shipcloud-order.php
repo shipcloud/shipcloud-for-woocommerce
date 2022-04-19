@@ -1517,7 +1517,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			$parcel_data['width']  = wc_format_decimal( $data['parcel_width'] );
 		    $parcel_data['height'] = wc_format_decimal( $data['parcel_height'] );
 		    $parcel_data['length'] = wc_format_decimal( $data['parcel_length'] );
-		    $parcel_data['weight'] = wc_format_decimal( $data['parcel_weight'] );
+      if (isset($data['shipcloud_use_calculated_weight']) && $data['shipcloud_use_calculated_weight'] == 'use_calculated_weight') {
+        $parcel_data['weight'] = $this->get_calculated_weight();
+      } else {
+        $parcel_data['weight'] = wc_format_decimal( $data['parcel_weight'] );
+      }
 
 		    if ( array_key_exists( 'declared_value', $data ) ) {
 		        $parcel_data['declared_value']['amount'] = wc_format_decimal( $data['declared_value']['amount'] );
