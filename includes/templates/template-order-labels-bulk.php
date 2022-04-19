@@ -168,7 +168,7 @@
                       "placeholder", "<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>"
                     );
                     $("input[name='shipcloud_notification_email']").prop(
-                      "placeholder", "<?php _e( 'Leave empty to use phone number from order', 'shipcloud-for-woocommerce' ); ?>"
+                      "placeholder", "<?php _e( 'Leave empty to use email address from order', 'shipcloud-for-woocommerce' ); ?>"
                     );
 
                   });
