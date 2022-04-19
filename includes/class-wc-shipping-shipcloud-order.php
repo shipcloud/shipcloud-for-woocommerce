@@ -1970,12 +1970,14 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 							$bank_account_holder = array_key_exists( 'bank_account_holder', $additional_service_value ) ? $additional_service_value['bank_account_holder'] : "";
 							$bank_account_number = array_key_exists( 'bank_account_number', $additional_service_value ) ? $additional_service_value['bank_account_number'] : "";
 							$reference = array_key_exists( 'reference1', $additional_service_value ) ? $additional_service_value['reference1'] : "";
+              $amount = array_key_exists( 'amount', $additional_service_value ) && $additional_service_value['amount'] != "" ? $additional_service_value['amount'] : $this->get_wc_order()->get_total();
+              $currency = array_key_exists( 'currency', $additional_service_value ) && $additional_service_value['currency'] != "" ? $additional_service_value['currency'] : 'EUR';
 
 							$cod_array = array(
 								'name' 		 => 'cash_on_delivery',
 								'properties' => array(
-									'amount' => $additional_service_value['amount'],
-									'currency' => $additional_service_value['currency'],
+									'amount' => $amount,
+									'currency' => $currency,
 								)
 							);
 							
