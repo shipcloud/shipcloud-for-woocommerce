@@ -868,11 +868,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				);
 			}
 
-      $additional_services_names = array_column($data['additional_services'], 'name');
-      if ( in_array( 'advance_notice', $additional_services_names ) ) {
-        // make sure notification_email doesn't get transmitted when advance notice is being used
-        unset($data['notification_email']);
-      }
+      $data = $this->handle_email_notification( $data );
 
 			if ( array_key_exists( 'customs_declaration', $data ) ) {
                 $data['customs_declaration'] = $this->handle_customs_declaration( $data['customs_declaration'] );
@@ -1444,7 +1440,47 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		    $data['items'] = $items;
 		    return $data;
 		}
-		
+
+    /**
+     * Check to see if email notification - by either shipcloud or the carrier - is desired by the 
+     * customer. Otherwise remove the data.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function handle_email_notification( $data ) {
+      if ( !$this->email_notification_enabled() ) {
+        unset($data['notification_email']);
+        $additional_services_names = array_column($data['additional_services'], 'name');
+
+        if ( in_array( 'advance_notice', $additional_services_names ) ) {
+          $additional_services = [];
+          foreach ( $data['additional_services'] as $additional_service ) {
+            if ( $additional_service['name'] != 'advance_notice' ) {
+              $additional_services[] = $additional_service;
+            }
+          }
+          $data['additional_services'] = $additional_services;
+        }
+      } else {
+        if ( isset( $data['shipcloud_notification_email_checkbox'] ) ) {
+          if ( !isset( $data['shipcloud_notification_email'] )) {
+            $data['notification_email'] = $this->get_email_for_notification();
+          } else {
+            $data['notification_email'] = $data['shipcloud_notification_email'];
+          }
+        }
+
+        $additional_services_names = array_column($data['additional_services'], 'name');
+        if ( in_array( 'advance_notice', $additional_services_names ) ) {
+          // make sure notification_email doesn't get transmitted when advance notice is being used
+          unset($data['notification_email']);
+        }
+      }
+
+      return $data;
+    }
+
 		/**
 		 * Sanitize package data.
 		 *
