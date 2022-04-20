@@ -187,9 +187,14 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 				$current 						= $order->create_shipment( $data );
 				
 				if ( is_wp_error( $current ) ) {
+          $error_message = 'There was an error while trying to create the label for order #%d: %s';
 					$this->log(
-						sprintf( 'There was an error while trying to create the label for order #%d.', $order_id )
+						sprintf( $error_message, $order_id, $current->get_error_message() )
 					);
+          $this->add_admin_notice( 
+            sprintf( $error_message, $order_id, $current->get_error_message() ), 
+            'error' 
+          );
 					continue;
 				}
 				
