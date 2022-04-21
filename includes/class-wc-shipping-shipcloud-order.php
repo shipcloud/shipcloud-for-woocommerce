@@ -2075,7 +2075,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 								) {
 									$props['phone'] = $additional_service_value['phone'];
 								} else {
-									$props['phone'] = $order->get_phone();
+									$props['phone'] = $this->get_phone();
 								}
 							}
 
