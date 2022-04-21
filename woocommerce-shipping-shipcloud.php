@@ -129,6 +129,7 @@ class WooCommerce_Shipping_Shipcloud {
 			// add frontend related code here
 			add_action( 'wp_enqueue_scripts', 							array( $this, 'enqueue_scripts' ) );
 		}
+    add_shortcode( 'shipcloud_orderid', 'shipcloud-for-woocommerce' );
 	}
 	
 	public static function activate_plugin() {
