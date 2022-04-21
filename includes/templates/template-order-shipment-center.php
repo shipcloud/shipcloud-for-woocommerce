@@ -242,7 +242,7 @@
                         $cod_data = array(
                             'amount'              => $order->get_total(),
                             'currency'            => $currency,
-                            'reference1'          => sprintf( __( 'WooCommerce OrderID: %s', 'shipcloud-for-woocommerce' ), $this->order_id ),
+                            'reference1'          => $this->get_global_reference_number(),
                             'bank_account_holder' => $this->get_option('bank_account_holder'),
                             'bank_name'           => $this->get_option('bank_name'),
                             'bank_account_number' => $this->get_option('bank_account_number'),
