@@ -1974,6 +1974,19 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 							$bank_account_holder = array_key_exists( 'bank_account_holder', $additional_service_value ) ? $additional_service_value['bank_account_holder'] : "";
 							$bank_account_number = array_key_exists( 'bank_account_number', $additional_service_value ) ? $additional_service_value['bank_account_number'] : "";
 							$reference = array_key_exists( 'reference1', $additional_service_value ) ? $additional_service_value['reference1'] : "";
+
+              if ( $reference == "" ) {
+                $global_reference_number = $this->get_option( 'global_reference_number' );
+                $order_id = $this->order_id;
+                if ( WC_Shipping_Shipcloud_Utils::shipcloud_admin_is_on_single_order_page() && ! empty( $order_id ) ) {
+                  if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
+                    $global_reference_number = str_replace( '[shipcloud_orderid]', $order_id, $global_reference_number );
+                  }
+                }
+                if ( $global_reference_number != "") {
+                  $reference = $global_reference_number;
+                }
+              }
               $amount = array_key_exists( 'amount', $additional_service_value ) && $additional_service_value['amount'] != "" ? $additional_service_value['amount'] : $this->get_wc_order()->get_total();
               $currency = array_key_exists( 'currency', $additional_service_value ) && $additional_service_value['currency'] != "" ? $additional_service_value['currency'] : 'EUR';
 
