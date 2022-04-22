@@ -1,0 +1,2504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>shipcloud for WooCommerce</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+	<link rel="icon" type="image/vnd.microsoft.icon" href="https://developers.shipcloud.io/favicon.ico">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <p style="width: 100% !important;"><a href="https://developers.shipcloud.io/" alt="shipcloud.io - Developer Portal" target="_blank"><img src="https://developers.shipcloud.io/assets/images/logos/shipcloud_logo.png" width="166.4px" height="33.28px"></a></p>
+<h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">shipcloud for WooCommerce</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                					                    	<h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/WC.html">WC</a></h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/WC-Shipping.html">Shipping</a>
+                
+            </li>
+            </ul>
+
+					                        </section>
+            
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -eight phpdocumentor-content">
+                    <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="packages/WC.html">WC</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="packages/WC-Shipping.html">Shipping</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="packages/WC-Shipping-Shipcloud.html">Shipcloud</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    WC_Shipping_Shipcloud_API_Adapter
+
+    
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/WC.html">WC</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/WC-Shipping.html">Shipping</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/WC-Shipping-Shipcloud.html">Shipcloud</a></li>
+                            </ul>
+        </div>
+    
+    
+    </h2>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">52</span>
+
+    </aside>
+
+        
+    <section class="phpdocumentor-description"></section>
+
+
+
+
+
+
+
+
+<h3 id="toc">
+    Table of Contents
+    <a href="#toc" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+                <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_api">$api</a>
+    <span>
+                &nbsp;: <abbr title="\ApiClient">ApiClient</abbr>            </span>
+</dt>
+<dd>ApiClient instance</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_api_key">$api_key</a>
+    <span>
+                &nbsp;: string            </span>
+</dt>
+<dd>The shipcloud API key</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_instance">$instance</a>
+    <span>
+                &nbsp;: object            </span>
+</dt>
+<dd>The Single instance of the class</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_services">$services</a>
+    <span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
+</dt>
+<dd>Services list</dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_address">create_address()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>This method is to create an address. It forces a validation against required fields
+before sending the request to API.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_label">create_label()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>Creating a shipping label</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_pickup_request">create_pickup_request()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>There are two ways you can request shipments to be picked up by a
+specific carrier. By simply stating that all shipments that haven&#039;t
+been picked up already should be picked up or by specifying which
+shipments should by picked up.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_shipment">create_shipment()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>This method is to create a shipment.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_tracker">create_tracker()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|bool    </span>
+</dt>
+<dd>If you want to create a tracker, this is the way to go.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_delete_shipment">delete_shipment()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|bool|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>This method is to delete an existing shipment.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_address">get_address()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>If you want to obtain a certain address, this is the way to go.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_address_by_pakadoo_id">get_address_by_pakadoo_id()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>If you want to request a pakadoo point address, this is the way to go.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_addresses">get_addresses()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>If you want to obtain a list of addresses, this is the way to go.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_carrier_list">get_carrier_list()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Get a list of carriers available for your account.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_carriers">get_carriers()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|false    </span>
+</dt>
+<dd>Get all carriers available for your shipcloud account.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_current_shipment_status">get_current_shipment_status()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>Getting the get current status of a certain shipment.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_default_returns_address">get_default_returns_address()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>This is the default address that will be used for returns shipments when no address was
+specified using the &#039;to&#039; attribute.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_default_shipping_address">get_default_shipping_address()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>This is the default address that will be used for shipments when no address was specified
+using the &#039;from&#039; attribute.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_instance">get_instance()</a>
+    <span>
+                        &nbsp;: object    </span>
+</dt>
+<dd>Main Instance</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_invoice_address">get_invoice_address()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>This is the address that a user has specified as being their invoice address.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_pickup_request">get_pickup_request()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|bool    </span>
+</dt>
+<dd>Getting information about a certain pickup request.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_pickup_requests">get_pickup_requests()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Getting a list of pickup requests.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_price">get_price()</a>
+    <span>
+                        &nbsp;: float|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>Getting the price for a shipment</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_shipment">get_shipment()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>If you want to obtain a certain shipment, this is the way to go.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_shipments">get_shipments()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>If you want to obtain a list of shipments, this is the way to go.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_tracker">get_tracker()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|bool    </span>
+</dt>
+<dd>Getting information about a certain tracker.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_trackers">get_trackers()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;    </span>
+</dt>
+<dd>Getting a list of trackers.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_webhook_id">get_webhook_id()</a>
+    <span>
+                        &nbsp;: mixed    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_update_shipment">update_shipment()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>This method is to update an existing shipment.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method___construct">__construct()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Constructor.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_add_admin_notice">add_admin_notice()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Output an admin notice.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_address_api_object">convert_data_array_to_address_api_object()</a>
+    <span>
+                        &nbsp;: <abbr title="\Address">Address</abbr>    </span>
+</dt>
+<dd>Converts address data array to Address.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_pickup_api_object">convert_data_array_to_pickup_api_object()</a>
+    <span>
+                        &nbsp;: <abbr title="\Pickup">Pickup</abbr>    </span>
+</dt>
+<dd>Converts pickup data array to Pickup.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_shipment_api_object">convert_data_array_to_shipment_api_object()</a>
+    <span>
+                        &nbsp;: <abbr title="\Shipment">Shipment</abbr>    </span>
+</dt>
+<dd>Converts shipment data array to Shipment.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_tracker_api_object">convert_data_array_to_tracker_api_object()</a>
+    <span>
+                        &nbsp;: <abbr title="\Tracker">Tracker</abbr>    </span>
+</dt>
+<dd>Converts tracker data array to Tracker.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_shipment_quote">create_shipment_quote()</a>
+    <span>
+                        &nbsp;: float|<abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>With this call you can find out how much we will charge you for a
+specific shipment.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_webhook">create_webhook()</a>
+    <span>
+                        &nbsp;: string|bool    </span>
+</dt>
+<dd>If you want to create a webhook, this is the way to go.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_api">get_api()</a>
+    <span>
+                        &nbsp;: <abbr title="\WP_Error">WP_Error</abbr>|<abbr title="\ApiClient">ApiClient</abbr>    </span>
+</dt>
+<dd>Getting shipcloud API.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_latest_tracking_status">get_latest_tracking_status()</a>
+    <span>
+                        &nbsp;: array&lt;string|int, mixed&gt;|bool    </span>
+</dt>
+<dd>Extracting latest tracking information of a certain shipment.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_service_display_name">get_service_display_name()</a>
+    <span>
+                        &nbsp;: string    </span>
+</dt>
+<dd>Getting service display name by service id.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_handle_exception">handle_exception()</a>
+    <span>
+                        &nbsp;: <abbr title="\WP_Error">WP_Error</abbr>    </span>
+</dt>
+<dd>Handles Exception and converts it to WP_Error.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_init">init()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Initialization.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_log">log()</a>
+    <span>
+                        &nbsp;: void    </span>
+</dt>
+<dd>Output a debug message.</dd>
+
+        </dl>
+
+
+
+        
+
+        
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_api">
+        $api
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_api" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">74</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">ApiClient instance</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type"><abbr title="\ApiClient">ApiClient</abbr></span>
+    <span class="phpdocumentor-signature__name">$api</span>
+    </code>
+
+    
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><abbr title="\ApiClient">ApiClient</abbr></span>
+                                        
+                                             
+                                    </dd>
+                        </dl>
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_api_key">
+        $api_key
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_api_key" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">66</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">The shipcloud API key</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">$api_key</span>
+    </code>
+
+    
+    
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+            -static                                            "
+>
+    <h4 class="phpdocumentor-element__name" id="property_instance">
+        $instance
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_instance" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">59</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">The Single instance of the class</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+    <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">object</span>
+    <span class="phpdocumentor-signature__name">$instance</span>
+    </code>
+
+    
+    
+    
+
+</article>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_services">
+        $services
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#property_services" class="headerlink"><i class="fas fa-link"></i></a>
+        <span class="phpdocumentor-element__modifiers">
+                                </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">81</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Services list</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__name">$services</span>
+    </code>
+
+    
+    
+    
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_create_address">
+        create_address()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_address" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">147</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This method is to create an address. It forces a validation against required fields
+before sending the request to API.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">create_address</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The address to be created.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The created address including ID.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_create_label">
+        create_label()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_label" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">854</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Creating a shipping label</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">create_label</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$shipment</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$shipment</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_create_pickup_request">
+        create_pickup_request()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_pickup_request" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">976</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">There are two ways you can request shipments to be picked up by a
+specific carrier. By simply stating that all shipments that haven&#039;t
+been picked up already should be picked up or by specifying which
+shipments should by picked up.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">create_pickup_request</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+        <section class="phpdocumentor-description"><p>Notice: If you don't supply a pickup_address in your request, we're
+using the default from address that's being defined in the shipcloud
+profile for requesting a pickup by the carrier. Please keep in mind
+there are carrier specific field lengths you have to take into account.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The pickup data.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>An array with pickup information if succeeded, false otherwise.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_create_shipment">
+        create_shipment()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_shipment" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">457</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This method is to create a shipment.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">create_shipment</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+        <section class="phpdocumentor-description"><pre class="prettyprint">
+Response:
+{
+  "id": "3a186c51d4281acbecf5ed38805b1db92a9d668b",
+  "carrier_tracking_no": "84168117830018",
+  "tracking_url": "https://track.shipcloud.io/3a186c51d4",
+  "label_url": "https://shipping-labels.shipcloud.io/shipments/01370b4d/199f803bf8/label/shipping_label_199f803bf8.pdf",
+  "price": 3.4
+}
+</pre>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The shipment labeling, tracking and pricing information.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_create_tracker">
+        create_tracker()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_tracker" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1172</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">If you want to create a tracker, this is the way to go.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">create_tracker</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The tracker data.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>An array with tracker information if succeeded, false otherwise.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_delete_shipment">
+        delete_shipment()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_delete_shipment" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">733</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This method is to delete an existing shipment.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">delete_shipment</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+        <section class="phpdocumentor-description"><pre class="prettyprint">
+NOTE:
+Prepared shipments (create_shipping_label is false) can be deleted
+at any time, because no transaction with the carrier has happened
+until this point and no actual shipping label has been created. In
+case you've created a shipping label you can delete it before the
+cutoff time of the carrier. Cutoff times differ from carrier to
+carrier and are some time between 5pm and 8pm.
+</pre>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The id attribute that was returned when creating the shipment.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>An empty array if succeeded, false otherwise.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_address">
+        get_address()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_address" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">191</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">If you want to obtain a certain address, this is the way to go.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_address</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The id attribute that was returned when creating the address.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The address if existing.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_address_by_pakadoo_id">
+        get_address_by_pakadoo_id()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_address_by_pakadoo_id" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">234</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">If you want to request a pakadoo point address, this is the way to go.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_address_by_pakadoo_id</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$pakadoo_id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$pakadoo_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The pakadoo point id.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The pakadoo point address if existing.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_addresses">
+        get_addresses()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_addresses" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">293</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">If you want to obtain a list of addresses, this is the way to go.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_addresses</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+        <section class="phpdocumentor-description"><p>You can filter the addresses list using one or more of the following
+URL parameters:</p>
+<p>first_name, e.g. 'first_name=Max'
+last_name, e.g. 'last_name=Mustermann'
+company, e.g. 'company=Example%20Company'
+care_of, e.g. 'care_of=Roger%20Receiver'
+street, e.g. 'street_no=Musterstraße'
+street_no, e.g. 'street_no=42'
+zip_code, e.g. 'zip_code=12345'
+state, e.g. 'state=CA'
+city, e.g. 'city=Musterstadt'
+country, e.g. 'country=DE'
+phone, e.g. 'phone=555-555'
+page, show page number x, e.g. 'page=2'
+per_page, show x number of shipments on a page (default &amp; max: 100), e.g. 'per_page=25'</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$filter</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>A list of filter criteria.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>A list of all created addresses.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_carrier_list">
+        get_carrier_list()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_carrier_list" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">871</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Get a list of carriers available for your account.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_carrier_list</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>A list of all carriers available for your account.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_carriers">
+        get_carriers()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_carriers" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">913</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Get all carriers available for your shipcloud account.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_carriers</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|false</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|false</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_current_shipment_status">
+        get_current_shipment_status()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_current_shipment_status" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">560</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting the get current status of a certain shipment.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_current_shipment_status</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$shipment_id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+        <section class="phpdocumentor-description"><pre class="prettyprint">
+Response:
+{
+  "timestamp": "2021-10-14T15:56:39+02:00",
+  "location": "Paderborn",
+  "status": "package_delivered",
+  "details": "Es wurde eine Sendung angelegt",
+  "id": "4bff7566-33f4-4baa-84aa-9fda2d02b77c"
+}
+</pre>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$shipment_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href=""><abbr title=""></abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The ID of the shipment asked for</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>$tracking_status The tracking status of the given shipment</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_default_returns_address">
+        get_default_returns_address()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_default_returns_address" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">330</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This is the default address that will be used for returns shipments when no address was
+specified using the &#039;to&#039; attribute.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_default_returns_address</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The default returns address.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_default_shipping_address">
+        get_default_shipping_address()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_default_shipping_address" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">367</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This is the default address that will be used for shipments when no address was specified
+using the &#039;from&#039; attribute.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_default_shipping_address</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The default shipping address.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_instance">
+        get_instance()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_instance" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">126</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Main Instance</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">get_instance</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">object</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">object</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_invoice_address">
+        get_invoice_address()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_invoice_address" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">403</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This is the address that a user has specified as being their invoice address.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_invoice_address</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The invoice address.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_pickup_request">
+        get_pickup_request()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_pickup_request" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1065</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting information about a certain pickup request.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_pickup_request</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The id attribute that was returned when creating the pickup request.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The pickup request if existing, false otherwise.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_pickup_requests">
+        get_pickup_requests()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_pickup_requests" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1028</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting a list of pickup requests.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_pickup_requests</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>A list of pickup requests.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_price">
+        get_price()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_price" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">828</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting the price for a shipment</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_price</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$carrier</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$from</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$to</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$package</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$service</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">float|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$carrier</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$from</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$to</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$package</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$service</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"></section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">float|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_shipment">
+        get_shipment()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_shipment" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">507</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">If you want to obtain a certain shipment, this is the way to go.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_shipment</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The id attribute that was returned when creating the shipment.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The shipment if existing.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_shipments">
+        get_shipments()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_shipments" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">633</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">If you want to obtain a list of shipments, this is the way to go.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_shipments</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$filter</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+        <section class="phpdocumentor-description"><p>You can filter the shipments list using one or more of the following
+URL parameters:</p>
+<pre class="prettyprint">
+carrier, e.g. 'carrier=dhl'
+carrier_tracking_no, e.g. 'carrier_tracking_no=43128000105'
+created_at_gt, e.g. 'created_at_gt=20180712T1300Z'
+created_at_lt, e.g. 'created_at_lt=20180712T1400Z'
+page, show page number x, e.g. 'page=2'
+per_page, show x number of shipments on a page (default & max: 100), e.g. 'per_page=25'
+reference_number, e.g. 'reference_number=ref123456'
+service, e.g. 'service=returns'
+shipcloud_tracking_no, e.g. 'shipcloud_tracking_no=86afb143f9c9c0cfd4eb7a7c26a5c616585a6271'
+shipment_type, e.g. 'shipment_type=prepared'
+source, e.g. 'source=api'
+tracking_status, e.g. 'tracking_status=out_for_delivery'
+tracking_status_not, e.g. 'tracking_status_not=delivered'
+
+shipment_type: Specifies the type of a shipment. The following types are available:
+
+prepared: a shipment which was saved in shipcloud but doesn't have a shipping label yet
+label_created: a shipment containing a shipping label.
+tracking_only: a shipment that was imported via its carrier tracking number (see trackers for more details)
+
+created_at_gt / created_at_lt: You can filter the list by using these parameters to specify a timerange to
+find the shipments that were created during this time. The timestamp will be evaluated as ISO 8601 using the
+following format: YYYYMMDDThhmmZ.
+
+source: Filter shipments by platform they were created through. The following keys can be used:
+
+api: a shipment created through our api
+webui: a shipment created using the shipcloud ui
+return_portal: a shipment created using the shipcloud return portal
+</pre>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$filter</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>A list of filter criteria.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>A list of all created shipments.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_tracker">
+        get_tracker()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_tracker" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1252</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting information about a certain tracker.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_tracker</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$id</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The id attribute that was returned when creating the tracker.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The tracker if existing, false otherwise.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_trackers">
+        get_trackers()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_trackers" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1215</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting a list of trackers.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_trackers</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>A list of trackers.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_webhook_id">
+        get_webhook_id()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_webhook_id" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1109</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">get_webhook_id</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">mixed</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_update_shipment">
+        update_shipment()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_update_shipment" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">670</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">This method is to update an existing shipment.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                <span class="phpdocumentor-signature__name">update_shipment</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The shipment to edit.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>Shipment labeling, tracking and pricing information.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method___construct">
+        __construct()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">88</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Constructor.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">__construct</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_add_admin_notice">
+        add_admin_notice()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_add_admin_notice" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1644</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Output an admin notice.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">add_admin_notice</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$type</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;info&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">bool&nbsp;</span><span class="phpdocumentor-signature__argument__name">$dismissible</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">true</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$message</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Debug message.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$type</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;info&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Message type.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$dismissible</span>
+                : <span class="phpdocumentor-signature__argument__return-type">bool</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">true</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Message type.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_convert_data_array_to_address_api_object">
+        convert_data_array_to_address_api_object()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_address_api_object" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1372</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Converts address data array to Address.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">convert_data_array_to_address_api_object</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Address">Address</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The address data</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Address">Address</abbr></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_convert_data_array_to_pickup_api_object">
+        convert_data_array_to_pickup_api_object()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_pickup_api_object" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1571</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Converts pickup data array to Pickup.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">convert_data_array_to_pickup_api_object</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Pickup">Pickup</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The pickup data</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Pickup">Pickup</abbr></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_convert_data_array_to_shipment_api_object">
+        convert_data_array_to_shipment_api_object()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_shipment_api_object" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1415</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Converts shipment data array to Shipment.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">convert_data_array_to_shipment_api_object</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Shipment">Shipment</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The shipment data</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Shipment">Shipment</abbr></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_convert_data_array_to_tracker_api_object">
+        convert_data_array_to_tracker_api_object()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_convert_data_array_to_tracker_api_object" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1607</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Converts tracker data array to Tracker.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">convert_data_array_to_tracker_api_object</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Tracker">Tracker</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The tracker data</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\Tracker">Tracker</abbr></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_create_shipment_quote">
+        create_shipment_quote()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_shipment_quote" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">777</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">With this call you can find out how much we will charge you for a
+specific shipment.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">create_shipment_quote</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$data</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">float|<abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$data</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The shipment data to get quote for.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">float|<abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>An array with shipment quote if succeeded, false otherwise.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_create_webhook">
+        create_webhook()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_create_webhook" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1124</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">If you want to create a webhook, this is the way to go.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">create_webhook</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string|bool</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string|bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The id of the created webhook, false otherwise.</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_api">
+        get_api()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_api" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1302</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting shipcloud API.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">get_api</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\WP_Error">WP_Error</abbr>|<abbr title="\ApiClient">ApiClient</abbr></span></code>
+
+    
+    
+    
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><abbr title="\ApiClient">ApiClient</abbr></span>
+                                        
+                                             
+                                    </dd>
+                        </dl>
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\WP_Error">WP_Error</abbr>|<abbr title="\ApiClient">ApiClient</abbr></span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>$api</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_latest_tracking_status">
+        get_latest_tracking_status()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_latest_tracking_status" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1346</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Extracting latest tracking information of a certain shipment.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">get_latest_tracking_status</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$tracking_events</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$tracking_events</span>
+                : <span class="phpdocumentor-signature__argument__return-type">array&lt;string|int, mixed&gt;</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The tracking events of a certain shipment</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;|bool</span>
+            &mdash;
+            <section class="phpdocumentor-description"><p>The latest tracking information if available</p>
+</section>
+
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_service_display_name">
+        get_service_display_name()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_get_service_display_name" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1332</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Getting service display name by service id.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">get_service_display_name</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$service_id</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$service_id</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">string</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_handle_exception">
+        handle_exception()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_handle_exception" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1632</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handles Exception and converts it to WP_Error.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">handle_exception</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$e</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\WP_Error">WP_Error</abbr></span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$e</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Exception">Exception</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The exception thrown</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type"><abbr title="\WP_Error">WP_Error</abbr></span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_init">
+        init()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_init" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">117</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Initialization.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">init</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+    
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_log">
+        log()
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#method_log" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="includes/class-wc-shipping-shipcloud-api-adapter.php"><a href="files/includes-class-wc-shipping-shipcloud-api-adapter.html"><abbr title="includes/class-wc-shipping-shipcloud-api-adapter.php">class-wc-shipping-shipcloud-api-adapter.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">1656</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Output a debug message.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+                <span class="phpdocumentor-signature__name">log</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$message</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$level</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">&#039;info&#039;</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__return-type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$context</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">[]</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$message</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Debug message.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$level</span>
+                : <span class="phpdocumentor-signature__argument__return-type">string</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">&#039;info&#039;</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Debug level.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$context</span>
+                : <span class="phpdocumentor-signature__argument__return-type">mixed</span>
+                 = <span class="phpdocumentor-signature__argument__default-value">[]</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The Debug context.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+            </section>
+
+        
+    <script type="text/javascript">
+        function loadExternalCodeSnippets(line) {
+            Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach((pre) => {
+                var src = pre.getAttribute('data-src').replace( /\\/g, '/');
+                var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+                var language = 'php';
+
+                var code = document.createElement('code');
+                code.className = 'language-' + language;
+
+                pre.textContent = '';
+
+                pre.setAttribute('data-line', line)
+                code.textContent = 'Loading…';
+
+                pre.appendChild(code);
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('GET', src, true);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+
+                        if (xhr.status < 400 && xhr.responseText) {
+                            code.textContent = xhr.responseText;
+
+                            Prism.highlightElement(code);
+                        }
+                        else if (xhr.status >= 400) {
+                            code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                        }
+                        else {
+                            code.textContent = '✖ Error: File does not exist, is empty or trying to view from localhost';
+                        }
+                    }
+                };
+
+                xhr.send(null);
+            });
+        }
+
+        var modals = document.querySelectorAll("[data-modal]");
+
+        modals.forEach(function (trigger) {
+            trigger.addEventListener("click", function (event) {
+                //event.preventDefault();
+                const modal = document.getElementById(trigger.dataset.modal);
+                modal.classList.add("phpdocumentor-modal__open");
+                loadExternalCodeSnippets(trigger.dataset.line)
+                const exits = modal.querySelectorAll("[data-exit-button]");
+                exits.forEach(function (exit) {
+                    exit.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        modal.classList.remove("phpdocumentor-modal__open");
+                    });
+                });
+            });
+        });
+    </script>
+
+    </article>
+                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+            </div>
+        </div>
+        <a href="classes/WC-Shipping-Shipcloud-API-Adapter.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,900 @@
+ .fixed .column-posts {
+     width: auto !important;
+}
+ .clearfix:after {
+     content: ".";
+     clear: both;
+     display: block;
+     visibility: hidden;
+     height: 20px;
+}
+ .w100, .w100 > input[type=text] {
+	width: 100% !important;
+}
+.w100px, .w100px > input[type="text"] {
+    width: 100px !important;
+}
+ .mb3, input[type=text] {
+	margin-bottom: 3px !important;
+}
+ .mb10 {
+	margin-bottom: 10px !important;
+}
+ .inline-box {
+	 display: inline-block !important;
+ }
+ .ms-options-wrap > button:focus, .ms-options-wrap > button {
+     border: 0 !important;
+     padding: 5px 20px 5px 10px !important;
+}
+ .ms-options > .ms-search > input[type=text] {
+     border-radius: 0 !important;
+}
+ .ms-options-wrap > .ms-options {
+     position: absolute;
+     left: 234px !important;
+     width: 100%;
+     max-width: 400px !important;
+     margin-bottom: 0px !important;
+}
+ .ms-options-wrap > .ms-options > ul {
+     margin: 1px !important;
+}
+ .ms-options-wrap > .ms-options > ul > li {
+     margin-bottom: 1px !important;
+}
+ .ms-options-wrap > .ms-options > ul input[type="checkbox"] {
+     margin-right: 10px !important;
+     position: unset !important;
+     margin-left: 0 !important;
+}
+ .ms-options-wrap > .ms-options > ul label {
+     padding-left: 10px !important;
+     margin: 0 !important;
+}
+ .ms-settings input[type="text"], .ms-settings input[type="email"],
+ .ms-settings input[type="number"], .ms-settings input[type="password"]
+ .ms-settings select, .ms-settings textarea {
+	 width: 400px !important;
+	 max-width: 400px !important;
+}
+ .ms-options-wrap {
+     max-width: 400px;
+     padding: 0;
+     line-height: 2;
+     height: auto;
+     min-height: 30px;
+     box-shadow: 0 0 0 transparent;
+     border-radius: 4px;
+     border: 1px solid #8c8f94;
+     background-color: #fff;
+     color: #2c3338;
+}
+
+/*****************************************
+ * 	Helpers
+ *****************************************/
+.flex {
+    display: flex;
+}
+
+.flex-col-reverse {
+    flex-direction: column-reverse;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.mb-5 {
+    margin-bottom: 5px;
+}
+
+.block {
+    display: block;
+}
+
+
+
+/*****************************************
+ * 	Order Form
+ *****************************************/
+
+.postbox .inside, .stuffbox .inside {
+    padding: 15px 15px 15px 15px !important;
+    margin: 0px !important;
+}
+
+#shipcloud-io #order_data .order_data_column .form-field .hour, 
+#shipcloud-io #order_data .order_data_column .form-field .minute {
+    width: 4.5rem;
+}
+
+/**
+ * 	General
+ */
+.shipcloud-panel {
+  padding: 1.5em 1.5em 0 0;
+}
+
+.shipcloud-panel-content {
+  background-color: #ECECEC;
+  border: 1px solid #CFCFCF;
+  padding: 1em;
+}
+
+.shipcloud-panel--alert {
+  border: 1px solid red;
+}
+
+.shipcloud-panel--alert svg {
+  color: red;
+}
+
+#shipcloud-io .inside {
+    padding: 0;
+}
+
+#shipcloud-io p {
+    color: #777;
+}
+
+#shipcloud-io select{
+  font-size:13px;
+}
+
+#shipcloud-io .inside h3,
+#shipcloud-io .inside h4,
+#shipcloud-io .inside p,
+#shipcloud-io .inside table{
+    padding: 0;
+    margin: 0 0 10px;
+}
+
+#shipcloud-io label {
+    padding-left: 2px;
+}
+
+#shipcloud-io .twentyfive {
+    width: 25%;
+    float:left;
+}
+
+#shipcloud-io .fifty {
+    width: 50% !important;
+    float: left !important;
+}
+
+#shipcloud-io .seventyfive {
+    width: 75%;
+    float:left;
+}
+
+#shipcloud-io .fullsize {
+    width: 100%;
+}
+
+#shipcloud-io.postbox .woocommerce-help-tip {
+    margin: 0;
+}
+
+#shipment-center .hide{
+    display: none;
+}
+#shipment-center .show{
+    display: block;
+}
+
+/**
+ * 	Container
+ */
+#shipcloud-io .section {
+    width: 96%;
+    padding: 1% 2% 2%;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+#shipcloud-io .section.addresses {
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+}
+
+#shipcloud-io .section.addresses > div {
+    width: 50%;
+}
+
+@media only screen and (max-width:580px) { 
+    #shipcloud-io .section.addresses {
+        flex-direction: column;
+    }
+    #shipcloud-io .section.addresses > div {
+        width: auto;
+    }
+}
+
+/**
+ * Address
+ */
+#shipcloud-io .address-form.sender {
+    padding-right:2%;
+    width:98%;
+}
+#shipcloud-io .address-form.recipient {
+    padding-left:2%;
+    width:98%;
+}
+/* #shipcloud-io .addresses label{
+    font-size: 10px;
+} */
+#shipcloud-io .addresses input,
+#shipcloud-io .addresses select {
+    width: 100%;
+}
+
+/**
+ * Parcels
+ */
+
+ #shipcloud-io .cod-table th{
+   font-weight: normal;
+   padding-top: 8px;
+   text-align: right;
+   vertical-align: top;
+   width: max-content;
+ }
+
+#shipcloud-io .parcels {
+    background: #f8f8f8 none repeat scroll 0 0;
+    padding-bottom: 0;
+}
+#wpbody-content .inline-edit-row-page .inline-edit-col-right.parcels-edit-bulk {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 0 20px rgb(0 0 0 / 20%);
+    margin-bottom: 20px;
+}
+
+.parcels__columns-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+#shipcloud-io .parcels .create-label,
+#shipcloud-io .parcels .additional_services{
+    width: 100%;
+}
+@media only screen and (min-width:580px) { 
+    .parcels__columns-wrapper {
+        flex-direction: row;
+    }
+    #shipcloud-io .parcels .create-label,
+    #shipcloud-io .parcels .additional_services{
+        width: 50%;
+    }
+}
+#shipcloud-io .parcels legend {
+  font-weight: 700;
+  padding: 0;
+}
+#shipcloud-io .parcel-form-table {
+    width: 100%;
+    text-align: left;
+}
+
+.parcel-form-section {
+    margin-bottom: 10px;
+}
+
+.parcel-dimensions {
+    display: flex;
+    gap: 20px;
+}
+.parcel-dimensions label,
+.parcel-weight label,
+.parcel-insurance label,
+.parcel-reference-number label,
+.parcel-labelformat label {
+    display: block;
+}
+#shipcloud-io .parcel-form-table .parcel-labelformat select {
+    width: 100%;
+    max-width: 100%;
+}
+
+.shipcloud-carrier-select {
+    display: flex;
+    gap: 10px;
+}
+
+.shipcloud-carrier-select select {
+    width: 33.333333%
+}
+
+/* #shipcloud-io .parcel-form-table select{
+    max-width:70%;
+} */
+
+#shipcloud-io .parcel-form-table .parcel-list {
+    width: 100%;
+}
+
+#shipcloud-io .btn-edit-address {
+    opacity: 0.4;
+    cursor: pointer;
+}
+
+#shipcloud-io .btn-edit-address:hover {
+    opacity: 1;
+}
+#shipcloud-io .parcel-form-table th{
+    font-weight: normal;
+    vertical-align: top;
+    padding-top: 8px;
+    width: 30%;
+}
+#shipcloud-io .parcel-form-table td{
+    vertical-align: top;
+    width: max-content;
+}
+#shipcloud-io .parcel-form-table input[type=text],
+#shipcloud-io .additional_services .shipcloud_additional_service__advance_notice table,
+#shipcloud-io .additional_services .shipcloud_additional_service__advance_notice td:nth-of-type(2) {
+    width:100%;
+}
+
+#shipcloud-io .parcel-form-table input[type=text].lengths{
+    width:50px;
+}
+#shipcloud-io .parcel-form-table input[type=text].notification_email_input,
+#shipcloud-io .shipment-labels .shipcloud_misc input[type=text].notification_email_input {
+  width: 90%;
+}
+
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest,
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--latest {
+  display: inline-block;
+}
+
+#shipcloud-io .shipcloud_additional_service .date-picker {
+    width: 217px;
+}
+
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest {
+  margin-right: 15px;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--earliest label,
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time--latest label,
+#shipcloud-io .additional_services .shipcloud__delivery_time--earliest label,
+#shipcloud-io .additional_services .shipcloud__delivery_time--latest label {
+  width: 100%;
+}
+#shipcloud-io .additional_services .shipcloud__delivery_time--earliest label,
+#shipcloud-io .additional_services .shipcloud__delivery_time--latest label {
+  display: block;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time .pickup_date,
+#shipcloud-io .label-shipment-pickup-request .shipcloud__pickup_time .pickup_date {
+  width: 100px;
+}
+#shipcloud-io .parcel-form-table .shipcloud__pickup_time .pickup_time,
+#shipcloud-io .label-shipment-pickup-request .shipcloud__pickup_time .pickup_time {
+  width: 50px;
+}
+#shipcloud-io .parcel-template-field{
+    margin-bottom:10px;
+}
+#shipcloud-io .parcel-template-field label{
+    display: block;
+}
+#shipcloud-io .parcel-template-field select{
+    font-size: 13px;
+}
+
+/**
+ * 	Action Buttons
+ */
+#shipcloud-io #button-actions {
+  margin: 15px 0 25px;
+}
+#shipcloud-io #button-actions .button {
+  float: left;
+  margin-right: .25em;
+  width: 100%;
+}
+@media only screen and (min-width:580px) { 
+    #shipcloud-io #button-actions .button {
+        width: auto;
+      }
+}
+
+#shipcloud-io #button-actions .button-primary {
+  float: none;
+  margin-right: 0;
+}
+#shipcloud-io .button-loading{
+    background-image: url('../images/loading.gif');
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    padding-left: 28px;
+}
+
+#shipcloud-io .button-loading-blue {
+    background-image: url('../images/loading-blue.gif');
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    padding-left: 28px;
+}
+
+/**
+ * 	Shipments
+ */
+
+.shipcloud-widget-icon{
+    float: left;
+    margin: -8px 15px 0 -5px;
+}
+#shipcloud-io .info{
+    padding: 0 20px;
+}
+
+#shipcloud-io .info .error{
+    border-left: 5px #FBC2C4 solid;
+    background: #FBE3E4;
+    color: #8a1f11;
+    margin: 20px 0;
+    padding: 12px 12px 6px 12px;
+}
+#shipcloud-io .info .error ul{
+    padding: 0px;
+    margin: 0px;
+}
+#shipcloud-io .info .notice{
+    border-left: 5px solid #C6D880;
+    background: #E6EFC2;
+    color: #264409;
+    margin: 20px 0;
+    padding: 12px;
+}
+#shipcloud-io .notice.notice-info p {
+  margin: .5em 0;
+}
+
+#shipcloud-io .shipment-labels .loading-overlay .spin-loader {
+    height: 100px;
+    background: url("../../assets/images/loading.gif") no-repeat center center transparent;
+    position: relative;
+    top: 25%;
+}
+
+#shipcloud-io .shipment-labels .loading-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    opacity: 0.6;
+}
+
+#shipcloud-io .shipment-labels fieldset {
+    border: 1px solid #aaa;
+    padding: 0 1em 1em 1em;
+    margin: 1em;
+}
+
+#shipcloud-io .shipment-labels label {
+    display: block;
+    margin-top: 0.5em;
+}
+
+#shipcloud-io .shipment-labels input {
+    width: 100%;
+}
+
+#shipcloud-io .shipment-labels input[type="checkbox"] {
+    width: 16px;
+}
+
+#shipcloud-io .shipment-labels .shipment_from_care_of_spacer {
+  height: 45px;
+}
+
+#shipcloud-io .shipment-labels .widget-title{
+    padding:15px;
+}
+
+#shipcloud-io .shipment-labels .widget-title h4{
+    margin: 0;
+    line-height: 16px;
+}
+#shipcloud-io .shipment-labels .widget-inside{
+    padding:20px;
+}
+
+.shipment-labels .widget-quick-actions {
+    float: right;
+    position: relative;
+    margin-top: 10px;
+    margin-right: 10px;
+    display: none;
+}
+
+@media only screen and (min-width:580px) { 
+    .shipment-labels .widget-quick-actions {
+        display: block;
+    }   
+}
+
+.label-shipment-status-section {
+    display: flex;
+    flex-direction: column;
+}
+.shipment-info-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+@media only screen and (min-width:580px) { 
+    .shipment-info-item {
+        flex-direction: row;
+        margin-bottom: 0;
+    }   
+}
+
+.shipment-info-item__label {
+    min-width: 150px;
+    font-weight: bold;
+}
+
+.shipment-info-item__value {
+    word-break: break-all;
+}
+
+.shipment-labels .widget-quick-actions .btn-primary {
+    color:#fff;
+    background-color:#337ab7;
+    border-color:#2e6da4;
+}
+
+.shipment-labels .shipcloud_delete_shipment,
+.shipment-labels .shipcloud_delete_shipment:hover,
+.shipment-labels .shipcloud_delete_shipment:focus
+{
+    color:#fff;
+    background-color:#d9534f;
+    border-color:#d43f3a;
+}
+
+.shipment-labels .widget-quick-actions .dashicons,
+.shipment-labels .widget-quick-actions .dashicons-before:before {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    line-height: 24px;
+}
+
+.label-shipment-info {
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (min-width:580px) { 
+    .label-shipment-info {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }   
+}
+
+#shipcloud-io .shipment-labels .label {
+    margin: 10px 0;
+    padding: 0;
+}
+
+#shipcloud-io .shipment-labels .label:first-child {
+    margin-top: 20px;
+}
+
+@media only screen and (min-width:580px) { 
+    #shipcloud-io .shipment-labels .label {
+        margin: 10px 20px;
+    }
+    
+    #shipcloud-io .shipment-labels .label:first-child {
+        margin: 20px 20px 10px 20px;
+    }
+    
+    #shipcloud-io .shipment-labels .label:last-child {
+        margin: 10px 20px 20px 20px;
+    }
+}
+
+#shipcloud-io .shipment-labels .address,
+#shipcloud-io .shipment-labels .label-shipment-additional-services,
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-basic-data,
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-item-data,
+#shipcloud-io .shipment-labels .label-shipment-pickup-request,
+fieldset .shipment-labels .address {
+    width: 29%;
+    display: inline-block;
+    margin: 20px 1%;
+    vertical-align: top;
+}
+
+#shipcloud-io .shipment-labels .label-shipment-status {
+    width: 100%;
+    display: inline-block;
+    margin: 20px 1%;
+    vertical-align: middle;
+}
+
+#shipcloud-io .shipment-labels .label-shipment-additional-services ul {
+  list-style-type: circle;
+}
+
+#shipcloud-io .label-shipment-actions{
+    text-align: right;
+    width: 100%;
+    display: inline-block;
+}
+
+#shipcloud-io .label-shipment-actions a,
+#shipcloud-io .label-shipment-actions input,
+#shipcloud-io .label-shipment-actions button
+{
+    min-width: 240px;
+    text-align: center;
+    margin: 0.5em 0;
+}
+
+#shipcloud-io .label-shipment-status table th {
+    text-align: left;
+}
+
+#shipcloud-io .label-shipment-status table td{
+    padding-left:20px;
+}
+
+#shipcloud-io .parcel-templates  label{
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+#shipcloud-io .parcel-templates select{
+    max-width:60%;
+}
+
+#shipcloud-io .additional_services .additional_services__infobox {
+  margin-bottom: 1em;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__checkbox,
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__text {
+  float: left;
+}
+
+#shipcloud-io .parcel-form-section .shipcloud_notification_email_checkbox,
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__checkbox {
+  /* margin: 0 1em 0.75em 1em; */
+  margin-right: 10px;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_additional_service__text {
+  margin-bottom: 0.75em;
+  width: 80%;
+}
+
+#shipcloud-io .shipcloud_additional_service--hidden {
+  display: none;
+}
+
+#shipcloud-io .shipcloud_drop_authorization textarea,
+#shipcloud-io .shipcloud_delivery_note textarea {
+  width: 50%;
+}
+
+#shipcloud-io .additional-services-details {
+  color: #999;
+  font-size: 10px;
+}
+
+/**
+ * Post type Page
+ */
+.post-type-sc_parcel_template #post-body-content{
+    margin: 0;
+}
+.post-type-sc_parcel_template #minor-publishing-actions,
+.post-type-sc_parcel_template #misc-publishing-actions{
+    display: none;
+}
+#shipcloud-parcel-settings .form-table th{
+    font-weight: normal;
+}
+#shipcloud-parcel-settings .form-table input[type="text"]{
+    width:50px;
+}
+
+/**
+ * Shipment Classes
+ */
+.shipcloud-parcel-form-field input[type="text"]{
+    width:50px;
+}
+.form-field.shipment-settings label{
+    float: left;
+    line-height: 26px;
+    margin-right: 10px;
+    width: 15%;
+}
+.form-field.shipment-settings input[type="text"]{
+    width:50px;
+}
+
+/**
+ * Dialogs
+ */
+#ask-create-label,
+#ask-delete-shipment,
+#ask-force-delete-shipment {
+    display: none;
+}
+
+/**
+ * 	Dialog (because WooCommerce adds jQuery UI CSS from google)
+ */
+.wp-admin .wcsc-dialog {
+    border-radius: 0;
+}
+
+.wp-admin .wcsc-dialog .ui-corner-all {
+    border-radius: 0;
+}
+
+.wp-admin .wcsc-dialog .ui-widget-header {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #CCC;
+}
+
+.wp-admin .wcsc-dialog .ui-button {
+    background: none;
+}
+
+.wp-admin .wcsc-dialog .ui-dialog-titlebar-close::before {
+    content: '';
+}
+
+/**
+ * Additional services
+ */
+/* #shipcloud-io .shipcloud_additional_service input[type="text"] {
+  width: 100%;
+} */
+
+/* #shipcloud-io .shipcloud_additional_service label {
+  font-size: 10px;
+} */
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_cash_on_delivery {
+  margin-top: 10px;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_cash_on_delivery .shipcloud_cash_on_delivery--left {
+  width: 98%;
+  padding-right: 2%;
+}
+
+#shipcloud-io .shipcloud_additional_service .shipcloud_cash_on_delivery .shipcloud_cash_on_delivery--right {
+  width: 98%;
+  padding-left: 2%;
+}
+/**
+ * Conflicts
+ */
+
+/* woocommerce-tm-extra-product-options */
+#shipcloud-io .fullsize {
+    position: inherit;
+}
+
+#wscs_order_bulk_pdf {
+    margin-right: 0.5em;
+}
+
+/**
+ * Bulk
+ */
+#wcsc-order-bulk-labels td {
+  padding-top: 4px;
+}
+#wcsc-order-bulk-labels .shipcloud_additional_service__advance_notice td {
+  padding: 4px 0 0 0;
+}
+
+#wcsc-order-bulk-labels #shipcloud-io .shipcloud_additional_service .advance_notice_input {
+  width: 98%;
+}
+
+#wcsc-order-bulk-labels #shipcloud-io  .parcel-form-section.parcel-notification-email label {
+  display: inline;
+}
+
+#shipcloud-io .order-id-list .bulkid {
+  display: inline-block;
+}
+
+#shipcloud-io .customs_declaration_button {
+  padding: .5em;
+}
+
+#shipcloud-io .customs-declaration__infotext {
+  padding: 1em 0 0 1em;
+}
+
+#shipcloud_bulk .parcel-form-table th {
+  width: 25%;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address {
+  display: none;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field {
+  float: left;
+  clear: left;
+  width: 48%;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_last_name_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_number_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_city_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_state_field {
+  float: right;
+  clear: right;
+}
+
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field.pickup_address_company_field,
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .pickup_address_phone_field {
+  width: 100%;
+  clear: both
+}
+.shipcloud-pickup-request-form-table .shipcloud-different-pickup-address .form-field .select2-container {
+  width: 100%!important;
+}
+
+/**
+ * Customs declaration
+ */
+/* #shipcloud-io .customs-declaration--definition, */
+#shipcloud-io .customs-declaration {
+  display: none;
+}
+#shipcloud-io .customs-declaration--items_content {
+  padding-left: 10px;
+}
+
+#shipcloud-io .customs-declaration--items fieldset {
+  border: 1px solid;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-data th {
+  font-size: 10px;
+  font-weight: normal;
+  text-align: left;
+}
+
+#shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-data td {
+  padding-left: 10px;
+}
+
+#woocommerce-embedded-layout__primary,
+#woocommerce-gzd-order-shipments {
+	display: none !important;
+}
