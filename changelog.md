@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1
+
+### Fixed
+- Error due to invalid header
+
 ## 2.0.0
 This is a complete code rewrite which also incorporates the new shipcloud PHP SDK.
 
