@@ -29,7 +29,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this plugin. If not, see License URI.
-
  * 
  * @category  Class
  * @package   WC_Shipping_Shipcloud
