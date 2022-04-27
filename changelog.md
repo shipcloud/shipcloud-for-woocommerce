@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.2
+
+### Fixed
+- Error due to missing additional services
+
 ## 2.0.1
 
 ### Fixed
