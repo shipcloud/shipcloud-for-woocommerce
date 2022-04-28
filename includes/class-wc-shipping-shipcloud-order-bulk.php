@@ -211,7 +211,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 					
 				} catch ( \RuntimeException $e ) {
 					$error_message = sprintf(
-						__( 'Couldn’t save label for order #%d to disk: %s' ),
+						__( 'Couldn’t save label for order #%d to disk: %s', 'shipcloud-for-woocommerce' ),
 						$order_id,
 						str_replace( "\n", ', ', $e->getMessage() )
 					);
@@ -241,7 +241,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 						
 					} catch ( \RuntimeException $e ) {
 						$error_message = sprintf(
-							__( 'Couldn’t save customs declaration documents for order #%d to disk: %s' ),
+							__( 'Couldn’t save customs declaration documents for order #%d to disk: %s', 'shipcloud-for-woocommerce' ),
 							$order_id,
 							str_replace( "\n", ', ', $e->getMessage() )
 						);

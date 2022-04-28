@@ -2,6 +2,9 @@
 
 ## 2.0.2
 
+### Enhanced
+- Added some missing translations
+
 ### Fixed
 - Error due to missing additional services
 

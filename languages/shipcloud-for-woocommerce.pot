@@ -2,14 +2,14 @@
 # This file is distributed under the GNU General Public License v3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: shipcloud for WooCommerce 2.0.0\n"
+"Project-Id-Version: shipcloud for WooCommerce 2.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shipcloud-for-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-04-11T10:59:37+00:00\n"
+"POT-Creation-Date: 2022-04-27T14:00:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: shipcloud-for-woocommerce\n"
@@ -111,13 +111,13 @@ msgstr ""
 
 #: includes/class-wc-shipping-shipcloud-cpt-parcel-template.php:130
 #: includes/class-wc-shipping-shipcloud-cpt-parcel-template.php:131
-#: woocommerce-shipping-shipcloud.php:421
-#: woocommerce-shipping-shipcloud.php:422
+#: woocommerce-shipping-shipcloud.php:425
+#: woocommerce-shipping-shipcloud.php:426
 msgid "Parcel templates"
 msgstr ""
 
 #: includes/class-wc-shipping-shipcloud-cpt-parcel-template.php:162
-#: woocommerce-shipping-shipcloud.php:226
+#: woocommerce-shipping-shipcloud.php:230
 msgid "Settings"
 msgstr ""
 
@@ -154,31 +154,39 @@ msgstr ""
 msgid "Unknown bulk action called. Order IDs: %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order-bulk.php:278
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:214
+msgid "Couldn’t save label for order #%d to disk: %s"
+msgstr ""
+
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:244
+msgid "Couldn’t save customs declaration documents for order #%d to disk: %s"
+msgstr ""
+
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:283
 msgid "Could not compose labels into one PDF."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order-bulk.php:317
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:322
 msgid "Could not compose customs declaration documents into one PDF."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order-bulk.php:386
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:391
 msgid "Pickup for shipment %s already requested, nothing to do here."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order-bulk.php:422
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:427
 msgid "Pickup request failed. Carrier %s (Shipment-IDs: %s), Error: %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order-bulk.php:432
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:437
 msgid "Error while creating a pickup request for orders %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order-bulk.php:436
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:441
 msgid "Pickup request failed. Carrier %s (Shipment-IDs: %s), please refer to log file."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order-bulk.php:445
+#: includes/class-wc-shipping-shipcloud-order-bulk.php:450
 msgid "Pickup request for orders %s successfully created"
 msgstr ""
 
@@ -221,6 +229,14 @@ msgstr ""
 msgid "Shipment successfully created or updated"
 msgstr ""
 
+#: includes/class-wc-shipping-shipcloud-order.php:547
+msgid "Not authenticated"
+msgstr ""
+
+#: includes/class-wc-shipping-shipcloud-order.php:554
+msgid "Bad Request"
+msgstr ""
+
 #: includes/class-wc-shipping-shipcloud-order.php:612
 msgid "Error while updating shipment: %s"
 msgstr ""
@@ -237,6 +253,10 @@ msgstr ""
 msgid "Could not delete shipment. Reason: %s"
 msgstr ""
 
+#: includes/class-wc-shipping-shipcloud-order.php:684
+msgid "Shipment %s has been deleted."
+msgstr ""
+
 #: includes/class-wc-shipping-shipcloud-order.php:731
 msgid "Error while creating or updating shipment"
 msgstr ""
@@ -245,32 +265,32 @@ msgstr ""
 msgid "Could not get pakadoo point. Reason: %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:940
+#: includes/class-wc-shipping-shipcloud-order.php:936
 msgid "shipcloud label has been prepared."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:946
-#: includes/class-wc-shipping-shipcloud-order.php:962
+#: includes/class-wc-shipping-shipcloud-order.php:942
+#: includes/class-wc-shipping-shipcloud-order.php:958
 msgid "Customs declaration documents not necessary. Therefore they were ignored."
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1517
+#: includes/class-wc-shipping-shipcloud-order.php:1559
 msgid "Pickup date and time fields must not be empty!"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1527
+#: includes/class-wc-shipping-shipcloud-order.php:1569
 msgid "Carrier missing in request"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1591
+#: includes/class-wc-shipping-shipcloud-order.php:1633
 msgid "Couldn't prepare pickup: %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1719
+#: includes/class-wc-shipping-shipcloud-order.php:1761
 msgid "Pickup request created with id %s for shipment with id %s"
 msgstr ""
 
-#: includes/class-wc-shipping-shipcloud-order.php:1812
+#: includes/class-wc-shipping-shipcloud-order.php:1854
 #: includes/class-wc-shipping-shipcloud-webhook.php:266
 msgid "shipcloud shipment has been deleted."
 msgstr ""
@@ -699,7 +719,7 @@ msgid "When active you won't have to provide pickup data when creating a shipmen
 msgstr ""
 
 #: includes/data/data-global-settings-form-fields.php:37
-#: includes/templates/template-label-form.php:101
+#: includes/templates/template-label-form.php:106
 msgid "Notification email"
 msgstr ""
 
@@ -1135,21 +1155,21 @@ msgstr ""
 msgid "When using the additional service Guaranteed24Service the carrier GLS is guaranteeing delivery on the next business day (except Saturdays) for shipments within Germany. If the delivery can't be made within time, GLS will refund the extra charges for the service."
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:405
+#: includes/templates/template-additional-services-edit-form.php:411
 #: includes/templates/template-order-label.php:85
 msgid "Advance notice"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:406
+#: includes/templates/template-additional-services-edit-form.php:412
 msgid "The carrier will notify the recipient about an upcoming delivery"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:426
+#: includes/templates/template-additional-services-edit-form.php:432
 #: includes/templates/template-order-label.php:88
 msgid "eMail"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:450
+#: includes/templates/template-additional-services-edit-form.php:456
 #: includes/templates/template-order-label.php:90
 #: includes/templates/template-order-shipment-center.php:75
 #: includes/templates/template-order-shipment-center.php:168
@@ -1157,59 +1177,59 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:474
+#: includes/templates/template-additional-services-edit-form.php:480
 #: includes/templates/template-order-label.php:92
 msgid "SMS"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:487
+#: includes/templates/template-additional-services-edit-form.php:493
 msgid "The contract selected for this shipping service provider does not support any additional services other than advance notice. However, the customer has not given permission for this."
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:511
+#: includes/templates/template-additional-services-edit-form.php:517
 #: includes/templates/template-order-label.php:176
 msgid "Named person only"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:512
+#: includes/templates/template-additional-services-edit-form.php:518
 msgid "The named person only service ensures in an uncomplicated and cost-effective way that your parcels are only delivered to the recipient in person or to an authorized person."
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:526
+#: includes/templates/template-additional-services-edit-form.php:532
 #: includes/templates/template-order-label.php:216
 msgid "Parcel outlet routing"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:527
+#: includes/templates/template-additional-services-edit-form.php:533
 msgid "With the DHL additional service retail outlet routing you can tell the carrier to reroute a parcel to the nearest outlet when the recipient can't be reached. Otherwise the parcel will be returned immediately."
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:557
+#: includes/templates/template-additional-services-edit-form.php:563
 #: includes/templates/template-order-label.php:168
 msgid "Endorsement"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:558
+#: includes/templates/template-additional-services-edit-form.php:564
 msgid "Prior to sending your parcel you can specify what should happen to the shipment in case it cannot be delivered in the destination country. By choosing the handling option abandon, your parcel will not be returned to you, but rather auctioned off or destroyed by the recipient countrys' postal company. You will not be charged with a return fee for this option. When using the option return_immediately, the shipment will be returned to you and you will be charged for returning it."
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:570
+#: includes/templates/template-additional-services-edit-form.php:576
 msgid "Select a handling"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:573
+#: includes/templates/template-additional-services-edit-form.php:579
 msgid "Abandon"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:576
+#: includes/templates/template-additional-services-edit-form.php:582
 msgid "Return immediately"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:590
+#: includes/templates/template-additional-services-edit-form.php:596
 msgid "Pickup"
 msgstr ""
 
-#: includes/templates/template-additional-services-edit-form.php:591
+#: includes/templates/template-additional-services-edit-form.php:597
 msgid "For some carriers it is mandatory to pass a pickup object when creating a shipment"
 msgstr ""
 
@@ -1289,7 +1309,7 @@ msgstr ""
 #: includes/templates/template-customs-declaration-edit-form.php:159
 #: includes/templates/template-customs-declaration-edit-form.php:237
 #: includes/templates/template-order-label.php:313
-#: woocommerce-shipping-shipcloud.php:331
+#: woocommerce-shipping-shipcloud.php:335
 msgid "Origin country"
 msgstr ""
 
@@ -1314,13 +1334,13 @@ msgstr ""
 #: includes/templates/template-customs-declaration-edit-form.php:197
 #: includes/templates/template-customs-declaration-edit-form.php:277
 #: includes/templates/template-order-label.php:337
-#: woocommerce-shipping-shipcloud.php:322
+#: woocommerce-shipping-shipcloud.php:326
 msgid "HS tariff number"
 msgstr ""
 
 #: includes/templates/template-customs-declaration-edit-form.php:198
 #: includes/templates/template-customs-declaration-edit-form.php:278
-#: woocommerce-shipping-shipcloud.php:324
+#: woocommerce-shipping-shipcloud.php:328
 msgid "Harmonized System Tariff Number"
 msgstr ""
 
@@ -1390,11 +1410,11 @@ msgstr ""
 msgid "Package description"
 msgstr ""
 
-#: includes/templates/template-label-form.php:107
+#: includes/templates/template-label-form.php:112
 msgid "Skip when shipping label present"
 msgstr ""
 
-#: includes/templates/template-label-form.php:108
+#: includes/templates/template-label-form.php:113
 msgid "Activate, if you want to skip label creation for an order if there is already a shipping label present"
 msgstr ""
 
@@ -1567,6 +1587,7 @@ msgid "For detailed information about shipping to dutiable countries, please ref
 msgstr ""
 
 #: includes/templates/template-order-labels-bulk.php:162
+#: includes/templates/template-order-labels-bulk.php:171
 msgid "Leave empty to use email address from order"
 msgstr ""
 
@@ -1575,7 +1596,7 @@ msgstr ""
 msgid "Leave empty to use phone number from order"
 msgstr ""
 
-#: includes/templates/template-order-labels-bulk.php:186
+#: includes/templates/template-order-labels-bulk.php:189
 msgid "Create labels"
 msgstr ""
 
@@ -1597,7 +1618,7 @@ msgstr ""
 #: includes/templates/template-order-shipment-center.php:18
 #: includes/templates/template-order-shipment-center.php:89
 #: includes/templates/template-pickup-request-form-table.php:29
-#: woocommerce-shipping-shipcloud.php:281
+#: woocommerce-shipping-shipcloud.php:285
 msgid "Company"
 msgstr ""
 
@@ -1649,10 +1670,6 @@ msgstr ""
 
 #: includes/templates/template-order-shipment-center.php:178
 msgid "Create shipment"
-msgstr ""
-
-#: includes/templates/template-order-shipment-center.php:245
-msgid "WooCommerce OrderID: %s"
 msgstr ""
 
 #: includes/templates/template-order-shipment-center.php:265
@@ -1813,58 +1830,62 @@ msgstr ""
 msgid "You're running version %s"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:282
+#: templates/requirements-error.php:23
+msgid "If you need to upgrade your version of PHP you can ask your hosting company for assistance, and if you need help upgrading WordPress you can refer to <a href='%s' target='_blank'>the Codex</a>."
+msgstr ""
+
+#: woocommerce-shipping-shipcloud.php:286
 msgid "The name of your business."
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:294
+#: woocommerce-shipping-shipcloud.php:298
 msgid "Contact"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:295
+#: woocommerce-shipping-shipcloud.php:299
 msgid "The name of the contact person."
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:410
+#: woocommerce-shipping-shipcloud.php:414
 msgid "shipcloud Settings"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:411
+#: woocommerce-shipping-shipcloud.php:415
 msgid "shipcloud"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:458
+#: woocommerce-shipping-shipcloud.php:462
 msgid "Yes"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:459
+#: woocommerce-shipping-shipcloud.php:463
 msgid "No"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:460
+#: woocommerce-shipping-shipcloud.php:464
 msgid "Force delete Dialog"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:462
+#: woocommerce-shipping-shipcloud.php:466
 msgid "Select options"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:463
+#: woocommerce-shipping-shipcloud.php:467
 msgid "Search"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:464
+#: woocommerce-shipping-shipcloud.php:468
 msgid " selected"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:465
+#: woocommerce-shipping-shipcloud.php:469
 msgid "Select all"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:466
+#: woocommerce-shipping-shipcloud.php:470
 msgid "Unselect all"
 msgstr ""
 
-#: woocommerce-shipping-shipcloud.php:467
+#: woocommerce-shipping-shipcloud.php:471
 msgid "None Selected"
 msgstr ""

@@ -20,5 +20,5 @@
 		<?php endif; ?>		
 	</ul>
 
-	<p><?php echo sprintf( __( "If you need to upgrade your version of PHP you can ask your hosting company for assistance, and if you need help upgrading WordPress you can refer to <a href='%s' target='_blank'>the Codex</a>." ), "https://wordpress.org/support/article/updating-wordpress/" ); ?></p>
+	<p><?php echo sprintf( __( "If you need to upgrade your version of PHP you can ask your hosting company for assistance, and if you need help upgrading WordPress you can refer to <a href='%s' target='_blank'>the Codex</a>.", "shipcloud-for-woocommerce" ), "https://wordpress.org/support/article/updating-wordpress/" ); ?></p>
 </div>

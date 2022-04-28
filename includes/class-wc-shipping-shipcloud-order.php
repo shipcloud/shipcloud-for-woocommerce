@@ -544,14 +544,14 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			
 	        if ( ! is_user_logged_in() && ! is_admin() ) {
 		        if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-		            wp_send_json_error( new \WP_Error( 403, __( 'Not authenticated' ) ), 403 );
+		            wp_send_json_error( new \WP_Error( 403, __( 'Not authenticated', 'shipcloud-for-woocommerce' ) ), 403 );
 		        }
 	            return;
 	        }
 
 	        if ( ! isset( $_POST['shipment'] ) ) {
 		        if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-		            wp_send_json_error( new \WP_Error( 400, __( 'Bad Request' ) ), 400 );
+		            wp_send_json_error( new \WP_Error( 400, __( 'Bad Request', 'shipcloud-for-woocommerce' ) ), 400 );
 		        }
 	            return;
 	        }
@@ -681,7 +681,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                     'status'	=> 'OK',
                     'html'		=> '',
                     'data'		=> [ $shipment_id ],
-                    'message'	=> sprintf( __( "Shipment %s has been deleted." ), $shipment_id ),
+                    'message'	=> sprintf( __( "Shipment %s has been deleted.", 'shipcloud-for-woocommerce' ), $shipment_id ),
 				)
            );
            exit();
