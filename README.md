@@ -2,7 +2,7 @@
 
 Contributors: andrecedik, shipcloud
 Tags: woocommerce, shipping, tracking, stamps
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Requires at least: 5.2.0
 Tested up to: 5.9.1
 Requires PHP: 7.4.2
