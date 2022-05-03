@@ -4,6 +4,7 @@
 
 ### Fixed
 - Removed unnecessary `id` field from customs declaration data
+- Error due to missing API key
 
 ## 2.0.2
 

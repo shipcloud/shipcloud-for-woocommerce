@@ -1302,7 +1302,13 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 		private function get_api() {
 			
 			if ( empty( $this->api_key ) ) {
-				return false;
+        $error = sprintf( 
+          __( 'No shipcloud API Key found! Please enter your <a href="%s">shipcloud API Key</a>.', 'shipcloud-for-woocommerce' ), 
+          admin_url( 'admin.php?page=wc-settings&tab=shipping&section=shipcloud' ) 
+        );
+        $this->log( $error, 'error' );
+        return new WP_Error( 444, $error );
+				// return false;
 			}
 			
 			try {
