@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.3
+
+### Fixed
+- Removed unnecessary `id` field from customs declaration data
+
 ## 2.0.2
 
 ### Enhanced

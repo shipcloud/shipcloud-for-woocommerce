@@ -1433,7 +1433,6 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 
 		    $items = [];
             foreach ( $line_items as $line_item_key => $line_item_data ) {
-                $line_item_data['id'] = $line_item_key;
 				$items[] = $line_item_data;
             }
 
