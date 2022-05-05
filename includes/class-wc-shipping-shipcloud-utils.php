@@ -225,7 +225,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 			}
 
 			$html = '<div class="shipcloud_tracking__timeline shipcloud_tracking__timeline--'.$status.'">';
-			$html .= '<i class="fas '.$icon.'"></i>';
+			$html .= '<i class="fa-solid '.$icon.'"></i>';
 			$html .= '</div>';
 			echo $html;
 		}

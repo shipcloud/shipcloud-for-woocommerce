@@ -6,25 +6,25 @@
     <# if ( data.model.get('label_url') ) { #>
         <# if ( data.model.get('customs_declaration').carrier_declaration_document_url ) { #>
             <a href="{{ data.model.get('customs_declaration').carrier_declaration_document_url }}" target="_blank" class="button btn-primary">
-                <i class="fas fa-file-contract"></i>
+                <i class="fa-solid fa-file-contract"></i>
                 <?php _e( 'Download customs document', 'shipcloud-for-woocommerce' ); ?>
             </a>
         <# } #>
 
         <a href="{{ data.model.get('label_url') }}" target="_blank" class="button btn-primary">
-            <i class="fas fa-file-alt"></i>
+            <i class="fa-solid fa-file-alt"></i>
             <?php _e( 'Download label', 'shipcloud-for-woocommerce' ); ?>
         </a>
     <# } else { #>
         <button class="shipcloud_create_label btn-primary button" type="button" data-ask-create-label-check="<?php echo esc_attr($this->get_option( 'ask_create_label_check' )); ?>">
-            <i class="fas fa-plus-square"></i>
+            <i class="fa-solid fa-plus-square"></i>
             <?php _e( 'Create label', 'shipcloud-for-woocommerce' ); ?>
         </button>
     <# } #>
 	
 	<?php if ( $order_status !== 'completed' ) : ?>
     <button class="shipcloud_delete_shipment button" type="button">
-        <i class="fas fa-trash-alt"></i>
+        <i class="fa-solid fa-trash-alt"></i>
     </button>
 	<?php endif; ?>
 	
