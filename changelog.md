@@ -5,6 +5,9 @@
 ### Enhanced
 - update fontawesome from 5.15.4 to 6.1.1
 
+### Fixed
+- removed a check for user permissions that was throwing errors for some users
+
 ## 2.0.3
 
 ### Fixed

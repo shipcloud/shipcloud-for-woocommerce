@@ -1271,7 +1271,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		 * @return void
 		 */
 		public static function log( $message = '', $level = 'info', $context = [] ) {
-			if ( self::is_debug_enabled() || ( current_user_can( 'manage_options' ) && 'error' == $type ) ) {
+			if ( self::is_debug_enabled() ) {
 				if ( is_array( $message ) || is_object( $message ) ) {
 	                $message = print_r( $message, true );
 	            }
