@@ -2,7 +2,7 @@
  A php client sdk for shipcloud api
 
 - API version: 1.0.0 (https://developers.shipcloud.io/reference/)
-- Package version: 0.0.1
+- Package version: 0.0.2
 
 ## Requirements
 
@@ -16,10 +16,10 @@ To install the bindings via [Composer](http://getcomposer.org/), add the followi
 ```
 {
   "repositories": [
-	{
-		"type": "vcs",
-		"url": "git@github.com:shipcloud/shipcloud-php.git"
-	}
+    {
+        "type": "vcs",
+        "url": "git@github.com:shipcloud/shipcloud-php.git"
+    }
   ],
   "require": {
     "shipcloud/shipcloud-php": "*"
@@ -59,17 +59,17 @@ echo json_encode( $response );
 /*
 Output:
 {
-	"id": "usr-xxxxxxxx",
-	"email": "info@example.org",
-	"first_name": "John",
-	"last_name": "Doe",
-	"customer_no": "xxxxxxxx",
-	"environment": "sandbox",
-	"subscription": {
-		"plan_name": "developer",
-		"plan_display_name": "Developer",
-		"chargeable": false
-	}
+    "id": "usr-xxxxxxxx",
+    "email": "info@example.org",
+    "first_name": "John",
+    "last_name": "Doe",
+    "customer_no": "xxxxxxxx",
+    "environment": "sandbox",
+    "subscription": {
+        "plan_name": "developer",
+        "plan_display_name": "Developer",
+        "chargeable": false
+    }
 }
 */
 ```
