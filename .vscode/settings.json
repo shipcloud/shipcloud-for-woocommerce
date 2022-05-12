@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": false,
+    "editor.formatOnSaveMode": "modifications",
+    "files.trimTrailingWhitespace": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": false,
+        "source.fixAll.eslint": false
+    }
+}
