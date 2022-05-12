@@ -1381,6 +1381,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			if ( ! empty( $data ) && is_array( $data ) ) {
 				$address = new Address( 
 					$data['last_name'], 
+          $data['company'],
 					$data['street'], 
 					$data['street_no'], 
 					$data['city'], 
@@ -1388,9 +1389,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 					$data['country'] 
 				);
 				
-				if ( ! empty( $data['company'] ) ) {
-					$address->set_company( $data['company'] );
-				}
+				// if ( ! empty( $data['company'] ) ) {
+				// 	$address->set_company( $data['company'] );
+				// }
 				
 				if ( ! empty( $data['first_name'] ) ) {
 					$address->set_first_name( $data['first_name'] );

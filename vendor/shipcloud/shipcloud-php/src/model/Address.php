@@ -116,10 +116,10 @@ class Address extends AbstractApiObject {
 	 * @return void
 	 * @throws ApiException
 	 */
-	public function __construct( string $last_name, string $street, string $street_no, string $city, string $zip_code, string $country ) {
+	public function __construct( string $last_name, string $company, string $street, string $street_no, string $city, string $zip_code, string $country ) {
 		
-		if ( empty( $last_name ) ) {
-			throw new ApiException( 'Last_name must not be empty!' );
+		if ( empty( $last_name ) && empty( $company ) ) {
+			throw new ApiException( 'Last name or company must not be empty!' );
 		}
 		if ( empty( $street ) ) {
 			throw new ApiException( 'Street must not be empty!' );
@@ -146,8 +146,9 @@ class Address extends AbstractApiObject {
 		$this->city    		= $city;
 		$this->zip_code  	= $zip_code;
 		$this->country  	= $country;
+    $this->company  	= $company;
 		
-		$this->required = [ "last_name", "street", "street_no", "city", "zip_code", "country" ];
+		$this->required = [ "street", "street_no", "city", "zip_code", "country" ];
 	}
 	
 	/**
@@ -414,6 +415,9 @@ class Address extends AbstractApiObject {
 		}
 		if ( ! empty( $this->get_first_name() ) ) {
 			$result['first_name'] = $this->get_first_name();
+		}
+		if ( ! empty( $this->get_first_name() ) ) {
+			$result['last_name'] = $this->get_last_name();
 		}
 		if ( ! empty( $this->get_care_of() ) ) {
 			$result['care_of'] = $this->get_care_of();
