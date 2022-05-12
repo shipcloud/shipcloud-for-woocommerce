@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.5
+
+### Enhanced
+- updated shipcloud-php to version 0.0.2
+
+### Fixed
+- Bug that caused addresses without a last name to throw an error
+
 ## 2.0.4
 
 ### Enhanced
