@@ -11,6 +11,8 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
+use Jmleroux\PDFMerger\PDFMerger;
+
 if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 	
     class WC_Shipping_Shipcloud_Order_Bulk {
@@ -157,8 +159,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 
 			$pdf_basename 				= sha1( implode( ',', $order_ids ) ) . '.pdf';
 			$shipping_label_count 		= $customs_declaration_count = 0;
-			$shipping_label_merger 		= new \iio\libmergepdf\Merger();
-			$customs_declaration_merger = new \iio\libmergepdf\Merger();
+			$shipping_label_merger 		= new PDFMerger();
+			$customs_declaration_merger = new PDFMerger();
 
 			foreach ( $order_ids as $order_id ) {
 				$shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
@@ -206,7 +208,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 						$current['label_url'],
 						'shipping_label'
 					);
-					$shipping_label_merger->addFile( $path_to_shipping_label );
+					$shipping_label_merger->addPDF( $path_to_shipping_label );
 					$shipping_label_count++;
 					
 				} catch ( \RuntimeException $e ) {
@@ -236,7 +238,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 							$carrier_declaration_document_url,
 							'customs_declaration'
 						);
-						$customs_declaration_merger->addFile( $path_to_customs_declaration );
+						$customs_declaration_merger->addPDF( $path_to_customs_declaration );
 						$customs_declaration_count++;
 						
 					} catch ( \RuntimeException $e ) {
@@ -273,7 +275,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 												. $pdf_basename;
 
 				try {
-					$shipping_labels_pdf_content = $shipping_label_merger->merge();
+					$shipping_labels_pdf_content = $shipping_label_merger->merge( 'string' );
 				} catch ( \Exception $e ) {
 					$this->log( 'Couldn\'t merge shipping label pdf files: ' . $e->getMessage(), 'error' );
 				}
@@ -312,7 +314,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 													. $pdf_basename;
 				
 				try {
-					$customs_declaration_pdf_content = $customs_declaration_merger->merge();
+					$customs_declaration_pdf_content = $customs_declaration_merger->merge( 'string' );
 				} catch ( \Exception $e ) {
 					$this->log( 'Couldn\'t merge customs declaration documents pdf files: ' . $e->getMessage(), 'error' );
 				}

@@ -8,7 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'shipcloud\\phpclient\\' => array($vendorDir . '/shipcloud/shipcloud-php/src'),
     'setasign\\Fpdi\\' => array($vendorDir . '/setasign/fpdi/src'),
-    'iio\\libmergepdf\\' => array($vendorDir . '/iio/libmergepdf/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
+    'Jmleroux\\PDFMerger\\' => array($vendorDir . '/msltns/pdf-merger/src'),
 );
