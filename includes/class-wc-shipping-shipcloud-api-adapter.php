@@ -1381,7 +1381,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			if ( ! empty( $data ) && is_array( $data ) ) {
 				$address = new Address( 
 					$data['last_name'], 
-          $data['company'],
+					$data['company'],
 					$data['street'], 
 					$data['street_no'], 
 					$data['city'], 
@@ -1407,6 +1407,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 				
 				if ( ! empty( $data['care_of'] ) ) {
 					$address->set_care_of( $data['care_of'] );
+				}
+				
+				if ( ! empty( $data['state'] ) ) {
+					$address->set_state( $data['state'] );
 				}
 			}
 			
@@ -1492,7 +1496,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 					
 					$customs_declaration = new CustomsDeclaration( $contents_type, $currency, $total_amount, $items );
 					$customs_declaration->set_contents_explanation( $cd_data['contents_explanation'] );
-					$customs_declaration->set_additional_fees( floatval( $cd_data['additional_fees'] ) );
+					$customs_declaration->set_additional_fees( floatval( str_replace( ',', '.', $cd_data['additional_fees'] ) ) );
 					$customs_declaration->set_drop_off_location( $cd_data['drop_off_location'] );
 					$customs_declaration->set_exporter_reference( $cd_data['exporter_reference'] );
 					$customs_declaration->set_importer_reference( $cd_data['importer_reference'] );

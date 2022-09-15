@@ -620,7 +620,7 @@
 #shipcloud-io .shipment-labels .label-shipment-customs-declaration .customs-declaration-item-data,
 #shipcloud-io .shipment-labels .label-shipment-pickup-request,
 fieldset .shipment-labels .address {
-    width: 29%;
+    width: auto;
     display: inline-block;
     margin: 20px 1%;
     vertical-align: top;
@@ -896,5 +896,5 @@ fieldset .shipment-labels .address {
 
 #woocommerce-embedded-layout__primary,
 #woocommerce-gzd-order-shipments {
-	display: none !important;
+	/*display: none !important;*/
 }
