@@ -7,12 +7,11 @@
  * @copyright shipcloud GmbH
  * @license   GPL 3
  * @category  Class
-
  * @wordpress-plugin
  * Plugin Name: shipcloud for WooCommerce
  * Plugin URI: https://www.wordpress.org/plugins/shipcloud-for-woocommerce/
  * Description: Integrates shipcloud shipment services to your WooCommerce shop.
- * Version: 2.0.5
+ * Version: 2.0.8
  * Author: shipcloud GmbH
  * Author URI: https://shipcloud.io
  * Developer: shipcloud GmbH
@@ -449,7 +448,7 @@ class WooCommerce_Shipping_Shipcloud {
 		wp_register_style( 'shipcloud-admin', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/shipcloud-admin.css', false );
 		wp_register_style( 'jquery-multiselect', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/jquery.multiselect.css', false );
 		wp_enqueue_style( 'shopcloud-fa', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.min.css', false );
-    wp_enqueue_style( 'shopcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.solid.min.css', false );
+		wp_enqueue_style( 'shopcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.solid.min.css', false );
 		
 		wp_register_script( 'jquery-multiselect', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/jquery.multiselect.js', array( 'jquery' ) );
 		wp_register_script( 'shipcloud-label', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-label.js', array( 'jquery' ) );
@@ -479,15 +478,17 @@ class WooCommerce_Shipping_Shipcloud {
 		
 		wp_enqueue_script( 'jquery-serialize-json', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/jquery.serializejson.min.js', array( 'jquery' ) );
 		wp_enqueue_script( 'shipcloud-fa', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.min.js', false );
-    wp_enqueue_script( 'shipcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.solid.min.js', false );
+    	wp_enqueue_script( 'shipcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.solid.min.js', false );
 		
 	}
 	
 	public function enqueue_scripts() {
+		/*
 		wp_enqueue_style( 'shopcloud-fa', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.min.css', false );
-    wp_enqueue_style( 'shopcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.solid.min.css', false );
+    	wp_enqueue_style( 'shopcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_CSS_DIR . '/fontawesome.solid.min.css', false );
 		wp_enqueue_script( 'shipcloud-fa', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.min.js', false );
-    wp_enqueue_script( 'shipcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.solid.min.js', false );
+    	wp_enqueue_script( 'shipcloud-fa-solid', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/fontawesome.solid.min.js', false );
+		*/
 		wp_enqueue_script( 'shipcloud-frontend', WC_SHIPPING_SHIPCLOUD_JS_DIR . '/shipcloud-frontend.js', false );
 	}
 	
