@@ -1,10 +1,10 @@
 # shipcloud for WooCommerce
 
-Contributors: andrecedik, shipcloud
+Contributors: andrecedik, shipcloud, msltns
 Tags: woocommerce, shipping, tracking, stamps
-Stable tag: 2.0.5
-Requires at least: 5.2.0
-Tested up to: 5.9.1
+Stable tag: 2.0.8
+Requires at least: 5.2
+Tested up to: 6.1.0
 Requires PHP: 7.4.2
 
 This plugin integrates [shipcloud](http://bit.ly/shipcloud-for-woocommerce-en) into WooCommerce.
@@ -93,6 +93,27 @@ In order to guarantee the highest possible level of convenience, shipcloud takes
 8. Let your customers see tracking for their order from within their shop account
 
 ## Changelog
+
+### 2.0.8
+- Fontawesome scripts & styles removed from frontend (obsolet)
+- Fault tolerance on not available orders enhanced
+- Array to string conversion fixed
+
+### 2.0.7
+- Bugs fixed, minor optimizations
+
+### 2.0.6
+- PDF file merge library switched
+
+### 2.0.5
+
+### 2.0.4
+
+### 2.0.3
+
+### 2.0.2
+
+### 2.0.1
 
 ### 2.0.0
 This is a complete code rewrite which also incorporates the new shipcloud PHP SDK.

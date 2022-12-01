@@ -223,16 +223,18 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
             $addresses = $this->get_addresses();
             extract( $addresses );
 
-            $order 				= $this->get_wc_order( $this->order_id );
-			$order_status 		= $order->get_status();
-			$parcel_templates 	= $this->get_parcel_templates();
-            $carriers 			= $this->get_allowed_carriers();
+            $order = $this->get_wc_order( $this->order_id );
+			if ( $order && $order instanceof WC_Order ) {
+				$order_status 		= $order->get_status();
+				$parcel_templates 	= $this->get_parcel_templates();
+	            $carriers 			= $this->get_allowed_carriers();
 			
-			$shipping_method	= $order->get_shipping_method();
-			$shipping_method 	= WC_Shipping_Shipcloud_Utils::get_carrier_name_by_display_name( $shipping_method );
-			$shipping_method 	= WC_Shipping_Shipcloud_Utils::disassemble_carrier_name( $shipping_method );
+				$shipping_method	= $order->get_shipping_method();
+				$shipping_method 	= WC_Shipping_Shipcloud_Utils::get_carrier_name_by_display_name( $shipping_method );
+				$shipping_method 	= WC_Shipping_Shipcloud_Utils::disassemble_carrier_name( $shipping_method );
 			
-			include( dirname( __FILE__ ) . '/templates/template-order-shipment-center.php' );
+				include( dirname( __FILE__ ) . '/templates/template-order-shipment-center.php' );
+			}
         }
 		
         /**
@@ -1000,7 +1002,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 * Getting WC order object.
 		 * 
 		 * @param $order_id
-		 * @return WC_Order
+		 * @return WC_Order|bool
 		 */
 		public function get_wc_order( $order_id = '' ) {
 		    if ( empty( $order_id ) && ! empty( $this->order_id ) ) {
@@ -1161,8 +1163,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		private function get_care_of() {
 		    $order = $this->get_wc_order();
 
-		    if ( ! $order ) {
-		        // No order present.
+		    if ( !$order || !$order instanceof WC_Order ) {
+		        // No order found.
 		        return '';
 		    }
 
@@ -1199,15 +1201,22 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 * @return string
 		 */
 		public function get_email_for_notification() {
-		    $order = $this->get_wc_order();
-
-		    if ( method_exists( $order, 'get_billing_email' ) ) {
-		        return $order->get_billing_email();
-		    } elseif ( method_exists( $order, 'billing_email' ) ) {
-		        return $order->billing_email;
-		    } else {
+			
+			$order = $this->get_wc_order();
+			
+		    if ( !$order || !$order instanceof WC_Order ) {
+		        // No order found.
 		        return '';
 		    }
+			
+			$billing_email = '';
+			if ( method_exists( $order, 'get_billing_email' ) ) {
+		        $billing_email = $order->get_billing_email();
+		    } elseif ( method_exists( $order, 'billing_email' ) ) {
+		        $billing_email = $order->billing_email;
+		    }
+		    
+			return $billing_email;
 		}
 		
 		/**
@@ -1218,23 +1227,23 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		private function get_phone() {
 		    $order = $this->get_wc_order();
 
-		    if ( ! $order ) {
-		        // No order present.
+		    if ( !$order || !$order instanceof WC_Order ) {
+		        // No order found.
 		        return '';
 		    }
-
-        $recipient 	= $this->get_recipient();
-        if ( $recipient['phone'] ) {
-          return ( string ) $recipient['phone'];
-        }
-
-		    if ( method_exists( $order, 'get_meta' ) ) {
-		        return ( string ) $order->get_meta( '_shipping_phone' );
-		    } elseif ( method_exists( $order, 'get_meta_data' ) ) {
-		        return ( string ) $order->get_meta_data( '_shipping_phone' );
+			
+			$billing_phone = '';
+			
+			$recipient = $this->get_recipient();
+			if ( !empty( $recipient['phone'] ) ) {
+				$billing_phone = ( string ) $recipient['phone'];
+			} elseif ( method_exists( $order, 'billing_phone' ) ) {
+		        $billing_phone = ( string ) $order->billing_phone;
+		    } else {
+		    	$billing_phone = ( string ) get_post_meta( $order->get_id(), '_shipping_phone', true );
 		    }
-
-		    return ( string ) $order->billing_phone;
+			
+		    return $billing_phone;
 		}
 		
 		/**
@@ -1976,20 +1985,29 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 							$bank_account_number = array_key_exists( 'bank_account_number', $additional_service_value ) ? $additional_service_value['bank_account_number'] : "";
 							$reference = array_key_exists( 'reference1', $additional_service_value ) ? $additional_service_value['reference1'] : "";
 
-              if ( $reference == "" ) {
-                $global_reference_number = $this->get_option( 'global_reference_number' );
-                $order_id = $this->order_id;
-                if ( WC_Shipping_Shipcloud_Utils::shipcloud_admin_is_on_single_order_page() && ! empty( $order_id ) ) {
-                  if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
-                    $global_reference_number = str_replace( '[shipcloud_orderid]', $order_id, $global_reference_number );
-                  }
-                }
-                if ( $global_reference_number != "") {
-                  $reference = $global_reference_number;
-                }
-              }
-              $amount = array_key_exists( 'amount', $additional_service_value ) && $additional_service_value['amount'] != "" ? $additional_service_value['amount'] : $this->get_wc_order()->get_total();
-              $currency = array_key_exists( 'currency', $additional_service_value ) && $additional_service_value['currency'] != "" ? $additional_service_value['currency'] : 'EUR';
+							if ( $reference == "" ) {
+								$global_reference_number = $this->get_option( 'global_reference_number' );
+								$order_id = $this->order_id;
+								if ( WC_Shipping_Shipcloud_Utils::shipcloud_admin_is_on_single_order_page() && ! empty( $order_id ) ) {
+									if ( has_shortcode( $global_reference_number, 'shipcloud_orderid' ) ) {
+										$global_reference_number = str_replace( '[shipcloud_orderid]', $order_id, $global_reference_number );
+									}
+								}
+								if ( $global_reference_number != "") {
+									$reference = $global_reference_number;
+								}
+							}
+							$amount = 0;
+							if ( array_key_exists( 'amount', $additional_service_value ) && $additional_service_value['amount'] != "" ) {
+								$amount = $additional_service_value['amount'];
+							} else {
+								$order = $this->get_wc_order();
+								if ( $order && $order instanceof WC_Order ) {
+							        $amount = $order->get_total();
+							    }
+							}
+							
+							$currency = array_key_exists( 'currency', $additional_service_value ) && $additional_service_value['currency'] != "" ? $additional_service_value['currency'] : 'EUR';
 
 							$cod_array = array(
 								'name' 		 => 'cash_on_delivery',

@@ -1,7 +1,3 @@
-<?php
-	$options = get_option( 'woocommerce_shipcloud_settings' );
-?>
-
 <div class="parcel-form-table">
     <div class="parcel-form-section parcel-dimensions">
         <div>

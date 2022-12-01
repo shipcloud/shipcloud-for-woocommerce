@@ -12,10 +12,6 @@ class ComposerStaticInit2a08687958857bc6db8a78282c25240a
             'shipcloud\\phpclient\\' => 20,
             'setasign\\Fpdi\\' => 14,
         ),
-        'i' => 
-        array (
-            'iio\\libmergepdf\\' => 16,
-        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -23,6 +19,10 @@ class ComposerStaticInit2a08687958857bc6db8a78282c25240a
         'M' => 
         array (
             'Monolog\\' => 8,
+        ),
+        'J' => 
+        array (
+            'Jmleroux\\PDFMerger\\' => 19,
         ),
     );
 
@@ -35,10 +35,6 @@ class ComposerStaticInit2a08687958857bc6db8a78282c25240a
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
         ),
-        'iio\\libmergepdf\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/iio/libmergepdf/src',
-        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
@@ -47,13 +43,17 @@ class ComposerStaticInit2a08687958857bc6db8a78282c25240a
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'Jmleroux\\PDFMerger\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/msltns/pdf-merger/src',
+        ),
     );
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
-        'FPDF' => __DIR__ . '/..' . '/iio/libmergepdf/tcpdi/tcpdi.php',
-        'FPDF_TPL' => __DIR__ . '/..' . '/iio/libmergepdf/tcpdi/fpdf_tpl.php',
+        'FPDF' => __DIR__ . '/..' . '/setasign/fpdf/fpdf.php',
+        'Jmleroux\\PDFMerger\\PDFMerger' => __DIR__ . '/..' . '/msltns/pdf-merger/src/PDFMerger.php',
         'Monolog\\ErrorHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/ErrorHandler.php',
         'Monolog\\Formatter\\ChromePHPFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/ChromePHPFormatter.php',
         'Monolog\\Formatter\\ElasticaFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/ElasticaFormatter.php',
@@ -175,18 +175,7 @@ class ComposerStaticInit2a08687958857bc6db8a78282c25240a
         'TCPDF_IMPORT' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_import.php',
         'TCPDF_PARSER' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_parser.php',
         'TCPDF_STATIC' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/tcpdf_static.php',
-        'TCPDI' => __DIR__ . '/..' . '/iio/libmergepdf/tcpdi/tcpdi.php',
-        'iio\\libmergepdf\\Driver\\DefaultDriver' => __DIR__ . '/..' . '/iio/libmergepdf/src/Driver/DefaultDriver.php',
-        'iio\\libmergepdf\\Driver\\DriverInterface' => __DIR__ . '/..' . '/iio/libmergepdf/src/Driver/DriverInterface.php',
-        'iio\\libmergepdf\\Driver\\Fpdi2Driver' => __DIR__ . '/..' . '/iio/libmergepdf/src/Driver/Fpdi2Driver.php',
-        'iio\\libmergepdf\\Driver\\TcpdiDriver' => __DIR__ . '/..' . '/iio/libmergepdf/src/Driver/TcpdiDriver.php',
-        'iio\\libmergepdf\\Exception' => __DIR__ . '/..' . '/iio/libmergepdf/src/Exception.php',
-        'iio\\libmergepdf\\Merger' => __DIR__ . '/..' . '/iio/libmergepdf/src/Merger.php',
-        'iio\\libmergepdf\\Pages' => __DIR__ . '/..' . '/iio/libmergepdf/src/Pages.php',
-        'iio\\libmergepdf\\PagesInterface' => __DIR__ . '/..' . '/iio/libmergepdf/src/PagesInterface.php',
-        'iio\\libmergepdf\\Source\\FileSource' => __DIR__ . '/..' . '/iio/libmergepdf/src/Source/FileSource.php',
-        'iio\\libmergepdf\\Source\\RawSource' => __DIR__ . '/..' . '/iio/libmergepdf/src/Source/RawSource.php',
-        'iio\\libmergepdf\\Source\\SourceInterface' => __DIR__ . '/..' . '/iio/libmergepdf/src/Source/SourceInterface.php',
+        'TTFontFile' => __DIR__ . '/..' . '/setasign/tfpdf/font/unifont/ttfonts.php',
         'setasign\\Fpdi\\FpdfTpl' => __DIR__ . '/..' . '/setasign/fpdi/src/FpdfTpl.php',
         'setasign\\Fpdi\\FpdfTplTrait' => __DIR__ . '/..' . '/setasign/fpdi/src/FpdfTplTrait.php',
         'setasign\\Fpdi\\Fpdi' => __DIR__ . '/..' . '/setasign/fpdi/src/Fpdi.php',
@@ -271,7 +260,7 @@ class ComposerStaticInit2a08687958857bc6db8a78282c25240a
         'shipcloud\\phpclient\\model\\Shipment' => __DIR__ . '/..' . '/shipcloud/shipcloud-php/src/model/Shipment.php',
         'shipcloud\\phpclient\\model\\Tracker' => __DIR__ . '/..' . '/shipcloud/shipcloud-php/src/model/Tracker.php',
         'shipcloud\\phpclient\\model\\Webhook' => __DIR__ . '/..' . '/shipcloud/shipcloud-php/src/model/Webhook.php',
-        'tcpdi_parser' => __DIR__ . '/..' . '/iio/libmergepdf/tcpdi/tcpdi_parser.php',
+        'tFPDF' => __DIR__ . '/..' . '/setasign/tfpdf/tfpdf.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

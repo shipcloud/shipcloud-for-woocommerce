@@ -1,79 +1,18 @@
 {
     "packages": [
         {
-            "name": "iio/libmergepdf",
-            "version": "4.0.4",
-            "version_normalized": "4.0.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/hanneskod/libmergepdf.git",
-                "reference": "6613b978c08d00d559796ab510614243e4dd5dfb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hanneskod/libmergepdf/zipball/6613b978c08d00d559796ab510614243e4dd5dfb",
-                "reference": "6613b978c08d00d559796ab510614243e4dd5dfb",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1||^8.0",
-                "setasign/fpdi": "^2",
-                "tecnickcom/tcpdf": "^6.2.22"
-            },
-            "conflict": {
-                "rafikhaceb/tcpdi": "*",
-                "setasign/fpdf": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7|^8",
-                "smalot/pdfparser": "~0.13"
-            },
-            "time": "2020-12-07T12:18:49+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "iio\\libmergepdf\\": "src/"
-                },
-                "classmap": [
-                    "tcpdi/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "WTFPL"
-            ],
-            "authors": [
-                {
-                    "name": "Hannes Forsgård",
-                    "email": "hannes.forsgard@fripost.org"
-                }
-            ],
-            "description": "Library for merging multiple PDFs",
-            "homepage": "https://github.com/hanneskod/libmergepdf",
-            "keywords": [
-                "merge",
-                "pdf"
-            ],
-            "support": {
-                "issues": "https://github.com/hanneskod/libmergepdf/issues",
-                "source": "https://github.com/hanneskod/libmergepdf/tree/4.0.4"
-            },
-            "install-path": "../iio/libmergepdf"
-        },
-        {
             "name": "monolog/monolog",
-            "version": "1.26.1",
-            "version_normalized": "1.26.1.0",
+            "version": "1.27.1",
+            "version_normalized": "1.27.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "c6b00f05152ae2c9b04a448f99c7590beb6042f5"
+                "reference": "904713c5929655dc9b97288b69cfeedad610c9a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c6b00f05152ae2c9b04a448f99c7590beb6042f5",
-                "reference": "c6b00f05152ae2c9b04a448f99c7590beb6042f5",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/904713c5929655dc9b97288b69cfeedad610c9a1",
+                "reference": "904713c5929655dc9b97288b69cfeedad610c9a1",
                 "shasum": ""
             },
             "require": {
@@ -108,7 +47,7 @@
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
                 "sentry/sentry": "Allow sending log messages to a Sentry server"
             },
-            "time": "2021-05-28T08:32:12+00:00",
+            "time": "2022-06-09T08:53:42+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -136,7 +75,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Seldaek/monolog/issues",
-                "source": "https://github.com/Seldaek/monolog/tree/1.26.1"
+                "source": "https://github.com/Seldaek/monolog/tree/1.27.1"
             },
             "funding": [
                 {
@@ -149,6 +88,64 @@
                 }
             ],
             "install-path": "../monolog/monolog"
+        },
+        {
+            "name": "msltns/pdf-merger",
+            "version": "v2.0.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/msltns/pdf-merger.git",
+                "reference": "3855cfa0d74992350eb1c468adcbf1323df63ede"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/msltns/pdf-merger/zipball/3855cfa0d74992350eb1c468adcbf1323df63ede",
+                "reference": "3855cfa0d74992350eb1c468adcbf1323df63ede",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2",
+                "setasign/fpdf": "^1.8",
+                "setasign/fpdi": "^2.3",
+                "setasign/tfpdf": "^1.31",
+                "tecnickcom/tcpdf": "^6.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpunit/phpunit": "^8.5|^9.1"
+            },
+            "time": "2020-04-30T07:28:34+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Jmleroux\\PDFMerger\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Jmleroux\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Clegg",
+                    "email": "paul@clegginabox.co.uk"
+                },
+                {
+                    "name": "JM Leroux",
+                    "email": "jmleroux.pro@gmail.com"
+                }
+            ],
+            "description": "PDF File Merger for PHP 7",
+            "support": {
+                "source": "https://github.com/msltns/pdf-merger/tree/v2.0.0"
+            },
+            "install-path": "../msltns/pdf-merger"
         },
         {
             "name": "psr/log",
@@ -202,6 +199,55 @@
                 "source": "https://github.com/php-fig/log/tree/1.1.4"
             },
             "install-path": "../psr/log"
+        },
+        {
+            "name": "setasign/fpdf",
+            "version": "1.8.4",
+            "version_normalized": "1.8.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Setasign/FPDF.git",
+                "reference": "b0ddd9c5b98ced8230ef38534f6f3c17308a7974"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Setasign/FPDF/zipball/b0ddd9c5b98ced8230ef38534f6f3c17308a7974",
+                "reference": "b0ddd9c5b98ced8230ef38534f6f3c17308a7974",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "ext-zlib": "*"
+            },
+            "time": "2021-08-30T07:50:06+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "fpdf.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Olivier Plathey",
+                    "email": "oliver@fpdf.org",
+                    "homepage": "http://fpdf.org/"
+                }
+            ],
+            "description": "FPDF is a PHP class which allows to generate PDF files with pure PHP. F from FPDF stands for Free: you may use it for any kind of usage and modify it to suit your needs.",
+            "homepage": "http://www.fpdf.org",
+            "keywords": [
+                "fpdf",
+                "pdf"
+            ],
+            "support": {
+                "source": "https://github.com/Setasign/FPDF/tree/1.8.4"
+            },
+            "install-path": "../setasign/fpdf"
         },
         {
             "name": "setasign/fpdi",
@@ -277,6 +323,63 @@
                 }
             ],
             "install-path": "../setasign/fpdi"
+        },
+        {
+            "name": "setasign/tfpdf",
+            "version": "v1.32",
+            "version_normalized": "1.32.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Setasign/tFPDF.git",
+                "reference": "a879b83485c263605cbf98ab2e8fdd4d37ca2707"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Setasign/tFPDF/zipball/a879b83485c263605cbf98ab2e8fdd4d37ca2707",
+                "reference": "a879b83485c263605cbf98ab2e8fdd4d37ca2707",
+                "shasum": ""
+            },
+            "time": "2020-08-31T07:28:46+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "classmap": [
+                    "tfpdf.php",
+                    "font/unifont/ttfonts.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Ian Back"
+                },
+                {
+                    "name": "Tycho Veltmeijer",
+                    "email": "tfpdf@tychoveltmeijer.nl",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Olivier Plathey",
+                    "email": "oliver@fpdf.org",
+                    "homepage": "http://fpdf.org/"
+                }
+            ],
+            "description": "This class is a modified version of FPDF that adds UTF-8 support. As of version 1.31 it is based on FPDF 1.82. Before it was based on FPDF 1.7.",
+            "homepage": "http://fpdf.org/en/script/script92.php",
+            "keywords": [
+                "fpdf",
+                "pdf",
+                "tfpdf",
+                "unicode"
+            ],
+            "support": {
+                "issues": "https://github.com/Setasign/tFPDF/issues",
+                "source": "https://github.com/Setasign/tFPDF/tree/master"
+            },
+            "install-path": "../setasign/tfpdf"
         },
         {
             "name": "shipcloud/shipcloud-php",
