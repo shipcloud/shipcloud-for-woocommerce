@@ -1200,6 +1200,11 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 */
 		public function get_email_for_notification() {
 		    $order = $this->get_wc_order();
+			
+		    if ( ! $order ) {
+		        // No order present.
+		        return '';
+		    }
 
 		    if ( method_exists( $order, 'get_billing_email' ) ) {
 		        return $order->get_billing_email();
@@ -1223,17 +1228,16 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		        return '';
 		    }
 
-        $recipient 	= $this->get_recipient();
-        if ( $recipient['phone'] ) {
-          return ( string ) $recipient['phone'];
-        }
-
-		    if ( method_exists( $order, 'get_meta' ) ) {
-		        return ( string ) $order->get_meta( '_shipping_phone' );
-		    } elseif ( method_exists( $order, 'get_meta_data' ) ) {
-		        return ( string ) $order->get_meta_data( '_shipping_phone' );
-		    }
-
+        	$recipient 	= $this->get_recipient();
+        	if ( $recipient['phone'] ) {
+				return ( string ) $recipient['phone'];
+        	}
+			
+			$phone = get_post_meta( $order->get_id(), '_shipping_phone', true );
+			if ( !empty( $phone ) ) {
+				return ( string ) $phone;
+			}
+		    
 		    return ( string ) $order->billing_phone;
 		}
 		

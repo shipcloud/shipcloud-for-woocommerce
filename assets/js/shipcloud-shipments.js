@@ -75,7 +75,7 @@ shipcloud.PickupRequestModel = Backbone.Model.extend({
 				timeZone: 'Europe/Berlin'
 			};
 
-			var earliest = new Date(this.get('pickup_time').earliest);
+			var earliest = new Date();
 			var latest = new Date(this.get('pickup_time').latest);
 
 			return new Intl.DateTimeFormat('de-DE', options).format(earliest) +
@@ -89,7 +89,7 @@ shipcloud.PickupRequestModel = Backbone.Model.extend({
 		var pickupTime;
 
 		if (key === 'earliest') {
-			pickupTime = new Date(this.get('pickup_time').earliest);
+			pickupTime = new Date();
 		} else {
 			pickupTime = new Date(this.get('pickup_time').latest);
 		}
@@ -99,6 +99,8 @@ shipcloud.PickupRequestModel = Backbone.Model.extend({
 		var day = pickupTime.getDate();
 		var hours = pickupTime.getHours();
 		var minutes = pickupTime.getMinutes();
+		
+		console.log('day: '+day);
 
 		return {
 			date: year + '-' + ((month < 10) ? '0' + month : month) + '-' + ((day < 10) ? '0' + day : day),
@@ -658,16 +660,8 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
 		$(prefix + "input[name='shipment[additional_services][angel_de_delivery_date_time][checked]']").change(function () {
 			if ($(this).prop('checked')) {
 				$(prefix + '.shipcloud_angel_de_delivery_date_time').fadeIn();
-				$("input[name='shipment[additional_services][angel_de_delivery_date_time][date]']").datepicker({
-					dateFormat : 'yy-mm-dd',
-					defaultDate: +1,
-					showButtonPanel: true
-				});
-				$("input[name='pickup[pickup_earliest_date]']").datepicker({
-					dateFormat : 'yy-mm-dd',
-					defaultDate: +1,
-					showButtonPanel: true
-				});
+				$("input[name='shipment[additional_services][angel_de_delivery_date_time][date]']").datepicker({dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date());
+				$("input[name='pickup[pickup_earliest_date]']").datepicker({dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date());
 			} else {
 				$(prefix + '.shipcloud_angel_de_delivery_date_time').fadeOut();
 			}
@@ -676,11 +670,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
 		$(prefix + "input[name='shipment[additional_services][delivery_date][checked]']").change(function () {
 			if ($(this).prop('checked')) {
 				$(prefix + '.shipcloud_delivery_date').fadeIn();
-				$("input[name='shipment[additional_services][delivery_date][date]']").datepicker({
-					dateFormat : 'yy-mm-dd',
-					defaultDate: +1,
-					showButtonPanel: true
-				});
+				$("input[name='shipment[additional_services][delivery_date][date]']").datepicker({dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date());
 			} else {
 				$(prefix + '.shipcloud_delivery_date').fadeOut();
 			}
@@ -732,11 +722,7 @@ shipcloud.ShipmentAdditionalServicesView = wp.Backbone.View.extend({
 			e.stopPropagation();
 		});
 		
-		$("input[name='pickup[pickup_earliest_date]']").datepicker({
-			dateFormat : 'yy-mm-dd',
-			defaultDate: +1,
-			showButtonPanel: true
-		});
+		$("input[name='pickup[pickup_earliest_date]']").datepicker({dateFormat: 'yy-mm-dd'}).datepicker("setDate", new Date());
 		
 	},
 
@@ -1024,8 +1010,6 @@ shipcloud.ShipmentEditView = wp.Backbone.View.extend({
     },
 
     renderLabelFormats: function (el) {
-		
-		console.log( "renderLabelFormats called" );
 		
 		var model = this.model;
 		el.prop('disabled', 'disabled');
