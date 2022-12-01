@@ -261,6 +261,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 			if ( ! is_array( $this->allowed_carriers ) ) {
 				$this->allowed_carriers = [ $this->allowed_carriers ];
 			}
+			
 			return $this->allowed_carriers;
 		}
 		
@@ -470,8 +471,6 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 		 */
 		private function get_sender() {
 			
-			// $company = get_option( 'woocommerce_store_address' );
-			
 			return array(
 				'last_name' => '',
 				'street'    => get_option( 'woocommerce_store_address' ),
@@ -649,6 +648,63 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 					}
 				}
 			}
+		}
+		
+		/**
+		 * Generate Select HTML.
+		 *
+		 * @param string $key Field key.
+		 * @param array  $data Field data.
+		 * @since  1.0.0
+		 * @return string
+		 */
+		public function generate_select_html( $key, $data ) {
+			$field_key = $this->get_field_key( $key );
+			$defaults  = array(
+				'title'             => '',
+				'disabled'          => false,
+				'class'             => '',
+				'css'               => '',
+				'placeholder'       => '',
+				'type'              => 'text',
+				'desc_tip'          => false,
+				'description'       => '',
+				'custom_attributes' => array(),
+				'options'           => array(),
+			);
+
+			$data = wp_parse_args( $data, $defaults );
+			$value = (array) $this->get_option( $key, array() );
+			
+			ob_start();
+			?>
+			<tr valign="top">
+				<th scope="row" class="titledesc">
+					<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // WPCS: XSS ok. ?></label>
+				</th>
+				<td class="forminp">
+					<fieldset>
+						<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
+						<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // WPCS: XSS ok. ?>>
+							<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
+								<?php if ( is_array( $option_value ) ) : ?>
+									<optgroup label="<?php echo esc_attr( $option_key ); ?>">
+										<?php foreach ( $option_value as $option_key_inner => $option_value_inner ) : ?>
+											<option value="<?php echo esc_attr( $option_key_inner ); ?>" <?php selected( (string) $option_key_inner, esc_attr( $value ) ); ?>><?php echo esc_html( $option_value_inner ); ?></option>
+										<?php endforeach; ?>
+									</optgroup>
+								<?php else : ?>
+									<option value="<?php echo esc_attr( $option_key ); ?>" <?php selected( in_array( (string) $option_key, $value, true ), true ); ?>><?php echo esc_html( $option_value ); ?></option>
+								<?php endif; ?>
+							<?php endforeach; ?>
+						</select>
+						<?php echo $this->get_description_html( $data ); // WPCS: XSS ok. ?>
+					</fieldset>
+				</td>
+			</tr>
+			<?php
+
+			return ob_get_clean();
 		}
 		
 		/**

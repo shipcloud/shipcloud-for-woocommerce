@@ -1237,14 +1237,12 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			$recipient = $this->get_recipient();
 			if ( !empty( $recipient['phone'] ) ) {
 				$billing_phone = ( string ) $recipient['phone'];
-			} elseif ( method_exists( $order, 'get_meta' ) ) {
-		        $billing_phone = ( string ) $order->get_meta( '_shipping_phone' );
-		    } elseif ( method_exists( $order, 'get_meta_data' ) ) {
-		        $billing_phone = ( string ) $order->get_meta_data( '_shipping_phone' );
+			} elseif ( method_exists( $order, 'billing_phone' ) ) {
+		        $billing_phone = ( string ) $order->billing_phone;
 		    } else {
-		    	$billing_phone = ( string ) $order->billing_phone;
+		    	$billing_phone = ( string ) get_post_meta( $order->get_id(), '_shipping_phone', true );
 		    }
-
+			
 		    return $billing_phone;
 		}
 		
