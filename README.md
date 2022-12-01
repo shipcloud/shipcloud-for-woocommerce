@@ -94,6 +94,23 @@ In order to guarantee the highest possible level of convenience, shipcloud takes
 
 ## Changelog
 
+### 2.0.8
+- Fontawesome scripts & styles removed from frontend (obsolet)
+
+### 2.0.7
+
+### 2.0.6
+
+### 2.0.5
+
+### 2.0.4
+
+### 2.0.3
+
+### 2.0.2
+
+### 2.0.1
+
 ### 2.0.0
 This is a complete code rewrite which also incorporates the new shipcloud PHP SDK.
 
