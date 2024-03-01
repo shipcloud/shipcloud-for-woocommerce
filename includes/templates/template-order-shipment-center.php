@@ -196,7 +196,7 @@
 
             <div class="additional_services">
                 <script type="template/html" id="tmpl-shipcloud-shipment-additional-services">
-                    <?php include( dirname( __FILE__ ) . '/template-additional-services-edit-form.php' ); ?>
+                    <?php include( WC_SHIPPING_SHIPCLOUD_INCLUDES_DIR . 'templates/template-additional-services-edit-form.php' ); ?>
                 </script>
                 <script type="application/javascript">
                     jQuery(function ($) {

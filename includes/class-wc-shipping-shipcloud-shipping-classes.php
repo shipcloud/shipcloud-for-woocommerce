@@ -105,7 +105,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Shipping_Classes' ) ) {
 	    public function add_shipping_class_col_width() {
 	        ?>
 	        <div class="view">{{ data.width }}</div>
-	        <div class="edit w100"><input type="text" name="width[{{ data.term_id }}]" data-attribute="width" value="{{ data.width }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
+	        <div class="edit w100"><input type="text" name="width" data-attribute="width" value="{{ data.width }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
 	        <?php
 	    }
 
@@ -117,7 +117,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Shipping_Classes' ) ) {
 	    public function add_shipping_class_col_height() {
 	        ?>
 	        <div class="view">{{ data.height }}</div>
-	        <div class="edit w100"><input type="text" name="height[{{ data.term_id }}]" data-attribute="height" value="{{ data.height }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
+	        <div class="edit w100"><input type="text" name="height" data-attribute="height" value="{{ data.height }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
 	        <?php
 	    }
 
@@ -129,7 +129,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Shipping_Classes' ) ) {
 	    public function add_shipping_class_col_length() {
 	        ?>
 	        <div class="view">{{ data.length }}</div>
-	        <div class="edit w100"><input type="text" name="length[{{ data.term_id }}]" data-attribute="length" value="{{ data.length }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
+	        <div class="edit w100"><input type="text" name="length" data-attribute="length" value="{{ data.length }}" placeholder="<?php esc_attr_e( '0', 'woocommerce' ); ?>" /></div>
 	        <?php
 	    }
 
@@ -141,7 +141,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Shipping_Classes' ) ) {
 	    public function add_shipping_class_col_weight() {
 	        ?>
 	        <div class="view">{{ data.weight }}</div>
-	        <div class="edit w100"><input type="text" name="weight[{{ data.term_id }}]" data-attribute="weight" value="{{ data.weight }}" placeholder="<?php esc_attr_e( '0.0', 'woocommerce' ); ?>" /></div>
+	        <div class="edit w100"><input type="text" name="weight" data-attribute="weight" value="{{ data.weight }}" placeholder="<?php esc_attr_e( '0.0', 'woocommerce' ); ?>" /></div>
 	        <?php
 	    }
 
@@ -153,8 +153,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Shipping_Classes' ) ) {
 		 * @return void
 		 */
 	    public function save_shipping_class( $term_id, $data ) {
-			
-		    if ( is_array( $term_id ) ) {
+            
+           if ( is_array( $term_id ) ) {
 		    	$term_id = $term_id[ 'term_id' ];
 		    }
 		

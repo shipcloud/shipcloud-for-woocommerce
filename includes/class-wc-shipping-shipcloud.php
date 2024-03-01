@@ -77,7 +77,28 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 		 * @var array
 		 */
 		private $calculated_parcels = [];
+        
+		/**
+		 * Callback URL
+		 *
+		 * @var string
+		 */
+		private $callback_url = '';
 		
+        /**
+		 * Webhook active
+		 *
+		 * @var bool
+		 */
+		private $webhook_active = false;
+        
+		/**
+		 * Webhook ID
+		 *
+		 * @var mixed
+		 */
+		private $webhook_id = '';
+        
 		/**
 		 * Constructor.
 		 *
@@ -144,7 +165,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 			$carriers_options = [];
 			if ( ! empty( $carriers ) ) {
 				foreach ( $carriers as $carrier ) {
-					if ( ( $only_allowed && in_array( $carrier[ 'name' ], $this->get_allowed_carriers() ) ) || ! $only_allowed ) {
+                    if ( ( $only_allowed && isset( $carrier[ 'name' ] ) && in_array( $carrier[ 'name' ], $this->get_allowed_carriers() ) ) || ! $only_allowed ) {
 						if ( $grouped ) {
 							$carriers_options[ $carrier[ 'group' ] ][ $carrier[ 'name' ] ] = $carrier[ 'display_name' ];
 						}
@@ -611,18 +632,17 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 	     */
 	    private function check_webhook_preconditions() {
 			if ( is_admin() ) {
-				$webhook_id 	 = get_option( 'woocommerce_shipcloud_catch_all_webhook_id' );
 				$wc_api_enabled  = get_option( 'woocommerce_api_enabled' );
 				
 				if ( $this->options ) {
 					if ( (
-							$webhook_id &&
+							$this->webhook_id &&
 							array_key_exists( 'webhook_active', $plugin_settings ) &&
 							$plugin_settings[ 'webhook_active' ] === 'yes' &&
 							! isset( $_POST[ 'woocommerce_shipcloud_webhook_active' ] )
 						) ||
 						(
-							! $webhook_id &&
+							! $this->webhook_id &&
 							array_key_exists( 'webhook_active', $plugin_settings ) &&
 							$plugin_settings[ 'webhook_active' ] === 'no' &&
 							isset( $_POST[ 'woocommerce_shipcloud_webhook_active' ] )
@@ -642,7 +662,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud' ) ) {
 					}
 
 					// make sure the checkbox for active webhook is deactivated when no webhook id is present
-					if ( ! $webhook_id && array_key_exists( 'webhook_active', $plugin_settings ) && $plugin_settings['webhook_active'] === 'yes') {
+					if ( ! $this->webhook_id && array_key_exists( 'webhook_active', $plugin_settings ) && $plugin_settings['webhook_active'] === 'yes') {
 						$plugin_settings['webhook_active'] = 'no';
 						update_option('woocommerce_shipcloud_settings', $plugin_settings);
 					}
