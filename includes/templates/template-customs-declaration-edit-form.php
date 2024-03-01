@@ -1,5 +1,9 @@
 <?php
-	
+
+$order_total        = floatval( $order->get_total() );
+$shipping_total     = floatval( $order->get_shipping_total() );
+$total_value_amount = $order_total - $shipping_total;
+
 ?>
 <div class="fifty customs-declaration--definition">
     <table class="parcel-form-table">
@@ -125,7 +129,7 @@
                     <# if ( data.model.get('customs_declaration') && data.model.get('customs_declaration').total_value_amount ) { #>
                         <input type="number" min="0" max="1000" step="0.01" name="customs_declaration[total_value_amount]" value="{{ data.model.get('customs_declaration').total_value_amount }}" />
                     <# } else { #>
-                        <input type="number" min="0" max="1000" step="0.01" name="customs_declaration[total_value_amount]" value="<?php echo $order->get_total() - $order->get_shipping_total(); ?>" />
+                        <input type="number" min="0" max="1000" step="0.01" name="customs_declaration[total_value_amount]" value="<?php echo $total_value_amount; ?>" />
                     <# } #>
                 </td>
             </tr>
