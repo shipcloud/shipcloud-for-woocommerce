@@ -1444,10 +1444,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_API_Adapter' ) ) {
 			if ( ! empty( $data['package'] ) && is_array( $data['package'] ) ) {
 				
 				$package = new Package( 
-					$data['package']['width'], 
-					$data['package']['height'], 
-					$data['package']['length'], 
-					$data['package']['weight'] 
+					(float) $data['package']['width'], 
+					(float) $data['package']['height'], 
+					(float) $data['package']['length'], 
+					(float) $data['package']['weight'] 
 				);
 				
 				if ( ! empty( $data['package']['type'] ) ) {
