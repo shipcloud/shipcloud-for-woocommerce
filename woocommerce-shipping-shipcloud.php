@@ -191,23 +191,23 @@ class WooCommerce_Shipping_Shipcloud {
 
 		// Settings exists.
 		if ( $shipcloud_settings ) {
-			
-			global $wpdb;
 
-			$sql  = "SELECT * FROM `{$wpdb->prefix}postmeta` WHERE `meta_key` = 'shipcloud_shipment_data';";
-			$rows = $wpdb->get_results( $sql );
-			
 			$count = 0;
-			foreach( $rows as $row ) {
-				$meta_id 		= $row->meta_id;
-				$meta_value 	= $row->meta_value;
-				$shipment_data 	= maybe_unserialize( $meta_value );
-				if ( array_key_exists( 'sender_first_name', $shipment_data ) ) {
+			// Loop through orders instead of direct DB queries.
+			$args = array(
+				'limit'   => -1,
+				'meta_key' => 'shipcloud_shipment_data'
+			);
+	
+			$orders = wc_get_orders( $args );
+			
+			foreach ( $orders as $order ) {
+				$shipment_data = $order->get_meta( 'shipcloud_shipment_data' );
+	
+				if ( $shipment_data && array_key_exists( 'sender_first_name', $shipment_data ) ) {
 					$shipment_data = WC_Shipping_Shipcloud_Utils::convert_postmeta_to_shipment( $shipment_data );
-					$shipment_data = maybe_serialize( $shipment_data );
-					
-					$sql = "UPDATE `{$wpdb->prefix}postmeta` SET `meta_value` = '{$shipment_data}' WHERE `meta_id` = '{$meta_id}';";
-					$wpdb->query( $sql );
+					$order->update_meta_data( 'shipcloud_shipment_data', $shipment_data );
+					$order->save();  // Save changes to the order
 					$count++;
 				}
 			}
