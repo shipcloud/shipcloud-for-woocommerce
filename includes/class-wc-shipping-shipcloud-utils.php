@@ -671,14 +671,28 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 		 * @param string $shipment_id
 		 * @return array|bool
 		 */
+
+		 // TODO: Convert to HPOS. Take into account the foreach! There can be multiple shipments 
 	    public static function get_order_meta_shipment_data( $order_id, $shipment_id ) {
-			foreach ( get_post_meta( $order_id, 'shipcloud_shipment_data' ) as $shipment ) {
-				if ( $shipment['id'] === $shipment_id ) {
+			$wc_order = wc_get_order( $order_id );
+			$shipments = $wc_order->get_meta( 'shipcloud_shipment_data' );
+			if ( ! is_array( $shipments ) ) {
+				return false;  // No shipments found or data format is incorrect
+			}
+			// Loop through each shipment and find the one with the matching shipment ID
+			foreach ( $shipments as $shipment ) {
+				if ( isset( $shipment['id'] ) && $shipment['id'] === $shipment_id ) {
 					return $shipment;
 				}
 			}
+
+			// foreach ( get_post_meta( $order_id, 'shipcloud_shipment_data' ) as $shipment ) {
+			// 	if ( $shipment['id'] === $shipment_id ) {
+			// 		return $shipment;
+			// 	}
+			// }
 			
-			return false;
+			return false; // No shipment found with the matching shipment ID
 	    }
 		
 	    /**

@@ -373,6 +373,7 @@ class ApiClient {
 	 * @return array Shipment labeling, tracking and pricing information.
 	 */
 	public function update_shipment( Shipment $shipment ) {
+		
 		if ( $this->validate_shipment( $shipment ) && $this->validate_id( $shipment->get_id() ) && $this->shipment_is_editable( $shipment->get_id() ) ) {
 			return $this->put( "/shipments/{$shipment->get_id()}", $shipment->to_array() );
 		}

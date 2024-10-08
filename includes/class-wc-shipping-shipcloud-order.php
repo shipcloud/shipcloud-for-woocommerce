@@ -1129,7 +1129,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 
 		    // Use default data if nothing was saved before
 		    if ( empty( $recipient ) || 0 == count( $recipient ) ) {
-		        $recipient_street_name = $order->get_shipping_address_1();
+		        $recipient_street_name = $wc_order->get_shipping_address_1();
 		        $recipient_street_nr   = '';
 
 		        if ( ! array_key_exists( 'street_detection', $options ) || 'yes' === $options['street_detection'] ) {
@@ -1735,6 +1735,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			    $data['carrier']	= $shipment['carrier'];
 			}
 			
+			
+
 			try {
 				
 		        $pickup_time = $this->extract_pickup_time( $data );
@@ -1769,6 +1771,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 				}
 			
 				$pickup_request = $this->api->create_pickup_request( $pickup_request_data );
+				$wc_order = wc_get_order( $order_id );
 
 				if ( is_wp_error( $pickup_request ) ) {
 					return $pickup_request;
@@ -1785,17 +1788,18 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 						) );
 
 			            // remove shipments element from pickup_request
-						/**
-						 * @TODO Check if orderID is a WC order ID or shipcloud order
-						 * */
-			            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+						
+						$shipments = $wc_order->get_meta( 'shipcloud_shipment_data' );
+						error_log( 'shipments: ' . print_r( $shipments, true ) );
+			            // $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 			            foreach ( $shipments as $shipment ) {
 							if ( $shipment_id === $shipment['id'] ) {
 								$updated_shipment = array_merge(
 									$shipment,
 									[ 'pickup_request' => $pickup_request ]
 								);
-								update_post_meta( $order_id, 'shipcloud_shipment_data', $updated_shipment, $shipment );
+								$wc_order->update_meta_data( 'shipcloud_shipment_data', $updated_shipment);
+								// update_post_meta( $order_id, 'shipcloud_shipment_data', $updated_shipment, $shipment );
 								return $updated_shipment;
 								break;
 							}
@@ -1814,6 +1818,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 						 * @TODO Check if orderID is a WC order ID or shipcloud order
 						 * */
 			            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
+
 			            foreach ( $shipments as $shipment ) {
 							if ( in_array( $shipment['id'], $ids ) ) {
 								$updated_shipment = array_merge(
