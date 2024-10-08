@@ -163,9 +163,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 			$customs_declaration_merger = new PDFMerger();
 
 			foreach ( $order_ids as $order_id ) {
-				// $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
-				// WOOCOMMERCE HPOS COMPATIBILITY
-				$wc_order = wc_get_order( $order_id );
+				$wc_order = wc_get_order( $order_id ); 
 				$shipments = $order->get_meta( 'shipcloud_shipment_data' );
 
 				if ( isset( $request['shipcloud_bulk_only_one_shipping_label'] ) ) {
@@ -376,9 +374,6 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order_Bulk' ) ) {
 			
 			foreach ( $order_ids as $order_id ) {
 				$order		= WC_Shipping_Shipcloud_Order::get_instance()->create_order( $order_id );
-				// $shipments 	= get_post_meta( $order_id, 'shipcloud_shipment_data' );
-				
-				// WOOCOMMERCE HPOS COMPATIBILITY
 				$wc_order = wc_get_order( $order_id );
 				$shipments = $order->get_meta( 'shipcloud_shipment_data' );
 

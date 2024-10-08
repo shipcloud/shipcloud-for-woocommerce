@@ -185,7 +185,8 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Cpt_Parcel_Template' ) ) {
 				$carriers[ $carrier['name'] ] = $carrier['display_name'];
 			}
 		
-			$selected_carrier = get_post_meta( $post->ID, 'carrier', true );
+			$selected_carrier = get_post_meta( $post->ID, 'carrier', true ); // Checked for HPOS compatibility: used for non-shop order post type
+
 
 			/* for compatibility reasons */
 			if ( $selected_carrier !== '' && ! is_array( $selected_carrier ) ) {
@@ -197,12 +198,12 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Cpt_Parcel_Template' ) ) {
 				);
 			}
 
-			$width	= get_post_meta( $post->ID, 'width', true );
-			$height	= get_post_meta( $post->ID, 'height', true );
-			$length	= get_post_meta( $post->ID, 'length', true );
-			$weight	= get_post_meta( $post->ID, 'weight', true );
+			$width	= get_post_meta( $post->ID, 'width', true ); // Checked for HPOS compatibility: used for non-shop order post type
+			$height	= get_post_meta( $post->ID, 'height', true ); // Checked for HPOS compatibility: used for non-shop order post type
+			$length	= get_post_meta( $post->ID, 'length', true ); // Checked for HPOS compatibility: used for non-shop order post type
+			$weight	= get_post_meta( $post->ID, 'weight', true ); // Checked for HPOS compatibility: used for non-shop order post type
 			
-			$shipcloud_is_standard_parcel_template = get_post_meta( $post->ID, 'shipcloud_is_standard_parcel_template', true );
+			$shipcloud_is_standard_parcel_template = get_post_meta( $post->ID, 'shipcloud_is_standard_parcel_template', true ); // Checked for HPOS compatibility: used for non-shop order post type
 
 	  	  	include( dirname( __FILE__ ) . '/templates/template-meta-box-settings.php' );
 		}
@@ -263,7 +264,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Cpt_Parcel_Template' ) ) {
 						  . ' ' . __( 'cm', 'shipcloud-for-woocommerce' )
 						  . ' ' . $weight . __( 'kg', 'shipcloud-for-woocommerce' );
 
-			$wpdb->update( $wpdb->posts, array( 'post_title' => $post_title ), [ 'ID' => $post_id ] );
+			$wpdb->update( $wpdb->posts, array( 'post_title' => $post_title ), [ 'ID' => $post_id ] ); // Checked for HPOS compatibility: used for non-shop order post type
 
 			update_post_meta(
 				$post_id,
@@ -272,25 +273,25 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Cpt_Parcel_Template' ) ) {
 					'service' => $request['shipcloud_carrier_service'],
 					'package' => $request['shipcloud_carrier_package'],
 				)
-			);
+			); // Checked for HPOS compatibility: used for non-shop order post type
 
-			update_post_meta( $post_id, 'width', wc_format_decimal( $width ) );
-			update_post_meta( $post_id, 'height', wc_format_decimal( $height ) );
-			update_post_meta( $post_id, 'length', wc_format_decimal( $length ) );
-			update_post_meta( $post_id, 'weight', wc_format_decimal( $weight ) );
+			update_post_meta( $post_id, 'width', wc_format_decimal( $width ) ); // Checked for HPOS compatibility: used for non-shop order post type
+			update_post_meta( $post_id, 'height', wc_format_decimal( $height ) ); // Checked for HPOS compatibility: used for non-shop order post type
+			update_post_meta( $post_id, 'length', wc_format_decimal( $length ) ); // Checked for HPOS compatibility: used for non-shop order post type
+			update_post_meta( $post_id, 'weight', wc_format_decimal( $weight ) ); // Checked for HPOS compatibility: used for non-shop order post type
 
 			if ( $shipcloud_is_standard_parcel_template ) {
 				$parcel_templates = WC_Shipping_Shipcloud_Utils::get_parcel_templates();
 				if ( count( $parcel_templates ) > 0 ) {
 					foreach ( $parcel_templates AS $parcel_template ) {
 						if ( $parcel_template ['values']['shipcloud_is_standard_parcel_template'] ) {
-							update_post_meta( $parcel_template['ID'], 'shipcloud_is_standard_parcel_template', "" );
+							update_post_meta( $parcel_template['ID'], 'shipcloud_is_standard_parcel_template', "" ); // Checked for HPOS compatibility: used for non-shop order post type
 						}
 					}
 				}
-				update_post_meta( $post_id, 'shipcloud_is_standard_parcel_template', $shipcloud_is_standard_parcel_template );
+				update_post_meta( $post_id, 'shipcloud_is_standard_parcel_template', $shipcloud_is_standard_parcel_template ); // Checked for HPOS compatibility: used for non-shop order post type
 			} else {
-				update_post_meta( $post_id, 'shipcloud_is_standard_parcel_template', "" );
+				update_post_meta( $post_id, 'shipcloud_is_standard_parcel_template', "" ); // Checked for HPOS compatibility: used for non-shop order post type
 			}
 			
 			wp_redirect( admin_url( 'edit.php?post_type=' . WC_SHIPPING_SHIPCLOUD_CPT_PARCEL_TEMPLATE, 'https' ) );
