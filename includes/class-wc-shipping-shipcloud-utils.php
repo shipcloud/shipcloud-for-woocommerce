@@ -605,15 +605,32 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Utils' ) ) {
 	  	 * @return null|\WC_Order
 	  	 */
 		public static function find_order_by_shipment_id( $shipment_id ) {
-			$orders = get_posts(
-				array(
-					'post_type'    => ['order', 'shop_order'],
-					'post_status'  => 'any',
-					'meta_key'     => 'shipcloud_shipment_data',
-					'meta_value'   => $shipment_id,
-					'meta_compare' => 'LIKE',
-				)
-			);
+			
+			// $orders = get_posts(
+			// 	array(
+			// 		'post_type'    => ['order', 'shop_order'],
+			// 		'post_status'  => 'any',
+			// 		'meta_key'     => 'shipcloud_shipment_data',
+			// 		'meta_value'   => $shipment_id,
+			// 		'meta_compare' => 'LIKE',
+			// 	)
+			// );
+			/**
+			 * @TODO Test HPOS change to wc_get_orders
+			 * if it works, remove the old code
+			 */
+
+			$query_args = [
+				'meta_query' => [
+					[
+						'key'     => 'shipcloud_shipment_data',
+						'value'   => $shipment_id,
+						'compare' => 'LIKE',
+					],
+				],
+			];
+			$orders = wc_get_orders( $query_args );
+
 
 			if ( ! $orders || is_wp_error( $orders ) ) {
 				return null;

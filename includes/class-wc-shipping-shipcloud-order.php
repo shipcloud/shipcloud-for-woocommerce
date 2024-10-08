@@ -257,12 +257,18 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                 return;
             }
 
+			
+			// WOOCOMMERCE HPOS COMPATIBILITY
+			$wc_order = wc_get_order( $post_id );
+
             if ( isset( $_POST['sender_address'] ) ) {
-                update_post_meta( $post_id, 'shipcloud_sender_address', $_POST['sender_address'] );
+                // update_post_meta( $post_id, 'shipcloud_sender_address', $_POST['sender_address'] );
+				$order->update_meta_data( 'shipcloud_sender_address', $_POST['sender_address'] );
             }
 
             if ( isset( $_POST['recipient_address'] ) ) {
-                update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST['recipient_address'] );
+                // update_post_meta( $post_id, 'shipcloud_recipient_address', $_POST['recipient_address'] );
+				$order->update_meta_data( 'shipcloud_recipient_address', $_POST['recipient_address'] );
             }
         }
 		
@@ -401,8 +407,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 */
 		public function handle_legal_checkboxes_update( $order_id ) {
 			if ( ! empty( $_POST['checkbox_parcel_delivery_notification'] ) ) {
-				update_post_meta( 
-					$order_id, 
+				// WOOCOMMERCE HPOS COMPATIBILITY
+				$wc_order = wc_get_order( $order_id );
+				$wc_order->update_meta_data( 
 					'shipcloud_parcel_delivery_notification', 
 					sanitize_text_field( $_POST['checkbox_parcel_delivery_notification'] ) 
 				);
@@ -423,13 +430,14 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
          * @param WC_Order $order
          * @return void
          */
-        public function display_tracking_information( $order ) {
+        public function display_tracking_information( $wc_order ) {
             $show_tracking_in_my_account = $this->get_option( 'show_tracking_in_my_account' );
             if ( $show_tracking_in_my_account === 'yes' ) {
-                $this->order_id = $order->get_id();
-                $shipment_ids 	= get_post_meta( $order->get_id(), 'shipcloud_shipment_ids' );
-                $shipments_data = $shipment_data = get_post_meta( $order->get_id(), 'shipcloud_shipment_data' );
+                $this->order_id = $wc_order->get_id();
 				
+				// WOOCOMMERCE HPOS COMPATIBILITY
+				$shipment_ids 	= $wc_order->get_meta( 'shipcloud_shipment_ids' );
+				$shipments_data = $shipment_data = $wc_order->get_meta( 'shipcloud_shipment_data' );
 				ob_start();
 	            
 				include( dirname( __FILE__ ) . '/templates/template-my-account-show-tracking.php' );
@@ -623,8 +631,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                     $shipment_data 		= array_merge( $prev_shipment_data, $shipment );
 
                     $order->add_order_note( __( 'shipcloud shipment has been updated.', 'shipcloud-for-woocommerce' ) );
-                    update_post_meta( $order->get_id(), 'shipcloud_shipment_data', $shipment_data, $prev_shipment_data );
-					
+                    
+					// WOOCOMMERCE HPOS COMPATIBILITY
+					$order->update_meta_data( 'shipcloud_shipment_data', $shipment_data);
+
 					wp_send_json_success(
 	                    array(
 	                        'status'      => 'OK',
@@ -936,7 +946,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                     $prev_shipment_data = WC_Shipping_Shipcloud_Utils::get_shipment_for_order( $order_id, $shipment_id );
 					$shipment_data 		= array_merge( $prev_shipment_data, $shipment );
 					$order->add_order_note( __( 'shipcloud label has been prepared.', 'shipcloud-for-woocommerce' ) );
-                    update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data, $prev_shipment_data );
+                    // update_post_meta( $order_id, 'shipcloud_shipment_data', $shipment_data, $prev_shipment_data );
+					// WOOCOMMERCE HPOS COMPATIBILITY
+					$order->update_meta_data( 'shipcloud_shipment_data', $shipment_data );
 
                     if ( array_key_exists( 'customs_declaration', $prev_shipment_data ) 
 						&& ! array_key_exists( 'customs_declaration', $shipment )
@@ -952,8 +964,12 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
                     }
 					
 					if ( isset( $shipment['id'] ) ) {
-						add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment['id'] );
-	                    add_post_meta( $order_id, 'shipcloud_shipment_data', $shipment );
+						// add_post_meta( $order_id, 'shipcloud_shipment_ids', $shipment['id'] );
+	                    // add_post_meta( $order_id, 'shipcloud_shipment_data', $shipment );
+
+						// WOOCOMMERCE HPOS COMPATIBILITY
+						$order->add_meta_data( 'shipcloud_shipment_ids', $shipment['id'] );
+						$order->add_meta_data( 'shipcloud_shipment_data', $shipment );
 					}
 					
                     if ( array_key_exists( 'customs_declaration', $data ) && empty( $shipment['customs_declaration'] ) ) {
@@ -1112,7 +1128,10 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 		 */
 		private function get_recipient( $prefix = '' ) {
 		    $options 	= WC_Shipping_Shipcloud_Utils::get_plugin_options();
-		    $recipient 	= get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
+		    // $recipient 	= get_post_meta( $this->order_id, 'shipcloud_recipient_address', true );
+			// WOOCOMMERCE HPOS COMPATIBILITY
+			$wc_order = wc_get_order( $this->order_id );
+			$recipient = $wc_order->get_meta( 'shipcloud_recipient_address' );
 
 		    // Use default data if nothing was saved before
 		    if ( empty( $recipient ) || 0 == count( $recipient ) ) {
@@ -1240,7 +1259,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			} elseif ( method_exists( $order, 'billing_phone' ) ) {
 		        $billing_phone = ( string ) $order->billing_phone;
 		    } else {
-		    	$billing_phone = ( string ) get_post_meta( $order->get_id(), '_shipping_phone', true );
+		    	// $billing_phone = ( string ) get_post_meta( $order->get_id(), '_shipping_phone', true );
+				// WOOCOMMERCE HPOS COMPATIBILITY
+				$billing_phone = ( string ) $order->get_meta( '_shipping_phone' );
 		    }
 			
 		    return $billing_phone;
@@ -1715,6 +1736,7 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 			}
 			*/
 			
+
 			$shipment_id = isset( $data['id'] ) ? $data['id'] : false;
 			
 			if ( empty( $data['carrier'] ) && ! empty( $shipment_id ) && ! empty( $order_id ) ) {
@@ -1772,6 +1794,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 						) );
 
 			            // remove shipments element from pickup_request
+						/**
+						 * @TODO Check if orderID is a WC order ID or shipcloud order
+						 * */
 			            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 			            foreach ( $shipments as $shipment ) {
 							if ( $shipment_id === $shipment['id'] ) {
@@ -1794,6 +1819,9 @@ if ( ! class_exists( 'WC_Shipping_Shipcloud_Order' ) ) {
 							}
 						}
 				
+						/**
+						 * @TODO Check if orderID is a WC order ID or shipcloud order
+						 * */
 			            $shipments = get_post_meta( $order_id, 'shipcloud_shipment_data' );
 			            foreach ( $shipments as $shipment ) {
 							if ( in_array( $shipment['id'], $ids ) ) {
