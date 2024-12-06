@@ -8,7 +8,11 @@
 <?php
 if ( ! empty( $shipment_ids ) ) {
 	foreach ( $shipment_ids as $shipment_id ) {
-	    $tracking_events = get_post_meta( $order->get_id(), 'shipment_' . $shipment_id . '_trackingevent' );
+		// Checked for HPOS compatibility, untested.
+		
+	    // $tracking_events = get_post_meta( $order->get_id(), 'shipment_' . $shipment_id . '_trackingevent' );
+		$tracking_events_meta = $order->get_meta( 'shipment_' . $shipment_id . '_trackingevent' , 0);
+		$tracking_events = $tracking_events_meta->get_data()['data'];
 	    $carrier_tracking_number = '';
 	    foreach ( $shipments_data as $shipment_data ) {
 	        if ( $shipment_data['id'] === $shipment_id ) {
