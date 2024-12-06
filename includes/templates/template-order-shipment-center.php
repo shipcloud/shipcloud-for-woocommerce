@@ -326,7 +326,12 @@ use Automattic\WooCommerce\Utilities\OrderUtil;
 			if ('' != $shipment_data && is_array($shipment_data)) {
 				$shipment_data = array_reverse($shipment_data);
 				foreach ($shipment_data as $data) {
-					$_data = $data->get_data()['value'];
+					error_log("shipment_data ".print_r($data, true));
+					if(is_array($data)){
+						$_data = $data;
+					}elseif (is_object($data) && $data->get_data()) {
+						$_data = $data->get_data()['value'];
+					}
 					$json_data[] = WC_Shipping_Shipcloud_Utils::convert_to_wc_api_response($_data, $this->order_id);
 				}
 			}

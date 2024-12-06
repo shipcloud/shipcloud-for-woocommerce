@@ -210,6 +210,7 @@ if (! class_exists('WC_Shipping_Shipcloud_Order')) {
 		 */
 		public function add_metaboxes($page, $post_or_order)
 		{
+			$order_id = (is_a($post_or_order, 'WC_Order')) ? $post_or_order->get_id() : $post_or_order->ID;
 			add_meta_box(
 				'shipcloud-io',
 				__('shipcloud Shipping Center', 'shipcloud-for-woocommerce'),
@@ -217,7 +218,7 @@ if (! class_exists('WC_Shipping_Shipcloud_Order')) {
 				'shop_order',
 				'advanced',
 				'default',
-				array('order_id' => $post_or_order->get_id())
+				array('order_id' => $order_id)
 			);
 
 			add_meta_box(
@@ -2387,6 +2388,10 @@ if (! class_exists('WC_Shipping_Shipcloud_Order')) {
 		public function get_description()
 		{
 			// $other = get_post_meta( $this->order_id, 'shipcloud_other', true );
+			$order = $this->get_wc_order();
+			if(! $order) {
+				return null;
+			}
 			$other = $this->get_wc_order()->get_meta('shipcloud_other', true);
 
 			if (! isset($other['description'])) {
